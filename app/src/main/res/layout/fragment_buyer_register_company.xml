@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="model" type="com.adrosonic.craftexchange.ui.modules.authentication.register.RegisterViewModel"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/buyer_register_company"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorBackground"
+        tools:context=".ui.modules.buyer.authentication.register.BuyerRegisterCompanyFragment">
+
+        <ImageView
+            android:id="@+id/back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_small"
+            android:paddingStart="@dimen/margin_regular"
+            android:contentDescription="@string/back"
+            android:src="@drawable/ic_keyboard_backspace_black_24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/buyer_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_small"
+            android:paddingEnd="18dp"
+            android:text="@string/buyer"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/back_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.98"
+            app:layout_constraintStart_toEndOf="@+id/back_button"
+            app:layout_constraintTop_toTopOf="@+id/back_button" />
+
+        <include
+            android:id="@+id/logo_part"
+            layout="@layout/logo_side"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.050000012" />
+
+        <TextView
+            android:id="@+id/textView_enter_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_regular"
+            android:fontFamily="@font/playfair_regular"
+            android:paddingStart="@dimen/margin_regular"
+            android:paddingEnd="@dimen/margin_regular"
+            android:text="@string/about_company"
+            android:textAlignment="center"
+            android:textColor="#000"
+            android:textSize="@dimen/Ques_text"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/logo_part"
+            app:layout_constraintStart_toStartOf="@+id/logo_part"
+            app:layout_constraintTop_toBottomOf="@+id/logo_part"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/margin_regular"
+            android:layout_marginBottom="@dimen/margin_semimedium"
+            app:layout_constraintBottom_toTopOf="@+id/text_comp_field"
+            app:layout_constraintEnd_toEndOf="@+id/textView_enter_details"
+            app:layout_constraintStart_toStartOf="@+id/textView_enter_details"
+            app:layout_constraintTop_toBottomOf="@+id/textView_enter_details">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/text_compname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_semimedium"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:fontFamily="@font/lato_regular"
+                    android:text="@string/compname"
+                    android:textAlignment="textStart"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/textBox_compname"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginStart="@dimen/margin_semimedium"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="@dimen/margin_semimedium"
+                    android:background="@drawable/rectangle_round_grad"
+                    android:fontFamily="@font/lato_regular"
+                    android:inputType="text"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/text_compname" />
+
+                <TextView
+                    android:id="@+id/text_gst"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_semimedium"
+                    android:layout_marginTop="@dimen/margin_regular"
+                    android:fontFamily="@font/lato_regular"
+                    android:text="@string/enter_gst"
+                    android:textAlignment="textStart"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textBox_compname" />
+
+                <EditText
+                    android:id="@+id/textBox_gst"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginStart="@dimen/margin_semimedium"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="@dimen/margin_semimedium"
+                    android:background="@drawable/rectangle_round_grad"
+                    android:fontFamily="@font/lato_regular"
+                    android:inputType="text"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/text_gst" />
+
+                <TextView
+                    android:id="@+id/text_cin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_semimedium"
+                    android:layout_marginTop="@dimen/margin_regular"
+                    android:fontFamily="@font/lato_regular"
+                    android:text="@string/enter_cin"
+                    android:textAlignment="textStart"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textBox_gst" />
+
+                <EditText
+                    android:id="@+id/textBox_cin"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginStart="@dimen/margin_semimedium"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="@dimen/margin_semimedium"
+                    android:background="@drawable/rectangle_round_grad"
+                    android:fontFamily="@font/lato_regular"
+                    android:inputType="text"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/text_cin" />
+
+                <TextView
+                    android:id="@+id/text_pan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_semimedium"
+                    android:layout_marginTop="@dimen/margin_regular"
+                    android:fontFamily="@font/lato_regular"
+                    android:text="@string/pan"
+                    android:textAlignment="textStart"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textBox_cin" />
+
+                <EditText
+                    android:id="@+id/textBox_pan"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginStart="@dimen/margin_semimedium"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="@dimen/margin_semimedium"
+                    android:background="@drawable/rectangle_round_grad"
+                    android:fontFamily="@font/lato_regular"
+                    android:inputType="text"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/text_pan" />
+
+                <TextView
+                    android:id="@+id/text_upload_logo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_semimedium"
+                    android:layout_marginTop="@dimen/margin_regular"
+                    android:fontFamily="@font/lato_regular"
+                    android:text="@string/upload_logo_text"
+                    android:textAlignment="textStart"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textBox_pan" />
+
+                <EditText
+                    android:id="@+id/textBox_upload"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginStart="@dimen/margin_semimedium"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="@dimen/margin_semimedium"
+                    android:background="@drawable/rectangle_round_grad"
+                    android:fontFamily="@font/lato_regular"
+                    android:clickable="false"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:textSize="16sp"
+                    android:drawableEnd="@drawable/ic_save_alt_black_24dp"
+                    android:hint="@string/specs_image_upload"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/text_upload_logo" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+
+        <TextView
+            android:id="@+id/text_comp_field"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato_regular"
+            android:text="@string/comp_field"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:textSize="10sp"
+            android:layout_marginTop="@dimen/margin_small"
+            app:layout_constraintEnd_toEndOf="@+id/divider2"
+            app:layout_constraintStart_toStartOf="@+id/divider2"
+            app:layout_constraintBottom_toTopOf="@+id/divider2" />
+
+        <View
+            android:id="@+id/divider2"
+            style="@style/HorizontalDivider"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintEnd_toEndOf="@+id/next_comp"
+            app:layout_constraintStart_toStartOf="@+id/next_comp"
+            app:layout_constraintBottom_toTopOf="@+id/next_comp"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/next_comp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_regular"
+            android:fontFamily="@font/lato_regular"
+            app:layout_constraintBottom_toTopOf="@+id/button_next"
+            app:layout_constraintEnd_toEndOf="@+id/button_next"
+            app:layout_constraintStart_toStartOf="@+id/button_next">
+
+            <TextView
+                android:id="@+id/text_nextup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_nextup"
+                android:fontFamily="@font/lato_regular"
+                android:textSize="8sp"
+                app:layout_constraintRight_toLeftOf="@+id/text_comp_details"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/text_comp_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_comp_details"
+                android:textColor="#000"
+                android:fontFamily="@font/lato_regular"
+                android:textSize="8sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Button
+            android:id="@+id/button_next"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rectangle_round_grad_black"
+            android:fontFamily="@font/lato_regular"
+            android:text="@string/next"
+            android:textAllCaps="false"
+            android:textColor="#fff"
+            android:textSize="16sp"
+            android:layout_marginBottom="@dimen/margin_regular"
+            app:layout_constraintEnd_toEndOf="@+id/privacy_policy"
+            app:layout_constraintStart_toStartOf="@+id/privacy_policy"
+            app:layout_constraintBottom_toTopOf="@+id/privacy_policy" />
+
+        <TextView
+            android:id="@+id/privacy_policy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_regular"
+            android:fontFamily="@font/lato_regular"
+            android:text="@string/privacy_policy"
+            android:textColor="@color/lighter_gray"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

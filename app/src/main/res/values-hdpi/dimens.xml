@@ -1,0 +1,14 @@
+<resources>
+	<dimen name="role_icon">36dp</dimen>
+	<dimen name="margin_semimedium">19.2dp</dimen>
+	<dimen name="margin_small">2.4dp</dimen>
+	<dimen name="logo_icon">54dp</dimen>
+	<dimen name="margin_regular">9.6dp</dimen>
+	<dimen name="margin_large">57.6dp</dimen>
+	<dimen name="margin_medium">24dp</dimen>
+	<dimen name="Ques_text">13.8sp</dimen>
+	<dimen name="textbox_ht">33.6dp</dimen>
+	<dimen name="edit_text">14.4sp</dimen>
+	<dimen name="button_text">12sp</dimen>
+	<dimen name="button_ht">36dp</dimen>
+</resources>
