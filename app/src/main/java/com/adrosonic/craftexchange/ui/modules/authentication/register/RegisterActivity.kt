@@ -7,6 +7,8 @@ import android.os.Bundle
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityRegisterBinding
 import com.adrosonic.craftexchange.ui.modules.buyer.authentication.register.BuyerRegisterUsernameFragment
+import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.pixplicity.easyprefs.library.Prefs
 
 fun Context.registerIntent(): Intent {
     return Intent(this, RegisterActivity::class.java).apply {
@@ -25,12 +27,23 @@ class RegisterActivity : AppCompatActivity() {
         val view = mBinding?.root
         setContentView(view)
 
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.register_container,
-                    BuyerRegisterUsernameFragment.newInstance(),"Register Buyer Username")
-                .addToBackStack(null)
-                .commit()
+        var profile = Prefs.getString(ConstantsDirectory.PROFILE,null)
+
+        when(profile){
+            ConstantsDirectory.ARTISAN -> {
+//                if (savedInstanceState == null) {
+//                    supportFragmentManager.beginTransaction()
+//                        .replace(R.id.login_container, ArtisanLoginUsernameFragment.newInstance(profile))
+//                        .commitNow()
+//                }
+            }
+            ConstantsDirectory.BUYER -> {
+                if (savedInstanceState == null) {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.register_container, BuyerRegisterUsernameFragment.newInstance(profile))
+                        .commitNow()
+                }
+            }
         }
     }
 }

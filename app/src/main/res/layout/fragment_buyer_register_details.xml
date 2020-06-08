@@ -8,44 +8,37 @@
         <variable name="model" type="com.adrosonic.craftexchange.ui.modules.authentication.register.RegisterViewModel"/>
     </data>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/buyer_register_details"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/colorBackground"
         tools:context=".ui.modules.buyer.authentication.register.BuyerRegisterDetailsFragment">
-
-        <ImageView
-            android:id="@+id/back_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_small"
-            android:paddingStart="@dimen/margin_regular"
-            android:contentDescription="@string/back"
-            android:src="@drawable/ic_keyboard_backspace_black_24dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/buyer_tag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_small"
-            android:paddingEnd="18dp"
             android:text="@string/buyer"
             android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/back_button"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.98"
-            app:layout_constraintStart_toEndOf="@+id/back_button"
-            app:layout_constraintTop_toTopOf="@+id/back_button" />
+            app:layout_constraintHorizontal_bias="0.9"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.02"/>
 
         <include
             android:id="@+id/logo_part"
             layout="@layout/logo_side"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -65,175 +58,172 @@
             android:textColor="#000"
             android:textSize="@dimen/Ques_text"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/logo_part"
-            app:layout_constraintStart_toStartOf="@+id/logo_part"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/logo_part"
             app:layout_constraintVertical_bias="0.0" />
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+        <TextView
+            android:id="@+id/text_firstname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_semimedium"
             android:layout_marginTop="@dimen/margin_regular"
-            android:layout_marginBottom="@dimen/margin_semimedium"
-            app:layout_constraintBottom_toTopOf="@+id/text_comp_field"
-            app:layout_constraintEnd_toEndOf="@+id/textView_enter_details"
-            app:layout_constraintStart_toStartOf="@+id/textView_enter_details"
-            app:layout_constraintTop_toBottomOf="@+id/textView_enter_details">
+            android:fontFamily="@font/lato_regular"
+            android:text="@string/firstname"
+            android:textAlignment="textStart"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_enter_details"  />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/textBox_firstname"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginStart="@dimen/margin_semimedium"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="@dimen/margin_semimedium"
+            android:background="@drawable/rectangle_round_grad"
+            android:fontFamily="@font/lato_regular"
+            android:inputType="text"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_firstname" />
 
-                <TextView
-                    android:id="@+id/text_firstname"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_semimedium"
-                    android:layout_marginTop="@dimen/margin_small"
-                    android:fontFamily="@font/lato_regular"
-                    android:text="@string/firstname"
-                    android:textAlignment="textStart"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/text_lastname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_semimedium"
+            android:layout_marginTop="@dimen/margin_regular"
+            android:fontFamily="@font/lato_regular"
+            android:text="@string/lastname"
+            android:textAlignment="textStart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textBox_firstname" />
 
-                <EditText
-                    android:id="@+id/textBox_firstname"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:layout_marginStart="@dimen/margin_semimedium"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginEnd="@dimen/margin_semimedium"
-                    android:background="@drawable/rectangle_round_grad"
-                    android:fontFamily="@font/lato_regular"
-                    android:inputType="text"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/text_firstname" />
+        <EditText
+            android:id="@+id/textBox_lastname"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginStart="@dimen/margin_semimedium"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="@dimen/margin_semimedium"
+            android:background="@drawable/rectangle_round_grad"
+            android:fontFamily="@font/lato_regular"
+            android:inputType="text"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_lastname" />
 
-                <TextView
-                    android:id="@+id/text_lastname"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_semimedium"
-                    android:layout_marginTop="@dimen/margin_regular"
-                    android:fontFamily="@font/lato_regular"
-                    android:text="@string/lastname"
-                    android:textAlignment="textStart"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textBox_firstname" />
+        <TextView
+            android:id="@+id/text_mobile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_semimedium"
+            android:layout_marginTop="@dimen/margin_regular"
+            android:fontFamily="@font/lato_regular"
+            android:text="@string/mobile"
+            android:textAlignment="textStart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textBox_lastname" />
 
-                <EditText
-                    android:id="@+id/textBox_lastname"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:layout_marginStart="@dimen/margin_semimedium"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginEnd="@dimen/margin_semimedium"
-                    android:background="@drawable/rectangle_round_grad"
-                    android:fontFamily="@font/lato_regular"
-                    android:inputType="text"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/text_lastname" />
+        <EditText
+            android:id="@+id/textBox_mobile"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginStart="@dimen/margin_semimedium"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="@dimen/margin_semimedium"
+            android:background="@drawable/rectangle_round_grad"
+            android:fontFamily="@font/lato_regular"
+            android:inputType="phone"
+            android:maxLength="15"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_mobile" />
 
-                <TextView
-                    android:id="@+id/text_mobile"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_semimedium"
-                    android:layout_marginTop="@dimen/margin_regular"
-                    android:fontFamily="@font/lato_regular"
-                    android:text="@string/mobile"
-                    android:textAlignment="textStart"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textBox_lastname" />
+        <TextView
+            android:id="@+id/text_alt_mobile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_semimedium"
+            android:layout_marginTop="@dimen/margin_regular"
+            android:fontFamily="@font/lato_regular"
+            android:text="@string/alt_mobile"
+            android:textAlignment="textStart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textBox_mobile" />
 
-                <EditText
-                    android:id="@+id/textBox_mobile"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:layout_marginStart="@dimen/margin_semimedium"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginEnd="@dimen/margin_semimedium"
-                    android:background="@drawable/rectangle_round_grad"
-                    android:fontFamily="@font/lato_regular"
-                    android:inputType="phone"
-                    android:maxLength="14"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/text_mobile" />
+        <EditText
+            android:id="@+id/textBox_alt_mobile"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginStart="@dimen/margin_semimedium"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="@dimen/margin_semimedium"
+            android:background="@drawable/rectangle_round_grad"
+            android:fontFamily="@font/lato_regular"
+            android:inputType="phone"
+            android:maxLength="15"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_alt_mobile" />
 
-                <TextView
-                    android:id="@+id/text_alt_mobile"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_semimedium"
-                    android:layout_marginTop="@dimen/margin_regular"
-                    android:fontFamily="@font/lato_regular"
-                    android:text="@string/alt_mobile"
-                    android:textAlignment="textStart"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textBox_mobile" />
+        <TextView
+            android:id="@+id/text_designation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_semimedium"
+            android:layout_marginTop="@dimen/margin_regular"
+            android:fontFamily="@font/lato_regular"
+            android:text="@string/designation"
+            android:textAlignment="textStart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textBox_alt_mobile" />
 
-                <EditText
-                    android:id="@+id/textBox_alt_mobile"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:layout_marginStart="@dimen/margin_semimedium"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginEnd="@dimen/margin_semimedium"
-                    android:background="@drawable/rectangle_round_grad"
-                    android:fontFamily="@font/lato_regular"
-                    android:inputType="text"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/text_alt_mobile" />
+        <EditText
+            android:id="@+id/textBox_designation"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginStart="@dimen/margin_semimedium"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="@dimen/margin_regular"
+            android:layout_marginEnd="@dimen/margin_semimedium"
+            android:background="@drawable/rectangle_round_grad"
+            android:fontFamily="@font/lato_regular"
+            android:inputType="text"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_designation" />
 
-                <TextView
-                    android:id="@+id/text_designation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_semimedium"
-                    android:layout_marginTop="@dimen/margin_regular"
-                    android:fontFamily="@font/lato_regular"
-                    android:text="@string/designation"
-                    android:textAlignment="textStart"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textBox_alt_mobile" />
-
-                <EditText
-                    android:id="@+id/textBox_designation"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:layout_marginStart="@dimen/margin_semimedium"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginEnd="@dimen/margin_semimedium"
-                    android:background="@drawable/rectangle_round_grad"
-                    android:fontFamily="@font/lato_regular"
-                    android:inputType="text"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/text_designation" />
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </ScrollView>
-
+        <TextView
+            android:id="@+id/asterik"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="* "
+            android:textColor="@color/red_logo"
+            android:textSize="10sp"
+            android:layout_marginEnd="1dp"
+            app:layout_constraintTop_toTopOf="@+id/text_comp_field"
+            app:layout_constraintBottom_toBottomOf="@+id/text_comp_field"
+            app:layout_constraintEnd_toStartOf="@+id/text_comp_field"/>
 
         <TextView
             android:id="@+id/text_comp_field"
@@ -241,31 +231,31 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/lato_regular"
             android:text="@string/comp_field"
-             android:layout_marginBottom="@dimen/margin_small"
+            android:layout_marginBottom="@dimen/margin_small"
             android:textSize="10sp"
-            android:layout_marginTop="@dimen/margin_small"
-            app:layout_constraintEnd_toEndOf="@+id/divider2"
-            app:layout_constraintStart_toStartOf="@+id/divider2"
-            app:layout_constraintBottom_toTopOf="@+id/divider2" />
+            android:layout_marginTop="@dimen/margin_regular"
+            app:layout_constraintEnd_toEndOf="@+id/textBox_designation"
+            app:layout_constraintStart_toStartOf="@+id/textBox_designation"
+            app:layout_constraintTop_toBottomOf="@+id/textBox_designation" />
 
         <View
             android:id="@+id/divider2"
             style="@style/HorizontalDivider"
-           android:layout_marginBottom="@dimen/margin_small"
+            android:layout_marginTop="@dimen/margin_small"
             android:background="@android:color/darker_gray"
-            app:layout_constraintEnd_toEndOf="@+id/next_comp"
-            app:layout_constraintStart_toStartOf="@+id/next_comp"
-            app:layout_constraintBottom_toTopOf="@+id/next_comp"/>
+            app:layout_constraintStart_toStartOf="@+id/text_comp_field"
+            app:layout_constraintEnd_toEndOf="@+id/text_comp_field"
+            app:layout_constraintTop_toBottomOf="@+id/text_comp_field"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/next_comp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_regular"
+            android:layout_marginTop="@dimen/margin_small"
             android:fontFamily="@font/lato_regular"
-            app:layout_constraintBottom_toTopOf="@+id/button_next"
-            app:layout_constraintEnd_toEndOf="@+id/button_next"
-            app:layout_constraintStart_toStartOf="@+id/button_next">
+            app:layout_constraintTop_toBottomOf="@+id/divider2"
+            app:layout_constraintStart_toStartOf="@+id/divider2"
+            app:layout_constraintEnd_toEndOf="@+id/divider2">
 
             <TextView
                 android:id="@+id/text_nextup"
@@ -294,29 +284,32 @@
             android:id="@+id/button_next"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/rectangle_round_grad_black"
+            android:background="@drawable/rectangle_round_grad_black_solid"
             android:fontFamily="@font/lato_regular"
             android:text="@string/next"
             android:textAllCaps="false"
             android:textColor="#fff"
             android:textSize="16sp"
-            android:layout_marginBottom="@dimen/margin_regular"
-            app:layout_constraintEnd_toEndOf="@+id/privacy_policy"
-            app:layout_constraintStart_toStartOf="@+id/privacy_policy"
-            app:layout_constraintBottom_toTopOf="@+id/privacy_policy" />
+            android:layout_marginTop="@dimen/margin_regular"
+            app:layout_constraintEnd_toEndOf="@+id/next_comp"
+            app:layout_constraintStart_toStartOf="@+id/next_comp"
+            app:layout_constraintTop_toBottomOf="@+id/next_comp" />
 
         <TextView
             android:id="@+id/privacy_policy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_regular"
             android:fontFamily="@font/lato_regular"
+            android:layout_marginTop="@dimen/margin_regular"
+            android:layout_marginBottom="@dimen/margin_regular"
             android:text="@string/privacy_policy"
             android:textColor="@color/lighter_gray"
             android:textSize="10sp"
+            app:layout_constraintTop_toBottomOf="@+id/button_next"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </layout>

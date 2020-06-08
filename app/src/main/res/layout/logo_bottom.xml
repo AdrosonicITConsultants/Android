@@ -13,62 +13,15 @@
         android:id="@+id/role_select_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
+        android:background="@drawable/logo_bottom_text"
         android:contentDescription="@string/logo"
-        android:src="@mipmap/ic_logo_main"
+        android:scaleType="centerInside"
+        android:adjustViewBounds="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
-        android:id="@+id/textView_craftexchange"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/craftexchange"
-        android:textColor="@color/red_logo"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        android:fontFamily="@font/lato_regular"
-        app:layout_constraintEnd_toEndOf="@+id/role_select_logo"
-        app:layout_constraintStart_toStartOf="@+id/role_select_logo"
-        app:layout_constraintTop_toBottomOf="@+id/role_select_logo" />
-
-    <View
-        android:id="@+id/divider1"
-        style="@style/HorizontalDivider"
-        android:layout_marginTop="4dp"
-        android:background="@android:color/darker_gray"
-        app:layout_constraintEnd_toEndOf="@+id/textView_craftexchange"
-        app:layout_constraintStart_toStartOf="@+id/textView_craftexchange"
-        app:layout_constraintTop_toBottomOf="@+id/textView_craftexchange" />
-
-    <TextView
-        android:id="@+id/textView_initiative1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:fontFamily="@font/lato_regular"
-        android:text="@string/initiative1"
-        android:textAlignment="center"
-        android:textSize="10sp"
-        app:layout_constraintEnd_toEndOf="@+id/divider1"
-        app:layout_constraintStart_toStartOf="@+id/divider1"
-        app:layout_constraintTop_toBottomOf="@+id/divider1" />
-
-    <TextView
-        android:id="@+id/textView_initiative2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/initiative2"
-        android:textAlignment="center"
-        android:textSize="10sp"
-        android:fontFamily="@font/lato_regular"
-        app:layout_constraintTop_toBottomOf="@+id/textView_initiative1"
-        app:layout_constraintEnd_toEndOf="@+id/textView_initiative1"
-        app:layout_constraintStart_toStartOf="@+id/textView_initiative1"/>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

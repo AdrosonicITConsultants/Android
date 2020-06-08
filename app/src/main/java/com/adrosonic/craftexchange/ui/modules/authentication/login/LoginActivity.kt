@@ -4,9 +4,14 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toolbar
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityLoginBinding
+import com.adrosonic.craftexchange.ui.modules.artisan.authentication.login.ArtisanLoginUsernameFragment
 import com.adrosonic.craftexchange.ui.modules.buyer.authentication.login.BuyerLoginUsernameFragment
+import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.pixplicity.easyprefs.library.Prefs
+import kotlinx.android.synthetic.main.activity_login.*
 
 fun Context.loginIntent(): Intent {
     return Intent(this, LoginActivity::class.java).apply {
@@ -24,12 +29,23 @@ class LoginActivity : AppCompatActivity() {
         val view = mBinding?.root
         setContentView(view)
 
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.login_container,
-                    BuyerLoginUsernameFragment.newInstance(),"Login Buyer Username")
-                .addToBackStack(null)
-                .commit()
+        var profile = Prefs.getString(ConstantsDirectory.PROFILE,null)
+
+        when(profile){
+            ConstantsDirectory.ARTISAN -> {
+                if (savedInstanceState == null) {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.login_container, ArtisanLoginUsernameFragment.newInstance())
+                        .commitNow()
+                }
+            }
+            ConstantsDirectory.BUYER -> {
+                if (savedInstanceState == null) {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.login_container, BuyerLoginUsernameFragment.newInstance(profile))
+                        .commitNow()
+                }
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityMainBinding
 import com.adrosonic.craftexchange.ui.modules.authentication.login.loginIntent
 import com.adrosonic.craftexchange.ui.modules.role.roleselectIntent

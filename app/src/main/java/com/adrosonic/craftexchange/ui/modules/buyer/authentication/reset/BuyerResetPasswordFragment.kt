@@ -1,0 +1,98 @@
+package com.adrosonic.craftexchange.ui.modules.buyer.authentication.reset
+
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.databinding.DataBindingUtil
+
+import com.adrosonic.craftexchange.R
+import com.adrosonic.craftexchange.databinding.FragmentBuyerResetPasswordBinding
+import com.adrosonic.craftexchange.repository.CraftExchangeRepository
+import com.adrosonic.craftexchange.repository.data.resetResponse.ResetResponse
+import com.adrosonic.craftexchange.repository.data.model.UserAuthModel
+import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.pixplicity.easyprefs.library.Prefs
+import retrofit2.Call
+import retrofit2.Response
+import javax.security.auth.callback.Callback
+
+private const val ARG_PARAM1 = "param1"
+
+class BuyerResetPasswordFragment : Fragment() {
+
+    companion object {
+        @JvmStatic
+        fun newInstance(param1: String) =
+            BuyerResetPasswordFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                }
+            }
+        const val TAG = "BuyerResetPwd"
+
+    }
+
+    private var mBinding: FragmentBuyerResetPasswordBinding ?= null
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_buyer_reset_password, container, false)
+        return mBinding?.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        var email = arguments?.get(ARG_PARAM1).toString()
+        mBinding?.buttonNext?.setOnClickListener{
+
+            if(mBinding?.textBoxPassword?.text.toString().isNotEmpty()){
+                if(mBinding?.textBoxPassword?.text.toString() == mBinding?.textBoxRetypePwd?.text.toString()){
+                    CraftExchangeRepository
+                        .resetPassword()
+                        .resetPassword("application/json",
+                            UserAuthModel(
+                                email,
+                                mBinding?.textBoxRetypePwd?.text.toString(),
+                                Prefs.getLong(ConstantsDirectory.REF_ROLE_ID, 0)
+                            )
+                        )
+                        .enqueue(object : Callback,retrofit2.Callback<ResetResponse>{
+                            override fun onFailure(call: Call<ResetResponse>, t: Throwable) {
+                                t.printStackTrace()
+                                Toast.makeText(activity,"${t.printStackTrace()}",Toast.LENGTH_SHORT).show()
+                            }
+                            override fun onResponse(
+                                call: Call<ResetResponse>, response: Response<ResetResponse>) {
+                                if(response.body()?.valid == true){
+                                    Prefs.putString(ConstantsDirectory.USER_PWD,mBinding?.textBoxRetypePwd?.text.toString())
+                                    if (savedInstanceState == null) {
+                                        activity?.supportFragmentManager?.beginTransaction()
+                                            ?.replace(R.id.reset_container,
+                                                BuyerResetSuccessFragment.newInstance(),"Reset Buyer Success")
+                                            ?.addToBackStack(null)
+                                            ?.commit()
+                                    }
+                                }
+                            }
+
+                        })
+
+
+                }else{
+                    Toast.makeText(activity,"Enter Correct Password",Toast.LENGTH_SHORT).show()
+                }
+            }else{
+                Toast.makeText(activity,"Enter Password",Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+
+}

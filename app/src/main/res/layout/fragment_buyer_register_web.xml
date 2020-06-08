@@ -8,44 +8,37 @@
         <variable name="model" type="com.adrosonic.craftexchange.ui.modules.authentication.register.RegisterViewModel"/>
     </data>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/buyer_register_web"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/colorBackground"
         tools:context=".ui.modules.buyer.authentication.register.BuyerRegisterWebFragment">
-
-        <ImageView
-            android:id="@+id/back_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_small"
-            android:paddingStart="@dimen/margin_regular"
-            android:contentDescription="@string/back"
-            android:src="@drawable/ic_keyboard_backspace_black_24dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/buyer_tag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_small"
-            android:paddingEnd="18dp"
             android:text="@string/buyer"
             android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/back_button"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.98"
-            app:layout_constraintStart_toEndOf="@+id/back_button"
-            app:layout_constraintTop_toTopOf="@+id/back_button" />
+            app:layout_constraintHorizontal_bias="0.9"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.02"/>
 
         <include
             android:id="@+id/logo_part"
             layout="@layout/logo_side"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -65,8 +58,8 @@
             android:textColor="#000"
             android:textSize="@dimen/Ques_text"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/logo_part"
-            app:layout_constraintStart_toStartOf="@+id/logo_part"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/logo_part"
             app:layout_constraintVertical_bias="0.0" />
 
@@ -81,8 +74,8 @@
             android:layout_marginTop="@dimen/margin_semimedium"
             android:paddingStart="@dimen/margin_medium"
             android:paddingEnd="@dimen/margin_medium"
-            app:layout_constraintStart_toStartOf="@+id/textView_web_details"
-            app:layout_constraintEnd_toEndOf="@+id/textView_web_details"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView_web_details"/>
 
         <TextView
@@ -90,7 +83,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_semimedium"
-            android:layout_marginTop="@dimen/margin_semimedium"
+            android:layout_marginTop="@dimen/margin_regular"
             android:fontFamily="@font/lato_regular"
             android:text="@string/weblink"
             android:textAlignment="textStart"
@@ -152,34 +145,42 @@
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_semimedium"
-            android:background="@drawable/rectangle_round_grad_black"
+            android:background="@drawable/rectangle_round_grad_black_solid"
             android:fontFamily="@font/lato_regular"
             android:text="@string/complete"
             android:textAllCaps="false"
             android:textColor="#fff"
             android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="@+id/textBox_sociallink"
-            app:layout_constraintStart_toStartOf="@+id/textBox_sociallink"
+            app:layout_constraintBottom_toTopOf="@+id/text_tnct"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textBox_sociallink"
             app:layout_constraintVertical_bias="0.0" />
 
-        <TextView
-            android:id="@+id/text_tnc"
+        <CheckBox
+            android:id="@+id/checkBox_tnc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_semimedium"
+            android:layout_marginStart="@dimen/margin_regular"
+            android:layout_marginEnd="2dp"
+            app:layout_constraintEnd_toStartOf="@+id/text_tnct"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/text_tnct" />
+
+        <TextView
+            android:id="@+id/text_tnct"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_small"
             android:layout_marginBottom="@dimen/margin_regular"
             android:fontFamily="@font/lato_regular"
-            android:paddingStart="@dimen/margin_regular"
-            android:paddingEnd="@dimen/margin_regular"
             android:text="@string/text_to_tnc"
             android:textAlignment="center"
             android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@+id/privacy_policy"
             app:layout_constraintEnd_toEndOf="@+id/button_complete"
-            app:layout_constraintStart_toStartOf="@+id/button_complete"
-            app:layout_constraintTop_toBottomOf="@+id/button_complete"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintStart_toStartOf="@+id/button_complete" />
 
         <TextView
             android:id="@+id/privacy_policy"
@@ -195,4 +196,5 @@
             app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </layout>

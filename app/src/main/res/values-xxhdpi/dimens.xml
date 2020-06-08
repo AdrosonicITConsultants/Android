@@ -8,7 +8,7 @@
 	<dimen name="margin_medium">40dp</dimen>
 	<dimen name="Ques_text">23sp</dimen>
 	<dimen name="textbox_ht">56dp</dimen>
-	<dimen name="edit_text">24sp</dimen>
+	<dimen name="edit_text">20sp</dimen>
 	<dimen name="button_text">20sp</dimen>
 	<dimen name="button_ht">60dp</dimen>
 </resources>

@@ -1,0 +1,55 @@
+package com.adrosonic.craftexchange.repository
+
+import com.adrosonic.craftexchange.repository.remote.RegisterDao
+import com.adrosonic.craftexchange.repository.remote.LoginDao
+import com.adrosonic.craftexchange.repository.remote.ResetPasswordDao
+import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.google.gson.GsonBuilder
+import okhttp3.ConnectionSpec
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
+
+object CraftExchangeRepository {
+    private fun <T> builder(endpoint: Class<T>): T {
+        var lists = listOf(ConnectionSpec.COMPATIBLE_TLS, ConnectionSpec.CLEARTEXT)
+
+//        var spec = ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+//            .tlsVersions(TlsVersion.TLS_1_2)
+//            .cipherSuites(
+//                CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+//                CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+//                CipherSuite.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256)
+//            .build()
+
+        return Retrofit.Builder()
+            .baseUrl(ConstantsDirectory.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
+            .client(OkHttpClient.Builder()
+                .addInterceptor(HttpLoggingInterceptor()
+                    .setLevel(HttpLoggingInterceptor.Level.BODY))
+//                .connectionSpecs(Collections.singletonList(spec))
+                .connectionSpecs(lists)
+                .connectTimeout(30,TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+        .build())
+
+            .build()
+            .create(endpoint)
+    }
+
+    fun getRegisterService(): RegisterDao {
+        return builder(RegisterDao::class.java)
+    }
+
+    fun loginService(): LoginDao {
+        return builder(LoginDao::class.java)
+    }
+
+    fun resetPassword(): ResetPasswordDao {
+        return builder(ResetPasswordDao::class.java)
+    }
+
+}

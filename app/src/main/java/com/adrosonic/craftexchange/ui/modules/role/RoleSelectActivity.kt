@@ -13,7 +13,7 @@ fun Context.roleselectIntent(): Intent {
     }
 }
 
-class RoleSelectActivity : AppCompatActivity() {
+class RoleSelectActivity : AppCompatActivity(){
 
     private var mBinding : ActivityRoleSelectBinding ?= null
 
@@ -26,7 +26,6 @@ class RoleSelectActivity : AppCompatActivity() {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.role_select_container,
                     RoleSelectFragment.newInstance(),"RoleSelect")
-                .addToBackStack(null)
                 .commit()
         }
     }

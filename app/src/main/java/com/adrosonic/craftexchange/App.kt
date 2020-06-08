@@ -1,6 +1,8 @@
 package com.adrosonic.craftexchange
 
 import android.app.Application
+import android.content.ContextWrapper
+import com.pixplicity.easyprefs.library.Prefs
 import io.realm.Realm
 import io.realm.RealmConfiguration
 
@@ -14,6 +16,12 @@ class App : Application() {
 
         //use this config for realm
         val mRealm = Realm.getInstance(config)
+
+        Prefs.Builder()
+            .setContext(this)
+            .setMode(ContextWrapper.MODE_PRIVATE)
+            .setUseDefaultSharedPreference(true)
+            .build()
 
     }
 }

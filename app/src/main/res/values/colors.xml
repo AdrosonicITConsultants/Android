@@ -6,6 +6,8 @@
     <color name="colorBackground">#ffffff</color>
     <color name="colorSplash">#ffffff</color>
     <color name="lighter_gray">#ddd</color>
-
+    <color name="darker_gray">#A9A9A9</color>
     <color name="red_logo">#c00</color>
+    <color name="dark_green">#009A2F</color>
+    <color name="light_green">#00B939</color>
 </resources>
