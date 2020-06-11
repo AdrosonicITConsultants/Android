@@ -55,14 +55,9 @@ class BuyerLoginPasswordFragment : Fragment() {
         return mBinding?.root
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        Prefs.putString(ConstantsDirectory.USER_PWD,mBinding?.textBoxPassword?.text.toString())
 
         var profile = arguments?.get(ARG_PARAM1)
 
@@ -91,8 +86,9 @@ class BuyerLoginPasswordFragment : Fragment() {
 
         mBinding?.buttonNext?.setOnClickListener{
             if(mBinding?.textBoxPassword?.text.toString() != ""){
+
                 CraftExchangeRepository
-                    .loginService()
+                    .getLoginService()
                     .authenticate("application/json",
                         UserAuthModel(
                             Prefs.getString(ConstantsDirectory.USER_EMAIL, null),

@@ -12,30 +12,36 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.FragmentArtisanLoginUsernameBinding
+import com.adrosonic.craftexchange.repository.CraftExchangeRepository
+import com.adrosonic.craftexchange.repository.data.loginResponse.LoginValidationResponse
 import com.adrosonic.craftexchange.ui.modules.authentication.register.RegisterActivity
+import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.pixplicity.easyprefs.library.Prefs
+import retrofit2.Call
+import retrofit2.Response
+import javax.security.auth.callback.Callback
 
 private const val ARG_PARAM1 = "param1"
 
 class ArtisanLoginUsernameFragment : Fragment() {
     private var param1: String? = null
 
-//    companion object {
-//        @JvmStatic
-//        fun newInstance(param1: String) =
-//            ArtisanLoginUsernameFragment().apply {
-//                arguments = Bundle().apply {
-//                    putString(ARG_PARAM1, param1)
-//                }
-//            }
-//    }
-
     companion object {
-        fun newInstance() = ArtisanLoginUsernameFragment()
+        @JvmStatic
+        fun newInstance(param1: String) =
+            ArtisanLoginUsernameFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                }
+            }
+        const val TAG = "ArtisanLoginEmail"
     }
+
 
     private var mBinding: FragmentArtisanLoginUsernameBinding ?= null
 
@@ -59,10 +65,17 @@ class ArtisanLoginUsernameFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        var profile = arguments?.get(ARG_PARAM1).toString()
+
         val clickSpan = SpannableString("New User? Click here to register.")
         val clickableSpan: ClickableSpan = object : ClickableSpan() {
             override fun onClick(textView: View) {
-                startActivity(Intent(activity, RegisterActivity::class.java))
+                startActivity(
+                    Intent(activity, RegisterActivity::class.java).putExtra(
+                        "profile",
+                        profile
+                    )
+                )
             }
 
             override fun updateDrawState(ds: TextPaint) {
@@ -76,12 +89,45 @@ class ArtisanLoginUsernameFragment : Fragment() {
         mBinding?.textViewClickHere?.movementMethod = LinkMovementMethod.getInstance()
         mBinding?.textViewClickHere?.highlightColor = Color.TRANSPARENT
 
-        mBinding?.buttonNext?.setOnClickListener{
-            if (savedInstanceState == null) {
-                activity?.supportFragmentManager?.beginTransaction()
-                    ?.replace(R.id.login_container,
-                        ArtisanLoginPasswordFragment.newInstance(),"Login Artisan Password")
-                    ?.commit()
+        mBinding?.buttonNext?.setOnClickListener {
+
+            if (mBinding?.textBoxUsername?.text.toString() != "") {
+                CraftExchangeRepository
+                    .getLoginService()
+                    .validateUserName(mBinding?.textBoxUsername?.text.toString(),
+                        Prefs.getLong(ConstantsDirectory.REF_ROLE_ID,0))
+                    .enqueue(object : Callback, retrofit2.Callback<LoginValidationResponse> {
+                        override fun onFailure(call: Call<LoginValidationResponse>, t: Throwable) {
+                            t.printStackTrace()
+                            Toast.makeText(activity,"${t.printStackTrace()}",Toast.LENGTH_SHORT).show()
+                        }
+                        override fun onResponse(
+                            call: Call<LoginValidationResponse>,
+                            response: Response<LoginValidationResponse>
+                        ) {
+                            if (response.body()?.valid == true) {
+                                Prefs.putString(
+                                    ConstantsDirectory.USER_EMAIL,
+                                    mBinding?.textBoxUsername?.text.toString()
+                                )
+                                if (savedInstanceState == null) {
+                                    activity?.supportFragmentManager?.beginTransaction()
+                                        ?.replace(
+                                            R.id.login_container,
+                                            ArtisanLoginPasswordFragment.newInstance(profile),
+                                            "Login Artisan Password"
+                                        )
+                                        ?.addToBackStack(null)
+                                        ?.commit()
+                                }
+                            } else {
+                                Toast.makeText(activity, "Enter Valid Email", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+
+                    })
+            } else {
+                Toast.makeText(activity, "Enter Valid email/mobile", Toast.LENGTH_SHORT).show()
             }
         }
     }

@@ -12,16 +12,35 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.FragmentArtisanLoginPasswordBinding
+import com.adrosonic.craftexchange.repository.CraftExchangeRepository
+import com.adrosonic.craftexchange.repository.data.loginResponse.LoginAuthResponse
+import com.adrosonic.craftexchange.repository.data.model.UserAuthModel
 import com.adrosonic.craftexchange.ui.modules.authentication.register.RegisterActivity
+import com.adrosonic.craftexchange.ui.modules.authentication.reset.ResetPasswordActivity
+import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.pixplicity.easyprefs.library.Prefs
+import retrofit2.Call
+import retrofit2.Response
+import javax.security.auth.callback.Callback
+
+private const val ARG_PARAM1 = "param1"
 
 class ArtisanLoginPasswordFragment : Fragment() {
 
     companion object {
-        fun newInstance() = ArtisanLoginPasswordFragment()
+        @JvmStatic
+        fun newInstance(param1: String) =
+            ArtisanLoginPasswordFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                }
+            }
+        const val TAG = "ArtisanLoginPwd"
     }
 
     private var mBinding: FragmentArtisanLoginPasswordBinding ?= null
@@ -55,13 +74,44 @@ class ArtisanLoginPasswordFragment : Fragment() {
         mBinding?.textViewClickHere?.movementMethod = LinkMovementMethod.getInstance()
         mBinding?.textViewClickHere?.highlightColor = Color.TRANSPARENT
 
-//        mBinding?.buttonNext?.setOnClickListener{
-//            if (savedInstanceState == null) {
-//                activity?.supportFragmentManager?.beginTransaction()
-//                    ?.replace(R.id.login_container,
-//                        ArtisanLoginPasswordFragment.newInstance(),"Login Artisan Password")
-//                    ?.commit()
-//            }
-//        }
+        mBinding?.textForgotPwd?.setOnClickListener {
+            startActivity(Intent(activity, ResetPasswordActivity::class.java))
+//                .putExtra("profile",ConstantsDirectory.BUYER)
+        }
+
+        mBinding?.buttonNext?.setOnClickListener{
+            if(mBinding?.textBoxPassword?.text.toString() != ""){
+
+                CraftExchangeRepository
+                    .getLoginService()
+                    .authenticate("application/json",
+                        UserAuthModel(
+                            Prefs.getString(ConstantsDirectory.USER_EMAIL, null),
+                            mBinding?.textBoxPassword?.text.toString(),
+                            Prefs.getLong(ConstantsDirectory.REF_ROLE_ID, 0)
+                        )
+                    )
+                    .enqueue(object : Callback, retrofit2.Callback<LoginAuthResponse>{
+                        override fun onFailure(call: Call<LoginAuthResponse>, t: Throwable) {
+                            t.printStackTrace()
+                            Toast.makeText(activity,"${t.printStackTrace()}", Toast.LENGTH_SHORT).show()
+                        }
+
+                        override fun onResponse(
+                            call: Call<LoginAuthResponse>, response: Response<LoginAuthResponse>
+                        ) {
+                            if(response.body()?.valid == true){
+                                Prefs.putString(ConstantsDirectory.USER_PWD,mBinding?.textBoxPassword?.text.toString())
+                                Prefs.putBoolean(ConstantsDirectory.IS_LOGGED_IN,true)
+                                Toast.makeText(activity,"Login Successful! - landing screen Artist", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+
+                    })
+            }else{
+                Toast.makeText(activity,"Enter Correct Pwd", Toast.LENGTH_SHORT).show()
+            }
+
+        }
     }
 }

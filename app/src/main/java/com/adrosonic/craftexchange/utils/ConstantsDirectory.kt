@@ -15,6 +15,7 @@ object ConstantsDirectory {
 
     const val USER_EMAIL = "useremail"
     const val USER_PWD = "password"
+    const val ARTISAN_ID = "artisanid"
 
     const val FIRST_NAME = "firstname"
     const val LAST_NAME = "lastname"
@@ -26,8 +27,8 @@ object ConstantsDirectory {
     const val CIN = "cin"
     const val GST = "gst"
     const val PAN = "pan"
-    const val POC_FNAME = "pocfname"
-    const val POC_LNAME = "poclname"
+    const val POC_NAME = "pocname"
+//    const val POC_LNAME = "poclname"
     const val POC_CONTACT = "poccontact"
     const val POC_EMAIL = "pocemail"
 
@@ -46,4 +47,6 @@ object ConstantsDirectory {
     const val WEB_LINK = "weblink"
 
     const val IS_FIRST_TIME = "isfirsttime"
+
+    const val CLUSTER_ID = "clusterid"
 }

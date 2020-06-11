@@ -25,7 +25,7 @@ data class LoginAuthResponse (
     val websiteLink: String,
     val socialMediaLink: String,
     val pointOfContact: PointOfContact,
-    val buyerCompanyDetails: BuyerCompanyDetails,
+    val companyDetails: CompanyDetails,
     val weaverDetails: Any? = null,
     val cluster: Any? = null,
     val refRoleId: Long,
@@ -69,7 +69,7 @@ data class LoginAuthResponse (
     val name: String
 )
 
- data class BuyerCompanyDetails (
+ data class CompanyDetails (
     val id: Long,
     val companyName: String,
     val contact: String,

@@ -1,13 +1,13 @@
 package com.adrosonic.craftexchange.repository.data.registerResponse
 
 data class CountryResponse (
-    val data: List<Datum>,
+    val data: List<Country>,
     val valid: Boolean,
     val errorMessage: Any? = null,
     val errorCode: Long
 )
 
-data class Datum (
+data class Country (
     val id: Long,
     val name: String
 )

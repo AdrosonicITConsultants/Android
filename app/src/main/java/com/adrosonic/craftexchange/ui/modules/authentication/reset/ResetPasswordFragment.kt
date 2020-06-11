@@ -1,4 +1,4 @@
-package com.adrosonic.craftexchange.ui.modules.buyer.authentication.reset
+package com.adrosonic.craftexchange.ui.modules.authentication.reset
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,7 +9,8 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 
 import com.adrosonic.craftexchange.R
-import com.adrosonic.craftexchange.databinding.FragmentBuyerResetPasswordBinding
+import com.adrosonic.craftexchange.databinding.FragmentResetPasswordBinding
+
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.resetResponse.ResetResponse
 import com.adrosonic.craftexchange.repository.data.model.UserAuthModel
@@ -21,12 +22,13 @@ import javax.security.auth.callback.Callback
 
 private const val ARG_PARAM1 = "param1"
 
-class BuyerResetPasswordFragment : Fragment() {
+class ResetPasswordFragment : Fragment() {
 
     companion object {
         @JvmStatic
         fun newInstance(param1: String) =
-            BuyerResetPasswordFragment().apply {
+            ResetPasswordFragment()
+                .apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                 }
@@ -35,14 +37,15 @@ class BuyerResetPasswordFragment : Fragment() {
 
     }
 
-    private var mBinding: FragmentBuyerResetPasswordBinding ?= null
+    private var mBinding: FragmentResetPasswordBinding ?= null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_buyer_reset_password, container, false)
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_reset_password, container, false)
+        mBinding?.profileTag?.text = Prefs.getString(ConstantsDirectory.PROFILE,"")
         return mBinding?.root
     }
 
@@ -55,7 +58,7 @@ class BuyerResetPasswordFragment : Fragment() {
             if(mBinding?.textBoxPassword?.text.toString().isNotEmpty()){
                 if(mBinding?.textBoxPassword?.text.toString() == mBinding?.textBoxRetypePwd?.text.toString()){
                     CraftExchangeRepository
-                        .resetPassword()
+                        .getResetPwdService()
                         .resetPassword("application/json",
                             UserAuthModel(
                                 email,
@@ -75,7 +78,7 @@ class BuyerResetPasswordFragment : Fragment() {
                                     if (savedInstanceState == null) {
                                         activity?.supportFragmentManager?.beginTransaction()
                                             ?.replace(R.id.reset_container,
-                                                BuyerResetSuccessFragment.newInstance(),"Reset Buyer Success")
+                                                ResetSuccessFragment.newInstance(),"Reset Buyer Success")
                                             ?.addToBackStack(null)
                                             ?.commit()
                                     }

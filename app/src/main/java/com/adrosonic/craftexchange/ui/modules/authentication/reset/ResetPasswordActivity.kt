@@ -6,9 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityResetPasswordBinding
-import com.adrosonic.craftexchange.ui.modules.buyer.authentication.reset.BuyerResetUsernameFragment
-import com.adrosonic.craftexchange.utils.ConstantsDirectory
-import com.pixplicity.easyprefs.library.Prefs
 
 fun Context.resetIntent(): Intent {
     return Intent(this,ResetPasswordActivity::class.java).apply {
@@ -27,18 +24,19 @@ class ResetPasswordActivity : AppCompatActivity() {
         val view = mBinding?.root
         setContentView(view)
 
-        var profile = Prefs.getString(ConstantsDirectory.PROFILE,"")
+//        var profile = Prefs.getString(ConstantsDirectory.PROFILE,"")
 
-        when(profile){
-            ConstantsDirectory.ARTISAN -> {}
-            ConstantsDirectory.BUYER -> {
+//        when(profile){
+//            ConstantsDirectory.ARTISAN -> {}
+//            ConstantsDirectory.BUYER -> {
                 if (savedInstanceState == null) {
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.reset_container,BuyerResetUsernameFragment.newInstance(),"Reset Buyer Username")
+                        .replace(R.id.reset_container,
+                            ResetUsernameFragment.newInstance(),"Reset Username")
                         .commitNow()
                 }
-            }
-        }
+//            }
+//        }
 
 
     }

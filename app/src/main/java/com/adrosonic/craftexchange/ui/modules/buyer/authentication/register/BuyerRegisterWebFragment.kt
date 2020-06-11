@@ -19,7 +19,8 @@ import androidx.databinding.DataBindingUtil
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.FragmentBuyerRegisterWebBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
-import com.adrosonic.craftexchange.repository.data.model.*
+import com.adrosonic.craftexchange.repository.data.model.buyer.*
+import com.adrosonic.craftexchange.repository.data.model.buyer.Country
 import com.adrosonic.craftexchange.repository.data.registerResponse.*
 import com.adrosonic.craftexchange.ui.modules.authentication.login.LoginActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
@@ -85,28 +86,35 @@ class BuyerRegisterWebFragment : Fragment() {
                 "",
                 0
             )
-        var country = Country(Prefs.getString(ConstantsDirectory.COUNTRY_ID,"").toLong())
+        var country =
+            Country(
+                Prefs.getString(
+                    ConstantsDirectory.COUNTRY_ID,
+                    ""
+                ).toLong()
+            )
 //        var country =
 //            Country(
 //                1,
 //                "INDIA"
 //            )
-        var addr = Address(
-            addrType,
-            Prefs.getString(ConstantsDirectory.CITY, ""),
-            country,
-            Prefs.getString(ConstantsDirectory.DISTRICT, ""),
-            0,
-            Prefs.getString(ConstantsDirectory.LANDMARK, ""),
-            Prefs.getString(ConstantsDirectory.ADDR_LINE1, ""),
-            Prefs.getString(ConstantsDirectory.ADDR_LINE2, ""),
-            Prefs.getString(ConstantsDirectory.PINCODE, ""),
-            Prefs.getString(ConstantsDirectory.STATE, ""),
-            Prefs.getString(ConstantsDirectory.STREET, "")
-        )
+        var addr =
+            Address(
+                addrType,
+                Prefs.getString(ConstantsDirectory.CITY, ""),
+                country,
+                Prefs.getString(ConstantsDirectory.DISTRICT, ""),
+                0,
+                Prefs.getString(ConstantsDirectory.LANDMARK, ""),
+                Prefs.getString(ConstantsDirectory.ADDR_LINE1, ""),
+                Prefs.getString(ConstantsDirectory.ADDR_LINE2, ""),
+                Prefs.getString(ConstantsDirectory.PINCODE, ""),
+                Prefs.getString(ConstantsDirectory.STATE, ""),
+                Prefs.getString(ConstantsDirectory.STREET, "")
+            )
 
         var company =
-            BuyerCompanyDetails(
+            CompanyDetails(
                 Prefs.getString(ConstantsDirectory.CIN, ""),
                 Prefs.getString(ConstantsDirectory.COMP_NAME, ""),
                 "",
@@ -119,9 +127,9 @@ class BuyerRegisterWebFragment : Fragment() {
             BuyerPointOfContact(
                 Prefs.getString(ConstantsDirectory.POC_CONTACT, ""),
                 Prefs.getString(ConstantsDirectory.POC_EMAIL, ""),
-                Prefs.getString(ConstantsDirectory.POC_FNAME, ""),
+                Prefs.getString(ConstantsDirectory.POC_NAME, ""),
                 0,
-                Prefs.getString(ConstantsDirectory.POC_LNAME, "")
+                ""
             )
 
         mBinding?.buttonComplete?.setOnClickListener{
@@ -161,7 +169,9 @@ class BuyerRegisterWebFragment : Fragment() {
                                 Prefs.clear()
                                 Prefs.putString(ConstantsDirectory.PROFILE,"Buyer")
                                 Prefs.putLong(ConstantsDirectory.REF_ROLE_ID,2)
-                                startActivity(Intent(activity,LoginActivity::class.java))}
+                                startActivity(Intent(activity,LoginActivity::class.java).addFlags(
+                                    Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                ))}
                         }
 
                     })

@@ -9,13 +9,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.FragmentBuyerRegisterCompanyBinding
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
-import com.google.gson.Gson
 import com.pixplicity.easyprefs.library.Prefs
 import com.wajahatkarim3.easyvalidation.core.view_ktx.nonEmpty
 
@@ -64,8 +62,7 @@ class BuyerRegisterCompanyFragment : Fragment() {
                 Prefs.putString(ConstantsDirectory.CIN,mBinding?.textBoxCin?.text.toString())
                 Prefs.putString(ConstantsDirectory.GST,mBinding?.textBoxGst?.text.toString())
                 Prefs.putString(ConstantsDirectory.PAN,mBinding?.textBoxPan?.text.toString())
-                Prefs.putString(ConstantsDirectory.POC_FNAME,mBinding?.textBoxPocFname?.text.toString())
-                Prefs.putString(ConstantsDirectory.POC_LNAME,mBinding?.textBoxPocLname?.text.toString())
+                Prefs.putString(ConstantsDirectory.POC_NAME,mBinding?.textBoxPocName?.text.toString())
                 Prefs.putString(ConstantsDirectory.POC_CONTACT,mBinding?.textBoxPocContact?.text.toString())
                 Prefs.putString(ConstantsDirectory.POC_EMAIL,mBinding?.textBoxPocEmail?.text.toString())
 

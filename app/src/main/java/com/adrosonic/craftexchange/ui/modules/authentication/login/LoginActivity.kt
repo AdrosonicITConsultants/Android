@@ -35,7 +35,7 @@ class LoginActivity : AppCompatActivity() {
             ConstantsDirectory.ARTISAN -> {
                 if (savedInstanceState == null) {
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.login_container, ArtisanLoginUsernameFragment.newInstance())
+                        .replace(R.id.login_container, ArtisanLoginUsernameFragment.newInstance(profile))
                         .commitNow()
                 }
             }

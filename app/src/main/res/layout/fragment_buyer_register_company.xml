@@ -219,7 +219,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_semimedium"
-            android:layout_marginTop="@dimen/margin_regular"
+            android:layout_marginTop="24dp"
             android:fontFamily="@font/lato_regular"
             android:text="@string/poc"
             android:textAlignment="textStart"
@@ -227,19 +227,19 @@
             app:layout_constraintTop_toBottomOf="@+id/textBox_upload" />
 
         <TextView
-            android:id="@+id/text_poc_fname"
+            android:id="@+id/text_poc_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_semimedium"
             android:layout_marginTop="@dimen/margin_small"
             android:fontFamily="@font/lato_regular"
-            android:text="@string/firstname"
+            android:text="@string/contactname"
             android:textAlignment="textStart"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_poc" />
 
         <EditText
-            android:id="@+id/textBox_poc_fname"
+            android:id="@+id/textBox_poc_name"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginStart="@dimen/margin_semimedium"
@@ -253,36 +253,7 @@
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_poc_fname" />
-
-        <TextView
-            android:id="@+id/text_poc_lname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_semimedium"
-            android:layout_marginTop="@dimen/margin_regular"
-            android:fontFamily="@font/lato_regular"
-            android:text="@string/lastname"
-            android:textAlignment="textStart"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textBox_poc_fname" />
-
-        <EditText
-            android:id="@+id/textBox_poc_lname"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginStart="@dimen/margin_semimedium"
-            android:layout_marginTop="2dp"
-            android:layout_marginEnd="@dimen/margin_semimedium"
-            android:background="@drawable/rectangle_round_grad"
-            android:fontFamily="@font/lato_regular"
-            android:inputType="text"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_poc_lname" />
+            app:layout_constraintTop_toBottomOf="@+id/text_poc_name" />
 
         <TextView
             android:id="@+id/text_poc_contact"
@@ -294,7 +265,7 @@
             android:text="@string/contact"
             android:textAlignment="textStart"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textBox_poc_lname" />
+            app:layout_constraintTop_toBottomOf="@+id/textBox_poc_name" />
 
         <EditText
             android:id="@+id/textBox_poc_contact"

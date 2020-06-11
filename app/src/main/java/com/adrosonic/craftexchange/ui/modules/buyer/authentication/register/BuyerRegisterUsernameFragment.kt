@@ -79,7 +79,6 @@ class BuyerRegisterUsernameFragment : Fragment() {
         mBinding?.buttonReach?.isClickable = true
     }
 
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -159,4 +158,6 @@ class BuyerRegisterUsernameFragment : Fragment() {
         }
         }
     }
-}}
+}
+
+}

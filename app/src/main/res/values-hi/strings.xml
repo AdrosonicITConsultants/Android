@@ -16,18 +16,19 @@
     <string name="buyer">Buyer</string>
     <string name="change_language">Change Language</string>
     <string name="need_help">Need help Deciding?</string>
+    <string name="need_help2">Need help?</string>
     <string name="change_lang_desc">Change language icon</string>
     <string name="privacy_policy">Privacy Policy</string>
 
     //buyer login
     <string name="back">Back</string>
-    <string name="enter_username">Enter your registered mobile number or email id</string>
+    <string name="enter_username">Enter your registered mobile\nnumber or email id</string>
     <string name="username">Username</string>
     <string name="username_email">Mobile no / Email Id</string>
     <string name="next">Next</string>
     <string name="need">Need help ?</string>
     <string name="new_user">New User? Click here to register.</string>
-    <string name="enter_password">Enter your password to login</string>
+    <string name="enter_password">Enter your password\nto login</string>
     <string name="login">Login</string>
     <string name="forgot_password">Forgot Password?</string>
 
@@ -77,12 +78,20 @@
     <string name="success_pwd_reset_msg">Your password was successfully reset</string>
     <string name="loginnow">Login now</string>
     <string name="confirmation_text">An email confirmation has been sent\nto your registered email id</string>
-    <string name="poc">Buyer\'s Point ofContact : </string>
+    <string name="poc">Buyer\'s Point of Contact : </string>
     <string name="contact">Contact Number</string>
     <string name="email">Email id</string>
     <string name="landmark">Landmark</string>
     <string name="district">District</string>
     <string name="buyer_logo">BuyerIcon</string>
+    <string name="enter_artisan_id">Enter your artisan id</string>
+    <string name="no_artisanId_text">if you don\'t have an\nartisan id get in touch with us</string>
+    <string name="artisanId">"Artisan id : "</string>
+    <string name="cluster">Cluster</string>
+    <string name="address">Address</string>
+    <string name="text_select_cat">Select category of products you make</string>
+    <string name="skip_text_artisan"><![CDATA[You can always do this step later, SKIP >]]></string>
+    <string name="contactname">Contact Name</string>
 
 
 </resources>

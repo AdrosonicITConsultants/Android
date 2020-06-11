@@ -1,9 +1,9 @@
-package com.adrosonic.craftexchange.repository.data.model
+package com.adrosonic.craftexchange.repository.data.model.buyer
 
 data class User (
     val address: Address,
     val alternateMobile: String,
-    val buyerCompanyDetails: BuyerCompanyDetails,
+    val companyDetails: CompanyDetails,
     val buyerPointOfContact: BuyerPointOfContact,
 //    val clusterId: Long,     //not needed for buyer
     val designation: String,
@@ -45,7 +45,7 @@ data class Country (
 //    val name: String
 )
 
-data class BuyerCompanyDetails (
+data class CompanyDetails (
     val cin: String,
     val companyName: String,
     val contact: String,

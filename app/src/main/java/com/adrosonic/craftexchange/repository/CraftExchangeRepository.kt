@@ -1,5 +1,6 @@
 package com.adrosonic.craftexchange.repository
 
+import com.adrosonic.craftexchange.repository.remote.ClusterDao
 import com.adrosonic.craftexchange.repository.remote.RegisterDao
 import com.adrosonic.craftexchange.repository.remote.LoginDao
 import com.adrosonic.craftexchange.repository.remote.ResetPasswordDao
@@ -44,12 +45,16 @@ object CraftExchangeRepository {
         return builder(RegisterDao::class.java)
     }
 
-    fun loginService(): LoginDao {
+    fun getLoginService(): LoginDao {
         return builder(LoginDao::class.java)
     }
 
-    fun resetPassword(): ResetPasswordDao {
+    fun getResetPwdService(): ResetPasswordDao {
         return builder(ResetPasswordDao::class.java)
+    }
+
+    fun getClusterService(): ClusterDao {
+        return builder(ClusterDao::class.java)
     }
 
 }

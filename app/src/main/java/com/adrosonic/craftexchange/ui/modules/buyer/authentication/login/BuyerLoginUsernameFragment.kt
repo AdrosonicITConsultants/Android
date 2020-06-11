@@ -85,7 +85,7 @@ class BuyerLoginUsernameFragment : Fragment() {
 
             if (mBinding?.textBoxUsername?.text.toString() != "") {
                 CraftExchangeRepository
-                    .loginService()
+                    .getLoginService()
                     .validateUserName(mBinding?.textBoxUsername?.text.toString(),Prefs.getLong(ConstantsDirectory.REF_ROLE_ID,0))
                     .enqueue(object : Callback, retrofit2.Callback<LoginValidationResponse> {
                         override fun onFailure(call: Call<LoginValidationResponse>, t: Throwable) {

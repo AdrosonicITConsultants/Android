@@ -1,10 +1,11 @@
-package com.adrosonic.craftexchange.ui.modules.buyer.authentication.register
+package com.adrosonic.craftexchange.ui.modules.artisan.authentication.register
 
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,11 +13,11 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
+
 import com.adrosonic.craftexchange.R
-import com.adrosonic.craftexchange.databinding.FragmentBuyerRegisterAddressBinding
+import com.adrosonic.craftexchange.databinding.FragmentArtisanRegisterDetailsBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
-import com.adrosonic.craftexchange.repository.data.registerResponse.CountryResponse
+import com.adrosonic.craftexchange.repository.data.clusterResponse.CLusterResponse
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.google.gson.Gson
 import com.pixplicity.easyprefs.library.Prefs
@@ -26,46 +27,40 @@ import retrofit2.Call
 import retrofit2.Response
 import javax.security.auth.callback.Callback
 
-
-class BuyerRegisterAddressFragment : Fragment() {
+class ArtisanRegisterDetailsFragment : Fragment() {
 
     companion object {
-//        @JvmStatic
-//        fun newInstance(param1: String,param2: String) =
-//            BuyerRegisterAddressFragment().apply {
-//                arguments = Bundle().apply {
-//                    putString(ARG_PARAM1,param1)
-//                    putString(ARG_PARAM2,param2)
-//                }
-//            }
-        fun newInstance() = BuyerRegisterAddressFragment()
-        const val TAG = "BuyerRegisterAddr"
+        fun newInstance() = ArtisanRegisterDetailsFragment()
+        const val TAG = "ARTisanREGDetails"
     }
 
-    private var mBinding: FragmentBuyerRegisterAddressBinding ?= null
-
-    var countryList = ArrayList<CountryResponse>()
-    var nameArray = ArrayList<String>()
+    private var mBinding: FragmentArtisanRegisterDetailsBinding ?= null
+    var clusterArray = ArrayList<String>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_buyer_register_address, container, false)
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_artisan_register_details, container, false)
 
-//        var ft = Prefs.getBoolean(ConstantsDirectory.IS_FIRST_TIME,true)
-//        if(ft){
-//        nameArray.clear()
+        var asterik = SpannableString("*")
+        asterik.setSpan(ForegroundColorSpan(Color.RED), 0, asterik.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        mBinding?.textFirstname?.append(asterik)
+        mBinding?.textPincode?.append(asterik)
+        mBinding?.textCluster?.append(asterik)
+        mBinding?.textMobile?.append(asterik)
+        mBinding?.valueArtisanId?.text = Prefs.getString(ConstantsDirectory.ARTISAN_ID,"")
+
         CraftExchangeRepository
-            .getRegisterService()
-            .getAllCountries().enqueue(object: Callback, retrofit2.Callback<CountryResponse>{
-                override fun onFailure(call: Call<CountryResponse>, t: Throwable) {
+            .getClusterService()
+            .getAllClusters().enqueue(object: Callback, retrofit2.Callback<CLusterResponse>{
+                override fun onFailure(call: Call<CLusterResponse>, t: Throwable) {
                     t.printStackTrace()
                 }
                 override fun onResponse(
-                    call: Call<CountryResponse>,
-                    response: Response<CountryResponse>
+                    call: Call<CLusterResponse>,
+                    response: Response<CLusterResponse>
                 ) {
                     if(response.body()?.valid == true){
 
@@ -76,33 +71,32 @@ class BuyerRegisterAddressFragment : Fragment() {
                         for (i in 0 until jsonArray.length()) {
                             val jsonObject = jsonArray.getJSONObject(i)
                             val id = Integer.parseInt(jsonObject.optString("id").toString())
-                            val name = jsonObject.optString("name").toString()
+                            val desc = jsonObject.optString("desc").toString()
 //                                countryList.add(Country(id.toLong(),name))
-                            if(!nameArray.contains(name)){
-                                nameArray.add(name)
+                            if(!clusterArray.contains(desc)){
+                                clusterArray.add(desc)
                             }
                         }
 //                        Log.e(TAG,"name : $nameArray")
 //                        Prefs.putBoolean(ConstantsDirectory.IS_FIRST_TIME,false)
-                        countrySpinner(nameArray)
+                        clusterSpinner(clusterArray)
 //                            Toast.makeText(activity,"countries added",Toast.LENGTH_SHORT).show()
                     }else{
                         Toast.makeText(activity,"${response.body()?.errorMessage}", Toast.LENGTH_SHORT).show()
                     }
                 }
             })
-//        }
 
         return mBinding?.root
     }
 
-    fun countrySpinner(array : ArrayList<String>){
-        var adapter=ArrayAdapter(requireActivity(),android.R.layout.simple_spinner_item, array)
+    fun clusterSpinner(array : ArrayList<String>){
+        var adapter= ArrayAdapter(requireActivity(),android.R.layout.simple_spinner_item, array)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        mBinding?.textBoxCountry?.adapter = adapter
-        mBinding?.textBoxCountry?.onItemSelectedListener = (object : AdapterView.OnItemSelectedListener{
+        mBinding?.textBoxCluster?.adapter = adapter
+        mBinding?.textBoxCluster?.onItemSelectedListener = (object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
-               TODO()
+                TODO()
             }
 
             override fun onItemSelected(
@@ -112,7 +106,7 @@ class BuyerRegisterAddressFragment : Fragment() {
                 id: Long
             ) {
                 var id = parent?.getItemIdAtPosition(position)?.inc()
-                Prefs.putString(ConstantsDirectory.COUNTRY_ID,id.toString())
+                Prefs.putString(ConstantsDirectory.CLUSTER_ID,id.toString())
             }
         })
     }
@@ -120,39 +114,37 @@ class BuyerRegisterAddressFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        var asterik = SpannableString("*")
-        asterik.setSpan(ForegroundColorSpan(Color.RED), 0, asterik.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        mBinding?.textAddr1?.append(asterik)
-        mBinding?.textCountry?.append(asterik)
-        mBinding?.textPincode?.append(asterik)
-
         mBinding?.buttonNext?.setOnClickListener{
 
-            if(mBinding?.textBoxAddr1?.nonEmpty() == true &&
+            if(mBinding?.textBoxFirstname?.nonEmpty() == true &&
                 mBinding?.textBoxPincode?.nonEmpty() == true &&
-                mBinding?.textBoxCountry?.nonEmpty() == true){
+                mBinding?.textBoxMobile?.nonEmpty() == true &&
+                mBinding?.textBoxCluster?.nonEmpty() == true){
 
-                Prefs.putString(ConstantsDirectory.ADDR_LINE1,mBinding?.textBoxAddr1?.text.toString())
-                Prefs.putString(ConstantsDirectory.ADDR_LINE2,mBinding?.textBoxAddr2?.text.toString())
-                Prefs.putString(ConstantsDirectory.STREET,mBinding?.textBoxStreet?.text.toString())
-                Prefs.putString(ConstantsDirectory.LANDMARK,mBinding?.textBoxLandmark?.text.toString())
-                Prefs.putString(ConstantsDirectory.DISTRICT,mBinding?.textBoxDistrict?.text.toString())
-                Prefs.putString(ConstantsDirectory.CITY,mBinding?.textBoxCity?.text.toString())
-                Prefs.putString(ConstantsDirectory.STATE,mBinding?.textBoxState?.text.toString())
-//                Prefs.putString(ConstantsDirectory.COUNTRY,mBinding?.textBoxCountry.toString())
+                Prefs.putString(ConstantsDirectory.FIRST_NAME,mBinding?.textBoxFirstname?.text.toString())
+                Prefs.putString(ConstantsDirectory.LAST_NAME,mBinding?.textBoxLastname?.text.toString())
                 Prefs.putString(ConstantsDirectory.PINCODE,mBinding?.textBoxPincode?.text.toString())
+                Prefs.putString(ConstantsDirectory.MOBILE,mBinding?.textBoxMobile?.text.toString())
+                Prefs.putString(ConstantsDirectory.DISTRICT,mBinding?.textBoxDistrict?.text.toString())
+                Prefs.putString(ConstantsDirectory.PAN,mBinding?.textBoxPan?.text.toString())
+                Prefs.putString(ConstantsDirectory.STATE,mBinding?.textBoxState?.text.toString())
+                Prefs.putString(ConstantsDirectory.PINCODE,mBinding?.textBoxPincode?.text.toString())
+                Prefs.putString(ConstantsDirectory.ADDR_LINE1,mBinding?.textBoxAddress?.text.toString())
+
 
                 if (savedInstanceState == null) {
                     activity?.supportFragmentManager?.beginTransaction()
                         ?.replace(R.id.register_container,
-                            BuyerRegisterWebFragment.newInstance(),"Register Buyer Web Details")
+                            ArtisanRegisterProductsFragment.newInstance(),"Register Artisan Products")
                         ?.addToBackStack(null)
                         ?.commit()
                 }
             }else{
-                mBinding?.textBoxAddr1?.nonEmpty{ mBinding?.textBoxAddr1?.error = it }
+                mBinding?.textBoxFirstname?.nonEmpty{ mBinding?.textBoxFirstname?.error = it }
                 mBinding?.textBoxPincode?.nonEmpty{ mBinding?.textBoxPincode?.error = it }
+                mBinding?.textBoxMobile?.nonEmpty{ mBinding?.textBoxMobile?.error = it }
             }
         }
     }
+
 }

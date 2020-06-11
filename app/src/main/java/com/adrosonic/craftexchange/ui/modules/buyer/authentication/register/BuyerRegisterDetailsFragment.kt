@@ -46,16 +46,17 @@ class BuyerRegisterDetailsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_buyer_register_details, container, false)
-        return mBinding?.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
 
         var asterik = SpannableString("*")
         asterik.setSpan(ForegroundColorSpan(Color.RED), 0, asterik.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         mBinding?.textFirstname?.append(asterik)
         mBinding?.textMobile?.append(asterik)
+
+        return mBinding?.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
         mBinding?.buttonNext?.setOnClickListener{
             if(mBinding?.textBoxFirstname?.nonEmpty() == true &&
