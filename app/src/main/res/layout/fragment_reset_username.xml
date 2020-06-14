@@ -120,7 +120,7 @@
             android:layout_marginEnd="@dimen/margin_regular"
             android:background="@drawable/rectangle_round_grad"
             android:fontFamily="@font/lato_regular"
-            android:inputType="text"
+            android:inputType="phone"
             android:maxLength="6"
             android:drawableStart="@drawable/ic_icon_simple_coderwall"
             android:drawablePadding="4dp"

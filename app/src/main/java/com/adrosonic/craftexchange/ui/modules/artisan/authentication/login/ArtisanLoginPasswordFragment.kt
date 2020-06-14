@@ -16,9 +16,10 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 
 import com.adrosonic.craftexchange.R
+import com.adrosonic.craftexchange.database.predicates.UserPredicates
 import com.adrosonic.craftexchange.databinding.FragmentArtisanLoginPasswordBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
-import com.adrosonic.craftexchange.repository.data.loginResponse.LoginAuthResponse
+import com.adrosonic.craftexchange.repository.data.loginResponse.artisan.ArtisanResponse
 import com.adrosonic.craftexchange.repository.data.model.UserAuthModel
 import com.adrosonic.craftexchange.ui.modules.authentication.register.RegisterActivity
 import com.adrosonic.craftexchange.ui.modules.authentication.reset.ResetPasswordActivity
@@ -84,26 +85,29 @@ class ArtisanLoginPasswordFragment : Fragment() {
 
                 CraftExchangeRepository
                     .getLoginService()
-                    .authenticate("application/json",
+                    .authenticateArtisan("application/json",
                         UserAuthModel(
                             Prefs.getString(ConstantsDirectory.USER_EMAIL, null),
                             mBinding?.textBoxPassword?.text.toString(),
                             Prefs.getLong(ConstantsDirectory.REF_ROLE_ID, 0)
                         )
                     )
-                    .enqueue(object : Callback, retrofit2.Callback<LoginAuthResponse>{
-                        override fun onFailure(call: Call<LoginAuthResponse>, t: Throwable) {
+                    .enqueue(object : Callback, retrofit2.Callback<ArtisanResponse>{
+                        override fun onFailure(call: Call<ArtisanResponse>, t: Throwable) {
                             t.printStackTrace()
                             Toast.makeText(activity,"${t.printStackTrace()}", Toast.LENGTH_SHORT).show()
                         }
 
                         override fun onResponse(
-                            call: Call<LoginAuthResponse>, response: Response<LoginAuthResponse>
+                            call: Call<ArtisanResponse>, response: Response<ArtisanResponse>
                         ) {
                             if(response.body()?.valid == true){
                                 Prefs.putString(ConstantsDirectory.USER_PWD,mBinding?.textBoxPassword?.text.toString())
                                 Prefs.putBoolean(ConstantsDirectory.IS_LOGGED_IN,true)
+                                UserPredicates.insertArtisan(response.body()!!)
                                 Toast.makeText(activity,"Login Successful! - landing screen Artist", Toast.LENGTH_SHORT).show()
+                            }else{
+                                Toast.makeText(activity,"${response.body()?.errorMessage}",Toast.LENGTH_SHORT).show()
                             }
                         }
 

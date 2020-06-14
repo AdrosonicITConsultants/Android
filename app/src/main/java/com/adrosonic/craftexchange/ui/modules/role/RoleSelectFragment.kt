@@ -39,7 +39,7 @@ class RoleSelectFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    var productArray = ArrayList<String>()
+//    var productArray = ArrayList<String>()
 //    var countryId = ArrayList<Int>()
 //        var nameArray = ArrayList<String>()
 
@@ -62,42 +62,6 @@ class RoleSelectFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        CraftExchangeRepository
-            .getClusterService()
-//            .getProductCategories(Prefs.getString(ConstantsDirectory.CLUSTER_ID,"1").toInt())
-            .getProductCategories()
-            .enqueue(object: Callback, retrofit2.Callback<ProductResponse>{
-                override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
-                    t.printStackTrace()
-                }
-                override fun onResponse(
-                    call: Call<ProductResponse>,
-                    response: Response<ProductResponse>
-                ) {
-                    if(response.body()?.valid == true){
-                        var obj = response.body()
-                        var jsonString = Gson().toJson(obj)
-                        val jsonRootObject = JSONObject(jsonString)
-                        val jsonArray = jsonRootObject.optJSONArray("data")
-                        for (i in 0 until jsonArray.length()) {
-//                            val id = Integer.parseInt(jsonObject.optString("id").toString())
-                            val jsonObject = jsonArray.getJSONObject(i)
-                            var prdObj = jsonObject.optJSONObject("productCategory")
-                            var prdDesc = prdObj.optString("productDesc")
-                            if(!productArray.contains(prdDesc)){
-                                productArray.add(prdDesc)
-                            }
-                        }
-                        Log.e(TAG,"name : $productArray")
-//                        Prefs.putBoolean(ConstantsDirectory.IS_FIRST_TIME,false)
-//                        productSpinner(productArray)
-//                            Toast.makeText(activity,"countries added",Toast.LENGTH_SHORT).show()
-                    }else{
-                        Toast.makeText(activity,"${response.body()?.errorMessage}", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            })
 
         mBinding?.roleArtisan?.setOnClickListener{
             startActivity(Intent(activity, LoginActivity::class.java))

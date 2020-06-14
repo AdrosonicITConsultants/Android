@@ -15,8 +15,7 @@ interface ClusterDao {
     fun getAllClusters() : Call<CLusterResponse>
 
     @Headers("Accept: application/json")
-    @GET("cluster/getProductCategories/1")
-//    fun getProductCategories(@Path("clusterId") clusterId : Int) : Call<ProductResponse>
-    fun getProductCategories() : Call<ProductResponse>
+    @GET("cluster/getProductCategories/{clusterId}")
+    fun getProductCategories(@Path("clusterId")clusterId:Int) : Call<ProductResponse>
 
 }

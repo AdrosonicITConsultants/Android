@@ -89,7 +89,7 @@
                 app:layout_constraintStart_toStartOf="@+id/textView_select_category"
                 app:layout_constraintTop_toBottomOf="@+id/textView_select_category">
 
-                <Spinner
+                <com.adrosonic.craftexchange.utils.MultiSelectionSpinner
                     android:id="@+id/list_products"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

@@ -81,13 +81,13 @@ class ResetPasswordFragment : Fragment() {
                                                 ResetSuccessFragment.newInstance(),"Reset Buyer Success")
                                             ?.addToBackStack(null)
                                             ?.commit()
+                                    }else{
+                                        Toast.makeText(activity,"${response.body()?.errorMessage}",Toast.LENGTH_SHORT).show()
                                     }
                                 }
                             }
 
                         })
-
-
                 }else{
                     Toast.makeText(activity,"Enter Correct Password",Toast.LENGTH_SHORT).show()
                 }

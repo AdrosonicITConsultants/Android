@@ -55,8 +55,8 @@ class ArtisanRegisterProductsFragment : Fragment() {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_artisan_register_products, container, false)
         CraftExchangeRepository
             .getClusterService()
-//            .getProductCategories(Prefs.getString(ConstantsDirectory.CLUSTER_ID,"1").toInt())
-            .getProductCategories()
+            .getProductCategories(Prefs.getString(ConstantsDirectory.CLUSTER_ID,"1").toInt())
+//            .getProductCategories()
             .enqueue(object: Callback, retrofit2.Callback<ProductResponse>{
                 override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
                     t.printStackTrace()
@@ -81,35 +81,14 @@ class ArtisanRegisterProductsFragment : Fragment() {
                         }
 //                        Log.e(TAG,"name : $productArray")
 //                        Prefs.putBoolean(ConstantsDirectory.IS_FIRST_TIME,false)
-                        productSpinner(productArray)
-//                            Toast.makeText(activity,"countries added",Toast.LENGTH_SHORT).show()
+//                        productSpinner(productArray)
+                        mBinding?.listProducts?.setItems(productArray)
                     }else{
                         Toast.makeText(activity,"${response.body()?.errorMessage}", Toast.LENGTH_SHORT).show()
                     }
                 }
             })
         return mBinding?.root
-    }
-
-    fun productSpinner(array : ArrayList<String>){
-        var adapter= ArrayAdapter(requireActivity(),android.R.layout.simple_spinner_item, array)
-        adapter.setDropDownViewResource(android.R.layout.select_dialog_multichoice)
-        mBinding?.listProducts?.adapter = adapter
-        mBinding?.listProducts?.onItemSelectedListener = (object : AdapterView.OnItemSelectedListener{
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                TODO()
-            }
-
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                var id = parent?.getItemIdAtPosition(position)?.inc()
-                listProducts.add(id!!)
-            }
-        })
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -137,14 +116,17 @@ class ArtisanRegisterProductsFragment : Fragment() {
             Prefs.getString(ConstantsDirectory.PINCODE, ""),
             Prefs.getString(ConstantsDirectory.STATE, ""))
 
-        var registerRequest = User(addr,Prefs.getString(ConstantsDirectory.CLUSTER_ID,"1").toLong(),
-            Prefs.getString(ConstantsDirectory.USER_EMAIL,""),Prefs.getString(ConstantsDirectory.FIRST_NAME,""),
-            Prefs.getString(ConstantsDirectory.LAST_NAME,""),Prefs.getString(ConstantsDirectory.MOBILE,""),
-            Prefs.getString(ConstantsDirectory.PAN,""),Prefs.getString(ConstantsDirectory.USER_PWD,""),
-            listProducts,Prefs.getLong(ConstantsDirectory.REF_ROLE_ID,1),Prefs.getString(ConstantsDirectory.CLUSTER_ID,""))
 
         mBinding?.buttonComplete?.setOnClickListener {
             if(mBinding?.checkBoxTnc?.isChecked == true){
+//                mBinding?.listProducts?.selectedItemsAsString
+                listProducts = mBinding?.listProducts?.selectedIndicies!!
+                var registerRequest = User(addr,Prefs.getString(ConstantsDirectory.CLUSTER_ID,"1").toLong(),
+                    Prefs.getString(ConstantsDirectory.USER_EMAIL,""),Prefs.getString(ConstantsDirectory.FIRST_NAME,""),
+                    Prefs.getString(ConstantsDirectory.LAST_NAME,""),Prefs.getString(ConstantsDirectory.MOBILE,""),
+                    Prefs.getString(ConstantsDirectory.PAN,""),Prefs.getString(ConstantsDirectory.USER_PWD,""),
+                    listProducts,Prefs.getLong(ConstantsDirectory.REF_ROLE_ID,1),Prefs.getString(ConstantsDirectory.CLUSTER_ID,""))
+
                 CraftExchangeRepository
                     .getRegisterService()
                     .registerArtisan("application/json",registerRequest)

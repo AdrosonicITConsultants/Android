@@ -7,15 +7,23 @@ import io.realm.Realm
 import io.realm.RealmConfiguration
 
 class App : Application() {
+
+    val REALM_DB_NAME = "CraftExchange.realm"
+    val DB_VERSION = 1L
+
     override fun onCreate() {
         super.onCreate()
-        Realm.init(applicationContext)
+
+        Realm.init(this)
         val config = RealmConfiguration.Builder()
-            .name("CraftExchange.realm")
+            .name(REALM_DB_NAME)
+            .schemaVersion(DB_VERSION)
+            .deleteRealmIfMigrationNeeded()
             .build()
 
+        Realm.setDefaultConfiguration(config)
         //use this config for realm
-        val mRealm = Realm.getInstance(config)
+//        val mRealm = Realm.getInstance(config)
 
         Prefs.Builder()
             .setContext(this)

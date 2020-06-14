@@ -15,9 +15,10 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.adrosonic.craftexchange.R
+import com.adrosonic.craftexchange.database.predicates.UserPredicates
 import com.adrosonic.craftexchange.databinding.FragmentBuyerLoginPasswordBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
-import com.adrosonic.craftexchange.repository.data.loginResponse.LoginAuthResponse
+import com.adrosonic.craftexchange.repository.data.loginResponse.buyer.BuyerResponse
 import com.adrosonic.craftexchange.repository.data.model.UserAuthModel
 import com.adrosonic.craftexchange.ui.modules.authentication.register.RegisterActivity
 import com.adrosonic.craftexchange.ui.modules.authentication.reset.ResetPasswordActivity
@@ -58,7 +59,6 @@ class BuyerLoginPasswordFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-
         var profile = arguments?.get(ARG_PARAM1)
 
         val clickSpan = SpannableString("New User? Click here to register.")
@@ -89,25 +89,28 @@ class BuyerLoginPasswordFragment : Fragment() {
 
                 CraftExchangeRepository
                     .getLoginService()
-                    .authenticate("application/json",
+                    .authenticateBuyer("application/json",
                         UserAuthModel(
                             Prefs.getString(ConstantsDirectory.USER_EMAIL, null),
                             mBinding?.textBoxPassword?.text.toString(),
                             Prefs.getLong(ConstantsDirectory.REF_ROLE_ID, 0)
                         )
                     )
-                    .enqueue(object : Callback, retrofit2.Callback<LoginAuthResponse>{
-                        override fun onFailure(call: Call<LoginAuthResponse>, t: Throwable) {
+                    .enqueue(object : Callback, retrofit2.Callback<BuyerResponse>{
+                        override fun onFailure(call: Call<BuyerResponse>, t: Throwable) {
                             t.printStackTrace()
                             Toast.makeText(activity,"${t.printStackTrace()}",Toast.LENGTH_SHORT).show()
                         }
 
                         override fun onResponse(
-                            call: Call<LoginAuthResponse>, response: Response<LoginAuthResponse>) {
+                            call: Call<BuyerResponse>, response: Response<BuyerResponse>) {
                             if(response.body()?.valid == true){
                                 Prefs.putString(ConstantsDirectory.USER_PWD,mBinding?.textBoxPassword?.text.toString())
                                 Prefs.putBoolean(ConstantsDirectory.IS_LOGGED_IN,true)
-                                Toast.makeText(activity,"Login Successful! - landing screen",Toast.LENGTH_SHORT).show()
+                                UserPredicates.insertBuyer(response.body()!!)
+                                Toast.makeText(activity,"Login Successful! - landing screen Buyer",Toast.LENGTH_SHORT).show()
+                            }else{
+                                Toast.makeText(activity,"${response.body()?.errorMessage}",Toast.LENGTH_SHORT).show()
                             }
                         }
 

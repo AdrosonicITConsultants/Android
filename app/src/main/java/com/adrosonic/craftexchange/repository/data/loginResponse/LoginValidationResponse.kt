@@ -8,14 +8,14 @@ import kotlinx.android.parcel.Parcelize
 data class LoginValidationResponse(
 
     @field:SerializedName("valid")
-    val valid: Boolean? = null,
+    var valid: Boolean? = null,
 
     @field:SerializedName("data")
-    val data: String? = null,
+    var data: String? = null,
 
     @field:SerializedName("errorMessage")
-    val errorMessage: String? = null,
+    var errorMessage: String? = null,
 
     @field:SerializedName("errorCode")
-    val errorCode: Int? = null
+    var errorCode: Int? = null
 ) : Parcelable
