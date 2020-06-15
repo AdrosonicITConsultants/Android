@@ -116,7 +116,7 @@ class BuyerLoginPasswordFragment : Fragment() {
 
                     })
             }else{
-                Toast.makeText(activity,"Enter Correct Pwd",Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity,"Enter Correct Password",Toast.LENGTH_SHORT).show()
             }
 
         }

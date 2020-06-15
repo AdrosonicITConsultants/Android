@@ -127,7 +127,7 @@ class ArtisanLoginUsernameFragment : Fragment() {
 
                     })
             } else {
-                Toast.makeText(activity, "Enter Valid email/mobile", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, "Enter your email/mobile no", Toast.LENGTH_SHORT).show()
             }
         }
     }

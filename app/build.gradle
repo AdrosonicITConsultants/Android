@@ -70,6 +70,9 @@ dependencies {
     //validations
     implementation "com.wajahatkarim3.easyvalidation:easyvalidation-core:1.0.1"
 
+    //bottomnav
+    implementation 'com.github.ittianyu:BottomNavigationViewEx:2.0.4'
+
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
