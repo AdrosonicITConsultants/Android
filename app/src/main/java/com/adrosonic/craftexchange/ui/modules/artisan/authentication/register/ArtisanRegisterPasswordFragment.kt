@@ -31,6 +31,7 @@ class ArtisanRegisterPasswordFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_artisan_register_password, container, false)
+        mBinding?.textBoxPassword?.setText(Prefs.getString(ConstantsDirectory.USER_PWD,""))
         return mBinding?.root
     }
 
@@ -54,7 +55,7 @@ class ArtisanRegisterPasswordFragment : Fragment() {
                             ?.commit()
                     }
                 }else{
-                    Toast.makeText(activity,"Enter Correct Password", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity,"Passwords are mismatched", Toast.LENGTH_SHORT).show()
                 }
             }else{
                 mBinding?.textBoxPassword?.nonEmpty{ mBinding?.textBoxPassword?.error = it }

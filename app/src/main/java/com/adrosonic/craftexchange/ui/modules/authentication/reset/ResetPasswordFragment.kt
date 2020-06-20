@@ -33,7 +33,7 @@ class ResetPasswordFragment : Fragment() {
                     putString(ARG_PARAM1, param1)
                 }
             }
-        const val TAG = "BuyerResetPwd"
+        const val TAG = "ResetPwd"
 
     }
 
@@ -89,7 +89,7 @@ class ResetPasswordFragment : Fragment() {
 
                         })
                 }else{
-                    Toast.makeText(activity,"Enter Correct Password",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity,"Passwords are mismatched",Toast.LENGTH_SHORT).show()
                 }
             }else{
                 Toast.makeText(activity,"Enter Password",Toast.LENGTH_SHORT).show()

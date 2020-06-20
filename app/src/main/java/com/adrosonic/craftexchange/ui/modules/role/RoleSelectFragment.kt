@@ -57,6 +57,14 @@ class RoleSelectFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_role_select, container, false)
+
+
+        //clear all prefs
+            val editor = Prefs.edit()
+            editor.clear()
+            editor.commit()
+            editor.apply()
+
         return mBinding?.root
     }
 

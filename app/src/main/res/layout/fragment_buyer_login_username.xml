@@ -75,6 +75,7 @@
                 android:fontFamily="@font/lato_regular"
                 android:inputType="text"
                 android:textSize="@dimen/edit_text"
+                android:imeOptions="actionDone"
                 app:layout_constraintEnd_toEndOf="@+id/textView_enter_username"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/textView_enter_username"

@@ -42,16 +42,25 @@ class BuyerRegisterCompanyFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_buyer_register_company, container, false)
-        return mBinding?.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
 
         var asterik = SpannableString("*")
         asterik.setSpan(ForegroundColorSpan(Color.RED), 0, asterik.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         mBinding?.textCompname?.append(asterik)
         mBinding?.textPan?.append(asterik)
+
+        mBinding?.textBoxCompname?.setText(Prefs.getString(ConstantsDirectory.COMP_NAME,""))
+        mBinding?.textBoxCin?.setText(Prefs.getString(ConstantsDirectory.CIN,""))
+        mBinding?.textBoxGst?.setText(Prefs.getString(ConstantsDirectory.GST,""))
+        mBinding?.textBoxPan?.setText(Prefs.getString(ConstantsDirectory.PAN,""))
+        mBinding?.textBoxPocName?.setText(Prefs.getString(ConstantsDirectory.POC_NAME,""))
+        mBinding?.textBoxPocContact?.setText(Prefs.getString(ConstantsDirectory.POC_CONTACT,""))
+        mBinding?.textBoxPocEmail?.setText(Prefs.getString(ConstantsDirectory.POC_EMAIL,""))
+
+        return mBinding?.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
         mBinding?.buttonNext?.setOnClickListener{
 

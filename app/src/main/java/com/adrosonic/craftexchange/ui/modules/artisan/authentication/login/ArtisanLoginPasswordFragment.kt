@@ -23,6 +23,7 @@ import com.adrosonic.craftexchange.repository.data.loginResponse.artisan.Artisan
 import com.adrosonic.craftexchange.repository.data.model.UserAuthModel
 import com.adrosonic.craftexchange.ui.modules.authentication.register.RegisterActivity
 import com.adrosonic.craftexchange.ui.modules.authentication.reset.ResetPasswordActivity
+import com.adrosonic.craftexchange.ui.modules.cx_video.CXVideoActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.pixplicity.easyprefs.library.Prefs
 import retrofit2.Call
@@ -106,6 +107,7 @@ class ArtisanLoginPasswordFragment : Fragment() {
                                 Prefs.putBoolean(ConstantsDirectory.IS_LOGGED_IN,true)
                                 UserPredicates.insertArtisan(response.body()!!)
                                 Toast.makeText(activity,"Login Successful! - landing screen Artist", Toast.LENGTH_SHORT).show()
+                                startActivity(Intent(activity, CXVideoActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                             }else{
                                 Toast.makeText(activity,"${response.body()?.errorMessage}",Toast.LENGTH_SHORT).show()
                             }

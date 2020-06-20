@@ -8,6 +8,7 @@ import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityRegisterBinding
 import com.adrosonic.craftexchange.ui.modules.artisan.authentication.register.ArtisanRegisterArtisanidFragment
 import com.adrosonic.craftexchange.ui.modules.buyer.authentication.register.BuyerRegisterUsernameFragment
+import com.adrosonic.craftexchange.ui.modules.buyer.authentication.register.BuyerRegisterWebFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.pixplicity.easyprefs.library.Prefs
 
@@ -41,7 +42,7 @@ class RegisterActivity : AppCompatActivity() {
             ConstantsDirectory.BUYER -> {
                 if (savedInstanceState == null) {
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.register_container, BuyerRegisterUsernameFragment.newInstance(profile))
+                        .replace(R.id.register_container, BuyerRegisterUsernameFragment.newInstance())
                         .commitNow()
                 }
             }

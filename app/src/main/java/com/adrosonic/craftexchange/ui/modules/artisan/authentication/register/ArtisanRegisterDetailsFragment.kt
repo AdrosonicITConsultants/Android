@@ -52,6 +52,16 @@ class ArtisanRegisterDetailsFragment : Fragment() {
         mBinding?.textMobile?.append(asterik)
         mBinding?.valueArtisanId?.text = Prefs.getString(ConstantsDirectory.ARTISAN_ID,"")
 
+        mBinding?.textBoxFirstname?.setText(Prefs.getString(ConstantsDirectory.FIRST_NAME,""))
+        mBinding?.textBoxLastname?.setText(Prefs.getString(ConstantsDirectory.LAST_NAME,""))
+        mBinding?.textBoxPincode?.setText(Prefs.getString(ConstantsDirectory.PINCODE,""))
+        mBinding?.textBoxMobile?.setText(Prefs.getString(ConstantsDirectory.MOBILE,""))
+        mBinding?.textBoxDistrict?.setText(Prefs.getString(ConstantsDirectory.DISTRICT,""))
+        mBinding?.textBoxPan?.setText(Prefs.getString(ConstantsDirectory.PAN,""))
+        mBinding?.textBoxState?.setText(Prefs.getString(ConstantsDirectory.STATE,""))
+//        mBinding?.textBoxCluster?.setText(Prefs.getString(ConstantsDirectory.ADDR_LINE2,""))
+        mBinding?.textBoxAddress?.setText(Prefs.getString(ConstantsDirectory.ADDR_LINE1,""))
+
         CraftExchangeRepository
             .getClusterService()
             .getAllClusters().enqueue(object: Callback, retrofit2.Callback<CLusterResponse>{
@@ -128,7 +138,6 @@ class ArtisanRegisterDetailsFragment : Fragment() {
                 Prefs.putString(ConstantsDirectory.DISTRICT,mBinding?.textBoxDistrict?.text.toString())
                 Prefs.putString(ConstantsDirectory.PAN,mBinding?.textBoxPan?.text.toString())
                 Prefs.putString(ConstantsDirectory.STATE,mBinding?.textBoxState?.text.toString())
-                Prefs.putString(ConstantsDirectory.PINCODE,mBinding?.textBoxPincode?.text.toString())
                 Prefs.putString(ConstantsDirectory.ADDR_LINE1,mBinding?.textBoxAddress?.text.toString())
 
 

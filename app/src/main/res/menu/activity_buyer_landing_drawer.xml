@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_my_profile"
+            android:icon="@drawable/ic_account_circle_black_24dp"
+            android:title="@string/my_profile" />
+
+        <item
+            android:id="@+id/nav_my_transactions"
+            android:icon="@drawable/ic_icon_transactions"
+            android:title="@string/my_transactions" />
+        <item
+            android:id="@+id/nav_my_orders"
+            android:icon="@drawable/ic_receipt"
+            android:title="@string/my_orders" />
+        <item
+            android:id="@+id/nav_my_dashboard"
+            android:icon="@drawable/ic_icon_dashboard"
+            android:title="@string/my_dashboard" />
+        <item
+            android:id="@+id/nav_support"
+            android:icon="@drawable/ic_icon_help"
+            android:title="@string/support" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_icon_log_out"
+            android:title="@string/logout" />
+    </group>
+</menu>

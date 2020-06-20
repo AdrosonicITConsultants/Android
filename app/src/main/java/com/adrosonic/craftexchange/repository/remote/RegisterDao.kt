@@ -5,6 +5,7 @@ import com.adrosonic.craftexchange.repository.data.model.OtpVerifyModel
 import com.adrosonic.craftexchange.repository.data.registerResponse.RegisterResponse
 import com.adrosonic.craftexchange.repository.data.model.buyer.User
 import com.adrosonic.craftexchange.repository.data.registerResponse.CountryResponse
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
 

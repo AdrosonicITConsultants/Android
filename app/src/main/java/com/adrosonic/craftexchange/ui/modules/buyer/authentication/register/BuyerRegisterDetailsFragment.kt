@@ -52,6 +52,13 @@ class BuyerRegisterDetailsFragment : Fragment() {
         mBinding?.textFirstname?.append(asterik)
         mBinding?.textMobile?.append(asterik)
 
+        mBinding?.textBoxFirstname?.setText(Prefs.getString(ConstantsDirectory.FIRST_NAME,""))
+        mBinding?.textBoxLastname?.setText(Prefs.getString(ConstantsDirectory.LAST_NAME,""))
+        mBinding?.textBoxMobile?.setText(Prefs.getString(ConstantsDirectory.MOBILE,""))
+        mBinding?.textBoxAltMobile?.setText(Prefs.getString(ConstantsDirectory.ALT_MOBILE,""))
+        mBinding?.textBoxDesignation?.setText(Prefs.getString(ConstantsDirectory.DESIGNATION,""))
+
+
         return mBinding?.root
     }
 

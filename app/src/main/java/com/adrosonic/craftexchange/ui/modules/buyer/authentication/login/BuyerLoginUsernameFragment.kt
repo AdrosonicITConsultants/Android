@@ -21,6 +21,7 @@ import com.adrosonic.craftexchange.repository.data.loginResponse.LoginValidation
 import com.adrosonic.craftexchange.ui.modules.authentication.register.RegisterActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.pixplicity.easyprefs.library.Prefs
+import kotlinx.android.synthetic.main.fragment_buyer_login_username.*
 import retrofit2.Call
 import retrofit2.Response
 import javax.security.auth.callback.Callback
@@ -44,6 +45,7 @@ class BuyerLoginUsernameFragment : Fragment() {
 //    }
 
     private var mBinding: FragmentBuyerLoginUsernameBinding ?= null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

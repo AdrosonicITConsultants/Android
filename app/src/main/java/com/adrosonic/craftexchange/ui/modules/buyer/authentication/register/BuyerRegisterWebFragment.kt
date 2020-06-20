@@ -24,7 +24,11 @@ import com.adrosonic.craftexchange.repository.data.model.buyer.Country
 import com.adrosonic.craftexchange.repository.data.registerResponse.*
 import com.adrosonic.craftexchange.ui.modules.authentication.login.LoginActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.google.gson.Gson
 import com.pixplicity.easyprefs.library.Prefs
+import okhttp3.ResponseBody
+import org.json.JSONException
+import org.json.JSONObject
 import retrofit2.Call
 import javax.security.auth.callback.Callback
 
@@ -134,7 +138,7 @@ class BuyerRegisterWebFragment : Fragment() {
 
         mBinding?.buttonComplete?.setOnClickListener{
 
-            var registerRequest =
+            var registerRequest=
                 User(
                     addr,
                     Prefs.getString(ConstantsDirectory.ALT_MOBILE, ""),
@@ -152,6 +156,8 @@ class BuyerRegisterWebFragment : Fragment() {
                     mBinding?.textBoxWeblink?.text.toString()
                 )
 
+//            var registerRequest = Gson().toJson(registerRequestObj)
+
             if(mBinding?.checkBoxTnc?.isChecked == true){
                 CraftExchangeRepository
                     .getRegisterService()
@@ -163,7 +169,8 @@ class BuyerRegisterWebFragment : Fragment() {
                         override fun onResponse(
                             call: Call<RegisterResponse>,
                             response: retrofit2.Response<RegisterResponse>) {
-                            if(response.body()?.valid == true){
+
+                            if(response.isSuccessful){
                                 Log.e(TAG, response.toString())
                                 Toast.makeText(activity,"User Registered Successfully",Toast.LENGTH_SHORT).show()
                                 Prefs.clear()
@@ -171,7 +178,18 @@ class BuyerRegisterWebFragment : Fragment() {
                                 Prefs.putLong(ConstantsDirectory.REF_ROLE_ID,2)
                                 startActivity(Intent(activity,LoginActivity::class.java).addFlags(
                                     Intent.FLAG_ACTIVITY_CLEAR_TOP
-                                ))}
+                                ))}else{
+                                    var jsonObject:JSONObject ?= null
+                                    try
+                                    {
+                                        jsonObject = JSONObject(response.errorBody()?.charStream()!!.readText())
+                                        val errorMessage = jsonObject.getString("errorMessage")
+                                        Toast.makeText(activity,errorMessage,Toast.LENGTH_SHORT).show()
+                                    }
+                                    catch (e: JSONException) {
+                                        e.printStackTrace()
+                                    }
+                            }
                         }
 
                     })

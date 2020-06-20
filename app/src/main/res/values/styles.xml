@@ -49,7 +49,25 @@
         parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_screen</item>
     </style>
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
+    <style name="AppTheme.Toolbar" parent="ThemeOverlay.AppCompat.Light">
+        <!--This line changes the color of text in Toolbar-->
+        <item name="android:textColorPrimary">#000</item>
+        <!--This line changes the color of icons in toolbar (back, overflow menu icons)-->
+        <item name="android:textColorSecondary">#000</item>
+    </style>
 
+    <style name="NavMenuText" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/lato_regular</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/nav_menu_text</item>
+    </style>
 
 </resources>

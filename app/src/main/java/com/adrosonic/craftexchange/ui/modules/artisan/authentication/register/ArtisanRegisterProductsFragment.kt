@@ -31,6 +31,7 @@ import com.adrosonic.craftexchange.ui.modules.authentication.login.LoginActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.google.gson.Gson
 import com.pixplicity.easyprefs.library.Prefs
+import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Response
@@ -137,7 +138,7 @@ class ArtisanRegisterProductsFragment : Fragment() {
                         override fun onResponse(
                             call: Call<RegisterResponse>,
                             response: retrofit2.Response<RegisterResponse>) {
-                            if(response.body()?.valid == true){
+                            if(response.isSuccessful){
                                 Log.e(TAG, response.toString())
                                 Toast.makeText(activity,"User Registered Successfully",Toast.LENGTH_SHORT).show()
                                 Prefs.clear()
@@ -145,9 +146,20 @@ class ArtisanRegisterProductsFragment : Fragment() {
                                 Prefs.putLong(ConstantsDirectory.REF_ROLE_ID,1)
                                 startActivity(Intent(activity, LoginActivity::class.java).addFlags(
                                     Intent.FLAG_ACTIVITY_CLEAR_TOP
-                                ))}
+                                ))}else{
+//                                if(response.code() == 400){
+                                    var jsonObject:JSONObject ?= null
+                                    try
+                                    {
+                                        jsonObject = JSONObject(response.errorBody()?.charStream()!!.readText())
+                                        val errorMessage = jsonObject.getString("errorMessage")
+                                        Toast.makeText(activity,errorMessage,Toast.LENGTH_SHORT).show()
+                                    }
+                                    catch (e: JSONException) {
+                                        e.printStackTrace()
+                                    }
+                            }
                         }
-
                     })
             }else{
                 Toast.makeText(activity,"Read TnC",Toast.LENGTH_SHORT).show()

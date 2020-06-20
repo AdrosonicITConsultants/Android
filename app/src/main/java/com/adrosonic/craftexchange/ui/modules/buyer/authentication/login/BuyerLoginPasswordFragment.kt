@@ -22,6 +22,7 @@ import com.adrosonic.craftexchange.repository.data.loginResponse.buyer.BuyerResp
 import com.adrosonic.craftexchange.repository.data.model.UserAuthModel
 import com.adrosonic.craftexchange.ui.modules.authentication.register.RegisterActivity
 import com.adrosonic.craftexchange.ui.modules.authentication.reset.ResetPasswordActivity
+import com.adrosonic.craftexchange.ui.modules.cx_video.CXVideoActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.pixplicity.easyprefs.library.Prefs
 import retrofit2.Call
@@ -55,6 +56,8 @@ class BuyerLoginPasswordFragment : Fragment() {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_buyer_login_password, container, false)
         return mBinding?.root
     }
+
+
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -108,15 +111,21 @@ class BuyerLoginPasswordFragment : Fragment() {
                                 Prefs.putString(ConstantsDirectory.USER_PWD,mBinding?.textBoxPassword?.text.toString())
                                 Prefs.putBoolean(ConstantsDirectory.IS_LOGGED_IN,true)
                                 UserPredicates.insertBuyer(response.body()!!)
-                                Toast.makeText(activity,"Login Successful! - landing screen Buyer",Toast.LENGTH_SHORT).show()
+                                Prefs.putString(ConstantsDirectory.ACC_TOKEN,response.body()?.data?.acctoken)
+                                Prefs.putString(ConstantsDirectory.FIRST_NAME,response.body()?.data?.user?.firstName)
+                                Prefs.putString(ConstantsDirectory.LAST_NAME,response.body()?.data?.user?.lastName)
+                                Prefs.putString(ConstantsDirectory.COMP_NAME,response.body()?.data?.user?.companyDetails?.companyName)
+
+//                                Toast.makeText(activity,"Login Successful! - landing screen Buyer",Toast.LENGTH_SHORT).show()
+                                startActivity(Intent(activity, CXVideoActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+
                             }else{
                                 Toast.makeText(activity,"${response.body()?.errorMessage}",Toast.LENGTH_SHORT).show()
                             }
                         }
-
                     })
             }else{
-                Toast.makeText(activity,"Enter Correct Password",Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity,"Please enter your password",Toast.LENGTH_SHORT).show()
             }
 
         }

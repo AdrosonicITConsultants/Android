@@ -18,7 +18,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.modules.landing.BuyerLandingActivity"></activity>
+
+        <activity android:name=".ui.modules.cx_video.CXVideoActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".ui.modules.landing.BuyerLandingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
         <activity
             android:name=".ui.modules.authentication.register.RegisterActivity"
             android:screenOrientation="portrait" />

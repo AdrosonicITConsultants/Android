@@ -36,6 +36,7 @@ class ResetUsernameFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_reset_username, container, false)
+        mBinding?.textBoxOtp?.setText("")
         mBinding?.profileTag?.text = Prefs.getString(ConstantsDirectory.PROFILE,"")
         return mBinding?.root
     }

@@ -142,6 +142,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_semimedium"
+            android:layout_marginBottom="@dimen/margin_semimedium"
             android:background="@drawable/rectangle_round_grad_black_solid"
             android:fontFamily="@font/lato_regular"
             android:text="@string/verify_proceed"

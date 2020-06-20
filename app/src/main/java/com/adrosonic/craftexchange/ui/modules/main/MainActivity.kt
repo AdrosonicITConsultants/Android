@@ -3,11 +3,15 @@ package com.adrosonic.craftexchange.ui.modules.main
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityMainBinding
 import com.adrosonic.craftexchange.ui.modules.authentication.login.loginIntent
+import com.adrosonic.craftexchange.ui.modules.landing.buyerLandingIntent
 import com.adrosonic.craftexchange.ui.modules.role.roleselectIntent
+import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.pixplicity.easyprefs.library.Prefs
 
 fun Context.mainIntent(): Intent {
     return Intent(this, MainActivity::class.java).apply {
@@ -24,6 +28,23 @@ class MainActivity : AppCompatActivity() {
         val view = mBinding?.root
         setContentView(view)
 
-        startActivity(roleselectIntent())
+//        startActivity(roleselectIntent())
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (Prefs.getBoolean(ConstantsDirectory.IS_LOGGED_IN, false)) {
+            var profile = Prefs.getString(ConstantsDirectory.PROFILE,null)
+            when(profile){
+                ConstantsDirectory.ARTISAN -> {
+
+                }
+                ConstantsDirectory.BUYER -> {
+                    startActivity(buyerLandingIntent())
+                }
+            }
+        } else {
+            startActivity(roleselectIntent())
+        }
     }
 }

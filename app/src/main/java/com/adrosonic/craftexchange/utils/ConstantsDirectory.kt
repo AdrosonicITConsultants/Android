@@ -8,6 +8,7 @@ object ConstantsDirectory {
     const val MARKETING = "Marketing"
     const val PROFILE = "profile"
     const val REF_ROLE_ID = "roleId"
+    const val ACC_TOKEN = "accesstoken"
 
     const val IS_LOGGED_IN = "checklogin"
 

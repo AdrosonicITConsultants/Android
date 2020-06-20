@@ -37,6 +37,8 @@ class ArtisanRegisterUsernameFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_artisan_register_username, container, false)
+        mBinding?.textBoxUsername?.setText(Prefs.getString(ConstantsDirectory.USER_EMAIL,""))
+        mBinding?.textBoxOtp?.setText("")
         mBinding?.sendOtpLoader = false
         return mBinding?.root
     }

@@ -92,6 +92,34 @@
     <string name="text_select_cat">Select category of products you make</string>
     <string name="skip_text_artisan"><![CDATA[You can always do this step later, SKIP >]]></string>
     <string name="contactname">Contact Name</string>
+    <string name="home">Home</string>
+    <string name="enquiries">Enquiries</string>
+    <string name="wishlist">Wishlist</string>
+    <string name="chat">Chat</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="hi">Hi,</string>
+    <string name="hi_without_comma">Hi</string>
+    <string name="my_profile">My Profile</string>
+    <string name="my_transactions">My Transactions</string>
+    <string name="my_orders">My Orders</string>
+    <string name="my_dashboard">My Dashboard</string>
+    <string name="support">Support</string>
+    <string name="logout">Logout</string>
+    <string name="action_notifications">Notifications</string>
+    <string name="search" />
+    <string name="browse_text">Browse the latest collection of</string>
+    <string name="choose_from">Choose from</string>
+    <string name="unique_in_mind">Have something unique in mind?</string>
+    <string name="customize_your_design">Customise your own design</string>
+    <string name="skip">Skip</string>
+
+    <string name="message_operation_not_supported_offline">Operation not supported offline</string>
+    <string name="logout_text">Are your sure you want to logout?</string>
+    <string name="artisan_self_design">Artisan self\ndesign</string>
+    <string name="explore">Explore</string>
+    <string name="antaran_design_collec">Antaran co-design\ncollection</string>
 
 
 </resources>

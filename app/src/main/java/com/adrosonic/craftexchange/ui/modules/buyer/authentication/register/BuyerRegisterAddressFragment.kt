@@ -54,9 +54,6 @@ class BuyerRegisterAddressFragment : Fragment() {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_buyer_register_address, container, false)
 
-//        var ft = Prefs.getBoolean(ConstantsDirectory.IS_FIRST_TIME,true)
-//        if(ft){
-//        nameArray.clear()
         CraftExchangeRepository
             .getRegisterService()
             .getAllCountries().enqueue(object: Callback, retrofit2.Callback<CountryResponse>{
@@ -91,7 +88,23 @@ class BuyerRegisterAddressFragment : Fragment() {
                     }
                 }
             })
-//        }
+
+
+        var asterik = SpannableString("*")
+        asterik.setSpan(ForegroundColorSpan(Color.RED), 0, asterik.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        mBinding?.textAddr1?.append(asterik)
+        mBinding?.textCountry?.append(asterik)
+        mBinding?.textPincode?.append(asterik)
+
+        mBinding?.textBoxAddr1?.setText(Prefs.getString(ConstantsDirectory.ADDR_LINE1,""))
+        mBinding?.textBoxAddr2?.setText(Prefs.getString(ConstantsDirectory.ADDR_LINE2,""))
+        mBinding?.textBoxStreet?.setText(Prefs.getString(ConstantsDirectory.STREET,""))
+        mBinding?.textBoxLandmark?.setText(Prefs.getString(ConstantsDirectory.LANDMARK,""))
+        mBinding?.textBoxDistrict?.setText(Prefs.getString(ConstantsDirectory.DISTRICT,""))
+        mBinding?.textBoxCity?.setText(Prefs.getString(ConstantsDirectory.CITY,""))
+        mBinding?.textBoxState?.setText(Prefs.getString(ConstantsDirectory.STATE,""))
+//        mBinding?.textBoxCountry?.setText(Prefs.getString(ConstantsDirectory.POC_CONTACT,""))
+        mBinding?.textBoxPincode?.setText(Prefs.getString(ConstantsDirectory.PINCODE,""))
 
         return mBinding?.root
     }
@@ -119,12 +132,6 @@ class BuyerRegisterAddressFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        var asterik = SpannableString("*")
-        asterik.setSpan(ForegroundColorSpan(Color.RED), 0, asterik.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        mBinding?.textAddr1?.append(asterik)
-        mBinding?.textCountry?.append(asterik)
-        mBinding?.textPincode?.append(asterik)
 
         mBinding?.buttonNext?.setOnClickListener{
 

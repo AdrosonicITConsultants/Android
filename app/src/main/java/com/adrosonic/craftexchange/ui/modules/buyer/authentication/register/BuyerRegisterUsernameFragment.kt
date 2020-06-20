@@ -2,15 +2,18 @@ package com.adrosonic.craftexchange.ui.modules.buyer.authentication.register
 
 
 import android.app.AlertDialog
+import android.content.Context
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
-
+import androidx.fragment.app.Fragment
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.FragmentBuyerRegisterUsernameBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
@@ -18,26 +21,25 @@ import com.adrosonic.craftexchange.repository.data.model.OtpVerifyModel
 import com.adrosonic.craftexchange.repository.data.registerResponse.RegisterResponse
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.pixplicity.easyprefs.library.Prefs
-
 import com.wajahatkarim3.easyvalidation.core.view_ktx.nonEmpty
-
 import retrofit2.Call
 import retrofit2.Response
 import javax.security.auth.callback.Callback
+
 
 private const val ARG_PARAM1 = "param1"
 
 class BuyerRegisterUsernameFragment : Fragment() {
 
     companion object {
-        @JvmStatic
-        fun newInstance(param1: String) =
-            BuyerRegisterUsernameFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                }
-            }
-//        fun newInstance() = BuyerRegisterUsernameFragment()
+//        @JvmStatic
+//        fun newInstance(param1: String) =
+//            BuyerRegisterUsernameFragment().apply {
+//                arguments = Bundle().apply {
+//                    putString(ARG_PARAM1, param1)
+//                }
+//            }
+        fun newInstance() = BuyerRegisterUsernameFragment()
         const val TAG = "BuyerRegisterEmail"
     }
 
@@ -49,6 +51,8 @@ class BuyerRegisterUsernameFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_buyer_register_username, container, false)
+        mBinding?.textBoxUsername?.setText(Prefs.getString(ConstantsDirectory.USER_EMAIL,""))
+        mBinding?.textBoxOtp?.setText("")
         mBinding?.sendOtpLoader = false
         return mBinding?.root
     }
@@ -142,6 +146,7 @@ class BuyerRegisterUsernameFragment : Fragment() {
                                     ?.commit()
                             }
                         }else{
+                            hideProgress()
                             Toast.makeText(activity,"${response.body()?.errorMessage}",Toast.LENGTH_SHORT).show()
                         }
                     }
