@@ -54,41 +54,48 @@ class ArtisanRegisterProductsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_artisan_register_products, container, false)
-        CraftExchangeRepository
-            .getClusterService()
-            .getProductCategories(Prefs.getString(ConstantsDirectory.CLUSTER_ID,"1").toInt())
-//            .getProductCategories()
-            .enqueue(object: Callback, retrofit2.Callback<ProductResponse>{
-                override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
-                    t.printStackTrace()
-                }
-                override fun onResponse(
-                    call: Call<ProductResponse>,
-                    response: Response<ProductResponse>
-                ) {
-                    if(response.body()?.valid == true){
-                        var obj = response.body()
-                        var jsonString = Gson().toJson(obj)
-                        val jsonRootObject = JSONObject(jsonString)
-                        val jsonArray = jsonRootObject.optJSONArray("data")
-                        for (i in 0 until jsonArray.length()) {
-//                            val id = Integer.parseInt(jsonObject.optString("id").toString())
-                            val jsonObject = jsonArray.getJSONObject(i)
-                            var prdObj = jsonObject.optJSONObject("productCategory")
-                            var prdDesc = prdObj.optString("productDesc")
-                            if(!productArray.contains(prdDesc)){
-                                productArray.add(prdDesc)
-                            }
-                        }
-//                        Log.e(TAG,"name : $productArray")
-//                        Prefs.putBoolean(ConstantsDirectory.IS_FIRST_TIME,false)
-//                        productSpinner(productArray)
-                        mBinding?.listProducts?.setItems(productArray)
-                    }else{
-                        Toast.makeText(activity,"${response.body()?.errorMessage}", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            })
+//        CraftExchangeRepository
+//            .getClusterService()
+//            .getProductCategories(Prefs.getString(ConstantsDirectory.CLUSTER_ID,"1").toInt())
+////            .getProductCategories()
+//            .enqueue(object: Callback, retrofit2.Callback<ProductResponse>{
+//                override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
+//                    t.printStackTrace()
+//                }
+//                override fun onResponse(
+//                    call: Call<ProductResponse>,
+//                    response: Response<ProductResponse>
+//                ) {
+//                    if(response.body()?.valid == true){
+//                        var obj = response.body()
+//                        var jsonString = Gson().toJson(obj)
+//                        val jsonRootObject = JSONObject(jsonString)
+//                        val jsonArray = jsonRootObject.optJSONArray("data")
+//                        for (i in 0 until jsonArray.length()) {
+////                            val id = Integer.parseInt(jsonObject.optString("id").toString())
+//                            val jsonObject = jsonArray.getJSONObject(i)
+//                            var prdObj = jsonObject.optJSONObject("productCategory")
+//                            var prdDesc = prdObj.optString("productDesc")
+//                            if(!productArray.contains(prdDesc)){
+//                            }
+//                        }
+////                        Log.e(TAG,"name : $productArray")
+////                        Prefs.putBoolean(ConstantsDirectory.IS_FIRST_TIME,false)
+////                        productSpinner(productArray)
+//                        mBinding?.listProducts?.setItems(productArray)
+//                    }else{
+//                        Toast.makeText(activity,"${response.body()?.errorMessage}", Toast.LENGTH_SHORT).show()
+//                    }
+//                }
+//            })
+
+        productArray.add("Saree")
+        productArray.add("Dupatta")
+        productArray.add("Stole")
+        productArray.add("Fabric")
+        productArray.add("Home Accessories")
+        productArray.add("Fashion Accessories")
+        mBinding?.listProducts?.setItems(productArray)
         return mBinding?.root
     }
 
@@ -122,15 +129,17 @@ class ArtisanRegisterProductsFragment : Fragment() {
             if(mBinding?.checkBoxTnc?.isChecked == true){
 //                mBinding?.listProducts?.selectedItemsAsString
                 listProducts = mBinding?.listProducts?.selectedIndicies!!
-                var registerRequest = User(addr,Prefs.getString(ConstantsDirectory.CLUSTER_ID,"1").toLong(),
+                var registerRequestObj = User(addr,Prefs.getString(ConstantsDirectory.CLUSTER_ID,"1").toLong(),
                     Prefs.getString(ConstantsDirectory.USER_EMAIL,""),Prefs.getString(ConstantsDirectory.FIRST_NAME,""),
                     Prefs.getString(ConstantsDirectory.LAST_NAME,""),Prefs.getString(ConstantsDirectory.MOBILE,""),
                     Prefs.getString(ConstantsDirectory.PAN,""),Prefs.getString(ConstantsDirectory.USER_PWD,""),
                     listProducts,Prefs.getLong(ConstantsDirectory.REF_ROLE_ID,1),Prefs.getString(ConstantsDirectory.CLUSTER_ID,""))
 
+                var registerRequest = Gson().toJson(registerRequestObj)
+
                 CraftExchangeRepository
                     .getRegisterService()
-                    .registerArtisan("application/json",registerRequest)
+                    .registerArtisan(registerRequest)
                     .enqueue(object: Callback, retrofit2.Callback<RegisterResponse> {
                         override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
                             t.printStackTrace()

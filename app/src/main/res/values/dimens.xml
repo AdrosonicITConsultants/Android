@@ -7,6 +7,7 @@
     <dimen name="margin_large">48dp</dimen>
     <dimen name="role_icon">30dp</dimen>
     <dimen name="Ques_text">11.5sp</dimen>
+    <dimen name="title_text">12.5sp</dimen>
     <dimen name="logo_icon">45dp</dimen>
     <dimen name="textbox_ht">28dp</dimen>
     <dimen name="button_text">10sp</dimen>

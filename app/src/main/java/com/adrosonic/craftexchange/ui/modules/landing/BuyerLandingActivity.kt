@@ -29,6 +29,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityBuyerLandingBinding
 import com.adrosonic.craftexchange.ui.modules.buyer.authentication.register.BuyerRegisterDetailsFragment
+import com.adrosonic.craftexchange.ui.modules.buyer.profile.buyerProfileIntent
 import com.adrosonic.craftexchange.ui.modules.role.roleselectIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
@@ -81,6 +82,7 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
         var username = "$firstname $lastname"
 
         mBinding?.navView?.setNavigationItemSelectedListener(this)
+//        mBinding?.navView?.menu?.getItem(0)?.isChecked = false
         nav_view.getHeaderView(0).text_user.text = username
 
         if (savedInstanceState == null) {
@@ -100,10 +102,12 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
                         }
                         return true
                     }
+
                     R.id.action_enquiries -> {
     //                        initTab(CalculatorFragment.newInstance(), CalculatorFragment.TAG)
                         return true
                     }
+
                     R.id.action_wishlist -> {
     //                        initTab(HistoryFragment.newInstance(), HistoryFragment.TAG)
                         // showBFXProductsMenu();
@@ -113,6 +117,7 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
     //                        initTab(BranchesFragment.newInstance(), BranchesFragment.TAG)
                         return true
                     }
+
                     else -> return false
                 }
             }
@@ -146,7 +151,9 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.nav_my_profile -> {}
+            R.id.nav_my_profile -> {
+                startActivity(buyerProfileIntent())
+            }
             R.id.nav_my_transactions -> {}
             R.id.nav_my_orders -> {}
             R.id.nav_my_dashboard -> {}

@@ -11,4 +11,10 @@
 	<dimen name="edit_text">25sp</dimen>
 	<dimen name="button_text">25sp</dimen>
 	<dimen name="button_ht">75dp</dimen>
+	<dimen name="fab_margin">40dp</dimen>
+	<dimen name="activity_vertical_margin">40dp</dimen>
+	<dimen name="nav_header_vertical_spacing">20dp</dimen>
+	<dimen name="activity_horizontal_margin">40dp</dimen>
+	<dimen name="nav_header_height">440dp</dimen>
+	<dimen name="title_text">31.2sp</dimen>
 </resources>

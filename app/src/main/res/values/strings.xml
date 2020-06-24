@@ -123,6 +123,16 @@
     <string name="artisan_self_design">Artisan self\ndesign</string>
     <string name="explore">Explore</string>
     <string name="antaran_design_collec">Antaran co-design\ncollection</string>
+    <string name="user">User</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="artisan_rating_text">Avg. rating by artisans</string>
+    <string name="general">General</string>
+    <string name="brand">Brand</string>
+    <string name="delivery">Delivery</string>
+    <string name="reg_addr">Registered address</string>
+    <string name="delivery_addr">Delivery address</string>
+    <string name="detials_of_poc">Details for point of contact</string>
+    <string name="name">Name</string>
 
 
 </resources>

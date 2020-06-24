@@ -7,6 +7,7 @@ import android.os.Bundle
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityRegisterBinding
 import com.adrosonic.craftexchange.ui.modules.artisan.authentication.register.ArtisanRegisterArtisanidFragment
+import com.adrosonic.craftexchange.ui.modules.buyer.authentication.register.BuyerRegisterCompanyFragment
 import com.adrosonic.craftexchange.ui.modules.buyer.authentication.register.BuyerRegisterUsernameFragment
 import com.adrosonic.craftexchange.ui.modules.buyer.authentication.register.BuyerRegisterWebFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory

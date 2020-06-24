@@ -12,4 +12,6 @@
     <color name="light_green">#00B939</color>
     <color name="landing_toolbar_color">#F5F5F5</color>
     <color name="nav_menu_text">#0047AB</color>
+    <color name="tab_details_selected_text">#cb9d06</color>
+    <color name="profile_text_bg">#F8E883</color>
 </resources>

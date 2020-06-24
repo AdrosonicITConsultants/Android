@@ -14,22 +14,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
 
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.FragmentBuyerRegisterWebBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.model.buyer.*
+import com.adrosonic.craftexchange.repository.data.model.buyer.Address
 import com.adrosonic.craftexchange.repository.data.model.buyer.Country
 import com.adrosonic.craftexchange.repository.data.registerResponse.*
 import com.adrosonic.craftexchange.ui.modules.authentication.login.LoginActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.google.gson.Gson
 import com.pixplicity.easyprefs.library.Prefs
-import okhttp3.ResponseBody
+import okhttp3.*
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
+import retrofit2.Response
+import java.io.File
+import java.util.*
 import javax.security.auth.callback.Callback
 
 private const val ARG_PARAM1 = "param1"
@@ -40,20 +45,12 @@ private const val ARG_PARAM3 = "param3"
 class BuyerRegisterWebFragment : Fragment() {
 
     companion object {
-//        @JvmStatic
-//        fun newInstance(param1: String,param2: String,param3: String) =
-//            BuyerRegisterWebFragment().apply {
-//                arguments = Bundle().apply {
-//                    putString(ARG_PARAM1,param1)
-//                    putString(ARG_PARAM2,param2)
-//                    putString(ARG_PARAM3,param3)
-//                }
-//            }
         fun newInstance() = BuyerRegisterWebFragment()
         const val TAG = "BuyerRegisterWeb"
     }
 
     var mBinding : FragmentBuyerRegisterWebBinding ?=null
+    private lateinit var logo : MultipartBody.Part
 
 
     override fun onCreateView(
@@ -64,6 +61,7 @@ class BuyerRegisterWebFragment : Fragment() {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_buyer_register_web, container, false)
         return mBinding?.root
     }
+
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -85,18 +83,8 @@ class BuyerRegisterWebFragment : Fragment() {
         mBinding?.textTnct?.movementMethod = LinkMovementMethod.getInstance()
         mBinding?.textTnct?.highlightColor = Color.TRANSPARENT
 
-        var addrType =
-            AddressType(
-                "",
-                0
-            )
-        var country =
-            Country(
-                Prefs.getString(
-                    ConstantsDirectory.COUNTRY_ID,
-                    ""
-                ).toLong()
-            )
+        var addrType = AddressType("", 0)
+        var country = Country(Prefs.getString(ConstantsDirectory.COUNTRY_ID, "0").toLong())
 //        var country =
 //            Country(
 //                1,
@@ -138,7 +126,7 @@ class BuyerRegisterWebFragment : Fragment() {
 
         mBinding?.buttonComplete?.setOnClickListener{
 
-            var registerRequest=
+            var registerRequestObj=
                 User(
                     addr,
                     Prefs.getString(ConstantsDirectory.ALT_MOBILE, ""),
@@ -156,12 +144,39 @@ class BuyerRegisterWebFragment : Fragment() {
                     mBinding?.textBoxWeblink?.text.toString()
                 )
 
-//            var registerRequest = Gson().toJson(registerRequestObj)
+            var registerRequest = Gson().toJson(registerRequestObj)
 
             if(mBinding?.checkBoxTnc?.isChecked == true){
+
+
+//              TODO: Implement for image upload during registration
+//                val file = File(Prefs.getString(ConstantsDirectory.BRAND_LOGO,""))
+////            var file = File("/storage/emulated/0/DCIM/Camera/IMG_20200116_160119.jpg")
+//                val fileReqBody = RequestBody.create(MediaType.parse("image/*"), file)
+//                var logo = MultipartBody.Part.createFormData("profilePic", file.name, fileReqBody)
+//                val body = MultipartBody.Builder()
+//                    .addFormDataPart("profilePic", file.name, fileReqBody)
+//                    .build()
+
+//                var call = CraftExchangeRepository
+//                    .getRegisterService()
+//                    .registerBuyer(registerRequest,"multipart/form-data",logo)
+//                call.enqueue(object : retrofit2.Callback<RegisterResponse> {
+//                    override fun onResponse(call: Call<RegisterResponse>?, response: Response<RegisterResponse>?) {
+//                        response?.takeUnless { response.isSuccessful }?.apply {
+//                            Log.e(TAG, "MultipartBody: " + response.message())
+//                        }
+//                        response?.takeIf { response.isSuccessful }?.apply {
+//                            Log.e(TAG, "MultipartBody delete cnt: ")
+//                        }
+//                    }
+//                    override fun onFailure(call: Call<RegisterResponse>?, t: Throwable?) {
+//                        Log.e(TAG, "MultipartBody onFailure:" + t.toString())
+//                    }
+//                })
                 CraftExchangeRepository
                     .getRegisterService()
-                    .registerBuyer("application/json",registerRequest)
+                    .registerBuyer(registerRequest)
                     .enqueue(object:Callback, retrofit2.Callback<RegisterResponse> {
                         override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
                             t.printStackTrace()
@@ -193,6 +208,9 @@ class BuyerRegisterWebFragment : Fragment() {
                         }
 
                     })
+
+
+
             }else{
                 Toast.makeText(activity,"Read TnC",Toast.LENGTH_SHORT).show()
             }
