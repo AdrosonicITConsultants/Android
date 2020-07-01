@@ -222,6 +222,22 @@ class UserPredicates{
             return nextID!!
         }
 
+        fun findUser(userid : Long) : CraftUser? {
+            var realm = Realm.getDefaultInstance()
+            var user : CraftUser ?= null
+            try {
+                user = realm.where(CraftUser::class.java)
+                    .equalTo("id", userid)
+                    .findFirst()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                //print logs
+            } finally {
+//                realm.close()
+            }
+            return user
+        }
+
         fun insertAllCountries(){
             var realm = Realm.getDefaultInstance()
             try {
@@ -230,7 +246,7 @@ class UserPredicates{
                 }
             }catch(e : Exception){
             }finally{
-                realm.close()
+//                realm.close()
             }
         }
 

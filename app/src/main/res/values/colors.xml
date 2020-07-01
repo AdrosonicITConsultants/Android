@@ -14,4 +14,8 @@
     <color name="nav_menu_text">#0047AB</color>
     <color name="tab_details_selected_text">#cb9d06</color>
     <color name="profile_text_bg">#F8E883</color>
+
+    <color name="white_text">#FFF</color>
+    <color name="black_text">#000</color>
+
 </resources>

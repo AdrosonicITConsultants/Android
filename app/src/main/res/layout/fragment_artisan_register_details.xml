@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="model" type="com.adrosonic.craftexchange.ui.modules.authentication.register.RegisterViewModel"/>
+        <variable name="model" type="com.adrosonic.craftexchange.ui.modules.auth_com.register.RegisterViewModel"/>
     </data>
 
     <ScrollView
@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorBackground"
-            tools:context=".ui.modules.artisan.authentication.register.ArtisanRegisterDetailsFragment">
+            tools:context=".ui.modules.artisan.auth.register.ArtisanRegisterDetailsFragment">
 
             <TextView
                 android:id="@+id/artisan_tag"
@@ -54,11 +54,8 @@
                 android:textAlignment="center"
                 android:textColor="#000"
                 android:textSize="@dimen/Ques_text"
-                android:layout_marginStart="@dimen/margin_small"
-                android:layout_marginEnd="@dimen/margin_small"
                 app:layout_constraintBottom_toBottomOf="@+id/value_artisanId"
                 app:layout_constraintEnd_toStartOf="@+id/value_artisanId"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/value_artisanId" />
 
             <TextView
@@ -158,6 +155,7 @@
                 android:background="@drawable/rectangle_round_grad"
                 android:fontFamily="@font/lato_regular"
                 android:inputType="phone"
+                android:maxLength="6"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:textSize="16sp"
@@ -282,7 +280,7 @@
                 android:background="@drawable/rectangle_round_grad"
                 android:fontFamily="@font/lato_regular"
                 android:inputType="phone"
-                android:maxLength="15"
+                android:maxLength="10"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:textSize="16sp"

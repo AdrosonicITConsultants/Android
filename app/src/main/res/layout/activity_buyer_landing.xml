@@ -14,7 +14,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.modules.landing.BuyerLandingActivity">
+        tools:context=".ui.modules.buyer.landing.BuyerLandingActivity">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -68,7 +68,7 @@
         android:fitsSystemWindows="true"
         android:background="@color/landing_toolbar_color"
         app:itemTextAppearance="@style/NavMenuText"
-        app:headerLayout="@layout/nav_header_buyer_landing"
+        app:headerLayout="@layout/nav_header_landing"
         app:menu="@menu/activity_buyer_landing_drawer">
 
         <LinearLayout

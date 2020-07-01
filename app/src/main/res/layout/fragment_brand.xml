@@ -7,7 +7,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:fillViewport="true">
 
     <LinearLayout
@@ -25,6 +25,7 @@
             android:layout_marginTop="@dimen/margin_regular"
             android:layout_marginStart="@dimen/margin_regular"
             android:text="@string/enter_gst"
+            android:textColor="@color/black_text"
             android:textStyle="bold"
             android:fontFamily="@font/lato_regular"/>
 
@@ -34,6 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:textSize="16sp"
+            android:textColor="@color/black_text"
             android:layout_marginStart="@dimen/margin_regular"
             android:fontFamily="@font/lato_regular"
             android:text="xxxxxxxxx"/>
@@ -46,6 +48,7 @@
             android:layout_marginTop="12dp"
             android:layout_marginStart="@dimen/margin_regular"
             android:text="@string/enter_cin"
+            android:textColor="@color/black_text"
             android:textStyle="bold"
             android:fontFamily="@font/lato_regular"/>
 
@@ -55,6 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:textSize="16sp"
+            android:textColor="@color/black_text"
             android:layout_marginStart="@dimen/margin_regular"
             android:fontFamily="@font/lato_regular"
             android:text="xxxxxxxxx"/>
@@ -67,6 +71,7 @@
             android:layout_marginTop="12dp"
             android:layout_marginStart="@dimen/margin_regular"
             android:text="@string/pan"
+            android:textColor="@color/black_text"
             android:textStyle="bold"
             android:fontFamily="@font/lato_regular"/>
 
@@ -76,6 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:textSize="16sp"
+            android:textColor="@color/black_text"
             android:layout_marginStart="@dimen/margin_regular"
             android:fontFamily="@font/lato_regular"
             android:text="xxxxxxxxx"/>
@@ -94,6 +100,7 @@
             android:layout_marginTop="@dimen/margin_regular"
             android:layout_marginStart="@dimen/margin_regular"
             android:text="@string/detials_of_poc"
+            android:textColor="@color/black_text"
             android:textSize="20sp"
             android:fontFamily="@font/playfair_regular"
             android:textStyle=""/>
@@ -106,6 +113,7 @@
             android:layout_marginTop="@dimen/margin_regular"
             android:layout_marginStart="@dimen/margin_regular"
             android:text="@string/name"
+            android:textColor="@color/black_text"
             android:textStyle="bold"
             android:fontFamily="@font/lato_regular"/>
 
@@ -115,6 +123,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:textSize="16sp"
+            android:textColor="@color/black_text"
             android:layout_marginStart="@dimen/margin_regular"
             android:fontFamily="@font/lato_regular"
             android:text="xxxxxxxxx"/>
@@ -127,6 +136,7 @@
             android:layout_marginTop="12dp"
             android:layout_marginStart="@dimen/margin_regular"
             android:text="@string/mobile"
+            android:textColor="@color/black_text"
             android:textStyle="bold"
             android:fontFamily="@font/lato_regular"/>
 
@@ -136,6 +146,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:textSize="16sp"
+            android:textColor="@color/black_text"
             android:layout_marginStart="@dimen/margin_regular"
             android:fontFamily="@font/lato_regular"
             android:text="xxxxxxxxx"/>
@@ -148,6 +159,7 @@
             android:layout_marginTop="12dp"
             android:layout_marginStart="@dimen/margin_regular"
             android:text="@string/email"
+            android:textColor="@color/black_text"
             android:textStyle="bold"
             android:fontFamily="@font/lato_regular"/>
 
@@ -157,6 +169,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:textSize="16sp"
+            android:textColor="@color/black_text"
             android:text="xyz@craftexchange.com"
             android:layout_marginStart="@dimen/margin_regular"
             android:fontFamily="@font/lato_regular"

@@ -8,7 +8,7 @@
         <import type="android.view.View" />
 
         <variable name="model"
-            type="com.adrosonic.craftexchange.ui.modules.authentication.register.RegisterViewModel"/>
+            type="com.adrosonic.craftexchange.ui.modules.auth_com.register.RegisterViewModel"/>
 
         <variable
             name="sendOtpLoader"
@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorBackground"
-            tools:context=".ui.modules.artisan.authentication.register.ArtisanRegisterUsernameFragment">
+            tools:context=".ui.modules.artisan.auth.register.ArtisanRegisterUsernameFragment">
 
 
         <TextView

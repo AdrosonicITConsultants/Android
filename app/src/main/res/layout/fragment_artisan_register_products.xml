@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="model" type="com.adrosonic.craftexchange.ui.modules.authentication.register.RegisterViewModel"/>
+        <variable name="model" type="com.adrosonic.craftexchange.ui.modules.auth_com.register.RegisterViewModel"/>
     </data>
 
     <ScrollView
@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorBackground"
-            tools:context=".ui.modules.artisan.authentication.register.ArtisanRegisterProductsFragment">
+            tools:context=".ui.modules.artisan.auth.register.ArtisanRegisterProductsFragment">
 
             <TextView
                 android:id="@+id/artisan_tag"
@@ -46,24 +46,35 @@
 
             <ImageView
                 android:id="@+id/upload_product"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
                 android:layout_margin="@dimen/margin_semimedium"
                 android:background="@drawable/upload_icon_artist"
+                android:cropToPadding="true"
+                android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/logo_part"
                 app:layout_constraintVertical_bias="0.0" />
 
+            <TextView
+                android:id="@+id/img_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                app:layout_constraintStart_toStartOf="@+id/upload_product"
+                app:layout_constraintEnd_toEndOf="@+id/upload_product"
+                app:layout_constraintTop_toBottomOf="@+id/upload_product"/>
+
             <View
                 android:id="@+id/divider"
                 style="@style/HorizontalDivider4"
                 android:layout_marginTop="@dimen/margin_regular"
                 android:background="@android:color/darker_gray"
-                app:layout_constraintStart_toStartOf="@+id/upload_product"
-                app:layout_constraintEnd_toEndOf="@+id/upload_product"
-                app:layout_constraintTop_toBottomOf="@+id/upload_product"/>
+                app:layout_constraintStart_toStartOf="@+id/img_name"
+                app:layout_constraintEnd_toEndOf="@+id/img_name"
+                app:layout_constraintTop_toBottomOf="@+id/img_name"/>
 
             <TextView
                 android:id="@+id/textView_select_category"
@@ -99,8 +110,6 @@
                     android:paddingStart="10dp"
                     android:paddingEnd="10dp"/>
             </RelativeLayout>
-
-
 
             <TextView
                 android:id="@+id/text_skip"

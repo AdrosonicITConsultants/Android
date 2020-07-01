@@ -23,22 +23,30 @@ interface RegisterDao {
                         @Body otpVerify : OtpVerifyModel
     ) : Call<RegisterResponse>
 
-    //TODO : Implement for image upload during registration
-//    @Multipart
-//    @POST("register/user")
-//    fun registerBuyer(@Part("registerRequest") registerRequest : String,
-//                      @Header("Content-Type") headerValue:String,
-//                      @Part profilePic : MultipartBody.Part
-//    ): Call<RegisterResponse>
-
-
-    @Headers("Accept: application/json")
-    @POST("register/user/")
-    fun registerBuyer(@Query("registerRequest", encoded = false) registerRequest : String): Call<RegisterResponse>
-
     @Headers("Accept: application/json")
     @GET("register/getAllCountries")
     fun getAllCountries() : Call<CountryResponse>
+
+    @Headers("Accept: application/json")
+    @POST("register/user")
+    fun registerUserPhoto(@Header("Content-Type") headerValue:String,
+                          @Query("registerRequest") registerRequest : String,
+                          @Body brandLogo : MultipartBody): Call<RegisterResponse>
+
+    @Headers("Accept: application/json")
+    @POST("register/user/")
+    fun registerUser(@Query("registerRequest", encoded = false) registerRequest : String): Call<RegisterResponse>
+
+//    @Headers("Accept: application/json")
+//    @POST("register/user")
+//    fun registerArtisanPhoto(@Header("Content-Type") headerValue:String,
+//                           @Query("registerRequest") registerRequest : String,
+//                           @Body brandLogo : MultipartBody): Call<RegisterResponse>
+//
+//    @Headers("Accept: application/json")
+//    @POST("register/user/")
+//    fun registerArtisan(@Query("registerRequest", encoded = false) registerRequest : String): Call<RegisterResponse>
+
 
     @Headers("Accept: application/json")
     @POST("register/verifyWeaverDetails")
@@ -46,15 +54,6 @@ interface RegisterDao {
                              @Body weaverDetails : ArtisanidModel
     ) : Call<RegisterResponse>
 
-    //TODO : Implement for image upload during registration
-//    @Headers("Accept: application/json")
-//    @POST("register/user")
-//    fun registerArtisan(@Header("Content-Type") headerValue:String,
-//                      @Body registerRequest : com.adrosonic.craftexchange.repository.data.model.artisan.User
-//    ): Call<RegisterResponse>
 
-    @Headers("Accept: application/json")
-    @POST("register/user/")
-    fun registerArtisan(@Query("registerRequest", encoded = false) registerRequest : String): Call<RegisterResponse>
 
 }

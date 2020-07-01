@@ -6,6 +6,10 @@ import io.realm.annotations.PrimaryKey
 open class Addresss : RealmObject() {
     @PrimaryKey
     var _id: Long?=0
+    var id : Long ?= 0
+    var userid : Long?=0
+    var addrid : String ?=""
+    var addrtype : String ?=""
     var country_id: String ?=""
     var country: String? = ""
     var pincode: String? = ""

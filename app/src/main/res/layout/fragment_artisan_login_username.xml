@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorBackground"
-        tools:context=".ui.modules.artisan.authentication.login.ArtisanLoginUsernameFragment">
+        tools:context=".ui.modules.artisan.auth.login.ArtisanLoginUsernameFragment">
 
         <TextView
             android:id="@+id/artisan_tag"

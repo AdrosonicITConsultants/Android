@@ -1,10 +1,14 @@
 package com.adrosonic.craftexchange.utils
 
+import android.Manifest
+import android.app.AlertDialog
 import android.content.Context
+import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -14,10 +18,20 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.*
 import java.util.*
+import java.util.regex.Pattern
 
 class Utility {
     companion object{
 
+        val URL_REGEX = Pattern.compile(
+            "[a-zA-Z0-9\\'\\`\\‘\\’\\+\\.\\_\\%\\-\\+]{1,256}" +
+                    "\\." +
+                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
+                    "(" +
+                    "\\." +
+                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
+                    ")+"
+        )
         const val BROWSING_IMGS: String = "BrowsedImages/"
 
         fun displayMessage(message: String, context: Context) {
@@ -37,6 +51,13 @@ class Utility {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+        }
+
+         fun checkPermission(context:Context):Boolean {
+            val result = ContextCompat.checkSelfPermission(context,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            )
+            return result == PackageManager.PERMISSION_GRANTED
         }
 
         fun getRealPathFromFileURI(context: Context, contentUri: Uri): String {
@@ -80,8 +101,23 @@ class Utility {
             }
         }
 
+        fun isValidPan(pan:String):Boolean {
+            val mPattern = Pattern.compile("[A-Z]{5}[0-9]{4}[A-Z]{1}")
+            val mMatcher = mPattern.matcher(pan)
+            return mMatcher.matches()
+        }
 
-        private fun deleteDir(dir: File): Boolean {
+        fun messageDialog(context : Context,message: String) {
+            val builder = AlertDialog.Builder(context, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar)
+            builder.setMessage(message)
+                .setPositiveButton("Ok"){ dialog, id ->
+                    dialog.cancel()
+                }
+            builder.create().show()
+        }
+
+
+        fun deleteDir(dir: File): Boolean {
             if (dir.isDirectory) {
                 var children = dir.list()
                 for (i in children) {

@@ -10,9 +10,11 @@ object ConstantsDirectory {
     const val REF_ROLE_ID = "roleId"
     const val ACC_TOKEN = "accesstoken"
 
+    const val USER_ID = "userid"
+
     const val IS_LOGGED_IN = "checklogin"
 
-    const val BASE_URL = "http://101.53.156.143:8090/"
+    const val BASE_URL = "http://101.53.153.96:8090/"
 
     const val USER_EMAIL = "useremail"
     const val USER_PWD = "password"
@@ -53,4 +55,7 @@ object ConstantsDirectory {
 
     const val BRAND_LOGO = "buyerbrandlogo"
     const val BRAND_IMG_NAME = "buyerimagename"
+
+    const val DELIVERY = "Delivery"
+    const val REGISTERED = "Registered"
 }

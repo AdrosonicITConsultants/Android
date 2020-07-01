@@ -133,6 +133,30 @@
     <string name="delivery_addr">Delivery address</string>
     <string name="detials_of_poc">Details for point of contact</string>
     <string name="name">Name</string>
+    <string name="pwd_validation_text">Please Enter Valid Password with 8 characters.It should contain atleast Capital alphabet,number and special character</string>
+    <string name="otp_send_success">OTP sent successfully!</string>
+    <string name="pincode_invalid_text">"Please enter valid pincode"</string>
+    <string name="pan_invalid_text">"Please enter valid Pan number"</string>
+    <string name="gst_invalid_text">"Please enter valid GST number"</string>
+    <string name="cin_invalid_text">"Please enter valid CIN number"</string>
+    <string name="link_invalid_text">"Please enter valid link"</string>
+    <string name="mobile_no_invalid_text">Please enter valid mobile number</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="alphaNumeric">ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789</string>
 
+    <string name="hello">Hello</string>
+    <string name="your_product">Your Products</string>
+    <string name="list_prod_text">List of your very own products sorted by categories</string>
+    <string name="registration_success_msg">Registration Successful!</string>
+
+    <string-array name="product_array">
+        <item>Saree</item>
+        <item>Dupatta</item>
+        <item>Stole</item>
+        <item>Fabric</item>
+        <item>Home Accessories</item>
+        <item>Fashion Accessories</item>
+    </string-array>
 
 </resources>

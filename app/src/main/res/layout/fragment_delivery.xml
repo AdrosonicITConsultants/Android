@@ -20,6 +20,7 @@
             android:layout_marginTop="@dimen/margin_regular"
             android:layout_marginStart="@dimen/margin_regular"
             android:text="@string/delivery_addr"
+            android:textColor="@color/black_text"
             android:textStyle="bold"
             android:fontFamily="@font/lato_regular"/>
 
@@ -29,6 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_regular"
             android:textSize="16sp"
+            android:textColor="@color/black_text"
             android:layout_marginStart="@dimen/margin_regular"
             android:fontFamily="@font/lato_regular"
             android:text="Company Name"/>
@@ -39,6 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:layout_marginStart="@dimen/margin_regular"
+            android:textColor="@color/black_text"
             android:text="xxx xxx, xxxx xxxx xxxxx\n xxxx xxx xx"
             android:textSize="16sp"
             android:fontFamily="@font/lato_regular"/>

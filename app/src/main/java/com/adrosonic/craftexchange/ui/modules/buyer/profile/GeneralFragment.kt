@@ -9,6 +9,8 @@ import androidx.databinding.DataBindingUtil
 
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.FragmentGeneralBinding
+import com.adrosonic.craftexchange.ui.modules.buyer.profile.BuyerProfileActivity.Companion.craftUser
+import com.adrosonic.craftexchange.ui.modules.buyer.profile.BuyerProfileActivity.Companion.regAddr
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -24,6 +26,7 @@ class GeneralFragment : Fragment() {
     }
 
     private var mBinding: FragmentGeneralBinding ?= null
+    private var altmobile:String?=""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +43,21 @@ class GeneralFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_general, container, false)
+
+
+        mBinding?.regAddr?.text = regAddr?.line1 ?: " - "
+        mBinding?.country?.text = regAddr?.country ?: " - "
+//        if(craftUser?.email != "") {
+            mBinding?.email?.text = craftUser?.email ?: " - "
+//        }
+        var mobile = "${craftUser?.mobile}  (primary)"
+        if(craftUser?.alternateMobile != ""){
+            altmobile = "${craftUser?.alternateMobile}  (alternate)"
+        }
+
+        mBinding?.mobile?.text = mobile ?: ""
+        mBinding?.altMobile?.text = altmobile ?: " - "
+
         return mBinding?.root
     }
 }

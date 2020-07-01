@@ -7,7 +7,7 @@
     android:id="@+id/login_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.modules.authentication.login.LoginActivity">
+    tools:context=".ui.modules.auth_com.login.LoginActivity">
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

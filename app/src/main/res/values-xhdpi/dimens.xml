@@ -17,4 +17,7 @@
 	<dimen name="activity_horizontal_margin">25.6dp</dimen>
 	<dimen name="nav_header_height">281.6dp</dimen>
 	<dimen name="title_text">20sp</dimen>
+	<dimen name="card_wt">120dp</dimen>
+	<dimen name="card_ht">144dp</dimen>
+	<dimen name="imageview_dim">96dp</dimen>
 </resources>
