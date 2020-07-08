@@ -18,46 +18,41 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-
-        <activity android:name=".ui.modules.artisan.landing.ArtisanLandingActivity"
+        <activity android:name=".ui.modules.artisan.profile.editProfile.ArtisanEditProfileActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.modules.artisan.profile.ArtisanProfileActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.modules.artisan.landing.ArtisanLandingActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
-
-        <activity android:name=".ui.modules.buyer.profile.editProfile.BuyerEditProfileActivity"
-            android:screenOrientation="portrait"/>
-
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.modules.buyer.profile.editProfile.BuyerEditProfileActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.modules.buyer.profile.BuyerProfileActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.modules.cx_video_com.CXVideoActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.modules.buyer.landing.BuyerLandingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".ui.modules.auth_com.register.RegisterActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.modules.role.RoleSelectActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.modules.auth_com.reset.ResetPasswordActivity"
             android:noHistory="true"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.modules.auth_com.login.LoginActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.modules.main.MainActivity"
             android:screenOrientation="portrait"

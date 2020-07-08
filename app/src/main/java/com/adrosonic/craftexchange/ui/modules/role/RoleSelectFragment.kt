@@ -12,6 +12,7 @@ import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.FragmentRoleSelectBinding
 import com.adrosonic.craftexchange.ui.modules.auth_com.login.LoginActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.adrosonic.craftexchange.utils.Utility
 import com.pixplicity.easyprefs.library.Prefs
 
 private const val ARG_PARAM1 = "param1"
@@ -49,13 +50,8 @@ class RoleSelectFragment : Fragment() {
     ): View? {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_role_select, container, false)
 
-
         //clear all prefs
-            val editor = Prefs.edit()
-            editor.clear()
-            editor.commit()
-            editor.apply()
-
+        Utility.clearPrefs()
         return mBinding?.root
     }
 
@@ -63,12 +59,14 @@ class RoleSelectFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         mBinding?.roleArtisan?.setOnClickListener{
+            Utility.clearPrefs()
             startActivity(Intent(activity, LoginActivity::class.java))
             Prefs.putString(ConstantsDirectory.PROFILE,"Artisan")
             Prefs.putLong(ConstantsDirectory.REF_ROLE_ID,1)
         }
 
         mBinding?.roleBuyer?.setOnClickListener{
+            Utility.clearPrefs()
             startActivity(Intent(activity, LoginActivity::class.java))
             Prefs.putString(ConstantsDirectory.PROFILE,"Buyer")
             Prefs.putLong(ConstantsDirectory.REF_ROLE_ID,2)

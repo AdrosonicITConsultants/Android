@@ -11,14 +11,20 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
-import androidx.fragment.app.replace
 import androidx.lifecycle.ViewModelProviders
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityArtisanLandingBinding
+import com.adrosonic.craftexchange.ui.modules.artisan.profile.artisanProfileIntent
 import com.adrosonic.craftexchange.ui.modules.landing_com.LandingViewModel
 import com.adrosonic.craftexchange.ui.modules.role.roleselectIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
+import com.bumptech.glide.signature.ObjectKey
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.pixplicity.easyprefs.library.Prefs
@@ -42,11 +48,22 @@ class ArtisanLandingActivity : AppCompatActivity(), NavigationView.OnNavigationI
         val view = mBinding?.root
         setContentView(view)
 
+        var profileImage = Utility.craftUser?.profilePic
+        var urlPro =
+            "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/User/${Prefs.getString(
+                ConstantsDirectory.USER_ID,
+                ""
+            )}/ProfilePics/${profileImage}"
+//            if (Utility.checkIfInternetConnected(applicationContext)) {
+        ImageSetter.setImage(applicationContext,urlPro,nav_view.getHeaderView(0).logo,
+            R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
+
         mViewModel = ViewModelProviders.of(this).get(LandingViewModel::class.java)
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.title = ""
+
 
         val toggle = ActionBarDrawerToggle(
             this, drawer_layout, toolbar,
@@ -127,7 +144,7 @@ class ArtisanLandingActivity : AppCompatActivity(), NavigationView.OnNavigationI
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_my_profile -> {
-//               TODO startActivity()
+               startActivity(artisanProfileIntent())
             }
             R.id.nav_my_transactions -> {}
             R.id.nav_my_orders -> {}
@@ -141,6 +158,7 @@ class ArtisanLandingActivity : AppCompatActivity(), NavigationView.OnNavigationI
                             dialog.cancel()
                             mViewModel?.logoutUser()
                             Utility.deleteCache(applicationContext)
+                            Utility.deleteImageCache(applicationContext)
                             startActivity(roleselectIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK))
                         }
                         .setNegativeButton("No"){ dialog, id ->

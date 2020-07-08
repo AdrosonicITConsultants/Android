@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+    <LinearLayout
+        android:id="@+id/artisan_mydetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context=".ui.modules.artisan.profile.MyDetailsFragment">
+
+        <info.abdolahi.CircularMusicProgressBar
+            android:id="@+id/artisan_profile_logo"
+            android:layout_width="@dimen/imageview_dim"
+            android:layout_height="@dimen/imageview_dim"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin_regular"
+            app:border_color="#80CBC4"
+            app:border_width="4dp"
+            android:src="@drawable/artisan_logo_placeholder"
+            app:centercircle_diammterer="1"
+            app:progress_color="#00796B"
+            app:progress_startAngle="270"
+            app:draw_anticlockwise="false"/>
+
+        <TextView
+            android:id="@+id/avg_rating_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="4dp"
+            android:text="@string/avg_rating"
+            android:fontFamily="@font/lato_regular"/>
+
+        <TextView
+            android:id="@+id/avg_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/black_text"
+            android:fontFamily="@font/lato_regular"/>
+
+        <View
+            android:id="@+id/divider1"
+            android:layout_width="80dp"
+            android:layout_height="1dp"
+            android:layout_gravity="center"
+            style="@style/HorizontalDivider2"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:id="@+id/field_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="@color/black_text"
+            android:layout_marginTop="@dimen/margin_semimedium"
+            android:layout_marginStart="@dimen/margin_regular"
+            android:text="@string/name"
+            android:textStyle="bold"
+            android:fontFamily="@font/lato_regular"/>
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="18sp"
+            android:textColor="@color/black_text"
+            android:layout_marginStart="@dimen/margin_regular"
+            android:fontFamily="@font/lato_regular"
+            android:text="Name"/>
+
+        <TextView
+            android:id="@+id/field_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="@color/black_text"
+            android:layout_marginTop="@dimen/margin_semimedium"
+            android:layout_marginStart="@dimen/margin_regular"
+            android:text="@string/email"
+            android:textStyle="bold"
+            android:fontFamily="@font/lato_regular"/>
+
+        <TextView
+            android:id="@+id/email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="18sp"
+            android:textColor="@color/black_text"
+            android:layout_marginStart="@dimen/margin_regular"
+            android:fontFamily="@font/lato_regular"
+            android:text="abc@gmail.com"/>
+
+        <TextView
+            android:id="@+id/field_mobile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="@color/black_text"
+            android:layout_marginTop="@dimen/margin_semimedium"
+            android:layout_marginStart="@dimen/margin_regular"
+            android:text="@string/mobile"
+            android:textStyle="bold"
+            android:fontFamily="@font/lato_regular"/>
+
+        <TextView
+            android:id="@+id/mobile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="18sp"
+            android:textColor="@color/black_text"
+            android:layout_marginStart="@dimen/margin_regular"
+            android:fontFamily="@font/lato_regular"
+            android:text="xxxxxxxxxx"/>
+
+        <TextView
+            android:id="@+id/field_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="@color/black_text"
+            android:layout_marginTop="@dimen/margin_semimedium"
+            android:layout_marginStart="@dimen/margin_regular"
+            android:text="@string/address"
+            android:textStyle="bold"
+            android:fontFamily="@font/lato_regular"/>
+
+        <TextView
+            android:id="@+id/address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="18sp"
+            android:textColor="@color/black_text"
+            android:layout_marginStart="@dimen/margin_regular"
+            android:fontFamily="@font/lato_regular"
+            android:text="addressssss"/>
+
+        <Button
+            android:id="@+id/btn_edit_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/lato_regular"
+            android:text="@string/edit_details"
+            android:textAllCaps="false"
+            android:textColor="@color/white_text"
+            android:textSize="16sp"
+            android:drawableStart="@drawable/ic_edit_white_18dp"
+            android:drawablePadding="6dp"
+            android:layout_marginTop="@dimen/margin_semimedium"
+            android:layout_marginBottom="@dimen/margin_regular"
+            android:background="@drawable/rectangle_round_grad_black_solid" />
+
+    </LinearLayout>
+        
+    </ScrollView>
+</layout>

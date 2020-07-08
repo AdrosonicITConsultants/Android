@@ -19,7 +19,9 @@ import com.adrosonic.craftexchange.ui.modules.buyer.profile.buyerProfileIntent
 import com.adrosonic.craftexchange.ui.modules.landing_com.LandingViewModel
 import com.adrosonic.craftexchange.ui.modules.role.roleselectIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.pixplicity.easyprefs.library.Prefs
 import kotlinx.android.synthetic.main.activity_buyer_landing.*
@@ -47,6 +49,11 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
         mBinding = ActivityBuyerLandingBinding.inflate(layoutInflater)
         val view = mBinding?.root
         setContentView(view)
+
+        var imageName = Utility.craftUser?.brandLogo
+        var url = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/User/${Prefs.getString(ConstantsDirectory.USER_ID,"")}/CompanyDetails/Logo/${imageName}"
+        ImageSetter.setImage(applicationContext,url,nav_view.getHeaderView(0).logo,
+            R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
 
         mViewModel = ViewModelProviders.of(this).get(LandingViewModel::class.java)
 

@@ -26,6 +26,10 @@
             android:icon="@drawable/ic_icon_help"
             android:title="@string/support" />
         <item
+            android:id="@+id/nav_change_lang"
+            android:icon="@drawable/ic_change_language_black"
+            android:title="@string/change_language" />
+        <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_icon_log_out"
             android:title="@string/logout" />

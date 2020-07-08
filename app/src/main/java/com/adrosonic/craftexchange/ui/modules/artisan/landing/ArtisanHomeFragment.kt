@@ -13,6 +13,11 @@ import com.adrosonic.craftexchange.database.entities.ProductListRecyclerView
 import com.adrosonic.craftexchange.databinding.FragmentArtisanHomeBinding
 import com.adrosonic.craftexchange.ui.modules.products.ProductListAdapter
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.adrosonic.craftexchange.utils.ImageSetter
+import com.adrosonic.craftexchange.utils.Utility
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.pixplicity.easyprefs.library.Prefs
 
 private const val ARG_PARAM1 = "param1"
@@ -41,6 +46,14 @@ class ArtisanHomeFragment : Fragment() {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_artisan_home, container, false)
         var welcomeText = "${activity?.getString(R.string.hello)} ${Prefs.getString(ConstantsDirectory.FIRST_NAME,"User")}"
         mBinding?.welcomeText?.text = welcomeText
+
+        var brandLogo = Utility.craftUser?.brandLogo
+        var urlBrand = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/User/${Prefs.getString(ConstantsDirectory.USER_ID,"")}/CompanyDetails/Logo/${brandLogo}"
+              mBinding?.brandLogoArtisan?.let {
+            ImageSetter.setImage(requireActivity(),urlBrand, it,
+                R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
+        }
+
         return mBinding?.root
     }
 

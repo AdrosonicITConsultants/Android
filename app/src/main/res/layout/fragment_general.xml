@@ -17,6 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
+            android:textColor="@color/black_text"
             android:layout_marginTop="@dimen/margin_regular"
             android:layout_marginStart="@dimen/margin_regular"
             android:text="@string/designation"
@@ -27,17 +28,17 @@
             android:id="@+id/designation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="4dp"
             android:textSize="16sp"
+            android:textColor="@color/black_text"
             android:layout_marginStart="@dimen/margin_regular"
-            android:fontFamily="@font/lato_regular"
-            android:text="Designation"/>
+            android:fontFamily="@font/lato_regular"/>
 
         <TextView
             android:id="@+id/field_reg_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="@dimen/margin_semimedium"
             android:layout_marginStart="@dimen/margin_regular"
             android:text="@string/reg_addr"
             android:textColor="@color/black_text"
@@ -74,7 +75,7 @@
             android:drawableStart="@drawable/ic_email_black_18dp"
             android:drawablePadding="8dp"
             android:layout_marginStart="@dimen/margin_regular"
-            android:layout_marginTop="@dimen/margin_regular"
+            android:layout_marginTop="@dimen/margin_semimedium"
             android:fontFamily="@font/lato_regular"
             android:text="abc@adrosonic.com"
             android:textColor="@color/black_text"
@@ -88,7 +89,7 @@
             android:drawablePadding="8dp"
             android:textSize="16sp"
             android:textColor="@color/black_text"
-            android:layout_marginTop="@dimen/margin_regular"
+            android:layout_marginTop="@dimen/margin_semimedium"
             android:layout_marginStart="@dimen/margin_regular"
             android:fontFamily="@font/lato_regular"/>
 
@@ -100,7 +101,8 @@
             android:drawablePadding="8dp"
             android:textSize="16sp"
             android:textColor="@color/black_text"
-            android:layout_marginTop="@dimen/margin_regular"
+            android:layout_marginTop="@dimen/margin_semimedium"
+            android:layout_marginBottom="@dimen/margin_semimedium"
             android:layout_marginStart="@dimen/margin_regular"
             android:fontFamily="@font/lato_regular"/>
 

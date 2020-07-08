@@ -28,6 +28,7 @@ import com.pixplicity.easyprefs.library.Prefs
 import com.wajahatkarim3.easyvalidation.core.view_ktx.minLength
 import com.wajahatkarim3.easyvalidation.core.view_ktx.nonEmpty
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validEmail
+import java.io.File
 
 private const val ARG_PARAM1 = "param1"
 
@@ -70,7 +71,7 @@ class BuyerRegisterCompanyFragment : Fragment() {
 
 
     private fun selectFromGallery() {
-        val intent = Intent(Intent.ACTION_PICK)
+        val intent = Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         intent.type = "image/*"
         val mimeTypes = arrayOf<String>("image/jpeg", "image/png")
         intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
@@ -91,28 +92,6 @@ class BuyerRegisterCompanyFragment : Fragment() {
             }
         }
 
-        mBinding?.textBoxGst?.addTextChangedListener {
-            if(mBinding?.textBoxGst?.text?.isNotEmpty()!! ) {
-                if(mBinding?.textBoxGst?.minLength(15) == false){
-                    mBinding?.textBoxGst?.minLength(15) { mBinding?.textBoxGst?.error =activity?.getString(R.string.gst_invalid_text) }
-                    mBinding?.buttonNext?.isClickable = false
-                }else{
-                    mBinding?.buttonNext?.isClickable = true
-                }
-            }
-        }
-
-        mBinding?.textBoxCin?.addTextChangedListener {
-            if(mBinding?.textBoxCin?.text?.isNotEmpty()!!) {
-                if(mBinding?.textBoxCin?.minLength(21) == false){
-                    mBinding?.textBoxCin?.minLength(21) { mBinding?.textBoxCin?.error = activity?.getString(R.string.cin_invalid_text) }
-                    mBinding?.buttonNext?.isClickable = false
-                }else{
-                    mBinding?.buttonNext?.isClickable = true
-                }
-            }
-        }
-
         mBinding?.textBoxPocContact?.addTextChangedListener {
             if(mBinding?.textBoxPocContact?.text?.isNotEmpty()!!) {
                 if(mBinding?.textBoxPocContact?.minLength(10) == false){
@@ -120,6 +99,42 @@ class BuyerRegisterCompanyFragment : Fragment() {
                     mBinding?.buttonNext?.isClickable = false
                 }else{
                     mBinding?.buttonNext?.isClickable = true
+                }
+            }
+        }
+
+        mBinding?.textBoxPan?.addTextChangedListener {
+            var boolean = Utility.isValidPan(mBinding?.textBoxPan?.text.toString())
+            if(mBinding?.textBoxPan?.text?.isNotEmpty()!! ) {
+                if(boolean){
+                    mBinding?.buttonNext?.isClickable = true
+                }else{
+                    mBinding?.textBoxPan?.error =activity?.getString(R.string.pan_invalid_text)
+                    mBinding?.buttonNext?.isClickable = false
+                }
+            }
+        }
+
+        mBinding?.textBoxGst?.addTextChangedListener {
+            var boolean = Utility.isValidGST(mBinding?.textBoxGst?.text.toString())
+            if(mBinding?.textBoxGst?.text?.isNotEmpty()!! ) {
+                if(boolean){
+                    mBinding?.buttonNext?.isClickable = true
+                }else{
+                    mBinding?.textBoxGst?.error =activity?.getString(R.string.gst_invalid_text)
+                    mBinding?.buttonNext?.isClickable = false
+                }
+            }
+        }
+
+        mBinding?.textBoxCin?.addTextChangedListener {
+            var boolean = Utility.isValidCIN(mBinding?.textBoxCin?.text.toString())
+            if(mBinding?.textBoxCin?.text?.isNotEmpty()!! ) {
+                if(boolean){
+                    mBinding?.buttonNext?.isClickable = true
+                }else{
+                    mBinding?.textBoxCin?.error =activity?.getString(R.string.cin_invalid_text)
+                    mBinding?.buttonNext?.isClickable = false
                 }
             }
         }
@@ -135,7 +150,6 @@ class BuyerRegisterCompanyFragment : Fragment() {
         mBinding?.buttonNext?.setOnClickListener{
 
             if(mBinding?.textBoxCompname?.nonEmpty() == true &&
-                mBinding?.textBoxPan?.minLength(10) == true &&
                 mBinding?.textBoxPan?.nonEmpty() == true) {
 
                 Prefs.putString(ConstantsDirectory.COMP_NAME,mBinding?.textBoxCompname?.text.toString())
@@ -156,8 +170,6 @@ class BuyerRegisterCompanyFragment : Fragment() {
             }else{
                 mBinding?.textBoxCompname?.nonEmpty{ mBinding?.textBoxCompname?.error = it }
                 mBinding?.textBoxPan?.nonEmpty{ mBinding?.textBoxPan?.error = it }
-                mBinding?.textBoxPan?.minLength(10){
-                    mBinding?.textBoxPan?.error = activity?.getString(R.string.pan_invalid_text) }
             }
         }
     }
@@ -169,13 +181,14 @@ class BuyerRegisterCompanyFragment : Fragment() {
                 PICK_IMAGE -> {
                     val uri = data.data
                     var absolutePath = Utility.getRealPathFromFileURI(requireContext(),uri!!)
-                    val filename = absolutePath.substring(absolutePath.lastIndexOf("/") + 1)
-
-                    Prefs.putString(ConstantsDirectory.BRAND_LOGO,absolutePath)
-                    Prefs.putString(ConstantsDirectory.BRAND_IMG_NAME,filename)
-
-                    mBinding?.textBoxUpload?.text = filename
-
+                    if(Utility.validFileSize(absolutePath)){
+                        val filename = absolutePath.substring(absolutePath.lastIndexOf("/") + 1)
+                        Prefs.putString(ConstantsDirectory.BRAND_LOGO,absolutePath)
+                        Prefs.putString(ConstantsDirectory.BRAND_IMG_NAME,filename)
+                        mBinding?.textBoxUpload?.text = filename
+                    }else{
+                        Utility.messageDialog(requireContext(), requireActivity().getString(R.string.file_size_exceeded))
+                    }
                 }
             }
     }

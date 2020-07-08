@@ -55,8 +55,7 @@
                 android:textColor="#000"
                 android:textSize="@dimen/Ques_text"
                 app:layout_constraintBottom_toBottomOf="@+id/value_artisanId"
-                app:layout_constraintEnd_toStartOf="@+id/value_artisanId"
-                app:layout_constraintTop_toTopOf="@+id/value_artisanId" />
+                app:layout_constraintEnd_toStartOf="@+id/value_artisanId" />
 
             <TextView
                 android:id="@+id/value_artisanId"
@@ -309,10 +308,12 @@
                 android:layout_marginEnd="@dimen/margin_semimedium"
                 android:background="@drawable/rectangle_round_grad"
                 android:fontFamily="@font/lato_regular"
-                android:inputType="text"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:textSize="16sp"
+                android:digits="@string/alphaNumeric"
+                android:inputType="textCapCharacters"
+                android:maxLength="10"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_pan" />

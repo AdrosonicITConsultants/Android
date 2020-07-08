@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 
 import com.adrosonic.craftexchange.R
@@ -19,6 +20,7 @@ import com.adrosonic.craftexchange.databinding.FragmentArtisanRegisterDetailsBin
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.clusterResponse.CLusterResponse
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.adrosonic.craftexchange.utils.Utility
 import com.google.gson.Gson
 import com.pixplicity.easyprefs.library.Prefs
 import com.wajahatkarim3.easyvalidation.core.view_ktx.minLength
@@ -125,9 +127,19 @@ class ArtisanRegisterDetailsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        mBinding?.textBoxPan?.addTextChangedListener {
+            var boolean = Utility.isValidPan(mBinding?.textBoxPan?.text.toString())
+            if(mBinding?.textBoxPan?.text?.isNotEmpty()!! ) {
+                if(boolean){
+                    mBinding?.buttonNext?.isClickable = true
+                }else{
+                    mBinding?.textBoxPan?.error =activity?.getString(R.string.pan_invalid_text)
+                    mBinding?.buttonNext?.isClickable = false
+                }
+            }
+        }
+
         mBinding?.buttonNext?.setOnClickListener{
-
-
 
             if(mBinding?.textBoxFirstname?.nonEmpty() == true &&
                 mBinding?.textBoxPincode?.nonEmpty() == true &&

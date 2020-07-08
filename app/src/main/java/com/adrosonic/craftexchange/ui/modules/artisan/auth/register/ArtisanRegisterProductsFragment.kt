@@ -25,9 +25,9 @@ import androidx.databinding.DataBindingUtil
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.FragmentArtisanRegisterProductsBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
-import com.adrosonic.craftexchange.repository.data.model.artisan.Address
-import com.adrosonic.craftexchange.repository.data.model.artisan.Country
-import com.adrosonic.craftexchange.repository.data.model.artisan.User
+import com.adrosonic.craftexchange.repository.data.request.artisan.Address
+import com.adrosonic.craftexchange.repository.data.request.artisan.Country
+import com.adrosonic.craftexchange.repository.data.request.artisan.User
 import com.adrosonic.craftexchange.repository.data.registerResponse.RegisterResponse
 import com.adrosonic.craftexchange.ui.modules.auth_com.login.LoginActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
@@ -68,6 +68,8 @@ class ArtisanRegisterProductsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_artisan_register_products, container, false)
+
+        mBinding?.sendOtpLoader = false
 
         productArray.add("Saree")
         productArray.add("Dupatta")
@@ -114,17 +116,18 @@ class ArtisanRegisterProductsFragment : Fragment() {
 
         mBinding?.buttonComplete?.setOnClickListener {
             if(mBinding?.checkBoxTnc?.isChecked == true){
+                showProgress()
 //                mBinding?.listProducts?.selectedItemsAsString
                 listProducts = mBinding?.listProducts?.selectedIndicies!!
                 var registerRequestObj = User(addr,Prefs.getString(ConstantsDirectory.CLUSTER_ID,"1").toLong(),
                     Prefs.getString(ConstantsDirectory.USER_EMAIL,""),Prefs.getString(ConstantsDirectory.FIRST_NAME,""),
                     Prefs.getString(ConstantsDirectory.LAST_NAME,""),Prefs.getString(ConstantsDirectory.MOBILE,""),
                     Prefs.getString(ConstantsDirectory.PAN,""),Prefs.getString(ConstantsDirectory.USER_PWD,""),
-                    listProducts,Prefs.getLong(ConstantsDirectory.REF_ROLE_ID,1),Prefs.getString(ConstantsDirectory.CLUSTER_ID,""))
+                    listProducts,Prefs.getLong(ConstantsDirectory.REF_ROLE_ID,1),Prefs.getString(ConstantsDirectory.ARTISAN_ID,""))
 
                 var registerRequest = Gson().toJson(registerRequestObj)
 
-                var filePath = Prefs.getString(ConstantsDirectory.BRAND_LOGO,"")
+                var filePath = Prefs.getString(ConstantsDirectory.PROFILE_PHOTO,"")
                 if(filePath.isNotEmpty()){
                     file = File(filePath)
                     fileReqBody = RequestBody.create(MediaType.parse("image/*"), file!!)
@@ -143,31 +146,32 @@ class ArtisanRegisterProductsFragment : Fragment() {
                         .registerUser(registerRequest)
                 }
 
-                CraftExchangeRepository
-                    .getRegisterService()
-                    .registerUser(registerRequest)
-                    .enqueue(object: Callback, retrofit2.Callback<RegisterResponse> {
+                registerCall?.enqueue(object: Callback, retrofit2.Callback<RegisterResponse> {
                         override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
+                            hideProgress()
                             t.printStackTrace()
                         }
                         override fun onResponse(
                             call: Call<RegisterResponse>,
                             response: retrofit2.Response<RegisterResponse>) {
-                            if(response.isSuccessful){
+                            if(response.body()?.valid == true){
+                                hideProgress()
                                 Log.e(TAG, response.toString())
                                 Toast.makeText(activity,activity?.getString(R.string.registration_success_msg),Toast.LENGTH_SHORT).show()
                                 Prefs.clear()
                                 Prefs.putString(ConstantsDirectory.PROFILE,"Artisan")
                                 Prefs.putLong(ConstantsDirectory.REF_ROLE_ID,1)
+                                Utility.deleteCache(requireContext())
                                 startActivity(Intent(activity, LoginActivity::class.java).addFlags(
                                     Intent.FLAG_ACTIVITY_CLEAR_TOP
                                 ))}else{
 //                                if(response.code() == 400){
+                                hideProgress()
                                     var jsonObject:JSONObject ?= null
                                     try
                                     {
                                         jsonObject = JSONObject(response.errorBody()?.charStream()!!.readText())
-                                        val errorMessage = jsonObject.getString("errorMessage")
+                                        val errorMessage = jsonObject.getString("message")
                                         Toast.makeText(activity,errorMessage,Toast.LENGTH_SHORT).show()
                                     }
                                     catch (e: JSONException) {
@@ -183,7 +187,7 @@ class ArtisanRegisterProductsFragment : Fragment() {
     }
 
     private fun selectFromGallery() {
-        val intent = Intent(Intent.ACTION_PICK)
+        val intent = Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         intent.type = "image/*"
         val mimeTypes = arrayOf<String>("image/jpeg", "image/png")
         intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
@@ -197,15 +201,22 @@ class ArtisanRegisterProductsFragment : Fragment() {
                 PICK_IMAGE -> {
                     val uri = data.data
                     var absolutePath = Utility.getRealPathFromFileURI(requireContext(),uri!!)
-                    Glide.with(this)
-                        .load(uri)
-                        .centerCrop()
-                        .placeholder(R.drawable.upload_icon_artist)
-                        .into(mBinding!!.uploadProduct)
-                    val filename = absolutePath.substring(absolutePath.lastIndexOf("/") + 1)
-                    mBinding?.imgName?.text = filename
-                    Prefs.putString(ConstantsDirectory.BRAND_LOGO,absolutePath)
-                    Prefs.putString(ConstantsDirectory.BRAND_IMG_NAME,filename)
+
+                    if(Utility.validFileSize(absolutePath)){
+                        Glide.with(this)
+                            .load(uri)
+                            .centerCrop()
+                            .placeholder(R.drawable.upload_icon_artist)
+                            .into(mBinding!!.uploadProduct)
+                        val filename = absolutePath.substring(absolutePath.lastIndexOf("/") + 1)
+                        mBinding?.imgName?.text = filename
+                        Prefs.putString(ConstantsDirectory.PROFILE_PHOTO,absolutePath)
+                        Prefs.putString(ConstantsDirectory.PROFILE_PHOTO_NAME,filename)
+                    }else{
+                        Utility.messageDialog(requireContext(), requireActivity().getString(R.string.file_size_exceeded))
+                    }
+
+
 
                 }
             }
@@ -246,6 +257,23 @@ class ArtisanRegisterProductsFragment : Fragment() {
             .setNegativeButton("Cancel", null)
             .create()
             .show()
+    }
+
+    private fun showProgress(){
+        mBinding?.sendOtpLoader = true
+        mBinding?.listProducts?.isFocusableInTouchMode = false
+        mBinding?.uploadProduct?.isFocusableInTouchMode = false
+        mBinding?.buttonComplete?.isClickable = false
+        mBinding?.checkBoxTnc?.isClickable = false
+        mBinding?.textTnct?.isClickable = false
+    }
+    private fun hideProgress(){
+        mBinding?.sendOtpLoader = false
+        mBinding?.listProducts?.isFocusableInTouchMode = true
+        mBinding?.uploadProduct?.isFocusableInTouchMode = true
+        mBinding?.buttonComplete?.isClickable = true
+        mBinding?.checkBoxTnc?.isClickable = true
+        mBinding?.textTnct?.isClickable = true
     }
 
 }

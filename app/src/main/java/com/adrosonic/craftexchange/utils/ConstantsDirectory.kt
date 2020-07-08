@@ -13,6 +13,7 @@ object ConstantsDirectory {
     const val USER_ID = "userid"
 
     const val IS_LOGGED_IN = "checklogin"
+    const val IS_EDITTABLE = "iseditable"
 
     const val BASE_URL = "http://101.53.153.96:8090/"
 
@@ -55,6 +56,9 @@ object ConstantsDirectory {
 
     const val BRAND_LOGO = "buyerbrandlogo"
     const val BRAND_IMG_NAME = "buyerimagename"
+
+    const val PROFILE_PHOTO = "profilephoto"
+    const val PROFILE_PHOTO_NAME = "profilephotoname"
 
     const val DELIVERY = "Delivery"
     const val REGISTERED = "Registered"

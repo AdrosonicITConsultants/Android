@@ -8,7 +8,7 @@ open class Addresss : RealmObject() {
     var _id: Long?=0
     var id : Long ?= 0
     var userid : Long?=0
-    var addrid : String ?=""
+    var addrtypeid : String ?=""
     var addrtype : String ?=""
     var country_id: String ?=""
     var country: String? = ""

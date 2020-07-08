@@ -28,7 +28,7 @@
             android:id="@+id/company_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_regular"
+            android:layout_marginTop="@dimen/margin_semimedium"
             android:textSize="16sp"
             android:textColor="@color/black_text"
             android:layout_marginStart="@dimen/margin_regular"

@@ -10,6 +10,7 @@
     <string name="initiative1">An initiative by Antaran</string>
     <string name="initiative2">Part of TataTrusts</string>
     <string name="description">What describes you the best?</string>
+    <string name="desc_text">Description</string>
     <string name="or">or</string>
     <string name="artisan">Artisan</string>
     <string name="artisan_logo">Artisan Logo</string>
@@ -56,7 +57,7 @@
     <string name="enter_cin">CIN Number</string>
     <string name="pan">PAN Number</string>
     <string name="upload_logo_text">Upload your brand logo</string>
-    <string name="specs_image_upload">"Image - PNG, JPEG - (2Mb Max) "</string>
+    <string name="specs_image_upload">"Image - PNG, JPEG - (1Mb Max) "</string>
     <string name="text_addr_details">Address Details</string>
     <string name="about_web">Provide your link for web presence?</string>
     <string name="text_skip_details">You can skip this step and add your links later in the profile section</string>
@@ -118,8 +119,11 @@
     <string name="customize_your_design">Customise your own design</string>
     <string name="skip">Skip</string>
 
-    <string name="message_operation_not_supported_offline">Operation not supported offline</string>
+    <string name="message_operation_not_supported_offline">Operation not supported in offline</string>
+    <string name="no_internet_connection">No Internet Connection</string>
     <string name="logout_text">Are your sure you want to logout?</string>
+    <string name="success">    Success!    </string>
+    <string name="profile_update_success">Profile updated successfully!</string>
     <string name="artisan_self_design">Artisan self\ndesign</string>
     <string name="explore">Explore</string>
     <string name="antaran_design_collec">Antaran co-design\ncollection</string>
@@ -135,28 +139,59 @@
     <string name="name">Name</string>
     <string name="pwd_validation_text">Please Enter Valid Password with 8 characters.It should contain atleast Capital alphabet,number and special character</string>
     <string name="otp_send_success">OTP sent successfully!</string>
-    <string name="pincode_invalid_text">"Please enter valid pincode"</string>
-    <string name="pan_invalid_text">"Please enter valid Pan number"</string>
-    <string name="gst_invalid_text">"Please enter valid GST number"</string>
-    <string name="cin_invalid_text">"Please enter valid CIN number"</string>
-    <string name="link_invalid_text">"Please enter valid link"</string>
-    <string name="mobile_no_invalid_text">Please enter valid mobile number</string>
+    <string name="pincode_invalid_text">"Invalid pincode"</string>
+    <string name="pan_invalid_text">"Invalid Pan number"</string>
+    <string name="gst_invalid_text">"Invalid GST number"</string>
+    <string name="cin_invalid_text">"Invalid CIN number"</string>
+    <string name="link_invalid_text">"Invalid link"</string>
+    <string name="mobile_no_invalid_text">Invalid mobile number</string>
+    <string name="enter_valid_details">Enter Valid Details</string>
+    <string name="file_size_exceeded">File size exceeded 1Mb</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="alphaNumeric">ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789</string>
-
+    <string name="alphaNumeric2">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789</string>
+    <string name="characters">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz</string>
     <string name="hello">Hello</string>
     <string name="your_product">Your Products</string>
     <string name="list_prod_text">List of your very own products sorted by categories</string>
     <string name="registration_success_msg">Registration Successful!</string>
+    <string name="my_details">My Details</string>
+    <string name="brand_details">Brand Details</string>
+    <string name="bank_details">Bank Details</string>
+    <string name="edit_details">Edit Details</string>
+    <string name="add_new_prod">Add a new product</string>
+    <string name="avg_rating">Avg rating</string>
+    <string name="product_category">Product Category</string>
+    <string name="edit_brand_details">Edit Brand Details</string>
+    <string name="details_bank">Bank Details</string>
+    <string name="account_no">Account Number</string>
+    <string name="bank_name">Bank Name</string>
+    <string name="benificiary_name">Beneficiary Name</string>
+    <string name="branch">Branch</string>
+    <string name="ifsc_code">IFSC Code</string>
+    <string name="digital_payment_details">Digital Payment Details</string>
+    <string name="edit_bank_details">Edit Bank Details</string>
+    <string name="change_brand_logo">Change Brand\nProfile Image</string>
+    <string name="change_profile_logo">Change Profile\nPhoto</string>
+
+    <string name="saree">Saree</string>
+    <string name="dupatta">Dupatta</string>
+    <string name="stole">Stole</string>
+    <string name="fabric">Fabric</string>
+    <string name="home_Accessories">Home Accessories</string>
+    <string name="fashion_accessories">Fashion Accessories</string>
+    <string name="gpay_field">Google Pay UPI Id</string>
+    <string name="paytm_field">Paytm Registered Mobile Number</string>
+    <string name="phonepe_field">PhonePe UPI Id</string>
 
     <string-array name="product_array">
-        <item>Saree</item>
-        <item>Dupatta</item>
-        <item>Stole</item>
-        <item>Fabric</item>
-        <item>Home Accessories</item>
-        <item>Fashion Accessories</item>
+        <item>@string/saree</item>
+        <item>@string/dupatta</item>
+        <item>@string/stole</item>
+        <item>@string/fabric</item>
+        <item>@string/home_Accessories</item>
+        <item>@string/fashion_accessories</item>
     </string-array>
 
 </resources>

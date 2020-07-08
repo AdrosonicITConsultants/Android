@@ -1,9 +1,6 @@
 package com.adrosonic.craftexchange.repository
 
-import com.adrosonic.craftexchange.repository.remote.ClusterDao
-import com.adrosonic.craftexchange.repository.remote.RegisterDao
-import com.adrosonic.craftexchange.repository.remote.LoginDao
-import com.adrosonic.craftexchange.repository.remote.ResetPasswordDao
+import com.adrosonic.craftexchange.repository.remote.*
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.google.gson.GsonBuilder
 import okhttp3.ConnectionSpec
@@ -33,8 +30,8 @@ object CraftExchangeRepository {
                     .setLevel(HttpLoggingInterceptor.Level.BODY))
 //                .connectionSpecs(Collections.singletonList(spec))
                 .connectionSpecs(lists)
-                .connectTimeout(30,TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
+                .connectTimeout(60,TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
         .build())
 
             .build()
@@ -56,5 +53,10 @@ object CraftExchangeRepository {
     fun getClusterService(): ClusterDao {
         return builder(ClusterDao::class.java)
     }
+
+    fun getUserService(): UserDao {
+        return builder(UserDao::class.java)
+    }
+
 
 }

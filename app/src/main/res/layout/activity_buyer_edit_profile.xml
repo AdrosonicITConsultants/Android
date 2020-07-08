@@ -19,11 +19,12 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
-            android:id="@+id/logo"
+            android:id="@+id/btn_back"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_gravity="start"
-            app:srcCompat="@drawable/ic_keyboard_backspace_black_24dp" />
+            android:src="@drawable/ic_keyboard_backspace_black_24dp"
+            android:background="?selectableItemBackgroundBorderless"/>
 
         <TextView
             android:id="@+id/text_cancel"

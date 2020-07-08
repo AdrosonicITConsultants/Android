@@ -1,5 +1,8 @@
 package com.adrosonic.craftexchange.repository.remote
 
+//import com.adrosonic.craftexchange.repository.data.clusterResponse.CLusterResponse
+//import com.adrosonic.craftexchange.repository.data.clusterResponse.ProductResponse
+
 import com.adrosonic.craftexchange.repository.data.clusterResponse.CLusterResponse
 import com.adrosonic.craftexchange.repository.data.clusterResponse.ProductResponse
 import retrofit2.Call

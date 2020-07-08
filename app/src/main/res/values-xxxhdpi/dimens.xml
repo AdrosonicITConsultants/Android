@@ -20,4 +20,5 @@
 	<dimen name="card_wt">187.5dp</dimen>
 	<dimen name="card_ht">225dp</dimen>
 	<dimen name="imageview_dim">150dp</dimen>
+	<dimen name="profile_img">125dp</dimen>
 </resources>

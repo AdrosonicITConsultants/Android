@@ -55,6 +55,35 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <LinearLayout
+                android:id="@+id/add_prod_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/add_prod_grad"
+                app:layout_constraintTop_toBottomOf="@+id/top_part"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/margin_regular"
+                    android:background="@drawable/rectangle_round_grad"
+                    android:backgroundTint="@color/colorSplash"
+                    android:drawableStart="@drawable/ic_add_prod_icon"
+                    android:drawablePadding="@dimen/margin_regular"
+                    android:paddingEnd="16dp"
+                    android:paddingStart="8dp"
+                    android:textSize="@dimen/edit_text"
+                    android:fontFamily="@font/lato_regular"
+                    android:text="@string/add_new_prod"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black_text" />
+
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/your_product"
                 android:layout_width="wrap_content"
@@ -64,7 +93,7 @@
                 android:layout_marginTop="@dimen/margin_small"
                 android:textSize="@dimen/title_text"
                 android:textColor="@color/white_text"
-                app:layout_constraintTop_toBottomOf="@+id/top_part"
+                app:layout_constraintTop_toBottomOf="@+id/add_prod_layout"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 

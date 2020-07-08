@@ -1,0 +1,99 @@
+package com.adrosonic.craftexchange.utils
+
+import android.content.Context
+import android.graphics.Bitmap
+import android.widget.ImageView
+import com.adrosonic.craftexchange.R
+import com.bumptech.glide.Glide
+import com.bumptech.glide.Priority
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.target.Target
+
+object ImageSetter {
+    /**
+     * This method will set image into ImageView without using placeholder.
+     * it will handel caching.
+     * */
+    fun setImage(context: Context, imagePath:String, imageView: ImageView) {
+        try
+        {
+            Glide.with(context)
+                .load(imagePath) // it can be a remote URL or a local absolute file path.
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                .priority(Priority.IMMEDIATE)
+                .skipMemoryCache(false)
+                .dontAnimate()
+                .into(imageView)
+        }
+        catch (ex:Exception) {
+            ex.printStackTrace()
+        }
+    }
+    /**
+     * This method will set image into ImageView with loading time placeholder
+     * and also with error.
+     * */
+    fun setImage(context:Context, imagePath:String, imageView:ImageView, placeholder:Int, errImage:Int, fallbck : Int) {
+        try
+        {
+            Glide.with(context)
+                .load(imagePath)
+                .apply(
+                    RequestOptions()
+                        .circleCrop()
+                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                        .override(Target.SIZE_ORIGINAL))
+                .placeholder(placeholder)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                .priority(Priority.IMMEDIATE)
+                .error(errImage)
+                .fallback(fallbck)
+                .skipMemoryCache(false)
+                .dontAnimate()
+                .into(imageView)
+
+        }
+        catch (ex:Exception) {
+            ex.printStackTrace()
+        }
+    }
+    /**
+     * Load image with caching, placeholder and result callback.
+     * */
+//    fun setImage(context:Context, imagePath:String, imageView:ImageView, placeholder:Int, listener: RequestListener<String, GlideDrawable>) {
+//        try
+//        {
+//            Glide.with(context)
+//                .load(imagePath)
+//                .placeholder(placeholder)
+//                .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                .priority(Priority.IMMEDIATE)
+//                .error(placeholder)
+//                .skipMemoryCache(false)
+//                .dontAnimate()
+//                .listener(listener)
+//                .into(imageView)
+//        }
+//        catch (ex:Exception) {
+//            ex.printStackTrace()
+//        }
+//    }
+    /**
+     * Download image from remote URL and get callback of result.
+     * */
+    fun downloadImage(context:Context, imageSource:String, listener: SimpleTarget<Bitmap>) {
+        try
+        {
+            Glide.with(context)
+                .asBitmap()
+                .load(imageSource)
+                .into(listener)
+        }
+        catch (ex:Exception) {
+            ex.printStackTrace()
+        }
+    }
+}

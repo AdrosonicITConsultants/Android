@@ -16,7 +16,7 @@ android {
         applicationId "com.adrosonic.craftexchange"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 8
+        versionCode 10
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -90,7 +90,10 @@ dependencies {
 
     //images
     implementation 'com.github.bumptech.glide:glide:4.10.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
 
+    //Circular Rating Bar
+    implementation 'com.github.aliab:circular-music-progressbar:v1.3.0'
 //    //Image Compression
 //    implementation 'id.zelory:compressor:2.1.0'
 

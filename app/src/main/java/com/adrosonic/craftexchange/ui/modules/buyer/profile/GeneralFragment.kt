@@ -44,7 +44,7 @@ class GeneralFragment : Fragment() {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_general, container, false)
 
-
+        mBinding?.designation?.text = craftUser?.designation ?: " - "
         mBinding?.regAddr?.text = regAddr?.line1 ?: " - "
         mBinding?.country?.text = regAddr?.country ?: " - "
 //        if(craftUser?.email != "") {

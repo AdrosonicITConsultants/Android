@@ -44,13 +44,17 @@ class DeliveryEditFragment : Fragment() {
         mBinding?.companyName?.text = craftUser?.companyName ?: " - "
         mBinding?.compAddr?.setText(delAddr?.line1 ?: "")
         mBinding?.country?.text = delAddr?.country ?: " - "
+
+        Prefs.putString(ConstantsDirectory.ADDR_LINE1, delAddr?.line1 ?: "")
+
         return mBinding?.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
         mBinding?.compAddr?.addTextChangedListener {
-            Prefs.putString(ConstantsDirectory.DELIVERY, mBinding?.compAddr?.text.toString())
+            Prefs.putString(ConstantsDirectory.ADDR_LINE1, mBinding?.compAddr?.text.toString())
         }
 
     }

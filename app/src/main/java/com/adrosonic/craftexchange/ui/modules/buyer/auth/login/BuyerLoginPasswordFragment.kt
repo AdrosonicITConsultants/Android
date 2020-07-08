@@ -19,12 +19,13 @@ import com.adrosonic.craftexchange.database.predicates.AddressPredicates
 import com.adrosonic.craftexchange.database.predicates.UserPredicates
 import com.adrosonic.craftexchange.databinding.FragmentBuyerLoginPasswordBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
-import com.adrosonic.craftexchange.repository.data.loginResponse.buyer.BuyerResponse
+import com.adrosonic.craftexchange.repository.data.response.buyer.login.BuyerResponse
 import com.adrosonic.craftexchange.repository.data.model.UserAuthModel
 import com.adrosonic.craftexchange.ui.modules.auth_com.register.RegisterActivity
 import com.adrosonic.craftexchange.ui.modules.auth_com.reset.ResetPasswordActivity
 import com.adrosonic.craftexchange.ui.modules.cx_video_com.CXVideoActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.adrosonic.craftexchange.utils.Utility
 import com.pixplicity.easyprefs.library.Prefs
 import retrofit2.Call
 import retrofit2.Response
@@ -89,50 +90,82 @@ class BuyerLoginPasswordFragment : Fragment() {
         }
 
         mBinding?.buttonNext?.setOnClickListener{
-            if(mBinding?.textBoxPassword?.text.toString() != ""){
+            if(Utility.checkIfInternetConnected(requireContext())) {
+                if (mBinding?.textBoxPassword?.text.toString() != "") {
 
-                CraftExchangeRepository
-                    .getLoginService()
-                    .authenticateBuyer("application/json",
-                        UserAuthModel(
-                            Prefs.getString(ConstantsDirectory.USER_EMAIL, null),
-                            mBinding?.textBoxPassword?.text.toString(),
-                            Prefs.getLong(ConstantsDirectory.REF_ROLE_ID, 0)
+                    CraftExchangeRepository
+                        .getLoginService()
+                        .authenticateBuyer(
+                            "application/json",
+                            UserAuthModel(
+                                Prefs.getString(ConstantsDirectory.USER_EMAIL, null),
+                                mBinding?.textBoxPassword?.text.toString(),
+                                Prefs.getLong(ConstantsDirectory.REF_ROLE_ID, 0)
+                            )
                         )
-                    )
-                    .enqueue(object : Callback, retrofit2.Callback<BuyerResponse>{
-                        override fun onFailure(call: Call<BuyerResponse>, t: Throwable) {
-                            t.printStackTrace()
-                            Toast.makeText(activity,"${t.printStackTrace()}",Toast.LENGTH_SHORT).show()
-                        }
+                        .enqueue(object : Callback, retrofit2.Callback<BuyerResponse> {
+                            override fun onFailure(call: Call<BuyerResponse>, t: Throwable) {
+                                t.printStackTrace()
+                                Toast.makeText(
+                                    activity,
+                                    "${t.printStackTrace()}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
 
-                        override fun onResponse(
-                            call: Call<BuyerResponse>, response: Response<BuyerResponse>) {
-                            if(response.body()?.valid == true){
+                            override fun onResponse(
+                                call: Call<BuyerResponse>, response: Response<BuyerResponse>
+                            ) {
+                                if (response.body()?.valid == true) {
 
-                                UserPredicates.insertBuyer(response.body()!!)
-                                AddressPredicates.insertBuyerAddress(response.body()?.data?.user)
+                                    UserPredicates.insertBuyer(response.body()!!)
+                                    AddressPredicates.insertBuyerAddress(response.body()!!)
 
-                                Prefs.putString(ConstantsDirectory.USER_PWD,mBinding?.textBoxPassword?.text.toString())
-                                Prefs.putBoolean(ConstantsDirectory.IS_LOGGED_IN,true)
-                                Prefs.putString(ConstantsDirectory.USER_ID,response.body()?.data?.user?.id.toString())
-                                Prefs.putString(ConstantsDirectory.ACC_TOKEN,response.body()?.data?.acctoken)
-                                Prefs.putString(ConstantsDirectory.FIRST_NAME,response.body()?.data?.user?.firstName)
-                                Prefs.putString(ConstantsDirectory.LAST_NAME,response.body()?.data?.user?.lastName)
-                                Prefs.putString(ConstantsDirectory.COMP_NAME,response.body()?.data?.user?.companyDetails?.companyName)
+                                    Prefs.putString(
+                                        ConstantsDirectory.USER_PWD,
+                                        mBinding?.textBoxPassword?.text.toString()
+                                    )
+                                    Prefs.putBoolean(ConstantsDirectory.IS_LOGGED_IN, true)
+                                    Prefs.putString(
+                                        ConstantsDirectory.USER_ID,
+                                        response.body()?.data?.user?.id.toString()
+                                    )
+                                    Prefs.putString(
+                                        ConstantsDirectory.ACC_TOKEN,
+                                        response.body()?.data?.acctoken
+                                    )
+                                    Prefs.putString(
+                                        ConstantsDirectory.FIRST_NAME,
+                                        response.body()?.data?.user?.firstName
+                                    )
+                                    Prefs.putString(
+                                        ConstantsDirectory.LAST_NAME,
+                                        response.body()?.data?.user?.lastName
+                                    )
+                                    Prefs.putString(
+                                        ConstantsDirectory.COMP_NAME,
+                                        response.body()?.data?.user?.companyDetails?.companyName
+                                    )
 
 //                                Toast.makeText(activity,"Login Successful! - landing screen Buyer",Toast.LENGTH_SHORT).show()
-                                startActivity(Intent(activity, CXVideoActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                                    startActivity(Intent(activity, CXVideoActivity::class.java))
 
-                            }else{
-                                Toast.makeText(activity,"${response.body()?.errorMessage}",Toast.LENGTH_SHORT).show()
+                                } else {
+                                    Toast.makeText(
+                                        activity,
+                                        "${response.body()?.errorMessage}",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             }
-                        }
-                    })
+                        })
+                } else {
+                    Toast.makeText(activity, "Please enter your password", Toast.LENGTH_SHORT)
+                        .show()
+                }
             }else{
-                Toast.makeText(activity,"Please enter your password",Toast.LENGTH_SHORT).show()
+                Utility.displayMessage(requireActivity().getString(R.string.no_internet_connection),requireContext())
             }
-
         }
 
     }

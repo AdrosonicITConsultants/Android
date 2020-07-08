@@ -26,6 +26,7 @@ import com.adrosonic.craftexchange.repository.data.model.buyer.Country
 import com.adrosonic.craftexchange.repository.data.registerResponse.*
 import com.adrosonic.craftexchange.ui.modules.auth_com.login.LoginActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.adrosonic.craftexchange.utils.Utility
 import com.google.gson.Gson
 import com.pixplicity.easyprefs.library.Prefs
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validUrl
@@ -62,9 +63,9 @@ class BuyerRegisterWebFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_buyer_register_web, container, false)
+        mBinding?.sendOtpLoader = false
         return mBinding?.root
     }
-
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -174,15 +175,14 @@ class BuyerRegisterWebFragment : Fragment() {
 
 
             if(mBinding?.checkBoxTnc?.isChecked == true){
-
-
+                showProgress()
                 var filePath = Prefs.getString(ConstantsDirectory.BRAND_LOGO,"")
                 if(filePath.isNotEmpty()){
                     file = File(filePath)
                     fileReqBody = RequestBody.create(MediaType.parse("image/*"), file!!)
                     profileBody = MultipartBody.Builder()
                         .addFormDataPart("profilePic", file?.name, fileReqBody!!)
-//                    .addFormDataPart("brandLogo",file.name,fileReqBody)
+                        .addFormDataPart("brandLogo",file?.name,fileReqBody!!)
                         .build()
                     headerBoundary="multipart/form-data;boundary="+ profileBody?.boundary
 
@@ -197,6 +197,7 @@ class BuyerRegisterWebFragment : Fragment() {
 
                 registerCall?.enqueue(object:Callback, retrofit2.Callback<RegisterResponse> {
                         override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
+                            hideProgress()
                             t.printStackTrace()
                         }
                         override fun onResponse(
@@ -204,19 +205,22 @@ class BuyerRegisterWebFragment : Fragment() {
                             response: retrofit2.Response<RegisterResponse>) {
 
                             if(response.body()?.valid == true){
+                                hideProgress()
                                 Log.e(TAG, response.toString())
                                 Toast.makeText(activity,activity?.getString(R.string.registration_success_msg),Toast.LENGTH_SHORT).show()
                                 Prefs.clear()
                                 Prefs.putString(ConstantsDirectory.PROFILE,"Buyer")
                                 Prefs.putLong(ConstantsDirectory.REF_ROLE_ID,2)
+                                Utility.deleteCache(requireContext())
                                 startActivity(Intent(activity,LoginActivity::class.java).addFlags(
                                     Intent.FLAG_ACTIVITY_CLEAR_TOP
                                 ))}else{
-                                    var jsonObject:JSONObject ?= null
+                                hideProgress()
+                                var jsonObject:JSONObject ?= null
                                     try
                                     {
                                         jsonObject = JSONObject(response.errorBody()?.charStream()!!.readText())
-                                        val errorMessage = jsonObject.getString("errorMessage")
+                                        val errorMessage = jsonObject.getString("message")
                                         Toast.makeText(activity,errorMessage,Toast.LENGTH_SHORT).show()
                                     }
                                     catch (e: JSONException) {
@@ -230,5 +234,22 @@ class BuyerRegisterWebFragment : Fragment() {
                 Toast.makeText(activity,"Read TnC",Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun showProgress(){
+        mBinding?.sendOtpLoader = true
+        mBinding?.textBoxWeblink?.isFocusableInTouchMode = false
+        mBinding?.textBoxSociallink?.isFocusableInTouchMode = false
+        mBinding?.buttonComplete?.isClickable = false
+        mBinding?.checkBoxTnc?.isClickable = false
+        mBinding?.textTnct?.isClickable = false
+    }
+    private fun hideProgress(){
+        mBinding?.sendOtpLoader = false
+        mBinding?.textBoxWeblink?.isFocusableInTouchMode = true
+        mBinding?.textBoxSociallink?.isFocusableInTouchMode = true
+        mBinding?.buttonComplete?.isClickable = true
+        mBinding?.checkBoxTnc?.isClickable = true
+        mBinding?.textTnct?.isClickable = true
     }
 }

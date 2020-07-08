@@ -5,7 +5,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="model" type="com.adrosonic.craftexchange.ui.modules.auth_com.register.RegisterViewModel"/>
+
+        <import type="android.view.View" />
+
+        <variable name="model"
+            type="com.adrosonic.craftexchange.ui.modules.auth_com.register.RegisterViewModel"/>
+
+        <variable
+            name="sendOtpLoader"
+            type="Boolean" />
+
     </data>
 
     <ScrollView
@@ -145,11 +154,12 @@
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_semimedium"
+            android:layout_marginBottom="@dimen/margin_regular"
             android:background="@drawable/rectangle_round_grad_black_solid"
             android:fontFamily="@font/lato_regular"
             android:text="@string/complete"
             android:textAllCaps="false"
-            android:textColor="#fff"
+            android:textColor="@color/white_text"
             android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@+id/text_tnct"
             app:layout_constraintEnd_toEndOf="parent"
@@ -194,6 +204,27 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/progress_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="@{sendOtpLoader ? View.VISIBLE : View.GONE}"
+            android:elevation="10dp"
+            android:contextClickable="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="10dp"
+                android:layout_gravity="center"/>
+        </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

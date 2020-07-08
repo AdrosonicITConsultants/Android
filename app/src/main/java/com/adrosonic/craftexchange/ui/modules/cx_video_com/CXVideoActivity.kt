@@ -22,6 +22,7 @@ fun Context.demoVideoIntent(): Intent {
 class CXVideoActivity : AppCompatActivity() {
 
     private var mBinding : ActivityCXVideoBinding ?= null
+//    var videoView = mBinding?.demoVideo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,31 +31,32 @@ class CXVideoActivity : AppCompatActivity() {
         setContentView(view)
 
         var profile = Prefs.getLong(ConstantsDirectory.REF_ROLE_ID,0)
-        var videoView = mBinding?.demoVideo
-        // initiate a video view
-        videoView?.setVideoURI(Uri.parse("android.resource://" + packageName + "/" + R.raw.demo_video))
-        videoView?.start()
-        videoView?.setOnCompletionListener {
-            when(profile){
-                1.toLong() ->{
-                    startActivity(artisanLandingIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK))
-                }
 
-                2.toLong() -> {
-                    startActivity(buyerLandingIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK))
-                }
-            }
-        }
+        // initiate a video view
+//        videoView?.setVideoURI(Uri.parse("android.resource://" + packageName + "/" + R.raw.demo_video));
+//        videoView?.start()
+//        videoView?.setOnCompletionListener {
+//            when(profile){
+//                1.toLong() ->{
+//                    startActivity(artisanLandingIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK))
+//                }
+//
+//                2.toLong() -> {
+//                    startActivity(buyerLandingIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK))
+//                }
+//            }
+//        }
 
         mBinding?.btnSkipVideo?.setOnClickListener {
             when(profile){
                 1.toLong() ->{
-                    startActivity(artisanLandingIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK))
+//                    videoView?.stopPlayback()
+                    startActivity(artisanLandingIntent())
                 }
 
                 2.toLong() -> {
-                    videoView?.stopPlayback()
-                    startActivity(buyerLandingIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK))
+//                    videoView?.stopPlayback()
+                    startActivity(buyerLandingIntent())
                 }
             }
         }
