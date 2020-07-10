@@ -13,6 +13,7 @@ import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.response.artisan.profile.ProfileResponse
 import com.adrosonic.craftexchange.ui.modules.buyer.profile.editProfile.buyerEditProfileIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
 import com.pixplicity.easyprefs.library.Prefs
 import retrofit2.Call
@@ -45,6 +46,15 @@ class BuyerProfileActivity : AppCompatActivity() {
         mBinding = ActivityBuyerProfileBinding.inflate(layoutInflater)
         val view = mBinding?.root
         setContentView(view)
+
+        var brandLogo = craftUser?.brandLogo
+        var urlBrand = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/User/${Prefs.getString(
+            ConstantsDirectory.USER_ID,"")}/CompanyDetails/Logo/${brandLogo}"
+        mBinding?.logo?.let {
+            ImageSetter.setImage(applicationContext,urlBrand, it,
+                R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
+        }
+
         mBinding?.textFirstname?.text = Prefs.getString(ConstantsDirectory.FIRST_NAME,"Craft")
         mBinding?.textLastname?.text = Prefs.getString(ConstantsDirectory.LAST_NAME,"User")
 

@@ -47,7 +47,10 @@
                 android:drawableStart="@drawable/ic_edit"
                 android:fontFamily="@font/lato_regular"
                 android:text="@string/edit_profile"
-                android:textColor="#000"
+                android:textColor="@drawable/on_click_black"
+                android:textStyle="bold"
+                android:clickable="true"
+                android:focusable="true"
                 app:layout_constraintBottom_toBottomOf="@+id/my_profile"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/my_profile" />

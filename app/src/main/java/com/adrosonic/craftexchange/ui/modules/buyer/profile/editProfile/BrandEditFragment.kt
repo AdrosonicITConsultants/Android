@@ -12,6 +12,7 @@ import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.FragmentBrandEditBinding
 import com.adrosonic.craftexchange.ui.modules.buyer.profile.BuyerProfileActivity.Companion.craftUser
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
 import com.pixplicity.easyprefs.library.Prefs
 import com.wajahatkarim3.easyvalidation.core.view_ktx.minLength
@@ -44,6 +45,14 @@ class BrandEditFragment : Fragment() {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_brand_edit, container, false)
 
+        var brandLogo = craftUser?.brandLogo
+        var urlBrand = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/User/${Prefs.getString(
+            ConstantsDirectory.USER_ID,"")}/CompanyDetails/Logo/${brandLogo}"
+        mBinding?.changeLogoImg?.let {
+            ImageSetter.setImage(requireActivity(),urlBrand, it,
+                R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
+        }
+
         mBinding?.gst?.setText(craftUser?.gstNo ?: "")
         mBinding?.cin?.setText(craftUser?.cin ?: "")
         mBinding?.pan?.setText(craftUser?.pancard ?: "")
@@ -65,6 +74,14 @@ class BrandEditFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        mBinding?.changeLogoText?.setOnClickListener {
+
+        }
+
+        mBinding?.removeLogoText?.setOnClickListener {
+
+        }
 
         mBinding?.gst?.addTextChangedListener {
             var boolean = Utility.isValidGST(mBinding?.gst?.text.toString())

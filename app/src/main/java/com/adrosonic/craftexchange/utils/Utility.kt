@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.AsyncTask
 import android.util.Log
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.adrosonic.craftexchange.database.predicates.UserPredicates
@@ -46,8 +47,6 @@ class Utility {
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         }
 
-
-
         fun checkIfInternetConnected(context: Context): Boolean {
             val connMgr = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val activeNetworkInfo = connMgr.activeNetworkInfo
@@ -65,9 +64,9 @@ class Utility {
 
         fun deleteImageCache(context: Context) {
             try {
+                Glide.get(context).clearMemory()
                 AsyncTask.execute {
                     Glide.get(context).clearDiskCache()
-                    Glide.get(context).clearMemory()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -80,6 +79,7 @@ class Utility {
             )
             return result == PackageManager.PERMISSION_GRANTED
         }
+
 
         fun getRealPathFromFileURI(context: Context, contentUri: Uri): String {
             var filePath = ""

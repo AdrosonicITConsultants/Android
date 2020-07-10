@@ -184,6 +184,8 @@
     <string name="gpay_field">Google Pay UPI Id</string>
     <string name="paytm_field">Paytm Registered Mobile Number</string>
     <string name="phonepe_field">PhonePe UPI Id</string>
+    <string name="remove_photo">Remove Photo</string>
+    <string name="change_profile_text">Change Profile Photo</string>
 
     <string-array name="product_array">
         <item>@string/saree</item>

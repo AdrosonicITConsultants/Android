@@ -34,7 +34,7 @@ interface UserDao {
     fun editArtisanDetailsPhoto(@Header("Content-Type") headerValue:String,
                               @Header("Authorization") token:String,
                               @Query("address") address : String,
-                              @Body profilePic : MultipartBody
+                              @Body profilePic : MultipartBody?
     ): Call<EditDetailsResponse>
 
     @Headers("Accept: application/json")

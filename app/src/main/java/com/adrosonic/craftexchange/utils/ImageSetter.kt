@@ -2,6 +2,7 @@ package com.adrosonic.craftexchange.utils
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.net.Uri
 import android.widget.ImageView
 import com.adrosonic.craftexchange.R
 import com.bumptech.glide.Glide
@@ -11,6 +12,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.target.Target
+import info.abdolahi.CircularMusicProgressBar
 
 object ImageSetter {
     /**
@@ -54,6 +56,56 @@ object ImageSetter {
                 .skipMemoryCache(false)
                 .dontAnimate()
                 .into(imageView)
+
+        }
+        catch (ex:Exception) {
+            ex.printStackTrace()
+        }
+    }
+
+    fun setImageUri(context: Context, imagePath: Uri, imageView: ImageView, placeholder:Int, errImage:Int, fallbck : Int) {
+        try
+        {
+            Glide.with(context)
+                .load(imagePath)
+                .apply(
+                    RequestOptions()
+                        .circleCrop()
+                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                        .override(Target.SIZE_ORIGINAL))
+                .placeholder(placeholder)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                .priority(Priority.IMMEDIATE)
+                .error(errImage)
+                .fallback(fallbck)
+                .skipMemoryCache(false)
+                .dontAnimate()
+                .into(imageView!!)
+
+        }
+        catch (ex:Exception) {
+            ex.printStackTrace()
+        }
+    }
+
+    fun setImageCircleProgress(context:Context, imagePath:String, imageView:CircularMusicProgressBar?, placeholder:Int, errImage:Int, fallbck : Int) {
+        try
+        {
+            Glide.with(context)
+                .load(imagePath)
+                .apply(
+                    RequestOptions()
+                        .circleCrop()
+                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                        .override(Target.SIZE_ORIGINAL))
+                .placeholder(placeholder)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                .priority(Priority.IMMEDIATE)
+                .error(errImage)
+                .fallback(fallbck)
+                .skipMemoryCache(false)
+                .dontAnimate()
+                .into(imageView!!)
 
         }
         catch (ex:Exception) {

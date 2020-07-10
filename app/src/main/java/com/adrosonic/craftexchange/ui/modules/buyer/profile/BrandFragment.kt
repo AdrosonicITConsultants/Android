@@ -10,6 +10,9 @@ import androidx.databinding.DataBindingUtil
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.FragmentBrandBinding
 import com.adrosonic.craftexchange.ui.modules.buyer.profile.BuyerProfileActivity.Companion.craftUser
+import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.adrosonic.craftexchange.utils.ImageSetter
+import com.pixplicity.easyprefs.library.Prefs
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"

@@ -20,6 +20,8 @@ import com.adrosonic.craftexchange.repository.data.response.artisan.editProfile.
 import com.adrosonic.craftexchange.ui.modules.artisan.profile.ArtisanProfileActivity.Companion.craftUser
 import com.adrosonic.craftexchange.ui.modules.artisan.profile.artisanProfileIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.adrosonic.craftexchange.utils.ImageSetter
+import com.adrosonic.craftexchange.utils.Utility
 import com.google.gson.Gson
 import com.pixplicity.easyprefs.library.Prefs
 import okhttp3.ResponseBody
@@ -52,6 +54,13 @@ class BrandDetailsEditFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_brand_details_edit, container, false)
+
+        var imageName = Utility.craftUser?.brandLogo
+        var url = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/User/${Prefs.getString(ConstantsDirectory.USER_ID,"")}/CompanyDetails/Logo/${imageName}"
+        mBinding?.changeLogoImg?.let {
+            ImageSetter.setImage(requireContext(),url, it,
+                R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
+        }
         productArray.add("Saree")
         productArray.add("Dupatta")
         productArray.add("Stole")

@@ -54,6 +54,20 @@ class ArtisanProfileActivity : AppCompatActivity() {
             mBinding?.tabLayoutArtisanProfile?.setupWithViewPager(mBinding?.viewPagerArtisanProfile)
         }
 
+        refreshProfile()
+
+        mBinding?.btnBack?.setOnClickListener{
+            onBackPressed()
+            this.finish()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        refreshProfile()
+    }
+
+    private fun refreshProfile(){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         if(Utility.checkIfInternetConnected(applicationContext)) {
             CraftExchangeRepository
@@ -79,11 +93,6 @@ class ArtisanProfileActivity : AppCompatActivity() {
                 })
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),applicationContext)
-        }
-
-        mBinding?.btnBack?.setOnClickListener{
-            onBackPressed()
-            this.finish()
         }
     }
 

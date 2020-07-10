@@ -163,6 +163,7 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
                             dialog.cancel()
                             mViewModel?.logoutUser()
                             Utility.deleteCache(applicationContext)
+                            Utility.deleteImageCache(applicationContext)
                             startActivity(roleselectIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK))
                         }
                         .setNegativeButton("No"){ dialog, id ->

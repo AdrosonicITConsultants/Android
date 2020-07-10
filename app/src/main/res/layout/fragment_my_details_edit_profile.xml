@@ -31,16 +31,47 @@
                     android:layout_width="@dimen/profile_img"
                     android:layout_height="@dimen/profile_img" />
 
-                <TextView
-                    android:id="@+id/change_logo_text"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:text="@string/change_profile_logo"
-                    android:textColor="@color/clickable_text_color"
-                    android:textStyle="bold"
-                    android:fontFamily="@font/lato_regular"
-                    android:layout_gravity="center_vertical"/>
+                    android:layout_weight="1">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"/>
+                    <TextView
+                        android:id="@+id/change_logo_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:text="@string/change_profile_text"
+                        android:textColor="@drawable/on_click_blue"
+                        android:clickable="true"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:fontFamily="@font/lato_regular"
+                        android:layout_gravity="center_vertical"
+                        android:focusable="true" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"/>
+
+                    <TextView
+                        android:id="@+id/remove_logo_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:text="@string/remove_photo"
+                        android:textColor="@drawable/on_click_orange"
+                        android:clickable="true"
+                        android:textStyle="bold"
+                        android:gravity="bottom"
+                        android:fontFamily="@font/lato_regular"
+                        android:layout_gravity="center_vertical"
+                        android:focusable="true" />
+                </LinearLayout>
 
             </LinearLayout>
 

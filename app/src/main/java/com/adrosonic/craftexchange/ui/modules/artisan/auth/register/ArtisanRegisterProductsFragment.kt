@@ -116,8 +116,9 @@ class ArtisanRegisterProductsFragment : Fragment() {
 
         mBinding?.buttonComplete?.setOnClickListener {
             if(mBinding?.checkBoxTnc?.isChecked == true){
+
                 showProgress()
-//                mBinding?.listProducts?.selectedItemsAsString
+
                 listProducts = mBinding?.listProducts?.selectedIndicies!!
                 var registerRequestObj = User(addr,Prefs.getString(ConstantsDirectory.CLUSTER_ID,"1").toLong(),
                     Prefs.getString(ConstantsDirectory.USER_EMAIL,""),Prefs.getString(ConstantsDirectory.FIRST_NAME,""),
@@ -139,14 +140,29 @@ class ArtisanRegisterProductsFragment : Fragment() {
 
                     registerCall = CraftExchangeRepository
                         .getRegisterService()
-                        .registerUserPhoto(headerBoundary!!,registerRequest,profileBody!!)
-                }else{
-                    registerCall = CraftExchangeRepository
-                        .getRegisterService()
-                        .registerUser(registerRequest)
+                        .registerUserPhoto(headerBoundary!!,registerRequest, profileBody!!)
                 }
 
-                registerCall?.enqueue(object: Callback, retrofit2.Callback<RegisterResponse> {
+                if(filePath.isNotEmpty()){
+                    file = File(filePath)
+                    fileReqBody = RequestBody.create(MediaType.parse("image/*"), file!!)
+                    profileBody = MultipartBody.Builder()
+                        .addFormDataPart("profilePic", file?.name, fileReqBody!!)
+//                        .addFormDataPart("brandLogo",file?.name,fileReqBody!!)
+                        .build()
+                    headerBoundary="multipart/form-data;boundary="+ profileBody?.boundary
+                }else{
+                    fileReqBody = RequestBody.create(MediaType.parse("text/plain"), "")
+                    profileBody = MultipartBody.Builder()
+                        .addFormDataPart("profilePic","",fileReqBody!!)
+                        .build()
+                    headerBoundary="multipart/form-data;boundary="+ profileBody?.boundary
+                }
+
+                CraftExchangeRepository
+                    .getRegisterService()
+                    .registerUser(headerBoundary!!,registerRequest, profileBody!!)
+                    .enqueue(object: Callback, retrofit2.Callback<RegisterResponse> {
                         override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
                             hideProgress()
                             t.printStackTrace()

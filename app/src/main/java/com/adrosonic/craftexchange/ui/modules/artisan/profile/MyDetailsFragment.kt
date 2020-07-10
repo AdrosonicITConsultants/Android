@@ -49,7 +49,7 @@ class MyDetailsFragment : Fragment() {
                 ConstantsDirectory.USER_ID,
                 ""
             )}/ProfilePics/${profileImage}"
-        ImageSetter.setImage(requireContext(),urlPro,mBinding?.artisanProfileLogo.set,
+        ImageSetter.setImageCircleProgress(requireContext(),urlPro,mBinding?.artisanProfileLogo,
             R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
 
 //        var rating = craftUser?.rating?.toInt()
@@ -57,6 +57,7 @@ class MyDetailsFragment : Fragment() {
         var ratingFloat = rating.times(20)?.toFloat()
         //artisan rating out of 5 (rating*20)
         ratingFloat?.let { mBinding?.artisanProfileLogo?.setValue(it) }
+
 
         mBinding?.avgRating?.text = "$rating / 5"
 
@@ -66,13 +67,11 @@ class MyDetailsFragment : Fragment() {
         mBinding?.mobile?.text = craftUser?.mobile ?: " - "
         mBinding?.address?.text = regAddr?.line1 ?: " - "
 
-
         return mBinding?.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
         mBinding?.btnEditDetails?.setOnClickListener {
             startActivity(context?.artisanEditProfileIntent()?.putExtra("Section","Details"))
         }
