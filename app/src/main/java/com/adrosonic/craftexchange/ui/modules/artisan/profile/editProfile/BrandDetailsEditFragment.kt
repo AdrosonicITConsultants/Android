@@ -1,6 +1,9 @@
 package com.adrosonic.craftexchange.ui.modules.artisan.profile.editProfile
 
+import android.Manifest
+import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -8,10 +11,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 
 import com.adrosonic.craftexchange.R
-import com.adrosonic.craftexchange.databinding.FragmentBrandDetailsBinding
 import com.adrosonic.craftexchange.databinding.FragmentBrandDetailsEditBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.request.editProfileModel.CompanyDetails
@@ -24,8 +28,11 @@ import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
 import com.google.gson.Gson
 import com.pixplicity.easyprefs.library.Prefs
-import okhttp3.ResponseBody
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
+import java.io.File
 import javax.security.auth.callback.Callback
 
 private const val ARG_PARAM1 = "param1"
@@ -36,9 +43,20 @@ class BrandDetailsEditFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private var PICK_IMAGE: Int = 1
+    private val PERMISSION_REQUEST_CODE = 200
+
     private var mBinding: FragmentBrandDetailsEditBinding ?= null
     var productArray = ArrayList<String>()
     var listProducts = ArrayList<Long>()
+    private var filePath : String?=""
+    private var file : File?= null
+    private var brandLogoBody : MultipartBody?= null
+    private var fileReqBody : RequestBody?= null
+    private var headerBoundary : String ?=""
+    private var editBrandCall : Call<EditDetailsResponse>?= null
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,12 +73,6 @@ class BrandDetailsEditFragment : Fragment() {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_brand_details_edit, container, false)
 
-        var imageName = Utility.craftUser?.brandLogo
-        var url = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/User/${Prefs.getString(ConstantsDirectory.USER_ID,"")}/CompanyDetails/Logo/${imageName}"
-        mBinding?.changeLogoImg?.let {
-            ImageSetter.setImage(requireContext(),url, it,
-                R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
-        }
         productArray.add("Saree")
         productArray.add("Dupatta")
         productArray.add("Stole")
@@ -75,8 +87,30 @@ class BrandDetailsEditFragment : Fragment() {
         return mBinding?.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        var brandLogo = Utility.craftUser?.brandLogo
+        var url = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/User/${Prefs.getString(ConstantsDirectory.USER_ID,"")}/CompanyDetails/Logo/${brandLogo}"
+        mBinding?.changeLogoImg?.let {
+            ImageSetter.setImage(requireContext(),url, it,
+                R.drawable.buyer_logo_placeholder,R.drawable.buyer_logo_placeholder,R.drawable.buyer_logo_placeholder)
+        }
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        mBinding?.changeLogoText?.setOnClickListener {
+            if(Utility.checkPermission(requireContext())){
+                selectFromGallery()
+            }else{
+                requestPermission()
+            }
+        }
+
+        mBinding?.removeLogoText?.setOnClickListener {
+            Utility.messageDialog(requireContext(),"Feature To Be Implemented")
+        }
 
         mBinding?.btnSave?.setOnClickListener {
 //            Toast.makeText(requireContext(),"Save Brand Details Feature to be implemented", Toast.LENGTH_LONG).show()
@@ -87,10 +121,31 @@ class BrandDetailsEditFragment : Fragment() {
             var editBrandDetails = Gson().toJson(editBrandDetailsObj)
 
             var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
-            CraftExchangeRepository
-                .getUserService()
-                .editArtisanBrandDetails(token,editBrandDetails)
-                .enqueue(object: Callback, retrofit2.Callback<EditDetailsResponse> {
+
+            if(filePath != "" ){
+                file = File(filePath)
+                fileReqBody = RequestBody.create(MediaType.parse("image/*"), file!!)
+                brandLogoBody = MultipartBody.Builder()
+                    .addFormDataPart("logo",file?.name,fileReqBody!!)
+                    .build()
+                headerBoundary="multipart/form-data;boundary="+ brandLogoBody?.boundary
+
+                editBrandCall = CraftExchangeRepository.getUserService().editArtisanBrandDetailsPhoto(headerBoundary!!,token,editBrandDetails,brandLogoBody!!)
+            }else{
+                //TODO implement later
+//                fileReqBody = RequestBody.create(MediaType.parse("text/plain"), "")
+//                brandLogoBody = MultipartBody.Builder()
+//                    .addFormDataPart("brandLogo","",fileReqBody!!)
+//                    .build()
+//                headerBoundary="multipart/form-data;boundary="+ brandLogoBody?.boundary
+
+                editBrandCall = CraftExchangeRepository
+                    .getUserService()
+                    .editArtisanBrandDetails(token,editBrandDetails)
+
+            }
+
+            editBrandCall?.enqueue(object: Callback, retrofit2.Callback<EditDetailsResponse> {
                     override fun onFailure(call: Call<EditDetailsResponse>, t: Throwable) {
 //                        hideProgress()
                         t.printStackTrace()
@@ -130,6 +185,76 @@ class BrandDetailsEditFragment : Fragment() {
 
 
         }
+    }
+
+    private fun selectFromGallery() {
+        val intent = Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        intent.type = "image/*"
+        val mimeTypes = arrayOf<String>("image/jpeg", "image/png")
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
+        startActivityForResult(intent, PICK_IMAGE)
+    }
+
+    private fun requestPermission() {
+        ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), PERMISSION_REQUEST_CODE)
+    }
+
+    private fun showMessageOKCancel(message:String, okListener: DialogInterface.OnClickListener) {
+        androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setMessage(message)
+            .setPositiveButton("OK", okListener)
+            .setNegativeButton("Cancel", null)
+            .create()
+            .show()
+    }
+
+    override fun onRequestPermissionsResult(requestCode:Int, permissions:Array<String>, grantResults:IntArray) {
+        when (requestCode) {
+            PERMISSION_REQUEST_CODE -> if (grantResults.isNotEmpty())
+            {
+                val storageReadAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED
+                if (storageReadAccepted){
+                    selectFromGallery()
+                }
+                else
+                {
+                    if (shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE))
+                    {
+                        showMessageOKCancel("You need to allow access to both the permissions",
+                            DialogInterface.OnClickListener { dialog, which ->
+                                requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), PERMISSION_REQUEST_CODE)
+                                selectFromGallery()
+                            })
+                        return
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PICK_IMAGE && resultCode == AppCompatActivity.RESULT_OK && null != data)
+            when (requestCode) {
+                PICK_IMAGE -> {
+                    val uri = data.data
+                    var absolutePath = Utility.getRealPathFromFileURI(requireContext(),uri!!)
+
+                    if(Utility.validFileSize(absolutePath)){
+
+                        mBinding?.changeLogoImg?.let {
+                            ImageSetter.setImageUri(requireContext(),uri,
+                                it,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
+                        }
+                        filePath = absolutePath
+                    }else{
+                        Utility.messageDialog(requireContext(), requireActivity().getString(R.string.file_size_exceeded))
+                    }
+
+
+
+                }
+            }
     }
 
     companion object {

@@ -1,7 +1,9 @@
 package com.adrosonic.craftexchange.ui.modules.role
 
 import android.content.Intent
+import android.os.AsyncTask
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,10 +12,15 @@ import androidx.databinding.DataBindingUtil
 
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.FragmentRoleSelectBinding
+import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.ui.modules.auth_com.login.LoginActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
+import com.google.firebase.iid.FirebaseInstanceId
 import com.pixplicity.easyprefs.library.Prefs
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -66,11 +73,69 @@ class RoleSelectFragment : Fragment() {
         }
 
         mBinding?.roleBuyer?.setOnClickListener{
+            //TODO:Uncommnt lter
             Utility.clearPrefs()
             startActivity(Intent(activity, LoginActivity::class.java))
             Prefs.putString(ConstantsDirectory.PROFILE,"Buyer")
             Prefs.putLong(ConstantsDirectory.REF_ROLE_ID,2)
+//            DeviceRegistration(object : DeviceTokenCallback {
+//                override fun registeredToken(token: String) {
+//                    addUserDevice(true,token)
+//                }
+//            }).execute()
         }
     }
+
+//    interface DeviceTokenCallback {
+//        fun registeredToken(token: String)
+//    }
+//
+//    class DeviceRegistration(var callback: DeviceTokenCallback) : AsyncTask<Void, Void, String>() {
+//        override fun doInBackground(vararg p0: Void?): String? {
+//            var token = FirebaseInstanceId.getInstance().token
+//            while (token == null)//this is used to get Firebase token until its null so it will save you from null pointer exception
+//            {
+//                token = FirebaseInstanceId.getInstance().token
+//            }
+//            Log.i("token",token)
+//            return token
+//        }
+//
+//        override fun onPostExecute(result: String) {
+//            callback.registeredToken(result)
+//        }
+//
+//    }
+//
+//    private fun addUserDevice(login: Boolean,authtoken:String) {
+//        try {
+//
+//            val deviceRegistration = CraftExchangeRepository.getRegisterService().registerToken(authtoken)
+//
+//            deviceRegistration.enqueue(object : Callback<ResponseBody> {
+//                override fun onResponse(call: Call<ResponseBody>, response: retrofit2.Response<ResponseBody>?) {
+//                    response?.takeUnless { response.isSuccessful }?.apply {
+//                        Log.e(TAG, "Error registering device token "+response.message()+" raw code "+response.raw().code())
+//                        Utility.displayMessage("Error registering device token "+response.message()+" raw code "+response.raw().code(),requireContext())
+//                        Utility.messageDialog(requireContext(),authtoken)
+//
+//                    }
+//                    response?.takeIf { response.isSuccessful }?.apply {
+//                        Log.e(TAG, "Device registration successful")
+//                        Utility.displayMessage("Device registration successful",requireContext())
+//                        Utility.messageDialog(requireContext(),authtoken)
+//                    }
+//                }
+//                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+//                    Log.e(TAG, "Error registering device token ")
+//                    Utility.displayMessage("Error registering device token ",requireContext())
+//                    Utility.messageDialog(requireContext(),authtoken)
+////                    addUserDevice(true)n
+//                }
+//            })
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//        }
+//    }
 
 }

@@ -141,28 +141,28 @@ class ArtisanRegisterProductsFragment : Fragment() {
                     registerCall = CraftExchangeRepository
                         .getRegisterService()
                         .registerUserPhoto(headerBoundary!!,registerRequest, profileBody!!)
-                }
-
-                if(filePath.isNotEmpty()){
-                    file = File(filePath)
-                    fileReqBody = RequestBody.create(MediaType.parse("image/*"), file!!)
-                    profileBody = MultipartBody.Builder()
-                        .addFormDataPart("profilePic", file?.name, fileReqBody!!)
-//                        .addFormDataPart("brandLogo",file?.name,fileReqBody!!)
-                        .build()
-                    headerBoundary="multipart/form-data;boundary="+ profileBody?.boundary
                 }else{
-                    fileReqBody = RequestBody.create(MediaType.parse("text/plain"), "")
-                    profileBody = MultipartBody.Builder()
-                        .addFormDataPart("profilePic","",fileReqBody!!)
-                        .build()
-                    headerBoundary="multipart/form-data;boundary="+ profileBody?.boundary
+                    registerCall = CraftExchangeRepository
+                        .getRegisterService()
+                        .registerUser(registerRequest)
                 }
 
-                CraftExchangeRepository
-                    .getRegisterService()
-                    .registerUser(headerBoundary!!,registerRequest, profileBody!!)
-                    .enqueue(object: Callback, retrofit2.Callback<RegisterResponse> {
+//                if(filePath.isNotEmpty()){
+//                    file = File(filePath)
+//                    fileReqBody = RequestBody.create(MediaType.parse("image/*"), file!!)
+//                    profileBody = MultipartBody.Builder()
+//                        .addFormDataPart("profilePic", file?.name, fileReqBody!!)
+////                        .addFormDataPart("brandLogo",file?.name,fileReqBody!!)
+//                        .build()
+//                    headerBoundary="multipart/form-data;boundary="+ profileBody?.boundary
+//                }else{
+//                    fileReqBody = RequestBody.create(MediaType.parse("text/plain"), "")
+//                    profileBody = MultipartBody.Builder()
+//                        .addFormDataPart("profilePic","",fileReqBody!!)
+//                        .build()
+//                    headerBoundary="multipart/form-data;boundary="+ profileBody?.boundary
+//                }
+                registerCall?.enqueue(object: Callback, retrofit2.Callback<RegisterResponse> {
                         override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
                             hideProgress()
                             t.printStackTrace()

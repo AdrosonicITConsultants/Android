@@ -62,4 +62,6 @@ object ConstantsDirectory {
 
     const val DELIVERY = "Delivery"
     const val REGISTERED = "Registered"
+
+    const val VIEW_PROD_OF = "viewproductof"
 }

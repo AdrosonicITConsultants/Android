@@ -9,6 +9,8 @@ import androidx.databinding.DataBindingUtil
 
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.FragmentBuyerHomeBinding
+import com.adrosonic.craftexchange.ui.modules.viewProducts.ViewAntaranProductsFragment
+import com.adrosonic.craftexchange.ui.modules.viewProducts.ViewArtisanProductsFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.pixplicity.easyprefs.library.Prefs
 
@@ -34,6 +36,32 @@ class BuyerHomeFragment : Fragment() {
         var firstname = Prefs.getString(ConstantsDirectory.FIRST_NAME,"User")
         mBinding?.textUser?.text = firstname
         return mBinding?.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        mBinding?.artisanCatalogue?.setOnClickListener{
+            if (savedInstanceState == null) {
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.buyer_home_container,
+                        ViewArtisanProductsFragment.newInstance())
+                    ?.addToBackStack(null)
+                    ?.commit()
+            }
+        }
+
+        mBinding?.antaranCatalogue?.setOnClickListener{
+            if (savedInstanceState == null) {
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.buyer_home_container,
+                        ViewAntaranProductsFragment.newInstance())
+                    ?.addToBackStack(null)
+                    ?.commit()
+            }
+        }
+
+
     }
 
 

@@ -8,13 +8,11 @@
 
     <data>
 
-        <variable
-            name="event"
-            type="com.adrosonic.craftexchange.ui.interfaces.ClickingInterface"/>
+
 
         <variable
-            name="product"
-            type="com.adrosonic.craftexchange.database.entities.ProductListRecyclerView"/>
+            name="artisanProduct"
+            type="com.adrosonic.craftexchange.database.entities.ArtisanProductList"/>
 
     </data>
 

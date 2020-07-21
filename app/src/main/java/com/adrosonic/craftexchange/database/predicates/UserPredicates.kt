@@ -1,7 +1,7 @@
 package com.adrosonic.craftexchange.database.predicates
 
-import com.adrosonic.craftexchange.database.entities.CraftUser
-import com.adrosonic.craftexchange.database.entities.PaymentAccount
+import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
+import com.adrosonic.craftexchange.database.entities.realmEntities.PaymentAccount
 import com.adrosonic.craftexchange.repository.data.editProfile.EditProfileResponse
 import com.adrosonic.craftexchange.repository.data.response.artisan.login.ArtisanResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.login.BuyerResponse
@@ -46,6 +46,9 @@ class UserPredicates{
                     exUser.pancard = user?.pancard
                     exUser.websiteLink = user?.websiteLink
                     exUser.socialMediaLink = user?.socialMediaLink
+                    exUser.clusterid = user?.cluster?.id.toString()
+                    exUser.clusterdesc = user?.cluster?.desc
+                    exUser.clusteradjective = user?.cluster?.adjective
                     exUser.poc_id = user?.pointOfContact?.id
                     exUser.poc_firstName = user?.pointOfContact?.firstName
                     exUser.poc_lastName = user?.pointOfContact?.lastName
@@ -87,6 +90,9 @@ class UserPredicates{
                     userObj?.pancard = user?.pancard
                     userObj?.websiteLink = user?.websiteLink
                     userObj?.socialMediaLink = user?.socialMediaLink
+                    userObj?.clusterid = user?.cluster?.id.toString()
+                    userObj?.clusterdesc = user?.cluster?.desc
+                    userObj?.clusteradjective = user?.cluster?.adjective
                     userObj?.poc_id = user?.pointOfContact?.id
                     userObj?.poc_firstName = user?.pointOfContact?.firstName
                     userObj?.poc_lastName = user?.pointOfContact?.lastName
@@ -228,7 +234,7 @@ class UserPredicates{
 
         fun findUser(userid : Long) : CraftUser? {
             var realm = Realm.getDefaultInstance()
-            var user : CraftUser ?= null
+            var user : CraftUser?= null
             try {
                 user = realm.where(CraftUser::class.java)
                     .equalTo("id", userid)
@@ -361,9 +367,9 @@ class UserPredicates{
                 userObj?.socialMediaLink = user?.socialMediaLink
                 userObj?.profilePic = user?.profilePic
 //                userObj?.weaverDetails = user.weaverDetails.weaverId
-//                userObj?.clusterid = user.cluster.id.toString()
-//                userObj?.clusterdesc = user.cluster.desc
-//                userObj?.clusteradjective = user.cluster.adjective
+                userObj?.clusterid = user?.cluster?.id.toString()
+                userObj?.clusterdesc = user?.cluster?.desc
+                userObj?.clusteradjective = user?.cluster?.adjective
 //                userObj?.refRoleId = user.refRoleId
                 userObj?.companyName = user?.companyDetails?.companyName
                 userObj?.companyid = user?.companyDetails?.id
@@ -456,7 +462,7 @@ class UserPredicates{
 
         fun getPaymentDetails(userid: String,accountid : Long): PaymentAccount? {
             var realm = Realm.getDefaultInstance()
-            var payment : PaymentAccount ?= null
+            var payment : PaymentAccount?= null
             try {
                 realm.executeTransaction {
                     payment = realm.where(PaymentAccount::class.java)

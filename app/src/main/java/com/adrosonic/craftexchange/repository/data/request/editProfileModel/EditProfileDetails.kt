@@ -1,4 +1,4 @@
-package com.adrosonic.craftexchange.repository.data.model.profile
+package com.adrosonic.craftexchange.repository.data.request.editProfileModel
 
 data class EditProfileDetails (
     val address: Address,

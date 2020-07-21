@@ -1,6 +1,6 @@
 package com.adrosonic.craftexchange.utils
 
-import com.adrosonic.craftexchange.database.entities.CraftUser
+import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
 import com.adrosonic.craftexchange.database.predicates.UserPredicates
 import com.pixplicity.easyprefs.library.Prefs
 

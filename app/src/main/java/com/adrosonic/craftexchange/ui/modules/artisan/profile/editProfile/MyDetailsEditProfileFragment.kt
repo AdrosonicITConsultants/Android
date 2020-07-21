@@ -21,13 +21,12 @@ import com.adrosonic.craftexchange.database.predicates.UserPredicates
 import com.adrosonic.craftexchange.databinding.FragmentMyDetailsEditProfileBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.response.artisan.editProfile.EditDetailsResponse
-import com.adrosonic.craftexchange.repository.data.model.profile.Country
+import com.adrosonic.craftexchange.repository.data.request.editProfileModel.Country
 import com.adrosonic.craftexchange.repository.data.request.editProfileModel.EditArtisanDetails
 import com.adrosonic.craftexchange.ui.modules.artisan.profile.artisanProfileIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
-import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.pixplicity.easyprefs.library.Prefs
 import okhttp3.MediaType
@@ -73,6 +72,18 @@ class MyDetailsEditProfileFragment : Fragment() {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_details_edit_profile, container, false)
 
+
+
+        var username = "${craftUser?.firstName ?: ""} ${craftUser?.lastName ?: ""}"
+        mBinding?.name?.text = username
+        mBinding?.email?.text = craftUser?.email ?: " - "
+        mBinding?.mobile?.text = craftUser?.mobile ?: " - "
+        mBinding?.address?.setText(regAddr?.line1 ?: " - ")
+        return mBinding?.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         //TODO Implement logo edit
         var profileImage = Utility.craftUser?.profilePic
         var urlPro =
@@ -84,13 +95,6 @@ class MyDetailsEditProfileFragment : Fragment() {
             ImageSetter.setImage(requireContext(),urlPro, it,
                 R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
         }
-
-        var username = "${craftUser?.firstName ?: ""} ${craftUser?.lastName ?: ""}"
-        mBinding?.name?.text = username
-        mBinding?.email?.text = craftUser?.email ?: " - "
-        mBinding?.mobile?.text = craftUser?.mobile ?: " - "
-        mBinding?.address?.setText(regAddr?.line1 ?: " - ")
-        return mBinding?.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -132,15 +136,18 @@ class MyDetailsEditProfileFragment : Fragment() {
                     .build()
                 headerBoundary="multipart/form-data;boundary="+ profilePicBody?.boundary
 
-                editDetailsCall = CraftExchangeRepository.getUserService().editArtisanDetailsPhoto(headerBoundary!!,token,address,profilePicBody)
+                editDetailsCall = CraftExchangeRepository
+                    .getUserService()
+                    .editArtisanProfileDetailsPhoto(headerBoundary!!,token,address,profilePicBody)
             }else{
-                fileReqBody = RequestBody.create(MediaType.parse("text/plain"), "")
-                profilePicBody = MultipartBody.Builder()
-                    .addFormDataPart("profilePic","",fileReqBody!!)
-                    .build()
-                headerBoundary="multipart/form-data;boundary="+ profilePicBody?.boundary
+                //TODO implement later
+//                fileReqBody = RequestBody.create(MediaType.parse("text/plain"), "")
+//                profilePicBody = MultipartBody.Builder()
+//                    .addFormDataPart("profilePic","",fileReqBody!!)
+//                    .build()
+//                headerBoundary="multipart/form-data;boundary="+ profilePicBody?.boundary
 
-                editDetailsCall = CraftExchangeRepository.getUserService().editArtisanDetails(token,address)
+                editDetailsCall = CraftExchangeRepository.getUserService().editArtisanProfileDetails(token,address)
 
             }
 

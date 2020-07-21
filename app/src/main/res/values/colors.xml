@@ -17,6 +17,7 @@
     <color name="clickable_text_color">#148DF5</color>
     <color name="dark_orange">#E87C02</color>
     <color name="light_orange">#FFA942</color>
+    <color name="light_blue">#a3ecf0</color>
 
     <color name="white_text">#FFF</color>
     <color name="black_text">#000</color>

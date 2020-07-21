@@ -83,7 +83,7 @@ class ArtisanProfileActivity : AppCompatActivity() {
                     ) {
                         if(response.body()?.valid == true){
                             UserPredicates.refreshArtisanDetails(response.body()!!)
-                            ProductPredicates.insertProductCategory(response.body())
+                            ProductPredicates.insertArtisanProductCategory(response.body())
                             UserPredicates.insertPaymentDetails(response.body())
                             AddressPredicates.refreshUserAddress(response.body()!!)
                         }else{

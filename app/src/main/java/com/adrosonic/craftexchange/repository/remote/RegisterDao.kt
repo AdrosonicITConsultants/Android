@@ -14,6 +14,11 @@ import java.io.File
 interface RegisterDao {
 
     @Headers("Accept: application/json")
+    @GET("register/registerToken")
+    fun registerToken(@Query("token") token : String) : Call<ResponseBody>
+
+
+    @Headers("Accept: application/json")
     @GET("register/sendVerifyEmailOtp")
     fun sendVerifyEmailOtp(@Query("email") email : String) : Call<RegisterResponse>
 

@@ -2,8 +2,10 @@ package com.adrosonic.craftexchange.ui.modules.artisan.landing
 
 import android.content.Context
 import android.content.Intent
+import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.annotation.NonNull
@@ -14,6 +16,7 @@ import androidx.core.view.GravityCompat
 import androidx.lifecycle.ViewModelProviders
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityArtisanLandingBinding
+import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.ui.modules.artisan.profile.artisanProfileIntent
 import com.adrosonic.craftexchange.ui.modules.landing_com.LandingViewModel
 import com.adrosonic.craftexchange.ui.modules.role.roleselectIntent
@@ -27,9 +30,13 @@ import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.ObjectKey
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.iid.FirebaseInstanceId
 import com.pixplicity.easyprefs.library.Prefs
 import kotlinx.android.synthetic.main.activity_artisan_landing.*
 import kotlinx.android.synthetic.main.nav_header_landing.view.*
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
 
 fun Context.artisanLandingIntent(): Intent {
     return Intent(this, ArtisanLandingActivity::class.java).apply {
@@ -39,6 +46,11 @@ fun Context.artisanLandingIntent(): Intent {
 
 class ArtisanLandingActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener  {
 
+
+    companion object{
+        const val TAG = "ArtisanLanding"
+    }
+
     private var mBinding : ActivityArtisanLandingBinding ?= null
     private var mViewModel: LandingViewModel? =null
 
@@ -47,6 +59,12 @@ class ArtisanLandingActivity : AppCompatActivity(), NavigationView.OnNavigationI
         mBinding = ActivityArtisanLandingBinding.inflate(layoutInflater)
         val view = mBinding?.root
         setContentView(view)
+
+        DeviceRegistration(object : DeviceTokenCallback {
+            override fun registeredToken(token: String) {
+                addUserDevice(true,token)
+            }
+        }).execute()
 
         var profileImage = Utility.craftUser?.profilePic
         var urlPro =
@@ -183,6 +201,51 @@ class ArtisanLandingActivity : AppCompatActivity(), NavigationView.OnNavigationI
             drawer_layout.closeDrawer(GravityCompat.START)
         }else{
             this.finish()
+        }
+    }
+
+    interface DeviceTokenCallback {
+        fun registeredToken(token: String)
+    }
+
+    class DeviceRegistration(var callback: DeviceTokenCallback) : AsyncTask<Void, Void, String>() {
+        override fun doInBackground(vararg p0: Void?): String? {
+            var token = FirebaseInstanceId.getInstance().token
+            while (token == null)//this is used to get Firebase token until its null so it will save you from null pointer exception
+            {
+                token = FirebaseInstanceId.getInstance().token
+            }
+            Log.i("token",token)
+            return token
+        }
+
+        override fun onPostExecute(result: String) {
+            callback.registeredToken(result)
+        }
+
+    }
+
+    private fun addUserDevice(login: Boolean,authtoken:String) {
+        try {
+
+            val deviceRegistration = CraftExchangeRepository.getRegisterService().registerToken(authtoken)
+
+            deviceRegistration.enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(call: Call<ResponseBody>, response: retrofit2.Response<ResponseBody>?) {
+                    response?.takeUnless { response.isSuccessful }?.apply {
+                        Log.e(TAG, "Error registering device token "+response.message()+" raw code "+response.raw().code())
+                    }
+                    response?.takeIf { response.isSuccessful }?.apply {
+                        Log.e(TAG, "Device registration successful")
+                    }
+                }
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Log.e(TAG, "Error registering device token ")
+//                    addUserDevice(true)n
+                }
+            })
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 }

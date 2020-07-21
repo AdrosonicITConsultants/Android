@@ -1,4 +1,4 @@
-package com.adrosonic.craftexchange.database.entities
+package com.adrosonic.craftexchange.database.entities.realmEntities
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey

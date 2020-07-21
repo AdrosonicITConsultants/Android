@@ -21,4 +21,5 @@
 	<dimen name="card_ht">180dp</dimen>
 	<dimen name="imageview_dim">120dp</dimen>
 	<dimen name="profile_img">100dp</dimen>
+	<dimen name="product_card_height">110dp</dimen>
 </resources>

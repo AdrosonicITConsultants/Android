@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="margin_small">2dp</dimen>
-    <dimen name="margin_regular">8dp</dimen>
-    <dimen name="margin_semimedium">16dp</dimen>
-    <dimen name="margin_medium">20dp</dimen>
-    <dimen name="margin_large">48dp</dimen>
-    <dimen name="role_icon">30dp</dimen>
-    <dimen name="Ques_text">11.5sp</dimen>
-    <dimen name="title_text">12.5sp</dimen>
-    <dimen name="logo_icon">45dp</dimen>
-    <dimen name="textbox_ht">28dp</dimen>
-    <dimen name="button_text">10sp</dimen>
-    <dimen name="button_ht">30dp</dimen>
-    <dimen name="edit_text">10sp</dimen>
-    <dimen name="card_ht">90dp</dimen>
-    <dimen name="card_wt">75dp</dimen>
-    <dimen name="imageview_dim">60dp</dimen>
-    <dimen name="profile_img">50dp</dimen>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="nav_header_vertical_spacing">8dp</dimen>
-    <dimen name="nav_header_height">176dp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
+	<dimen name="margin_small">2dp</dimen>
+	<dimen name="margin_regular">8dp</dimen>
+	<dimen name="margin_semimedium">16dp</dimen>
+	<dimen name="margin_medium">20dp</dimen>
+	<dimen name="margin_large">48dp</dimen>
+	<dimen name="role_icon">30dp</dimen>
+	<dimen name="Ques_text">11.5sp</dimen>
+	<dimen name="title_text">12.5sp</dimen>
+	<dimen name="logo_icon">45dp</dimen>
+	<dimen name="textbox_ht">28dp</dimen>
+	<dimen name="button_text">10sp</dimen>
+	<dimen name="button_ht">30dp</dimen>
+	<dimen name="edit_text">10sp</dimen>
+	<dimen name="card_ht">90dp</dimen>
+	<dimen name="card_wt">75dp</dimen>
+	<dimen name="imageview_dim">60dp</dimen>
+	<dimen name="profile_img">50dp</dimen>
+	<dimen name="activity_horizontal_margin">16dp</dimen>
+	<dimen name="activity_vertical_margin">16dp</dimen>
+	<dimen name="nav_header_vertical_spacing">8dp</dimen>
+	<dimen name="nav_header_height">176dp</dimen>
+	<dimen name="fab_margin">16dp</dimen>
+	<dimen name="product_card_height">55dp</dimen>
+
 </resources>

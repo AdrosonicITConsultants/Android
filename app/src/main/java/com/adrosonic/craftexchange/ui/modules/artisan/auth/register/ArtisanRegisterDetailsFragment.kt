@@ -18,7 +18,7 @@ import androidx.databinding.DataBindingUtil
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.FragmentArtisanRegisterDetailsBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
-import com.adrosonic.craftexchange.repository.data.clusterResponse.CLusterResponse
+import com.adrosonic.craftexchange.repository.data.response.clusterResponse.CLusterResponse
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
 import com.google.gson.Gson

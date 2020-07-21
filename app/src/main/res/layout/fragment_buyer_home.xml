@@ -61,7 +61,7 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/products_collection_card"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="160dp"
             android:layout_marginStart="@dimen/margin_regular"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="@dimen/margin_regular"
@@ -75,7 +75,7 @@
                 android:id="@+id/production_collection"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/logo_bottom_text" />
+                android:background="@drawable/demo3_img" />
         </androidx.cardview.widget.CardView>
 
         <View

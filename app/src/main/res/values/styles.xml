@@ -74,5 +74,10 @@
         <item name="android:fontFamily">@font/playfair_regular</item>
         <item name="android:textStyle">bold</item>
     </style>
+    <style name="artisan_viewprod_tab_text" parent="TextAppearance.Design.Tab">
+        <item name="android:fontFamily">@font/lato_regular</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
 
 </resources>

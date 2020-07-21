@@ -21,6 +21,7 @@ import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.loginResponse.LoginValidationResponse
 import com.adrosonic.craftexchange.ui.modules.auth_com.register.RegisterActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.adrosonic.craftexchange.utils.Utility
 import com.pixplicity.easyprefs.library.Prefs
 import retrofit2.Call
 import retrofit2.Response
@@ -92,6 +93,7 @@ class ArtisanLoginUsernameFragment : Fragment() {
         mBinding?.buttonNext?.setOnClickListener {
 
             if (mBinding?.textBoxUsername?.text.toString() != "") {
+                if (Utility.checkIfInternetConnected(requireContext())){
                 CraftExchangeRepository
                     .getLoginService()
                     .validateUserName(mBinding?.textBoxUsername?.text.toString(),
@@ -126,8 +128,11 @@ class ArtisanLoginUsernameFragment : Fragment() {
                         }
 
                     })
+                }else{
+                    Utility.displayMessage(requireActivity().getString(R.string.no_internet_connection),requireContext())
+                }
             } else {
-                Toast.makeText(activity, "Enter your email/mobile no", Toast.LENGTH_SHORT).show()
+                Utility.displayMessage(requireActivity().getString(R.string.enter_email_mobile),requireContext())
             }
         }
     }

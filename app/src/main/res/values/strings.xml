@@ -92,7 +92,7 @@
     <string name="artisanId">"Artisan id : "</string>
     <string name="cluster">Cluster</string>
     <string name="address">Address</string>
-    <string name="text_select_cat">Select category of products you make</string>
+    <string name="text_select_cat">Select category of artisanProducts you make</string>
     <string name="skip_text_artisan"><![CDATA[You can always do this step later, SKIP >]]></string>
     <string name="contactname">Contact Name</string>
     <string name="home">Home</string>
@@ -121,6 +121,7 @@
 
     <string name="message_operation_not_supported_offline">Operation not supported in offline</string>
     <string name="no_internet_connection">No Internet Connection</string>
+    <string name="enter_email_mobile">Enter your email/mobile numner</string>
     <string name="logout_text">Are your sure you want to logout?</string>
     <string name="success">    Success!    </string>
     <string name="profile_update_success">Profile updated successfully!</string>
@@ -154,13 +155,13 @@
     <string name="characters">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz</string>
     <string name="hello">Hello</string>
     <string name="your_product">Your Products</string>
-    <string name="list_prod_text">List of your very own products sorted by categories</string>
+    <string name="list_prod_text">List of your very own artisanProducts sorted by categories</string>
     <string name="registration_success_msg">Registration Successful!</string>
     <string name="my_details">My Details</string>
     <string name="brand_details">Brand Details</string>
     <string name="bank_details">Bank Details</string>
     <string name="edit_details">Edit Details</string>
-    <string name="add_new_prod">Add a new product</string>
+    <string name="add_new_prod">Add a new artisanProduct</string>
     <string name="avg_rating">Avg rating</string>
     <string name="product_category">Product Category</string>
     <string name="edit_brand_details">Edit Brand Details</string>
@@ -186,6 +187,14 @@
     <string name="phonepe_field">PhonePe UPI Id</string>
     <string name="remove_photo">Remove Photo</string>
     <string name="change_profile_text">Change Profile Photo</string>
+    <string name="artisan_self_design_collection">Artisan Self Design Collection</string>
+    <string name="regions">Regions</string>
+    <string name="categories">Categories</string>
+    <string name="artisan_brands">Artisan Brands</string>
+    <string name="antaran_co_design_collection">Antaran Co Design Collection</string>
+    <string name="view_more">View More</string>
+    <string name="generate_enquiry">Generate Enquiry</string>
+    <string name="available_in_stock">Avalaible in stock</string>
 
     <string-array name="product_array">
         <item>@string/saree</item>

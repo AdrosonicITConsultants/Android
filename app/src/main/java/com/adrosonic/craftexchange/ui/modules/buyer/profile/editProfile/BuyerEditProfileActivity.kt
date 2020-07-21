@@ -12,7 +12,7 @@ import com.adrosonic.craftexchange.database.predicates.UserPredicates
 import com.adrosonic.craftexchange.databinding.ActivityBuyerEditProfileBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.editProfile.EditProfileResponse
-import com.adrosonic.craftexchange.repository.data.model.profile.*
+import com.adrosonic.craftexchange.repository.data.request.editProfileModel.*
 import com.adrosonic.craftexchange.ui.modules.buyer.profile.buyerProfileIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
@@ -160,6 +160,7 @@ class BuyerEditProfileActivity : AppCompatActivity() {
         Prefs.remove(ConstantsDirectory.POC_CONTACT)
         Prefs.remove(ConstantsDirectory.ADDR_LINE1)
         Prefs.remove(ConstantsDirectory.IS_EDITTABLE)
+        Prefs.remove(ConstantsDirectory.BRAND_LOGO)
     }
 
     fun successDialog(){
@@ -176,6 +177,7 @@ class BuyerEditProfileActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         this.finish()
+
         removeEditPrefs()
     }
 }

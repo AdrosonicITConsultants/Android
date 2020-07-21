@@ -18,7 +18,7 @@ data class User(
     var addressses: List<Addressse>,
     var alternateMobile: String,
     var authorities: String,
-    var cluster: String,
+    var cluster: Cluster,
     var companyDetails: CompanyDetails,
     var credentialsNonExpired: Boolean,
     var designation: String,
@@ -40,6 +40,12 @@ data class User(
     var username: String,
     var weaverDetails: String,
     var websiteLink: String
+)
+
+data class Cluster (
+    val id: Long,
+    val desc: String,
+    val adjective: String
 )
 
 data class PointOfContact(

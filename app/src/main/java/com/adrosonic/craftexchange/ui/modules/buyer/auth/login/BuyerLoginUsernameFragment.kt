@@ -20,6 +20,7 @@ import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.loginResponse.LoginValidationResponse
 import com.adrosonic.craftexchange.ui.modules.auth_com.register.RegisterActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.adrosonic.craftexchange.utils.Utility
 import com.pixplicity.easyprefs.library.Prefs
 import retrofit2.Call
 import retrofit2.Response
@@ -85,41 +86,60 @@ class BuyerLoginUsernameFragment : Fragment() {
         mBinding?.buttonNext?.setOnClickListener {
 
             if (mBinding?.textBoxUsername?.text.toString() != "") {
-                CraftExchangeRepository
-                    .getLoginService()
-                    .validateUserName(mBinding?.textBoxUsername?.text.toString(),Prefs.getLong(ConstantsDirectory.REF_ROLE_ID,0))
-                    .enqueue(object : Callback, retrofit2.Callback<LoginValidationResponse> {
-                        override fun onFailure(call: Call<LoginValidationResponse>, t: Throwable) {
-                            t.printStackTrace()
-                            Toast.makeText(activity,"${t.printStackTrace()}",Toast.LENGTH_SHORT).show()
-                        }
-                        override fun onResponse(
-                            call: Call<LoginValidationResponse>,
-                            response: Response<LoginValidationResponse>
-                        ) {
-                            if (response.body()?.valid == true) {
-                                Prefs.putString(
-                                    ConstantsDirectory.USER_EMAIL,
-                                    mBinding?.textBoxUsername?.text.toString()
-                                )
-                                if (savedInstanceState == null) {
-                                    activity?.supportFragmentManager?.beginTransaction()
-                                        ?.replace(
-                                            R.id.login_container,
-                                            BuyerLoginPasswordFragment.newInstance(profile),
-                                            "Login Buyer Password"
-                                        )
-                                        ?.addToBackStack(null)
-                                        ?.commit()
-                                }
-                            } else {
-                                Toast.makeText(activity, response.body()?.errorMessage, Toast.LENGTH_SHORT).show()
+                if (Utility.checkIfInternetConnected(requireContext())){
+                    CraftExchangeRepository
+                        .getLoginService()
+                        .validateUserName(
+                            mBinding?.textBoxUsername?.text.toString(),
+                            Prefs.getLong(ConstantsDirectory.REF_ROLE_ID, 0)
+                        )
+                        .enqueue(object : Callback, retrofit2.Callback<LoginValidationResponse> {
+                            override fun onFailure(
+                                call: Call<LoginValidationResponse>,
+                                t: Throwable
+                            ) {
+                                t.printStackTrace()
+                                Toast.makeText(
+                                    activity,
+                                    "${t.printStackTrace()}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
-                        }
 
-                    })
+                            override fun onResponse(
+                                call: Call<LoginValidationResponse>,
+                                response: Response<LoginValidationResponse>
+                            ) {
+                                if (response.body()?.valid == true) {
+                                    Prefs.putString(
+                                        ConstantsDirectory.USER_EMAIL,
+                                        mBinding?.textBoxUsername?.text.toString()
+                                    )
+                                    if (savedInstanceState == null) {
+                                        activity?.supportFragmentManager?.beginTransaction()
+                                            ?.replace(
+                                                R.id.login_container,
+                                                BuyerLoginPasswordFragment.newInstance(profile),
+                                                "Login Buyer Password"
+                                            )
+                                            ?.addToBackStack(null)
+                                            ?.commit()
+                                    }
+                                } else {
+                                    Toast.makeText(
+                                        activity,
+                                        response.body()?.errorMessage,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+
+                        })
+                }else{
+                    Utility.displayMessage(requireActivity().getString(R.string.no_internet_connection),requireContext())
+                }
             } else {
-                Toast.makeText(activity, "Enter your email/mobile no", Toast.LENGTH_SHORT).show()
+                Utility.displayMessage(requireActivity().getString(R.string.enter_email_mobile),requireContext())
             }
         }
     }

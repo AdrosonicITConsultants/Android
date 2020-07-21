@@ -31,16 +31,16 @@ interface UserDao {
 
     @Headers("Accept: application/json")
     @PUT("user/edit/artistProfile")
-    fun editArtisanDetailsPhoto(@Header("Content-Type") headerValue:String,
-                              @Header("Authorization") token:String,
-                              @Query("address") address : String,
-                              @Body profilePic : MultipartBody?
+    fun editArtisanProfileDetailsPhoto(@Header("Content-Type") headerValue:String,
+                                       @Header("Authorization") token:String,
+                                       @Query("address") address : String,
+                                       @Body profilePic : MultipartBody?
     ): Call<EditDetailsResponse>
 
     @Headers("Accept: application/json")
     @PUT("user/edit/artistProfile")
-    fun editArtisanDetails(@Header("Authorization") token:String,
-                         @Query("address", encoded = false) address : String): Call<EditDetailsResponse>
+    fun editArtisanProfileDetails(@Header("Authorization") token:String,
+                                  @Query("address", encoded = false) address : String): Call<EditDetailsResponse>
 
     @Headers("Accept: application/json")
     @PUT("user/edit/artistBrandDetails")
@@ -48,7 +48,7 @@ interface UserDao {
                                 @Header("Authorization") token:String,
                                 @Query("editBrandDetails") editBrandDetails : String,
                                 @Body logo : MultipartBody
-    ): Call<ResponseBody>
+    ): Call<EditDetailsResponse>
 
     @Headers("Accept: application/json")
     @PUT("user/edit/artistBrandDetails")

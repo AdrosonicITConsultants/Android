@@ -9,15 +9,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.adrosonic.craftexchange.R
-import com.adrosonic.craftexchange.database.entities.ProductListRecyclerView
+import com.adrosonic.craftexchange.database.entities.ArtisanProductList
 import com.adrosonic.craftexchange.databinding.FragmentArtisanHomeBinding
 import com.adrosonic.craftexchange.ui.modules.products.ProductListAdapter
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.Target
 import com.pixplicity.easyprefs.library.Prefs
 
 private const val ARG_PARAM1 = "param1"
@@ -29,7 +26,7 @@ class ArtisanHomeFragment : Fragment() {
     private var param2: String? = null
 
     private var mBinding: FragmentArtisanHomeBinding ?= null
-    private var mProduct = mutableListOf<ProductListRecyclerView>()
+    private var mProduct = mutableListOf<ArtisanProductList>()
     private var productListAdapter: ProductListAdapter ?= null
 
 
@@ -72,9 +69,9 @@ class ArtisanHomeFragment : Fragment() {
 
     private fun initialiseList(){
 
-        mProduct.add(ProductListRecyclerView("Sarees",R.drawable.demo_img))
-        mProduct.add(ProductListRecyclerView("Dupatta",R.drawable.demo_img))
-        mProduct.add(ProductListRecyclerView("Home Accessories",R.drawable.demo_img))
+        mProduct.add(ArtisanProductList("Sarees",R.drawable.demo_img))
+        mProduct.add(ArtisanProductList("Dupatta",R.drawable.demo_img))
+        mProduct.add(ArtisanProductList("Home Accessories",R.drawable.demo_img))
     }
 
     companion object {

@@ -1,8 +1,7 @@
 package com.adrosonic.craftexchange.database.predicates
 
-import com.adrosonic.craftexchange.database.entities.Addresss
+import com.adrosonic.craftexchange.database.entities.realmEntities.Addresss
 import com.adrosonic.craftexchange.repository.data.editProfile.EditProfileResponse
-import com.adrosonic.craftexchange.repository.data.response.buyer.login.User
 import com.adrosonic.craftexchange.repository.data.request.editProfileModel.EditArtisanDetails
 import com.adrosonic.craftexchange.repository.data.response.artisan.login.ArtisanResponse
 import com.adrosonic.craftexchange.repository.data.response.artisan.profile.ProfileResponse
@@ -152,7 +151,7 @@ class AddressPredicates {
 
         fun getAddressAddrType(addrType : String, userid : Long) : Addresss? {
             var realm = Realm.getDefaultInstance()
-            var address : Addresss ?= null
+            var address : Addresss?= null
             try {
                 realm.executeTransaction {
                     address = realm.where(Addresss::class.java)
@@ -171,7 +170,7 @@ class AddressPredicates {
 
         fun editBuyerDelievryAddress(userData : EditProfileResponse, addrType: String){
             val realm = Realm.getDefaultInstance()
-            var addrObj : Addresss ?= null
+            var addrObj : Addresss?= null
             var user = userData.data
             var addressList = user?.addressses
             realm.executeTransaction {

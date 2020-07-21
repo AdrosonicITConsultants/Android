@@ -1,13 +1,17 @@
-package com.adrosonic.craftexchange.repository.data.clusterResponse
+package com.adrosonic.craftexchange.repository.data.response.clusterResponse
+
+import io.realm.RealmObject
 
 data class CLusterResponse (
     val data: List<Cluster>,
     val valid: Boolean,
-    val errorMessage: Any? = null,
+    val errorMessage: String,
     val errorCode: Long
 )
 
-data class Cluster (
-    val id: Long,
-    val desc: String
+data class Cluster(
+    var id: Long ,
+    var desc: String ,
+    var adjective: String
 )
+

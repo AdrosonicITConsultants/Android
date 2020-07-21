@@ -3,7 +3,9 @@ package com.adrosonic.craftexchange.ui.modules.buyer.landing
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.os.AsyncTask
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.annotation.NonNull
@@ -12,24 +14,31 @@ import com.google.android.material.navigation.NavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProviders
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityBuyerLandingBinding
+import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.ui.modules.buyer.profile.buyerProfileIntent
 import com.adrosonic.craftexchange.ui.modules.landing_com.LandingViewModel
 import com.adrosonic.craftexchange.ui.modules.role.roleselectIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
+import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.iid.FirebaseInstanceId
 import com.pixplicity.easyprefs.library.Prefs
 import kotlinx.android.synthetic.main.activity_buyer_landing.*
 import kotlinx.android.synthetic.main.nav_header_landing.view.*
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
 
 fun Context.buyerLandingIntent(): Intent {
     return Intent(this, BuyerLandingActivity::class.java).apply {
-        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
     }
 }
 
@@ -38,6 +47,10 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
 //    fun AppCompatActivity.replaceContainerFragment(fragment: androidx.fragment.app.Fragment) {
 //        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit()
 //    }
+
+    companion object{
+        const val TAG = "buyerLanding"
+    }
 
     private var mBinding : ActivityBuyerLandingBinding ?= null
     private var mViewModel: LandingViewModel? =null
@@ -49,6 +62,13 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
         mBinding = ActivityBuyerLandingBinding.inflate(layoutInflater)
         val view = mBinding?.root
         setContentView(view)
+
+        DeviceRegistration(object : DeviceTokenCallback {
+            override fun registeredToken(token: String) {
+                    addUserDevice(true,token)
+            }
+        }).execute()
+
 
         var imageName = Utility.craftUser?.brandLogo
         var url = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/User/${Prefs.getString(ConstantsDirectory.USER_ID,"")}/CompanyDetails/Logo/${imageName}"
@@ -80,7 +100,7 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.buyer_home_container,
+                .add(R.id.buyer_home_container,
                     BuyerHomeFragment.newInstance()
                 )
                 .commitNow()
@@ -92,7 +112,7 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
                     R.id.action_home -> {
                         if (savedInstanceState == null) {
                             supportFragmentManager.beginTransaction()
-                                .replace(R.id.buyer_home_container,
+                                .add(R.id.buyer_home_container,
                                     BuyerHomeFragment.newInstance()
                                 )
                                 .commitNow()
@@ -187,8 +207,67 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
         }else{
-            this.finish()
+            if(fragmentManager.backStackEntryCount == 0) {
+            super.onBackPressed();
+            }
+            else {
+                fragmentManager.popBackStack();
+            }
         }
     }
 
+
+    interface DeviceTokenCallback {
+        fun registeredToken(token: String)
+    }
+
+    class DeviceRegistration(var callback: DeviceTokenCallback) : AsyncTask<Void, Void, String>() {
+        override fun doInBackground(vararg p0: Void?): String? {
+            var token = FirebaseInstanceId.getInstance().token
+            while (token == null)//this is used to get Firebase token until its null so it will save you from null pointer exception
+            {
+                token = FirebaseInstanceId.getInstance().token
+            }
+            Log.i("token",token)
+            return token
+        }
+
+        override fun onPostExecute(result: String) {
+            callback.registeredToken(result)
+        }
+
+    }
+
+    private fun addUserDevice(login: Boolean,authtoken:String) {
+        try {
+
+            val deviceRegistration = CraftExchangeRepository.getRegisterService().registerToken(authtoken)
+
+            deviceRegistration.enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(call: Call<ResponseBody>, response: retrofit2.Response<ResponseBody>?) {
+                    response?.takeUnless { response.isSuccessful }?.apply {
+                        Log.e(BuyerLandingActivity.TAG, "Error registering device token "+response.message()+" raw code "+response.raw().code())
+                    }
+                    response?.takeIf { response.isSuccessful }?.apply {
+                        Log.e(BuyerLandingActivity.TAG, "Device registration successful")
+                    }
+                }
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Log.e(BuyerLandingActivity.TAG, "Error registering device token ")
+//                    addUserDevice(true)n
+                }
+            })
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+
 }
+
+
+
+
+
+
+

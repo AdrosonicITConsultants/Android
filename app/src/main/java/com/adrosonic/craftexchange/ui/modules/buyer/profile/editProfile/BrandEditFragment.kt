@@ -1,10 +1,17 @@
 package com.adrosonic.craftexchange.ui.modules.buyer.profile.editProfile
 
+import android.Manifest
+import android.content.DialogInterface
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 
@@ -28,6 +35,8 @@ class BrandEditFragment : Fragment() {
     private var param2: String? = null
 
     private var mBinding: FragmentBrandEditBinding ?= null
+    private var PICK_IMAGE: Int = 1
+    private val PERMISSION_REQUEST_CODE = 200
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,11 +85,15 @@ class BrandEditFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         mBinding?.changeLogoText?.setOnClickListener {
-
+            if(Utility.checkPermission(requireContext())){
+                selectFromGallery()
+            }else{
+                requestPermission()
+            }
         }
 
         mBinding?.removeLogoText?.setOnClickListener {
-
+            Utility.messageDialog(requireContext(),"Feature To Be Implemented")
         }
 
         mBinding?.gst?.addTextChangedListener {
@@ -165,6 +178,74 @@ class BrandEditFragment : Fragment() {
             }
         }
 
+    }
+
+    private fun selectFromGallery() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        intent.type = "image/*"
+        val mimeTypes = arrayOf<String>("image/jpeg", "image/png")
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
+        startActivityForResult(intent, PICK_IMAGE)
+    }
+
+    private fun requestPermission() {
+        ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), PERMISSION_REQUEST_CODE)
+    }
+
+    private fun showMessageOKCancel(message:String, okListener: DialogInterface.OnClickListener) {
+        androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setMessage(message)
+            .setPositiveButton("OK", okListener)
+            .setNegativeButton("Cancel", null)
+            .create()
+            .show()
+    }
+
+    override fun onRequestPermissionsResult(requestCode:Int, permissions:Array<String>, grantResults:IntArray) {
+        when (requestCode) {
+            PERMISSION_REQUEST_CODE -> if (grantResults.isNotEmpty())
+            {
+                val storageReadAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED
+                if (storageReadAccepted){
+                    selectFromGallery()
+                }
+                else
+                {
+                    if (shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE))
+                    {
+                        showMessageOKCancel("You need to allow access to both the permissions",
+                            DialogInterface.OnClickListener { dialog, which ->
+                                requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), PERMISSION_REQUEST_CODE)
+                                selectFromGallery()
+                            })
+                        return
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PICK_IMAGE && resultCode == AppCompatActivity.RESULT_OK && null != data)
+            when (requestCode) {
+                PICK_IMAGE -> {
+                    val uri = data.data
+                    var absolutePath = Utility.getRealPathFromFileURI(requireContext(),uri!!)
+
+                    if(Utility.validFileSize(absolutePath)){
+
+                        mBinding?.changeLogoImg?.let {
+                            ImageSetter.setImageUri(requireContext(),uri,
+                                it,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
+                        }
+                        Prefs.putString(ConstantsDirectory.BRAND_LOGO,absolutePath)
+                    }else{
+                        Utility.messageDialog(requireContext(), requireActivity().getString(R.string.file_size_exceeded))
+                    }
+
+                }
+            }
     }
 
     companion object {
