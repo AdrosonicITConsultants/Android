@@ -53,7 +53,7 @@ class CategoryAdapter(var context: Context?, private var categoryDetails: List<P
 
 
     override fun onItemClick(list: Product) {
-        Toast.makeText(context,"$list",Toast.LENGTH_SHORT).show()
+//        Toast.makeText(context,"$list",Toast.LENGTH_SHORT).show()
         var bundle = Bundle()
         bundle.putString(ConstantsDirectory.VIEW_PROD_OF,list.productDesc)
         var frag2 = CategoryProdListFragment()

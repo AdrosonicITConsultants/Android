@@ -1,6 +1,7 @@
 package com.adrosonic.craftexchange.utils
 
 import android.Manifest
+import android.R
 import android.app.AlertDialog
 import android.content.Context
 import android.content.pm.PackageManager
@@ -8,6 +9,10 @@ import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.AsyncTask
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -78,6 +83,33 @@ class Utility {
                 Manifest.permission.READ_EXTERNAL_STORAGE
             )
             return result == PackageManager.PERMISSION_GRANTED
+        }
+
+        fun filterSpinner(context : Context ,array : List<String>, spinner : Spinner?) {
+            var adapter= ArrayAdapter(context, R.layout.simple_spinner_item, array)
+            var filterBy : String
+            adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
+            spinner?.adapter = adapter
+            spinner?.onItemSelectedListener = (object : AdapterView.OnItemSelectedListener{
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    filterBy = ""
+                }
+
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    if(position > 0){
+                        filterBy = parent?.getItemAtPosition(position).toString()
+                        Log.e("spin","fil : $filterBy")
+
+                    }else{
+                        filterBy = ""
+                    }
+                }
+            })
         }
 
 

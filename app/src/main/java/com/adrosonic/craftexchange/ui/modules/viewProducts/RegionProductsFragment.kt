@@ -62,10 +62,6 @@ class RegionProductsFragment : Fragment() {
         regionAdapter?.notifyDataSetChanged()
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-    }
-
     private fun initializeView(){
         var clusterList = ClusterPredicates.getAllClusters()
         mProduct.clear()

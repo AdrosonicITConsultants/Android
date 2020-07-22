@@ -36,6 +36,10 @@ class ArtisanProductsFragment : Fragment() {
     private var mBinding: FragmentArtisanProductsBinding ?= null
     private var mProduct = mutableListOf<BrandDetails>()
     private var brandAdapter: BrandAdapter?= null
+    private var mSpinner = mutableListOf<String>()
+    private var mClusterList = mutableListOf<Pair<Long?,String?>>()
+    private var filterBy : String ? = ""
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -113,6 +117,20 @@ class ArtisanProductsFragment : Fragment() {
                 mProduct.add(brand)
             }
         }
+
+        var clusterList = ProductPredicates.getAllClusters()
+        mSpinner.clear()
+        mSpinner.add("View by Cluster")
+        if (clusterList != null) {
+            for (size in clusterList){
+                Log.i("Stat","$size")
+                var cluster = size?.clusterDesc
+                var clusterId = size?.clusterid
+                mSpinner.add(cluster!!)
+                mClusterList.add(Pair(clusterId,cluster))
+            }
+        }
+       Utility.filterSpinner(requireContext(),mSpinner,mBinding?.filterCluster)
     }
 
     companion object {

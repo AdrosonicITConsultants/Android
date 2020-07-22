@@ -1,14 +1,26 @@
 package com.adrosonic.craftexchange.ui.modules.viewProducts.adapter
 
 import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
+import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.databinding.ItemRegionProductBinding
+import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.response.clusterResponse.Cluster
+import com.adrosonic.craftexchange.repository.data.response.viewProducts.cluster.ClusterProductDetailResponse
 import com.adrosonic.craftexchange.ui.interfaces.ClusterProductClick
+import com.adrosonic.craftexchange.ui.modules.buyer.landing.BuyerLandingActivity
+import com.adrosonic.craftexchange.ui.modules.viewProducts.productlists.RegionProdListFragment
+import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.pixplicity.easyprefs.library.Prefs
+import retrofit2.Call
+import retrofit2.Response
+import javax.security.auth.callback.Callback
 
 class RegionAdapter(var context: Context?, private var regionProducts: List<Cluster>) : RecyclerView.Adapter<RegionAdapter.ViewHolder>(),
     ClusterProductClick {
@@ -43,7 +55,34 @@ class RegionAdapter(var context: Context?, private var regionProducts: List<Clus
     }
 
     override fun onItemClick(list: Cluster) {
-        TODO("Not yet implemented")
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getProductService()
+            .getProductByCluster(token,list.id)
+            .enqueue(object : Callback, retrofit2.Callback<ClusterProductDetailResponse> {
+                override fun onFailure(call: Call<ClusterProductDetailResponse>, t: Throwable) {
+                    t.printStackTrace()
+                }
+                override fun onResponse(
+                    call: Call<ClusterProductDetailResponse>, response: Response<ClusterProductDetailResponse>
+                ) {
+                    if (response.body()?.valid == true) {
+                        ProductPredicates.insertClusterProducts(response.body())
+                    } else {
+                        Toast.makeText(context, "${response.body()}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            })
+        var bundle = Bundle()
+        bundle.putString(ConstantsDirectory.CLUSTER_ID,list.id.toString())
+        bundle.putString(ConstantsDirectory.CLUSTER_PRODUCTS,list.desc)
+        var frag2 = RegionProdListFragment()
+        frag2.arguments = bundle
+        var activity = context as BuyerLandingActivity
+        activity.supportFragmentManager.beginTransaction()
+            .replace(R.id.buyer_home_container, frag2)
+            .addToBackStack(null)
+            .commit()
     }
 
 

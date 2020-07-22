@@ -14,6 +14,7 @@ import com.adrosonic.craftexchange.databinding.FragmentCategoryProdListBinding
 import com.adrosonic.craftexchange.repository.data.response.viewProducts.ProductType
 import com.adrosonic.craftexchange.ui.modules.viewProducts.adapter.CategoryProductsAdapter
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.adrosonic.craftexchange.utils.Utility
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -35,6 +36,9 @@ class CategoryProdListFragment : Fragment() {
     var productType : String ?= ""
     private var mProduct = mutableListOf<ProductType>()
     private var catProdAdapter: CategoryProductsAdapter?= null
+    private var mSpinner = mutableListOf<String>()
+    private var mClusterList = mutableListOf<Pair<Long?,String?>>()
+    private var filterBy : String ?= ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,6 +95,20 @@ class CategoryProdListFragment : Fragment() {
                 mProduct.add(product)
             }
         }
+
+        var clusterList = ProductPredicates.getAllClusters()
+        mSpinner.clear()
+        mSpinner.add("Filter by Region")
+        if (clusterList != null) {
+            for (size in clusterList){
+                Log.i("Stat","$size")
+                var cluster = size?.clusterDesc
+                var clusterId = size?.clusterid
+                mSpinner.add(cluster!!)
+                mClusterList.add(Pair(clusterId,cluster))
+            }
+        }
+        Utility.filterSpinner(requireContext(),mSpinner,mBinding?.filterProduct)
     }
 
     companion object {

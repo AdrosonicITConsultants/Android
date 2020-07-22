@@ -20,7 +20,7 @@ class CategoryProductsAdapter(var context: Context?, private var categoryProduct
     inner class ViewHolder(val binding: ItemProductDescListBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(categoryProduct: ProductType){
             binding.categoryDetails = categoryProduct
-            binding.event = this@CategoryProductsAdapter
+            binding.catEvent = this@CategoryProductsAdapter
             binding.executePendingBindings()
         }
     }

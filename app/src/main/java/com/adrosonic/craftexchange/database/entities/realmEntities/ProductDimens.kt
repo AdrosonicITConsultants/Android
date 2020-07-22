@@ -6,6 +6,7 @@ import io.realm.annotations.PrimaryKey
 open class ProductDimens : RealmObject() {
     @PrimaryKey
     var _id :Long ?=0
+    var inProductCategory : Long ?= 0
     var prodTypeId : Long?=0
     var productType : String ?=""
     var lengthId : Long ?=0

@@ -14,6 +14,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_regular"
+            android:textColor="@color/black_text"
+            android:fontFamily="@font/playfair_regular"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
@@ -46,7 +48,7 @@
             <Spinner
                 android:id="@+id/filter_region"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"/>
+                android:layout_height="50dp"/>
 
         </androidx.cardview.widget.CardView>
 

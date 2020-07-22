@@ -246,14 +246,14 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
             deviceRegistration.enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(call: Call<ResponseBody>, response: retrofit2.Response<ResponseBody>?) {
                     response?.takeUnless { response.isSuccessful }?.apply {
-                        Log.e(BuyerLandingActivity.TAG, "Error registering device token "+response.message()+" raw code "+response.raw().code())
+                        Log.e(TAG, "Error registering device token "+response.message()+" raw code "+response.raw().code())
                     }
                     response?.takeIf { response.isSuccessful }?.apply {
-                        Log.e(BuyerLandingActivity.TAG, "Device registration successful")
+                        Log.e(TAG, "Device registration successful")
                     }
                 }
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                    Log.e(BuyerLandingActivity.TAG, "Error registering device token ")
+                    Log.e(TAG, "Error registering device token ")
 //                    addUserDevice(true)n
                 }
             })

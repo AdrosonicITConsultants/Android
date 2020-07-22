@@ -64,4 +64,18 @@ object ConstantsDirectory {
     const val REGISTERED = "Registered"
 
     const val VIEW_PROD_OF = "viewproductof"
+
+    const val CATEGORY_PRODUCTS = "CategoryProducts"
+    const val CLUSTER_PRODUCTS = "ClusterProducts"
+    const val BRAND_PRODUCTS = "BrandProducts"
+
+    const val AVAILABLE_IN_STOCK = "Available In Stock"
+    const val MADE_TO_ORDER = "Made To Order"
+
+    const val IMAGE_URL = "imageurl"
+
+    const val FILTER = "filter"
+
+
+
 }
