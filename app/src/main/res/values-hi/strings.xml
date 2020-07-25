@@ -200,6 +200,7 @@
 
     <string name="in_stock">In Stock</string>
     <string name="exc_made_to_order">Exclusively\nMade To Order</string>
+    <string name="view_edit"><![CDATA[View &\nEdit]]></string>
 
 
     <string-array name="product_array">

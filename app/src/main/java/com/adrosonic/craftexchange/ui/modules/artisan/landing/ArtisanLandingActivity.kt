@@ -28,7 +28,12 @@ import com.google.android.material.navigation.NavigationView
 import com.google.firebase.iid.FirebaseInstanceId
 import com.pixplicity.easyprefs.library.Prefs
 import kotlinx.android.synthetic.main.activity_artisan_landing.*
+import kotlinx.android.synthetic.main.activity_artisan_landing.drawer_layout
+import kotlinx.android.synthetic.main.activity_artisan_landing.nav_view
+import kotlinx.android.synthetic.main.activity_artisan_landing.tab_bar
+import kotlinx.android.synthetic.main.activity_buyer_landing.*
 import kotlinx.android.synthetic.main.nav_header_landing.view.*
+import kotlinx.android.synthetic.main.nav_header_landing.view.logo
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -196,7 +201,12 @@ class ArtisanLandingActivity : AppCompatActivity(), NavigationView.OnNavigationI
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
         }else{
-            this.finish()
+            if(fragmentManager.backStackEntryCount == 0) {
+                super.onBackPressed();
+            }
+            else {
+                fragmentManager.popBackStack();
+            }
         }
     }
 

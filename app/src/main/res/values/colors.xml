@@ -19,6 +19,7 @@
     <color name="light_orange">#FFA942</color>
     <color name="light_blue">#a3ecf0</color>
     <color name="dark_magenta">#8B008B</color>
+    <color name="swipe_background">#0089FF</color>
 
     <color name="white_text">#FFF</color>
     <color name="black_text">#000</color>
