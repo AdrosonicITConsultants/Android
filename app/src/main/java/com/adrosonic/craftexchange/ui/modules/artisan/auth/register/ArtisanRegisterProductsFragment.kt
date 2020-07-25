@@ -29,7 +29,7 @@ import com.adrosonic.craftexchange.repository.data.request.artisan.Address
 import com.adrosonic.craftexchange.repository.data.request.artisan.Country
 import com.adrosonic.craftexchange.repository.data.request.artisan.User
 import com.adrosonic.craftexchange.repository.data.registerResponse.RegisterResponse
-import com.adrosonic.craftexchange.ui.modules.auth_com.login.LoginActivity
+import com.adrosonic.craftexchange.ui.modules.authentication.login.LoginActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
 import com.bumptech.glide.Glide

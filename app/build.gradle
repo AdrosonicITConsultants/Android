@@ -80,6 +80,9 @@ dependencies {
     //spf
     implementation 'com.pixplicity.easyprefs:library:1.9.0'
 
+    //swipe
+    implementation "com.daimajia.swipelayout:library:1.2.0@aar"
+
     //validations
     implementation "com.wajahatkarim3.easyvalidation:easyvalidation-core:1.0.1"
 

@@ -14,7 +14,7 @@
 
     <variable
         name="brandDetails"
-        type="com.adrosonic.craftexchange.repository.data.response.viewProducts.BrandDetails"/>
+        type="com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.BrandDetails"/>
 
 </data>
     <androidx.cardview.widget.CardView

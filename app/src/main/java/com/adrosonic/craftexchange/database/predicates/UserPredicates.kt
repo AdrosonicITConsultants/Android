@@ -1,5 +1,6 @@
 package com.adrosonic.craftexchange.database.predicates
 
+import android.util.Log
 import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
 import com.adrosonic.craftexchange.database.entities.realmEntities.PaymentAccount
 import com.adrosonic.craftexchange.repository.data.editProfile.EditProfileResponse
@@ -184,7 +185,7 @@ class UserPredicates{
                     exUser.accountNonLocked = user?.accountNonLocked
                     exUser.credentialsNonExpired = user?.credentialsNonExpired
 
-//                    realm.copyToRealmOrUpdate(exUser)
+                    realm.copyToRealmOrUpdate(exUser)
 
                 }else{
                     nextID=userObj?._id?:0
@@ -300,47 +301,52 @@ class UserPredicates{
         fun refreshArtisanDetails(userData : ProfileResponse?){
             val realm = Realm.getDefaultInstance()
             var user = userData?.data?.user
-            realm!!.executeTransaction {
+            realm?.executeTransaction {
 
                 var userObj = realm.where(CraftUser::class.java)
                     .equalTo("id", userData?.data?.user?.id)
                     .limit(1)
                     .findFirst()
+                Log.e("UserDetails",userObj.toString())
+                try {
 
-                userObj?.id = user?.id
+                    userObj?.id = user?.id
 //                userObj?.acctoken = userData.data.acctoken
-                userObj?.firstName = user?.firstName
-                userObj?.lastName = user?.lastName
-                userObj?.email = user?.email
-                userObj?.mobile = user?.mobile
-                userObj?.alternateMobile = user?.alternateMobile
-                userObj?.pancard = user?.pancard
-                userObj?.profilePic = user?.profilePic
-                userObj?.weaverDetails = user?.weaverDetails?.weaverId
-                userObj?.clusterid = user?.cluster?.id.toString()
-                userObj?.clusterdesc = user?.cluster?.desc
-                userObj?.clusteradjective = user?.cluster?.adjective
+                    userObj?.firstName = user?.firstName
+                    userObj?.lastName = user?.lastName
+                    userObj?.email = user?.email
+                    userObj?.mobile = user?.mobile
+                    userObj?.alternateMobile = user?.alternateMobile
+                    userObj?.pancard = user?.pancard
+                    userObj?.profilePic = user?.profilePic
+                    userObj?.weaverDetails = user?.weaverDetails?.weaverId
+                    userObj?.clusterid = user?.cluster?.id.toString()
+                    userObj?.clusterdesc = user?.cluster?.desc
+                    userObj?.clusteradjective = user?.cluster?.adjective
 //                userObj?.refRoleId = user.refRoleId
-                userObj?.companyName = user?.companyDetails?.companyName
-                userObj?.companyid = user?.companyDetails?.id
-                userObj?.contact = user?.companyDetails?.contact
-                userObj?.brandLogo = user?.companyDetails?.logo
-                userObj?.cin = user?.companyDetails?.cin
-                userObj?.gstNo = user?.companyDetails?.gstNo
-                userObj?.companyDesc = user?.companyDetails?.desc
-                userObj?.registeredOn = user?.registeredOn
-                userObj?.status = user?.status
-                userObj?.emailVerified = user?.emailVerified
-                userObj?.lastLoggedIn = user?.lastLoggedIn
-                userObj?.username = user?.username
-                userObj?.rating = user?.rating
-                userObj?.enabled = user?.enabled
-                userObj?.authorities = user?.authorities
-                userObj?.accountNonExpired = user?.accountNonExpired
-                userObj?.accountNonLocked = user?.accountNonLocked
-                userObj?.credentialsNonExpired = user?.credentialsNonExpired
+                    userObj?.companyName = user?.companyDetails?.companyName
+                    userObj?.companyid = user?.companyDetails?.id
+                    userObj?.contact = user?.companyDetails?.contact
+                    userObj?.brandLogo = user?.companyDetails?.logo
+                    userObj?.cin = user?.companyDetails?.cin
+                    userObj?.gstNo = user?.companyDetails?.gstNo
+                    userObj?.companyDesc = user?.companyDetails?.desc
+                    userObj?.registeredOn = user?.registeredOn
+                    userObj?.status = user?.status
+                    userObj?.emailVerified = user?.emailVerified
+                    userObj?.lastLoggedIn = user?.lastLoggedIn
+                    userObj?.username = user?.username
+                    userObj?.rating = user?.rating
+                    userObj?.enabled = user?.enabled
+                    userObj?.authorities = user?.authorities
+                    userObj?.accountNonExpired = user?.accountNonExpired
+                    userObj?.accountNonLocked = user?.accountNonLocked
+                    userObj?.credentialsNonExpired = user?.credentialsNonExpired
 
-                realm.copyToRealmOrUpdate(userObj)
+                    realm.copyToRealmOrUpdate(userObj)
+                }catch (e:Exception){
+                    Log.e("refresh artisan","$e")
+                }
             }
         }
 

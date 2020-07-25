@@ -5,8 +5,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="model" type="com.adrosonic.craftexchange.ui.modules.auth_com.register.RegisterViewModel"/>
+        <variable name="model"
+            type="com.adrosonic.craftexchange.viewModels.AuthenticationViewModel"/>
     </data>
+
 
     <ScrollView
         android:layout_width="match_parent"

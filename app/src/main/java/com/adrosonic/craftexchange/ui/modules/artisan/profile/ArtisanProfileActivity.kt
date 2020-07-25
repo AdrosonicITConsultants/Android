@@ -82,10 +82,10 @@ class ArtisanProfileActivity : AppCompatActivity() {
                         response: Response<ProfileResponse>
                     ) {
                         if(response.body()?.valid == true){
-                            UserPredicates.refreshArtisanDetails(response.body()!!)
+                            UserPredicates.refreshArtisanDetails(response.body())
                             ProductPredicates.insertArtisanProductCategory(response.body())
                             UserPredicates.insertPaymentDetails(response.body())
-                            AddressPredicates.refreshUserAddress(response.body()!!)
+                            AddressPredicates.refreshUserAddress(response.body())
                         }else{
                             Toast.makeText(applicationContext,response.body()?.errorMessage,Toast.LENGTH_SHORT).show()
                         }

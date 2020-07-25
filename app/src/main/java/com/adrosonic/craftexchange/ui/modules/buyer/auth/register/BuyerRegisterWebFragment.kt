@@ -24,7 +24,7 @@ import com.adrosonic.craftexchange.repository.data.model.buyer.*
 import com.adrosonic.craftexchange.repository.data.model.buyer.Address
 import com.adrosonic.craftexchange.repository.data.model.buyer.Country
 import com.adrosonic.craftexchange.repository.data.registerResponse.*
-import com.adrosonic.craftexchange.ui.modules.auth_com.login.LoginActivity
+import com.adrosonic.craftexchange.ui.modules.authentication.login.LoginActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
 import com.google.gson.Gson

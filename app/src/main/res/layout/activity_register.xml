@@ -8,7 +8,7 @@
     android:id="@+id/register_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.modules.auth_com.register.RegisterActivity">
+    tools:context=".ui.modules.authentication.register.RegisterActivity">
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

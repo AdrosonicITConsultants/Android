@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="model" type="com.adrosonic.craftexchange.ui.modules.auth_com.login.LoginViewModel"/>
+        <variable name="model" type="com.adrosonic.craftexchange.viewModels.LoginViewModel"/>
     </data>
 
     <ScrollView

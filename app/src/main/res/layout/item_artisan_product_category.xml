@@ -7,21 +7,25 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto">
 
     <data>
-
-
-
         <variable
             name="artisanProduct"
-            type="com.adrosonic.craftexchange.database.entities.ArtisanProductList"/>
+            type="com.adrosonic.craftexchange.database.entities.realmEntities.ProductCard"/>
+
+        <variable
+            name="event"
+            type="com.adrosonic.craftexchange.ui.interfaces.ArtisanProductClick" />
 
     </data>
 
 <androidx.cardview.widget.CardView
+    android:id="@+id/item_artisan_prod_category"
     android:layout_marginEnd="@dimen/margin_regular"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:onClick="@{()->event.onItemClick(artisanProduct)}">
 
-    <LinearLayout
+
+<LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/black_text"
@@ -32,6 +36,7 @@
             android:id="@+id/prod_img"
             android:layout_width="@dimen/card_wt"
             android:layout_height="@dimen/card_ht"
+            android:src="@drawable/demo_img"
             android:scaleType="centerCrop"/>
 
         <TextView

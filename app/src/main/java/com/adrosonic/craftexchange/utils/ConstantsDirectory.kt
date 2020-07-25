@@ -72,9 +72,14 @@ object ConstantsDirectory {
     const val AVAILABLE_IN_STOCK = "Available In Stock"
     const val MADE_TO_ORDER = "Made To Order"
 
+
+
     const val IMAGE_URL = "imageurl"
 
     const val FILTER = "filter"
+
+    const val PRODUCT_CATEGORY = "productcategory"
+    const val PRODUCT_CATEGORY_ID = "productcategoryid"
 
 
 

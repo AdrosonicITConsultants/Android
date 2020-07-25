@@ -8,7 +8,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        tools:context=".ui.modules.viewProducts.productlists.BrandProdListFragment">
+        tools:context=".ui.modules.buyer.viewProducts.productlists.BrandProdListFragment">
         <ImageView
             android:id="@+id/logo"
             android:layout_width="@dimen/margin_semimedium"

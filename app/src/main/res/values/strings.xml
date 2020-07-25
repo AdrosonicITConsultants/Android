@@ -155,13 +155,13 @@
     <string name="characters">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz</string>
     <string name="hello">Hello</string>
     <string name="your_product">Your Products</string>
-    <string name="list_prod_text">List of your very own artisanProducts sorted by categories</string>
+    <string name="list_prod_text">List of your very own products sorted by categories</string>
     <string name="registration_success_msg">Registration Successful!</string>
     <string name="my_details">My Details</string>
     <string name="brand_details">Brand Details</string>
     <string name="bank_details">Bank Details</string>
     <string name="edit_details">Edit Details</string>
-    <string name="add_new_prod">Add a new artisanProduct</string>
+    <string name="add_new_prod">Add a new product</string>
     <string name="avg_rating">Avg rating</string>
     <string name="product_category">Product Category</string>
     <string name="edit_brand_details">Edit Brand Details</string>
@@ -195,6 +195,11 @@
     <string name="view_more">View More</string>
     <string name="generate_enquiry">Generate Enquiry</string>
     <string name="available_in_stock">Avalaible in stock</string>
+    <string name="change_category">Change Category</string>
+
+    <string name="in_stock">In Stock</string>
+    <string name="exc_made_to_order">Exclusively\nMade To Order</string>
+
 
     <string-array name="product_array">
         <item>@string/saree</item>

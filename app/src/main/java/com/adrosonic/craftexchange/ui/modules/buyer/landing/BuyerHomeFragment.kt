@@ -9,8 +9,8 @@ import androidx.databinding.DataBindingUtil
 
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.FragmentBuyerHomeBinding
-import com.adrosonic.craftexchange.ui.modules.viewProducts.ViewAntaranProductsFragment
-import com.adrosonic.craftexchange.ui.modules.viewProducts.ViewArtisanProductsFragment
+import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.ViewAntaranProductsFragment
+import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.ViewArtisanProductsFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.pixplicity.easyprefs.library.Prefs
 

@@ -1,6 +1,7 @@
 package com.adrosonic.craftexchange.ui.modules.artisan.landing
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,9 +10,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.adrosonic.craftexchange.R
-import com.adrosonic.craftexchange.database.entities.ArtisanProductList
+import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCard
+import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.databinding.FragmentArtisanHomeBinding
-import com.adrosonic.craftexchange.ui.modules.products.ProductListAdapter
+import com.adrosonic.craftexchange.ui.modules.artisan.products.ArtisanProductAdapter
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
@@ -26,14 +28,10 @@ class ArtisanHomeFragment : Fragment() {
     private var param2: String? = null
 
     private var mBinding: FragmentArtisanHomeBinding ?= null
-    private var mProduct = mutableListOf<ArtisanProductList>()
-    private var productListAdapter: ProductListAdapter ?= null
+    private var mProduct = mutableListOf<ProductCard>()
+    private var artisanProductAdapter: ArtisanProductAdapter?= null
+    var artisanId : Long ?= 0
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-            initialiseList()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,28 +48,46 @@ class ArtisanHomeFragment : Fragment() {
             ImageSetter.setImage(requireActivity(),urlBrand, it,
                 R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
         }
+        artisanId = Prefs.getString(ConstantsDirectory.USER_ID,"").toLong()
 
         return mBinding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initialiseList()
+        artisanProductAdapter =
+            ArtisanProductAdapter(
+                requireContext(),
+                mProduct
+            )
         setupRecyclerView()
     }
 
 
     private fun setupRecyclerView(){
-
-        val adapter = ProductListAdapter(requireContext(),mProduct)
-        mBinding?.productRecyclerList?.adapter = adapter
+        mBinding?.productRecyclerList?.adapter = artisanProductAdapter
         mBinding?.productRecyclerList?.layoutManager = LinearLayoutManager(activity,LinearLayoutManager.HORIZONTAL, false)
+        artisanProductAdapter?.setProducts(mProduct)
+        artisanProductAdapter?.notifyDataSetChanged()
+
     }
 
     private fun initialiseList(){
-
-        mProduct.add(ArtisanProductList("Sarees",R.drawable.demo_img))
-        mProduct.add(ArtisanProductList("Dupatta",R.drawable.demo_img))
-        mProduct.add(ArtisanProductList("Home Accessories",R.drawable.demo_img))
+        var productList = ProductPredicates.getProductCategoriesOfArtisan(artisanId)
+        mProduct.clear()
+        if (productList != null) {
+            for (size in productList){
+                Log.i("Stat","$size")
+                var artisanId = size.artisanId
+                var productId = size.productCategoryId
+                var productTitle = size.productCategoryDesc
+//                var status =size.productStatusId
+//                var desc = size.productSpecs
+                var prod = ProductCard(artisanId,productId,productTitle,null,null)
+                mProduct.add(prod)
+            }
+        }
     }
 
     companion object {

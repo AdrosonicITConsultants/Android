@@ -17,15 +17,14 @@ import androidx.databinding.DataBindingUtil
 
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.predicates.AddressPredicates
-import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.database.predicates.UserPredicates
 import com.adrosonic.craftexchange.databinding.FragmentArtisanLoginPasswordBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.response.artisan.login.ArtisanResponse
 import com.adrosonic.craftexchange.repository.data.model.UserAuthModel
-import com.adrosonic.craftexchange.ui.modules.auth_com.register.RegisterActivity
-import com.adrosonic.craftexchange.ui.modules.auth_com.reset.ResetPasswordActivity
-import com.adrosonic.craftexchange.ui.modules.cx_video_com.CXVideoActivity
+import com.adrosonic.craftexchange.ui.modules.authentication.register.RegisterActivity
+import com.adrosonic.craftexchange.ui.modules.authentication.reset.ResetPasswordActivity
+import com.adrosonic.craftexchange.ui.modules.cx_demovideo.CXVideoActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
 import com.pixplicity.easyprefs.library.Prefs

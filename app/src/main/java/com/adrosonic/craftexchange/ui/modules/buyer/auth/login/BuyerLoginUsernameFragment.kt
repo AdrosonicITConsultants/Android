@@ -18,7 +18,7 @@ import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.FragmentBuyerLoginUsernameBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.loginResponse.LoginValidationResponse
-import com.adrosonic.craftexchange.ui.modules.auth_com.register.RegisterActivity
+import com.adrosonic.craftexchange.ui.modules.authentication.register.RegisterActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
 import com.pixplicity.easyprefs.library.Prefs

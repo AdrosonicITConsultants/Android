@@ -7,7 +7,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        tools:context=".ui.modules.viewProducts.productlists.CategoryProdListFragment">
+        tools:context=".ui.modules.buyer.viewProducts.productlists.CategoryProdListFragment">
 
         <TextView
             android:id="@+id/product_type"

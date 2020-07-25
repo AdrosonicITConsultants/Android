@@ -11,7 +11,7 @@
 
         <import type="android.view.View" />
 
-        <variable name="model" type="com.adrosonic.craftexchange.ui.modules.auth_com.reset.ResetPasswordViewModel"/>
+        <variable name="model" type="com.adrosonic.craftexchange.ui.modules.authentication.reset.ResetPasswordViewModel"/>
     </data>
 
     <ScrollView
@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorBackground"
-        tools:context=".ui.modules.auth_com.reset.ResetUsernameFragment">
+        tools:context=".ui.modules.authentication.reset.ResetUsernameFragment">
 
         <TextView
             android:id="@+id/profile_tag"

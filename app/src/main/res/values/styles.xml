@@ -80,4 +80,10 @@
         <item name="android:textAllCaps">false</item>
     </style>
 
+    <style name="dark_spinner" parent="android:Widget.Spinner">
+        <item name="backgroundColor">@color/black_text</item>
+        <item name="android:textColor">@color/white_text</item>
+        <item name="fontFamily">@font/lato_regular</item>
+    </style>
+
 </resources>

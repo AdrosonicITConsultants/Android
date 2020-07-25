@@ -1,9 +1,7 @@
 package com.adrosonic.craftexchange.ui.modules.role
 
 import android.content.Intent
-import android.os.AsyncTask
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,15 +10,10 @@ import androidx.databinding.DataBindingUtil
 
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.FragmentRoleSelectBinding
-import com.adrosonic.craftexchange.repository.CraftExchangeRepository
-import com.adrosonic.craftexchange.ui.modules.auth_com.login.LoginActivity
+import com.adrosonic.craftexchange.ui.modules.authentication.login.LoginActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
-import com.google.firebase.iid.FirebaseInstanceId
 import com.pixplicity.easyprefs.library.Prefs
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"

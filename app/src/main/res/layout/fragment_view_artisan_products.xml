@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/landing_toolbar_color"
-            tools:context=".ui.modules.viewProducts.ViewArtisanProductsFragment">
+            tools:context=".ui.modules.buyer.viewProducts.ViewArtisanProductsFragment">
 
             <TextView
                 android:id="@+id/artisan_collection_text"

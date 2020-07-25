@@ -36,24 +36,24 @@
             android:name=".ui.modules.buyer.profile.BuyerProfileActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.modules.cx_video_com.CXVideoActivity"
+            android:name=".ui.modules.cx_demovideo.CXVideoActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.modules.buyer.landing.BuyerLandingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.modules.auth_com.register.RegisterActivity"
+            android:name=".ui.modules.authentication.register.RegisterActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.modules.role.RoleSelectActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.modules.auth_com.reset.ResetPasswordActivity"
+            android:name=".ui.modules.authentication.reset.ResetPasswordActivity"
             android:noHistory="true"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.modules.auth_com.login.LoginActivity"
+            android:name=".ui.modules.authentication.login.LoginActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.modules.main.MainActivity"

@@ -13,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/landing_toolbar_color"
-            tools:context=".ui.modules.viewProducts.ViewAntaranProductsFragment">
+            tools:context=".ui.modules.buyer.viewProducts.ViewAntaranProductsFragment">
 
             <TextView
                 android:id="@+id/antaran_collection_text"

@@ -6,7 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        tools:context=".ui.modules.viewProducts.productlists.RegionProdListFragment">
+        tools:context=".ui.modules.buyer.viewProducts.productlists.RegionProdListFragment">
 
         <TextView
             android:id="@+id/product_type"
@@ -64,12 +64,14 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:fillViewport="true"
             android:layout_marginTop="@dimen/margin_regular"
-            app:layout_constraintTop_toBottomOf="@+id/divider"
-            app:layout_constraintStart_toStartOf="parent"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider"
+            app:layout_constraintVertical_bias="1.0">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/region_prod_recycler_list"

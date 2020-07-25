@@ -12,7 +12,7 @@
 
         <variable
             name="categoryDetails"
-            type="com.adrosonic.craftexchange.repository.data.response.viewProducts.ProductType"/>
+            type="com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.ProductType"/>
 
         <variable
             name="brandEvent"

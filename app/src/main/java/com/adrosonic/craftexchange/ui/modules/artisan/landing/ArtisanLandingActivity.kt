@@ -18,16 +18,11 @@ import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityArtisanLandingBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.ui.modules.artisan.profile.artisanProfileIntent
-import com.adrosonic.craftexchange.ui.modules.landing_com.LandingViewModel
+import com.adrosonic.craftexchange.viewModels.LandingViewModel
 import com.adrosonic.craftexchange.ui.modules.role.roleselectIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.Target
-import com.bumptech.glide.signature.ObjectKey
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.iid.FirebaseInstanceId
@@ -77,6 +72,7 @@ class ArtisanLandingActivity : AppCompatActivity(), NavigationView.OnNavigationI
             R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
 
         mViewModel = ViewModelProviders.of(this).get(LandingViewModel::class.java)
+        mViewModel!!.getProductsOfArtisan(applicationContext)
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)

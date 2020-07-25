@@ -2,17 +2,15 @@ package com.adrosonic.craftexchange.database.predicates
 
 import android.util.Log
 import com.adrosonic.craftexchange.database.entities.UserProductCategory
+import com.adrosonic.craftexchange.database.entities.realmEntities.*
 import com.adrosonic.craftexchange.database.entities.realmEntities.brandProducts.BrandList
-import com.adrosonic.craftexchange.database.entities.realmEntities.CategoryProducts
-import com.adrosonic.craftexchange.database.entities.realmEntities.ClusterList
-import com.adrosonic.craftexchange.database.entities.realmEntities.ClusterProducts
-import com.adrosonic.craftexchange.database.entities.realmEntities.ProductDimens
 import com.adrosonic.craftexchange.database.entities.realmEntities.brandProducts.BrandProducts
+import com.adrosonic.craftexchange.repository.data.response.artisan.products.ArtisanProductDetailsResponse
 import com.adrosonic.craftexchange.repository.data.response.artisan.profile.ProfileResponse
-import com.adrosonic.craftexchange.repository.data.response.viewProducts.AllProductsResponse
-import com.adrosonic.craftexchange.repository.data.response.viewProducts.BrandListResponse
-import com.adrosonic.craftexchange.repository.data.response.viewProducts.brand.BrandProductDetailResponse
-import com.adrosonic.craftexchange.repository.data.response.viewProducts.cluster.ClusterProductDetailResponse
+import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.AllProductsResponse
+import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.BrandListResponse
+import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.brand.BrandProductDetailResponse
+import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.cluster.ClusterProductDetailResponse
 import io.realm.Realm
 import io.realm.RealmResults
 import java.lang.Exception
@@ -82,115 +80,117 @@ class ProductPredicates {
 
                             var catProdType = product.productTypes
                             var prdtypeItr = catProdType?.iterator()
-                            while (prdtypeItr.hasNext()) {
-                                var catProd = prdtypeItr.next()
+                            if(prdtypeItr !=null){
+                                while (prdtypeItr.hasNext()) {
+                                    var catProd = prdtypeItr.next()
 
-                                //Adding products in sub category
-                                var productObj = realm.where(CategoryProducts::class.java)
-                                    .equalTo("subProductid",catProd.id)
-                                    .limit(1)
-                                    .findFirst()
-
-                                if(productObj == null){
-                                    var primId = it.where(CategoryProducts::class.java).max("_id")
-                                    if (primId == null) {
-                                        nextID = 1
-                                    } else {
-                                        nextID = primId.toLong() + 1
-                                    }
-                                    var exprod = it.createObject(CategoryProducts::class.java, nextID)
-                                    exprod.productid = product.id
-                                    exprod.code = product.code
-                                    exprod.product = product.productDesc
-                                    exprod.subProductid = catProd.id
-                                    exprod.subProduct = catProd.productDesc
-                                    exprod.prodCategoryid = catProd.productCategoryId
-
-
-                                    realm.copyToRealmOrUpdate(exprod)
-                                }else{
-                                    nextID = productObj._id ?: 0
-
-                                    productObj.productid = product.id
-                                    productObj.code = product.code
-                                    productObj.product = product.productDesc
-                                    productObj.subProductid = catProd.id
-                                    productObj.subProduct = catProd.productDesc
-                                    productObj.prodCategoryid = catProd.productCategoryId
-
-                                    realm.copyToRealmOrUpdate(productObj)
-
-                                }
-
-                                var length = catProd.productLengths
-                                var width = catProd.productWidths
-
-                                var lengthItr = length.iterator()
-                                var widthItr = width.iterator()
-
-                                while (lengthItr.hasNext()){
-                                    var pLength = lengthItr.next()
-                                    var lengthObj = realm.where(ProductDimens::class.java)
-                                        .equalTo("lengthId",pLength.id)
+                                    //Adding products in sub category
+                                    var productObj = realm.where(CategoryProducts::class.java)
+                                        .equalTo("subProductid",catProd.id)
                                         .limit(1)
                                         .findFirst()
 
-                                    if(lengthObj == null){
-                                        var primId = it.where(ProductDimens::class.java).max("_id")
+                                    if(productObj == null){
+                                        var primId = it.where(CategoryProducts::class.java).max("_id")
                                         if (primId == null) {
                                             nextID = 1
                                         } else {
                                             nextID = primId.toLong() + 1
                                         }
-                                        var exdimen = it.createObject(ProductDimens::class.java, nextID)
-                                        exdimen.inProductCategory = product.id
-                                        exdimen.prodTypeId = catProd.id
-                                        exdimen.productType = catProd.productDesc
-                                        exdimen.lengthId = pLength.id
-                                        exdimen.length = pLength.length
+                                        var exprod = it.createObject(CategoryProducts::class.java, nextID)
+                                        exprod.productid = product.id
+                                        exprod.code = product.code
+                                        exprod.product = product.productDesc
+                                        exprod.subProductid = catProd.id
+                                        exprod.subProduct = catProd.productDesc
+                                        exprod.prodCategoryid = catProd.productCategoryId
 
-                                        realm.copyToRealmOrUpdate(exdimen)
+
+                                        realm.copyToRealmOrUpdate(exprod)
                                     }else{
-                                        nextID = lengthObj._id ?: 0
-                                        lengthObj.inProductCategory = product.id
-                                        lengthObj.prodTypeId = catProd.id
-                                        lengthObj.productType = catProd.productDesc
-                                        lengthObj.lengthId = pLength.id
-                                        lengthObj.length = pLength.length
+                                        nextID = productObj._id ?: 0
 
-                                        realm.copyToRealmOrUpdate(lengthObj)
+                                        productObj.productid = product.id
+                                        productObj.code = product.code
+                                        productObj.product = product.productDesc
+                                        productObj.subProductid = catProd.id
+                                        productObj.subProduct = catProd.productDesc
+                                        productObj.prodCategoryid = catProd.productCategoryId
+
+                                        realm.copyToRealmOrUpdate(productObj)
+
                                     }
-                                }
 
-                                while (widthItr.hasNext()){
-                                    var pWidth = widthItr.next()
-                                    var widthObj = realm.where(ProductDimens::class.java)
-                                        .equalTo("prodTypeId",pWidth.productTypeId)
-                                        .limit(1)
-                                        .findFirst()
+                                    var length = catProd.productLengths
+                                    var width = catProd.productWidths
 
-                                    if(widthObj == null){
-                                        var primId = it.where(ProductDimens::class.java).max("_id")
-                                        if (primId == null) {
-                                            nextID = 1
-                                        } else {
-                                            nextID = primId.toLong() + 1
+                                    var lengthItr = length.iterator()
+                                    var widthItr = width.iterator()
+
+                                    while (lengthItr.hasNext()){
+                                        var pLength = lengthItr.next()
+                                        var lengthObj = realm.where(ProductDimens::class.java)
+                                            .equalTo("lengthId",pLength.id)
+                                            .limit(1)
+                                            .findFirst()
+
+                                        if(lengthObj == null){
+                                            var primId = it.where(ProductDimens::class.java).max("_id")
+                                            if (primId == null) {
+                                                nextID = 1
+                                            } else {
+                                                nextID = primId.toLong() + 1
+                                            }
+                                            var exdimen = it.createObject(ProductDimens::class.java, nextID)
+                                            exdimen.inProductCategory = product.id
+                                            exdimen.prodTypeId = catProd.id
+                                            exdimen.productType = catProd.productDesc
+                                            exdimen.lengthId = pLength.id
+                                            exdimen.length = pLength.length
+
+                                            realm.copyToRealmOrUpdate(exdimen)
+                                        }else{
+                                            nextID = lengthObj._id ?: 0
+                                            lengthObj.inProductCategory = product.id
+                                            lengthObj.prodTypeId = catProd.id
+                                            lengthObj.productType = catProd.productDesc
+                                            lengthObj.lengthId = pLength.id
+                                            lengthObj.length = pLength.length
+
+                                            realm.copyToRealmOrUpdate(lengthObj)
                                         }
-                                        var exdimen = it.createObject(ProductDimens::class.java, nextID)
-                                        exdimen.prodTypeId = catProd.id
-                                        exdimen.productType = catProd.productDesc
-                                        exdimen.widthId = pWidth.id
-                                        exdimen.width = pWidth.width
+                                    }
 
-                                        realm.copyToRealmOrUpdate(exdimen)
-                                    }else{
+                                    while (widthItr.hasNext()){
+                                        var pWidth = widthItr.next()
+                                        var widthObj = realm.where(ProductDimens::class.java)
+                                            .equalTo("prodTypeId",pWidth.productTypeId)
+                                            .limit(1)
+                                            .findFirst()
+
+                                        if(widthObj == null){
+                                            var primId = it.where(ProductDimens::class.java).max("_id")
+                                            if (primId == null) {
+                                                nextID = 1
+                                            } else {
+                                                nextID = primId.toLong() + 1
+                                            }
+                                            var exdimen = it.createObject(ProductDimens::class.java, nextID)
+                                            exdimen.prodTypeId = catProd.id
+                                            exdimen.productType = catProd.productDesc
+                                            exdimen.widthId = pWidth.id
+                                            exdimen.width = pWidth.width
+
+                                            realm.copyToRealmOrUpdate(exdimen)
+                                        }else{
 //                                        nextID = lengthObj._id ?: 0
 //                                        lengthObj.prodTypeId = catProd.id
 //                                        lengthObj.productType = catProd.productDesc
-                                        widthObj.widthId = pWidth.id
-                                        widthObj.width = pWidth.width
+                                            widthObj.widthId = pWidth.id
+                                            widthObj.width = pWidth.width
 
-                                        realm.copyToRealmOrUpdate(widthObj)
+                                            realm.copyToRealmOrUpdate(widthObj)
+                                        }
                                     }
                                 }
                             }
@@ -555,6 +555,177 @@ class ProductPredicates {
             }
         }
 
+        fun insertProductsOfArtisan(productList : ArtisanProductDetailsResponse?){
+            nextID = 0L
+            val realm = Realm.getDefaultInstance()
+            var data = productList?.data
+            var size = data?.size
+            try {
+                realm.executeTransaction {
+                    var dataItr = data?.iterator()
+                    if (dataItr != null) {
+                        while (dataItr.hasNext()){
+                            var data = dataItr?.next()
+
+                            var prodlist = data?.products
+                            var prodItr = prodlist?.iterator()
+                            if(prodItr != null){
+                                while (prodItr.hasNext()){
+                                    var brandProduct = prodItr?.next()
+
+                                    var productObj = realm.where(ArtisanProducts::class.java)
+                                        .equalTo("productId",brandProduct.id)
+                                        .limit(1)
+                                        .findFirst()
+
+                                    if (productObj == null){
+                                        var primId = it.where(ArtisanProducts::class.java).max("_id")
+                                        if (primId == null) {
+                                            nextID = 1
+                                        } else {
+                                            nextID = primId.toLong() + 1
+                                        }
+                                        var exprod = it.createObject(ArtisanProducts::class.java, nextID)
+                                        exprod.artisanId = brandProduct?.artitionId
+//                                    exprod.artisanName = brandProduct?.artistName
+//                                    exprod.clusterId = brandProduct?.clusterId
+                                        exprod.clusterName = brandProduct?.clusterName
+//                                    exprod.brandName = brandProduct?.brand
+
+                                        exprod.productId = brandProduct?.id
+                                        exprod.productCode = brandProduct?.code
+                                        exprod.productTag = brandProduct?.tag
+
+                                        exprod.productCategoryId = brandProduct?.productCategoryId
+                                        exprod.productCategoryDesc = brandProduct?.productCategoryDesc
+//                                    exprod.productCategoryCode = brandProduct?.productCategory?.code
+
+                                        exprod.productTypeId = brandProduct?.productTypeId
+                                        exprod.productTypeDesc = brandProduct?.productTypeDesc
+//                                    exprod.inProductCategory = brandProduct?.productType?.productCategoryId
+
+                                        exprod.warpYarnId = brandProduct?.warpYarnId
+//                                    exprod.warpYarnDesc = brandProduct?.warpYarn?.yarnDesc
+//                                    exprod.warpYarnTypeId = brandProduct?.warpYarn?.yarnType?.id
+//                                    exprod.warpDyeId = brandProduct?.warpYarn?.id
+                                        exprod.warpDyeId = brandProduct?.warpDyeId
+//                                    exprod.warpDyeDesc = brandProduct?.warpDye?.dyeDesc
+                                        exprod.warpYarnCount = brandProduct?.warpYarnCount
+
+                                        exprod.weftYarnId = brandProduct?.weftYarnId
+//                                    exprod.weftYarnDesc = brandProduct?.weftYarn?.yarnDesc
+//                                    exprod.weftYarnTypeId = brandProduct?.weftYarn?.yarnType?.id
+                                        exprod.weftDyeId = brandProduct?.weftDyeId
+//                                    exprod.weftDyeDesc = brandProduct?.weftDye?.dyeDesc
+                                        exprod.weftYarnCount = brandProduct?.weftYarnCount
+
+
+                                        exprod.extraWeftYarnId = brandProduct?.extraWeftYarnId
+//                                    exprod.extraWeftYarnDesc = brandProduct?.extraWeftYarn?.yarnDesc
+//                                    exprod.extraWeftYarnTypeId = brandProduct?.extraWeftYarn?.yarnType?.id
+                                        exprod.extraWeftDyeId = brandProduct?.extraWeftDyeId
+//                                    exprod.extraWeftDyeDesc = brandProduct?.extraWeftDye?.dyeDesc
+                                        exprod.extraWeftYarnCount = brandProduct?.extraWeftYarnCount
+
+
+                                        exprod.productLength = brandProduct?.length
+                                        exprod.productWidth = brandProduct?.width
+
+                                        exprod.reedCountId = brandProduct?.reedCountId
+//                                    exprod.reedCount = brandProduct?.reedCount?.count
+
+                                        exprod.productStatusId = brandProduct?.productStatusId
+
+                                        //TODO : ProductCares, ProductImages and ProductWeaves...different table
+                                        //TODO : Related Product Types to be implemented later
+
+                                        exprod.gsm = brandProduct?.gsm
+                                        exprod.weight = brandProduct?.weight
+                                        exprod.productSpecs = brandProduct?.productSpec
+
+
+                                        exprod.createdOn = brandProduct?.created_on
+                                        exprod.modifiedOn = brandProduct?.modified_on
+//                                    exprod.madeWithAntaran = brandProduct?.madeWithAnthran
+                                        exprod.isDeleted = brandProduct?.isDeleted
+
+                                        realm.copyToRealmOrUpdate(exprod)
+                                    }else{
+                                        nextID = productObj._id ?: 0
+                                        productObj.artisanId = brandProduct?.artitionId
+//                                    exprod.artisanName = brandProduct?.artistName
+//                                    exprod.clusterId = brandProduct?.clusterId
+                                        productObj.clusterName = brandProduct?.clusterName
+//                                    exprod.brandName = brandProduct?.brand
+
+                                        productObj.productId = brandProduct?.id
+                                        productObj.productCode = brandProduct?.code
+                                        productObj.productTag = brandProduct?.tag
+
+                                        productObj.productCategoryId = brandProduct?.productCategoryId
+                                        productObj.productCategoryDesc = brandProduct?.productCategoryDesc
+//                                    exprod.productCategoryCode = brandProduct?.productCategory?.code
+
+                                        productObj.productTypeId = brandProduct?.productTypeId
+                                        productObj.productTypeDesc = brandProduct?.productTypeDesc
+//                                    exprod.inProductCategory = brandProduct?.productType?.productCategoryId
+
+                                        productObj.warpYarnId = brandProduct?.warpYarnId
+//                                    exprod.warpYarnDesc = brandProduct?.warpYarn?.yarnDesc
+//                                    exprod.warpYarnTypeId = brandProduct?.warpYarn?.yarnType?.id
+//                                    exprod.warpDyeId = brandProduct?.warpYarn?.id
+                                        productObj.warpDyeId = brandProduct?.warpDyeId
+//                                    exprod.warpDyeDesc = brandProduct?.warpDye?.dyeDesc
+                                        productObj.warpYarnCount = brandProduct?.warpYarnCount
+
+                                        productObj.weftYarnId = brandProduct?.weftYarnId
+//                                    exprod.weftYarnDesc = brandProduct?.weftYarn?.yarnDesc
+//                                    exprod.weftYarnTypeId = brandProduct?.weftYarn?.yarnType?.id
+                                        productObj.weftDyeId = brandProduct?.weftDyeId
+//                                    exprod.weftDyeDesc = brandProduct?.weftDye?.dyeDesc
+                                        productObj.weftYarnCount = brandProduct?.weftYarnCount
+
+
+                                        productObj.extraWeftYarnId = brandProduct?.extraWeftYarnId
+//                                    exprod.extraWeftYarnDesc = brandProduct?.extraWeftYarn?.yarnDesc
+//                                    exprod.extraWeftYarnTypeId = brandProduct?.extraWeftYarn?.yarnType?.id
+                                        productObj.extraWeftDyeId = brandProduct?.extraWeftDyeId
+//                                    exprod.extraWeftDyeDesc = brandProduct?.extraWeftDye?.dyeDesc
+                                        productObj.extraWeftYarnCount = brandProduct?.extraWeftYarnCount
+
+
+                                        productObj.productLength = brandProduct?.length
+                                        productObj.productWidth = brandProduct?.width
+
+                                        productObj.reedCountId = brandProduct?.reedCountId
+//                                    exprod.reedCount = brandProduct?.reedCount?.count
+
+                                        productObj.productStatusId = brandProduct?.productStatusId
+
+                                        //TODO : ProductCares, ProductImages and ProductWeaves...different table
+                                        //TODO : Related Product Types to be implemented later
+
+                                        productObj.gsm = brandProduct?.gsm
+                                        productObj.weight = brandProduct?.weight
+                                        productObj.productSpecs = brandProduct?.productSpec
+
+
+                                        productObj.createdOn = brandProduct?.created_on
+                                        productObj.modifiedOn = brandProduct?.modified_on
+//                                    exprod.madeWithAntaran = brandProduct?.madeWithAnthran
+                                        productObj.isDeleted = brandProduct?.isDeleted
+
+                                        realm.copyToRealmOrUpdate(productObj)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }catch (e:Exception){
+                Log.e("ArtisanProdLog","$e")
+            }
+        }
 
         //TODO : GET
 
@@ -600,6 +771,23 @@ class ProductPredicates {
         fun getClusterProductsFromId(clusterId : Long?): RealmResults<ClusterProducts>? {
             val realm = Realm.getDefaultInstance()
             return realm.where(ClusterProducts::class.java).equalTo("clusterId",clusterId).findAll()
+        }
+
+        fun getProductCategoriesOfArtisan(artisanId : Long?) : RealmResults<ArtisanProducts>?{
+            val realm = Realm.getDefaultInstance()
+            return realm.where(ArtisanProducts::class.java)
+                .equalTo("artisanId",artisanId)
+                .distinct("productCategoryDesc")
+                .findAll()
+        }
+
+        fun getArtisanProductsByCategory(artisanId : Long?,categoryId : Long?) : RealmResults<ArtisanProducts>?{
+            val realm = Realm.getDefaultInstance()
+            return realm.where(ArtisanProducts::class.java)
+                .equalTo("artisanId",artisanId)
+                .and()
+                .equalTo("productCategoryId",categoryId)
+                .findAll()
         }
 
 //        fun filterBrandProducts(artisanId: Long?,filter : Long?) : RealmResults<BrandProducts>?{
