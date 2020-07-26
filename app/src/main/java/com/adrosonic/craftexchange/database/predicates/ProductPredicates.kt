@@ -1,7 +1,8 @@
 package com.adrosonic.craftexchange.database.predicates
 
 import android.util.Log
-import com.adrosonic.craftexchange.database.entities.UserProductCategory
+import com.adrosonic.craftexchange.database.CXRealmManager
+import com.adrosonic.craftexchange.database.entities.ArtisanProductCategory
 import com.adrosonic.craftexchange.database.entities.realmEntities.*
 import com.adrosonic.craftexchange.database.entities.realmEntities.brandProducts.BrandList
 import com.adrosonic.craftexchange.database.entities.realmEntities.brandProducts.BrandProducts
@@ -11,7 +12,6 @@ import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.A
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.BrandListResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.brand.BrandProductDetailResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.cluster.ClusterProductDetailResponse
-import io.realm.Realm
 import io.realm.RealmResults
 import java.lang.Exception
 
@@ -23,7 +23,7 @@ class ProductPredicates {
 
         fun insertArtisanProductCategory(user: ProfileResponse?) : Long? {
             nextID = 0L
-            val realm = Realm.getDefaultInstance()
+            val realm = CXRealmManager.getRealmInstance()
             var productList = user?.data?.userProductCategories
             try {
                 realm?.executeTransaction {
@@ -31,19 +31,19 @@ class ProductPredicates {
                     if (prodIterator != null) {
                         while (prodIterator.hasNext()) {
                             var prod = prodIterator.next()
-                            var prodObj = realm.where(UserProductCategory::class.java)
+                            var prodObj = realm.where(ArtisanProductCategory::class.java)
                                 .equalTo("id", prod.id)
                                 .limit(1)
                                 .findFirst()
 
                             if (prodObj == null) {
-                                var primId = it.where(UserProductCategory::class.java).max("_id")
+                                var primId = it.where(ArtisanProductCategory::class.java).max("_id")
                                 if (primId == null) {
                                     nextID = 1
                                 } else {
                                     nextID = primId.toLong() + 1
                                 }
-                                var exprod = it.createObject(UserProductCategory::class.java, nextID)
+                                var exprod = it.createObject(ArtisanProductCategory::class.java, nextID)
                                 exprod.id = prod.id
                                 exprod.userid = prod.userId
                                 exprod.productCategoryid = prod.productCategoryId
@@ -69,7 +69,7 @@ class ProductPredicates {
 
         fun insertAllCategoryProducts(prod : AllProductsResponse?){
             nextID = 0L
-            val realm = Realm.getDefaultInstance()
+            val realm = CXRealmManager.getRealmInstance()
             var catProd = prod?.data
             try {
                 realm.executeTransaction {
@@ -205,7 +205,7 @@ class ProductPredicates {
 
         fun insertBrands(list : BrandListResponse?){
             nextID = 0L
-            val realm = Realm.getDefaultInstance()
+            val realm = CXRealmManager.getRealmInstance()
             var brandProd = list?.data
             try {
                 realm.executeTransaction {
@@ -257,7 +257,7 @@ class ProductPredicates {
 
         fun insertBrandProducts(productList : BrandProductDetailResponse?){
             nextID = 0L
-            val realm = Realm.getDefaultInstance()
+            val realm = CXRealmManager.getRealmInstance()
             var product = productList?.data?.products
             try {
                 realm.executeTransaction {
@@ -407,7 +407,7 @@ class ProductPredicates {
 
         fun insertClusterProducts(productList : ClusterProductDetailResponse?){
             nextID = 0L
-            val realm = Realm.getDefaultInstance()
+            val realm = CXRealmManager.getRealmInstance()
             var product = productList?.data?.products
             try {
                 realm.executeTransaction {
@@ -557,7 +557,7 @@ class ProductPredicates {
 
         fun insertProductsOfArtisan(productList : ArtisanProductDetailsResponse?){
             nextID = 0L
-            val realm = Realm.getDefaultInstance()
+            val realm = CXRealmManager.getRealmInstance()
             var data = productList?.data
             var size = data?.size
             try {
@@ -730,37 +730,37 @@ class ProductPredicates {
         //TODO : GET
 
         fun getAllBrandProducts(): RealmResults<BrandList>? {
-            val realm = Realm.getDefaultInstance()
+            val realm = CXRealmManager.getRealmInstance()
             return realm.where(BrandList::class.java).findAll()
         }
 
         fun getAllCategoryProducts(): RealmResults<CategoryProducts>? {
-            val realm = Realm.getDefaultInstance()
+            val realm = CXRealmManager.getRealmInstance()
             return realm.where(CategoryProducts::class.java).distinct("product").findAll()
         }
 
         fun getAllClusterProducts(): RealmResults<ClusterProducts>?{
-            val realm = Realm.getDefaultInstance()
+            val realm = CXRealmManager.getRealmInstance()
             return realm.where(ClusterProducts::class.java).distinct("clusterName").findAll()
         }
 
         fun getAllClusters(): RealmResults<ClusterList>?{
-            val realm = Realm.getDefaultInstance()
+            val realm = CXRealmManager.getRealmInstance()
             return realm.where(ClusterList::class.java).findAll()
         }
 
         fun getProductsFromType(type : String?): RealmResults<CategoryProducts>? {
-            val realm = Realm.getDefaultInstance()
+            val realm = CXRealmManager.getRealmInstance()
             return realm.where(CategoryProducts::class.java).equalTo("product",type).findAll()
         }
 
         fun getBrandProductsFromId(artisanId : Long?): RealmResults<BrandProducts>? {
-            val realm = Realm.getDefaultInstance()
+            val realm = CXRealmManager.getRealmInstance()
             return realm.where(BrandProducts::class.java).equalTo("artisanId",artisanId).findAll()
         }
 
         fun getFilteredBrandProductsFromId(artisanId : Long?,filter : String?) : RealmResults<BrandProducts>?{
-            val realm = Realm.getDefaultInstance()
+            val realm = CXRealmManager.getRealmInstance()
             return realm.where(BrandProducts::class.java)
                 .equalTo("productCategoryName",filter)
                 .and()
@@ -769,12 +769,12 @@ class ProductPredicates {
         }
 
         fun getClusterProductsFromId(clusterId : Long?): RealmResults<ClusterProducts>? {
-            val realm = Realm.getDefaultInstance()
+            val realm = CXRealmManager.getRealmInstance()
             return realm.where(ClusterProducts::class.java).equalTo("clusterId",clusterId).findAll()
         }
 
         fun getProductCategoriesOfArtisan(artisanId : Long?) : RealmResults<ArtisanProducts>?{
-            val realm = Realm.getDefaultInstance()
+            val realm = CXRealmManager.getRealmInstance()
             return realm.where(ArtisanProducts::class.java)
                 .equalTo("artisanId",artisanId)
                 .distinct("productCategoryDesc")
@@ -782,7 +782,7 @@ class ProductPredicates {
         }
 
         fun getArtisanProductsByCategory(artisanId : Long?,categoryId : Long?) : RealmResults<ArtisanProducts>?{
-            val realm = Realm.getDefaultInstance()
+            val realm = CXRealmManager.getRealmInstance()
             return realm.where(ArtisanProducts::class.java)
                 .equalTo("artisanId",artisanId)
                 .and()

@@ -1,6 +1,7 @@
 package com.adrosonic.craftexchange.database.predicates
 
 import android.util.Log
+import com.adrosonic.craftexchange.database.CXRealmManager
 import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
 import com.adrosonic.craftexchange.database.entities.realmEntities.PaymentAccount
 import com.adrosonic.craftexchange.repository.data.editProfile.EditProfileResponse
@@ -16,7 +17,7 @@ class UserPredicates{
 
         fun insertBuyer(userData : BuyerResponse?) : Long? {
             nextID=0L
-            val realm = Realm.getDefaultInstance()
+            val realm = CXRealmManager.getRealmInstance()
             var user = userData?.data?.user
 
             realm!!.executeTransaction {
@@ -128,7 +129,7 @@ class UserPredicates{
 
         fun insertArtisan(userData : ArtisanResponse?) : Long? {
             nextID=0L
-            val realm = Realm.getDefaultInstance()
+            val realm = CXRealmManager.getRealmInstance()
             var user = userData?.data?.user
 
             realm!!.executeTransaction {
@@ -234,7 +235,7 @@ class UserPredicates{
         }
 
         fun findUser(userid : Long) : CraftUser? {
-            var realm = Realm.getDefaultInstance()
+            val realm = CXRealmManager.getRealmInstance()
             var user : CraftUser?= null
             try {
                 user = realm.where(CraftUser::class.java)
@@ -250,7 +251,7 @@ class UserPredicates{
         }
 
         fun editBuyerDetails(userData : EditProfileResponse?) {
-            val realm = Realm.getDefaultInstance()
+            val realm = CXRealmManager.getRealmInstance()
             var user = userData?.data
             realm!!.executeTransaction {
                 var userObj =realm.where(CraftUser::class.java)
@@ -299,7 +300,7 @@ class UserPredicates{
         }
 
         fun refreshArtisanDetails(userData : ProfileResponse?){
-            val realm = Realm.getDefaultInstance()
+            val realm = CXRealmManager.getRealmInstance()
             var user = userData?.data?.user
             realm?.executeTransaction {
 
@@ -351,7 +352,7 @@ class UserPredicates{
         }
 
         fun refreshBuyerDetails(userData : ProfileResponse?){
-            val realm = Realm.getDefaultInstance()
+            val realm = CXRealmManager.getRealmInstance()
             var user = userData?.data?.user
             realm!!.executeTransaction {
 
@@ -407,7 +408,7 @@ class UserPredicates{
 
         fun insertPaymentDetails(userData : ProfileResponse?): Long?{
             nextID = 0L
-            val realm = Realm.getDefaultInstance()
+            val realm = CXRealmManager.getRealmInstance()
             var paymentList = userData?.data?.user?.paymentAccountDetails
             try {
                 realm?.executeTransaction {
@@ -467,7 +468,7 @@ class UserPredicates{
         }
 
         fun getPaymentDetails(userid: String,accountid : Long): PaymentAccount? {
-            var realm = Realm.getDefaultInstance()
+            val realm = CXRealmManager.getRealmInstance()
             var payment : PaymentAccount?= null
             try {
                 realm.executeTransaction {
@@ -486,7 +487,7 @@ class UserPredicates{
         }
 
         fun insertAllCountries(){
-            var realm = Realm.getDefaultInstance()
+            val realm = CXRealmManager.getRealmInstance()
             try {
                 realm?.executeTransaction {
 

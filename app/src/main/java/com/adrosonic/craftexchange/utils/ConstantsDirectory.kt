@@ -1,6 +1,9 @@
 package com.adrosonic.craftexchange.utils
 
 object ConstantsDirectory {
+//////////////////////////////////////////////////////////////////////
+    const val BASE_URL = "http://101.53.153.96:8090/"
+//////////////////////////////////////////////////////////////////////
 
     const val PREFS_NAME = "craft_exchange"
     const val ARTISAN = "Artisan"
@@ -15,7 +18,6 @@ object ConstantsDirectory {
     const val IS_LOGGED_IN = "checklogin"
     const val IS_EDITTABLE = "iseditable"
 
-    const val BASE_URL = "http://101.53.153.96:8090/"
 
     const val USER_EMAIL = "useremail"
     const val USER_PWD = "password"
@@ -65,15 +67,12 @@ object ConstantsDirectory {
 
     const val VIEW_PROD_OF = "viewproductof"
 
-    const val CATEGORY_PRODUCTS = "CategoryProducts"
-    const val CLUSTER_PRODUCTS = "ClusterProducts"
-    const val BRAND_PRODUCTS = "BrandProducts"
+    const val CATEGORY_PRODUCTS = "Category"
+    const val CLUSTER_PRODUCTS = "Cluster"
+    const val BRAND_PRODUCTS = "Brand"
 
     const val AVAILABLE_IN_STOCK = "Available In Stock"
     const val MADE_TO_ORDER = "Made To Order"
-
-
-
     const val IMAGE_URL = "imageurl"
 
     const val FILTER = "filter"

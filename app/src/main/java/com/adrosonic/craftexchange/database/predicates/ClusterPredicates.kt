@@ -1,6 +1,7 @@
 package com.adrosonic.craftexchange.database.predicates
 
 import android.util.Log
+import com.adrosonic.craftexchange.database.CXRealmManager
 import com.adrosonic.craftexchange.database.entities.realmEntities.ClusterList
 import com.adrosonic.craftexchange.repository.data.response.clusterResponse.CLusterResponse
 import io.realm.Realm
@@ -13,7 +14,7 @@ class ClusterPredicates {
 
         fun insertClusters(clusters : CLusterResponse?){
             nextID = 0L
-            val realm = Realm.getDefaultInstance()
+            val realm = CXRealmManager.getRealmInstance()
             var clusterList = clusters?.data
             realm.executeTransaction {
                 try {
@@ -57,7 +58,7 @@ class ClusterPredicates {
         }
 
         fun getAllClusters(): RealmResults<ClusterList>? {
-            val realm = Realm.getDefaultInstance()
+            val realm = CXRealmManager.getRealmInstance()
             return realm.where(ClusterList::class.java).findAll()
         }
     }

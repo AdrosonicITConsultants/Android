@@ -3,7 +3,7 @@ package com.adrosonic.craftexchange.database.entities
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
-open class UserProductCategory : RealmObject(){
+open class ArtisanProductCategory : RealmObject(){
     @PrimaryKey
     var _id: Long?=0
     var id: Long? = 0

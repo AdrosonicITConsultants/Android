@@ -1,6 +1,7 @@
 package com.adrosonic.craftexchange.database.predicates
 
-import com.adrosonic.craftexchange.database.entities.realmEntities.Addresss
+import com.adrosonic.craftexchange.database.CXRealmManager
+import com.adrosonic.craftexchange.database.entities.realmEntities.UserAddress
 import com.adrosonic.craftexchange.repository.data.editProfile.EditProfileResponse
 import com.adrosonic.craftexchange.repository.data.request.editProfileModel.EditArtisanDetails
 import com.adrosonic.craftexchange.repository.data.response.artisan.login.ArtisanResponse
@@ -15,7 +16,7 @@ class AddressPredicates {
 
         fun insertBuyerAddress(user: BuyerResponse?) : Long? {
             nextID = 0L
-            val realm = Realm.getDefaultInstance()
+            val realm = CXRealmManager.getRealmInstance()
             var addressList = user?.data?.user?.addressses
             try {
                 realm?.executeTransaction {
@@ -23,19 +24,19 @@ class AddressPredicates {
                     if (addrIterator != null) {
                         while (addrIterator.hasNext()) {
                             var addr = addrIterator.next()
-                            var addrObj = realm.where(Addresss::class.java)
+                            var addrObj = realm.where(UserAddress::class.java)
                                 .equalTo("id", addr.id)
                                 .limit(1)
                                 .findFirst()
 
                             if (addrObj == null) {
-                                var primId = it.where(Addresss::class.java).max("_id")
+                                var primId = it.where(UserAddress::class.java).max("_id")
                                 if (primId == null) {
                                     nextID = 1
                                 } else {
                                     nextID = primId.toLong() + 1
                                 }
-                                var exaddr = it.createObject(Addresss::class.java, nextID)
+                                var exaddr = it.createObject(UserAddress::class.java, nextID)
                                 exaddr.id = addr.id.toLong()
                                 exaddr.userid = user?.data?.user?.id
                                 exaddr.addrtypeid = addr.addressType.id.toString()
@@ -83,7 +84,7 @@ class AddressPredicates {
 
         fun insertArtisanAddress(user: ArtisanResponse?) : Long? {
             nextID = 0L
-            val realm = Realm.getDefaultInstance()
+            val realm = CXRealmManager.getRealmInstance()
             var addressList = user?.data?.user?.addressses
             try {
                 realm?.executeTransaction {
@@ -91,19 +92,19 @@ class AddressPredicates {
                     if (addrIterator != null) {
                         while (addrIterator.hasNext()) {
                             var addr = addrIterator.next()
-                            var addrObj = realm.where(Addresss::class.java)
+                            var addrObj = realm.where(UserAddress::class.java)
                                 .equalTo("id", addr.id)
                                 .limit(1)
                                 .findFirst()
 
                             if (addrObj == null) {
-                                var primId = it.where(Addresss::class.java).max("_id")
+                                var primId = it.where(UserAddress::class.java).max("_id")
                                 if (primId == null) {
                                     nextID = 1
                                 } else {
                                     nextID = primId.toLong() + 1
                                 }
-                                var exaddr = it.createObject(Addresss::class.java, nextID)
+                                var exaddr = it.createObject(UserAddress::class.java, nextID)
                                 exaddr.id = addr.id
                                 exaddr.userid = user?.data?.user?.id
                                 exaddr.addrtypeid = addr.addressType.id.toString()
@@ -149,12 +150,12 @@ class AddressPredicates {
             return nextID
         }
 
-        fun getAddressAddrType(addrType : String, userid : Long) : Addresss? {
-            var realm = Realm.getDefaultInstance()
-            var address : Addresss?= null
+        fun getAddressAddrType(addrType : String, userid : Long) : UserAddress? {
+            val realm = CXRealmManager.getRealmInstance()
+            var address : UserAddress?= null
             try {
                 realm.executeTransaction {
-                    address = realm.where(Addresss::class.java)
+                    address = realm.where(UserAddress::class.java)
                         .equalTo("userid", userid)
                         .and()
                         .equalTo("addrtype", addrType)
@@ -169,8 +170,8 @@ class AddressPredicates {
         }
 
         fun editBuyerDelievryAddress(userData : EditProfileResponse, addrType: String){
-            val realm = Realm.getDefaultInstance()
-            var addrObj : Addresss?= null
+            val realm = CXRealmManager.getRealmInstance()
+            var addrObj : UserAddress?= null
             var user = userData.data
             var addressList = user?.addressses
             realm.executeTransaction {
@@ -182,7 +183,7 @@ class AddressPredicates {
                         var addr = addrIterator.next()
 
                         if(addr.addressType.addrType == addrType) {
-                            addrObj = realm.where(Addresss::class.java)
+                            addrObj = realm.where(UserAddress::class.java)
                                 .equalTo("userid", user.id)
                                 .and()
                                 .equalTo("addrtype", addrType)
@@ -217,11 +218,11 @@ class AddressPredicates {
         }
 
         fun editArtisanAddress(userid : String, userData : EditArtisanDetails){
-            var realm = Realm.getDefaultInstance()
-            var address: Addresss?
+            val realm = CXRealmManager.getRealmInstance()
+            var address: UserAddress?
             try {
                 realm.executeTransaction {
-                    var address = realm.where(Addresss::class.java)
+                    var address = realm.where(UserAddress::class.java)
                         .equalTo("userid", userid.toLong())
                         .findFirst()
 
@@ -246,7 +247,7 @@ class AddressPredicates {
         }
 
         fun refreshUserAddress(userData: ProfileResponse?){
-            val realm = Realm.getDefaultInstance()
+            val realm = CXRealmManager.getRealmInstance()
             var addressList = userData?.data?.user?.addressses
             try {
                 realm?.executeTransaction {
@@ -254,7 +255,7 @@ class AddressPredicates {
                     if (addrIterator != null) {
                         while (addrIterator.hasNext()) {
                             var addr = addrIterator.next()
-                            var addrObj = realm.where(Addresss::class.java)
+                            var addrObj = realm.where(UserAddress::class.java)
                                 .equalTo("id", addr.id)
                                 .limit(1)
                                 .findFirst()
