@@ -46,8 +46,7 @@ fun Context.artisanLandingIntent(): Intent {
 
 class ArtisanLandingActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener  {
 
-
-    companion object{
+   companion object{
         const val TAG = "ArtisanLanding"
     }
 
@@ -77,8 +76,8 @@ class ArtisanLandingActivity : AppCompatActivity(), NavigationView.OnNavigationI
             R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
 
         mViewModel = ViewModelProviders.of(this).get(LandingViewModel::class.java)
-        mViewModel!!.getProductsOfArtisan(applicationContext)
-
+        mViewModel?.getProductsOfArtisan(applicationContext)
+        mViewModel?.getProductUploadData()
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.title = ""
@@ -97,8 +96,9 @@ class ArtisanLandingActivity : AppCompatActivity(), NavigationView.OnNavigationI
 
         var username = "$firstname $lastname"
 
+
         mBinding?.navView?.setNavigationItemSelectedListener(this)
-        nav_view.getHeaderView(0).text_user.text = username
+        nav_view.getHeaderView(0).text_user.text = username+"aaaaaaaaaaaa"
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()

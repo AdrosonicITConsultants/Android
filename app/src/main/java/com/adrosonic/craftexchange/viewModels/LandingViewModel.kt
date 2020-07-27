@@ -2,13 +2,17 @@ package com.adrosonic.craftexchange.viewModels
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.ArtisanProductDetailsResponse
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
+import com.google.gson.Gson
 import com.pixplicity.easyprefs.library.Prefs
+import quicktype.ProductUploadData
 import retrofit2.Call
 import javax.security.auth.callback.Callback
 
@@ -41,5 +45,35 @@ class LandingViewModel(application: Application) : AndroidViewModel(application)
             }
 
         })
+    }
+
+    fun getProductUploadData(){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getProductService()
+            .getProductUploadData(token)
+            .enqueue(object: Callback, retrofit2.Callback<ProductUploadData> {
+                override fun onFailure(call: Call<ProductUploadData>, t: Throwable) {
+                    t.printStackTrace()
+                    Log.e("LandingViewModel","getProductUploadData onFailure: "+t.message)
+                }
+                override fun onResponse(
+                    call: Call<ProductUploadData>,
+                    response: retrofit2.Response<ProductUploadData>) {
+
+                    if(response.body()?.valid == true){
+                        //todo store data to spf
+                       Log.e("LandingViewModel","getProductUploadData :"+response.body()?.data?.productCare?.size)
+                        UserConfig.shared.productUploadJson= Gson().toJson(response.body())
+                        Log.e("LandingViewModel","SPF :"+UserConfig.shared.productUploadJson)
+
+
+                    }else{
+                        Log.e("LandingViewModel","getProductUploadData onFailure: "+response.body()?.errorCode)
+
+                    }
+                }
+
+            })
     }
 }

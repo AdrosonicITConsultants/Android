@@ -13,6 +13,7 @@ import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCard
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.databinding.FragmentArtisanHomeBinding
+import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.addProductIntent
 import com.adrosonic.craftexchange.ui.modules.artisan.products.ArtisanProductAdapter
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
@@ -62,6 +63,9 @@ class ArtisanHomeFragment : Fragment() {
                 mProduct
             )
         setupRecyclerView()
+        mBinding?.btnAddProd?.setOnClickListener {
+            startActivity(context?.addProductIntent())
+        }
     }
 
 

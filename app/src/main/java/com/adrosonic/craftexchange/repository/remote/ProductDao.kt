@@ -3,9 +3,8 @@ package com.adrosonic.craftexchange.repository.remote
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.ArtisanProductDetailsResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.AllProductsResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.BrandListResponse
-import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.BrandProductDetailResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.CatalogueProductsResponse
-import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.ClusterProductDetailResponse
+import quicktype.ProductUploadData
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -38,4 +37,9 @@ interface ProductDao {
     @Headers("Accept: application/json")
     @GET("product/getArtitionProducts")
     fun getArtisanProducts(@Header("Authorization") token:String) : Call<ArtisanProductDetailsResponse>
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+@Headers("Accept: application/json")
+@GET("product/getProductUploadData")
+fun getProductUploadData(@Header("Authorization") token:String) : Call<ProductUploadData>
 }

@@ -4,7 +4,7 @@ object ConstantsDirectory {
 //////////////////////////////////////////////////////////////////////
     const val BASE_URL = "http://101.53.153.96:8090/"
 //////////////////////////////////////////////////////////////////////
-
+    const val PICK_IMAGE=1
     const val PREFS_NAME = "craft_exchange"
     const val ARTISAN = "Artisan"
     const val BUYER = "Buyer"

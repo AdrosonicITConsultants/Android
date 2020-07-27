@@ -201,7 +201,17 @@
     <string name="in_stock">In Stock</string>
     <string name="exc_made_to_order">Exclusively\nMade To Order</string>
     <string name="view_edit"><![CDATA[View &\nEdit]]></string>
-
+    <string name="you_can_check_again_by_clicking_on_cancel">You can check again by clicking on \'Cancel\'</string>
+    <string name="save_n_upload">Save &amp; upload it?</string>
+    <string name="ok">Ok</string>
+    <string name="are_you_sure_you_want_to_go_back">Are you sure you want to go back?</string>
+    <string name="go_back">Go back</string>
+    <string name="you_shal_lose">You shall lose all your progress as it is not saved yet. If you don\'t want to lose, you can save it before going back!</string>
+    <string name="describe_your_product">Describe your product</string>
+    <string name="weight_10_characters">Weight (10 Characters)</string>
+    <string name="enter_gsm_value">Enter GSM value</string>
+    <string name="click_here_to_add_upto_3_photos">Click here to add upto 3 images</string>
+    <string name="product_add_limit">You can add upto 3 images only</string>
 
     <string-array name="product_array">
         <item>@string/saree</item>

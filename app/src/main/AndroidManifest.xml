@@ -17,8 +17,11 @@
         android:roundIcon="@mipmap/ic_logo_main_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:hardwareAccelerated="false"
         android:usesCleartextTraffic="true">
-
+        <activity
+            android:name=".ui.modules.artisan.productTemplate.ArtisanAddProductTemplateActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.modules.artisan.profile.editProfile.ArtisanEditProfileActivity"
             android:screenOrientation="portrait" />
