@@ -3,8 +3,7 @@ package com.adrosonic.craftexchange.database.entities.realmEntities
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
-open class ClusterProducts : RealmObject(){
-
+open class ProductCatalogue : RealmObject() {
     @PrimaryKey
     var _id :Long ?=0
 
@@ -85,8 +84,4 @@ open class ClusterProducts : RealmObject(){
     var modifiedOn : String ?=""
     var madeWithAntaran : Long ?= 0
     var isDeleted : Long ?= 0
-
-
-
-
 }

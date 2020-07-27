@@ -1,7 +1,6 @@
-package com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.cluster
+package com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue
 
-
-data class ClusterProductDetailResponse (
+data class CatalogueProductsResponse (
     val data: Data,
     val valid: Boolean,
     val errorMessage: String,
@@ -10,7 +9,19 @@ data class ClusterProductDetailResponse (
 
 data class Data (
     val products: List<Product>,
+    val productCategory: String,
+    val artisanDetails: List<ArtisanDetail>,
     val cluster: Cluster
+)
+
+data class ArtisanDetail (
+    val companyName: String,
+    val firstName: String,
+    val clusterId: Long,
+    val profilePic: String,
+    val logo: String,
+    val productImages: String,
+    val artisanId: Long
 )
 
 data class Cluster (
@@ -20,54 +31,52 @@ data class Cluster (
     val hibernateLazyInitializer: HibernateLazyInitializer
 )
 
-
 class HibernateLazyInitializer()
+
 
 data class Product (
     val id: Long,
-    val code: String? = "",
-    val tag: String? = "",
-    val productCategory: ProductCategory? = null,
+    val code: String,
+    val tag: String,
+    val productCategory: ProductCategory,
     val productType: ProductType,
-    val warpYarn: Yarn? = null,
-    val weftYarn: Yarn? = null,
-    val extraWeftYarn: Yarn? = null,
-    val warpYarnCount: String? = "",
-    val weftYarnCount: String? = "",
-    val extraWeftYarnCount: String? = "",
-    val warpDye: Dye? = null,
-    val weftDye: Dye? = null,
-    val extraWeftDye: Dye? = null,
+    val warpYarn: Yarn,
+    val weftYarn: Yarn,
+    val extraWeftYarn: Yarn,
+    val warpYarnCount: String,
+    val weftYarnCount: String,
+    val extraWeftYarnCount: String,
+    val warpDye: Dye,
+    val weftDye: Dye,
+    val extraWeftDye: Dye,
     val length: String,
     val width: String,
-    val reedCount: ReedCount? = null,
-    val productStatusId: Long? = 0,
-    val gsm: String? = "",
-    val weight: String? = "",
-    val product_spe: String? = "",
+    val reedCount: ReedCount,
+    val productStatusId: Long,
+    val gsm: String,
+    val weight: String,
+    val product_spe: String,
     val productCares: List<ProductCare>,
     val productWeaves: List<ProductWeaf>,
-    val createdOn: String? = "",
-    val modifiedOn: String? = "",
+    val createdOn: String,
+    val modifiedOn: String,
     val relProduct: List<Product>,
     val productImages: List<ProductImage>,
-    val artitionId: Long? = 0,
-    val clusterId: Long? = 0,
-    val productCategoryDesc: String? = "",
-    val productTypeDesc: String? = "",
-    val clusterName: String? = "",
-    val artistName: String? = "",
-    val brand: String? = "",
-    val madeWithAnthran: Long? = 0,
-    val isDeleted: Long? = 0
+    val artitionId: Long,
+    val clusterId: Long,
+    val productCategoryDesc: String,
+    val productTypeDesc: String,
+    val clusterName: String,
+    val artistName: String,
+    val brand: String,
+    val madeWithAnthran: Long,
+    val isDeleted: Long
 )
-
 
 data class Dye (
     val id: Long,
     val dyeDesc: String
 )
-
 
 data class Yarn (
     val id: Long,
@@ -104,7 +113,7 @@ data class ProductCategory (
 data class ProductType (
     val id: Long,
     val productDesc: String,
-    val productCategoryId: Long? = 0,
+    val productCategoryId: Long,
     val productLengths: List<ProductLength>,
     val productWidths: List<ProductWidth>,
     val relatedProductType: List<ProductType>

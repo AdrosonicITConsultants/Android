@@ -60,10 +60,19 @@ class BrandProdListFragment : Fragment() {
 
         artisanId = this.requireArguments().getString(ConstantsDirectory.ARTISAN_ID)?.toLong()
         artisanName = this.requireArguments().getString(ConstantsDirectory.ARTISAN)
-        brandName = this.requireArguments().getString(ConstantsDirectory.BRAND_IMG_NAME)
+        brandName = this.requireArguments().getString(ConstantsDirectory.COMP_NAME)
         mBinding?.artisanBrand?.text = brandName ?: artisanName
+        var logo = this.requireArguments().getString(ConstantsDirectory.BRAND_IMG_NAME)
+        var photo = this.requireArguments().getString(ConstantsDirectory.PROFILE_PHOTO_NAME)
+        if(logo != null){
+            url = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/User/${artisanId}/CompanyDetails/Logo/${logo}"
+        }else{
+            url = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/User/${artisanId}/ProfilePics/${photo}"
+        }
 
-            ImageSetter.setImage(requireContext(),url!!,mBinding?.logo!!,R.drawable.artisan_logo_placeholder
+        mBinding?.brandDesc?.text = "By $artisanName"
+
+        ImageSetter.setImage(requireContext(),url!!,mBinding?.logo!!,R.drawable.artisan_logo_placeholder
                 ,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
 
         initializeView()
@@ -109,20 +118,20 @@ class BrandProdListFragment : Fragment() {
                 }
             }
         }else{
-            var filteredList = ProductPredicates.getFilteredBrandProductsFromId(artisanId,filterBy)
-            mProduct.clear()
-            if (filteredList != null) {
-                for (size in filteredList){
-                    Log.i("Stat","$size")
-                    var artisanId = size.artisanId
-                    var productId = size.productId
-                    var productTitle = size.productTag
-                    var status =size.productStatusId
-                    var desc = size.product_spe
-                    var prod = ProductCard(artisanId,productId,productTitle,desc,status)
-                    mProduct.add(prod)
-                }
-            }
+//            var filteredList = ProductPredicates.getFilteredBrandProductsFromId(artisanId,filterBy)
+//            mProduct.clear()
+//            if (filteredList != null) {
+//                for (size in filteredList){
+//                    Log.i("Stat","$size")
+//                    var artisanId = size.artisanId
+//                    var productId = size.productId
+//                    var productTitle = size.productTag
+//                    var status =size.productStatusId
+//                    var desc = size.product_spe
+//                    var prod = ProductCard(artisanId,productId,productTitle,desc,status)
+//                    mProduct.add(prod)
+//                }
+//            }
         }
     }
 

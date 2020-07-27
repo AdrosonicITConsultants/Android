@@ -1,5 +1,6 @@
 package com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts
 
+
 data class AllProductsResponse (
     val data: List<Product>,
     val valid: Boolean,

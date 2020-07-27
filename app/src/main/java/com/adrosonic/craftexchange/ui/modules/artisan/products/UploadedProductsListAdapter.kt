@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
@@ -42,12 +43,18 @@ class UploadedProductsListAdapter(var context: Context?, private var artisanProd
             1.toLong() -> {
                 status = context?.getString(R.string.in_stock)
                 holder.binding.availabilityText.text = status
-                holder.binding.availabilityText.resources.getColor(R.color.dark_magenta)
+                context?.let {
+                    ContextCompat.getColor(
+                        it, R.color.dark_green)
+                }?.let { holder.binding.availabilityText.setTextColor(it) }
             }
             2.toLong() -> {
                 status = context?.getString(R.string.exc_made_to_order)
                 holder.binding.availabilityText.text = status
-                holder.binding.availabilityText.resources.getColor(R.color.dark_green)
+                context?.let {
+                    ContextCompat.getColor(
+                        it, R.color.dark_magenta)
+                }?.let { holder.binding.availabilityText.setTextColor(it) }
             }
         }
 //        product.productImageId?.let { holder.binding.prodImg.setImageResource(it) }

@@ -9,14 +9,18 @@
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         tools:context=".ui.modules.buyer.viewProducts.productlists.BrandProdListFragment">
+
         <ImageView
             android:id="@+id/logo"
             android:layout_width="@dimen/margin_semimedium"
             android:layout_height="@dimen/margin_semimedium"
+            android:layout_marginStart="2dp"
             android:layout_marginEnd="2dp"
-            app:layout_constraintTop_toTopOf="@+id/artisan_brand"
             app:layout_constraintBottom_toBottomOf="@+id/artisan_brand"
-            app:layout_constraintEnd_toStartOf="@+id/artisan_brand"/>
+            app:layout_constraintEnd_toStartOf="@+id/artisan_brand"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/artisan_brand" />
 
         <TextView
             android:id="@+id/artisan_brand"
@@ -26,23 +30,34 @@
             android:layout_marginTop="@dimen/margin_regular"
             android:textColor="@color/black_text"
             android:fontFamily="@font/playfair_regular"
+            android:maxLines="1"
+            android:elevation="2dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
+
+        <ImageView
+            android:id="@+id/decor_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_circle_of_life"
+            android:layout_marginStart="@dimen/margin_regular"
+            app:layout_constraintBottom_toBottomOf="@+id/artisan_brand"
+            app:layout_constraintEnd_toEndOf="@+id/artisan_brand"
+            app:layout_constraintStart_toEndOf="@+id/artisan_brand"
+            app:layout_constraintTop_toTopOf="@+id/artisan_brand" />
 
         <TextView
             android:id="@+id/brand_desc"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="@dimen/margin_small"
-            android:textSize="8sp"
-            android:textAlignment="center"
+            android:layout_marginTop="10dp"
             android:fontFamily="@font/lato_regular"
-            app:layout_constraintTop_toBottomOf="@+id/artisan_brand"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            android:textAlignment="center"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/artisan_brand"
+            app:layout_constraintStart_toStartOf="@+id/artisan_brand"
+            app:layout_constraintTop_toBottomOf="@+id/artisan_brand" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/filter_brand_card"

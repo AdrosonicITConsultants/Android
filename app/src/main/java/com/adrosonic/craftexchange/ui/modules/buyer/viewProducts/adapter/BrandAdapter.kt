@@ -12,7 +12,7 @@ import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.databinding.ItemBrandProductsBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.BrandDetails
-import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.brand.BrandProductDetailResponse
+import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.CatalogueProductsResponse
 import com.adrosonic.craftexchange.ui.interfaces.BrandProductClick
 import com.adrosonic.craftexchange.ui.modules.buyer.landing.BuyerLandingActivity
 import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.productlists.BrandProdListFragment
@@ -71,15 +71,15 @@ class BrandAdapter(var context: Context?, private var brandDetails: List<BrandDe
         CraftExchangeRepository
             .getProductService()
             .getProductsByArtisan(token,list.artisanId!!)
-            .enqueue(object : Callback, retrofit2.Callback<BrandProductDetailResponse> {
-                override fun onFailure(call: Call<BrandProductDetailResponse>, t: Throwable) {
+            .enqueue(object : Callback, retrofit2.Callback<CatalogueProductsResponse> {
+                override fun onFailure(call: Call<CatalogueProductsResponse>, t: Throwable) {
                     t.printStackTrace()
                 }
                 override fun onResponse(
-                    call: Call<BrandProductDetailResponse>, response: Response<BrandProductDetailResponse>
+                    call: Call<CatalogueProductsResponse>, response: Response<CatalogueProductsResponse>
                 ) {
                     if (response.body()?.valid == true) {
-                        ProductPredicates.insertBrandProducts(response.body())
+                        ProductPredicates.insertProductsInCatalogue(response.body())
                     } else {
                         Toast.makeText(context, "${response.body()}", Toast.LENGTH_SHORT).show()
                     }
@@ -88,8 +88,11 @@ class BrandAdapter(var context: Context?, private var brandDetails: List<BrandDe
         var bundle = Bundle()
         bundle.putString(ConstantsDirectory.ARTISAN_ID,list.artisanId.toString())
         bundle.putString(ConstantsDirectory.ARTISAN,list.firstName)
-        bundle.putString(ConstantsDirectory.BRAND_IMG_NAME,list.companyName)
-        bundle.putString(ConstantsDirectory.IMAGE_URL,url)
+        bundle.putString(ConstantsDirectory.COMP_NAME,list.companyName)
+        var logo = list.logo ?: ""
+        var photo = list.profilePic ?: ""
+        bundle.putString(ConstantsDirectory.BRAND_IMG_NAME,list.logo)
+        bundle.putString(ConstantsDirectory.PROFILE_PHOTO_NAME,photo)
         var frag2 = BrandProdListFragment()
         frag2.arguments = bundle
         var activity = context as BuyerLandingActivity

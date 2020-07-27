@@ -55,6 +55,7 @@ object ConstantsDirectory {
     const val IS_FIRST_TIME = "isfirsttime"
 
     const val CLUSTER_ID = "clusterid"
+    const val CLUSTER_NAME = "clustername"
 
     const val BRAND_LOGO = "buyerbrandlogo"
     const val BRAND_IMG_NAME = "buyerimagename"

@@ -1,11 +1,15 @@
 package com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.productlists
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 
@@ -79,7 +83,67 @@ class RegionProdListFragment : Fragment() {
     }
 
     private fun initializeView(){
+
+        var list =ProductPredicates.getAllCategoryProducts()
+        mSpinner.clear()
+        mSpinner.add("Filter by product category")
+        if (list != null) {
+            for (size in list){
+                Log.i("Stat","$size")
+                var product = size?.product
+                mSpinner.add(product!!)
+            }
+        }
+        filterSpinner(requireContext(),mSpinner,mBinding?.filterRegion)
+//        Utility.filterSpinner(requireContext(),mSpinner,mBinding?.filterRegion)
+    }
+
+    fun filterSpinner(context : Context, array : List<String>, spinner : Spinner?) {
+        var adapter= ArrayAdapter(context, android.R.layout.simple_spinner_item, array)
+        var filterBy : String
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner?.adapter = adapter
+        spinner?.onItemSelectedListener = (object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                initialList()
+                clusterProductAdapter?.setProducts(mProduct)
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                if(position > 0){
+                    filterBy = parent?.getItemAtPosition(position).toString()
+                    Log.e("spin","fil : $filterBy")
+                    var productList = ProductPredicates.getFilteredClusterProducts(clusterId,filterBy)
+                    var size = productList?.size
+                    mProduct.clear()
+                    if (productList != null) {
+                        for (size in productList){
+                            Log.i("Stat","$size")
+                            var clusterId = size.clusterId
+                            var productId = size.productId
+                            var productTitle = size.productTag
+                            var status =size.productStatusId
+                            var desc = size.product_spe
+                            var prod = ProductCard(clusterId,productId,productTitle,desc,status)
+                            mProduct.add(prod)
+                        }
+                    }
+                    clusterProductAdapter?.setProducts(mProduct)
+                }else{
+                    initialList()
+                }
+            }
+        })
+    }
+
+    fun initialList(){
         var productList = ProductPredicates.getClusterProductsFromId(clusterId)
+        var size = productList?.size
         mProduct.clear()
         if (productList != null) {
             for (size in productList){
@@ -92,19 +156,10 @@ class RegionProdListFragment : Fragment() {
                 var prod = ProductCard(clusterId,productId,productTitle,desc,status)
                 mProduct.add(prod)
             }
+            clusterProductAdapter?.setProducts(mProduct)
         }
-        var list =ProductPredicates.getAllCategoryProducts()
-        mSpinner.clear()
-        mSpinner.add("Filter by product category")
-        if (list != null) {
-            for (size in list){
-                Log.i("Stat","$size")
-                var product = size?.product
-                mSpinner.add(product!!)
-            }
-        }
-        Utility.filterSpinner(requireContext(),mSpinner,mBinding?.filterRegion)
     }
+
 
     companion object {
         fun newInstance() = RegionProdListFragment()

@@ -12,7 +12,7 @@
 
         <variable
             name="categoryDetails"
-            type="com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.ProductType"/>
+            type="com.adrosonic.craftexchange.database.entities.realmEntities.ProductCard"/>
 
         <variable
             name="brandEvent"
@@ -37,7 +37,7 @@
         android:id="@+id/product_desc_bck"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_regular">
+        android:layout_margin="8dp">
 
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
@@ -100,7 +100,6 @@
                     android:layout_marginStart="2dp"
                     android:layout_marginTop="@dimen/margin_regular"
                     android:fontFamily="@font/lato_regular"
-                    android:textColor="@color/light_green"
                     android:textSize="10sp"
                     app:layout_constraintEnd_toStartOf="@+id/wishlist_button"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -120,14 +119,23 @@
                     app:layout_constraintStart_toStartOf="@+id/design_logo"
                     app:layout_constraintTop_toBottomOf="@+id/product_available_text" />
 
+                <View
+                    android:id="@+id/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/lighter_gray"
+                    android:layout_marginTop="@dimen/margin_regular"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/product_description"/>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="@dimen/margin_regular"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/product_description">
+                    app:layout_constraintTop_toBottomOf="@+id/divider">
 
                     <Button
                         android:id="@+id/btn_view_more"

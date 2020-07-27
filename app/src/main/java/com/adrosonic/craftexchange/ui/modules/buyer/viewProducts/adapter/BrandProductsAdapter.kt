@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
@@ -33,26 +34,32 @@ class BrandProductsAdapter(var context: Context?, private var brandProduct: List
     override fun getItemCount(): Int = brandProduct.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var prodproduct = brandProduct[position]
+        var product = brandProduct[position]
         var rnd = Random()
         var currentColor = Color.argb(200, rnd.nextInt(202), rnd.nextInt(256), rnd.nextInt(256))
-        holder.bind(prodproduct)
+        holder.bind(product)
         holder.binding.productDescBck.setBackgroundColor(currentColor)
-        holder.binding.productTitle.text = prodproduct.productTitle
+        holder.binding.productTitle.text = product.productTitle
         var status : String ?= ""
-        when(prodproduct.statusId){
+        when(product.statusId){
             1.toLong() -> {
                 status = ConstantsDirectory.AVAILABLE_IN_STOCK
                 holder.binding.productAvailableText.text = status
-                holder.binding.productAvailableText.resources.getColor(R.color.light_green)
+                context?.let {
+                    ContextCompat.getColor(
+                        it, R.color.light_green)
+                }?.let { holder.binding.productAvailableText.setTextColor(it) }
             }
             2.toLong() -> {
                 status = ConstantsDirectory.MADE_TO_ORDER
                 holder.binding.productAvailableText.text = status
-                holder.binding.productAvailableText.resources.getColor(R.color.dark_orange)
+                context?.let {
+                    ContextCompat.getColor(
+                        it, R.color.dark_orange)
+                }?.let { holder.binding.productAvailableText.setTextColor(it) }
             }
         }
-        holder.binding.productDescription.text = prodproduct.productDescription
+        holder.binding.productDescription.text = product.productDescription
 
 //        holder.binding.prodImg.setBackgroundColor(currentColor) // TODO : to be commented later
 //        holder.binding.prodText.text= product.productDesc

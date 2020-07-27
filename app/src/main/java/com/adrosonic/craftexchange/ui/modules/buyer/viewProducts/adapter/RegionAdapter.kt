@@ -11,8 +11,8 @@ import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.databinding.ItemRegionProductBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
+import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.CatalogueProductsResponse
 import com.adrosonic.craftexchange.repository.data.response.clusterResponse.Cluster
-import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.cluster.ClusterProductDetailResponse
 import com.adrosonic.craftexchange.ui.interfaces.ClusterProductClick
 import com.adrosonic.craftexchange.ui.modules.buyer.landing.BuyerLandingActivity
 import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.productlists.RegionProdListFragment
@@ -59,15 +59,15 @@ class RegionAdapter(var context: Context?, private var regionProducts: List<Clus
         CraftExchangeRepository
             .getProductService()
             .getProductByCluster(token,list.id)
-            .enqueue(object : Callback, retrofit2.Callback<ClusterProductDetailResponse> {
-                override fun onFailure(call: Call<ClusterProductDetailResponse>, t: Throwable) {
+            .enqueue(object : Callback, retrofit2.Callback<CatalogueProductsResponse> {
+                override fun onFailure(call: Call<CatalogueProductsResponse>, t: Throwable) {
                     t.printStackTrace()
                 }
                 override fun onResponse(
-                    call: Call<ClusterProductDetailResponse>, response: Response<ClusterProductDetailResponse>
+                    call: Call<CatalogueProductsResponse>, response: Response<CatalogueProductsResponse>
                 ) {
                     if (response.body()?.valid == true) {
-                        ProductPredicates.insertClusterProducts(response.body())
+                        ProductPredicates.insertProductsInCatalogue(response.body())
                     } else {
                         Toast.makeText(context, "${response.body()}", Toast.LENGTH_SHORT).show()
                     }

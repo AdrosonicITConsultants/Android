@@ -2,8 +2,7 @@ package com.adrosonic.craftexchange.database
 
 import com.adrosonic.craftexchange.database.entities.ArtisanProductCategory
 import com.adrosonic.craftexchange.database.entities.realmEntities.*
-import com.adrosonic.craftexchange.database.entities.realmEntities.brandProducts.BrandList
-import com.adrosonic.craftexchange.database.entities.realmEntities.brandProducts.BrandProducts
+import com.adrosonic.craftexchange.database.entities.realmEntities.BrandList
 import io.realm.annotations.RealmModule
 
 
@@ -12,13 +11,12 @@ import io.realm.annotations.RealmModule
     CraftUser::class,
     PaymentAccount::class,
     ArtisanProducts::class,
-    BrandProducts::class,
     BrandList::class,
     CategoryProducts::class,
-    ClusterProducts::class,
     ProductDimens::class,
     ArtisanProductCategory::class,
-    ClusterList::class
+    ClusterList::class,
+    ProductCatalogue::class
 ])
 class CXRealmModule {
 }

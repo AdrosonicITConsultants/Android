@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrosonic.craftexchange.R
+import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCard
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.databinding.FragmentCategoryProdListBinding
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.ProductType
@@ -34,7 +35,8 @@ class CategoryProdListFragment : Fragment() {
     private var mBinding: FragmentCategoryProdListBinding ?= null
 
     var productType : String ?= ""
-    private var mProduct = mutableListOf<ProductType>()
+    var categoryId : Long ?= 0
+    private var mProduct = mutableListOf<ProductCard>()
     private var catProdAdapter: CategoryProductsAdapter?= null
     private var mSpinner = mutableListOf<String>()
     private var mClusterList = mutableListOf<Pair<Long?,String?>>()
@@ -55,9 +57,9 @@ class CategoryProdListFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_category_prod_list, container, false)
-        var type = this.requireArguments().getString(ConstantsDirectory.VIEW_PROD_OF)
-        productType = type
-        mBinding?.productType?.text = type
+        productType = this.requireArguments().getString(ConstantsDirectory.VIEW_PROD_OF)
+        categoryId = this.requireArguments().getString(ConstantsDirectory.PRODUCT_CATEGORY_ID)?.toLong()
+        mBinding?.productType?.text = productType
         initializeView()
         catProdAdapter = CategoryProductsAdapter(requireContext(),mProduct)
         return mBinding?.root
@@ -78,21 +80,18 @@ class CategoryProdListFragment : Fragment() {
     }
 
     private fun initializeView(){
-        var productList = ProductPredicates.getProductsFromType(productType)
+        var productList = ProductPredicates.getCategoryProductsFromId(categoryId)
         mProduct.clear()
         if (productList != null) {
             for (size in productList){
                 Log.i("Stat","$size")
-                var productid = size.productid
-                var productType = size.product
-                var subProductid = size.subProductid
-                var subProduct= size.subProduct
-                var product =
-                    ProductType(
-                        subProductid!!, subProduct!!, productid, emptyList(),
-                        emptyList(), emptyList()
-                    )
-                mProduct.add(product)
+                var artisanId = size.artisanId
+                var productId = size.productId
+                var productTitle = size.productTag
+                var status =size.productStatusId
+                var desc = size.product_spe
+                var prod = ProductCard(artisanId,productId,productTitle,desc,status)
+                mProduct.add(prod)
             }
         }
 

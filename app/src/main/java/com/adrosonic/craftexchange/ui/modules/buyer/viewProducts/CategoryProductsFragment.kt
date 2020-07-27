@@ -16,7 +16,7 @@ import com.adrosonic.craftexchange.databinding.FragmentCategoryProductsBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.AllProductsResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.Product
-import com.adrosonic.craftexchange.ui.modules.viewProducts.adapter.CategoryAdapter
+import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.adapter.CategoryAdapter
 import com.adrosonic.craftexchange.utils.Utility
 import retrofit2.Call
 import retrofit2.Response
@@ -100,15 +100,9 @@ class CategoryProductsFragment : Fragment() {
         if (prodList != null) {
             for (prodsize in prodList){
                 Log.i("Stat","$prodsize")
-                var id = prodsize?.productid
+                var id = prodsize?.productCategoryid
                 var productType = prodsize?.product
-                var product =
-                    Product(
-                        id!!,
-                        productType!!,
-                        "",
-                        emptyList()
-                    )
+                var product = Product(id!!, productType!!, "", emptyList())
                 mProduct.add(product)
             }
         }

@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
@@ -12,6 +13,7 @@ import com.adrosonic.craftexchange.databinding.ItemProductDescListBinding
 import com.adrosonic.craftexchange.repository.data.response.clusterResponse.Cluster
 import com.adrosonic.craftexchange.ui.interfaces.ClusterProductClick
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.adrosonic.craftexchange.utils.Utility
 import java.util.*
 
 class RegionProductsAdapter(var context: Context?, private var regionProduct: List<ProductCard>) : RecyclerView.Adapter<RegionProductsAdapter.ViewHolder>(),
@@ -44,12 +46,18 @@ class RegionProductsAdapter(var context: Context?, private var regionProduct: Li
             1.toLong() -> {
                 status = ConstantsDirectory.AVAILABLE_IN_STOCK
                 holder.binding.productAvailableText.text = status
-                holder.binding.productAvailableText.resources.getColor(R.color.light_green)
+                context?.let {
+                    ContextCompat.getColor(
+                        it, R.color.light_green)
+                }?.let { holder.binding.productAvailableText.setTextColor(it) }
             }
             2.toLong() -> {
                 status = ConstantsDirectory.MADE_TO_ORDER
                 holder.binding.productAvailableText.text = status
-                holder.binding.productAvailableText.resources.getColor(R.color.dark_orange)
+                context?.let {
+                    ContextCompat.getColor(
+                        it, R.color.dark_orange)
+                }?.let { holder.binding.productAvailableText.setTextColor(it) }
             }
         }
         holder.binding.productDescription.text = product.productDescription
@@ -67,7 +75,7 @@ class RegionProductsAdapter(var context: Context?, private var regionProduct: Li
     fun performFilter(filter : String?){}
 
     override fun onItemClick(list: Cluster) {
-        TODO("Not yet implemented")
+
     }
 
 }
