@@ -16,7 +16,8 @@ import io.realm.annotations.RealmModule
     ProductDimens::class,
     ArtisanProductCategory::class,
     ClusterList::class,
-    ProductCatalogue::class
+    ProductCatalogue::class,
+    ProductImages::class
 ])
 class CXRealmModule {
 }

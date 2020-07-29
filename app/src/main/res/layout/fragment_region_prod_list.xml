@@ -36,10 +36,11 @@
             android:id="@+id/product_type_desc"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="@dimen/margin_semimedium"
+            android:layout_marginEnd="@dimen/margin_semimedium"
             android:layout_marginTop="10dp"
-            android:textSize="8sp"
+            android:textSize="12sp"
+            android:textStyle="italic"
             android:textAlignment="center"
             android:fontFamily="@font/lato_regular"
             app:layout_constraintTop_toBottomOf="@+id/product_type"
@@ -69,6 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="6dp"
+            android:background="@color/lighter_gray"
             app:layout_constraintTop_toBottomOf="@+id/filter_region_card"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
@@ -76,7 +78,6 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="@dimen/margin_regular"
             android:fillViewport="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -88,8 +89,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/region_prod_recycler_list"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp" />
+                android:layout_height="wrap_content"/>
 
         </androidx.core.widget.NestedScrollView>
 

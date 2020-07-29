@@ -87,13 +87,13 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
         toggle.syncState()
 
         var firstname = Prefs.getString(ConstantsDirectory.FIRST_NAME,"Craft")
-        var lastname = Prefs.getString(ConstantsDirectory.LAST_NAME,"User")
-
-        var username = "$firstname $lastname"
+//        var lastname = Prefs.getString(ConstantsDirectory.LAST_NAME,"User")
+//
+//        var username = "$firstname $lastname""
 
         mBinding?.navView?.setNavigationItemSelectedListener(this)
 //        mBinding?.navView?.menu?.getItem(0)?.isChecked = false
-        nav_view.getHeaderView(0).text_user.text = username
+        nav_view.getHeaderView(0).text_user.text = firstname
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()

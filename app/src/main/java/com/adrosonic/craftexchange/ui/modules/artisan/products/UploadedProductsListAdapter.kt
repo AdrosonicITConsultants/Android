@@ -1,7 +1,11 @@
 package com.adrosonic.craftexchange.ui.modules.artisan.products
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -9,11 +13,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCard
+import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.databinding.ItemArtisanProductBinding
 import com.adrosonic.craftexchange.databinding.ItemArtisanProductCategoryBinding
 import com.adrosonic.craftexchange.ui.interfaces.ArtisanProductClick
 import com.adrosonic.craftexchange.ui.modules.artisan.landing.ArtisanLandingActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.adrosonic.craftexchange.utils.ImageSetter
 
 class UploadedProductsListAdapter(var context: Context?, private var artisanProducts: List<ProductCard>) : RecyclerView.Adapter<UploadedProductsListAdapter.ViewHolder>(){
 
@@ -40,7 +46,7 @@ class UploadedProductsListAdapter(var context: Context?, private var artisanProd
         holder.binding.productDescription.text = product.productDescription
         var status : String ?= ""
         when(product.statusId){
-            1.toLong() -> {
+            2.toLong() -> {
                 status = context?.getString(R.string.in_stock)
                 holder.binding.availabilityText.text = status
                 context?.let {
@@ -48,15 +54,26 @@ class UploadedProductsListAdapter(var context: Context?, private var artisanProd
                         it, R.color.dark_green)
                 }?.let { holder.binding.availabilityText.setTextColor(it) }
             }
-            2.toLong() -> {
-                status = context?.getString(R.string.exc_made_to_order)
+            1.toLong() -> {
+                status = context?.getString(R.string.exclusively)
+                var mto = SpannableString(ConstantsDirectory.MADE_TO_ORDER)
+                mto.setSpan(context?.let { ContextCompat.getColor(it,R.color.light_green) }?.let {
+                    ForegroundColorSpan(
+                        it
+                    )
+                }, 0, mto.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 holder.binding.availabilityText.text = status
+                holder.binding.availabilityText.append(mto)
                 context?.let {
                     ContextCompat.getColor(
                         it, R.color.dark_magenta)
                 }?.let { holder.binding.availabilityText.setTextColor(it) }
             }
         }
+
+        var image = ProductPredicates.getProductDisplayImage(product.productId)
+        var url = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/Product/${product.productId}/${image?.imageName}"
+        context?.let { ImageSetter.setImage(it,url,holder.binding.productImage) }
 //        product.productImageId?.let { holder.binding.prodImg.setImageResource(it) }
     }
 

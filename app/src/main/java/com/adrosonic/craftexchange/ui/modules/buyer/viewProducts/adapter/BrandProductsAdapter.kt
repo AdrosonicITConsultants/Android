@@ -1,7 +1,9 @@
 package com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -9,18 +11,20 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCard
+import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.databinding.ItemProductDescListBinding
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.BrandDetails
 import com.adrosonic.craftexchange.ui.interfaces.BrandProductClick
+import com.adrosonic.craftexchange.ui.modules.buyer.productDetails.catalogueProductDetailsIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.adrosonic.craftexchange.utils.ImageSetter
 import java.util.*
 
-class BrandProductsAdapter(var context: Context?, private var brandProduct: List<ProductCard>) : RecyclerView.Adapter<BrandProductsAdapter.ViewHolder>(),BrandProductClick{
+class BrandProductsAdapter(var context: Context?, private var brandProduct: List<ProductCard>) : RecyclerView.Adapter<BrandProductsAdapter.ViewHolder>(){
 
     inner class ViewHolder(val binding: ItemProductDescListBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(brandProduct: ProductCard){
             binding.brandProducts = brandProduct
-            binding.brandEvent = this@BrandProductsAdapter
             binding.executePendingBindings()
         }
     }
@@ -38,11 +42,11 @@ class BrandProductsAdapter(var context: Context?, private var brandProduct: List
         var rnd = Random()
         var currentColor = Color.argb(200, rnd.nextInt(202), rnd.nextInt(256), rnd.nextInt(256))
         holder.bind(product)
-        holder.binding.productDescBck.setBackgroundColor(currentColor)
+//        holder.binding.productDescBck.setBackgroundColor(currentColor)
         holder.binding.productTitle.text = product.productTitle
         var status : String ?= ""
         when(product.statusId){
-            1.toLong() -> {
+            2.toLong() -> {
                 status = ConstantsDirectory.AVAILABLE_IN_STOCK
                 holder.binding.productAvailableText.text = status
                 context?.let {
@@ -50,7 +54,7 @@ class BrandProductsAdapter(var context: Context?, private var brandProduct: List
                         it, R.color.light_green)
                 }?.let { holder.binding.productAvailableText.setTextColor(it) }
             }
-            2.toLong() -> {
+            1.toLong() -> {
                 status = ConstantsDirectory.MADE_TO_ORDER
                 holder.binding.productAvailableText.text = status
                 context?.let {
@@ -61,24 +65,28 @@ class BrandProductsAdapter(var context: Context?, private var brandProduct: List
         }
         holder.binding.productDescription.text = product.productDescription
 
+        var image = ProductPredicates.getProductDisplayImage(product.productId)
+        var url = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/Product/${product.productId}/${image?.imageName}"
+        context?.let { ImageSetter.setImage(it,url,holder.binding.productImage) }
+
+        holder.binding.btnViewMore.setOnClickListener {
+            val intent = Intent(context?.catalogueProductDetailsIntent())
+            val bundle = Bundle()
+            bundle.putString(ConstantsDirectory.PRODUCT_ID, product.productId?.toString())
+            intent.putExtras(bundle)
+            context?.startActivity(intent)
+        }
 //        holder.binding.prodImg.setBackgroundColor(currentColor) // TODO : to be commented later
 //        holder.binding.prodText.text= product.productDesc
         //TODO : Img to be Implemented using CMS
 //        product.productImageId?.let { holder.binding.prodImg.setImageResource(it) }
     }
 
-    fun filterList(filterId : Long?){
-
-    }
 
     internal fun setProducts(brandProduct: List<ProductCard>) {
         this.brandProduct = brandProduct
         notifyDataSetChanged()
     }
 
-
-    override fun onItemClick(list: BrandDetails) {
-        TODO("Not yet implemented")
-    }
 
 }

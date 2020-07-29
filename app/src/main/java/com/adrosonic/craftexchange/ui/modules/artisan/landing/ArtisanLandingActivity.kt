@@ -93,12 +93,12 @@ class ArtisanLandingActivity : AppCompatActivity(), NavigationView.OnNavigationI
         toggle.syncState()
 
         var firstname = Prefs.getString(ConstantsDirectory.FIRST_NAME,"Craft")
-        var lastname = Prefs.getString(ConstantsDirectory.LAST_NAME,"User")
+//        var lastname = Prefs.getString(ConstantsDirectory.LAST_NAME,"User")
 
-        var username = "$firstname $lastname"
+//        var username = "$firstname $lastname"
 
         mBinding?.navView?.setNavigationItemSelectedListener(this)
-        nav_view.getHeaderView(0).text_user.text = username
+        nav_view.getHeaderView(0).text_user.text = firstname
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()

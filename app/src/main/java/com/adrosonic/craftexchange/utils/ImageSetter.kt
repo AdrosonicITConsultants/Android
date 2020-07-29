@@ -24,8 +24,13 @@ object ImageSetter {
         {
             Glide.with(context)
                 .load(imagePath) // it can be a remote URL or a local absolute file path.
+                .apply(
+                    RequestOptions()
+                        .centerCrop()
+                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                        .override(Target.SIZE_ORIGINAL))
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                .priority(Priority.IMMEDIATE)
+//                .priority(Priority.IMMEDIATE)
                 .skipMemoryCache(false)
                 .dontAnimate()
                 .into(imageView)

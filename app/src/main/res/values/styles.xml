@@ -74,16 +74,20 @@
         <item name="android:fontFamily">@font/playfair_regular</item>
         <item name="android:textStyle">bold</item>
     </style>
+
     <style name="artisan_viewprod_tab_text" parent="TextAppearance.Design.Tab">
         <item name="android:fontFamily">@font/lato_regular</item>
-        <item name="android:textStyle">bold</item>
         <item name="android:textAllCaps">false</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
-    <style name="dark_spinner" parent="android:Widget.Spinner">
-        <item name="backgroundColor">@color/black_text</item>
+    <style name="dark_spinner_item" parent="@android:style/Widget.TextView">
         <item name="android:textColor">@color/white_text</item>
+        <item name="android:background">@color/black_text</item>
         <item name="fontFamily">@font/lato_regular</item>
+        <item name="paddingStart">@dimen/margin_regular</item>
+        <item name="android:gravity">center_vertical|end</item>
     </style>
 
 </resources>

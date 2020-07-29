@@ -8,6 +8,7 @@ import com.adrosonic.craftexchange.database.entities.realmEntities.BrandList
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.ArtisanProductDetailsResponse
 import com.adrosonic.craftexchange.repository.data.response.artisan.profile.ProfileResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.AllProductsResponse
+import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.BrandDetails
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.BrandListResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.BrandProductDetailResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.CatalogueProductsResponse
@@ -701,6 +702,41 @@ class ProductPredicates {
 
                                 realm.copyToRealmOrUpdate(productObj)
                             }
+
+                            var imageList = catalogueProduct?.productImages
+                            var imageItr = imageList?.iterator()
+                            if(imageItr!=null){
+                                while (imageItr.hasNext()){
+                                    var image = imageItr.next()
+
+                                    var imageObj = realm.where(ProductImages::class.java)
+                                        .equalTo("imageId",image.id)
+                                        .limit(1)
+                                        .findFirst()
+                                    if(imageObj == null){
+                                        var primId = it.where(ProductImages::class.java).max("_id")
+                                        if (primId == null) {
+                                            nextID = 1
+                                        } else {
+                                            nextID = primId.toLong() + 1
+                                        }
+                                        var eximg = it.createObject(ProductImages::class.java, nextID)
+                                        eximg.productId = image?.productId
+                                        eximg.imageId = image?.id
+                                        eximg.imageName = image?.lable
+
+                                        realm.copyToRealmOrUpdate(eximg)
+                                    }else{
+                                        nextID = imageObj?._id ?: 0
+                                        imageObj?.productId = image?.productId
+                                        imageObj?.imageId = image?.id
+                                        imageObj?.imageName = image?.lable
+
+                                        realm.copyToRealmOrUpdate(imageObj)
+                                    }
+
+                                }
+                            }
                         }
                     }
                 }
@@ -872,6 +908,41 @@ class ProductPredicates {
 
                                         realm.copyToRealmOrUpdate(productObj)
                                     }
+
+                                    var imageList = brandProduct?.productImages
+                                    var imageItr = imageList?.iterator()
+                                    if(imageItr!=null){
+                                        while (imageItr.hasNext()){
+                                            var image = imageItr.next()
+
+                                            var imageObj = realm.where(ProductImages::class.java)
+                                                .equalTo("imageId",image.id)
+                                                .limit(1)
+                                                .findFirst()
+                                            if(imageObj == null){
+                                                var primId = it.where(ProductImages::class.java).max("_id")
+                                                if (primId == null) {
+                                                    nextID = 1
+                                                } else {
+                                                    nextID = primId.toLong() + 1
+                                                }
+                                                var eximg = it.createObject(ProductImages::class.java, nextID)
+                                                eximg.productId = image?.productId
+                                                eximg.imageId = image?.id
+                                                eximg.imageName = image?.lable
+
+                                                realm.copyToRealmOrUpdate(eximg)
+                                            }else{
+                                                nextID = imageObj?._id ?: 0
+                                                imageObj?.productId = image?.productId
+                                                imageObj?.imageId = image?.id
+                                                imageObj?.imageName = image?.lable
+
+                                                realm.copyToRealmOrUpdate(imageObj)
+                                            }
+
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -923,6 +994,22 @@ class ProductPredicates {
             return realm.where(ProductCatalogue::class.java).equalTo("artisanId",artisanId).findAll()
         }
 
+        fun getFilteredBrands(clusterId : Long?): RealmResults<BrandList>? {
+            val realm = CXRealmManager.getRealmInstance()
+            return realm.where(BrandList::class.java)
+                .equalTo("clusterId",clusterId)
+                .findAll()
+        }
+
+        fun getFilteredBrandProducts(artisanId : Long?,category : String?): RealmResults<ProductCatalogue>? {
+            val realm = CXRealmManager.getRealmInstance()
+            return realm.where(ProductCatalogue::class.java)
+                .equalTo("artisanId",artisanId)
+                .and()
+                .equalTo("productCategoryName",category)
+                .findAll()
+        }
+
         fun getClusterProductsFromId(clusterId : Long?): RealmResults<ProductCatalogue>? {
             val realm = CXRealmManager.getRealmInstance()
             return realm.where(ProductCatalogue::class.java).equalTo("clusterId",clusterId).findAll()
@@ -942,6 +1029,15 @@ class ProductPredicates {
             return realm.where(ProductCatalogue::class.java).equalTo("productCategoryId",categoryId).findAll()
         }
 
+        fun getFilteredCategoryProducts(categoryId : Long?,category : String?): RealmResults<ProductCatalogue>? {
+            val realm = CXRealmManager.getRealmInstance()
+            return realm.where(ProductCatalogue::class.java)
+                .equalTo("productCategoryId",categoryId)
+                .and()
+                .equalTo("clusterName",category)
+                .findAll()
+        }
+
         fun getProductCategoriesOfArtisan(artisanId : Long?) : RealmResults<ArtisanProducts>?{
             val realm = CXRealmManager.getRealmInstance()
             return realm.where(ArtisanProducts::class.java)
@@ -959,6 +1055,22 @@ class ProductPredicates {
                 .findAll()
         }
 
+        fun getFilteredUploadedProducts(artisanId : Long?,category : String?) : RealmResults<ArtisanProducts>?{
+            val realm = CXRealmManager.getRealmInstance()
+            return realm.where(ArtisanProducts::class.java)
+                .equalTo("artisanId",artisanId)
+                .and()
+                .equalTo("productCategoryDesc",category)
+                .findAll()
+        }
+
+        fun getProductDisplayImage(productId:Long?): ProductImages? {
+            val realm = CXRealmManager.getRealmInstance()
+            return realm.where(ProductImages::class.java)
+                .equalTo("productId",productId)
+                .limit(1)
+                .findFirst()
+        }
 //        fun filterBrandProducts(artisanId: Long?,filter : Long?) : RealmResults<BrandProducts>?{
 //            var realm = Realm.getDefaultInstance()
 ////            return realm.where(BrandProducts::class.java).equalTo("")

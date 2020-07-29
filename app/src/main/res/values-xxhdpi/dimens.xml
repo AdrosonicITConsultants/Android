@@ -22,4 +22,9 @@
 	<dimen name="imageview_dim">120dp</dimen>
 	<dimen name="profile_img">100dp</dimen>
 	<dimen name="product_card_height">110dp</dimen>
+	<dimen name="product_title_text">22sp</dimen>
+	<dimen name="product_description_text">18sp</dimen>
+	<dimen name="product_note_text">15sp</dimen>
+	<dimen name="product_availability_text">12sp</dimen>
+	<dimen name="cat_prod_image_width">90dp</dimen>
 </resources>

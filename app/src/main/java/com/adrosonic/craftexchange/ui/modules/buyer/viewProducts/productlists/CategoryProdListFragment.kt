@@ -1,10 +1,14 @@
 package com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.productlists
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,10 +16,8 @@ import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCard
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.databinding.FragmentCategoryProdListBinding
-import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.ProductType
 import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.adapter.CategoryProductsAdapter
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
-import com.adrosonic.craftexchange.utils.Utility
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -80,6 +82,66 @@ class CategoryProdListFragment : Fragment() {
     }
 
     private fun initializeView(){
+        var clusterList = ProductPredicates.getAllClusters()
+        mSpinner.clear()
+        mSpinner.add("Filter by Region")
+        if (clusterList != null) {
+            for (size in clusterList){
+                Log.i("Stat","$size")
+                var cluster = size?.cluster
+                var clusterId = size?.clusterid
+                mSpinner.add(cluster!!)
+                mClusterList.add(Pair(clusterId,cluster))
+            }
+        }
+        filterSpinner(requireContext(),mSpinner,mBinding?.filterProduct)
+    }
+
+    fun filterSpinner(context : Context, array : List<String>, spinner : Spinner?) {
+        var adapter= ArrayAdapter(context, android.R.layout.simple_spinner_item, array)
+        var filterBy : String
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner?.adapter = adapter
+        spinner?.onItemSelectedListener = (object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                initialList()
+                catProdAdapter?.setProducts(mProduct)
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                if(position > 0){
+                    filterBy = parent?.getItemAtPosition(position).toString()
+                    Log.e("spin","fil : $filterBy")
+                    var productList = ProductPredicates.getFilteredCategoryProducts(categoryId,filterBy)
+                    var size = productList?.size
+                    mProduct.clear()
+                    if (productList != null) {
+                        for (size in productList){
+                            Log.i("Stat","$size")
+                            var clusterId = size.clusterId
+                            var productId = size.productId
+                            var productTitle = size.productTag
+                            var status =size.productStatusId
+                            var desc = size.product_spe
+                            var prod = ProductCard(clusterId,productId,productTitle,desc,status)
+                            mProduct.add(prod)
+                        }
+                    }
+                    catProdAdapter?.setProducts(mProduct)
+                }else{
+                    initialList()
+                }
+            }
+        })
+    }
+
+
+    fun initialList(){
         var productList = ProductPredicates.getCategoryProductsFromId(categoryId)
         mProduct.clear()
         if (productList != null) {
@@ -93,21 +155,8 @@ class CategoryProdListFragment : Fragment() {
                 var prod = ProductCard(artisanId,productId,productTitle,desc,status)
                 mProduct.add(prod)
             }
+            catProdAdapter?.setProducts(mProduct)
         }
-
-        var clusterList = ProductPredicates.getAllClusters()
-        mSpinner.clear()
-        mSpinner.add("Filter by Region")
-        if (clusterList != null) {
-            for (size in clusterList){
-                Log.i("Stat","$size")
-                var cluster = size?.clusterDesc
-                var clusterId = size?.clusterid
-                mSpinner.add(cluster!!)
-                mClusterList.add(Pair(clusterId,cluster))
-            }
-        }
-        Utility.filterSpinner(requireContext(),mSpinner,mBinding?.filterProduct)
     }
 
     companion object {
