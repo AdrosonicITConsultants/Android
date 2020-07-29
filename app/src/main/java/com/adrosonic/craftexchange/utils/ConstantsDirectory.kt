@@ -73,7 +73,7 @@ object ConstantsDirectory {
     const val BRAND_PRODUCTS = "Brand"
 
     const val AVAILABLE_IN_STOCK = "Available In Stock"
-    const val MADE_TO_ORDER = "\nMade To Order"
+    const val MADE_TO_ORDER = "Made To Order"
     const val IMAGE_URL = "imageurl"
 
     const val FILTER = "filter"
