@@ -90,9 +90,9 @@ class BrandDetailsEditFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         var brandLogo = Utility.craftUser?.brandLogo
-        var url = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/User/${Prefs.getString(ConstantsDirectory.USER_ID,"")}/CompanyDetails/Logo/${brandLogo}"
+        var urlBrand = Utility?.getBrandLogoUrl(Prefs.getString(ConstantsDirectory.USER_ID,"").toLong(),brandLogo)
         mBinding?.changeLogoImg?.let {
-            ImageSetter.setImage(requireContext(),url, it,
+            ImageSetter.setImage(requireContext(),urlBrand, it,
                 R.drawable.buyer_logo_placeholder,R.drawable.buyer_logo_placeholder,R.drawable.buyer_logo_placeholder)
         }
     }

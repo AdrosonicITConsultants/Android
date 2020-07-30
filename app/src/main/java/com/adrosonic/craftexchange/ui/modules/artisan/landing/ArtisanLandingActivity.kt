@@ -46,7 +46,6 @@ fun Context.artisanLandingIntent(): Intent {
 
 class ArtisanLandingActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener  {
 
-
     companion object{
         const val TAG = "ArtisanLanding"
     }
@@ -67,18 +66,13 @@ class ArtisanLandingActivity : AppCompatActivity(), NavigationView.OnNavigationI
         }).execute()
 
         var profileImage = Utility.craftUser?.profilePic
-        var urlPro =
-            "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/User/${Prefs.getString(
-                ConstantsDirectory.USER_ID,
-                ""
-            )}/ProfilePics/${profileImage}"
-//            if (Utility.checkIfInternetConnected(applicationContext)) {
+        var urlPro = Utility.getProfilePhotoUrl(Prefs.getString(ConstantsDirectory.USER_ID, "").toLong(),profileImage)
         ImageSetter.setImage(applicationContext,urlPro,nav_view.getHeaderView(0).logo,
             R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
 
         mViewModel = ViewModelProviders.of(this).get(LandingViewModel::class.java)
-        mViewModel!!.getProductsOfArtisan(applicationContext)
-
+        mViewModel?.getProductsOfArtisan(applicationContext)
+        mViewModel?.getProductUploadData()
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.title = ""
@@ -96,6 +90,7 @@ class ArtisanLandingActivity : AppCompatActivity(), NavigationView.OnNavigationI
 //        var lastname = Prefs.getString(ConstantsDirectory.LAST_NAME,"User")
 
 //        var username = "$firstname $lastname"
+
 
         mBinding?.navView?.setNavigationItemSelectedListener(this)
         nav_view.getHeaderView(0).text_user.text = firstname
@@ -163,7 +158,7 @@ class ArtisanLandingActivity : AppCompatActivity(), NavigationView.OnNavigationI
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_my_profile -> {
-               startActivity(artisanProfileIntent())
+                startActivity(artisanProfileIntent())
             }
             R.id.nav_my_transactions -> {}
             R.id.nav_my_orders -> {}

@@ -67,12 +67,17 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
         }).execute()
 
 
+//        var imageName = Utility.craftUser?.brandLogo
+//        var url = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/User/${Prefs.getString(ConstantsDirectory.USER_ID,"")}/CompanyDetails/Logo/${imageName}"
+
         var imageName = Utility.craftUser?.brandLogo
-        var url = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/User/${Prefs.getString(ConstantsDirectory.USER_ID,"")}/CompanyDetails/Logo/${imageName}"
+        var url = Utility?.getBrandLogoUrl(Prefs.getString(ConstantsDirectory.USER_ID,"").toLong(),imageName)
+
         ImageSetter.setImage(applicationContext,url,nav_view.getHeaderView(0).logo,
             R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
 
         mViewModel = ViewModelProviders.of(this).get(LandingViewModel::class.java)
+        mViewModel?.getProductUploadData()
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)

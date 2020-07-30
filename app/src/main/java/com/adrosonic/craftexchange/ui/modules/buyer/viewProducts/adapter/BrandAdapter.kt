@@ -18,6 +18,7 @@ import com.adrosonic.craftexchange.ui.modules.buyer.landing.BuyerLandingActivity
 import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.productlists.BrandProdListFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
+import com.adrosonic.craftexchange.utils.Utility
 import com.pixplicity.easyprefs.library.Prefs
 import retrofit2.Call
 import retrofit2.Response
@@ -47,9 +48,9 @@ class BrandAdapter(var context: Context?, private var brandDetails: List<BrandDe
         var product = brandDetails[position]
         holder.bind(product)
         if(product.logo != null){
-            url = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/User/${product.artisanId}/CompanyDetails/Logo/${product.logo}"
+            url = Utility.getBrandLogoUrl(product.artisanId,product.logo)
         }else{
-            url = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/User/${product.artisanId}/ProfilePics/${product.profilePic}"
+            url = Utility.getProfilePhotoUrl(product.artisanId,product.profilePic)
         }
 
         ImageSetter.setImage(context!!,url!!,holder.binding.prodImg,R.drawable.artisan_logo_placeholder

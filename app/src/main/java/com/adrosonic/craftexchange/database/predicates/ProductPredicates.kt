@@ -8,11 +8,8 @@ import com.adrosonic.craftexchange.database.entities.realmEntities.BrandList
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.ArtisanProductDetailsResponse
 import com.adrosonic.craftexchange.repository.data.response.artisan.profile.ProfileResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.AllProductsResponse
-import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.BrandDetails
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.BrandListResponse
-import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.BrandProductDetailResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.CatalogueProductsResponse
-import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.ClusterProductDetailResponse
 import io.realm.RealmResults
 import java.lang.Exception
 
@@ -256,310 +253,7 @@ class ProductPredicates {
             }
         }
 
-//        fun insertBrandProducts(productList: BrandProductDetailResponse?){
-//            nextID = 0L
-//            val realm = CXRealmManager.getRealmInstance()
-//            var product = productList?.data?.products
-//
-//            try {
-//                realm.executeTransaction {
-//                    var prodItr = product?.iterator()
-//                    if (prodItr != null) {
-//                        while (prodItr.hasNext()){
-//                            var brandProduct = prodItr.next()
-//                            var productObj = realm.where(BrandProducts::class.java)
-//                                .equalTo("productId",brandProduct.id)
-//                                .limit(1)
-//                                .findFirst()
-//
-//                            if (productObj == null){
-//                                var primId = it.where(BrandProducts::class.java).max("_id")
-//                                if (primId == null) {
-//                                    nextID = 1
-//                                } else {
-//                                    nextID = primId.toLong() + 1
-//                                }
-//                                var exprod = it.createObject(BrandProducts::class.java, nextID)
-//                                exprod.artisanId = brandProduct?.artitionId
-//                                exprod.artisanName = brandProduct?.artistName
-//                                exprod.clusterId = brandProduct?.clusterId
-//                                exprod.clusterName = brandProduct?.clusterName
-//                                exprod.brandName = brandProduct?.brand
-//
-//                                exprod.productId = brandProduct?.id
-//                                exprod.productCode = brandProduct?.code
-//                                exprod.productTag = brandProduct?.tag
-//
-//                                exprod.productCategoryId = brandProduct?.productCategory?.id
-//                                exprod.productCategoryName = brandProduct?.productCategory?.productDesc
-//                                exprod.productCategoryCode = brandProduct?.productCategory?.code
-//
-//                                exprod.productTypeId = brandProduct?.productType?.id
-//                                exprod.productTypeDesc = brandProduct?.productType?.productDesc
-//                                exprod.inProductCategory = brandProduct?.productType?.productCategoryId
-//
-//                                exprod.warpYarnId = brandProduct?.warpYarn?.id
-//                                exprod.warpYarnDesc = brandProduct?.warpYarn?.yarnDesc
-//                                exprod.warpYarnTypeId = brandProduct?.warpYarn?.yarnType?.id
-//                                exprod.warpDyeId = brandProduct?.warpYarn?.id
-//                                exprod.warpDyeId = brandProduct?.warpDye?.id
-//                                exprod.warpDyeDesc = brandProduct?.warpDye?.dyeDesc
-//
-//                                exprod.weftYarnId = brandProduct?.weftYarn?.id
-//                                exprod.weftYarnDesc = brandProduct?.weftYarn?.yarnDesc
-//                                exprod.weftYarnTypeId = brandProduct?.weftYarn?.yarnType?.id
-//                                exprod.weftDyeId = brandProduct?.weftDye?.id
-//                                exprod.weftDyeDesc = brandProduct?.weftDye?.dyeDesc
-//
-//                                exprod.extraWeftYarnId = brandProduct?.extraWeftYarn?.id
-//                                exprod.extraWeftYarnDesc = brandProduct?.extraWeftYarn?.yarnDesc
-//                                exprod.extraWeftYarnTypeId = brandProduct?.extraWeftYarn?.yarnType?.id
-//                                exprod.extraWeftDyeId = brandProduct?.extraWeftDye?.id
-//                                exprod.extraWeftDyeDesc = brandProduct?.extraWeftDye?.dyeDesc
-//
-//                                exprod.productLength = brandProduct?.length
-//                                exprod.productWidth = brandProduct?.width
-//
-//                                exprod.reedCountId = brandProduct?.reedCount?.id
-//                                exprod.reedCount = brandProduct?.reedCount?.count
-//
-//                                exprod.productStatusId = brandProduct?.productStatusId
-//
-//                                //TODO : ProductCares, ProductImages and ProductWeaves...different table
-//                                //TODO : Related Product Types to be implemented later
-//
-//                                exprod.gsm = brandProduct?.gsm
-//                                exprod.weight = brandProduct?.weight
-//                                exprod.product_spe = brandProduct?.product_spe
-//
-//                                exprod.createdOn = brandProduct?.createdOn
-//                                exprod.modifiedOn = brandProduct?.modifiedOn
-//                                exprod.madeWithAntaran = brandProduct?.madeWithAnthran
-//                                exprod.isDeleted = brandProduct?.isDeleted
-//
-//                                realm.copyToRealmOrUpdate(exprod)
-//                            }else{
-//                                nextID = productObj._id ?: 0
-//                                productObj.artisanId = brandProduct?.artitionId
-//                                productObj.artisanName = brandProduct?.artistName
-//                                productObj.clusterId = brandProduct?.clusterId
-//                                productObj.clusterName = brandProduct?.clusterName
-//                                productObj.brandName = brandProduct?.brand
-//
-//                                productObj.productId = brandProduct?.id
-//                                productObj.productCode = brandProduct?.code
-//                                productObj.productTag = brandProduct?.tag
-//
-//                                productObj.productCategoryId = brandProduct?.productCategory?.id
-//                                productObj.productCategoryName = brandProduct?.productCategory?.productDesc
-//                                productObj.productCategoryCode = brandProduct?.productCategory?.code
-//
-//                                productObj.productTypeId = brandProduct?.productType?.id
-//                                productObj.productTypeDesc = brandProduct?.productType?.productDesc
-//                                productObj.inProductCategory = brandProduct?.productType?.productCategoryId
-//
-//                                productObj.warpYarnId = brandProduct?.warpYarn?.id
-//                                productObj.warpYarnDesc = brandProduct?.warpYarn?.yarnDesc
-//                                productObj.warpYarnTypeId = brandProduct?.warpYarn?.yarnType?.id
-//                                productObj.warpDyeId = brandProduct?.warpYarn.id
-//                                productObj.warpDyeId = brandProduct?.warpDye?.id
-//                                productObj.warpDyeDesc = brandProduct?.warpDye?.dyeDesc
-//
-//                                productObj.weftYarnId = brandProduct?.weftYarn?.id
-//                                productObj.weftYarnDesc = brandProduct?.weftYarn?.yarnDesc
-//                                productObj.weftYarnTypeId = brandProduct?.weftYarn?.yarnType?.id
-//                                productObj.weftDyeId = brandProduct?.weftDye?.id
-//                                productObj.weftDyeDesc = brandProduct?.weftDye?.dyeDesc
-//
-//                                productObj.extraWeftYarnId = brandProduct?.extraWeftYarn?.id
-//                                productObj.extraWeftYarnDesc = brandProduct?.extraWeftYarn?.yarnDesc
-//                                productObj.extraWeftYarnTypeId = brandProduct?.extraWeftYarn?.yarnType?.id
-//                                productObj.extraWeftDyeId = brandProduct?.extraWeftDye?.id
-//                                productObj.extraWeftDyeDesc = brandProduct?.extraWeftDye?.dyeDesc
-//
-//                                productObj.productLength = brandProduct?.length
-//                                productObj.productWidth = brandProduct?.width
-//
-//                                productObj.reedCountId = brandProduct?.reedCount?.id
-//                                productObj.reedCount = brandProduct?.reedCount?.count
-//
-//                                productObj.productStatusId = brandProduct?.productStatusId
-//
-//                                //TODO : ProductCares, ProductImages and ProductWeaves...different table
-//                                //TODO : Related Product Types to be implemented later
-//
-//                                productObj.gsm = brandProduct?.gsm
-//                                productObj.weight = brandProduct?.weight
-//                                productObj.product_spe = brandProduct?.product_spe
-//
-//                                productObj.createdOn = brandProduct?.createdOn
-//                                productObj.modifiedOn = brandProduct?.modifiedOn
-//                                productObj.madeWithAntaran = brandProduct?.madeWithAnthran
-//                                productObj.isDeleted = brandProduct?.isDeleted
-//
-//                                realm.copyToRealmOrUpdate(productObj)
-//                            }
-//                        }
-//                    }
-//                }
-//            }catch (e:Exception){
-//                Log.e("brandProdLog","$e")
-//            }
-//        }
-//
-//        fun insertClusterProducts(productList : ClusterProductDetailResponse?){
-//            nextID = 0L
-//            val realm = CXRealmManager.getRealmInstance()
-//            var product = productList?.data?.products
-//            try {
-//                realm.executeTransaction {
-//                    var prodItr = product?.iterator()
-//                    if (prodItr != null) {
-//                        while (prodItr.hasNext()){
-//                            var clusterProduct = prodItr.next()
-//                            var productObj = realm.where(ClusterProducts::class.java)
-//                                .equalTo("productId",clusterProduct.id)
-//                                .limit(1)
-//                                .findFirst()
-//
-//                            if (productObj == null){
-//                                var primId = it.where(ClusterProducts::class.java).max("_id")
-//                                if (primId == null) {
-//                                    nextID = 1
-//                                } else {
-//                                    nextID = primId.toLong() + 1
-//                                }
-//                                var exprod = it.createObject(ClusterProducts::class.java, nextID)
-//                                exprod.artisanId = clusterProduct?.artitionId
-//                                exprod.artisanName = clusterProduct?.artistName
-//                                exprod.clusterId = clusterProduct?.clusterId
-//                                exprod.clusterName = clusterProduct?.clusterName
-//                                exprod.brandName = clusterProduct?.brand
-//
-//                                exprod.productId = clusterProduct?.id
-//                                exprod.productCode = clusterProduct?.code
-//                                exprod.productTag = clusterProduct?.tag
-//
-//                                exprod.productCategoryId = clusterProduct?.productCategory?.id
-//                                exprod.productCategoryName = clusterProduct?.productCategory?.productDesc
-//                                exprod.productCategoryCode = clusterProduct?.productCategory?.code
-//
-//                                exprod.productTypeId = clusterProduct?.productType?.id
-//                                exprod.productTypeDesc = clusterProduct?.productType?.productDesc
-//                                exprod.inProductCategory = clusterProduct?.productType?.productCategoryId
-//
-//                                exprod.warpYarnId = clusterProduct?.warpYarn?.id
-//                                exprod.warpYarnDesc = clusterProduct?.warpYarn?.yarnDesc
-//                                exprod.warpYarnTypeId = clusterProduct?.warpYarn?.yarnType?.id
-//                                exprod.warpDyeId = clusterProduct?.warpYarn?.id
-//                                exprod.warpDyeId = clusterProduct?.warpDye?.id
-//                                exprod.warpDyeDesc = clusterProduct?.warpDye?.dyeDesc
-//
-//                                exprod.weftYarnId = clusterProduct?.weftYarn?.id
-//                                exprod.weftYarnDesc = clusterProduct?.weftYarn?.yarnDesc
-//                                exprod.weftYarnTypeId = clusterProduct?.weftYarn?.yarnType?.id
-//                                exprod.weftDyeId = clusterProduct?.weftDye?.id
-//                                exprod.weftDyeDesc = clusterProduct?.weftDye?.dyeDesc
-//
-//                                exprod.extraWeftYarnId = clusterProduct?.extraWeftYarn?.id
-//                                exprod.extraWeftYarnDesc = clusterProduct?.extraWeftYarn?.yarnDesc
-//                                exprod.extraWeftYarnTypeId = clusterProduct?.extraWeftYarn?.yarnType?.id
-//                                exprod.extraWeftDyeId = clusterProduct?.extraWeftDye?.id
-//                                exprod.extraWeftDyeDesc = clusterProduct?.extraWeftDye?.dyeDesc
-//
-//                                exprod.productLength = clusterProduct?.length
-//                                exprod.productWidth = clusterProduct?.width
-//
-//                                exprod.reedCountId = clusterProduct?.reedCount?.id
-//                                exprod.reedCount = clusterProduct?.reedCount?.count
-//
-//                                exprod.productStatusId = clusterProduct?.productStatusId
-//
-//                                //TODO : ProductCares, ProductImages and ProductWeaves...different table
-//                                //TODO : Related Product Types to be implemented later
-//
-//                                exprod.gsm = clusterProduct?.gsm
-//                                exprod.weight = clusterProduct?.weight
-//                                exprod.product_spe = clusterProduct?.product_spe
-//
-//                                exprod.createdOn = clusterProduct?.createdOn
-//                                exprod.modifiedOn = clusterProduct?.modifiedOn
-//                                exprod.madeWithAntaran = clusterProduct?.madeWithAnthran
-//                                exprod.isDeleted = clusterProduct?.isDeleted
-//
-//                                realm.copyToRealmOrUpdate(exprod)
-//                            }else{
-//                                nextID = productObj._id ?: 0
-//                                productObj.artisanId = clusterProduct?.artitionId
-//                                productObj.artisanName = clusterProduct?.artistName
-//                                productObj.clusterId = clusterProduct?.clusterId
-//                                productObj.clusterName = clusterProduct?.clusterName
-//                                productObj.brandName = clusterProduct?.brand
-//
-//                                productObj.productId = clusterProduct?.id
-//                                productObj.productCode = clusterProduct?.code
-//                                productObj.productTag = clusterProduct?.tag
-//
-//                                productObj.productCategoryId = clusterProduct?.productCategory?.id
-//                                productObj.productCategoryName = clusterProduct?.productCategory?.productDesc
-//                                productObj.productCategoryCode = clusterProduct?.productCategory?.code
-//
-//                                productObj.productTypeId = clusterProduct?.productType?.id
-//                                productObj.productTypeDesc = clusterProduct?.productType?.productDesc
-//                                productObj.inProductCategory = clusterProduct?.productType?.productCategoryId
-//
-//                                productObj.warpYarnId = clusterProduct?.warpYarn?.id
-//                                productObj.warpYarnDesc = clusterProduct?.warpYarn?.yarnDesc
-//                                productObj.warpYarnTypeId = clusterProduct?.warpYarn?.yarnType?.id
-//                                productObj.warpDyeId = clusterProduct?.warpYarn?.id
-//                                productObj.warpDyeId = clusterProduct?.warpDye?.id
-//                                productObj.warpDyeDesc = clusterProduct?.warpDye?.dyeDesc
-//
-//                                productObj.weftYarnId = clusterProduct?.weftYarn?.id
-//                                productObj.weftYarnDesc = clusterProduct?.weftYarn?.yarnDesc
-//                                productObj.weftYarnTypeId = clusterProduct?.weftYarn?.yarnType?.id
-//                                productObj.weftDyeId = clusterProduct?.weftDye?.id
-//                                productObj.weftDyeDesc = clusterProduct?.weftDye?.dyeDesc
-//
-//                                productObj.extraWeftYarnId = clusterProduct?.extraWeftYarn?.id
-//                                productObj.extraWeftYarnDesc = clusterProduct?.extraWeftYarn?.yarnDesc
-//                                productObj.extraWeftYarnTypeId = clusterProduct?.extraWeftYarn?.yarnType?.id
-//                                productObj.extraWeftDyeId = clusterProduct?.extraWeftDye?.id
-//                                productObj.extraWeftDyeDesc = clusterProduct?.extraWeftDye?.dyeDesc
-//
-//                                productObj.productLength = clusterProduct?.length
-//                                productObj.productWidth = clusterProduct?.width
-//
-//                                productObj.reedCountId = clusterProduct?.reedCount?.id
-//                                productObj.reedCount = clusterProduct?.reedCount?.count
-//
-//                                productObj.productStatusId = clusterProduct?.productStatusId
-//
-//                                //TODO : ProductCares, ProductImages and ProductWeaves...different table
-//                                //TODO : Related Product Types to be implemented later
-//
-//                                productObj.gsm = clusterProduct?.gsm
-//                                productObj.weight = clusterProduct?.weight
-//                                productObj.product_spe = clusterProduct?.product_spe
-//
-//                                productObj.createdOn = clusterProduct?.createdOn
-//                                productObj.modifiedOn = clusterProduct?.modifiedOn
-//                                productObj.madeWithAntaran = clusterProduct?.madeWithAnthran
-//                                productObj.isDeleted = clusterProduct?.isDeleted
-//
-//                                realm.copyToRealmOrUpdate(productObj)
-//                            }
-//                        }
-//                    }
-//                }
-//            }catch (e:Exception){
-//                Log.e("clusterProdLog","$e")
-//            }
-//        }
-
-        fun insertProductsInCatalogue(
-            productList: CatalogueProductsResponse?
-        ){
+        fun insertProductsInCatalogue(productList: CatalogueProductsResponse?){
             nextID = 0L
             val realm = CXRealmManager.getRealmInstance()
             var product = productList?.data?.products
@@ -603,20 +297,23 @@ class ProductPredicates {
 
                                 exprod.warpYarnId = catalogueProduct?.warpYarn?.id
                                 exprod.warpYarnDesc = catalogueProduct?.warpYarn?.yarnDesc
-                                exprod.warpYarnTypeId = catalogueProduct?.warpYarn?.yarnType?.id
+                                exprod.warpYarnCount = catalogueProduct?.warpYarnCount
+//                                exprod.warpYarnTypeId = catalogueProduct?.warpYarn?.yarnType?.id TODO : to be used later if required
                                 exprod.warpDyeId = catalogueProduct?.warpYarn?.id
                                 exprod.warpDyeId = catalogueProduct?.warpDye?.id
                                 exprod.warpDyeDesc = catalogueProduct?.warpDye?.dyeDesc
 
                                 exprod.weftYarnId = catalogueProduct?.weftYarn?.id
                                 exprod.weftYarnDesc = catalogueProduct?.weftYarn?.yarnDesc
-                                exprod.weftYarnTypeId = catalogueProduct?.weftYarn?.yarnType?.id
+                                exprod.weftYarnCount = catalogueProduct?.weftYarnCount
+//                                exprod.weftYarnTypeId = catalogueProduct?.weftYarn?.yarnType?.id TODO : to be used later if required
                                 exprod.weftDyeId = catalogueProduct?.weftDye?.id
                                 exprod.weftDyeDesc = catalogueProduct?.weftDye?.dyeDesc
 
                                 exprod.extraWeftYarnId = catalogueProduct?.extraWeftYarn?.id
                                 exprod.extraWeftYarnDesc = catalogueProduct?.extraWeftYarn?.yarnDesc
-                                exprod.extraWeftYarnTypeId = catalogueProduct?.extraWeftYarn?.yarnType?.id
+                                exprod.extraWeftYarnCount = catalogueProduct?.extraWeftYarnCount
+//                                exprod.extraWeftYarnTypeId = catalogueProduct?.extraWeftYarn?.yarnType?.id TODO : to be used later if required
                                 exprod.extraWeftDyeId = catalogueProduct?.extraWeftDye?.id
                                 exprod.extraWeftDyeDesc = catalogueProduct?.extraWeftDye?.dyeDesc
 
@@ -663,20 +360,23 @@ class ProductPredicates {
 
                                 productObj.warpYarnId = catalogueProduct?.warpYarn?.id
                                 productObj.warpYarnDesc = catalogueProduct?.warpYarn?.yarnDesc
-                                productObj.warpYarnTypeId = catalogueProduct?.warpYarn?.yarnType?.id
+                                productObj.warpYarnCount = catalogueProduct?.warpYarnCount
+//                                productObj.warpYarnTypeId = catalogueProduct?.warpYarn?.yarnType?.id TODO : to be used later if required
                                 productObj.warpDyeId = catalogueProduct?.warpYarn?.id
                                 productObj.warpDyeId = catalogueProduct?.warpDye?.id
                                 productObj.warpDyeDesc = catalogueProduct?.warpDye?.dyeDesc
 
                                 productObj.weftYarnId = catalogueProduct?.weftYarn?.id
                                 productObj.weftYarnDesc = catalogueProduct?.weftYarn?.yarnDesc
-                                productObj.weftYarnTypeId = catalogueProduct?.weftYarn?.yarnType?.id
+                                productObj.weftYarnCount = catalogueProduct?.weftYarnCount
+//                                productObj.weftYarnTypeId = catalogueProduct?.weftYarn?.yarnType?.id TODO : to be used later if required
                                 productObj.weftDyeId = catalogueProduct?.weftDye?.id
                                 productObj.weftDyeDesc = catalogueProduct?.weftDye?.dyeDesc
 
                                 productObj.extraWeftYarnId = catalogueProduct?.extraWeftYarn?.id
                                 productObj.extraWeftYarnDesc = catalogueProduct?.extraWeftYarn?.yarnDesc
-                                productObj.extraWeftYarnTypeId = catalogueProduct?.extraWeftYarn?.yarnType?.id
+                                productObj.extraWeftYarnCount = catalogueProduct?.extraWeftYarnCount
+//                                productObj.extraWeftYarnTypeId = catalogueProduct?.extraWeftYarn?.yarnType?.id TODO : to be used later if required
                                 productObj.extraWeftDyeId = catalogueProduct?.extraWeftDye?.id
                                 productObj.extraWeftDyeDesc = catalogueProduct?.extraWeftDye?.dyeDesc
 
@@ -737,6 +437,115 @@ class ProductPredicates {
 
                                 }
                             }
+
+                            var relatedProductList = catalogueProduct?.relProduct
+                            var prodItr = relatedProductList?.iterator()
+                            if(prodItr!=null){
+                                while (prodItr.hasNext()){
+                                    var relProduct = prodItr.next()
+
+                                    var relPoprductObj = realm.where(RelatedProducts::class.java)
+                                        .equalTo("relatedProductId",relProduct.id)
+                                        .limit(1)
+                                        .findFirst()
+                                    if(relPoprductObj == null){
+                                        var primId = it.where(RelatedProducts::class.java).max("_id")
+                                        if (primId == null) {
+                                            nextID = 1
+                                        } else {
+                                            nextID = primId.toLong() + 1
+                                        }
+                                        var exRelProd= it.createObject(RelatedProducts::class.java, nextID)
+                                        exRelProd?.inProductCategoryId = catalogueProduct?.productCategory?.id
+                                        exRelProd?.relatedToProductId = catalogueProduct?.id
+                                        exRelProd?.relatedProductId = relProduct?.id
+                                        exRelProd?.productTypeId = relProduct?.productType?.id
+                                        exRelProd?.productName = relProduct?.productType?.productDesc
+                                        exRelProd?.productLength = relProduct?.length
+                                        exRelProd?.productWidth = relProduct?.width
+                                        exRelProd?.productWeight = relProduct?.weight
+
+                                        realm?.copyToRealmOrUpdate(exRelProd)
+                                    }else{
+                                        relPoprductObj?.inProductCategoryId = catalogueProduct?.productCategory?.id
+                                        relPoprductObj?.relatedToProductId = catalogueProduct?.productType?.id
+                                        relPoprductObj?.relatedProductId = relProduct?.id
+                                        relPoprductObj?.productTypeId = relProduct?.productType?.id
+                                        relPoprductObj?.productName = relProduct?.productType?.productDesc
+                                        relPoprductObj?.productLength = relProduct?.length
+                                        relPoprductObj?.productWidth = relProduct?.width
+                                        relPoprductObj?.productWeight = relProduct?.weight
+
+                                        realm.copyToRealmOrUpdate(relPoprductObj)
+                                    }
+                                }
+                            }
+
+                            var weaveTypeList = catalogueProduct?.productWeaves
+                            var weaveTypeItr = weaveTypeList?.iterator()
+                            if(weaveTypeItr!=null){
+                                while (weaveTypeItr.hasNext()){
+                                    var weaveType = weaveTypeItr.next()
+
+                                    var weaveTypeObj = realm.where(WeaveTypes::class.java)
+                                        .equalTo("productId",weaveType.productId)
+                                        .limit(1)
+                                        .findFirst()
+                                    if(weaveTypeObj == null){
+                                        var primId = it.where(WeaveTypes::class.java).max("_id")
+                                        if (primId == null) {
+                                            nextID = 1
+                                        } else {
+                                            nextID = primId.toLong() + 1
+                                        }
+                                        var exWeaveType = it.createObject(WeaveTypes::class.java, nextID)
+                                        exWeaveType?.productId = weaveType?.productId
+                                        exWeaveType?.productWeaveId = weaveType?.id
+                                        exWeaveType?.weaveId = weaveType?.weaveId
+                                        realm.copyToRealmOrUpdate(exWeaveType)
+                                    }else{
+                                        nextID = weaveTypeObj?._id ?: 0
+                                        weaveTypeObj?.productId = weaveType?.productId
+                                        weaveTypeObj?.productWeaveId = weaveType?.id
+                                        weaveTypeObj?.weaveId = weaveType?.weaveId
+                                        realm.copyToRealmOrUpdate(weaveTypeObj)
+                                    }
+
+                                }
+                            }
+
+                            var careList = catalogueProduct?.productCares
+                            var careItr = careList?.iterator()
+                            if(careItr!=null){
+                                while (careItr.hasNext()){
+                                    var care = careItr.next()
+
+                                    var careObj = realm.where(ProductCares::class.java)
+                                        .equalTo("productId",care.productId)
+                                        .limit(1)
+                                        .findFirst()
+                                    if(careObj == null){
+                                        var primId = it.where(ProductCares::class.java).max("_id")
+                                        if (primId == null) {
+                                            nextID = 1
+                                        } else {
+                                            nextID = primId.toLong() + 1
+                                        }
+                                        var exCare = it.createObject(ProductCares::class.java, nextID)
+                                        exCare?.productId = care?.productId
+                                        exCare?.careId = care?.id
+                                        exCare?.productCareId = care?.productCareId
+                                        realm.copyToRealmOrUpdate(exCare)
+                                    }else{
+                                        nextID = careObj?._id ?: 0
+                                        careObj?.productId = care?.productId
+                                        careObj?.careId = care?.id
+                                        careObj?.productCareId = care?.productCareId
+                                        realm.copyToRealmOrUpdate(careObj)
+                                    }
+
+                                }
+                            }
                         }
                     }
                 }
@@ -744,7 +553,6 @@ class ProductPredicates {
                 Log.e("ProductCatalogueLog","$e")
             }
         }
-
 
         fun insertProductsOfArtisan(productList : ArtisanProductDetailsResponse?){
             nextID = 0L
@@ -955,9 +763,14 @@ class ProductPredicates {
 
         //TODO : GET
 
-        fun getAllBrandProducts(): RealmResults<BrandList>? {
+        fun getAllBrandDetails(): RealmResults<BrandList>? {
             val realm = CXRealmManager.getRealmInstance()
             return realm.where(BrandList::class.java).findAll()
+        }
+
+        fun getBrandDetailsFromId(artisanId : Long?): BrandList? {
+            val realm = CXRealmManager.getRealmInstance()
+            return realm.where(BrandList::class.java).equalTo("artisanId",artisanId).limit(1).findFirst()
         }
 
         fun getAllCategoryProducts(): RealmResults<CategoryProducts>? {
@@ -965,29 +778,10 @@ class ProductPredicates {
             return realm.where(CategoryProducts::class.java).distinct("product").findAll()
         }
 
-//        fun getAllClusterProducts(): RealmResults<ClusterProducts>?{
-//            val realm = CXRealmManager.getRealmInstance()
-//            return realm.where(ClusterProducts::class.java).distinct("clusterName").findAll()
-//        }
-
         fun getAllClusters(): RealmResults<ClusterList>?{
             val realm = CXRealmManager.getRealmInstance()
             return realm.where(ClusterList::class.java).findAll()
         }
-
-        fun getProductsFromType(type : String?): RealmResults<CategoryProducts>? {
-            val realm = CXRealmManager.getRealmInstance()
-            return realm.where(CategoryProducts::class.java).equalTo("product",type).findAll()
-        }
-
-//        fun getFilteredBrandProductsFromId(artisanId : Long?,filter : String?) : RealmResults<BrandProducts>?{
-//            val realm = CXRealmManager.getRealmInstance()
-//            return realm.where(BrandProducts::class.java)
-//                .equalTo("productCategoryName",filter)
-//                .and()
-//                .equalTo("artisanId",artisanId)
-//                .findAll()
-//        }
 
         fun getBrandProductsFromId(artisanId : Long?): RealmResults<ProductCatalogue>? {
             val realm = CXRealmManager.getRealmInstance()
@@ -1071,10 +865,28 @@ class ProductPredicates {
                 .limit(1)
                 .findFirst()
         }
-//        fun filterBrandProducts(artisanId: Long?,filter : Long?) : RealmResults<BrandProducts>?{
-//            var realm = Realm.getDefaultInstance()
-////            return realm.where(BrandProducts::class.java).equalTo("")
-//        }
+
+        fun getProductDetails(productId:Long?): ProductCatalogue? {
+            val realm = CXRealmManager.getRealmInstance()
+            return realm.where(ProductCatalogue::class.java)
+                .equalTo("productId", productId)
+                .limit(1)
+                .findFirst()
+        }
+
+        fun getAllProductImagesFromId(productId:Long?): RealmResults<ProductImages>? {
+            val realm = CXRealmManager.getRealmInstance()
+            return realm.where(ProductImages::class.java)
+                .equalTo("productId",productId)
+                .findAll()
+        }
+
+        fun getWeaveTypesOfProduct(productId: Long?): RealmResults<WeaveTypes>?{
+            val realm = CXRealmManager.getRealmInstance()
+            return realm.where(WeaveTypes::class.java)
+                .equalTo("productId",productId)
+                .findAll()
+        }
 
     }
 }

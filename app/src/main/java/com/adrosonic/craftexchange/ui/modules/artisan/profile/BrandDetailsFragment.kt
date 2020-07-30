@@ -14,6 +14,7 @@ import com.adrosonic.craftexchange.ui.modules.artisan.profile.editProfile.artisa
 import com.adrosonic.craftexchange.ui.modules.buyer.profile.editProfile.BrandEditFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
+import com.adrosonic.craftexchange.utils.Utility
 import com.pixplicity.easyprefs.library.Prefs
 
 private const val ARG_PARAM1 = "param1"
@@ -42,9 +43,8 @@ class BrandDetailsFragment : Fragment() {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_brand_details, container, false)
 
-        var brandLogo = craftUser?.brandLogo
-        var urlBrand = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/User/${Prefs.getString(
-            ConstantsDirectory.USER_ID,"")}/CompanyDetails/Logo/${brandLogo}"
+        var brandLogo = Utility.craftUser?.brandLogo
+        var urlBrand = Utility?.getBrandLogoUrl(Prefs.getString(ConstantsDirectory.USER_ID,"").toLong(),brandLogo)
         mBinding?.artisanBrandLogo?.let {
             ImageSetter.setImage(requireActivity(),urlBrand, it,
                 R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)

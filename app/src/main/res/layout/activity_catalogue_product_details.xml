@@ -865,6 +865,7 @@
             android:textAlignment="center"
             android:drawableEnd="@drawable/ic_arrow_right_alt_white_18dp"
             android:background="@color/black_text"
+            android:elevation="8dp"
             android:layout_marginBottom="@dimen/margin_semimedium"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

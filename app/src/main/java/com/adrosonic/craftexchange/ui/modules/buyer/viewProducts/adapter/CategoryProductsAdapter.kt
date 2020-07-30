@@ -19,6 +19,7 @@ import com.adrosonic.craftexchange.ui.interfaces.CategoryProductClick
 import com.adrosonic.craftexchange.ui.modules.buyer.productDetails.catalogueProductDetailsIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
+import com.adrosonic.craftexchange.utils.Utility
 import java.util.*
 
 
@@ -67,7 +68,7 @@ class CategoryProductsAdapter(var context: Context?, private var categoryProduct
         holder.binding.productDescription.text = product.productDescription
 
         var image = ProductPredicates.getProductDisplayImage(product.productId)
-        var url = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/Product/${product.productId}/${image?.imageName}"
+        var url = Utility.getProductsImagesUrl(product.productId,image?.imageName)
         context?.let { ImageSetter.setImage(it,url,holder.binding.productImage) }
 
         holder.binding.btnViewMore.setOnClickListener {

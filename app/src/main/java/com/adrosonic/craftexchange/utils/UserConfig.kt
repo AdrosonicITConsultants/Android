@@ -65,6 +65,9 @@ const val FILTER = "filter"
 const val PRODUCT_CATEGORY = "productcategory"
 const val PRODUCT_CATEGORY_ID = "productcategoryid"
 
+///////////////////ProductTemplateParams///////////////////////
+const val PRODUCT_UPLOAD_JSON = "product_upload_json"
+
 class UserConfig {
 
     private object Holder { val INSTANCE = UserConfig() }
@@ -391,6 +394,13 @@ class UserConfig {
         get() = Prefs.getString(PRODUCT_CATEGORY_ID,"")
         set(value) {
             Prefs.putString(PRODUCT_CATEGORY_ID, value)
+            field = value
+        }
+
+    var productUploadJson: String? = ""
+        get() = Prefs.getString(PRODUCT_UPLOAD_JSON,"")
+        set(value) {
+            Prefs.putString(PRODUCT_UPLOAD_JSON, value)
             field = value
         }
 }

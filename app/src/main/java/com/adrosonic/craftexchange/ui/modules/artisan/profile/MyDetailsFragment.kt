@@ -43,12 +43,9 @@ class MyDetailsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_details, container, false)
+
         var profileImage = Utility.craftUser?.profilePic
-        var urlPro =
-            "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/User/${Prefs.getString(
-                ConstantsDirectory.USER_ID,
-                ""
-            )}/ProfilePics/${profileImage}"
+        var urlPro = Utility.getProfilePhotoUrl(Prefs.getString(ConstantsDirectory.USER_ID, "").toLong(),profileImage)
         ImageSetter.setImageCircleProgress(requireContext(),urlPro,mBinding?.artisanProfileLogo,
             R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
 

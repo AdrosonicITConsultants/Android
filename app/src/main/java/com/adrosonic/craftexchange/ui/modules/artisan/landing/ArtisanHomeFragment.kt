@@ -43,7 +43,7 @@ class ArtisanHomeFragment : Fragment() {
         mBinding?.welcomeText?.text = welcomeText
 
         var brandLogo = Utility.craftUser?.brandLogo
-        var urlBrand = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/User/${Prefs.getString(ConstantsDirectory.USER_ID,"")}/CompanyDetails/Logo/${brandLogo}"
+        var urlBrand = Utility?.getBrandLogoUrl(Prefs.getString(ConstantsDirectory.USER_ID,"").toLong(),brandLogo)
               mBinding?.brandLogoArtisan?.let {
             ImageSetter.setImage(requireActivity(),urlBrand, it,
                 R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)

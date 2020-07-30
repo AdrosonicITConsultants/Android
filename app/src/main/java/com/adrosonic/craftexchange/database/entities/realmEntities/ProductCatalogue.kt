@@ -37,7 +37,7 @@ open class ProductCatalogue : RealmObject() {
     //warp Yan
     var warpYarnId : Long ?= 0
     var warpYarnDesc : String ? = ""
-    // TODO : var warpYarnCount
+    var warpYarnCount : String ? = ""
     var warpYarnTypeId : Long ?= 0
     var warpYarnTypeDesc : String ?= ""
     var warpDyeId : Long ?=0
@@ -46,7 +46,7 @@ open class ProductCatalogue : RealmObject() {
     //weft Yan
     var weftYarnId : Long ?= 0
     var weftYarnDesc : String ? = ""
-    // TODO : var weftYarnCount
+    var weftYarnCount : String ? = ""
     var weftYarnTypeId : Long ?= 0
     var weftYarnTypeDesc : String ?= ""
     var weftDyeId : Long ?=0
@@ -55,7 +55,7 @@ open class ProductCatalogue : RealmObject() {
     //extra weft Yan
     var extraWeftYarnId : Long ?= 0
     var extraWeftYarnDesc : String ? = ""
-    // TODO : var extraWeftYarnCount
+    var extraWeftYarnCount : String ? = ""
     var extraWeftYarnTypeId : Long ?= 0
     var extraWeftYarnTypeDesc : String ?= ""
     var extraWeftDyeId : Long ?=0

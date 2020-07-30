@@ -18,6 +18,7 @@ import com.adrosonic.craftexchange.ui.interfaces.BrandProductClick
 import com.adrosonic.craftexchange.ui.modules.buyer.productDetails.catalogueProductDetailsIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
+import com.adrosonic.craftexchange.utils.Utility
 import java.util.*
 
 class BrandProductsAdapter(var context: Context?, private var brandProduct: List<ProductCard>) : RecyclerView.Adapter<BrandProductsAdapter.ViewHolder>(){
@@ -66,7 +67,8 @@ class BrandProductsAdapter(var context: Context?, private var brandProduct: List
         holder.binding.productDescription.text = product.productDescription
 
         var image = ProductPredicates.getProductDisplayImage(product.productId)
-        var url = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/Product/${product.productId}/${image?.imageName}"
+        var url = Utility.getProductsImagesUrl(product.productId,image?.imageName)
+
         context?.let { ImageSetter.setImage(it,url,holder.binding.productImage) }
 
         holder.binding.btnViewMore.setOnClickListener {

@@ -1,5 +1,6 @@
 package com.adrosonic.craftexchange.repository.remote
 
+import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.ProductUploadData
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.ArtisanProductDetailsResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.AllProductsResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.BrandListResponse
@@ -38,4 +39,8 @@ interface ProductDao {
     @Headers("Accept: application/json")
     @GET("product/getArtitionProducts")
     fun getArtisanProducts(@Header("Authorization") token:String) : Call<ArtisanProductDetailsResponse>
+
+    @Headers("Accept: application/json")
+    @GET("product/getProductUploadData")
+    fun getProductUploadData(@Header("Authorization") token:String) : Call<ProductUploadData>
 }

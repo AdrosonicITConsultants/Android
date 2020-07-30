@@ -70,7 +70,7 @@ class RegionProductsAdapter(var context: Context?, private var regionProduct: Li
         holder.binding.productDescription.text = product.productDescription
 
         var image = ProductPredicates.getProductDisplayImage(product.productId)
-        var url = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/Product/${product.productId}/${image?.imageName}"
+        var url = Utility.getProductsImagesUrl(product.productId,image?.imageName)
         context?.let { ImageSetter.setImage(it,url,holder.binding.productImage) }
 
         holder.binding.btnViewMore.setOnClickListener {

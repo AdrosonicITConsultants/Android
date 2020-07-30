@@ -220,5 +220,17 @@ class Utility {
             }
         }
 
+        fun getBrandLogoUrl(userId : Long?, imagename : String?) : String{
+            return "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/User/${userId}/CompanyDetails/Logo/${imagename}"
+        }
+
+        fun getProfilePhotoUrl(artisanId : Long?, imagename : String?) : String{
+            return "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/User/${artisanId}/ProfilePics/${imagename}"
+        }
+
+        fun getProductsImagesUrl(productId : Long?,imagename : String?) : String{
+            return "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/Product/${productId}/${imagename}"
+        }
+
     }
 }

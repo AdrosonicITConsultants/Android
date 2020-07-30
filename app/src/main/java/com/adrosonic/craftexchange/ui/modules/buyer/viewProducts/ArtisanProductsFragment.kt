@@ -167,7 +167,7 @@ class ArtisanProductsFragment : Fragment() {
     }
 
     fun initialList(){
-        var brandList = ProductPredicates.getAllBrandProducts()
+        var brandList = ProductPredicates.getAllBrandDetails()
         mProduct.clear()
         if (brandList != null) {
             for (brandsize in brandList){
