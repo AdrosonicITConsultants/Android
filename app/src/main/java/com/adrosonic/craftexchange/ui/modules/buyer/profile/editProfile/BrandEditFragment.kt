@@ -54,9 +54,8 @@ class BrandEditFragment : Fragment() {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_brand_edit, container, false)
 
-        var brandLogo = craftUser?.brandLogo
-        var urlBrand = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/User/${Prefs.getString(
-            ConstantsDirectory.USER_ID,"")}/CompanyDetails/Logo/${brandLogo}"
+        var brandLogo = Utility.craftUser?.brandLogo
+        var urlBrand = Utility?.getBrandLogoUrl(Prefs.getString(ConstantsDirectory.USER_ID,"").toLong(),brandLogo)
         mBinding?.changeLogoImg?.let {
             ImageSetter.setImage(requireActivity(),urlBrand, it,
                 R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)

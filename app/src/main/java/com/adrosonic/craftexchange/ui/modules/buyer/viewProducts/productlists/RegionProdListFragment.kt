@@ -61,6 +61,7 @@ class RegionProdListFragment : Fragment() {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_region_prod_list, container, false)
         clusterId = this.requireArguments().getString(ConstantsDirectory.CLUSTER_ID)?.toLong()
         clusterName = this.requireArguments().getString(ConstantsDirectory.CLUSTER_PRODUCTS)
+        clusterDescription(clusterName)
         mBinding?.productType?.text = clusterName
         initializeView()
         clusterProductAdapter = RegionProductsAdapter(requireContext(),mProduct)
@@ -134,6 +135,7 @@ class RegionProdListFragment : Fragment() {
                         }
                     }
                     clusterProductAdapter?.setProducts(mProduct)
+
                 }else{
                     initialList()
                 }
@@ -160,6 +162,17 @@ class RegionProdListFragment : Fragment() {
         }
     }
 
+//TODO : to be deleted later...only for demo purpose
+    fun clusterDescription(name : String?){
+        when(name){
+            "Maniabandhan" -> {mBinding?.productTypeDesc?.text = activity?.getString(R.string.Man_text)}
+            "Gopalpur" -> {mBinding?.productTypeDesc?.text = activity?.getString(R.string.Gop_text)}
+            "Venkatagiri" -> {mBinding?.productTypeDesc?.text = activity?.getString(R.string.Ven_text)}
+            "Kamrup" -> {mBinding?.productTypeDesc?.text = activity?.getString(R.string.Kam_text)}
+            "Nalbari" -> {mBinding?.productTypeDesc?.text = activity?.getString(R.string.Nal_text)}
+            "Dimapur" -> {mBinding?.productTypeDesc?.text = activity?.getString(R.string.Dil_text)}
+        }
+    }
 
     companion object {
         fun newInstance() = RegionProdListFragment()

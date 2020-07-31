@@ -7,6 +7,6 @@ open class ClusterList : RealmObject() {
     @PrimaryKey
     var _id: Long?=0
     var clusterid: Long ?= 0
-    var clusterDesc: String ?=""
+    var cluster: String ?=""
     var adjective: String ?=""
 }

@@ -218,6 +218,17 @@ class Utility {
             }
         }
 
+        fun getBrandLogoUrl(userId : Long?, imagename : String?) : String{
+            return "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/User/${userId}/CompanyDetails/Logo/${imagename}"
+        }
+
+        fun getProfilePhotoUrl(artisanId : Long?, imagename : String?) : String{
+            return "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/User/${artisanId}/ProfilePics/${imagename}"
+        }
+
+        fun getProductsImagesUrl(productId : Long?,imagename : String?) : String{
+            return "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/Product/${productId}/${imagename}"
+        }
         fun setImageResource(context: Context?,imageView:ImageView,imageId:Int){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 imageView.setImageDrawable(context?.getResources()?.getDrawable(imageId, context?.getTheme()));

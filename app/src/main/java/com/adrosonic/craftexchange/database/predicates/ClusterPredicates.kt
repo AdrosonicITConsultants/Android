@@ -4,7 +4,6 @@ import android.util.Log
 import com.adrosonic.craftexchange.database.CXRealmManager
 import com.adrosonic.craftexchange.database.entities.realmEntities.ClusterList
 import com.adrosonic.craftexchange.repository.data.response.clusterResponse.CLusterResponse
-import io.realm.Realm
 import io.realm.RealmResults
 import java.lang.Exception
 
@@ -36,14 +35,14 @@ class ClusterPredicates {
                                 }
                                 var excluster = it.createObject(ClusterList::class.java, nextID)
                                 excluster?.clusterid = cluster.id
-                                excluster?.clusterDesc = cluster.desc
+                                excluster?.cluster = cluster.desc
                                 excluster?.adjective = cluster.adjective
 
                                 realm.copyToRealmOrUpdate(excluster)
                             }else {
                                 nextID = clusterObj._id ?: 0
                                 clusterObj?.clusterid = cluster.id
-                                clusterObj?.clusterDesc = cluster.desc
+                                clusterObj?.cluster = cluster.desc
                                 clusterObj?.adjective = cluster.adjective
 
                                 realm.copyToRealmOrUpdate(clusterObj)

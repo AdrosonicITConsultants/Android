@@ -23,6 +23,9 @@
 	<dimen name="nav_header_height">176dp</dimen>
 	<dimen name="fab_margin">16dp</dimen>
 	<dimen name="product_card_height">55dp</dimen>
-	<dimen name="expandable_layout_std_padding">16dp</dimen>
-
+	<dimen name="product_title_text">11sp</dimen>
+	<dimen name="product_description_text">9sp</dimen>
+	<dimen name="product_note_text">7.5sp</dimen>
+	<dimen name="product_availability_text">6sp</dimen>
+	<dimen name="cat_prod_image_width">55dp</dimen>
 </resources>

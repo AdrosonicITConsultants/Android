@@ -200,18 +200,37 @@
 
     <string name="in_stock">In Stock</string>
     <string name="exc_made_to_order">Exclusively\nMade To Order</string>
+    <string name="exclusively_enter">Exclusively\n</string>
     <string name="view_edit"><![CDATA[View &\nEdit]]></string>
-    <string name="you_can_check_again_by_clicking_on_cancel">You can check again by clicking on \'Cancel\'</string>
-    <string name="save_n_upload">Save &amp; upload it?</string>
-    <string name="ok">Ok</string>
-    <string name="are_you_sure_you_want_to_go_back">Are you sure you want to go back?</string>
-    <string name="go_back">Go back</string>
-    <string name="you_shal_lose">You shall lose all your progress as it is not saved yet. If you don\'t want to lose, you can save it before going back!</string>
-    <string name="describe_your_product">Describe your product</string>
-    <string name="weight_10_characters">Weight (10 Characters)</string>
-    <string name="enter_gsm_value">Enter GSM value</string>
-    <string name="click_here_to_add_upto_3_photos">Click here to add upto 3 images</string>
-    <string name="product_add_limit">You can add upto 3 images only</string>
+
+    <string name="Man_text"> Maniabandha in Cuttack is known for single weft ikat weaving - particularly the “khandua patta” woven for Lord Jagnath. </string>
+    <string name="Gop_text">A coastal village of Odisha, on banks of Brahmani river, Gopalpur is a Tussar weave cluster. </string>
+    <string name="Ven_text"> Part of Nellore district of Andhra, Venktagiri  is famous for fine handloom cotton and silk saris, dupattas. </string>
+    <string name="Kam_text"> A district in Assam, on the banks of Brahmaputra river, Kamrup is the leading eri silk cluster of India. </string>
+    <string name="Nal_text"> Situated on north bank of Brahmaputra in Assam, Nalbari specialises in weave of mulberry silk; while cotton, eri and zari yarns are also used. </string>
+    <string name="Dil_text">  Dimapur, Phek region weavers now weave contemporary textiles in thick cotton for home textiles, jackets, bags.. </string>
+    <string name="no_products_found">No products found :(</string>
+    <string name="product_details">Product Details</string>
+    <string name="see_all_prod_details">See all product details</string>
+    <string name="region_of_origin">Region of origin:</string>
+    <string name="product_category_colon">Product Category:</string>
+    <string name="weave_type_used">Weave types used</string>
+    <string name="artisan_brand">Artisan Brand</string>
+    <string name="weaves_used">Weaves used</string>
+    <string name="warp">Warp</string>
+    <string name="weft">Weft</string>
+    <string name="extraweft">Extra Weft</string>
+    <string name="yarn">Yarn</string>
+    <string name="yarn_count">Yarn Count</string>
+    <string name="dye_used">Dye Used</string>
+    <string name="reed_count">Reed Count</string>
+    <string name="weight">Weight</string>
+    <string name="dimensions">Dimensions</string>
+    <string name="gsm">GSM\n(Gram per Square Metre)</string>
+    <string name="wash_care_instructions">Wash Care Instructions</string>
+    <string name="like_it">Like it ?</string>
+    <string name="exclusively">Exclusively\t</string>
+
 
     <string-array name="product_array">
         <item>@string/saree</item>

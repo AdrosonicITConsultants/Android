@@ -1,11 +1,15 @@
 package com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.productlists
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 
@@ -101,37 +105,69 @@ class BrandProdListFragment : Fragment() {
                 mSpinner.add(product!!)
             }
         }
-        Utility.filterSpinner(requireContext(),mSpinner,mBinding?.filterBrand)
-        if(filterBy == ""){
-            var productList = ProductPredicates.getBrandProductsFromId(artisanId)
-            mProduct.clear()
-            if (productList != null) {
-                for (size in productList){
-                    Log.i("Stat","$size")
-                    var artisanId = size.artisanId
-                    var productId = size.productId
-                    var productTitle = size.productTag
-                    var status =size.productStatusId
-                    var desc = size.product_spe
-                    var prod = ProductCard(artisanId,productId,productTitle,desc,status)
-                    mProduct.add(prod)
+       filterSpinner(requireContext(),mSpinner,mBinding?.filterBrand)
+    }
+
+    fun filterSpinner(context : Context, array : List<String>, spinner : Spinner?) {
+        var adapter= ArrayAdapter(context, android.R.layout.simple_spinner_item, array)
+        var filterBy : String
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner?.adapter = adapter
+        spinner?.onItemSelectedListener = (object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                initialList()
+                brandProductAdapter?.setProducts(mProduct)
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                if(position > 0){
+                    filterBy = parent?.getItemAtPosition(position).toString()
+                    Log.e("spin","fil : $filterBy")
+                    var productList = ProductPredicates.getFilteredBrandProducts(artisanId,filterBy)
+                    var size = productList?.size
+                    mProduct.clear()
+                    if (productList != null) {
+                        for (size in productList){
+                            Log.i("Stat","$size")
+                            var clusterId = size.clusterId
+                            var productId = size.productId
+                            var productTitle = size.productTag
+                            var status =size.productStatusId
+                            var desc = size.product_spe
+                            var prod = ProductCard(clusterId,productId,productTitle,desc,status)
+                            mProduct.add(prod)
+                        }
+                    }
+                    brandProductAdapter?.setProducts(mProduct)
+                }else{
+                    initialList()
                 }
             }
-        }else{
-//            var filteredList = ProductPredicates.getFilteredBrandProductsFromId(artisanId,filterBy)
-//            mProduct.clear()
-//            if (filteredList != null) {
-//                for (size in filteredList){
-//                    Log.i("Stat","$size")
-//                    var artisanId = size.artisanId
-//                    var productId = size.productId
-//                    var productTitle = size.productTag
-//                    var status =size.productStatusId
-//                    var desc = size.product_spe
-//                    var prod = ProductCard(artisanId,productId,productTitle,desc,status)
-//                    mProduct.add(prod)
-//                }
-//            }
+        })
+    }
+
+
+    fun initialList(){
+        var productList = ProductPredicates.getBrandProductsFromId(artisanId)
+        var size = productList?.size
+        mProduct.clear()
+        if (productList != null) {
+            for (size in productList){
+                Log.i("Stat","$size")
+                var clusterId = size.clusterId
+                var productId = size.productId
+                var productTitle = size.productTag
+                var status =size.productStatusId
+                var desc = size.product_spe
+                var prod = ProductCard(clusterId,productId,productTitle,desc,status)
+                mProduct.add(prod)
+            }
+            brandProductAdapter?.setProducts(mProduct)
         }
     }
 

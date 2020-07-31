@@ -403,5 +403,4 @@ class UserConfig {
             Prefs.putString(PRODUCT_UPLOAD_JSON, value)
             field = value
         }
-
 }

@@ -38,16 +38,11 @@
                     android:paddingStart="@dimen/margin_regular"
                     android:paddingEnd="4dp"/>
 
-                <TextView
+                <Spinner
                     android:id="@+id/filter_category"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="@string/change_category"
-                    android:textColor="@color/white_text"
-                    android:gravity="end|center_vertical"
-                    android:background="?selectableItemBackgroundBorderless"
-                    android:layout_marginEnd="@dimen/margin_regular"/>
+                    android:layout_weight="1"/>
 
             </LinearLayout>
 

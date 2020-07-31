@@ -13,7 +13,6 @@ import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCard
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.databinding.FragmentArtisanHomeBinding
-import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.addProductIntent
 import com.adrosonic.craftexchange.ui.modules.artisan.products.ArtisanProductAdapter
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
@@ -44,7 +43,7 @@ class ArtisanHomeFragment : Fragment() {
         mBinding?.welcomeText?.text = welcomeText
 
         var brandLogo = Utility.craftUser?.brandLogo
-        var urlBrand = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/User/${Prefs.getString(ConstantsDirectory.USER_ID,"")}/CompanyDetails/Logo/${brandLogo}"
+        var urlBrand = Utility?.getBrandLogoUrl(Prefs.getString(ConstantsDirectory.USER_ID,"").toLong(),brandLogo)
               mBinding?.brandLogoArtisan?.let {
             ImageSetter.setImage(requireActivity(),urlBrand, it,
                 R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
@@ -63,9 +62,6 @@ class ArtisanHomeFragment : Fragment() {
                 mProduct
             )
         setupRecyclerView()
-        mBinding?.btnAddProd?.setOnClickListener {
-            startActivity(context?.addProductIntent())
-        }
     }
 
 

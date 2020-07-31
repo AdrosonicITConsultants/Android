@@ -86,11 +86,8 @@ class MyDetailsEditProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         //TODO Implement logo edit
         var profileImage = Utility.craftUser?.profilePic
-        var urlPro =
-            "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/User/${Prefs.getString(
-                ConstantsDirectory.USER_ID,
-                ""
-            )}/ProfilePics/${profileImage}"
+        var urlPro = Utility.getProfilePhotoUrl(Prefs.getString(ConstantsDirectory.USER_ID, "").toLong(),profileImage)
+
         mBinding?.changeLogoImg?.let {
             ImageSetter.setImage(requireContext(),urlPro, it,
                 R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)

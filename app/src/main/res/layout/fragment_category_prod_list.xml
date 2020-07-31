@@ -33,19 +33,6 @@
             app:layout_constraintStart_toEndOf="@+id/product_type"
             app:layout_constraintTop_toTopOf="@+id/product_type" />
 
-        <TextView
-            android:id="@+id/product_type_desc"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="10dp"
-            android:textSize="8sp"
-            android:textAlignment="center"
-            android:fontFamily="@font/lato_regular"
-            app:layout_constraintTop_toBottomOf="@+id/product_type"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/filter_product_card"
@@ -54,7 +41,7 @@
             android:layout_marginStart="@dimen/margin_regular"
             android:layout_marginEnd="@dimen/margin_regular"
             android:layout_marginTop="@dimen/margin_regular"
-            app:layout_constraintTop_toBottomOf="@+id/product_type_desc"
+            app:layout_constraintTop_toBottomOf="@+id/product_type"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
@@ -70,6 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="6dp"
+            android:background="@color/lighter_gray"
             app:layout_constraintTop_toBottomOf="@+id/filter_product_card"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
@@ -78,7 +66,6 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:fillViewport="true"
-            android:layout_marginTop="@dimen/margin_regular"
             app:layout_constraintTop_toBottomOf="@+id/divider"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -87,8 +74,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/category_prod_recycler_list"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp" />
+                android:layout_height="wrap_content"/>
 
         </androidx.core.widget.NestedScrollView>
 

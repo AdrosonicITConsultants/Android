@@ -12,6 +12,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.target.Target
+//import com.synnapps.carouselview.CarouselView
 import info.abdolahi.CircularMusicProgressBar
 
 object ImageSetter {
@@ -24,8 +25,13 @@ object ImageSetter {
         {
             Glide.with(context)
                 .load(imagePath) // it can be a remote URL or a local absolute file path.
+                .apply(
+                    RequestOptions()
+                        .centerCrop()
+                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                        .override(Target.SIZE_ORIGINAL))
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                .priority(Priority.IMMEDIATE)
+//                .priority(Priority.IMMEDIATE)
                 .skipMemoryCache(false)
                 .dontAnimate()
                 .into(imageView)
@@ -133,6 +139,29 @@ object ImageSetter {
 //            ex.printStackTrace()
 //        }
 //    }
+
+    //Set image in carousel view
+//    fun setImage(context: Context, imagePath:String, imageView: Carou) {
+//        try
+//        {
+//            Glide.with(context)
+//                .load(imagePath) // it can be a remote URL or a local absolute file path.
+//                .apply(
+//                    RequestOptions()
+//                        .centerCrop()
+//                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+//                        .override(Target.SIZE_ORIGINAL))
+//                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+////                .priority(Priority.IMMEDIATE)
+//                .skipMemoryCache(false)
+//                .dontAnimate()
+//                .into(imageView)
+//        }
+//        catch (ex:Exception) {
+//            ex.printStackTrace()
+//        }
+//    }
+
     /**
      * Download image from remote URL and get callback of result.
      * */

@@ -69,7 +69,7 @@ class RegionProductsFragment : Fragment() {
             for (clustersize in clusterList){
                 Log.i("Stat","$clustersize")
                 var id = clustersize?.clusterid
-                var name = clustersize?.clusterDesc
+                var name = clustersize?.cluster
                 var adjective = clustersize?.adjective
                 var cluster = Cluster(id!!,name!!,adjective!!)
                 mProduct.add(cluster)
