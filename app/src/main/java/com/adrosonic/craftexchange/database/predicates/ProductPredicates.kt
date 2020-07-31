@@ -12,6 +12,7 @@ import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.B
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.CatalogueProductsResponse
 import io.realm.RealmResults
 import java.lang.Exception
+import kotlin.math.exp
 
 class ProductPredicates {
     companion object {
@@ -256,6 +257,7 @@ class ProductPredicates {
         fun insertProductsInCatalogue(productList: CatalogueProductsResponse?){
             nextID = 0L
             val realm = CXRealmManager.getRealmInstance()
+            var addRelatedProducts = arrayListOf<Pair<Long,Long>>()
             var product = productList?.data?.products
 
             try {
@@ -468,7 +470,7 @@ class ProductPredicates {
                                         realm?.copyToRealmOrUpdate(exRelProd)
                                     }else{
                                         relPoprductObj?.inProductCategoryId = catalogueProduct?.productCategory?.id
-                                        relPoprductObj?.relatedToProductId = catalogueProduct?.productType?.id
+                                        relPoprductObj?.relatedToProductId = catalogueProduct?.id
                                         relPoprductObj?.relatedProductId = relProduct?.id
                                         relPoprductObj?.productTypeId = relProduct?.productType?.id
                                         relPoprductObj?.productName = relProduct?.productType?.productDesc
@@ -489,6 +491,8 @@ class ProductPredicates {
 
                                     var weaveTypeObj = realm.where(WeaveTypes::class.java)
                                         .equalTo("productId",weaveType.productId)
+                                        .and()
+                                        .equalTo("weaveId",weaveType.weaveId)
                                         .limit(1)
                                         .findFirst()
                                     if(weaveTypeObj == null){
@@ -522,6 +526,8 @@ class ProductPredicates {
 
                                     var careObj = realm.where(ProductCares::class.java)
                                         .equalTo("productId",care.productId)
+                                        .and()
+                                        .equalTo("productCareId",care.productCareId)
                                         .limit(1)
                                         .findFirst()
                                     if(careObj == null){
@@ -874,7 +880,7 @@ class ProductPredicates {
                 .findFirst()
         }
 
-        fun getAllProductImagesFromId(productId:Long?): RealmResults<ProductImages>? {
+        fun getAllImagesOfProduct(productId:Long?): RealmResults<ProductImages>? {
             val realm = CXRealmManager.getRealmInstance()
             return realm.where(ProductImages::class.java)
                 .equalTo("productId",productId)
@@ -886,6 +892,40 @@ class ProductPredicates {
             return realm.where(WeaveTypes::class.java)
                 .equalTo("productId",productId)
                 .findAll()
+        }
+
+        fun getWashCareInstrctionsOfProduct(productId: Long?): RealmResults<ProductCares>?{
+            val realm = CXRealmManager.getRealmInstance()
+            return realm.where(ProductCares::class.java)
+                .equalTo("productId",productId)
+                .findAll()
+        }
+
+        fun getRelatedProductOfProduct(productId: Long?): RelatedProducts? {
+            val realm = CXRealmManager.getRealmInstance()
+            return realm.where(RelatedProducts::class.java)
+                .equalTo("relatedToProductId",productId)
+                .limit(1)
+                .findFirst()
+        }
+
+        fun getAllProductIdsOfCategoryFromCluster(category : String?, cluster : String?): MutableList<Long> {
+            val realm = CXRealmManager.getRealmInstance()
+            var productList = mutableListOf<Long>()
+            var list = realm.where(ProductCatalogue::class.java)
+                .equalTo("productCategoryName",category)
+                .and()
+                .equalTo("clusterName",cluster)
+                .findAll()
+
+            var itr = list.iterator()
+            if(itr !=null){
+                while (itr.hasNext()){
+                    var product = itr.next()
+                    product.productId?.let { productList.add(it) }
+                }
+            }
+            return productList
         }
 
     }

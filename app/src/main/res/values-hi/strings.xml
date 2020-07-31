@@ -229,8 +229,7 @@
     <string name="gsm">GSM\n(Gram per Square Metre)</string>
     <string name="wash_care_instructions">Wash Care Instructions</string>
     <string name="like_it">Like it ?</string>
-    <string name="exclusively">Exclusively
-    </string>
+    <string name="exclusively">Exclusively\t</string>
 
 
     <string-array name="product_array">

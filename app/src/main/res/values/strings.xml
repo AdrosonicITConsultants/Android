@@ -200,7 +200,7 @@
     <string name="in_stock">In Stock</string>
     <string name="exc_made_to_order">Exclusively\nMade To Order</string>
     <string name="exclusively_enter">Exclusively\n</string>
-    <string name="exclusively">Exclusively </string>
+    <string name="exclusively">Exclusively\t</string>
     <string name="view_edit"><![CDATA[View &\nEdit]]></string>
 
 

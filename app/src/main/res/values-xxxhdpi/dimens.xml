@@ -26,5 +26,5 @@
 	<dimen name="product_description_text">21.6sp</dimen>
 	<dimen name="product_note_text">18sp</dimen>
 	<dimen name="product_availability_text">14.4sp</dimen>
-	<dimen name="cat_prod_image_width">108dp</dimen>
+	<dimen name="cat_prod_image_width">132dp</dimen>
 </resources>
