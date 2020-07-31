@@ -8,12 +8,10 @@ import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.AsyncTask
+import android.os.Build
 import android.util.Log
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -220,5 +218,12 @@ class Utility {
             }
         }
 
+        fun setImageResource(context: Context?,imageView:ImageView,imageId:Int){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                imageView.setImageDrawable(context?.getResources()?.getDrawable(imageId, context?.getTheme()));
+            } else {
+                imageView.setImageDrawable(context?.getDrawable(imageId));
+            }
+        }
     }
 }

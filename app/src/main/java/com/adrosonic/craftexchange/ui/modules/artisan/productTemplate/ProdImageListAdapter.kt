@@ -1,5 +1,6 @@
 package com.adrosonic.craftexchange.ui.modules.artisan.productTemplate
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -8,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.app.ShareCompat
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
@@ -39,7 +41,8 @@ class ProdImageListAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView = LayoutInflater.from(parent.context) .inflate(R.layout.item_add_product_phot, parent, false)
+        val itemView = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_add_product_phot, parent, false)
         return MyViewHolder(itemView)
     }
 
@@ -47,8 +50,8 @@ class ProdImageListAdapter(
 
         var item = pairList.get(position)
         var file = File(item)
-        Log.e("ProdPath",""+item)
-        ImageSetter.setImage(context,file.absolutePath,holder.thumbnail,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
+        Log.e("ProdPath", "" + item)
+        ImageSetter.setImage(context, file.absolutePath, holder.thumbnail)
 
         holder.thumbnail.setOnClickListener {
             viewImage(item)
@@ -73,14 +76,17 @@ class ProdImageListAdapter(
         listener?.onUpdate(pairList, deletedPaths)
     }
 
-    fun viewImage( strfile: String) {
-            val file = File(strfile)
-            val install = Intent(Intent.ACTION_VIEW)
-            install.flags =  Intent.FLAG_ACTIVITY_NEW_TASK
-
-            val apkURI = FileProvider.getUriForFile(context,context.packageName + ".provider", file)
-            install.setDataAndType(apkURI, "image/*")
-            install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            context.startActivity(Intent.createChooser(install, "Open With"))
-           }
+    fun viewImage(strfile: String) {
+        val file = File(strfile)
+        if (file.exists()) {
+            val uri = FileProvider.getUriForFile(context, context.packageName + ".provider", file)
+            val myIntent = Intent(Intent.ACTION_VIEW)
+            myIntent.putExtra(ShareCompat.EXTRA_CALLING_PACKAGE, context.getPackageName())
+            val componentName = (context as Activity).getComponentName()
+            myIntent.putExtra(ShareCompat.EXTRA_CALLING_ACTIVITY, componentName)
+            myIntent.setDataAndType(uri, "image/*")
+            myIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            context.startActivity(Intent.createChooser(myIntent, "Open with"))
+        }
+    }
 }

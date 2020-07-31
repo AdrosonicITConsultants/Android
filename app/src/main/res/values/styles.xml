@@ -86,4 +86,7 @@
         <item name="fontFamily">@font/lato_regular</item>
     </style>
 
+    <style name="spinner_theme" parent="android:Widget.Spinner">
+        <item name="android:background">@drawable/ic_arrow_spinner_drop_down</item>
+    </style>
 </resources>
