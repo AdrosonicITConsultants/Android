@@ -18,15 +18,14 @@ import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCatalogue
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.databinding.ActivityCatalogueProductDetailsBinding
-import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.ProductCare
-import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.ProductUploadData
+import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.ProductCare
+import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.ProductUploadData
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.ProductImage
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
 import com.google.gson.GsonBuilder
-import com.synnapps.carouselview.ImageListener
 import kotlin.collections.ArrayList
 
 fun Context.catalogueProductDetailsIntent(): Intent {
@@ -39,7 +38,7 @@ private var mBinding : ActivityCatalogueProductDetailsBinding ?= null
 var imageUrlList : MutableList<String> ?= null
 var productId : Long ?= 0
 var productDetails : ProductCatalogue ?= null
-var productUploadData : ProductUploadData ?= null
+var productUploadData : ProductUploadData?= null
 private var mUserConfig = UserConfig()
 var jsonProductData : String ?=""
 var careSelctionList = ArrayList<Pair<Long,String>>()
@@ -69,16 +68,15 @@ class CatalogueProductDetailsActivity : AppCompatActivity() {
 
         getProductImages(productId)
 
-        var imageListener =
-            ImageListener { position, imageView ->
-                imageUrlList?.get(position)?.let {
-                    ImageSetter.setImage(applicationContext,
-                        it,imageView)
-                }
-            }
-
-        mBinding?.carouselViewProducts?.setImageListener(imageListener)
-        imageUrlList?.count()?.let { mBinding?.carouselViewProducts?.setPageCount(it) }
+//        var imageListener =ImageListener { position, imageView ->
+//                imageUrlList?.get(position)?.let {
+//                    ImageSetter.setImage(applicationContext,
+//                        it,imageView)
+//                }
+//            }
+//
+//        mBinding?.carouselViewProducts?.setImageListener(imageListener)
+//        imageUrlList?.count()?.let { mBinding?.carouselViewProducts?.setPageCount(it) }
 
         mBinding?.productTitle?.text = productDetails?.productTag ?: "-"
         mBinding?.productDescription?.text = productDetails?.product_spe ?: "-"
@@ -227,7 +225,7 @@ class CatalogueProductDetailsActivity : AppCompatActivity() {
                 var id = i.productCareId
                 careSelctionList.forEach {
                     if(it.first == id){
-                        mCare.add(ProductCare(it.first,it.second))
+//                        mCare.add(ProductCare(it.first,it.second))
                     }
                 }
             }

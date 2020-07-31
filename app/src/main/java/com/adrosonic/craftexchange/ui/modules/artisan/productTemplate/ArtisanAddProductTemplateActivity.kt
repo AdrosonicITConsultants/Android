@@ -19,14 +19,13 @@ import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityArtisanAddProductTemplateBinding
 import com.adrosonic.craftexchange.repository.data.request.artisan.productTemplate.ArtisanAddProductRequest
 import com.adrosonic.craftexchange.repository.data.request.artisan.productTemplate.RelatedProduct
+import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.*
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.ArtisanProductTemplateViewModel
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_artisan_add_product_template.*
-import quicktype.*
 
 
 fun Context.addProductIntent(): Intent {
@@ -634,7 +633,6 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                 template.relatedProduct=null
 
 //             ProductPredicates.insertArtisanProductOffline(template)
-//                mViewModel.uploadProduct(Gson().toJson(template), pairList)
                 mViewModel.uploadProduct(template.toString(), pairList)
 //                finish()
             }

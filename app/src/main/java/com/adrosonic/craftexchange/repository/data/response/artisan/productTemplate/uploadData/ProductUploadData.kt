@@ -1,4 +1,4 @@
-package quicktype
+package com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData
 
 data class ProductUploadData (
     val data: Data,

@@ -13,7 +13,8 @@ import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.databinding.ItemBrandProductsBinding
 import com.adrosonic.craftexchange.databinding.ItemProductCareListBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
-import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.ProductCare
+import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.ProductCare
+//import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.ProductCare
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.BrandDetails
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.CatalogueProductsResponse
 import com.adrosonic.craftexchange.ui.interfaces.BrandProductClick
@@ -32,7 +33,7 @@ class ProductCareRecyclerAdapter(var context: Context?, private var careList: Li
 
     inner class ViewHolder(val binding: ItemProductCareListBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(care: ProductCare){
-            binding.productCare = care
+//            binding.productCare = care
             binding.executePendingBindings()
         }
     }

@@ -11,14 +11,14 @@ import androidx.core.widget.addTextChangedListener
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.adrosonic.craftexchange.R
+import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.Dye
+import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.Yarn
+import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.YarnCount
 import com.adrosonic.craftexchange.utils.Utility
 import kotlinx.android.synthetic.main.activity_artisan_add_product_template.*
-import quicktype.Dye
-import quicktype.Yarn
-import quicktype.YarnCount
 
 
-class YarnViewpager(context: Context,arrYarn:List<Yarn>?,arrDye:List<Dye>?):PagerAdapter() {
+class YarnViewpager(context: Context, arrYarn:List<Yarn>?, arrDye:List<Dye>?):PagerAdapter() {
 
     private var context: Context? = null
     private var arrYarn: List<Yarn>? = null

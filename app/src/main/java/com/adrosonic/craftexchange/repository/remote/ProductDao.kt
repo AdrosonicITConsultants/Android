@@ -1,16 +1,14 @@
 package com.adrosonic.craftexchange.repository.remote
 
 import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.ArtisanProductTemplateRespons
-import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.ProductUploadData
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.ArtisanProductDetailsResponse
+import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.ProductUploadData
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.AllProductsResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.BrandListResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.CatalogueProductsResponse
 import okhttp3.MultipartBody
-import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.ClusterProductDetailResponse
 import retrofit2.Call
 import retrofit2.http.*
-import java.io.File
 
 interface ProductDao {
 

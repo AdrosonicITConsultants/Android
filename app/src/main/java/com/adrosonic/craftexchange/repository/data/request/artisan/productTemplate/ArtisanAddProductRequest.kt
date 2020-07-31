@@ -1,6 +1,5 @@
 package com.adrosonic.craftexchange.repository.data.request.artisan.productTemplate
 
-import quicktype.ProductType
 
 
 open class ArtisanAddProductRequest{

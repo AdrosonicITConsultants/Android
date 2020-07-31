@@ -8,7 +8,6 @@ import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.ArtisanProductTemplateRespons
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
-import com.adrosonic.craftexchange.viewModels.ArtisanProductTemplateViewModel
 import com.pixplicity.easyprefs.library.Prefs
 import okhttp3.MediaType
 import okhttp3.MultipartBody
