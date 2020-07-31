@@ -54,984 +54,1008 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:id="@+id/linearLayout2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="@color/darker_gray"
-            android:orientation="vertical"
-            android:showDividers="middle"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="parent">
-
             <LinearLayout
-                android:id="@+id/parent_step1"
+                android:id="@+id/linearLayout2"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:id="@+id/img_status_step1"
-                    android:layout_width="0dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_add_prod_status" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="8"
-                    android:text="Step 1 : Add Photo"
-                    android:textColor="@color/black_text" />
-
-                <ImageView
-                    android:id="@+id/ic_step1_arr"
-                    android:layout_width="0dp"
-                    android:layout_height="32dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_arrow_down"
-                    android:tint="@color/darker_gray" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/child_step1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/black_text"
-                android:foreground="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:layout_height="match_parent"
+                android:divider="@color/darker_gray"
                 android:orientation="vertical"
-                android:padding="@dimen/expandable_layout_std_padding"
-                android:visibility="gone"
-                tools:ignore="UnusedAttribute">
+                android:showDividers="middle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="parent">
 
-                <TextView
-                    android:id="@+id/txt_add_product_image"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_baseline_photo_camera_24"
-                    android:fontFamily="@font/lato_regular"
-                    android:text="@string/click_here_to_add_upto_3_photos"
-                    android:textColor="@color/lighter_gray"
-                    android:textSize="@dimen/edit_text" />
+                <LinearLayout
+                    android:id="@+id/parent_step1"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/add_photo_recycler"
-                    android:layout_width="wrap_content"
-                    android:layout_height="200dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:layout_margin="@dimen/margin_regular"
-                    android:orientation="horizontal"
-                    android:padding="8dp"
-                    android:scrollbars="horizontal" />
+                    <ImageView
+                        android:id="@+id/img_status_step1"
+                        android:layout_width="0dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_add_prod_status" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/rectangle_round_green_solid"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:text="   Next  >   "
-                    android:textAlignment="center"
-                    android:textColor="@color/white_text"
-                    android:textSize="@dimen/edit_text"
-                    android:textStyle="bold"
-                    android:visibility="gone" />
-            </LinearLayout>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="8"
+                        android:text="Step 1 : Add Photo"
+                        android:textColor="@color/black_text" />
 
-            <LinearLayout
-                android:id="@+id/parent_step2"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:gravity="center_vertical">
+                    <ImageView
+                        android:id="@+id/ic_step1_arr"
+                        android:layout_width="0dp"
+                        android:layout_height="32dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_arrow_down"
+                        android:tint="@color/darker_gray" />
+                </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/img_status_step2"
-                    android:layout_width="0dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_add_prod_status" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="8"
-                    android:text="Step 2 : Add general details"
-                    android:textColor="@color/black_text" />
-
-                <ImageView
-                    android:id="@+id/ic_step2_arr"
-                    android:layout_width="0dp"
-                    android:layout_height="24dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_arrow_down"
-                    android:tint="@color/darker_gray" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/child_step2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="@dimen/expandable_layout_std_padding"
-                android:visibility="gone">
-
-                <EditText
-                    android:id="@+id/et_prod_name"
+                <LinearLayout
+                    android:id="@+id/child_step1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/expandable_layout_std_padding"
-                    android:background="@drawable/rectangle_edittext_bg"
-                    android:hint="Name of the product (40 characters)"
-                    android:maxLength="40"
-                    android:maxLines="1"
-                    android:textSize="@dimen/edit_text" />
+                    android:background="@color/black_text"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:padding="@dimen/expandable_layout_std_padding"
+                    android:visibility="gone"
+                    tools:ignore="UnusedAttribute">
 
-                <EditText
-                    android:id="@+id/et_prod_code"
+                    <TextView
+                        android:id="@+id/txt_add_product_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_baseline_photo_camera_24"
+                        android:fontFamily="@font/lato_regular"
+                        android:text="@string/click_here_to_add_upto_3_photos"
+                        android:textColor="@color/lighter_gray"
+                        android:textSize="@dimen/edit_text" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/add_photo_recycler"
+                        android:layout_width="wrap_content"
+                        android:layout_height="200dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="@dimen/margin_regular"
+                        android:orientation="horizontal"
+                        android:padding="8dp"
+                        android:scrollbars="horizontal" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/rectangle_round_green_solid"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:text="   Next  >   "
+                        android:textAlignment="center"
+                        android:textColor="@color/white_text"
+                        android:textSize="@dimen/edit_text"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/parent_step2"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:id="@+id/img_status_step2"
+                        android:layout_width="0dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_add_prod_status" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="8"
+                        android:text="Step 2 : Add general details"
+                        android:textColor="@color/black_text" />
+
+                    <ImageView
+                        android:id="@+id/ic_step2_arr"
+                        android:layout_width="0dp"
+                        android:layout_height="24dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_arrow_down"
+                        android:tint="@color/darker_gray" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/child_step2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/expandable_layout_std_padding"
-                    android:background="@drawable/rectangle_edittext_bg"
-                    android:hint="Product code(Eg. NAG09_89)"
-                    android:maxLength="40"
-                    android:maxLines="1"
-                    android:textSize="@dimen/edit_text" />
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/expandable_layout_std_padding"
+                    android:visibility="gone">
 
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/expandable_layout_std_padding"
-                    android:background="@drawable/rectangle_spinner_bg">
-
-                    <Spinner
-                        android:id="@+id/sp_prod_category"
-                        style="@style/Widget.AppCompat.DropDownItem.Spinner"
+                    <EditText
+                        android:id="@+id/et_prod_name"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:autofillHints="Select product category" />
-                </RelativeLayout>
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/expandable_layout_std_padding"
+                        android:background="@drawable/rectangle_edittext_bg"
+                        android:hint="Name of the product (40 characters)"
+                        android:maxLength="40"
+                        android:maxLines="1"
+                        android:textSize="@dimen/edit_text" />
 
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/expandable_layout_std_padding"
-                    android:background="@drawable/rectangle_spinner_bg">
-
-                    <Spinner
-                        android:id="@+id/sp_prod_type"
-                        style="@style/Widget.AppCompat.DropDownItem.Spinner"
+                    <EditText
+                        android:id="@+id/et_prod_code"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:autofillHints="Product type" />
-                </RelativeLayout>
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/expandable_layout_std_padding"
+                        android:background="@drawable/rectangle_edittext_bg"
+                        android:hint="Product code(Eg. NAG09_89)"
+                        android:maxLength="40"
+                        android:maxLines="1"
+                        android:textSize="@dimen/edit_text" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/rectangle_round_green_solid"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:text="   Next  >   "
-                    android:textAlignment="center"
-                    android:textColor="@color/white_text"
-                    android:textSize="@dimen/edit_text"
-                    android:textStyle="bold"
-                    android:visibility="gone" />
-            </LinearLayout>
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/expandable_layout_std_padding"
+                        android:background="@drawable/rectangle_spinner_bg">
 
-            <LinearLayout
-                android:id="@+id/parent_step3"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:gravity="center_vertical">
+                        <Spinner
+                            android:id="@+id/sp_prod_category"
+                            style="@style/Widget.AppCompat.DropDownItem.Spinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:autofillHints="Select product category" />
+                    </RelativeLayout>
 
-                <ImageView
-                    android:id="@+id/img_status_step3"
-                    android:layout_width="0dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_add_prod_status" />
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/expandable_layout_std_padding"
+                        android:background="@drawable/rectangle_spinner_bg">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="8"
-                    android:text="Step 3 : Select weave type"
-                    android:textColor="@color/black_text" />
+                        <Spinner
+                            android:id="@+id/sp_prod_type"
+                            style="@style/Widget.AppCompat.DropDownItem.Spinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:autofillHints="Product type" />
+                    </RelativeLayout>
 
-                <ImageView
-                    android:id="@+id/ic_step3_arr"
-                    android:layout_width="0dp"
-                    android:layout_height="24dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_arrow_down"
-                    android:tint="@color/darker_gray" />
-            </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/rectangle_round_green_solid"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:text="   Next  >   "
+                        android:textAlignment="center"
+                        android:textColor="@color/white_text"
+                        android:textSize="@dimen/edit_text"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+                </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/child_step3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="@dimen/expandable_layout_std_padding"
-                android:visibility="gone">
+                <LinearLayout
+                    android:id="@+id/parent_step3"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="You can select multiple options"
-                    android:textColor="@color/black_text"
-                    android:textSize="@dimen/edit_text" />
+                    <ImageView
+                        android:id="@+id/img_status_step3"
+                        android:layout_width="0dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_add_prod_status" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/weave_recycler_list"
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="8"
+                        android:text="Step 3 : Select weave type"
+                        android:textColor="@color/black_text" />
+
+                    <ImageView
+                        android:id="@+id/ic_step3_arr"
+                        android:layout_width="0dp"
+                        android:layout_height="24dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_arrow_down"
+                        android:tint="@color/darker_gray" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/child_step3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:scrollbars="vertical" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_margin="16dp"
-                    android:background="@drawable/rectangle_round_green_solid"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:text="   Next  >   "
-                    android:textAlignment="center"
-                    android:textColor="@color/white_text"
-                    android:textSize="@dimen/edit_text"
-                    android:textStyle="bold"
-                    android:visibility="gone" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/parent_step4"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:id="@+id/img_status_step4"
-                    android:layout_width="0dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_add_prod_status" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="8"
-                    android:text="Step 4 : Select warp, weft and yarn"
-                    android:textColor="@color/black_text" />
-
-                <ImageView
-                    android:id="@+id/ic_step4_arr"
-                    android:layout_width="0dp"
-                    android:layout_height="24dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_arrow_down"
-                    android:tint="@color/darker_gray" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/child_step4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="@dimen/expandable_layout_std_padding"
-                android:visibility="gone">
-
-                <androidx.viewpager.widget.ViewPager
-                    android:id="@+id/yarn_pager"
-                    android:layout_width="match_parent"
-                    android:layout_height="220dp" />
-
-                <LinearLayout
-                    android:id="@+id/slider_dots"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/viewPager"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:orientation="horizontal" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/rectangle_round_green_solid"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:text="   Next  >   "
-                    android:textAlignment="center"
-                    android:textColor="@color/white_text"
-                    android:textSize="@dimen/edit_text"
-                    android:textStyle="bold"
-                    android:visibility="gone"
-                    app:layout_constraintEnd_toEndOf="@+id/SliderDots"
-                    app:layout_constraintStart_toStartOf="@+id/SliderDots"
-                    app:layout_constraintTop_toBottomOf="@+id/SliderDots" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/parent_step5"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:id="@+id/img_status_step5"
-                    android:layout_width="0dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_add_prod_status" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="8"
-                    android:text="Step 5 : Enter the reed count"
-                    android:textColor="@color/black_text" />
-
-                <ImageView
-                    android:id="@+id/ic_step5_arr"
-                    android:layout_width="0dp"
-                    android:layout_height="24dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_arrow_down"
-                    android:tint="@color/darker_gray" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/child_step5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:padding="@dimen/expandable_layout_std_padding"
-                android:visibility="gone">
-
-                <ImageView
-                    android:layout_width="88dp"
-                    android:layout_height="88dp"
-                    android:layout_marginBottom="16dp"
-                    android:src="@drawable/ic_reed_count" />
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/expandable_layout_std_padding"
-                    android:background="@drawable/rectangle_spinner_bg">
-
-                    <Spinner
-                        android:id="@+id/sp_reed_count"
-                        style="@style/Widget.AppCompat.DropDownItem.Spinner"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:autofillHints="Enter reed count" />
-                </RelativeLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/rectangle_round_green_solid"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:text="   Next  >   "
-                    android:textAlignment="center"
-                    android:textColor="@color/white_text"
-                    android:textSize="@dimen/edit_text"
-                    android:textStyle="bold"
-                    android:visibility="gone" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/parent_step6"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:id="@+id/img_status_step6"
-                    android:layout_width="0dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_add_prod_status" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="8"
-                    android:text="Step 6 : Enter the dimensions"
-                    android:textColor="@color/black_text" />
-
-                <ImageView
-                    android:id="@+id/ic_step6_arr"
-                    android:layout_width="0dp"
-                    android:layout_height="24dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_arrow_down"
-                    android:tint="@color/darker_gray" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/child_step6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="@dimen/expandable_layout_std_padding"
-                android:visibility="gone">
-
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="8dp"
-                    android:src="@drawable/ic_dimensions" />
-
-                <TextView
-                    android:id="@+id/txt_prod_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Dimensions" />
-
-                <LinearLayout
-                    android:id="@+id/linearLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/margin_regular"
-                    android:weightSum="9"
-                    app:layout_constraintStart_toStartOf="@+id/txt_prod_type"
-                    app:layout_constraintTop_toBottomOf="@+id/txt_prod_type">
-
-                    <Spinner
-                        android:id="@+id/sp_prod_length"
-                        android:layout_width="0dp"
-                        android:layout_height="40dp"
-                        android:layout_weight="4"
-                        android:background="@drawable/rectangle_edittext_bg"
-                        tools:layout_editor_absoluteX="8dp"
-                        tools:layout_editor_absoluteY="162dp" />
-
-                    <EditText
-                        android:id="@+id/et_prod_length"
-                        android:layout_width="0dp"
-                        android:layout_height="40dp"
-                        android:layout_weight="4"
-                        android:background="@drawable/rectangle_edittext_bg"
-                        android:hint="Length"
-                        android:visibility="gone"
-                        tools:layout_editor_absoluteX="8dp"
-                        tools:layout_editor_absoluteY="162dp" />
+                    android:padding="@dimen/expandable_layout_std_padding"
+                    android:visibility="gone">
 
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text=" X "
-                        android:textAlignment="center"
-                        android:textSize="16sp" />
-
-                    <Spinner
-                        android:id="@+id/sp_prod_width"
-                        android:layout_width="0dp"
-                        android:layout_height="40dp"
-                        android:layout_weight="4"
-                        android:background="@drawable/rectangle_edittext_bg"
-                        tools:layout_editor_absoluteX="8dp"
-                        tools:layout_editor_absoluteY="162dp" />
-
-                    <EditText
-                        android:id="@+id/et_prod_width"
-                        android:layout_width="0dp"
-                        android:layout_height="40dp"
-                        android:layout_weight="4"
-                        android:background="@drawable/rectangle_edittext_bg"
-                        android:hint="Width"
-                        android:visibility="gone"
-                        tools:layout_editor_absoluteX="8dp"
-                        tools:layout_editor_absoluteY="162dp" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/txt_related_prod_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Blouse"
-                    android:visibility="gone"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
-
-                <LinearLayout
-                    android:id="@+id/ll_sub_prod"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/margin_regular"
-                    android:visibility="gone"
-                    android:weightSum="9"
-                    app:layout_constraintTop_toBottomOf="@+id/txt_related_prod_type"
-                    tools:layout_editor_absoluteX="24dp">
-
-                    <Spinner
-                        android:id="@+id/sp_sub_prod_length"
-                        android:layout_width="0dp"
-                        android:layout_height="40dp"
-                        android:layout_weight="4"
-                        android:background="@drawable/rectangle_edittext_bg"
-                        tools:layout_editor_absoluteX="8dp"
-                        tools:layout_editor_absoluteY="162dp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text=" X "
-                        android:textAlignment="center"
-                        android:textSize="16sp" />
-
-                    <Spinner
-                        android:id="@+id/sp_sub_prod_width"
-                        android:layout_width="0dp"
-                        android:layout_height="40dp"
-                        android:layout_weight="4"
-                        android:background="@drawable/rectangle_edittext_bg"
-                        tools:layout_editor_absoluteX="8dp"
-                        tools:layout_editor_absoluteY="162dp" />
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/rectangle_round_green_solid"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:text="   Next  >   "
-                    android:textAlignment="center"
-                    android:textColor="@color/white_text"
-                    android:textSize="@dimen/edit_text"
-                    android:textStyle="bold"
-                    android:visibility="gone"
-                    app:layout_constraintEnd_toEndOf="@+id/ll_sub_prod"
-                    app:layout_constraintStart_toStartOf="@+id/ll_sub_prod"
-                    app:layout_constraintTop_toBottomOf="@+id/ll_sub_prod" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/parent_step7"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:id="@+id/img_status_step7"
-                    android:layout_width="0dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_add_prod_status" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="8"
-                    android:text="Step 7 : Enter the wash care instructions"
-                    android:textColor="@color/black_text" />
-
-                <ImageView
-                    android:id="@+id/ic_step7_arr"
-                    android:layout_width="0dp"
-                    android:layout_height="24dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_arrow_down"
-                    android:tint="@color/darker_gray" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/child_step7"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:padding="@dimen/expandable_layout_std_padding"
-                android:visibility="gone">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/wash_care_recycler_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/parent_step8"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:id="@+id/img_status_step8"
-                    android:layout_width="0dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_add_prod_status" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="8"
-                    android:text="Step 8 : Select the availability"
-                    android:textColor="@color/black_text" />
-
-                <ImageView
-                    android:id="@+id/ic_step8_arr"
-                    android:layout_width="0dp"
-                    android:layout_height="24dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_arrow_down"
-                    android:tint="@color/darker_gray" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/child_step8"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:padding="@dimen/expandable_layout_std_padding"
-                android:visibility="gone">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center">
-
-                    <LinearLayout
-                        android:id="@+id/ll_made_to_order"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:layout_marginRight="32dp"
-                        android:orientation="vertical">
+                        android:text="You can select multiple options"
+                        android:textColor="@color/black_text"
+                        android:textSize="@dimen/edit_text" />
 
-                        <RelativeLayout
-                            android:id="@+id/img_made_to_order"
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/weave_recycler_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:scrollbars="vertical" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_margin="16dp"
+                        android:background="@drawable/rectangle_round_green_solid"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:text="   Next  >   "
+                        android:textAlignment="center"
+                        android:textColor="@color/white_text"
+                        android:textSize="@dimen/edit_text"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/parent_step4"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:id="@+id/img_status_step4"
+                        android:layout_width="0dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_add_prod_status" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="8"
+                        android:text="Step 4 : Select warp, weft and yarn"
+                        android:textColor="@color/black_text" />
+
+                    <ImageView
+                        android:id="@+id/ic_step4_arr"
+                        android:layout_width="0dp"
+                        android:layout_height="24dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_arrow_down"
+                        android:tint="@color/darker_gray" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/child_step4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/expandable_layout_std_padding"
+                    android:visibility="gone">
+
+                    <androidx.viewpager.widget.ViewPager
+                        android:id="@+id/yarn_pager"
+                        android:layout_width="match_parent"
+                        android:layout_height="220dp" />
+
+                    <LinearLayout
+                        android:id="@+id/slider_dots"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/viewPager"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:orientation="horizontal" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/rectangle_round_green_solid"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:text="   Next  >   "
+                        android:textAlignment="center"
+                        android:textColor="@color/white_text"
+                        android:textSize="@dimen/edit_text"
+                        android:textStyle="bold"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="@+id/SliderDots"
+                        app:layout_constraintStart_toStartOf="@+id/SliderDots"
+                        app:layout_constraintTop_toBottomOf="@+id/SliderDots" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/parent_step5"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:id="@+id/img_status_step5"
+                        android:layout_width="0dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_add_prod_status" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="8"
+                        android:text="Step 5 : Enter the reed count"
+                        android:textColor="@color/black_text" />
+
+                    <ImageView
+                        android:id="@+id/ic_step5_arr"
+                        android:layout_width="0dp"
+                        android:layout_height="24dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_arrow_down"
+                        android:tint="@color/darker_gray" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/child_step5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:padding="@dimen/expandable_layout_std_padding"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="88dp"
+                        android:layout_height="88dp"
+                        android:layout_marginBottom="16dp"
+                        android:src="@drawable/ic_reed_count" />
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/expandable_layout_std_padding"
+                        android:background="@drawable/rectangle_spinner_bg">
+
+                        <Spinner
+                            android:id="@+id/sp_reed_count"
+                            style="@style/Widget.AppCompat.DropDownItem.Spinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:autofillHints="Enter reed count" />
+                    </RelativeLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/rectangle_round_green_solid"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:text="   Next  >   "
+                        android:textAlignment="center"
+                        android:textColor="@color/white_text"
+                        android:textSize="@dimen/edit_text"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/parent_step6"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:id="@+id/img_status_step6"
+                        android:layout_width="0dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_add_prod_status" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="8"
+                        android:text="Step 6 : Enter the dimensions"
+                        android:textColor="@color/black_text" />
+
+                    <ImageView
+                        android:id="@+id/ic_step6_arr"
+                        android:layout_width="0dp"
+                        android:layout_height="24dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_arrow_down"
+                        android:tint="@color/darker_gray" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/child_step6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/expandable_layout_std_padding"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/ic_dimensions" />
+
+                    <TextView
+                        android:id="@+id/txt_prod_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Dimensions" />
+
+                    <LinearLayout
+                        android:id="@+id/linearLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/margin_regular"
+                        android:weightSum="9"
+                        app:layout_constraintStart_toStartOf="@+id/txt_prod_type"
+                        app:layout_constraintTop_toBottomOf="@+id/txt_prod_type">
+
+                        <Spinner
+                            android:id="@+id/sp_prod_length"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="4"
+                            android:background="@drawable/rectangle_edittext_bg"
+                            tools:layout_editor_absoluteX="8dp"
+                            tools:layout_editor_absoluteY="162dp" />
+
+                        <EditText
+                            android:id="@+id/et_prod_length"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="4"
+                            android:background="@drawable/rectangle_edittext_bg"
+                            android:hint="Length"
+                            android:visibility="gone"
+                            tools:layout_editor_absoluteX="8dp"
+                            tools:layout_editor_absoluteY="162dp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text=" X "
+                            android:textAlignment="center"
+                            android:textSize="16sp" />
+
+                        <Spinner
+                            android:id="@+id/sp_prod_width"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="4"
+                            android:background="@drawable/rectangle_edittext_bg"
+                            tools:layout_editor_absoluteX="8dp"
+                            tools:layout_editor_absoluteY="162dp" />
+
+                        <EditText
+                            android:id="@+id/et_prod_width"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="4"
+                            android:background="@drawable/rectangle_edittext_bg"
+                            android:hint="Width"
+                            android:visibility="gone"
+                            tools:layout_editor_absoluteX="8dp"
+                            tools:layout_editor_absoluteY="162dp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/txt_related_prod_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Blouse"
+                        android:visibility="gone"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+                    <LinearLayout
+                        android:id="@+id/ll_sub_prod"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/margin_regular"
+                        android:visibility="gone"
+                        android:weightSum="9"
+                        app:layout_constraintTop_toBottomOf="@+id/txt_related_prod_type"
+                        tools:layout_editor_absoluteX="24dp">
+
+                        <Spinner
+                            android:id="@+id/sp_sub_prod_length"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="4"
+                            android:background="@drawable/rectangle_edittext_bg"
+                            tools:layout_editor_absoluteX="8dp"
+                            tools:layout_editor_absoluteY="162dp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text=" X "
+                            android:textAlignment="center"
+                            android:textSize="16sp" />
+
+                        <Spinner
+                            android:id="@+id/sp_sub_prod_width"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="4"
+                            android:background="@drawable/rectangle_edittext_bg"
+                            tools:layout_editor_absoluteX="8dp"
+                            tools:layout_editor_absoluteY="162dp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/rectangle_round_green_solid"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:text="   Next  >   "
+                        android:textAlignment="center"
+                        android:textColor="@color/white_text"
+                        android:textSize="@dimen/edit_text"
+                        android:textStyle="bold"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="@+id/ll_sub_prod"
+                        app:layout_constraintStart_toStartOf="@+id/ll_sub_prod"
+                        app:layout_constraintTop_toBottomOf="@+id/ll_sub_prod" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/parent_step7"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:id="@+id/img_status_step7"
+                        android:layout_width="0dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_add_prod_status" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="8"
+                        android:text="Step 7 : Enter the wash care instructions"
+                        android:textColor="@color/black_text" />
+
+                    <ImageView
+                        android:id="@+id/ic_step7_arr"
+                        android:layout_width="0dp"
+                        android:layout_height="24dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_arrow_down"
+                        android:tint="@color/darker_gray" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/child_step7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:padding="@dimen/expandable_layout_std_padding"
+                    android:visibility="gone">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/wash_care_recycler_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/parent_step8"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:id="@+id/img_status_step8"
+                        android:layout_width="0dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_add_prod_status" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="8"
+                        android:text="Step 8 : Select the availability"
+                        android:textColor="@color/black_text" />
+
+                    <ImageView
+                        android:id="@+id/ic_step8_arr"
+                        android:layout_width="0dp"
+                        android:layout_height="24dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_arrow_down"
+                        android:tint="@color/darker_gray" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/child_step8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:padding="@dimen/expandable_layout_std_padding"
+                    android:visibility="gone">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center">
+
+                        <LinearLayout
+                            android:id="@+id/ll_made_to_order"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/bg_availability_selected"
-                            android:padding="@dimen/expandable_layout_std_padding">
+                            android:layout_marginRight="32dp"
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical">
 
-                            <ImageView
-                                android:layout_width="56dp"
-                                android:layout_height="56dp"
-                                android:src="@drawable/ic_made_to_order" />
-                        </RelativeLayout>
-                        <TextView
-                            android:id="@+id/txt_made_to_order"
+                            <RelativeLayout
+                                android:id="@+id/img_made_to_order"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/bg_availability_selected"
+                                android:padding="@dimen/expandable_layout_std_padding">
+
+                                <ImageView
+                                    android:layout_width="56dp"
+                                    android:layout_height="56dp"
+                                    android:src="@drawable/ic_made_to_order" />
+                            </RelativeLayout>
+
+                            <TextView
+                                android:id="@+id/txt_made_to_order"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/made_to_order"
+                                android:textColor="@color/black_text" />
+                        </LinearLayout>
+
+                        <LinearLayout
                             android:layout_width="wrap_content"
-                            android:textColor="@color/black_text"
-                            android:text="@string/made_to_order"
-                            android:layout_height="wrap_content"/>
-                    </LinearLayout>
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/ll_made_to_order"
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical">
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:layout_toRightOf="@+id/ll_made_to_order"
-                        android:orientation="vertical">
-                    <RelativeLayout
-                        android:id="@+id/img_in_stock"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bg_availability_unselected"
-                        android:padding="@dimen/expandable_layout_std_padding">
+                            <RelativeLayout
+                                android:id="@+id/img_in_stock"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/bg_availability_unselected"
+                                android:padding="@dimen/expandable_layout_std_padding">
 
-                        <ImageView
-                            android:layout_width="56dp"
-                            android:layout_height="56dp"
-                            android:src="@drawable/ic_in_stock" />
+                                <ImageView
+                                    android:layout_width="56dp"
+                                    android:layout_height="56dp"
+                                    android:src="@drawable/ic_in_stock" />
+                            </RelativeLayout>
+
+                            <TextView
+                                android:id="@+id/txt_available"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/available_in_stock"
+                                android:textColor="@color/clickable_text_color" />
+                        </LinearLayout>
                     </RelativeLayout>
-                        <TextView
-                            android:id="@+id/txt_available"
-                            android:layout_width="wrap_content"
-                            android:text="@string/available_in_stock"
-                            android:textColor="@color/clickable_text_color"
-                            android:layout_height="wrap_content"/>
-                    </LinearLayout>
-                </RelativeLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/expandable_layout_std_padding"
-                android:background="@drawable/rectangle_round_green_solid"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:text="   Next  >   "
-                android:textAlignment="center"
-                android:textColor="@color/white_text"
-                android:textSize="@dimen/edit_text"
-                android:textStyle="bold"
-                android:visibility="gone" />
-        </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/expandable_layout_std_padding"
+                        android:background="@drawable/rectangle_round_green_solid"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:text="   Next  >   "
+                        android:textAlignment="center"
+                        android:textColor="@color/white_text"
+                        android:textSize="@dimen/edit_text"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+                </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/parent_step9"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:gravity="center_vertical">
+                <LinearLayout
+                    android:id="@+id/parent_step9"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical">
 
-            <ImageView
-                android:id="@+id/img_status_step9"
-                android:layout_width="0dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:src="@drawable/ic_add_prod_status" />
+                    <ImageView
+                        android:id="@+id/img_status_step9"
+                        android:layout_width="0dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_add_prod_status" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="8"
-                android:text="Step 9 : Enter the weight"
-                android:textColor="@color/black_text" />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="8"
+                        android:text="Step 9 : Enter the weight"
+                        android:textColor="@color/black_text" />
 
-            <ImageView
-                android:id="@+id/ic_step9_arr"
-                android:layout_width="0dp"
-                android:layout_height="24dp"
-                android:layout_weight="1"
-                android:src="@drawable/ic_arrow_down"
-                android:tint="@color/darker_gray" />
-        </LinearLayout>
+                    <ImageView
+                        android:id="@+id/ic_step9_arr"
+                        android:layout_width="0dp"
+                        android:layout_height="24dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_arrow_down"
+                        android:tint="@color/darker_gray" />
+                </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/child_step9"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:padding="@dimen/expandable_layout_std_padding"
-            android:visibility="gone">
+                <LinearLayout
+                    android:id="@+id/child_step9"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:padding="@dimen/expandable_layout_std_padding"
+                    android:visibility="gone">
 
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_marginBottom="16dp"
-                android:src="@drawable/ic_weight" />
+                    <ImageView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_marginBottom="16dp"
+                        android:src="@drawable/ic_weight" />
 
-            <EditText
-                android:id="@+id/et_prod_weight"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/fab_margin"
-                android:layout_marginEnd="@dimen/fab_margin"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/rectangle_edittext_bg"
-                android:hint="@string/weight_10_characters"
-                android:maxLength="10" />
+                    <EditText
+                        android:id="@+id/et_prod_weight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/fab_margin"
+                        android:layout_marginEnd="@dimen/fab_margin"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/rectangle_edittext_bg"
+                        android:hint="@string/weight_10_characters"
+                        android:maxLength="10" />
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/fab_margin"
-                android:layout_marginEnd="@dimen/fab_margin"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/rectangle_edittext_bg"
-                android:hint="@string/weight_10_characters"
-                android:visibility="gone" />
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/fab_margin"
+                        android:layout_marginEnd="@dimen/fab_margin"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/rectangle_edittext_bg"
+                        android:hint="@string/weight_10_characters"
+                        android:visibility="gone" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@drawable/rectangle_round_green_solid"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:text="   Next  >   "
-                android:textAlignment="center"
-                android:textColor="@color/white_text"
-                android:textSize="@dimen/edit_text"
-                android:textStyle="bold"
-                android:visibility="gone" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/rectangle_round_green_solid"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:text="   Next  >   "
+                        android:textAlignment="center"
+                        android:textColor="@color/white_text"
+                        android:textSize="@dimen/edit_text"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
 
-        </LinearLayout>
+                </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/parent_step10"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:gravity="center_vertical">
+                <LinearLayout
+                    android:id="@+id/parent_step10"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical">
 
-            <ImageView
-                android:id="@+id/img_status_step10"
-                android:layout_width="0dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:src="@drawable/ic_add_prod_status" />
+                    <ImageView
+                        android:id="@+id/img_status_step10"
+                        android:layout_width="0dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_add_prod_status" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="8"
-                android:text="Step 10 : Enter GSM value of fabric"
-                android:textColor="@color/black_text" />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="8"
+                        android:text="Step 10 : Enter GSM value of fabric"
+                        android:textColor="@color/black_text" />
 
-            <ImageView
-                android:id="@+id/ic_step10_arr"
-                android:layout_width="0dp"
-                android:layout_height="24dp"
-                android:layout_weight="1"
-                android:src="@drawable/ic_arrow_down"
-                android:tint="@color/darker_gray" />
-        </LinearLayout>
+                    <ImageView
+                        android:id="@+id/ic_step10_arr"
+                        android:layout_width="0dp"
+                        android:layout_height="24dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_arrow_down"
+                        android:tint="@color/darker_gray" />
+                </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/child_step10"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:padding="@dimen/expandable_layout_std_padding"
-            android:visibility="gone">
+                <LinearLayout
+                    android:id="@+id/child_step10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:padding="@dimen/expandable_layout_std_padding"
+                    android:visibility="gone">
 
-            <ImageView
-                android:layout_width="88dp"
-                android:layout_height="88dp"
-                android:layout_marginBottom="16dp"
-                android:src="@drawable/ic_gsm_value" />
+                    <ImageView
+                        android:layout_width="88dp"
+                        android:layout_height="88dp"
+                        android:layout_marginBottom="16dp"
+                        android:src="@drawable/ic_gsm_value" />
 
-            <EditText
-                android:id="@+id/et_gsm"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/fab_margin"
-                android:layout_marginEnd="@dimen/fab_margin"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/rectangle_edittext_bg"
-                android:hint="@string/enter_gsm_value" />
+                    <EditText
+                        android:id="@+id/et_gsm"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/fab_margin"
+                        android:layout_marginEnd="@dimen/fab_margin"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/rectangle_edittext_bg"
+                        android:hint="@string/enter_gsm_value" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rectangle_round_green_solid"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:text="   Next  >   "
-                android:textAlignment="center"
-                android:textColor="@color/white_text"
-                android:textSize="@dimen/edit_text"
-                android:textStyle="bold"
-                android:visibility="gone" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/rectangle_round_green_solid"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:text="   Next  >   "
+                        android:textAlignment="center"
+                        android:textColor="@color/white_text"
+                        android:textSize="@dimen/edit_text"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
 
-        </LinearLayout>
+                </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/parent_step11"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:gravity="center_vertical">
+                <LinearLayout
+                    android:id="@+id/parent_step11"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical">
 
-            <ImageView
-                android:id="@+id/img_status_step11"
-                android:layout_width="0dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:src="@drawable/ic_add_prod_status" />
+                    <ImageView
+                        android:id="@+id/img_status_step11"
+                        android:layout_width="0dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_add_prod_status" />
 
-            <TextView
-                android:id="@+id/txt_step_11"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="8"
-                android:text="Step 11 : Enter description"
-                android:textColor="@color/black_text" />
+                    <TextView
+                        android:id="@+id/txt_step_11"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="8"
+                        android:text="Step 11 : Enter description"
+                        android:textColor="@color/black_text" />
 
-            <ImageView
-                android:id="@+id/ic_step11_arr"
-                android:layout_width="0dp"
-                android:layout_height="24dp"
-                android:layout_weight="1"
-                android:src="@drawable/ic_arrow_down"
-                android:tint="@color/darker_gray" />
-        </LinearLayout>
+                    <ImageView
+                        android:id="@+id/ic_step11_arr"
+                        android:layout_width="0dp"
+                        android:layout_height="24dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_arrow_down"
+                        android:tint="@color/darker_gray" />
+                </LinearLayout>
 
-        <FrameLayout
-            android:id="@+id/child_step11"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/expandable_layout_std_padding"
-            android:visibility="gone">
+                <FrameLayout
+                    android:id="@+id/child_step11"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/expandable_layout_std_padding"
+                    android:visibility="gone">
 
-            <EditText
-                android:id="@+id/et_dscrp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rectangle_edittext_bg"
-                android:gravity="top|left"
-                android:hint="@string/describe_your_product"
-                android:inputType="textMultiLine"
-                android:lines="4"
-                android:maxLength="500"
-                android:maxLines="4"
-                android:minLines="4"
-                android:padding="8dp"
-                android:scrollbars="vertical"
-                android:textSize="@dimen/edit_text" />
-        </FrameLayout>
+                    <EditText
+                        android:id="@+id/et_dscrp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/rectangle_edittext_bg"
+                        android:gravity="top|left"
+                        android:hint="@string/describe_your_product"
+                        android:inputType="textMultiLine"
+                        android:lines="4"
+                        android:maxLength="500"
+                        android:maxLines="4"
+                        android:minLines="4"
+                        android:padding="8dp"
+                        android:scrollbars="vertical"
+                        android:textSize="@dimen/edit_text" />
+                </FrameLayout>
 
-        <TextView
-            android:id="@+id/txt_save_upload"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="@dimen/margin_regular"
-            android:background="@drawable/rect_round_grad_blue_solid"
-            android:drawableRight="@drawable/ic_save_upload"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:text="  Save  "
-            android:textAlignment="center"
-            android:textColor="@color/white_text" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="@dimen/margin_regular"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/txt_save_upload"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginRight="32dp"
+                        android:background="@drawable/rect_round_grad_blue_solid"
+                        android:drawableRight="@drawable/ic_save_upload"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:text="  Save  "
+                        android:textAlignment="center"
+                        android:textColor="@color/white_text" />
+
+                    <TextView
+                        android:id="@+id/txt_reset"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/rectangle_round_grad"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:text=" Reset All "
+                        android:textAlignment="center"
+                        android:textColor="@color/clickable_text_color" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </ScrollView>
     </LinearLayout>
 
-</ScrollView></LinearLayout>
-
-    </layout>
+</layout>

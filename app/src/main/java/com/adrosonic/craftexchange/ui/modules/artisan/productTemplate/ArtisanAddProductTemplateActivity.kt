@@ -283,6 +283,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
         /////////////////////////Save and Upload///////////////////////////
         txt_save_upload.setOnClickListener {saveUploadProduct() }
         txt_save_upload_top.setOnClickListener {  saveUploadProduct() }
+        txt_reset.setOnClickListener { resetAll() }
     }
 
     override fun onUpdate(pairList: ArrayList<String>, deletedIds: ArrayList<String>) {
@@ -640,7 +641,15 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
          }
     }
 
-
+fun resetAll(){
+    et_dscrp.text.clear()
+    et_gsm.text.clear()
+    et_prod_length.text.clear()
+    et_prod_width.text.clear()
+    et_prod_weight.text.clear()
+    et_prod_name.text.clear()
+    et_prod_code.text.clear()
+}
 }
 
 //et_prod_name.text.toString(),et_prod_code.text.toString(), prodCatId!!,prodTypeId!!,et_dscrp.text.toString(),et_prod_weight.text.toString(),careIdList,weaveIdList,status,
