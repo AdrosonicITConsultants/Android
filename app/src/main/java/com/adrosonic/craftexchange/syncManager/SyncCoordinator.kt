@@ -29,8 +29,8 @@ class SyncCoordinator(val context: Context) {
                 }
             } catch (e: Exception) {
             }
-            Log.e("SynCoordinator", "SynCoordinator items: " + list.size)
             try {
+                Log.e("Offline", "SynCoordinator items: " + list.size)
                 it.processChangedLocalElements(list, context)
             } catch (e: Exception) {
                 Log.e("SynCoordinator", e.message)

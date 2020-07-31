@@ -44,6 +44,7 @@
                 android:layout_gravity="end"
                 android:background="@drawable/rect_round_grad_blue_solid"
                 android:drawableRight="@drawable/ic_save_upload"
+                android:fontFamily="@font/lato_regular"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
                 android:text=" Save "
@@ -84,6 +85,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="8"
+                        android:fontFamily="@font/lato_regular"
                         android:text="Step 1 : Add Photo"
                         android:textColor="@color/black_text" />
 
@@ -133,6 +135,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/rectangle_round_green_solid"
+                        android:fontFamily="@font/lato_regular"
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         android:text="   Next  >   "
@@ -162,6 +165,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="8"
+                        android:fontFamily="@font/lato_regular"
                         android:text="Step 2 : Add general details"
                         android:textColor="@color/black_text" />
 
@@ -189,6 +193,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/expandable_layout_std_padding"
                         android:background="@drawable/rectangle_edittext_bg"
+                        android:fontFamily="@font/lato_regular"
                         android:hint="Name of the product (40 characters)"
                         android:maxLength="40"
                         android:maxLines="1"
@@ -199,6 +204,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/expandable_layout_std_padding"
+                        android:fontFamily="@font/lato_regular"
                         android:background="@drawable/rectangle_edittext_bg"
                         android:hint="Product code(Eg. NAG09_89)"
                         android:maxLength="40"
@@ -237,6 +243,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:background="@drawable/rectangle_round_green_solid"
+                        android:fontFamily="@font/lato_regular"
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         android:text="   Next  >   "
@@ -266,6 +273,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="8"
+                        android:fontFamily="@font/lato_regular"
                         android:text="Step 3 : Select weave type"
                         android:textColor="@color/black_text" />
 
@@ -289,6 +297,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/lato_regular"
                         android:text="You can select multiple options"
                         android:textColor="@color/black_text"
                         android:textSize="@dimen/edit_text" />
@@ -306,6 +315,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_margin="16dp"
                         android:background="@drawable/rectangle_round_green_solid"
+                        android:fontFamily="@font/lato_regular"
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         android:text="   Next  >   "
@@ -336,6 +346,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="8"
+                        android:fontFamily="@font/lato_regular"
                         android:text="Step 4 : Select warp, weft and yarn"
                         android:textColor="@color/black_text" />
 
@@ -375,6 +386,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="16dp"
                         android:background="@drawable/rectangle_round_green_solid"
+                        android:fontFamily="@font/lato_regular"
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         android:text="   Next  >   "
@@ -407,6 +419,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="8"
+                        android:fontFamily="@font/lato_regular"
                         android:text="Step 5 : Enter the reed count"
                         android:textColor="@color/black_text" />
 
@@ -452,6 +465,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:background="@drawable/rectangle_round_green_solid"
+                        android:fontFamily="@font/lato_regular"
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         android:text="   Next  >   "
@@ -482,6 +496,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="8"
+                        android:fontFamily="@font/lato_regular"
                         android:text="Step 6 : Enter the dimensions"
                         android:textColor="@color/black_text" />
 
@@ -515,6 +530,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
+                        android:fontFamily="@font/lato_regular"
                         android:text="Dimensions" />
 
                     <LinearLayout
@@ -543,6 +559,7 @@
                             android:layout_width="0dp"
                             android:layout_height="40dp"
                             android:layout_weight="4"
+                            android:fontFamily="@font/lato_regular"
                             android:background="@drawable/rectangle_edittext_bg"
                             android:hint="Length"
                             android:visibility="gone"
@@ -553,6 +570,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:fontFamily="@font/lato_regular"
                             android:text=" X "
                             android:textAlignment="center"
                             android:textSize="16sp" />
@@ -571,6 +589,7 @@
                             android:layout_width="0dp"
                             android:layout_height="40dp"
                             android:layout_weight="4"
+                            android:fontFamily="@font/lato_regular"
                             android:background="@drawable/rectangle_edittext_bg"
                             android:hint="Width"
                             android:visibility="gone"
@@ -583,6 +602,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
+                        android:fontFamily="@font/lato_regular"
                         android:text="Blouse"
                         android:visibility="gone"
                         app:layout_constraintStart_toStartOf="parent"
@@ -614,6 +634,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:fontFamily="@font/lato_regular"
                             android:text=" X "
                             android:textAlignment="center"
                             android:textSize="16sp" />
@@ -633,6 +654,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:background="@drawable/rectangle_round_green_solid"
+                        android:fontFamily="@font/lato_regular"
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         android:text="   Next  >   "
@@ -665,6 +687,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="8"
+                        android:fontFamily="@font/lato_regular"
                         android:text="Step 7 : Enter the wash care instructions"
                         android:textColor="@color/black_text" />
 
@@ -712,6 +735,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="8"
+                        android:fontFamily="@font/lato_regular"
                         android:text="Step 8 : Select the availability"
                         android:textColor="@color/black_text" />
 
@@ -763,6 +787,7 @@
                                 android:id="@+id/txt_made_to_order"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:fontFamily="@font/lato_regular"
                                 android:text="@string/made_to_order"
                                 android:textColor="@color/black_text" />
                         </LinearLayout>
@@ -791,6 +816,7 @@
                                 android:id="@+id/txt_available"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:fontFamily="@font/lato_regular"
                                 android:text="@string/available_in_stock"
                                 android:textColor="@color/clickable_text_color" />
                         </LinearLayout>
@@ -801,6 +827,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/expandable_layout_std_padding"
                         android:background="@drawable/rectangle_round_green_solid"
+                        android:fontFamily="@font/lato_regular"
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         android:text="   Next  >   "
@@ -830,6 +857,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="8"
+                        android:fontFamily="@font/lato_regular"
                         android:text="Step 9 : Enter the weight"
                         android:textColor="@color/black_text" />
 
@@ -864,6 +892,7 @@
                         android:layout_marginStart="@dimen/fab_margin"
                         android:layout_marginEnd="@dimen/fab_margin"
                         android:layout_marginBottom="16dp"
+                        android:fontFamily="@font/lato_regular"
                         android:background="@drawable/rectangle_edittext_bg"
                         android:hint="@string/weight_10_characters"
                         android:maxLength="10" />
@@ -874,6 +903,7 @@
                         android:layout_marginStart="@dimen/fab_margin"
                         android:layout_marginEnd="@dimen/fab_margin"
                         android:layout_marginBottom="16dp"
+                        android:fontFamily="@font/lato_regular"
                         android:background="@drawable/rectangle_edittext_bg"
                         android:hint="@string/weight_10_characters"
                         android:visibility="gone" />
@@ -882,6 +912,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:background="@drawable/rectangle_round_green_solid"
+                        android:fontFamily="@font/lato_regular"
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         android:text="   Next  >   "
@@ -912,6 +943,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="8"
+                        android:fontFamily="@font/lato_regular"
                         android:text="Step 10 : Enter GSM value of fabric"
                         android:textColor="@color/black_text" />
 
@@ -946,6 +978,7 @@
                         android:layout_marginStart="@dimen/fab_margin"
                         android:layout_marginEnd="@dimen/fab_margin"
                         android:layout_marginBottom="16dp"
+                        android:fontFamily="@font/lato_regular"
                         android:background="@drawable/rectangle_edittext_bg"
                         android:hint="@string/enter_gsm_value" />
 
@@ -953,6 +986,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/rectangle_round_green_solid"
+                        android:fontFamily="@font/lato_regular"
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         android:text="   Next  >   "
@@ -984,6 +1018,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="8"
+                        android:fontFamily="@font/lato_regular"
                         android:text="Step 11 : Enter description"
                         android:textColor="@color/black_text" />
 
@@ -1010,6 +1045,7 @@
                         android:background="@drawable/rectangle_edittext_bg"
                         android:gravity="top|left"
                         android:hint="@string/describe_your_product"
+                        android:fontFamily="@font/lato_regular"
                         android:inputType="textMultiLine"
                         android:lines="4"
                         android:maxLength="500"
@@ -1035,6 +1071,7 @@
                         android:layout_marginRight="32dp"
                         android:background="@drawable/rect_round_grad_blue_solid"
                         android:drawableRight="@drawable/ic_save_upload"
+                        android:fontFamily="@font/lato_regular"
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         android:text="  Save  "
@@ -1047,6 +1084,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:background="@drawable/rectangle_round_grad"
+                        android:fontFamily="@font/lato_regular"
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         android:text=" Reset All "

@@ -6,6 +6,7 @@ import com.adrosonic.craftexchange.database.entities.ArtisanProductCategory
 import com.adrosonic.craftexchange.database.entities.realmEntities.*
 import com.adrosonic.craftexchange.database.entities.realmEntities.BrandList
 import com.adrosonic.craftexchange.repository.data.request.artisan.productTemplate.ArtisanAddProductRequest
+import com.adrosonic.craftexchange.repository.data.request.artisan.productTemplate.RelatedProduct
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.ArtisanProductDetailsResponse
 import com.adrosonic.craftexchange.repository.data.response.artisan.profile.ProfileResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.AllProductsResponse
@@ -968,7 +969,7 @@ class ProductPredicates {
             }
             return itemId
         }
-        fun insertArtisanProductOffline(product : ArtisanAddProductRequest){
+        fun insertArtisanProductOffline(product : ArtisanAddProductRequest,imageList:ArrayList<String>,relatedProdList:ArrayList<RelatedProduct>){
             nextID = 0L
             val realm = CXRealmManager.getRealmInstance()
             try {
@@ -983,6 +984,7 @@ class ProductPredicates {
                     var prodEntry = it.createObject(ArtisanProducts::class.java, nextID)
                     prodEntry.actionCreate = 1
 
+                    prodEntry.productTag = product.tag
                     prodEntry.productCategoryId = product.productCategoryId
                     prodEntry.productSpecs = product.productSpec
                     prodEntry.productTypeId = product.productTypeId
@@ -1007,12 +1009,30 @@ class ProductPredicates {
                     prodEntry.extraWeftYarnCount = product.extraWeftYarnCount
                     prodEntry.extraWeftYarnId = product.extraWeftYarnId
 
-                    realm.copyToRealmOrUpdate(prodEntry)
+//                    realm.copyToRealmOrUpdate(prodEntry)
                     //todo add related products, image paths,weave ids, was care instructions
+
                 }
+                Log.e("ArtisanProdLog","${product.weaveIds?.joinToString()}")
+                Log.e("ArtisanProdLog","${product.careIds?.joinToString()}")
+                Log.e("ArtisanProdLog","${imageList?.joinToString()}")
+                if(relatedProdList.size>0)RelateProductPredicates.insertRelatedProduct(nextID,relatedProdList.get(0).productTypeID,relatedProdList.get(0).width,relatedProdList.get(0).length)
+                ProductImagePredicates.insertProductImages(nextID,imageList)
+                if(product.weaveIds!=null)WeaveTypesPredicates.insertWeaveIds(nextID,product.weaveIds)
+                ProductCaresPredicates.insertCareIds(nextID,product.careIds)
             }catch (e:Exception){
-                Log.e("ArtisanProdLog","$e")
+                Log.e("ArtisanProdLog","${e.message}")
             }
+        }
+
+        fun deleteArtisanProductTemplatePOstUpload(id:Long){
+            var count=0
+            val realm = CXRealmManager.getRealmInstance()
+            realm?.executeTransaction {
+                val artisonProd = it.where(ArtisanProducts::class.java).equalTo("_id", id).findAll()
+                artisonProd.deleteAllFromRealm()
+            }
+
         }
 
 

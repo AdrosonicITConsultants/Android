@@ -9,4 +9,8 @@ open class ProductImages : RealmObject() {
     var productId : Long?=0
     var imageId : Long?=0
     var imageName : String?=""
+
+    companion object{
+        const val COLUMN_PRODUCT_ID="productId"
+    }
 }

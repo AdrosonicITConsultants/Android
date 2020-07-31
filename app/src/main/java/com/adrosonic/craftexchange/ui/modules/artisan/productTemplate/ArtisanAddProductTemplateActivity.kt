@@ -15,15 +15,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
+import com.adrosonic.craftexchange.App
 import com.adrosonic.craftexchange.R
+import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.databinding.ActivityArtisanAddProductTemplateBinding
 import com.adrosonic.craftexchange.repository.data.request.artisan.productTemplate.ArtisanAddProductRequest
 import com.adrosonic.craftexchange.repository.data.request.artisan.productTemplate.RelatedProduct
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.*
+import com.adrosonic.craftexchange.syncManager.SyncCoordinator
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.ArtisanProductTemplateViewModel
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_artisan_add_product_template.*
 
@@ -86,6 +90,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
     var prodTypeId:Long?=null
     var weaveIdList=ArrayList<Long>()
     var careIdList=ArrayList<Long>()
+    var relatedProduct =ArrayList<RelatedProduct>()
     var status=1L
     var reedCountId=1L
     //    private var parentViewsList=ArrayList<LinearLayout>()
@@ -570,11 +575,15 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
             }
         }
         }
-        Log.e("saveUploadProduct","${sp_prod_category.selectedItem.toString() } ProductCatId :"+prodCatId)
-        Log.e("saveUploadProduct","${sp_prod_type.selectedItem.toString() } ProductTypeId :"+prodTypeId)
-//        if(arrRelatedProdType!!.size>0){
-//            arrRelatedProdType?.forEach { arrListRelatedProduct.add(RelatedProduct(it.id,it.)) }
-//        }
+        if(arrRelatedProdType!!.size>0){
+            var relatedProductObj=RelatedProduct()
+            relatedProductObj.length=sp_sub_prod_length.selectedItem.toString()
+            relatedProductObj.width=sp_sub_prod_width.selectedItem.toString()
+            relatedProductObj.productTypeID=arrRelatedProdType?.get(0)?.id?:0
+            relatedProduct.add(relatedProductObj)
+        }
+        Log.e("saveUploadProduct","relatedProduct :${sp_prod_category.selectedItem.toString() } ")
+
         if(pairList.isEmpty()) Utility.displayMessage("Please add atleast 1 product image",applicationContext)
         else if(et_prod_name.text.isBlank()) Utility.displayMessage("Please enter product name at step 2",applicationContext)
         else if(et_prod_code.text.isBlank()) Utility.displayMessage("Please enter product code at step 2",applicationContext)
@@ -610,9 +619,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                 template.code=et_prod_code.text.toString()
                 template.productCategoryId=prodCatId?:0
                 template.productTypeId=prodTypeId?:0
-                Log.e("saveUploadProduct","Type: ${template.productTypeId } ProductCatId ${template.productCategoryId}")
                 template.productSpec=et_dscrp.text.toString()
-                template.weight=et_prod_weight.text.toString()
                 template.weight=et_prod_weight.text.toString()
                 template.careIds=careIdList
                 template.weaveIds=weaveIdList
@@ -630,27 +637,27 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                 template.width=width
                 template.length=length
                 template.reedCountId=reedCountId.toString()
-                template.relatedProduct=null
+             if(relatedProduct.size>0)   template.relatedProduct=relatedProduct.get(0).toString()
 
-//             ProductPredicates.insertArtisanProductOffline(template)
-                mViewModel.uploadProduct(template.toString(), pairList)
-//                finish()
+                ProductPredicates.insertArtisanProductOffline(template,pairList,relatedProduct)
+                if(Utility.checkIfInternetConnected(applicationContext)){
+                val coordinator = SyncCoordinator(applicationContext)
+                coordinator?.performLocallyAvailableActions()}
+//             mViewModel.uploadProduct(template.toString(), pairList)
+             finish()
             }
          }
     }
 
-fun resetAll(){
-    et_dscrp.text.clear()
-    et_gsm.text.clear()
-    et_prod_length.text.clear()
-    et_prod_width.text.clear()
-    et_prod_weight.text.clear()
-    et_prod_name.text.clear()
-    et_prod_code.text.clear()
-}
+    fun resetAll(){
+        et_dscrp.text.clear()
+        et_gsm.text.clear()
+        et_prod_length.text.clear()
+        et_prod_width.text.clear()
+        et_prod_weight.text.clear()
+        et_prod_name.text.clear()
+        et_prod_code.text.clear()
+    }
 }
 
-//et_prod_name.text.toString(),et_prod_code.text.toString(), prodCatId!!,prodTypeId!!,et_dscrp.text.toString(),et_prod_weight.text.toString(),careIdList,weaveIdList,status,
-//et_gsm.text.toString(),warpDyeId,warpYarnCount,warpYarnId,weftDyeId,weftYarnCount,weftYarnId,extraWeftYarnId,extraWeftYarnCount,extraWeftDyeId,
-//width,  length, sp_reed_count.selectedItem.toString(),null
 

@@ -4,11 +4,16 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import androidx.core.app.JobIntentService
-import com.adrosonic.craftexchange.database.predicates.ProductPredicates
+import com.adrosonic.craftexchange.database.entities.realmEntities.ArtisanProducts
+import com.adrosonic.craftexchange.database.entities.realmEntities.RelatedProducts
+import com.adrosonic.craftexchange.database.predicates.*
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
+import com.adrosonic.craftexchange.repository.data.request.artisan.productTemplate.ArtisanAddProductRequest
+import com.adrosonic.craftexchange.repository.data.request.artisan.productTemplate.RelatedProduct
 import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.ArtisanProductTemplateRespons
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.pixplicity.easyprefs.library.Prefs
+import kotlinx.android.synthetic.main.activity_artisan_add_product_template.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -28,58 +33,150 @@ class ProductCreateService: JobIntentService() {
     private fun addProductAction(prodId: Long){
         try {
             if (prodId > 0){
-                //todo base upton itemId/product id fire select query for mark deletion to have neccesary parameters to hit delte API
+                Log.e("Offline","prodId :"+prodId)
                val productEntry=ProductPredicates.getArtisanProducts(prodId)
-                uploadProduct("",null)
+               val imageEntry=ProductImagePredicates.getImagesList(prodId)
+               val weaveIds=WeaveTypesPredicates.getWeaveList(prodId)
+               val careIds=ProductCaresPredicates.getCareList(prodId)
+               val relatedEntry=RelateProductPredicates.getRelatedProductOfProduct(prodId)
+                Log.e("Offline","imageList :"+imageEntry?.joinToString ())
+                Log.e("Offline","weaveIds :"+weaveIds?.joinToString ())
+                Log.e("Offline","careIds :"+careIds?.joinToString ())
+                Log.e("Offline","relatedEntry :"+relatedEntry?.productWeight)
+               var productData=createProductTemplateString(productEntry,weaveIds,careIds,relatedEntry)
+                Log.e("Offline","productData :"+productData)
+                uploadProduct(productData,imageEntry,prodId)
           }
         }catch (e: Exception){
-            Log.e("Exception Deleting",e.message)
+            Log.e("Offline",e.message)
         }
     }
-
-    fun uploadProduct(productData:String,imageList:ArrayList<String>?){
-        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
-
-        val productData1="{\"tag\":\"ekansh\",\"code\":\"ekansh\",\"productCategoryId\":3,\"productTypeId\":3,\"productSpec\":\"asdasd\",\"weight\":\"asdasd\",\"careIds\":[7],\"weaveIds\":[4,6],\"statusId\":2,\"gsm\":\"\",\"warpDyeId\":1,\"warpYarnCount\":\"50nm\",\"warpYarnId\":2,\"weftDyeId\":2,\"weftYarnCount\":\"2/20s\",\"weftYarnId\":1,\"extraWeftDyeId\":1,\"extraWeftYarnCount\":\"2/10s\",\"extraWeftYarnId\":1,\"width\":\"46 inches\",\"length\":\"5.5 mtr\",\"reedCountId\":\"6\"}"
-        Log.e(TAG,"productData :"+productData)
-        var file1 = File(imageList?.get(0))
-        var file2 = File(imageList?.get(1))
-        var file3 = File(imageList?.get(2))
-
-        val body1 = prepareFilePart("file1", file1)
-        val body2 = prepareFilePart("file2", file2)
-        val body3 = prepareFilePart("file3", file3)
-
-        CraftExchangeRepository
-            .getProductService()
-            .uploadProductTemplate(token,productData1,body1,body2,body3)
-            .enqueue(object: Callback, retrofit2.Callback<ArtisanProductTemplateRespons> {
-                override fun onFailure(call: Call<ArtisanProductTemplateRespons>, t: Throwable) {
-                    t.printStackTrace()
-                    Log.e(TAG,"getProductUploadData onFailure: "+t.stackTrace.joinToString())
-                    Log.e(TAG,"getProductUploadData onFailure: "+t.localizedMessage)
-                }
-                override fun onResponse(
-                    call: Call<ArtisanProductTemplateRespons>,
-                    response: retrofit2.Response<ArtisanProductTemplateRespons>) {
-                    Log.e(TAG,"onResponse :"+response.code())
-                    Log.e(TAG,"onResponse :"+response.isSuccessful)
-                    Log.e(TAG,"onResponse :"+call.request().url)
-                    if(response.body()?.valid == true){
-                        Log.e(TAG,"getProductUploadData :"+response.body()?.data?.artitionID)
-//                        todo update DB table
-//                        UserConfig.shared.productUploadJson= Gson().toJson(response.body())
-//                        Log.e("LandingViewModel","SPF :"+ UserConfig.shared.productUploadJson)
-
-
-                    }else{
-                        Log.e(TAG,"getProductUploadData body null: "+response.body()?.errorCode)
-                    }
-                }
-
-            })
+    fun createProductTemplateString(productEntry:ArtisanProducts?,weaveIds:List<Long>,careIdList:List<Long>,realatedEntry:RelatedProducts?):String{
+        var template= ArtisanAddProductRequest()
+        Log.e("Offline","createProductTemplateString 1111111111:"+weaveIds?.size)
+        template.tag=productEntry?.productTag?:""//et_prod_name.text.toString()
+        template.code=productEntry?.productCode?:""
+        template.productCategoryId=productEntry?.productCategoryId?:0
+        Log.e("Offline","createProductTemplateString 22222222222:"+weaveIds?.size)
+        template.productTypeId=productEntry?.productTypeId?:0
+        template.productSpec=productEntry?.productSpecs?:""
+        template.weight=productEntry?.weight?:""
+        template.careIds=careIdList
+        template.weaveIds=weaveIds
+        Log.e("Offline","createProductTemplateString 333333333:"+careIdList?.size)
+        template.statusId=productEntry?.productStatusId?:1
+        template.gsm=productEntry?.gsm?:""
+        template.warpDyeId=productEntry?.warpDyeId?:0
+        template.warpYarnCount=productEntry?.warpYarnCount?:""
+        Log.e("Offline","createProductTemplateString 4444444444:"+template.statusId)
+        template.warpYarnId=productEntry?.warpYarnId?:0
+        template.weftDyeId=productEntry?.weftDyeId?:0
+        template.weftYarnCount=productEntry?.weftYarnCount?:""
+        template.weftYarnId=productEntry?.weftYarnId?:0
+        template.extraWeftYarnId=productEntry?.extraWeftYarnId?:0
+        template.extraWeftYarnCount=productEntry?.extraWeftYarnCount?:""
+        template.extraWeftDyeId=productEntry?.extraWeftDyeId?:0
+        template.width=productEntry?.productWidth?:""
+        template.length=productEntry?.productLength?:""
+        template.reedCountId=productEntry?.reedCountId.toString()
+        Log.e("Offline","createProductTemplateString 6666666666:"+template?.reedCountId)
+        if(realatedEntry!=null)  {
+            var relatedProductObj= RelatedProduct()
+            relatedProductObj.length=realatedEntry.productLength?:""
+            relatedProductObj.width=realatedEntry.productWidth?:""
+            relatedProductObj.productTypeID=realatedEntry.productTypeId?:0
+            template.relatedProduct=relatedProductObj.toString()
+        }
+        Log.e("Offline","template 777777777 :"+template.code)
+        return template.toString()
     }
 
+    fun uploadProduct(productData:String,imageList:ArrayList<String>?,prodId:Long){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        Log.e("Offline","productData :"+productData)
+        if(imageList!!.size==3) {
+            var file1 = File(imageList?.get(0))
+            var file2 = File(imageList?.get(1))
+            var file3 = File(imageList?.get(2))
+            val body1 = prepareFilePart("file1", file1)
+            val body2 = prepareFilePart("file2", file2)
+            val body3 = prepareFilePart("file3", file3)
+
+            CraftExchangeRepository.getProductService()
+                .uploadProductTemplate(token, productData, body1, body2, body3)
+                .enqueue(object : Callback, retrofit2.Callback<ArtisanProductTemplateRespons> {
+                    override fun onFailure(
+                        call: Call<ArtisanProductTemplateRespons>,
+                        t: Throwable
+                    ) {
+                        t.printStackTrace()
+                        Log.e("Offline", "getProductUploadData onFailure: " + t.localizedMessage)
+                    }
+
+                    override fun onResponse(
+                        call: Call<ArtisanProductTemplateRespons>,
+                        response: retrofit2.Response<ArtisanProductTemplateRespons>
+                    ) {
+                        Log.e("Offline", "onResponse :" + response.code())
+                        if (response.body()?.valid == true) {
+                            deleteOfflineEntries(prodId)
+                        }
+                    }
+                })
+        }else if(imageList!!.size==2) {
+            var file1 = File(imageList?.get(0))
+            var file2 = File(imageList?.get(1))
+            val body1 = prepareFilePart("file1", file1)
+            val body2 = prepareFilePart("file2", file2)
+
+            CraftExchangeRepository.getProductService()
+                .uploadProductTemplate(token, productData, body1, body2)
+                .enqueue(object : Callback, retrofit2.Callback<ArtisanProductTemplateRespons> {
+                    override fun onFailure(
+                        call: Call<ArtisanProductTemplateRespons>,
+                        t: Throwable
+                    ) {
+                        t.printStackTrace()
+                        Log.e("Offline", "getProductUploadData onFailure: " + t.localizedMessage)
+                    }
+
+                    override fun onResponse(
+                        call: Call<ArtisanProductTemplateRespons>,
+                        response: retrofit2.Response<ArtisanProductTemplateRespons>
+                    ) {
+                        Log.e("Offline", "onResponse :" + response.code())
+                        if (response.body()?.valid == true) {
+                            deleteOfflineEntries(prodId)
+                        }
+                    }
+                })
+        }else {
+            var file1 = File(imageList?.get(0))
+            val body1 = prepareFilePart("file1", file1)
+
+            CraftExchangeRepository.getProductService()
+                .uploadProductTemplate(token, productData, body1)
+                .enqueue(object : Callback, retrofit2.Callback<ArtisanProductTemplateRespons> {
+                    override fun onFailure(
+                        call: Call<ArtisanProductTemplateRespons>,
+                        t: Throwable
+                    ) {
+                        t.printStackTrace()
+                        Log.e("Offline", "getProductUploadData onFailure: " + t.localizedMessage)
+                    }
+
+                    override fun onResponse(
+                        call: Call<ArtisanProductTemplateRespons>,
+                        response: retrofit2.Response<ArtisanProductTemplateRespons>
+                    ) {
+                        Log.e("Offline", "onResponse :" + response.code())
+                        if (response.body()?.valid == true) {
+                            deleteOfflineEntries(prodId)
+                        }
+                    }
+                })
+        }
+    }
     private fun prepareFilePart(
         partName: String,
         fileUri: File
@@ -89,6 +186,13 @@ class ProductCreateService: JobIntentService() {
         Log.e(TAG,"MultipartBody :"+partName+" Name:  "+file.name)
         return MultipartBody.Part.createFormData(partName, file.name, requestFile)
     }
+private fun deleteOfflineEntries(prodId:Long){
+    ProductPredicates.deleteArtisanProductTemplatePOstUpload(prodId)
+    RelateProductPredicates.deleteRelatedProduct(prodId)
+    ProductImagePredicates.deleteProdImages(prodId)
+    WeaveTypesPredicates.deleteWeaveIds(prodId)
+    ProductCaresPredicates.deleteCareIds(prodId)
+}
 
 
     companion object {
