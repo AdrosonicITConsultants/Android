@@ -44,14 +44,17 @@
 
                 <com.synnapps.carouselview.CarouselView
                     android:id="@+id/carousel_view_products"
-                    android:layout_width="@dimen/card_wt"
-                    android:layout_height="@dimen/card_ht"
+                    android:layout_width="210dp"
+                    android:layout_height="260dp"
                     android:layout_marginTop="@dimen/margin_small"
                     app:fillColor="@color/carousel_dot_color"
                     app:pageColor="@color/colorSplash"
-                    app:radius="6dp"
-                    app:slideInterval="3000"
+                    app:radius="3dp"
                     app:strokeWidth="1dp"
+                    app:autoPlay="false"
+                    app:disableAutoPlayOnUserInteraction="true"
+                    app:strokeColor="@color/white_text"
+                    app:animateOnBoundary="false"
                     android:layout_gravity="center"/>
 
 
@@ -253,10 +256,11 @@
                     android:textColor="@color/black_text"
                     android:textSize="@dimen/product_description_text" />
 
+
                 <ListView
                     android:id="@+id/weave_type_list"
                     android:layout_width="wrap_content"
-                    android:layout_height="150dp"
+                    android:layout_height="100dp"
                     android:layout_marginStart="@dimen/margin_regular"
                     android:layout_marginTop="@dimen/margin_regular"
                     android:divider="@null"
@@ -562,7 +566,7 @@
                         android:fontFamily="@font/lato_regular"
                         android:gravity="center"
                         android:textAllCaps="false"
-                        android:textSize="@dimen/product_note_text" />
+                        android:textSize="@dimen/product_availability_text" />
 
                 </LinearLayout>
 
@@ -604,7 +608,7 @@
                         android:fontFamily="@font/lato_regular"
                         android:gravity="center"
                         android:textAllCaps="false"
-                        android:textSize="@dimen/product_note_text" />
+                        android:textSize="@dimen/product_availability_text" />
 
                 </LinearLayout>
 
@@ -624,17 +628,38 @@
                         android:layout_weight="1"
                         android:src="@drawable/ic_dimens_icon" />
 
-                    <TextView
-                        android:id="@+id/dimens_text"
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:fontFamily="@font/lato_regular"
-                        android:text="@string/dimensions"
-                        android:textAllCaps="false"
-                        android:textColor="@color/black_text"
-                        android:textSize="@dimen/product_description_text" />
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/dimens_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/lato_regular"
+                            android:text="@string/dimensions"
+                            android:textAllCaps="false"
+                            android:textColor="@color/black_text"
+                            android:textSize="@dimen/product_description_text" />
+
+                        <TextView
+                            android:id="@+id/dimens_unit_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/lato_regular"
+                            android:text="@string/dimensions"
+                            android:textAllCaps="false"
+                            android:textSize="@dimen/product_note_text"
+                            android:layout_marginTop="4dp"/>
+
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="0dp"
