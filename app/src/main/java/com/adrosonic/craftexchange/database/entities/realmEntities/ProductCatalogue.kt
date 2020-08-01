@@ -85,7 +85,12 @@ open class ProductCatalogue : RealmObject() {
     var madeWithAntaran : Long ?= 0
     var isDeleted : Long ?= 0
     ////////////offline manager////////////////
+    var isWishlisted: Long ?=0
+    var actionWishlisted: Long ? = 0
 
-
-
+companion object{
+    const val COLUMN_IS_WISHLISTED="isWishlisted"
+    const val COLUMN_ACTION_WISHLISTED="actionWishlisted"
+    const val COLUMN_PRODUCT_ID="productId"
+}
 }

@@ -1035,6 +1035,47 @@ class ProductPredicates {
 
         }
 
+    ////////////////////////Wishlist////////////////////////////
+        fun addToWishlist(wishListedProd:List<Long>?){
+        val realm = CXRealmManager.getRealmInstance()
+        try {
+            realm?.executeTransaction {
+                val productIterator = wishListedProd?.iterator()
+                while (productIterator!!.hasNext()) {
+                    val id=productIterator.next()
+                    Log.e("addToWishlist","addToWishlist :$id")
+                    var productCatalog = realm.where(ProductCatalogue::class.java)
+                        .equalTo(ProductCatalogue.COLUMN_PRODUCT_ID,id).limit(1)
+                        .findFirst()
+                    if(productCatalog!=null) {
+                        productCatalog?.isWishlisted = 1L
+                        Log.e("addToWishlist", "addToWishlist after :$id")
+                        realm.copyToRealmOrUpdate(productCatalog)
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("addToWishlist","${e}")
+        } finally {
+//            realm.close()
+        }
+    }
+        fun getWishListedData(): RealmResults<ProductCatalogue>? {
+            val realm = CXRealmManager.getRealmInstance()
+            var wishlistedItem: RealmResults<ProductCatalogue>?=null
+            try {
+                realm?.executeTransaction {
+                    wishlistedItem=realm.where(ProductCatalogue::class.java)
+                        .equalTo(ProductCatalogue.COLUMN_IS_WISHLISTED,1L)
+                        .findAll()
+                    }
+                } catch (e: Exception) {
+                Log.e("addToWishlist","${e}")
+            } finally {
+//            realm.close()
+            }
+            return wishlistedItem
+        }
 
     }
 }
