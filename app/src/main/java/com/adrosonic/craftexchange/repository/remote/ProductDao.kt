@@ -72,4 +72,6 @@ interface ProductDao {
         @Part file1: MultipartBody.Part?
     ): Call<ArtisanProductTemplateRespons>
 
+
+
 }

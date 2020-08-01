@@ -5,5 +5,6 @@ class ProductCard (
     var productId : Long?=0,
     var productTitle : String ?="",
     var productDescription : String ?="",
-    var statusId : Long ?=0
+    var statusId : Long ?=0,
+    var isWishlisted : Long ?=0
     )

@@ -61,4 +61,8 @@ object CraftExchangeRepository {
     fun getProductService(): ProductDao {
         return builder(ProductDao::class.java)
     }
+
+    fun getWishlistService():WishlistDao{
+        return builder(WishlistDao::class.java)
+    }
 }

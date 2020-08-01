@@ -87,5 +87,17 @@ open class ProductCatalogue : RealmObject() {
     ////////////offline manager////////////////
 
 
+    var isWishlisted : Long ?= 0
+    var actionWishlisted : Long ?= 0
+
+    companion object{
+        const val COLUMN_TABLE = "ProductCatalogue"
+        const val COLUMN__ID = "_id"
+        const val COLUMN_PRODUCT_ID = "productId"
+
+        const val COLUMN_ACTION_WISHLISTED = "actionWishlisted"
+
+    }
+
 
 }

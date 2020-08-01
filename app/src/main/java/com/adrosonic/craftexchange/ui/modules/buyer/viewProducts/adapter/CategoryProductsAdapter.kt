@@ -78,10 +78,9 @@ class CategoryProductsAdapter(var context: Context?, private var categoryProduct
             intent.putExtras(bundle)
             context?.startActivity(intent)
         }
-//        holder.binding.prodImg.setBackgroundColor(currentColor) // TODO : to be commented later
-//        holder.binding.prodText.text= product.productDesc
-        //TODO : Img to be Implemented using CMS
-//        product.productImageId?.let { holder.binding.prodImg.setImageResource(it) }
+
+        holder.binding.wishlistButton.isLiked = product.isWishlisted == 1L
+
     }
 
     internal fun setProducts(categoryProduct: List<ProductCard>) {

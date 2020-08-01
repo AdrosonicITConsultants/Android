@@ -952,6 +952,9 @@ class ProductPredicates {
                         "actionDelete=1"-> {realm.where(ArtisanProducts::class.java)
                             .equalTo(ArtisanProducts.COLUMN_ACTION_DELETE,1L)
                             .findAll() }
+
+
+
                         else-> null
                     }
                     if(message!=null){
@@ -1014,7 +1017,6 @@ class ProductPredicates {
                 Log.e("ArtisanProdLog","$e")
             }
         }
-
 
     }
 }
