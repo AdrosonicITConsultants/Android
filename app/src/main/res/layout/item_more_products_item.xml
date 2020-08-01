@@ -14,8 +14,8 @@
 
     <ImageView
         android:id="@+id/more_img"
-        android:padding="8dp"
-        android:layout_height="60dp"
+        android:layout_margin="4dp"
+        android:layout_height="50dp"
         android:layout_width="60dp"
         android:onClick="@{()->event.onItemClick(image)}"/>
 </layout>

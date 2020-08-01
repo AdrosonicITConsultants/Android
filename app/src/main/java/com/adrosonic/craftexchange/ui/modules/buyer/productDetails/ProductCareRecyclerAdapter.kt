@@ -41,7 +41,7 @@ class ProductCareRecyclerAdapter(var context: Context?, private var careList: Li
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding: ItemProductCareListBinding = DataBindingUtil.inflate(inflater, R.layout.item_product_care_list,parent, false)
-        return ViewHolder(binding)    }
+        return ViewHolder(binding)}
 
     override fun getItemCount(): Int = careList.size
 
@@ -66,8 +66,7 @@ class ProductCareRecyclerAdapter(var context: Context?, private var careList: Li
                 holder.binding.careIcon.setImageResource(R.drawable.ic_care5)
             }
             6.toLong() -> {
-//                TODO logo not rendering
-//                holder.binding.careIcon.setImageResource(R.drawable.ic_care6)
+                holder.binding.careIcon.setImageResource(R.drawable.ic_care6)
             }
             7.toLong() -> {
                 holder.binding.careIcon.setImageResource(R.drawable.ic_care7)

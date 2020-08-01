@@ -12,6 +12,7 @@ import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrosonic.craftexchange.R
@@ -26,6 +27,7 @@ import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
 import com.google.gson.GsonBuilder
+import com.synnapps.carouselview.ImageListener
 import kotlin.collections.ArrayList
 
 fun Context.catalogueProductDetailsIntent(): Intent {
@@ -35,7 +37,7 @@ fun Context.catalogueProductDetailsIntent(): Intent {
     }
 }
 private var mBinding : ActivityCatalogueProductDetailsBinding ?= null
-var imageUrlList : MutableList<String> ?= null
+var imageUrlList: MutableList<String> = ArrayList()
 var productId : Long ?= 0
 var productDetails : ProductCatalogue ?= null
 var productUploadData : ProductUploadData?= null
@@ -67,16 +69,6 @@ class CatalogueProductDetailsActivity : AppCompatActivity() {
         getProductDetails(productId)
 
         getProductImages(productId)
-
-//        var imageListener =ImageListener { position, imageView ->
-//                imageUrlList?.get(position)?.let {
-//                    ImageSetter.setImage(applicationContext,
-//                        it,imageView)
-//                }
-//            }
-//
-//        mBinding?.carouselViewProducts?.setImageListener(imageListener)
-//        imageUrlList?.count()?.let { mBinding?.carouselViewProducts?.setPageCount(it) }
 
         mBinding?.productTitle?.text = productDetails?.productTag ?: "-"
         mBinding?.productDescription?.text = productDetails?.product_spe ?: "-"
@@ -130,7 +122,7 @@ class CatalogueProductDetailsActivity : AppCompatActivity() {
         var productWeight = productDetails?.weight ?: "-"
 
 
-        mBinding?.weightValue?.text = "$productTypeName\t\t\t$productWeight"
+        mBinding?.weightValue?.text = "$productTypeName\t\t$productWeight"
 
         setDimensions(productDetails)
 
@@ -161,6 +153,14 @@ class CatalogueProductDetailsActivity : AppCompatActivity() {
                 var imagename = size?.imageName
                 var url = Utility.getProductsImagesUrl(productId,imagename)
                 imageUrlList?.add(url)
+            }
+            if(imageUrlList!=null) {
+                var imageListener = ImageListener { position, imageView ->
+//
+                    ImageSetter.setImage(applicationContext,imageUrlList?.get(position),imageView)
+                }
+                mBinding?.carouselViewProducts?.pageCount = imageUrlList?.size!!
+                mBinding?.carouselViewProducts?.setImageListener(imageListener)
             }
         }
     }
@@ -225,7 +225,7 @@ class CatalogueProductDetailsActivity : AppCompatActivity() {
                 var id = i.productCareId
                 careSelctionList.forEach {
                     if(it.first == id){
-//                        mCare.add(ProductCare(it.first,it.second))
+                        mCare.add(ProductCare(it.first,it.second))
                     }
                 }
             }
@@ -253,6 +253,17 @@ class CatalogueProductDetailsActivity : AppCompatActivity() {
     }
 
     fun setDimensions(details: ProductCatalogue?){
+        var l = SpannableString("L")
+        l.setSpan(ForegroundColorSpan(ContextCompat.getColor(applicationContext,R.color.length_unit_color)), 0, l.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        var w = SpannableString("W")
+        w.setSpan(ForegroundColorSpan(ContextCompat.getColor(applicationContext,R.color.swipe_background)), 0, w.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        mBinding?.dimensUnitText?.text = l
+        mBinding?.dimensUnitText?.append("\tX\t")
+        mBinding?.dimensUnitText?.append(w)
+
+
+
+
         var length = SpannableString(details?.productLength)
         length.setSpan(ForegroundColorSpan(ContextCompat.getColor(applicationContext,R.color.length_unit_color)), 0, length.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         var width = SpannableString(details?.productWidth)
@@ -301,9 +312,7 @@ class CatalogueProductDetailsActivity : AppCompatActivity() {
     private fun focusOnView() {
         Handler().post {
             mBinding?.weaveTypeUsedText?.top?.let {
-                mBinding?.scrollProductDetails?.scrollTo(0,
-                    it
-                )
+                mBinding?.scrollProductDetails?.scrollTo(0,it)
             }
         }
     }
