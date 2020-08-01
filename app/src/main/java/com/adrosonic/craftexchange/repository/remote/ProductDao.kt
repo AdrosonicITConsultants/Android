@@ -1,12 +1,12 @@
 package com.adrosonic.craftexchange.repository.remote
 
-import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.ProductUploadData
+import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.ArtisanProductTemplateRespons
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.ArtisanProductDetailsResponse
+import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.ProductUploadData
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.AllProductsResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.BrandListResponse
-import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.BrandProductDetailResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.CatalogueProductsResponse
-import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.ClusterProductDetailResponse
+import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -40,7 +40,36 @@ interface ProductDao {
     @GET("product/getArtitionProducts")
     fun getArtisanProducts(@Header("Authorization") token:String) : Call<ArtisanProductDetailsResponse>
 
+    //////////////////////////////////////////add product template artisan///////////////////////////////////////////////////
     @Headers("Accept: application/json")
     @GET("product/getProductUploadData")
-    fun getProductUploadData(@Header("Authorization") token:String) : Call<ProductUploadData>
+    fun getProductUploadData(@Header("Authorization") token: String): Call<ProductUploadData>
+
+    @Multipart
+    @Headers("Accept: application/json")
+    @POST("product/uploadProduct")
+    fun uploadProductTemplate(
+        @Header("Authorization") token: String,
+        @Query("productData") productData: String,
+        @Part file1: MultipartBody.Part?, @Part file2: MultipartBody.Part?,  @Part file3: MultipartBody.Part?
+    ): Call<ArtisanProductTemplateRespons>
+
+    @Multipart
+    @Headers("Accept: application/json")
+    @POST("product/uploadProduct")
+    fun uploadProductTemplate(
+        @Header("Authorization") token: String,
+        @Query("productData") productData: String,
+        @Part file1: MultipartBody.Part?, @Part file2: MultipartBody.Part?
+    ): Call<ArtisanProductTemplateRespons>
+
+    @Multipart
+    @Headers("Accept: application/json")
+    @POST("product/uploadProduct")
+    fun uploadProductTemplate(
+        @Header("Authorization") token: String,
+        @Query("productData") productData: String,
+        @Part file1: MultipartBody.Part?
+    ): Call<ArtisanProductTemplateRespons>
+
 }

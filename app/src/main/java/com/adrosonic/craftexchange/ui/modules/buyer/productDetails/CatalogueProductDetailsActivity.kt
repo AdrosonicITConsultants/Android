@@ -19,14 +19,13 @@ import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCatalogue
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.databinding.ActivityCatalogueProductDetailsBinding
-import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.ProductCare
-import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.ProductUploadData
+import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.ProductCare
+import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.ProductUploadData
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.ProductImage
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
-import com.bumptech.glide.Glide
 import com.google.gson.GsonBuilder
 import com.synnapps.carouselview.ImageListener
 import kotlin.collections.ArrayList
@@ -41,7 +40,7 @@ private var mBinding : ActivityCatalogueProductDetailsBinding ?= null
 var imageUrlList: MutableList<String> = ArrayList()
 var productId : Long ?= 0
 var productDetails : ProductCatalogue ?= null
-var productUploadData : ProductUploadData ?= null
+var productUploadData : ProductUploadData?= null
 private var mUserConfig = UserConfig()
 var jsonProductData : String ?=""
 var careSelctionList = ArrayList<Pair<Long,String>>()
@@ -140,8 +139,6 @@ class CatalogueProductDetailsActivity : AppCompatActivity() {
         }
     }
 
-
-
     fun getProductDetails(productId : Long?){
         productDetails = ProductPredicates.getProductDetails(productId)
     }
@@ -149,7 +146,7 @@ class CatalogueProductDetailsActivity : AppCompatActivity() {
     fun getProductImages(productId : Long?){
         var imageList = ProductPredicates.getAllImagesOfProduct(productId)
         var size = imageList
-        imageUrlList.clear()
+        imageUrlList?.clear()
         if (imageList != null) {
             for (size in imageList){
                 Log.i("Stat","$size")

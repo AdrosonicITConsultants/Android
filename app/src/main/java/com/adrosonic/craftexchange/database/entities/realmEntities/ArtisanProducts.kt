@@ -3,26 +3,27 @@ package com.adrosonic.craftexchange.database.entities.realmEntities
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
-open class ArtisanProducts : RealmObject()  {
+open class ArtisanProducts : RealmObject() {
 
     @PrimaryKey
-    var _id :Long ?=0
+    var _id: Long? = 0
 
     //details of brand
-    var artisanId : Long ?= 0
-//    var artisanName : String ?= ""
+    var artisanId: Long? = 0
+
+    //    var artisanName : String ?= ""
 //    var clusterId : Long ?= 0
-    var clusterName : String ?= ""
+    var clusterName: String? = ""
 //    var brandName : String ?= ""
 
     //product main
-    var productId : Long ?= 0
-    var productCode : String ?=""
-    var productTag : String ?=""
+    var productId: Long? = 0
+    var productCode: String? = ""
+    var productTag: String? = ""
 
     //product catgory
-    var productCategoryId : Long ?=0
-    var productCategoryDesc : String ?= ""
+    var productCategoryId: Long? = 0
+    var productCategoryDesc: String? = ""
 //    var productCategoryCode : String ?= ""
 
     //subProduct under category
@@ -31,58 +32,80 @@ open class ArtisanProducts : RealmObject()  {
 //    var subProductName : String ?=""
 
     //productType
-    var productTypeId : Long ?= 0
-    var productTypeDesc : String ?= ""
+    var productTypeId: Long? = 0
+    var productTypeDesc: String? = ""
 //    var inProductCategory : Long ?=0
 
     //warp Yan
-      var warpYarnId : Long ?= 0
-//    var warpYarnDesc : String ? = ""
-      var warpYarnCount : String ? = ""
-//    var warpYarnTypeId : Long ?= 0
+    var warpYarnId: Long? = 0
+
+    //    var warpYarnDesc : String ? = ""
+    var warpYarnCount: String? = ""
+
+    //    var warpYarnTypeId : Long ?= 0
 //    var warpYarnTypeDesc : String ?= ""
-    var warpDyeId : Long ?=0
+    var warpDyeId: Long? = 0
 //    var warpDyeDesc : String ?=""
 
     //weft Yan
-    var weftYarnId : Long ?= 0
-//    var weftYarnDesc : String ? = ""
-    var weftYarnCount : String ?= ""
-//    var weftYarnTypeId : Long ?= 0
+    var weftYarnId: Long? = 0
+
+    //    var weftYarnDesc : String ? = ""
+    var weftYarnCount: String? = ""
+
+    //    var weftYarnTypeId : Long ?= 0
 //    var weftYarnTypeDesc : String ?= ""
-    var weftDyeId : Long ?=0
+    var weftDyeId: Long? = 0
 //    var weftDyeDesc : String ?=""
 
     //extra weft Yan
-    var extraWeftYarnId : Long ?= 0
-//    var extraWeftYarnDesc : String ? = ""
-    var extraWeftYarnCount : String ? = ""
-//    var extraWeftYarnTypeId : Long ?= 0
+    var extraWeftYarnId: Long? = 0
+
+    //    var extraWeftYarnDesc : String ? = ""
+    var extraWeftYarnCount: String? = ""
+
+    //    var extraWeftYarnTypeId : Long ?= 0
 //    var extraWeftYarnTypeDesc : String ?= ""
-    var extraWeftDyeId : Long ?=0
+    var extraWeftDyeId: Long? = 0
 //    var extraWeftDyeDesc : String ?=""
 
     //product dimensions
-    var productLength : String ?= ""
-    var productWidth : String ?= ""
+    var productLength: String? = ""
+    var productWidth: String? = ""
 
     //reed count
-    var reedCountId : Long ?= 0
+    var reedCountId: Long? = 0
 //    var reedCount : String ?= ""
 
     //product status id ... 1-> MadeToOrder.... 2-> Available
-    var productStatusId : Long ?=0
+    var productStatusId: Long? = 0
 
     //product specs
-    var gsm : String ?=""
-    var weight : String ?= ""
-    var productSpecs : String ?=""
+    var gsm: String? = ""
+    var weight: String? = ""
+    var productSpecs: String? = ""
 
     //TODO : ProductCares, ProductImages and ProductWeaves...different table
     //TODO : Related Product Types to be implemented later
 
-    var createdOn : String ?=""
-    var modifiedOn : String ?=""
-//    var madeWithAntaran : Long ?= 0
-    var isDeleted : Long ?= 0
+    var createdOn: String? = ""
+    var modifiedOn: String? = ""
+
+    //    var madeWithAntaran : Long ?= 0
+    var isDeleted: Long? = 0
+
+    ////////////offline manager////////////////
+    var actionDelete = 0
+    var actionUpdate = 0
+    var actionCreate = 0
+
+    companion object {
+        const val COLUMN_TABLE = "ArtisanProducts"
+        const val COLUMN__ID = "_id"
+
+        const val COLUMN_ACTION_DELETE = "actionDelete"
+        const val COLUMN_ACTION_UPDATE = "actionUpdate"
+        const val COLUMN_ACTION_CREATE = "actionCreate"
+
+    }
 }

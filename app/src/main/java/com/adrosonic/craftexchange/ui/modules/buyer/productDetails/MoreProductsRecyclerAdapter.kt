@@ -9,7 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ItemMoreProductsItemBinding
-import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.ProductCare
+//import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.ProductCare
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.ProductImage
 import com.adrosonic.craftexchange.ui.interfaces.MoreProductClick
 import com.adrosonic.craftexchange.utils.ConstantsDirectory

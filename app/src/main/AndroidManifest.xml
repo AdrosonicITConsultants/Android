@@ -18,8 +18,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.modules.buyer.productDetails.CatalogueProductDetailsActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.modules.buyer.productDetails.CatalogueProductDetailsActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.modules.artisan.profile.editProfile.ArtisanEditProfileActivity"
@@ -67,6 +68,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.modules.artisan.productTemplate.ArtisanAddProductTemplateActivity"
+            android:screenOrientation="portrait" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

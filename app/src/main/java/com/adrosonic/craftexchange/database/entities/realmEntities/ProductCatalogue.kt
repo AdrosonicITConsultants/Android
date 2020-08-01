@@ -84,4 +84,8 @@ open class ProductCatalogue : RealmObject() {
     var modifiedOn : String ?=""
     var madeWithAntaran : Long ?= 0
     var isDeleted : Long ?= 0
+    ////////////offline manager////////////////
+
+
+
 }

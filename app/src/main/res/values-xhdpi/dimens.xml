@@ -27,4 +27,6 @@
 	<dimen name="product_note_text">12sp</dimen>
 	<dimen name="product_availability_text">9.6sp</dimen>
 	<dimen name="cat_prod_image_width">88dp</dimen>
+	<dimen name="expandable_layout_std_padding">16dp</dimen>
+
 </resources>

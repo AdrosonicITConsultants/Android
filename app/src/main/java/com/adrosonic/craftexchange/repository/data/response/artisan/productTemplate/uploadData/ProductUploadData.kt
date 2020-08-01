@@ -1,9 +1,9 @@
-package com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate
+package com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData
 
 data class ProductUploadData (
     val data: Data,
     val valid: Boolean,
-    val errorMessage: String,
+    val errorMessage: Any? = null,
     val errorCode: Long
 )
 
@@ -36,7 +36,7 @@ data class ProductCategory (
 data class ProductType (
     val id: Long,
     val productDesc: String,
-    val productCategoryId: Long,
+    val productCategoryID: Long? = null,
     val productLengths: List<ProductLength>,
     val productWidths: List<ProductWidth>,
     val relatedProductType: List<ProductType>
@@ -45,13 +45,13 @@ data class ProductType (
 data class ProductLength (
     val id: Long,
     val length: String,
-    val productTypeId: Long
+    val productTypeID: Long
 )
 
 data class ProductWidth (
     val id: Long,
     val width: String,
-    val productTypeId: Long
+    val productTypeID: Long
 )
 
 data class ReedCount (
@@ -80,5 +80,5 @@ data class YarnType (
 data class YarnCount (
     val id: Long,
     val count: String,
-    val yarnTypeId: Long
+    val yarnTypeID: Long
 )
