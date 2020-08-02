@@ -2,6 +2,8 @@ package com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.productlists
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -21,11 +23,13 @@ import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.adapter.BrandPr
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
+import com.adrosonic.craftexchange.viewModels.WishlistViewModel
+import kotlinx.android.synthetic.main.fragment_wishlist.*
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class BrandProdListFragment : Fragment() {
+class BrandProdListFragment : Fragment(){
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -165,7 +169,8 @@ class BrandProdListFragment : Fragment() {
                 var productTitle = size.productTag
                 var status =size.productStatusId
                 var desc = size.product_spe
-                var prod = ProductCard(clusterId,productId,productTitle,desc,status)
+                var isWishlisted = size.isWishlisted
+                var prod = ProductCard(clusterId,productId,productTitle,desc,status,isWishlisted)
                 mProduct.add(prod)
             }
             brandProductAdapter?.setProducts(mProduct)
@@ -177,4 +182,5 @@ class BrandProdListFragment : Fragment() {
         fun newInstance() = BrandProdListFragment()
         const val TAG = "BrandProducts"
     }
+
 }

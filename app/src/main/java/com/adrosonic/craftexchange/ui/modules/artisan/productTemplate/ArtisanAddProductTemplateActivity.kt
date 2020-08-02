@@ -15,15 +15,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
+import com.adrosonic.craftexchange.App
 import com.adrosonic.craftexchange.R
+import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.databinding.ActivityArtisanAddProductTemplateBinding
 import com.adrosonic.craftexchange.repository.data.request.artisan.productTemplate.ArtisanAddProductRequest
 import com.adrosonic.craftexchange.repository.data.request.artisan.productTemplate.RelatedProduct
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.*
+import com.adrosonic.craftexchange.syncManager.SyncCoordinator
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.ArtisanProductTemplateViewModel
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_artisan_add_product_template.*
 
@@ -86,6 +90,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
     var prodTypeId:Long?=null
     var weaveIdList=ArrayList<Long>()
     var careIdList=ArrayList<Long>()
+    var relatedProduct =ArrayList<RelatedProduct>()
     var status=1L
     var reedCountId=1L
     //    private var parentViewsList=ArrayList<LinearLayout>()
@@ -139,6 +144,13 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
         btn_back.setOnClickListener{
             showCancelDialog()
         }
+        loadData()
+        /////////////////////////Save and Upload///////////////////////////
+        txt_save_upload.setOnClickListener {saveUploadProduct() }
+        txt_save_upload_top.setOnClickListener {  saveUploadProduct() }
+        txt_reset.setOnClickListener { resetAll() }
+    }
+    fun loadData(){
         ///////////////////////Add Photo////////////////////////
         add_photo_recycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         prodImgListAdapter = ProdImageListAdapter(this, pairList)
@@ -208,11 +220,11 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
             ) {
                 val prodType = arrProdTypeStr.get(position)
                 arrProductType?.forEach {
-                  if(it.productDesc.equals(prodType)){
+                    if(it.productDesc.equals(prodType)){
 //                      prodTypeId=it.id
 //                      prodCatId=it.productCategoryID
-                      arrRelatedProdType= it.relatedProductType
-                  }
+                        arrRelatedProdType= it.relatedProductType
+                    }
                 }
                 setVisiblitiesAndTextsOnType(arrProdTypeStr.get(position),arrRelatedProdType)
             }
@@ -279,12 +291,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
             } else productAvalability = true
             setproductAvailability(productAvalability)
         }
-        /////////////////////////Save and Upload///////////////////////////
-        txt_save_upload.setOnClickListener {saveUploadProduct() }
-        txt_save_upload_top.setOnClickListener {  saveUploadProduct() }
-        txt_reset.setOnClickListener { resetAll() }
     }
-
     override fun onUpdate(pairList: ArrayList<String>, deletedIds: ArrayList<String>) {
         this.pairList = pairList
         this.deletedPaths = deletedIds
@@ -552,105 +559,114 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
     }
     fun saveUploadProduct() {
 
-        weaveIdList.clear()
-        careIdList.clear()
-        weaveSelctionList.forEach { if(it.second)weaveIdList?.add(it.third) }
-        careSelctionList.forEach { if(it.second)careIdList?.add(it.third) }
-        var width=if(arrProdWidthStr.size<=0)et_prod_width.text.toString() else sp_prod_width.selectedItem.toString()
-        var length=if(arrProdLengthStr.size<=0)et_prod_length.text.toString() else sp_prod_length.selectedItem.toString()
+        try {
+            weaveIdList.clear()
+            careIdList.clear()
+            weaveSelctionList.forEach { if(it.second)weaveIdList?.add(it.third) }
+            careSelctionList.forEach { if(it.second)careIdList?.add(it.third) }
+            var width=if(arrProdWidthStr.size<=0)et_prod_width.text.toString() else sp_prod_width?.selectedItem.toString()
+            var length=if(arrProdLengthStr.size<=0)et_prod_length.text.toString() else sp_prod_length?.selectedItem.toString()
 
-        arrReedCount?.forEach { if(it.count.equals(sp_reed_count.selectedItem.toString()) ){reedCountId=it.id}}
+            arrReedCount?.forEach { if(it.count.equals(sp_reed_count?.selectedItem.toString()) ){reedCountId=it.id}}
 
-        arrProductCategory?.forEach { if(it.productDesc.equals(sp_prod_category.selectedItem.toString())){
-            prodCatId=it.id
-            it.productTypes.forEach {
-                if(it.productDesc.equals(sp_prod_type.selectedItem.toString())){
-                    prodTypeId=it.id
+            arrProductCategory?.forEach { if(it.productDesc.equals(sp_prod_category?.selectedItem.toString())){
+                prodCatId=it.id
+                it.productTypes.forEach {
+                    if(it.productDesc.equals(sp_prod_type?.selectedItem.toString())){
+                        prodTypeId=it.id
+                    }
                 }
             }
-        }
-        }
-        Log.e("saveUploadProduct","${sp_prod_category.selectedItem.toString() } ProductCatId :"+prodCatId)
-        Log.e("saveUploadProduct","${sp_prod_type.selectedItem.toString() } ProductTypeId :"+prodTypeId)
-//        if(arrRelatedProdType!!.size>0){
-//            arrRelatedProdType?.forEach { arrListRelatedProduct.add(RelatedProduct(it.id,it.)) }
-//        }
-        if(pairList.isEmpty()) Utility.displayMessage("Please add atleast 1 product image",applicationContext)
-        else if(et_prod_name.text.isBlank()) Utility.displayMessage("Please enter product name at step 2",applicationContext)
-        else if(et_prod_code.text.isBlank()) Utility.displayMessage("Please enter product code at step 2",applicationContext)
-        else if(sp_prod_category.selectedItem.toString().isBlank()) Utility.displayMessage("Please select product category at step 2",applicationContext)
-        else if(sp_prod_type.selectedItem.toString().isBlank()) Utility.displayMessage("Please select product type at step 2",applicationContext)
-        else if(weaveIdList.isEmpty()) Utility.displayMessage("Please select weave type at step 3",applicationContext)
-        else if(warpDyeId<=0) Utility.displayMessage("Please select warp dye Id at step 4",applicationContext)
-        else if(warpYarnCount.isBlank()) Utility.displayMessage("Please select warp yarn count at step 4",applicationContext)
-        else if(warpYarnId<=0) Utility.displayMessage("Please select warp yarn Id at step 4",applicationContext)
-        else if(weftDyeId<=0) Utility.displayMessage("Please select weft dye Id at step 4",applicationContext)
-        else if(weftYarnCount.isBlank()) Utility.displayMessage("Please select weft yarn count at step 4",applicationContext)
-        else if(weftYarnId<=0) Utility.displayMessage("Please select weft yarn Id at step 4",applicationContext)
-        else if(sp_reed_count.selectedItem.toString().isBlank()) Utility.displayMessage("Please select reed count at step 5",applicationContext)
-        else if(width.isBlank()) Utility.displayMessage("Please enter width at step 6",applicationContext)
-        else if(length.isBlank()) Utility.displayMessage("Please enter length at step 6",applicationContext)
-        //todo add step 6 validations for related items
-        else if(careIdList.isEmpty()) Utility.displayMessage("Please select weave type at step 7",applicationContext)
-        else if(et_prod_weight.text.isBlank()) Utility.displayMessage("Please enter product weight at step 9",applicationContext)
-        else if(et_dscrp.text.isBlank()) Utility.displayMessage("Please enter description",applicationContext)
-        else{
-            var dialog = Dialog(this)
-            dialog?.setContentView(R.layout.dialog_save_upload)
-            dialog?.show()
-            val tvCancel = dialog?.findViewById(R.id.cancel) as TextView
-            val tvSave = dialog?.findViewById(R.id.save) as TextView
-            tvCancel.setOnClickListener {
-                dialog.cancel()
             }
-            tvSave.setOnClickListener {
-
-                var template= ArtisanAddProductRequest()
-                template.tag=et_prod_name.text.toString()
-                template.code=et_prod_code.text.toString()
-                template.productCategoryId=prodCatId?:0
-                template.productTypeId=prodTypeId?:0
-                Log.e("saveUploadProduct","Type: ${template.productTypeId } ProductCatId ${template.productCategoryId}")
-                template.productSpec=et_dscrp.text.toString()
-                template.weight=et_prod_weight.text.toString()
-                template.weight=et_prod_weight.text.toString()
-                template.careIds=careIdList
-                template.weaveIds=weaveIdList
-                template.statusId=status
-                template.gsm=et_gsm.text.toString()
-                template.warpDyeId=warpDyeId
-                template.warpYarnCount=warpYarnCount
-                template.warpYarnId=warpYarnId
-                template.weftDyeId=weftDyeId
-                template.weftYarnCount=weftYarnCount
-                template.weftYarnId=weftYarnId
-                template.extraWeftYarnId=extraWeftYarnId
-                template.extraWeftYarnCount=extraWeftYarnCount
-                template.extraWeftDyeId=extraWeftDyeId
-                template.width=width
-                template.length=length
-                template.reedCountId=reedCountId.toString()
-                template.relatedProduct=null
-
-//             ProductPredicates.insertArtisanProductOffline(template)
-                mViewModel.uploadProduct(template.toString(), pairList)
-//                finish()
+            if(arrRelatedProdType!!.size>0){
+                var relatedProductObj=RelatedProduct()
+                relatedProductObj.length=sp_sub_prod_length?.selectedItem.toString()
+                relatedProductObj.width=sp_sub_prod_width?.selectedItem.toString()
+                relatedProductObj.productTypeID=arrRelatedProdType?.get(0)?.id?:0
+                relatedProduct.add(relatedProductObj)
             }
-         }
+            Log.e("saveUploadProduct","relatedProduct :${sp_prod_category.selectedItem.toString() } ")
+
+            if(pairList.isEmpty()) Utility.displayMessage("Please add atleast 1 product image",applicationContext)
+            else if(et_prod_name.text.isBlank()) Utility.displayMessage("Please enter product name at step 2",applicationContext)
+            else if(et_prod_code.text.isBlank()) Utility.displayMessage("Please enter product code at step 2",applicationContext)
+            else if(sp_prod_category.selectedItem.toString().isBlank()) Utility.displayMessage("Please select product category at step 2",applicationContext)
+            else if(sp_prod_type.selectedItem.toString().isBlank()) Utility.displayMessage("Please select product type at step 2",applicationContext)
+            else if(weaveIdList.isEmpty()) Utility.displayMessage("Please select weave type at step 3",applicationContext)
+            else if(warpDyeId<=0) Utility.displayMessage("Please select warp dye Id at step 4",applicationContext)
+            else if(warpYarnCount.isBlank()) Utility.displayMessage("Please select warp yarn count at step 4",applicationContext)
+            else if(warpYarnId<=0) Utility.displayMessage("Please select warp yarn Id at step 4",applicationContext)
+            else if(weftDyeId<=0) Utility.displayMessage("Please select weft dye Id at step 4",applicationContext)
+            else if(weftYarnCount.isBlank()) Utility.displayMessage("Please select weft yarn count at step 4",applicationContext)
+            else if(weftYarnId<=0) Utility.displayMessage("Please select weft yarn Id at step 4",applicationContext)
+            else if(sp_reed_count.selectedItem.toString().isBlank()) Utility.displayMessage("Please select reed count at step 5",applicationContext)
+            else if(width.isBlank()) Utility.displayMessage("Please enter width at step 6",applicationContext)
+            else if(length.isBlank()) Utility.displayMessage("Please enter length at step 6",applicationContext)
+            //todo add step 6 validations for related items
+            else if(careIdList.isEmpty()) Utility.displayMessage("Please select weave type at step 7",applicationContext)
+            else if(et_prod_weight.text.isBlank()) Utility.displayMessage("Please enter product weight at step 9",applicationContext)
+            else if(et_dscrp.text.isBlank()) Utility.displayMessage("Please enter description",applicationContext)
+            else{
+                var dialog = Dialog(this)
+                dialog?.setContentView(R.layout.dialog_save_upload)
+                dialog?.show()
+                val tvCancel = dialog?.findViewById(R.id.cancel) as TextView
+                val tvSave = dialog?.findViewById(R.id.save) as TextView
+                tvCancel.setOnClickListener {
+                    dialog.cancel()
+                }
+                tvSave.setOnClickListener {
+
+                    var template= ArtisanAddProductRequest()
+                    template.tag=et_prod_name.text.toString()
+                    template.code=et_prod_code.text.toString()
+                    template.productCategoryId=prodCatId?:0
+                    template.productTypeId=prodTypeId?:0
+                    template.productSpec=et_dscrp.text.toString()
+                    template.weight=et_prod_weight.text.toString()
+                    template.careIds=careIdList
+                    template.weaveIds=weaveIdList
+                    template.statusId=status
+                    template.gsm=et_gsm.text.toString()
+                    template.warpDyeId=warpDyeId
+                    template.warpYarnCount=warpYarnCount
+                    template.warpYarnId=warpYarnId
+                    template.weftDyeId=weftDyeId
+                    template.weftYarnCount=weftYarnCount
+                    template.weftYarnId=weftYarnId
+                    template.extraWeftYarnId=extraWeftYarnId
+                    template.extraWeftYarnCount=extraWeftYarnCount
+                    template.extraWeftDyeId=extraWeftDyeId
+                    template.width=width
+                    template.length=length
+                    template.reedCountId=reedCountId.toString()
+                 if(relatedProduct.size>0)   template.relatedProduct=relatedProduct.get(0).toString()
+
+                    ProductPredicates.insertArtisanProductOffline(template,pairList,relatedProduct)
+                    if(Utility.checkIfInternetConnected(applicationContext)){
+                    val coordinator = SyncCoordinator(applicationContext)
+                    coordinator?.performLocallyAvailableActions()}
+    //             mViewModel.uploadProduct(template.toString(), pairList)
+                 finish()
+                }
+             }
+        } catch (e: Exception) {
+            Utility.displayMessage("Please fill all details",applicationContext)
+            Log.e("AddProductTemplate","while save click $e")
+        }
     }
 
-fun resetAll(){
-    et_dscrp.text.clear()
-    et_gsm.text.clear()
-    et_prod_length.text.clear()
-    et_prod_width.text.clear()
-    et_prod_weight.text.clear()
-    et_prod_name.text.clear()
-    et_prod_code.text.clear()
-}
+    fun resetAll(){
+        et_dscrp.text.clear()
+        et_gsm.text.clear()
+        et_prod_length.text.clear()
+        et_prod_width.text.clear()
+        et_prod_weight.text.clear()
+        et_prod_name.text.clear()
+        et_prod_code.text.clear()
+        pairList.clear()
+        loadData()
+    }
 }
 
-//et_prod_name.text.toString(),et_prod_code.text.toString(), prodCatId!!,prodTypeId!!,et_dscrp.text.toString(),et_prod_weight.text.toString(),careIdList,weaveIdList,status,
-//et_gsm.text.toString(),warpDyeId,warpYarnCount,warpYarnId,weftDyeId,weftYarnCount,weftYarnId,extraWeftYarnId,extraWeftYarnCount,extraWeftDyeId,
-//width,  length, sp_reed_count.selectedItem.toString(),null
 

@@ -1,9 +1,11 @@
 package com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.adapter
 
+import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -12,15 +14,25 @@ import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCard
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
+import com.adrosonic.craftexchange.database.predicates.WishlistPredicates
 import com.adrosonic.craftexchange.databinding.ItemProductDescListBinding
+import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.response.clusterResponse.Cluster
+import com.adrosonic.craftexchange.syncManager.SyncCoordinator
 import com.adrosonic.craftexchange.ui.interfaces.ClusterProductClick
 import com.adrosonic.craftexchange.ui.modules.buyer.productDetails.catalogueProductDetailsIntent
 import com.adrosonic.craftexchange.ui.modules.buyer.profile.buyerProfileIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
+import com.adrosonic.craftexchange.viewModels.WishlistViewModel
+import com.like.LikeButton
+import com.like.OnLikeListener
+import com.pixplicity.easyprefs.library.Prefs
+import okhttp3.ResponseBody
+import retrofit2.Call
 import java.util.*
+import javax.security.auth.callback.Callback
 
 class RegionProductsAdapter(var context: Context?, private var regionProduct: List<ProductCard>) : RecyclerView.Adapter<RegionProductsAdapter.ViewHolder>() {
 
@@ -82,6 +94,71 @@ class RegionProductsAdapter(var context: Context?, private var regionProduct: Li
         }
 
         holder.binding.wishlistButton.isLiked = product.isWishlisted == 1L
+        var wishVM = WishlistViewModel(context?.applicationContext as Application)
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        holder.binding?.wishlistButton?.setOnLikeListener(object: OnLikeListener {
+            override fun liked(likeButton: LikeButton) {
+                product.productId?.let { it1 ->
+                    CraftExchangeRepository
+                        .getWishlistService()
+                        .addToWishlist(token, it1)
+                        .enqueue(object: Callback, retrofit2.Callback<ResponseBody> {
+                            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                                t.printStackTrace()
+                                Log.e("AddToWishlist failure ","${t.printStackTrace()}")
+                                Utility.displayMessage("Error while adding to wishlist", context!!)
+                            }
+
+                            override fun onResponse(
+                                call: Call<ResponseBody>,
+                                response: retrofit2.Response<ResponseBody>) {
+                                if(response.isSuccessful){
+                                    Log.e(WishlistViewModel.TAG,"addToWishlist :"+response.body())
+                                    WishlistPredicates.updateProductWishlisting(product.productId,1L)
+                                    Utility.displayMessage("Added to wishlist :-)",context!!)
+                                    holder.binding.wishlistButton.isLiked = true
+                                }else{
+                                    Log.e(WishlistViewModel.TAG,"addToWishlist "+response.body())
+                                    Utility.displayMessage("Error while adding to wishlist",context!!)
+                                }
+                            }
+
+                        })
+
+                }}
+            override fun unLiked(likeButton: LikeButton) {
+                product.productId?.let { it1 ->
+                    CraftExchangeRepository
+                        .getWishlistService()
+                        .deleteProductsInWishlist(token, it1)
+                        .enqueue(object: Callback, retrofit2.Callback<ResponseBody> {
+                            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                                t.printStackTrace()
+                                Log.e("AddToWishlist failure ","${t.printStackTrace()}")
+
+                            }
+
+                            override fun onResponse(
+                                call: Call<ResponseBody>,
+                                response: retrofit2.Response<ResponseBody>) {
+                                Log.e(WishlistViewModel.TAG,"onResponse :"+response.code())
+                                Log.e(WishlistViewModel.TAG,"onResponse :"+response.isSuccessful)
+                                Log.e(WishlistViewModel.TAG,"onResponse :"+call.request().url)
+                                if(response.isSuccessful){
+                                    Log.e(WishlistViewModel.TAG,"addToWishlist :"+response.body())
+                                    WishlistPredicates.updateProductWishlisting(product.productId,0L)
+                                    Utility.displayMessage("Removed from wishlist :-(",context!!)
+                                    holder.binding.wishlistButton.isLiked = false
+
+                                }else{
+                                    Log.e(WishlistViewModel.TAG,"addToWishlist "+response.body())
+
+                                }
+                            }
+                        })
+                }
+            }
+        })
 
     }
 

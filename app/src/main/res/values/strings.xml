@@ -243,6 +243,8 @@
     <string name="gsm">GSM\n(Gram per Square Metre)</string>
     <string name="wash_care_instructions">Wash Care Instructions</string>
     <string name="like_it">Like it ?</string>
+    <string name="are_you_sure_you_want_to_remove">Are you sure you want to remove?</string>
+    <string name="remove">Remove</string>
 
 
     <string-array name="product_array">

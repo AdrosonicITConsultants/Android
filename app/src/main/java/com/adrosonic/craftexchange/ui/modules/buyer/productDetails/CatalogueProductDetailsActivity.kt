@@ -18,7 +18,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCatalogue
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
+import com.adrosonic.craftexchange.database.predicates.WishlistPredicates
 import com.adrosonic.craftexchange.databinding.ActivityCatalogueProductDetailsBinding
+import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.ProductCare
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.ProductUploadData
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.ProductImage
@@ -26,8 +28,15 @@ import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
+import com.adrosonic.craftexchange.viewModels.WishlistViewModel
 import com.google.gson.GsonBuilder
+import com.like.LikeButton
+import com.like.OnLikeListener
+import com.pixplicity.easyprefs.library.Prefs
 import com.synnapps.carouselview.ImageListener
+import okhttp3.ResponseBody
+import retrofit2.Call
+import javax.security.auth.callback.Callback
 import kotlin.collections.ArrayList
 
 fun Context.catalogueProductDetailsIntent(): Intent {
@@ -130,6 +139,8 @@ class CatalogueProductDetailsActivity : AppCompatActivity() {
 
         moreProdAdapter = MoreProductsRecyclerAdapter(applicationContext, mMoreProductList)
         setMoreProducts(productDetails)
+
+        setWishlisting(productDetails)
 
         mBinding?.seeAllProdText?.setOnClickListener{
             focusOnView()
@@ -302,6 +313,75 @@ class CatalogueProductDetailsActivity : AppCompatActivity() {
         mBinding?.moreProductImages?.layoutManager = LinearLayoutManager(applicationContext,
             LinearLayoutManager.HORIZONTAL, false)
         moreProdAdapter?.notifyDataSetChanged()
+    }
+
+    fun setWishlisting(details: ProductCatalogue?){
+        mBinding?.btnWishlist?.isLiked = details?.isWishlisted == 1L
+
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        mBinding?.btnWishlist?.setOnLikeListener(object: OnLikeListener {
+            override fun liked(likeButton: LikeButton) {
+                details?.productId?.let { it1 ->
+                    CraftExchangeRepository
+                        .getWishlistService()
+                        .addToWishlist(token, it1)
+                        .enqueue(object: Callback, retrofit2.Callback<ResponseBody> {
+                            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                                t.printStackTrace()
+                                Log.e("AddToWishlist failure ","${t.printStackTrace()}")
+                                Utility.displayMessage("Error while adding to wishlist", applicationContext)
+                            }
+
+                            override fun onResponse(
+                                call: Call<ResponseBody>,
+                                response: retrofit2.Response<ResponseBody>) {
+                                if(response.isSuccessful){
+                                    Log.e(WishlistViewModel.TAG,"addToWishlist :"+response.body())
+                                    WishlistPredicates.updateProductWishlisting(details.productId,1L)
+                                    Utility.displayMessage("Added to wishlist :-)",applicationContext!!)
+                                    mBinding?.btnWishlist?.isLiked = true
+                                }else{
+                                    Log.e(WishlistViewModel.TAG,"addToWishlist "+response.body())
+                                    Utility.displayMessage("Error while adding to wishlist",applicationContext!!)
+                                }
+                            }
+
+                        })
+
+                }}
+            override fun unLiked(likeButton: LikeButton) {
+                details?.productId?.let { it1 ->
+                    CraftExchangeRepository
+                        .getWishlistService()
+                        .deleteProductsInWishlist(token, it1)
+                        .enqueue(object: Callback, retrofit2.Callback<ResponseBody> {
+                            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                                t.printStackTrace()
+                                Log.e("AddToWishlist failure ","${t.printStackTrace()}")
+
+                            }
+
+                            override fun onResponse(
+                                call: Call<ResponseBody>,
+                                response: retrofit2.Response<ResponseBody>) {
+                                Log.e(WishlistViewModel.TAG,"onResponse :"+response.code())
+                                Log.e(WishlistViewModel.TAG,"onResponse :"+response.isSuccessful)
+                                Log.e(WishlistViewModel.TAG,"onResponse :"+call.request().url)
+                                if(response.isSuccessful){
+                                    Log.e(WishlistViewModel.TAG,"addToWishlist :"+response.body())
+                                    WishlistPredicates.updateProductWishlisting(details.productId,0L)
+                                    Utility.displayMessage("Removed from wishlist :-(",applicationContext!!)
+                                    mBinding?.btnWishlist?.isLiked = false
+
+                                }else{
+                                    Log.e(WishlistViewModel.TAG,"addToWishlist "+response.body())
+
+                                }
+                            }
+                        })
+                }
+            }
+        })
     }
 
     override fun onBackPressed() {

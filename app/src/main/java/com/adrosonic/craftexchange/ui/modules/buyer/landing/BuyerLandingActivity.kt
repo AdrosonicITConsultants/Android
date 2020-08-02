@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.annotation.NonNull
 import androidx.appcompat.app.ActionBarDrawerToggle
 import com.google.android.material.navigation.NavigationView
@@ -19,11 +20,13 @@ import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityBuyerLandingBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.ui.modules.buyer.profile.buyerProfileIntent
+import com.adrosonic.craftexchange.ui.modules.buyer.wishList.wishlistFragment
 import com.adrosonic.craftexchange.viewModels.LandingViewModel
 import com.adrosonic.craftexchange.ui.modules.role.roleselectIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
+import com.adrosonic.craftexchange.viewModels.ArtisanProductTemplateViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.iid.FirebaseInstanceId
 import com.pixplicity.easyprefs.library.Prefs
@@ -50,7 +53,7 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
     }
 
     private var mBinding : ActivityBuyerLandingBinding ?= null
-    private var mViewModel: LandingViewModel? =null
+    val mViewModel: LandingViewModel by viewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,8 +79,8 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
         ImageSetter.setImage(applicationContext,url,nav_view.getHeaderView(0).logo,
             R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
 
-        mViewModel = ViewModelProviders.of(this).get(LandingViewModel::class.java)
         mViewModel?.getProductUploadData()
+        mViewModel.getwishlisteProductIds()
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -125,11 +128,15 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
                     R.id.action_enquiries -> {
     //                        initTab(CalculatorFragment.newInstance(), CalculatorFragment.TAG)
                         return true
+
                     }
 
                     R.id.action_wishlist -> {
-    //                        initTab(HistoryFragment.newInstance(), HistoryFragment.TAG)
-                        // showBFXProductsMenu();
+                        if (savedInstanceState == null) {
+                            supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container,   wishlistFragment.newInstance())
+                                .addToBackStack(null)
+                                .commit()
+                        }
                         return true
                     }
                     R.id.action_chat -> {

@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver
 import android.content.ContextWrapper
 import android.util.Log
 import com.adrosonic.craftexchange.syncManager.SyncCoordinator
+import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.utils.registerNetworkChangeReceiver
 import com.pixplicity.easyprefs.library.Prefs
 import io.realm.Realm
@@ -34,5 +35,15 @@ class App : Application() {
             onNetworkDisconnected = {
                 Log.i("Network", "DisConnected")
             })
+    }
+
+    fun callOfflineSync() {
+        if (Utility.checkIfInternetConnected(this)){
+            try {
+                coordinator?.performLocallyAvailableActions()
+            } catch (e: Exception) {
+                Log.e("App Exception", e.message)
+            }
+        }
     }
 }

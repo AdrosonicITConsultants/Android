@@ -13,4 +13,15 @@ interface WishlistDao {
     fun addToWishlist(@Header("Authorization") token:String,
                        @Path("productId") productId : Long
     ) : Call<ResponseBody>
+
+    @Headers("Accept: application/json")
+    @DELETE("product/deleteProductsInWishlist/{productId}")
+    fun deleteProductsInWishlist(@Header("Authorization") token:String,
+                      @Path("productId") productId : Long
+    ) : Call<ResponseBody>
+
+    @Headers("Accept: application/json")
+    @DELETE("product/deleteAllProductsInWishlist")
+    fun deleteAllProductsInWishlist(@Header("Authorization") token:String
+    ) : Call<ResponseBody>
 }

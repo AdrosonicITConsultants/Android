@@ -25,7 +25,7 @@ open class ArtisanAddProductRequest{
     var width: String = ""
     var length: String = ""
     var reedCountId: String = ""
-    var relatedProduct: List<RelatedProduct>? = null
+    var relatedProduct: String? = null
 
     override fun toString(): String {
         return "{"+"\"tag\":\"" + tag + '\"'.toString() +
@@ -49,15 +49,21 @@ open class ArtisanAddProductRequest{
                 ",\"extraWeftYarnId\":"+extraWeftYarnId+
                 ",\"width\":\""+width+'\"'.toString() +
                 ",\"length\":\""+length+'\"'.toString() +
-                ",\"reedCountId\":\""+reedCountId+'\"'.toString() +"}"
-//                ",\"relatedProduct\" : \"" + relatedProduct + '\"'.toString() +
-
+                ",\"reedCountId\":\""+reedCountId+'\"'.toString()+
+                ",\"relatedProduct\":" + relatedProduct +"}"
     }
+
 }
 
-data class RelatedProduct (
-    var productTypeID: Long,
-    var width: String,
-    var length: String
-)
+open class RelatedProduct {
+    var productTypeID: Long=0
+    var width: String=""
+    var length: String=""
 
+
+    override fun toString(): String {
+        return "[{" + "\"productTypeId\":" + productTypeID +
+                ",\"width\":\""+width+'\"'.toString() +
+                ",\"length\":\""+length+'\"'.toString() + "}]"
+    }
+}
