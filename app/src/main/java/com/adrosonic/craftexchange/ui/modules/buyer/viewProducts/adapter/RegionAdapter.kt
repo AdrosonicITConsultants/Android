@@ -67,7 +67,7 @@ class RegionAdapter(var context: Context?, private var regionProducts: List<Clus
                     call: Call<CatalogueProductsResponse>, response: Response<CatalogueProductsResponse>
                 ) {
                     if (response.body()?.valid == true) {
-                        ProductPredicates.insertProductsInCatalogue(response.body())
+                        ProductPredicates.insertProductsInCatalogue(response.body()?.data?.products)
                     } else {
                         Toast.makeText(context, "${response.body()}", Toast.LENGTH_SHORT).show()
                     }

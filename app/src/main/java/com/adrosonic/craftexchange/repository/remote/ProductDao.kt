@@ -5,6 +5,7 @@ import com.adrosonic.craftexchange.repository.data.response.artisan.products.Art
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.ProductUploadData
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.AllProductsResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.BrandListResponse
+import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.singleProduct.SingleProductDetails
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.CatalogueProductsResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.wishList.WishListedIds
 import okhttp3.MultipartBody
@@ -88,4 +89,7 @@ interface ProductDao {
     @GET("product/getProductIdsInWishlist")
     fun getWishlistedProductIds(@Header("Authorization") token: String): Call<WishListedIds>
 
+    @Headers("Accept: application/json")
+    @GET("product/getProduct/{productId}")
+    fun getSingleProductDetails(@Header("Authorization") token: String,@Path("productId")productId:Int): Call<SingleProductDetails>
 }

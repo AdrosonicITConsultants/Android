@@ -73,7 +73,7 @@ class CategoryAdapter(var context: Context?, private var categoryDetails: List<P
                     call: Call<CatalogueProductsResponse>, response: Response<CatalogueProductsResponse>
                 ) {
                     if (response.body()?.valid == true) {
-                        ProductPredicates.insertProductsInCatalogue(response.body())
+                        ProductPredicates.insertProductsInCatalogue(response.body()?.data?.products)
                     } else {
                         Toast.makeText(context, "${response.body()}", Toast.LENGTH_SHORT).show()
                     }

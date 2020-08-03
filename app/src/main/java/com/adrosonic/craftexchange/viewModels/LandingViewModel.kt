@@ -7,9 +7,14 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCatalogue
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
+import com.adrosonic.craftexchange.database.predicates.WishlistPredicates
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.ArtisanProductDetailsResponse
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.ProductUploadData
+import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.*
+import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.singleProduct.SingleProductDetails
+import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.singleProduct.Data
+import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.singleProduct.ProductCategory
 import com.adrosonic.craftexchange.repository.data.response.buyer.wishList.WishListedIds
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.UserConfig
@@ -35,7 +40,7 @@ class LandingViewModel(application: Application) : AndroidViewModel(application)
         return wishListData
     }
     fun loadwishListData(): RealmResults<ProductCatalogue> {
-        var wishList=ProductPredicates.getWishListedData()
+        var wishList= WishlistPredicates.getWishListedData()
         Log.e("Wishlist","loadwishListData :"+wishList?.size)
         return wishList!!
     }
@@ -114,13 +119,44 @@ class LandingViewModel(application: Application) : AndroidViewModel(application)
                     response: retrofit2.Response<WishListedIds>) {
 
                     if(response.body()?.valid == true){
-                        Log.e("LandingViewModel","wishlist :"+response.body()?.data?.joinToString())
+                        val response=response.body()?.data
+                        Log.e("LandingViewModel","wishlist :"+response?.joinToString())
+                        response?.forEach {
+                            if(!WishlistPredicates.isProductPresent(it))   getBuyerProductDetails(it)
+                        }
+                        WishlistPredicates.addToWishlist(response)
                         listener?.onSuccess()
-                        ProductPredicates.addToWishlist(response.body()?.data)
+
                     }else{
                         listener?.onFailure()
                         Log.e("LandingViewModel","wishlist onFailure: "+response.body()?.errorCode)
 
+                    }
+                }
+
+            })
+    }
+
+    fun getBuyerProductDetails(id:Long){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getProductService()
+            .getSingleProductDetails(token,id.toInt())
+            .enqueue(object: Callback, retrofit2.Callback<SingleProductDetails> {
+                override fun onFailure(call: Call<SingleProductDetails>, t: Throwable) {
+                    t.printStackTrace()
+                    Log.e("LandingViewModel","wishlist onFailure: "+t.message)
+                }
+                override fun onResponse(
+                    call: Call<SingleProductDetails>,
+                    response: retrofit2.Response<SingleProductDetails>) {
+
+                    if(response.body()?.valid == true){
+                        val response=response.body()?.data
+                        if (response != null) {
+                            WishlistPredicates.insertSingleProduct(response)
+                        }
+                        Log.e("LandingViewModel","wishlist :"+response?.artistName)
                     }
                 }
 
