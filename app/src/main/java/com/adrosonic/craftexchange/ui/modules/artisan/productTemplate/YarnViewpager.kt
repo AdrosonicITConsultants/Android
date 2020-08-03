@@ -56,7 +56,7 @@ class YarnViewpager(context: Context, arrYarn:List<Yarn>?, arrDye:List<Dye>?):Pa
         val spYarnCount = view.findViewById<View>(R.id.sp_yarn_count) as Spinner
         val etYarnCount = view.findViewById<View>(R.id.et_yarn_count) as EditText
         val spYarnDye = view.findViewById<View>(R.id.sp_yarn_dye) as Spinner
-
+        arrYarneStr.clear()
         arrYarn?.forEach { arrYarneStr.add(it.yarnDesc) }
         val spYarnAdapter = ArrayAdapter<String>(context!!, android.R.layout.simple_spinner_item, arrYarneStr)
         spYarnAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
@@ -70,7 +70,6 @@ class YarnViewpager(context: Context, arrYarn:List<Yarn>?, arrDye:List<Dye>?):Pa
                 id: Long
             ) {
                 arrYarnCountStr?.clear()
-
                 val yarnType = arrYarneStr.get(position)
                 for (category in arrYarn!!) {
                     if (category.yarnDesc.equals(yarnType, true)) {
@@ -107,7 +106,7 @@ class YarnViewpager(context: Context, arrYarn:List<Yarn>?, arrDye:List<Dye>?):Pa
             }
 
         }
-
+        arrDyeStr.clear()
         arrDye?.forEach { arrDyeStr.add(it.dyeDesc) }
         val spDyeAdapter =ArrayAdapter<String>(context!!, android.R.layout.simple_spinner_item, arrDyeStr)
         spDyeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)

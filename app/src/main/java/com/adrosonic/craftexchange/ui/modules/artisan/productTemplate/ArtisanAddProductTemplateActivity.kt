@@ -181,6 +181,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
         weave_recycler_list.adapter = weaveSelectionAdapter
 
         ///////////general details//////////////
+        arrProdCategoryStr.clear()
         arrProductCategory?.forEach { arrProdCategoryStr.add(it.productDesc) }
         val spProdCataAdapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrProdCategoryStr)
         spProdCataAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
@@ -666,6 +667,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
         et_prod_code.text.clear()
         pairList.clear()
         loadData()
+        
     }
 }
 
