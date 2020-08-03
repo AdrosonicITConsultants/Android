@@ -4,17 +4,15 @@ import android.util.Log
 import com.adrosonic.craftexchange.database.CXRealmManager
 import com.adrosonic.craftexchange.database.entities.ArtisanProductCategory
 import com.adrosonic.craftexchange.database.entities.realmEntities.*
-import com.adrosonic.craftexchange.database.entities.realmEntities.BrandList
 import com.adrosonic.craftexchange.repository.data.request.artisan.productTemplate.ArtisanAddProductRequest
 import com.adrosonic.craftexchange.repository.data.request.artisan.productTemplate.RelatedProduct
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.ArtisanProductDetailsResponse
 import com.adrosonic.craftexchange.repository.data.response.artisan.profile.ProfileResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.AllProductsResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.BrandListResponse
-import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.CatalogueProductsResponse
+import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.Product
+import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.singleProduct.Data
 import io.realm.RealmResults
-import java.lang.Exception
-import kotlin.math.exp
 
 class ProductPredicates {
     companion object {
@@ -256,11 +254,11 @@ class ProductPredicates {
             }
         }
 
-        fun insertProductsInCatalogue(productList: CatalogueProductsResponse?){
+        fun insertProductsInCatalogue(productList: List<Product>?){
             nextID = 0L
             val realm = CXRealmManager.getRealmInstance()
             var addRelatedProducts = arrayListOf<Pair<Long,Long>>()
-            var product = productList?.data?.products
+            var product = productList//?.data?.products
 
             try {
                 realm.executeTransaction {
@@ -1036,46 +1034,7 @@ class ProductPredicates {
         }
 
     ////////////////////////Wishlist////////////////////////////
-        fun addToWishlist(wishListedProd:List<Long>?){
-        val realm = CXRealmManager.getRealmInstance()
-        try {
-            realm?.executeTransaction {
-                val productIterator = wishListedProd?.iterator()
-                while (productIterator!!.hasNext()) {
-                    val id=productIterator.next()
-                    Log.e("addToWishlist","addToWishlist :$id")
-                    var productCatalog = realm.where(ProductCatalogue::class.java)
-                        .equalTo(ProductCatalogue.COLUMN_PRODUCT_ID,id).limit(1)
-                        .findFirst()
-                    if(productCatalog!=null) {
-                        productCatalog?.isWishlisted = 1L
-                        Log.e("addToWishlist", "addToWishlist after :$id")
-                        realm.copyToRealmOrUpdate(productCatalog)
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            Log.e("addToWishlist","${e}")
-        } finally {
-//            realm.close()
-        }
-    }
-        fun getWishListedData(): RealmResults<ProductCatalogue>? {
-            val realm = CXRealmManager.getRealmInstance()
-            var wishlistedItem: RealmResults<ProductCatalogue>?=null
-            try {
-                realm?.executeTransaction {
-                    wishlistedItem=realm.where(ProductCatalogue::class.java)
-                        .equalTo(ProductCatalogue.COLUMN_IS_WISHLISTED,1L)
-                        .findAll()
-                    }
-                } catch (e: Exception) {
-                Log.e("addToWishlist","${e}")
-            } finally {
-//            realm.close()
-            }
-            return wishlistedItem
-        }
+
 
     }
 }

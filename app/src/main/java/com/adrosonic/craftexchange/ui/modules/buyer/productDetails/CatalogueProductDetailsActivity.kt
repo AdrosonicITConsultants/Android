@@ -2,7 +2,6 @@ package com.adrosonic.craftexchange.ui.modules.buyer.productDetails
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -10,9 +9,7 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.util.Log
-import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrosonic.craftexchange.R
@@ -246,7 +243,13 @@ class CatalogueProductDetailsActivity : AppCompatActivity() {
         for(i in 1..5){
             var productId = idList.random()
             var label = ProductPredicates.getProductDisplayImage(productId)
-            mMoreProductList.add(ProductImage(0,label?.imageName.toString(),productId))
+            mMoreProductList.add(
+                ProductImage(
+                    0,
+                    label?.imageName.toString(),
+                    productId
+                )
+            )
         }
         setupMoreProductsRecycler()
         idList.clear()

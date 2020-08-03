@@ -11,7 +11,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="@dimen/margin_regular"
         android:fontFamily="@font/playfair_regular"
-        android:text="@string/are_you_sure_you_want_to_go_back"
+        android:text="@string/are_you_sure_you_want_to_remove"
         android:textAlignment="center"
         android:textColor="@color/red_logo"
         android:textSize="28sp" />

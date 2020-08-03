@@ -18,6 +18,9 @@ import io.realm.RealmResults
 import kotlinx.android.synthetic.main.fragment_wishlist.*
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.adrosonic.craftexchange.database.predicates.ProductPredicates
+import com.adrosonic.craftexchange.database.predicates.WishlistPredicates
+import com.adrosonic.craftexchange.syncManager.SyncCoordinator
 import com.adrosonic.craftexchange.utils.Utility
 
 class WishlistFragment : Fragment(),
@@ -25,6 +28,7 @@ class WishlistFragment : Fragment(),
     WishlistAdapter.WishListUpdatedListener {
     val mViewModel: LandingViewModel by viewModels()
     private lateinit var adapter: WishlistAdapter
+    var coordinator: SyncCoordinator? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,16 +45,17 @@ class WishlistFragment : Fragment(),
         } else {
             mViewModel.getwishlisteProductIds()
         }
-        buyerWishlist.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        buyerWishlist.layoutManager =LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         adapter = WishlistAdapter(requireContext(), mViewModel.getwishListMutableData().value)
         buyerWishlist.adapter = adapter
+        adapter.listener=this
         Log.e("Wishlist", "Size :" + mViewModel.getwishListMutableData().value?.size)
         mViewModel.getwishListMutableData()
             .observe(viewLifecycleOwner, Observer<RealmResults<ProductCatalogue>>() {
                 Log.e("Wishlist", "updateWishlist ${it.size}")
                 adapter?.updateWishlist(it)
             })
+        setVisiblities()
         deleteAll.setOnClickListener {
             showDeleteDialog()
         }
@@ -62,6 +67,8 @@ class WishlistFragment : Fragment(),
                 mViewModel.getwishlisteProductIds()
             }
         }
+        wishlist_elements.text =
+            "Your wishlist has ${mViewModel.getwishListMutableData().value?.size} items"
     }
 
     override fun onSuccess() {
@@ -70,6 +77,7 @@ class WishlistFragment : Fragment(),
                 Log.e("Wishlist", "Onsucces")
                 swipe_refresh_layout.isRefreshing = false
                 mViewModel?.getwishListMutableData()
+                setVisiblities()
             }
             )
         } catch (e: Exception) {
@@ -83,10 +91,11 @@ class WishlistFragment : Fragment(),
                 Log.e("Wishlist", "OnFailure")
                 swipe_refresh_layout.isRefreshing = false
                 mViewModel?.getwishListMutableData()
-                Utility.displayMessage(
+               Utility.displayMessage(
                     "Error while fetching wishlist. Pleas try again after some time",
                     requireContext()
                 )
+                setVisiblities()
             }
             )
         } catch (e: Exception) {
@@ -99,19 +108,52 @@ class WishlistFragment : Fragment(),
         dialog?.setContentView(R.layout.dialog_removefrom_wishlist)
         dialog?.show()
         val tvCancel = dialog?.findViewById(R.id.txt_cancel) as TextView
-        val tvBack = dialog?.findViewById(R.id.txt_back) as TextView
+        val tvDelete = dialog?.findViewById(R.id.txt_back) as TextView
         tvCancel.setOnClickListener {
             dialog.cancel()
         }
-        tvBack.setOnClickListener {
+        tvDelete.setOnClickListener {
             //todo set all the wishlisted products isWishlisted property to one and call performm locally available action
             //todo also call mutable live data to update the list
+
+            WishlistPredicates.getWishListedData()?.forEach {
+                WishlistPredicates.updateProductWishlisting(it.productId,0,1)
+            }
+            mViewModel?.getwishListMutableData()
+            setVisiblities()
+            if(Utility.checkIfInternetConnected(requireContext())) {
+                coordinator = SyncCoordinator(requireContext())
+                coordinator?.performLocallyAvailableActions()
+            }
         }
     }
 
     override fun onSelected(productId: Long, isWishListed: Long) {
         //todo db call
         //mutable live data
+        WishlistPredicates.updateProductWishlisting(productId,isWishListed,1)
+        mViewModel?.getwishListMutableData()
+        setVisiblities()
+        if(Utility.checkIfInternetConnected(requireContext())) {
+            coordinator = SyncCoordinator(requireContext())
+            coordinator?.performLocallyAvailableActions()
+        }
+    }
+
+    fun setVisiblities() {
+        if (mViewModel.getwishListMutableData().value?.size!! > 0) {
+            buyerWishlist.visibility = View.VISIBLE
+            empty_view.visibility = View.GONE
+            deleteAll.visibility=View.VISIBLE
+            wishlist_elements.text =
+                "Your wishlist has ${mViewModel.getwishListMutableData().value?.size} items"
+        } else {
+            buyerWishlist.visibility = View.GONE
+            empty_view.visibility = View.VISIBLE
+            deleteAll.visibility=View.GONE
+            wishlist_elements.text = "Your wishlist is empty"
+
+        }
     }
 
     companion object {

@@ -111,8 +111,9 @@ class WishlistAdapter(
         }
         holder.wishlistButton.setOnClickListener {
             //todo show dialog
-            if(product?.isWishlisted!!.equals(1)) removeFromWishlist(pos,0,product.productId?:0)
-            else  removeFromWishlist(pos,1,product.productId?:0)
+//            if(product?.isWishlisted!!.equals(1))
+                removeFromWishlist(pos,0,product?.productId?:0)
+//            else  removeFromWishlist(pos,1,product.productId?:0)
         }
     }
 
