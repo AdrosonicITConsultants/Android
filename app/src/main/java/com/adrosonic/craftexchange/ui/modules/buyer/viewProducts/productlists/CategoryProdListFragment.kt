@@ -128,7 +128,10 @@ class CategoryProdListFragment : Fragment() {
                             var productTitle = size.productTag
                             var status =size.productStatusId
                             var desc = size.product_spe
-                            var prod = ProductCard(clusterId,productId,productTitle,desc,status)
+                            var isWishlisted = size.isWishlisted
+
+                            var prod = ProductCard(clusterId,productId,productTitle,desc,status,isWishlisted)
+
                             mProduct.add(prod)
                         }
                     }
@@ -152,7 +155,8 @@ class CategoryProdListFragment : Fragment() {
                 var productTitle = size.productTag
                 var status =size.productStatusId
                 var desc = size.product_spe
-                var prod = ProductCard(artisanId,productId,productTitle,desc,status)
+                var isWishlisted = size.isWishlisted
+                var prod = ProductCard(artisanId,productId,productTitle,desc,status,isWishlisted)
                 mProduct.add(prod)
             }
             catProdAdapter?.setProducts(mProduct)

@@ -20,7 +20,7 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="@dimen/expandable_layout_std_padding"
-                android:src="@drawable/ic_warp" />
+                android:src="@drawable/ic_warp_icon" />
 
             <TextView
                 android:id="@+id/txt_yarn_title"

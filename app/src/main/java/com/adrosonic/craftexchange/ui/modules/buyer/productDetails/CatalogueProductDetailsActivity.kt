@@ -15,23 +15,33 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCatalogue
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
+import com.adrosonic.craftexchange.database.predicates.WishlistPredicates
 import com.adrosonic.craftexchange.databinding.ActivityCatalogueProductDetailsBinding
+import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.ProductCare
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.ProductUploadData
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.ProductImage
+import com.adrosonic.craftexchange.syncManager.SyncCoordinator
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
+import com.adrosonic.craftexchange.viewModels.WishlistViewModel
 import com.google.gson.GsonBuilder
+import com.like.LikeButton
+import com.like.OnLikeListener
+import com.pixplicity.easyprefs.library.Prefs
 import com.synnapps.carouselview.ImageListener
+import okhttp3.ResponseBody
+import retrofit2.Call
+import javax.security.auth.callback.Callback
 import kotlin.collections.ArrayList
 
 fun Context.catalogueProductDetailsIntent(): Intent {
     return Intent(this, CatalogueProductDetailsActivity::class.java)
         .apply {
-        flags = Intent.FLAG_ACTIVITY_NEW_TASK
-    }
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        }
 }
 private var mBinding : ActivityCatalogueProductDetailsBinding ?= null
 var imageUrlList: MutableList<String> = ArrayList()
@@ -127,6 +137,8 @@ class CatalogueProductDetailsActivity : AppCompatActivity() {
 
         moreProdAdapter = MoreProductsRecyclerAdapter(applicationContext, mMoreProductList)
         setMoreProducts(productDetails)
+
+        setWishlisting(productDetails)
 
         mBinding?.seeAllProdText?.setOnClickListener{
             focusOnView()
@@ -277,25 +289,6 @@ class CatalogueProductDetailsActivity : AppCompatActivity() {
         mBinding?.prodDimensValue?.append("\tX\t")
         mBinding?.prodDimensValue?.append(width)
 
-//        var relProd = ProductPredicates.getRelatedProductOfProduct(details?.productId)
-//        if(relProd!=null){
-//            mBinding?.dividerDimens?.visibility = View.VISIBLE
-//            mBinding?.relProdDimensValue?.visibility = View.VISIBLE
-//
-//            var length = SpannableString(relProd?.productLength)
-//            length.setSpan(ForegroundColorSpan(ContextCompat.getColor(applicationContext,R.color.length_unit_color)), 0, length.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-//            var width = SpannableString(relProd?.productWidth)
-//            width.setSpan(ForegroundColorSpan(ContextCompat.getColor(applicationContext,R.color.swipe_background)), 0, width.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-//            var dimensions = "${relProd?.productName}\t\t"
-//            mBinding?.prodDimensValue?.text = dimensions
-//            mBinding?.prodDimensValue?.append(length)
-//            mBinding?.prodDimensValue?.append("\tX\t")
-//            mBinding?.prodDimensValue?.append(width)
-//
-//        }else{
-//            mBinding?.dividerDimens?.visibility = View.GONE
-//            mBinding?.relProdDimensValue?.visibility = View.GONE
-//        }
 
 
     }
@@ -305,6 +298,26 @@ class CatalogueProductDetailsActivity : AppCompatActivity() {
         mBinding?.moreProductImages?.layoutManager = LinearLayoutManager(applicationContext,
             LinearLayoutManager.HORIZONTAL, false)
         moreProdAdapter?.notifyDataSetChanged()
+    }
+
+    fun setWishlisting(details: ProductCatalogue?){
+        mBinding?.btnWishlist?.isLiked = details?.isWishlisted == 1L
+        mBinding?.btnWishlist?.setOnLikeListener(object: OnLikeListener {
+            override fun liked(likeButton: LikeButton) {
+                WishlistPredicates.updateProductWishlisting(productId,1L,1L)
+                if(Utility.checkIfInternetConnected(applicationContext)){
+                    val coordinator = SyncCoordinator(applicationContext)
+                    coordinator?.performLocallyAvailableActions()
+                }
+            }
+            override fun unLiked(likeButton: LikeButton) {
+                WishlistPredicates.updateProductWishlisting(productId,0L,1L)
+                if(Utility.checkIfInternetConnected(applicationContext)){
+                    val coordinator = SyncCoordinator(applicationContext)
+                    coordinator?.performLocallyAvailableActions()
+                }
+            }
+        })
     }
 
     override fun onBackPressed() {

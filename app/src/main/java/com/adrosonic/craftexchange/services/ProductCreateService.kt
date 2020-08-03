@@ -186,13 +186,13 @@ class ProductCreateService: JobIntentService() {
         Log.e(TAG,"MultipartBody :"+partName+" Name:  "+file.name)
         return MultipartBody.Part.createFormData(partName, file.name, requestFile)
     }
-private fun deleteOfflineEntries(prodId:Long){
-    ProductPredicates.deleteArtisanProductTemplatePOstUpload(prodId)
-    RelateProductPredicates.deleteRelatedProduct(prodId)
-    ProductImagePredicates.deleteProdImages(prodId)
-    WeaveTypesPredicates.deleteWeaveIds(prodId)
-    ProductCaresPredicates.deleteCareIds(prodId)
-}
+    private fun deleteOfflineEntries(prodId:Long){
+        ProductPredicates.deleteArtisanProductTemplatePOstUpload(prodId)
+        RelateProductPredicates.deleteRelatedProduct(prodId)
+        ProductImagePredicates.deleteProdImages(prodId)
+        WeaveTypesPredicates.deleteWeaveIds(prodId)
+        ProductCaresPredicates.deleteCareIds(prodId)
+    }
 
 
     companion object {

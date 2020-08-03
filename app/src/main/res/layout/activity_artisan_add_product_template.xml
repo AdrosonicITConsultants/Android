@@ -445,7 +445,7 @@
                         android:layout_width="88dp"
                         android:layout_height="88dp"
                         android:layout_marginBottom="16dp"
-                        android:src="@drawable/ic_reed_count" />
+                        android:src="@drawable/ic_reed_icon" />
 
                     <RelativeLayout
                         android:layout_width="wrap_content"
@@ -883,7 +883,7 @@
                         android:layout_width="80dp"
                         android:layout_height="80dp"
                         android:layout_marginBottom="16dp"
-                        android:src="@drawable/ic_weight" />
+                        android:src="@drawable/ic_weight_icon" />
 
                     <EditText
                         android:id="@+id/et_prod_weight"
@@ -969,7 +969,7 @@
                         android:layout_width="88dp"
                         android:layout_height="88dp"
                         android:layout_marginBottom="16dp"
-                        android:src="@drawable/ic_gsm_value" />
+                        android:src="@drawable/ic_gsm_icon" />
 
                     <EditText
                         android:id="@+id/et_gsm"

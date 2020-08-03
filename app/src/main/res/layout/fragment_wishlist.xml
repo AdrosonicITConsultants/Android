@@ -7,7 +7,7 @@
     android:background="@color/colorBackground"
     android:orientation="vertical"
     android:padding="8dp"
-    tools:context=".ui.modules.buyer.wishList.WishlistFragment">
+    tools:context=".ui.modules.buyer.wishList.wishlistFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"

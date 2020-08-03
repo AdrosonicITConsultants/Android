@@ -1,7 +1,7 @@
 package com.adrosonic.craftexchange.syncManager.processor
 
 /**
- * Created by 'Rital Naik on 15/05/18.
+ * Created by 'Rital Naik on 01/08/20.
  */
 class InProgressTracker<T> {
 

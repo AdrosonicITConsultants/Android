@@ -34,6 +34,7 @@ class LandingViewModel(application: Application) : AndroidViewModel(application)
     }
     var listener: wishlistFetchedInterface? = null
     val wishListData : MutableLiveData<RealmResults<ProductCatalogue>> by lazy { MutableLiveData<RealmResults<ProductCatalogue>>() }
+
     fun getwishListMutableData(): MutableLiveData<RealmResults<ProductCatalogue>> {
         wishListData.value=loadwishListData()
         return wishListData

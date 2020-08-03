@@ -136,16 +136,16 @@ class YarnViewpager(context: Context, arrYarn:List<Yarn>?, arrDye:List<Dye>?):Pa
         when(position){
             0->{
                 yarnTitle.text="Warp "
-                Utility.setImageResource(context,imgYarn,R.drawable.ic_warp)
+                Utility.setImageResource(context,imgYarn,R.drawable.ic_warp_icon)
 
             }
             1->{
                 yarnTitle.text="Weft "
-                Utility.setImageResource(context,imgYarn,R.drawable.ic_weft)
+                Utility.setImageResource(context,imgYarn,R.drawable.ic_weft_icon)
             }
             2->{
                 yarnTitle.text="Extra Weft (Optional) "
-                Utility.setImageResource(context,imgYarn,R.drawable.ic_extra_weft)
+                Utility.setImageResource(context,imgYarn,R.drawable.ic_extraweft_icon)
             }
         }
         val vp = container as ViewPager

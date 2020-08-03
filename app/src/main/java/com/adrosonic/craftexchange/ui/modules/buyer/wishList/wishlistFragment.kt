@@ -23,7 +23,7 @@ import com.adrosonic.craftexchange.database.predicates.WishlistPredicates
 import com.adrosonic.craftexchange.syncManager.SyncCoordinator
 import com.adrosonic.craftexchange.utils.Utility
 
-class WishlistFragment : Fragment(),
+class wishlistFragment : Fragment(),
     LandingViewModel.wishlistFetchedInterface,
     WishlistAdapter.WishListUpdatedListener {
     val mViewModel: LandingViewModel by viewModels()
@@ -159,7 +159,7 @@ class WishlistFragment : Fragment(),
     companion object {
         @JvmStatic
         fun newInstance() =
-            WishlistFragment().apply {
+            wishlistFragment().apply {
                 arguments = Bundle().apply {
 //                    putString(ARG_PARAM1, param1)
 //                    putString(ARG_PARAM2, param2)

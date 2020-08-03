@@ -236,6 +236,8 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
         val viewPagerAdapter = YarnViewpager(this, arrYarn, arrDyes)
         yarn_pager.setAdapter(viewPagerAdapter)
         viewPagerAdapter.listener=this
+        dots.clear()
+        slider_dots.removeAllViews()
         do {
             val d = TextView(this)
             d.text = "."
@@ -554,10 +556,10 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
         }
     }
 
-    fun setDotsColor(position:Int){
-        dots.forEach { it.setTextColor(  ContextCompat.getColor(this, R.color.darker_gray)) }
-        dots.get(position).setTextColor(Color.parseColor("#009A2F"))
-    }
+        fun setDotsColor(position:Int){
+            dots.forEach { it.setTextColor(  ContextCompat.getColor(this, R.color.darker_gray)) }
+            dots.get(position).setTextColor(Color.parseColor("#009A2F"))
+        }
     fun saveUploadProduct() {
 
         try {
@@ -667,7 +669,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
         et_prod_code.text.clear()
         pairList.clear()
         loadData()
-        
+
     }
 }
 

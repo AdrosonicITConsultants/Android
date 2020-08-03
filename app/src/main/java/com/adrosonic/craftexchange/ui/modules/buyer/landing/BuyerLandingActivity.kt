@@ -20,7 +20,7 @@ import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityBuyerLandingBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.ui.modules.buyer.profile.buyerProfileIntent
-import com.adrosonic.craftexchange.ui.modules.buyer.wishList.WishlistFragment
+import com.adrosonic.craftexchange.ui.modules.buyer.wishList.wishlistFragment
 import com.adrosonic.craftexchange.viewModels.LandingViewModel
 import com.adrosonic.craftexchange.ui.modules.role.roleselectIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
@@ -133,7 +133,7 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
 
                     R.id.action_wishlist -> {
                         if (savedInstanceState == null) {
-                            supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container,   WishlistFragment.newInstance())
+                            supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container,   wishlistFragment.newInstance())
                                 .addToBackStack(null)
                                 .commit()
                         }
