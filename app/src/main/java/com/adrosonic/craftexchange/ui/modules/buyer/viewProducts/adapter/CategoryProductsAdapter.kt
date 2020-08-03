@@ -18,8 +18,10 @@ import com.adrosonic.craftexchange.databinding.ItemProductDescListBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.Product
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.ProductType
+import com.adrosonic.craftexchange.syncManager.SyncCoordinator
 import com.adrosonic.craftexchange.ui.interfaces.CategoryProductClick
 import com.adrosonic.craftexchange.ui.modules.buyer.productDetails.catalogueProductDetailsIntent
+import com.adrosonic.craftexchange.ui.modules.buyer.productDetails.productId
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
@@ -90,68 +92,19 @@ class CategoryProductsAdapter(var context: Context?, private var categoryProduct
         }
 
         holder.binding.wishlistButton.isLiked = product.isWishlisted == 1L
-//        var wishVM = WishlistViewModel(context?.applicationContext as Application)
-        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         holder.binding?.wishlistButton?.setOnLikeListener(object: OnLikeListener {
             override fun liked(likeButton: LikeButton) {
-                product.productId?.let { it1 ->
-                    CraftExchangeRepository
-                        .getWishlistService()
-                        .addToWishlist(token, it1)
-                        .enqueue(object: Callback, retrofit2.Callback<ResponseBody> {
-                            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                                t.printStackTrace()
-                                Log.e("AddToWishlist failure ","${t.printStackTrace()}")
-                                Utility.displayMessage("Error while adding to wishlist", context!!)
-                            }
-
-                            override fun onResponse(
-                                call: Call<ResponseBody>,
-                                response: retrofit2.Response<ResponseBody>) {
-                                if(response.isSuccessful){
-                                    Log.e(WishlistViewModel.TAG,"addToWishlist :"+response.body())
-                                    WishlistPredicates.updateProductWishlisting(product.productId,1L)
-                                    Utility.displayMessage("Added to wishlist :-)",context!!)
-                                    holder.binding.wishlistButton.isLiked = true
-                                }else{
-                                    Log.e(WishlistViewModel.TAG,"addToWishlist "+response.body())
-                                    Utility.displayMessage("Error while adding to wishlist",context!!)
-                                }
-                            }
-
-                        })
-
-                }}
+                WishlistPredicates.updateProductWishlisting(product.productId,1L,1L)
+                if(Utility.checkIfInternetConnected(context!!)){
+                    val coordinator = SyncCoordinator(context!!)
+                    coordinator?.performLocallyAvailableActions()
+                }
+            }
             override fun unLiked(likeButton: LikeButton) {
-                product.productId?.let { it1 ->
-                    CraftExchangeRepository
-                        .getWishlistService()
-                        .deleteProductsInWishlist(token, it1)
-                        .enqueue(object: Callback, retrofit2.Callback<ResponseBody> {
-                            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                                t.printStackTrace()
-                                Log.e("AddToWishlist failure ","${t.printStackTrace()}")
-
-                            }
-
-                            override fun onResponse(
-                                call: Call<ResponseBody>,
-                                response: retrofit2.Response<ResponseBody>) {
-                                Log.e(WishlistViewModel.TAG,"onResponse :"+response.code())
-                                Log.e(WishlistViewModel.TAG,"onResponse :"+response.isSuccessful)
-                                Log.e(WishlistViewModel.TAG,"onResponse :"+call.request().url)
-                                if(response.isSuccessful){
-                                    Log.e(WishlistViewModel.TAG,"addToWishlist :"+response.body())
-                                    WishlistPredicates.updateProductWishlisting(product.productId,0L)
-                                    Utility.displayMessage("Removed from wishlist :-(",context!!)
-                                    holder.binding.wishlistButton.isLiked = false
-
-                                }else{
-                                    Log.e(WishlistViewModel.TAG,"addToWishlist "+response.body())
-
-                                }
-                            }
-                        })
+                WishlistPredicates.updateProductWishlisting(product.productId,0L,1L)
+                if(Utility.checkIfInternetConnected(context!!)){
+                    val coordinator = SyncCoordinator(context!!)
+                    coordinator?.performLocallyAvailableActions()
                 }
             }
         })

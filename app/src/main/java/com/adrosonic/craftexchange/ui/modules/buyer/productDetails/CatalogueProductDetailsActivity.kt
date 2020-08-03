@@ -24,6 +24,7 @@ import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.ProductCare
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.ProductUploadData
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.ProductImage
+import com.adrosonic.craftexchange.syncManager.SyncCoordinator
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.UserConfig
@@ -42,8 +43,8 @@ import kotlin.collections.ArrayList
 fun Context.catalogueProductDetailsIntent(): Intent {
     return Intent(this, CatalogueProductDetailsActivity::class.java)
         .apply {
-        flags = Intent.FLAG_ACTIVITY_NEW_TASK
-    }
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        }
 }
 private var mBinding : ActivityCatalogueProductDetailsBinding ?= null
 var imageUrlList: MutableList<String> = ArrayList()
@@ -285,25 +286,6 @@ class CatalogueProductDetailsActivity : AppCompatActivity() {
         mBinding?.prodDimensValue?.append("\tX\t")
         mBinding?.prodDimensValue?.append(width)
 
-//        var relProd = ProductPredicates.getRelatedProductOfProduct(details?.productId)
-//        if(relProd!=null){
-//            mBinding?.dividerDimens?.visibility = View.VISIBLE
-//            mBinding?.relProdDimensValue?.visibility = View.VISIBLE
-//
-//            var length = SpannableString(relProd?.productLength)
-//            length.setSpan(ForegroundColorSpan(ContextCompat.getColor(applicationContext,R.color.length_unit_color)), 0, length.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-//            var width = SpannableString(relProd?.productWidth)
-//            width.setSpan(ForegroundColorSpan(ContextCompat.getColor(applicationContext,R.color.swipe_background)), 0, width.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-//            var dimensions = "${relProd?.productName}\t\t"
-//            mBinding?.prodDimensValue?.text = dimensions
-//            mBinding?.prodDimensValue?.append(length)
-//            mBinding?.prodDimensValue?.append("\tX\t")
-//            mBinding?.prodDimensValue?.append(width)
-//
-//        }else{
-//            mBinding?.dividerDimens?.visibility = View.GONE
-//            mBinding?.relProdDimensValue?.visibility = View.GONE
-//        }
 
 
     }
@@ -317,68 +299,19 @@ class CatalogueProductDetailsActivity : AppCompatActivity() {
 
     fun setWishlisting(details: ProductCatalogue?){
         mBinding?.btnWishlist?.isLiked = details?.isWishlisted == 1L
-
-        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         mBinding?.btnWishlist?.setOnLikeListener(object: OnLikeListener {
             override fun liked(likeButton: LikeButton) {
-                details?.productId?.let { it1 ->
-                    CraftExchangeRepository
-                        .getWishlistService()
-                        .addToWishlist(token, it1)
-                        .enqueue(object: Callback, retrofit2.Callback<ResponseBody> {
-                            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                                t.printStackTrace()
-                                Log.e("AddToWishlist failure ","${t.printStackTrace()}")
-                                Utility.displayMessage("Error while adding to wishlist", applicationContext)
-                            }
-
-                            override fun onResponse(
-                                call: Call<ResponseBody>,
-                                response: retrofit2.Response<ResponseBody>) {
-                                if(response.isSuccessful){
-                                    Log.e(WishlistViewModel.TAG,"addToWishlist :"+response.body())
-                                    WishlistPredicates.updateProductWishlisting(details.productId,1L)
-                                    Utility.displayMessage("Added to wishlist :-)",applicationContext!!)
-                                    mBinding?.btnWishlist?.isLiked = true
-                                }else{
-                                    Log.e(WishlistViewModel.TAG,"addToWishlist "+response.body())
-                                    Utility.displayMessage("Error while adding to wishlist",applicationContext!!)
-                                }
-                            }
-
-                        })
-
-                }}
+                WishlistPredicates.updateProductWishlisting(productId,1L,1L)
+                if(Utility.checkIfInternetConnected(applicationContext)){
+                    val coordinator = SyncCoordinator(applicationContext)
+                    coordinator?.performLocallyAvailableActions()
+                }
+            }
             override fun unLiked(likeButton: LikeButton) {
-                details?.productId?.let { it1 ->
-                    CraftExchangeRepository
-                        .getWishlistService()
-                        .deleteProductsInWishlist(token, it1)
-                        .enqueue(object: Callback, retrofit2.Callback<ResponseBody> {
-                            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                                t.printStackTrace()
-                                Log.e("AddToWishlist failure ","${t.printStackTrace()}")
-
-                            }
-
-                            override fun onResponse(
-                                call: Call<ResponseBody>,
-                                response: retrofit2.Response<ResponseBody>) {
-                                Log.e(WishlistViewModel.TAG,"onResponse :"+response.code())
-                                Log.e(WishlistViewModel.TAG,"onResponse :"+response.isSuccessful)
-                                Log.e(WishlistViewModel.TAG,"onResponse :"+call.request().url)
-                                if(response.isSuccessful){
-                                    Log.e(WishlistViewModel.TAG,"addToWishlist :"+response.body())
-                                    WishlistPredicates.updateProductWishlisting(details.productId,0L)
-                                    Utility.displayMessage("Removed from wishlist :-(",applicationContext!!)
-                                    mBinding?.btnWishlist?.isLiked = false
-
-                                }else{
-                                    Log.e(WishlistViewModel.TAG,"addToWishlist "+response.body())
-
-                                }
-                            }
-                        })
+                WishlistPredicates.updateProductWishlisting(productId,0L,1L)
+                if(Utility.checkIfInternetConnected(applicationContext)){
+                    val coordinator = SyncCoordinator(applicationContext)
+                    coordinator?.performLocallyAvailableActions()
                 }
             }
         })

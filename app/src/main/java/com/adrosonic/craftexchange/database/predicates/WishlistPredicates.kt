@@ -11,22 +11,24 @@ class WishlistPredicates {
     companion object {
         private var nextID: Long? = 0
 
-        fun addToWishlist(productId: Long?){
-            var realm = CXRealmManager.getRealmInstance()
-            var product = realm.where(ProductCatalogue::class.java).equalTo("productId",ProductCatalogue.COLUMN_PRODUCT_ID).limit(1).findFirst()
-            product?.actionWishlisted = 1
-        }
 
-        fun getWishlistedProduct(productId: Long?){
 
-        }
-
-        fun updateProductWishlisting(productId: Long?,isWishlisted : Long?){
+        fun updateProductWishlisting(productId: Long?,isWishlisted : Long?,actionWishlisting : Long?){
             var realm = CXRealmManager.getRealmInstance()
             realm.executeTransaction{
                 var product = realm.where(ProductCatalogue::class.java).equalTo(ProductCatalogue.COLUMN_PRODUCT_ID,productId).limit(1).findFirst()
                 product?.isWishlisted = isWishlisted
+                product?.actionWishlisted = actionWishlisting
             }
+        }
+
+        fun getProductWishlisting(productId: Long?): ProductCatalogue? {
+            var realm = CXRealmManager.getRealmInstance()
+            var product : ProductCatalogue ? = null
+            realm.executeTransaction{
+                product = realm.where(ProductCatalogue::class.java).equalTo(ProductCatalogue.COLUMN_PRODUCT_ID,productId).limit(1).findFirst()
+            }
+            return product
         }
 
         fun getProductMarkedForActions(actionsMarked:String): ArrayList<Long>? {
@@ -44,7 +46,7 @@ class WishlistPredicates {
                     if(message!=null){
                         val iterator=message.iterator()
                         while (iterator.hasNext()) {
-                            itemId?.add(iterator.next()._id?:0L)
+                            itemId?.add(iterator.next().productId?:0L)
                         }
                     }
                 }

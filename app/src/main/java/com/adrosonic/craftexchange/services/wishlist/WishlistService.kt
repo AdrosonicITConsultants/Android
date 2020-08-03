@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import androidx.core.app.JobIntentService
+import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.database.predicates.WishlistPredicates
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
@@ -12,18 +13,27 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import javax.security.auth.callback.Callback
 
-class WishlistAddService: JobIntentService() {
+class WishlistService: JobIntentService() {
 
     override fun onHandleWork(intent: Intent) {
-        var itemId = intent.getStringExtra(WishlistAddService.KEY_ID)
-        if(itemId.isEmpty())itemId="-1"
-        var longId=itemId.toLong()
-        addToWishlist(longId)
+        var itemId = intent.getStringExtra(WishlistService.KEY_ID)
+//        if(itemId.isEmpty())itemId="-1"
+//        var longId=itemId.toLong()
+        actionToWishlist(itemId.toLong())
     }
 
-    private fun addToWishlist(productId : Long){
+    private fun actionToWishlist(productId : Long){
         try {
-            addProductToWishlist(productId)
+            var productDetails = WishlistPredicates.getProductWishlisting(productId)
+            when(productDetails?.isWishlisted ){
+                0L -> {
+                    removeProductFromWishlist(productId)
+                }
+                1L -> {
+                    addProductToWishlist(productId)
+                }
+            }
+
         }catch (e: Exception){
             Log.e("Exception Adding",e.message)
         }
@@ -48,6 +58,7 @@ class WishlistAddService: JobIntentService() {
                     Log.e(TAG,"onResponse :"+call.request().url)
                     if(response.isSuccessful){
                         Log.e(TAG,"addToWishlist :"+response.body())
+                        WishlistPredicates.updateProductWishlisting(productId,1L,0L)
                     }else{
                         Log.e(TAG,"addToWishlist "+response.body())
                     }
@@ -57,6 +68,34 @@ class WishlistAddService: JobIntentService() {
     }
 
 
+    fun removeProductFromWishlist(productId : Long){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+
+        CraftExchangeRepository
+            .getWishlistService()
+            .deleteProductsInWishlist(token,productId)
+            .enqueue(object: Callback, retrofit2.Callback<ResponseBody> {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    t.printStackTrace()
+                    Log.e("RemoveWishlist failure ","${t.printStackTrace()}")
+                }
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: retrofit2.Response<ResponseBody>) {
+                    Log.e(TAG,"onResponse :"+response.code())
+                    Log.e(TAG,"onResponse :"+response.isSuccessful)
+                    Log.e(TAG,"onResponse :"+call.request().url)
+                    if(response.isSuccessful){
+                        Log.e(TAG,"REmoveFromWishlist :"+response.body())
+                        WishlistPredicates.updateProductWishlisting(productId,0L,0L)
+                    }else{
+                        Log.e(TAG,"REmoveFromWishlist "+response.body())
+                    }
+                }
+
+            })
+    }
+
 
 
     companion object {
@@ -65,7 +104,7 @@ class WishlistAddService: JobIntentService() {
         private const val TAG="WishlistAddService"
         fun enqueueWork(context: Context, work: Intent){
             try {
-                enqueueWork(context, WishlistAddService::class.java, this.JOB_ID,work)
+                enqueueWork(context, WishlistService::class.java, this.JOB_ID,work)
             }catch (e: Exception){
                 Log.e("EnqueueWork Delete",e.message)
             }

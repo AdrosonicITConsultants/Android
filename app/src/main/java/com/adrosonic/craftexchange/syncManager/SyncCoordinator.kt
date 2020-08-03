@@ -8,7 +8,7 @@ import com.adrosonic.craftexchange.syncManager.processor.ProductDeleter
 import com.adrosonic.craftexchange.syncManager.processor.objects.ItemType
 import com.adrosonic.craftexchange.syncManager.processor.ProductAdd
 import com.adrosonic.craftexchange.syncManager.processor.ProductUpdate
-import com.adrosonic.craftexchange.syncManager.processor.wishlist.WishlistAdd
+import com.adrosonic.craftexchange.syncManager.processor.wishlist.WishlistAction
 
 /**
  * Created by Rital Naik on 29/07/2020.
@@ -18,7 +18,7 @@ class SyncCoordinator(val context: Context) {
         ProductAdd(),
         ProductUpdate(),
         ProductDeleter(),
-        WishlistAdd()
+        WishlistAction()
     )
 
     fun performLocallyAvailableActions() {

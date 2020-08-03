@@ -71,7 +71,6 @@
                         android:layout_marginTop="@dimen/margin_small"
                         android:layout_marginEnd="@dimen/margin_semimedium"
                         android:fontFamily="@font/playfair_regular"
-                        android:text="Default Text of Product Title from maninadjf"
                         android:textColor="@color/black_text"
                         android:textSize="@dimen/product_title_text"
                         app:layout_constraintEnd_toStartOf="@+id/btn_wishlist"
@@ -100,20 +99,6 @@
                     android:fontFamily="@font/lato_regular"
                     android:textColor="@color/darker_gray"
                     android:textSize="@dimen/product_description_text" />
-
-                <TextView
-                    android:id="@+id/product_note"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_regular"
-                    android:layout_marginTop="@dimen/margin_regular"
-                    android:layout_marginEnd="@dimen/margin_semimedium"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/lato_regular"
-                    android:text="Specific note about the product"
-                    android:textColor="@color/darker_gray"
-                    android:textSize="@dimen/product_note_text"
-                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/product_availability_text"
@@ -845,7 +830,7 @@
                     android:paddingEnd="@dimen/margin_regular"
                     android:layout_gravity="center_horizontal"/>
 
-                </LinearLayout>
+            </LinearLayout>
 
         </ScrollView>
         <Button
