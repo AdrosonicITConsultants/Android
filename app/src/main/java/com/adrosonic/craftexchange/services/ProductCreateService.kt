@@ -16,10 +16,17 @@ import com.pixplicity.easyprefs.library.Prefs
 import kotlinx.android.synthetic.main.activity_artisan_add_product_template.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
+import okhttp3.MultipartBody.Part.*
+import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
+import retrofit2.http.Multipart
 import java.io.File
+import java.nio.ByteBuffer
+import java.nio.charset.StandardCharsets
+import java.util.*
 import javax.security.auth.callback.Callback
+import kotlin.collections.ArrayList
 
 class ProductCreateService: JobIntentService() {
 
@@ -40,15 +47,12 @@ class ProductCreateService: JobIntentService() {
                val careIds=ProductCaresPredicates.getCareList(prodId)
                val relatedEntry=RelateProductPredicates.getRelatedProductOfProduct(prodId)
                 Log.e("Offline","imageList :"+imageEntry?.joinToString ())
-                Log.e("Offline","weaveIds :"+weaveIds?.joinToString ())
-                Log.e("Offline","careIds :"+careIds?.joinToString ())
-                Log.e("Offline","relatedEntry :"+relatedEntry?.productWeight)
                var productData=createProductTemplateString(productEntry,weaveIds,careIds,relatedEntry)
                 Log.e("Offline","productData :"+productData)
                 uploadProduct(productData,imageEntry,prodId)
           }
         }catch (e: Exception){
-            Log.e("Offline",e.message)
+            Log.e("Offline","Exception "+e.localizedMessage)
         }
     }
     fun createProductTemplateString(productEntry:ArtisanProducts?,weaveIds:List<Long>,careIdList:List<Long>,realatedEntry:RelatedProducts?):String{
@@ -57,18 +61,15 @@ class ProductCreateService: JobIntentService() {
         template.tag=productEntry?.productTag?:""//et_prod_name.text.toString()
         template.code=productEntry?.productCode?:""
         template.productCategoryId=productEntry?.productCategoryId?:0
-        Log.e("Offline","createProductTemplateString 22222222222:"+weaveIds?.size)
         template.productTypeId=productEntry?.productTypeId?:0
         template.productSpec=productEntry?.productSpecs?:""
         template.weight=productEntry?.weight?:""
         template.careIds=careIdList
         template.weaveIds=weaveIds
-        Log.e("Offline","createProductTemplateString 333333333:"+careIdList?.size)
         template.statusId=productEntry?.productStatusId?:1
         template.gsm=productEntry?.gsm?:""
         template.warpDyeId=productEntry?.warpDyeId?:0
         template.warpYarnCount=productEntry?.warpYarnCount?:""
-        Log.e("Offline","createProductTemplateString 4444444444:"+template.statusId)
         template.warpYarnId=productEntry?.warpYarnId?:0
         template.weftDyeId=productEntry?.weftDyeId?:0
         template.weftYarnCount=productEntry?.weftYarnCount?:""
@@ -79,7 +80,6 @@ class ProductCreateService: JobIntentService() {
         template.width=productEntry?.productWidth?:""
         template.length=productEntry?.productLength?:""
         template.reedCountId=productEntry?.reedCountId.toString()
-        Log.e("Offline","createProductTemplateString 6666666666:"+template?.reedCountId)
         if(realatedEntry!=null)  {
             var relatedProductObj= RelatedProduct()
             relatedProductObj.length=realatedEntry.productLength?:""
@@ -87,23 +87,31 @@ class ProductCreateService: JobIntentService() {
             relatedProductObj.productTypeID=realatedEntry.productTypeId?:0
             template.relatedProduct=relatedProductObj.toString()
         }
-        Log.e("Offline","template 777777777 :"+template.code)
+        Log.e("Offline","template :"+template.code)
         return template.toString()
     }
 
     fun uploadProduct(productData:String,imageList:ArrayList<String>?,prodId:Long){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         Log.e("Offline","productData :"+productData)
-        if(imageList!!.size==3) {
-            var file1 = File(imageList?.get(0))
-            var file2 = File(imageList?.get(1))
-            var file3 = File(imageList?.get(2))
-            val body1 = prepareFilePart("file1", file1)
-            val body2 = prepareFilePart("file2", file2)
-            val body3 = prepareFilePart("file3", file3)
 
+            var dataLength=0L
+            imageList?.forEach {
+                dataLength=dataLength+ File(it).length()
+            }
+            var boundary= UUID.randomUUID().toString()
+            var headerBoundary="multipart/form-data;boundary="+boundary
+
+            val byteData=prepareMultiPartBody(boundary,dataLength,imageList)
+            Log.e("Offline","prepareMultiPartBody 666666 "+byteData?.capacity())
+            val body = byteData!!.array().toRequestBody(MediaType.parse("image/*"), 0, byteData!!.capacity())
+            Log.e("Offline","prepareMultiPartBody 77777 "+body.contentLength())
+            val bodyMultipart = MultipartBody.Builder()
+                .addPart(body)
+                .build()
+            Log.e("Offline","prepareMultiPartBody 88888 "+bodyMultipart.boundary)
             CraftExchangeRepository.getProductService()
-                .uploadProductTemplate(token, productData, body1, body2, body3)
+                .uploadProductTemplate(token,headerBoundary,dataLength, productData, bodyMultipart)
                 .enqueue(object : Callback, retrofit2.Callback<ArtisanProductTemplateRespons> {
                     override fun onFailure(
                         call: Call<ArtisanProductTemplateRespons>,
@@ -123,59 +131,95 @@ class ProductCreateService: JobIntentService() {
                         }
                     }
                 })
-        }else if(imageList!!.size==2) {
-            var file1 = File(imageList?.get(0))
-            var file2 = File(imageList?.get(1))
-            val body1 = prepareFilePart("file1", file1)
-            val body2 = prepareFilePart("file2", file2)
-
-            CraftExchangeRepository.getProductService()
-                .uploadProductTemplate(token, productData, body1, body2)
-                .enqueue(object : Callback, retrofit2.Callback<ArtisanProductTemplateRespons> {
-                    override fun onFailure(
-                        call: Call<ArtisanProductTemplateRespons>,
-                        t: Throwable
-                    ) {
-                        t.printStackTrace()
-                        Log.e("Offline", "getProductUploadData onFailure: " + t.localizedMessage)
-                    }
-
-                    override fun onResponse(
-                        call: Call<ArtisanProductTemplateRespons>,
-                        response: retrofit2.Response<ArtisanProductTemplateRespons>
-                    ) {
-                        Log.e("Offline", "onResponse :" + response.code())
-                        if (response.body()?.valid == true) {
-                            deleteOfflineEntries(prodId)
-                        }
-                    }
-                })
-        }else {
-            var file1 = File(imageList?.get(0))
-            val body1 = prepareFilePart("file1", file1)
-
-            CraftExchangeRepository.getProductService()
-                .uploadProductTemplate(token, productData, body1)
-                .enqueue(object : Callback, retrofit2.Callback<ArtisanProductTemplateRespons> {
-                    override fun onFailure(
-                        call: Call<ArtisanProductTemplateRespons>,
-                        t: Throwable
-                    ) {
-                        t.printStackTrace()
-                        Log.e("Offline", "getProductUploadData onFailure: " + t.localizedMessage)
-                    }
-
-                    override fun onResponse(
-                        call: Call<ArtisanProductTemplateRespons>,
-                        response: retrofit2.Response<ArtisanProductTemplateRespons>
-                    ) {
-                        Log.e("Offline", "onResponse :" + response.code())
-                        if (response.body()?.valid == true) {
-                            deleteOfflineEntries(prodId)
-                        }
-                    }
-                })
+//        }else if(imageList!!.size==2) {
+//            var file1 = File(imageList?.get(0))
+//            var file2 = File(imageList?.get(1))
+//            val body1 = prepareFilePart("file1", file1)
+//            val body2 = prepareFilePart("file2", file2)
+//
+//            CraftExchangeRepository.getProductService()
+//                .uploadProductTemplate(token, productData, body1, body2)
+//                .enqueue(object : Callback, retrofit2.Callback<ArtisanProductTemplateRespons> {
+//                    override fun onFailure(
+//                        call: Call<ArtisanProductTemplateRespons>,
+//                        t: Throwable
+//                    ) {
+//                        t.printStackTrace()
+//                        Log.e("Offline", "getProductUploadData onFailure: " + t.localizedMessage)
+//                    }
+//
+//                    override fun onResponse(
+//                        call: Call<ArtisanProductTemplateRespons>,
+//                        response: retrofit2.Response<ArtisanProductTemplateRespons>
+//                    ) {
+//                        Log.e("Offline", "onResponse :" + response.code())
+//                        if (response.body()?.valid == true) {
+//                            deleteOfflineEntries(prodId)
+//                        }
+//                    }
+//                })
+//        }
+//         else {
+//            var file1 = File(imageList?.get(0))
+//            val body1 = prepareFilePart("file1", file1)
+//
+//            CraftExchangeRepository.getProductService()
+//                .uploadProductTemplate(token, productData, body1)
+//                .enqueue(object : Callback, retrofit2.Callback<ArtisanProductTemplateRespons> {
+//                    override fun onFailure(
+//                        call: Call<ArtisanProductTemplateRespons>,
+//                        t: Throwable
+//                    ) {
+//                        t.printStackTrace()
+//                        Log.e("Offline", "getProductUploadData onFailure: " + t.localizedMessage)
+//                    }
+//
+//                    override fun onResponse(
+//                        call: Call<ArtisanProductTemplateRespons>,
+//                        response: retrofit2.Response<ArtisanProductTemplateRespons>
+//                    ) {
+//                        Log.e("Offline", "onResponse :" + response.code())
+//                        if (response.body()?.valid == true) {
+//                            deleteOfflineEntries(prodId)
+//                        }
+//                    }
+//                })
+//        }
+    }
+    private fun prepareMultiPartBody(
+        boundary:String,
+        dataLength:Long,
+        imageList:ArrayList<String>?
+    ): ByteBuffer? {
+        var ctr=0
+        var body = ByteBuffer.allocate(dataLength.toInt()+5000)
+        Log.e("Offline","prepareMultiPartBody 1111111")
+        var boundaryPrefix = "--$boundary\n"
+        Log.e("Offline","prepareMultiPartBody 2222222")
+        imageList?.forEach {
+            ctr++
+            body.put(boundaryPrefix.toByteArray(StandardCharsets.UTF_8))
+            val file = File(it)
+//            Content-Disposition: form-data; name="file2"; filename="Screenshot_20200801-115847.png"
+//            Content-Type: image/png
+            var contentDisposition = "Content-Disposition: form-data; name=file$ctr; filename=${file.name}\r\n"
+            body.put(contentDisposition.toByteArray(StandardCharsets.UTF_8))
+            var mimetype=MediaType.parse("image/*")
+            var mimeType = "Content-Type: $mimetype\r\n\r\n"
+            body.put(mimeType.toByteArray(StandardCharsets.UTF_8))
+            Log.e("Offline","prepareMultiPartBody 3333 "+file.name)
+            Log.e("Offline","prepareMultiPartBody 3333 "+file.length())
+            body.put(file.readBytes())
+            Log.e("Offline","prepareMultiPartBody 4444 "+ctr)
+            body.put("\r\n".toByteArray(StandardCharsets.UTF_8))
+            Log.e("Offline","prepareMultiPartBody 5555")
+            if(ctr==imageList.size){
+                var bottomBoundaryStr = "--$boundary--"
+                body.put(bottomBoundaryStr.toByteArray(StandardCharsets.UTF_8))
+            }
         }
+
+        return body
     }
     private fun prepareFilePart(
         partName: String,

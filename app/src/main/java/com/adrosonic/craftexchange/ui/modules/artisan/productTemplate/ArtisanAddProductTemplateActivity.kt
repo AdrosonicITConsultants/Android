@@ -22,14 +22,14 @@ import com.adrosonic.craftexchange.databinding.ActivityArtisanAddProductTemplate
 import com.adrosonic.craftexchange.repository.data.request.artisan.productTemplate.ArtisanAddProductRequest
 import com.adrosonic.craftexchange.repository.data.request.artisan.productTemplate.RelatedProduct
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.*
+import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.ProductType
 import com.adrosonic.craftexchange.syncManager.SyncCoordinator
-import com.adrosonic.craftexchange.utils.ConstantsDirectory
-import com.adrosonic.craftexchange.utils.UserConfig
-import com.adrosonic.craftexchange.utils.Utility
+import com.adrosonic.craftexchange.utils.*
 import com.adrosonic.craftexchange.viewModels.ArtisanProductTemplateViewModel
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_artisan_add_product_template.*
+import java.io.File
 
 
 fun Context.addProductIntent(): Intent {
@@ -326,6 +326,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                 ConstantsDirectory.PICK_IMAGE -> {
                     val uri = data?.data
                     if (uri != null) {
+
                         var absolutePath = Utility.getRealPathFromFileURI(applicationContext, uri!!)
                         pairList.add(absolutePath)
                         prodImgListAdapter.notifyDataSetChanged()
@@ -619,7 +620,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                     dialog.cancel()
                 }
                 tvSave.setOnClickListener {
-
+                    dialog.dismiss()
                     var template= ArtisanAddProductRequest()
                     template.tag=et_prod_name.text.toString()
                     template.code=et_prod_code.text.toString()
@@ -645,18 +646,57 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                     template.reedCountId=reedCountId.toString()
                  if(relatedProduct.size>0)   template.relatedProduct=relatedProduct.get(0).toString()
 
-                    ProductPredicates.insertArtisanProductOffline(template,pairList,relatedProduct)
-                    if(Utility.checkIfInternetConnected(applicationContext)){
-                    val coordinator = SyncCoordinator(applicationContext)
-                    coordinator?.performLocallyAvailableActions()}
-    //             mViewModel.uploadProduct(template.toString(), pairList)
-                 finish()
+                    val dialogCompresion = CompressionProgressDialog()
+                    dialogCompresion.show(supportFragmentManager, resources.getString(R.string.compressing))
+                    dialogCompresion.isCancelable = false
+                    CompressImageTask(cacheDir.absolutePath,  pairList,  object : CompressTaskResult {
+                        override fun performFinalTask(result: ArrayList<String>) {
+                            dialogCompresion.dismiss()
+                            val pair=validTotalFileSize(result)
+                            val status = pair.first
+                            if (status) {
+                                ProductPredicates.insertArtisanProductOffline(template, pairList,relatedProduct)
+                                if (Utility.checkIfInternetConnected(applicationContext)) {
+                                    val coordinator = SyncCoordinator(applicationContext)
+                                    coordinator?.performLocallyAvailableActions()
+                                }
+
+                                finish()
+                            } else
+                                Utility.displayMessage("One of image size exceeds 1MB limit, kindly remove the it to continue", applicationContext)
+                        }
+                    }).execute()
+
                 }
              }
         } catch (e: Exception) {
             Utility.displayMessage("Please fill all details",applicationContext)
             Log.e("AddProductTemplate","while save click $e")
         }
+    }
+
+    private fun validTotalFileSize(filePaths: ArrayList<String>): Pair<Boolean,String> {
+        var files=""
+        var statusList=ArrayList<Pair<Boolean,String>>()
+        var size = 0.00
+        val iterator = filePaths.iterator()
+        while (iterator.hasNext()) {
+            val path = iterator.next()
+            val file = File(path)
+            val fileSizeInBytes = file.length()
+            val fileSizeInKB: Double = (fileSizeInBytes / 1024).toDouble()
+            if((fileSizeInKB/1024)>1)statusList.add(Pair( false,file.name))
+            else statusList.add(Pair( true,file.name))
+            size += fileSizeInKB
+        }
+        val fileSizeInMB: Double = (size / 1024)
+        for(s in statusList)
+        {
+            if(s.first==false) files=files+s.second+","
+        }
+        Log.e("validate","files:"+files)
+        if(files.isEmpty()) return Pair(true,files)
+        else return Pair(false,files)
     }
 
     fun resetAll(){

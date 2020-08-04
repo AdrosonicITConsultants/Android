@@ -55,41 +55,14 @@ interface ProductDao {
     @GET("product/getProductUploadData")
     fun getProductUploadData(@Header("Authorization") token: String): Call<ProductUploadData>
 
-    @Multipart
     @Headers("Accept: application/json")
     @POST("product/uploadProduct")
     fun uploadProductTemplate(
         @Header("Authorization") token: String,
+        @Header("Content-Type") headerValue:String,
+        @Header("Content-Length") length: Long,
         @Query("productData") productData: String,
-        @Part file1: MultipartBody.Part?,
-        @Part file2: MultipartBody.Part?,
-        @Part file3: MultipartBody.Part?
+        @Body file: MultipartBody
     ): Call<ArtisanProductTemplateRespons>
 
-    @Multipart
-    @Headers("Accept: application/json")
-    @POST("product/uploadProduct")
-    fun uploadProductTemplate(
-        @Header("Authorization") token: String,
-        @Query("productData") productData: String,
-        @Part file1: MultipartBody.Part?, @Part file2: MultipartBody.Part?
-    ): Call<ArtisanProductTemplateRespons>
-
-    @Multipart
-    @Headers("Accept: application/json")
-    @POST("product/uploadProduct")
-    fun uploadProductTemplate(
-        @Header("Authorization") token: String,
-        @Query("productData") productData: String,
-        @Part file1: MultipartBody.Part?
-    ): Call<ArtisanProductTemplateRespons>
-
-    //////////////////////////////////////WishlistedProducts////////////////////////////////////////
-    @Headers("Accept: application/json")
-    @GET("product/getProductIdsInWishlist")
-    fun getWishlistedProductIds(@Header("Authorization") token: String): Call<WishListedIds>
-
-    @Headers("Accept: application/json")
-    @GET("product/getProduct/{productId}")
-    fun getSingleProductDetails(@Header("Authorization") token: String,@Path("productId")productId:Int): Call<SingleProductDetails>
-}
+  }

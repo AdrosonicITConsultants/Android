@@ -106,7 +106,7 @@ class LandingViewModel(application: Application) : AndroidViewModel(application)
     fun getwishlisteProductIds(){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         CraftExchangeRepository
-            .getProductService()
+            .getWishlistService()
             .getWishlistedProductIds(token)
             .enqueue(object: Callback, retrofit2.Callback<WishListedIds> {
                 override fun onFailure(call: Call<WishListedIds>, t: Throwable) {
@@ -140,7 +140,7 @@ class LandingViewModel(application: Application) : AndroidViewModel(application)
     fun getBuyerProductDetails(id:Long){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         CraftExchangeRepository
-            .getProductService()
+            .getWishlistService()
             .getSingleProductDetails(token,id.toInt())
             .enqueue(object: Callback, retrofit2.Callback<SingleProductDetails> {
                 override fun onFailure(call: Call<SingleProductDetails>, t: Throwable) {
