@@ -1,6 +1,8 @@
 package com.adrosonic.craftexchange.database.predicates
 
 import android.util.Log
+import com.adrosonic.craftexchange.database.entities.realmEntities.ArtisanProducts
+import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCatalogue
 import com.adrosonic.craftexchange.database.CXRealmManager
 import com.adrosonic.craftexchange.database.entities.realmEntities.ArtisanProducts
 import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCatalogue
@@ -14,7 +16,18 @@ class WishlistPredicates {
     companion object {
         private var nextID: Long? = 0
 
+        fun actionWishlist(productId: Long?, actionWishlisting : Long?) {
+            var realm = CXRealmManager.getRealmInstance()
+            realm.executeTransaction {
+            var product = realm.where(ProductCatalogue::class.java)
+                .equalTo(ProductCatalogue.COLUMN_PRODUCT_ID, productId).limit(1).findFirst()
+            product?.actionWishlisted = actionWishlisting
+            }
+        }
 
+        fun getWishlistedProduct(productId: Long?){
+
+        }
 
         fun updateProductWishlisting(productId: Long?,isWishlisted : Long?,actionWishlisting : Long?){
             var realm = CXRealmManager.getRealmInstance()

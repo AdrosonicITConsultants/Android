@@ -12,13 +12,16 @@
 
     <application
         android:name=".App"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_logo_main_round"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_logo_main_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.modules.buyer.productDetails.FullScreenImageActivity"></activity>
+        <activity android:name=".ui.modules.buyer.productDetails.FullScreenImageActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.modules.buyer.productDetails.CatalogueProductDetailsActivity"
             android:screenOrientation="portrait" />

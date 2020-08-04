@@ -207,7 +207,7 @@
                         android:fontFamily="@font/lato_regular"
                         android:background="@drawable/rectangle_edittext_bg"
                         android:hint="Product code(Eg. NAG09_89)"
-                        android:maxLength="40"
+                        android:maxLength="20"
                         android:maxLines="1"
                         android:textSize="@dimen/edit_text" />
 
@@ -980,6 +980,7 @@
                         android:layout_marginBottom="16dp"
                         android:fontFamily="@font/lato_regular"
                         android:background="@drawable/rectangle_edittext_bg"
+                        android:maxLength="10"
                         android:hint="@string/enter_gsm_value" />
 
                     <TextView
