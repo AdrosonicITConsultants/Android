@@ -42,7 +42,7 @@ class WishlistAdapter(
 
     inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var productImage: ImageView
-        var wishlistButton: LikeButton
+        var wishlistButton: ImageView
         var productTitle: TextView
         var productAvailableText: TextView
         var productDescription: TextView
@@ -68,7 +68,6 @@ class WishlistAdapter(
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val pos=position
         var product = categoryProduct?.get(position)
-        holder.wishlistButton.isLiked=true
         holder.productTitle.text = product?.productTag
         var status : String ?= ""
         when(product?.productStatusId){

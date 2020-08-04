@@ -27,6 +27,7 @@ import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.WishlistViewModel
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.like.LikeButton
 import com.like.OnLikeListener
@@ -170,6 +171,10 @@ class CatalogueProductDetailsActivity : AppCompatActivity() {
                 }
                 mBinding?.carouselViewProducts?.pageCount = imageUrlList?.size!!
                 mBinding?.carouselViewProducts?.setImageListener(imageListener)
+                mBinding?.carouselViewProducts?.setImageClickListener {
+                    UserConfig.shared.imageUrlList= Gson().toJson(imageUrlList)
+                    startActivity(fullScreenImageIntent())
+                }
             }
         }
     }
@@ -283,14 +288,11 @@ class CatalogueProductDetailsActivity : AppCompatActivity() {
         length.setSpan(ForegroundColorSpan(ContextCompat.getColor(applicationContext,R.color.length_unit_color)), 0, length.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         var width = SpannableString(details?.productWidth)
         width.setSpan(ForegroundColorSpan(ContextCompat.getColor(applicationContext,R.color.swipe_background)), 0, width.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        var dimensions = "$productTypeName\t\t"
+        var dimensions = "$productTypeName\t"
         mBinding?.prodDimensValue?.text = dimensions
         mBinding?.prodDimensValue?.append(length)
         mBinding?.prodDimensValue?.append("\tX\t")
         mBinding?.prodDimensValue?.append(width)
-
-
-
     }
 
     private fun setupMoreProductsRecycler(){

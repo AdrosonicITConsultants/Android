@@ -45,6 +45,9 @@ class RegionProdListFragment : Fragment() {
     private var mSpinner = mutableListOf<String>()
     private var filterBy : String ?= ""
 
+    var productListSize : Int ?= 0
+    var filterListSize : Int ?= 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -80,6 +83,7 @@ class RegionProdListFragment : Fragment() {
         mBinding?.regionProdRecyclerList?.layoutManager = LinearLayoutManager(requireContext(),
             LinearLayoutManager.VERTICAL, false)
 //        mBinding?.catProdRecyclerList?.layoutManager = AutoFitGridLayoutManager(requireContext(),500)
+
         clusterProductAdapter?.notifyDataSetChanged()
     }
 
@@ -135,7 +139,15 @@ class RegionProdListFragment : Fragment() {
                             mProduct.add(prod)
                         }
                     }
-                    clusterProductAdapter?.setProducts(mProduct)
+                    if(mProduct.size == 0){
+                        mBinding?.emptyView?.visibility = View.VISIBLE
+                        mBinding?.regionProdRecyclerList?.visibility = View.GONE
+                    }else{
+                        mBinding?.emptyView?.visibility = View.GONE
+                        mBinding?.regionProdRecyclerList?.visibility = View.VISIBLE
+                        clusterProductAdapter?.setProducts(mProduct)
+                    }
+
 
                 }else{
                     initialList()
@@ -160,7 +172,14 @@ class RegionProdListFragment : Fragment() {
                 var prod = ProductCard(clusterId,productId,productTitle,desc,status,isWishlisted)
                 mProduct.add(prod)
             }
-            clusterProductAdapter?.setProducts(mProduct)
+            if(mProduct.size == 0){
+                mBinding?.emptyView?.visibility = View.VISIBLE
+                mBinding?.regionProdRecyclerList?.visibility = View.GONE
+            }else{
+                mBinding?.emptyView?.visibility = View.GONE
+                mBinding?.regionProdRecyclerList?.visibility = View.VISIBLE
+                clusterProductAdapter?.setProducts(mProduct)
+            }
         }
     }
 
@@ -174,6 +193,11 @@ class RegionProdListFragment : Fragment() {
             "Nalbari" -> {mBinding?.productTypeDesc?.text = activity?.getString(R.string.Nal_text)}
             "Dimapur" -> {mBinding?.productTypeDesc?.text = activity?.getString(R.string.Dil_text)}
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        clusterProductAdapter?.notifyDataSetChanged()
     }
 
     companion object {

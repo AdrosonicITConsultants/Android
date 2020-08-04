@@ -18,10 +18,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".ui.modules.buyer.productDetails.FullScreenImageActivity"></activity>
         <activity
             android:name=".ui.modules.buyer.productDetails.CatalogueProductDetailsActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.modules.artisan.profile.editProfile.ArtisanEditProfileActivity"
             android:screenOrientation="portrait" />
@@ -81,16 +81,15 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
         <service
             android:name=".services.ProductCreateService"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
-
         <service
             android:name=".services.wishlist.WishlistService"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
-
         <service android:name=".services.InstanceIdService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />

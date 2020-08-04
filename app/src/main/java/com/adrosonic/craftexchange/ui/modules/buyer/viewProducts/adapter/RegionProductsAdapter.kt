@@ -111,7 +111,6 @@ class RegionProductsAdapter(var context: Context?, private var regionProduct: Li
                 }
             }
         })
-
     }
 
     internal fun setProducts(regionProduct: List<ProductCard>) {

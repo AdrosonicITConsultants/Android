@@ -163,6 +163,11 @@ class ArtisanUploadedProductsFragment : Fragment() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        productAdapter?.notifyDataSetChanged()
+    }
+
     companion object {
         @JvmStatic
         fun newInstance() = ArtisanUploadedProductsFragment()
