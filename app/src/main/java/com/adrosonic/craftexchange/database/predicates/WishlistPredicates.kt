@@ -1,8 +1,6 @@
 package com.adrosonic.craftexchange.database.predicates
 
 import android.util.Log
-import com.adrosonic.craftexchange.database.entities.realmEntities.ArtisanProducts
-import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCatalogue
 import com.adrosonic.craftexchange.database.CXRealmManager
 import com.adrosonic.craftexchange.database.entities.realmEntities.ArtisanProducts
 import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCatalogue
