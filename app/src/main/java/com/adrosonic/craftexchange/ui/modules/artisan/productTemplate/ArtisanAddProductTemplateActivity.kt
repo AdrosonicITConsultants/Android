@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
@@ -15,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
-import com.adrosonic.craftexchange.App
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.databinding.ActivityArtisanAddProductTemplateBinding
@@ -26,7 +27,6 @@ import com.adrosonic.craftexchange.repository.data.response.artisan.products.pro
 import com.adrosonic.craftexchange.syncManager.SyncCoordinator
 import com.adrosonic.craftexchange.utils.*
 import com.adrosonic.craftexchange.viewModels.ArtisanProductTemplateViewModel
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_artisan_add_product_template.*
 import java.io.File
@@ -96,7 +96,6 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
     //    private var parentViewsList=ArrayList<LinearLayout>()
 //    private var childViewsList=ArrayList<Any>()
     private var dots = ArrayList<TextView>()
-    private var statusList = ArrayList<ImageView>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityArtisanAddProductTemplateBinding.inflate(layoutInflater)
@@ -129,18 +128,6 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
         parent_step10.setOnClickListener(this)
         parent_step11.setOnClickListener(this)
 
-        statusList.add(img_status_step1)
-        statusList.add(img_status_step2)
-        statusList.add(img_status_step3)
-        statusList.add(img_status_step4)
-        statusList.add(img_status_step5)
-        statusList.add(img_status_step6)
-        statusList.add(img_status_step7)
-        statusList.add(img_status_step8)
-        statusList.add(img_status_step9)
-        statusList.add(img_status_step10)
-        statusList.add(img_status_step11)
-
         btn_back.setOnClickListener{
             showCancelDialog()
         }
@@ -149,6 +136,31 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
         txt_save_upload.setOnClickListener {saveUploadProduct() }
         txt_save_upload_top.setOnClickListener {  saveUploadProduct() }
         txt_reset.setOnClickListener { resetAll() }
+        ///////////////////////////////////////////////////////////////////
+        et_prod_name.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(expr: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                setStatusResource()
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+        })
+        et_prod_code.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(expr: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                setStatusResource()
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+        })
+
     }
     fun loadData(){
         ///////////////////////Add Photo////////////////////////
@@ -294,10 +306,13 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
             } else productAvalability = true
             setproductAvailability(productAvalability)
         }
+        setStatusResource()
     }
+
     override fun onUpdate(pairList: ArrayList<String>, deletedIds: ArrayList<String>) {
         this.pairList = pairList
         this.deletedPaths = deletedIds
+        setStatusResource()
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
@@ -319,6 +334,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
             finish()
         }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == ConstantsDirectory.PICK_IMAGE && resultCode == AppCompatActivity.RESULT_OK && null != data)
@@ -330,6 +346,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                         var absolutePath = Utility.getRealPathFromFileURI(applicationContext, uri!!)
                         pairList.add(absolutePath)
                         prodImgListAdapter.notifyDataSetChanged()
+                        setStatusResource()
                     }
                 }
             }
@@ -337,11 +354,14 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
 
     override fun onWeaveItemSelected(pairList: ArrayList<Triple<String, Boolean, Long>>) {
         this.weaveSelctionList = pairList
+        setStatusResource()
     }
 
     override fun onCareItemSelected(pairList: ArrayList<Triple<String, Boolean, Long>>) {
         this.careSelctionList = pairList
+        setStatusResource()
     }
+
     override fun sendYarnData(position:Int, yarnType:Long,yarnCount:String,dye:Long) {
         Log.e("Viewpager","{$position} position/yarnType :"+yarnType+" :yarnCount :"+yarnCount+" : dye :"+dye)
         when(position){
@@ -361,6 +381,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                 extraWeftDyeId=dye
             }
         }
+        setStatusResource()
     }
 
     override fun onClick(p0: View?) {
@@ -555,12 +576,14 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
             txt_made_to_order.setTextColor(this.resources.getColor(R.color.black_text))
             txt_available.setTextColor(this.resources.getColor(R.color.clickable_text_color))
         }
+        setStatusResource()
     }
 
-        fun setDotsColor(position:Int){
+    fun setDotsColor(position:Int){
             dots.forEach { it.setTextColor(  ContextCompat.getColor(this, R.color.darker_gray)) }
             dots.get(position).setTextColor(Color.parseColor("#009A2F"))
         }
+
     fun saveUploadProduct() {
 
         try {
@@ -644,7 +667,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                     template.width=width
                     template.length=length
                     template.reedCountId=reedCountId.toString()
-                 if(relatedProduct.size>0)   template.relatedProduct=relatedProduct.get(0).toString()
+                    if(relatedProduct.size>0)   template.relatedProduct=relatedProduct.get(0).toString()
 
                     val dialogCompresion = CompressionProgressDialog()
                     dialogCompresion.show(supportFragmentManager, resources.getString(R.string.compressing))
@@ -711,6 +734,51 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
         loadData()
 
     }
+
+    fun setStatusResource(){
+
+//        var width=if(arrProdWidthStr.size<=0)et_prod_width.text.toString() else sp_prod_width?.selectedItem.toString()
+//        var length=if(arrProdLengthStr.size<=0)et_prod_length.text.toString() else sp_prod_length?.selectedItem.toString()
+//
+//
+//        if(pairList.size>0)Utility.setImageResource(applicationContext, img_status_step1, R.drawable.ic_add_prod_status_filled)
+//        else Utility.setImageResource(applicationContext, img_status_step1, R.drawable.ic_add_prod_status)
+//
+//        if(et_prod_name.text.isNotBlank() && et_prod_code.text.isNotBlank()) Utility.setImageResource(applicationContext, img_status_step2, R.drawable.ic_add_prod_status_filled)
+//        else Utility.setImageResource(applicationContext,img_status_step2, R.drawable.ic_add_prod_status)
+//
+//        if(weaveIdList.size>0)Utility.setImageResource(applicationContext, img_status_step3, R.drawable.ic_add_prod_status_filled)
+//         else Utility.setImageResource(applicationContext, img_status_step3, R.drawable.ic_add_prod_status)
+//
+//        if(warpDyeId<=0 ||warpYarnCount.isBlank() || warpYarnId<=0||weftDyeId<=0||weftYarnCount.isBlank()||weftYarnId<=0) Utility.setImageResource(applicationContext,img_status_step2, R.drawable.ic_add_prod_status)
+//        else Utility.setImageResource(applicationContext, img_status_step3, R.drawable.ic_add_prod_status_filled)
+//
+//
+//                if(sp_reed_count.selectedItem.toString().isNotBlank()) Utility.setImageResource(applicationContext, img_status_step5, R.drawable.ic_add_prod_status_filled)
+//                else Utility.setImageResource(applicationContext, img_status_step5, R.drawable.ic_add_prod_status)
+//
+//                if(width.isNotBlank() && length.isNotBlank()) Utility.setImageResource(applicationContext, img_status_step6, R.drawable.ic_add_prod_status_filled)
+//                else Utility.setImageResource(applicationContext, img_status_step6, R.drawable.ic_add_prod_status)
+//
+//
+//                if(careIdList.size>0)Utility.setImageResource(applicationContext, img_status_step7, R.drawable.ic_add_prod_status_filled)
+//                else Utility.setImageResource(applicationContext, img_status_step7, R.drawable.ic_add_prod_status)
+//
+//                if(status==null)Utility.setImageResource(applicationContext, img_status_step8, R.drawable.ic_add_prod_status_filled)
+//                else Utility.setImageResource(applicationContext, img_status_step8, R.drawable.ic_add_prod_status)
+//
+//
+//                if(et_prod_weight.text.isNotBlank())Utility.setImageResource(applicationContext, img_status_step9, R.drawable.ic_add_prod_status_filled)
+//                else Utility.setImageResource(applicationContext, img_status_step9, R.drawable.ic_add_prod_status)
+//
+//                if(et_gsm.text.isNotBlank())Utility.setImageResource(applicationContext, img_status_step10, R.drawable.ic_add_prod_status_filled)
+//                else Utility.setImageResource(applicationContext, img_status_step10, R.drawable.ic_add_prod_status)
+//
+//                if(et_gsm.text.isNotBlank())Utility.setImageResource(applicationContext, img_status_step11, R.drawable.ic_add_prod_status_filled)
+//                else Utility.setImageResource(applicationContext, img_status_step11, R.drawable.ic_add_prod_status)
+       }
+
+
 }
 
 
