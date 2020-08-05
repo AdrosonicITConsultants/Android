@@ -21,6 +21,7 @@
                 android:layout_height="50dp"
                 android:orientation="horizontal"
                 android:background="@color/black_text"
+                android:weightSum="10"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
@@ -29,12 +30,13 @@
                     android:id="@+id/product_title"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_weight="6"
                     android:textSize="20sp"
                     android:maxLines="1"
                     android:textColor="@color/white_text"
                     android:fontFamily="@font/playfair_regular"
-                    android:gravity="center_vertical"
+                    android:gravity="center_vertical|start"
+                    android:layout_gravity="center_vertical|start"
                     android:paddingStart="@dimen/margin_regular"
                     android:paddingEnd="4dp"/>
 
@@ -42,7 +44,7 @@
                     android:id="@+id/filter_category"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"/>
+                    android:layout_weight="4"/>
 
             </LinearLayout>
 

@@ -148,7 +148,14 @@ class BrandProdListFragment : Fragment(){
                             mProduct.add(prod)
                         }
                     }
-                    brandProductAdapter?.setProducts(mProduct)
+                    if(mProduct.size == 0){
+                        mBinding?.emptyView?.visibility = View.VISIBLE
+                        mBinding?.brandProdRecyclerList?.visibility = View.GONE
+                    }else{
+                        mBinding?.emptyView?.visibility = View.GONE
+                        mBinding?.brandProdRecyclerList?.visibility = View.VISIBLE
+                        brandProductAdapter?.setProducts(mProduct)
+                    }
                 }else{
                     initialList()
                 }
@@ -173,8 +180,20 @@ class BrandProdListFragment : Fragment(){
                 var prod = ProductCard(clusterId,productId,productTitle,desc,status,isWishlisted)
                 mProduct.add(prod)
             }
-            brandProductAdapter?.setProducts(mProduct)
+            if(mProduct.size == 0){
+                mBinding?.emptyView?.visibility = View.VISIBLE
+                mBinding?.brandProdRecyclerList?.visibility = View.GONE
+            }else{
+                mBinding?.emptyView?.visibility = View.GONE
+                mBinding?.brandProdRecyclerList?.visibility = View.VISIBLE
+                brandProductAdapter?.setProducts(mProduct)
+            }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        brandProductAdapter?.notifyDataSetChanged()
     }
 
     companion object {

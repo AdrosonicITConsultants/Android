@@ -403,4 +403,11 @@ class UserConfig {
             Prefs.putString(PRODUCT_UPLOAD_JSON, value)
             field = value
         }
+
+    var imageUrlList : String? = ""
+        get() = Prefs.getString(IMAGE_URL,"")
+        set(value) {
+            Prefs.putString(IMAGE_URL, value)
+            field = value
+        }
 }

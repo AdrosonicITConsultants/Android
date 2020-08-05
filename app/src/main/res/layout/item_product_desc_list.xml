@@ -105,7 +105,6 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/lato_regular"
                 android:maxLines="2"
-                android:text="eerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr\ndffffffaaaaaaaaaaaaaaaaaaaaaaaaa\nadffffffff"
                 android:textSize="@dimen/product_availability_text"
                 app:layout_constraintEnd_toStartOf="@+id/wishlist_button"
                 app:layout_constraintHorizontal_bias="0.0"

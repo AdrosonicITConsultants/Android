@@ -519,14 +519,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_semimedium"
                     android:orientation="horizontal"
-                    android:weightSum="3">
+                    android:weightSum="10">
 
                     <ImageView
                         android:id="@+id/reed_icon"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="1"
+                        android:layout_weight="3"
                         android:src="@drawable/ic_reed_icon" />
 
                     <TextView
@@ -534,22 +534,22 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="1"
+                        android:layout_weight="3"
                         android:fontFamily="@font/lato_regular"
-                        android:gravity="center"
+                        android:gravity="start"
                         android:text="@string/reed_count"
                         android:textAllCaps="false"
                         android:textColor="@color/black_text"
-                        android:textSize="@dimen/product_description_text" />
+                        android:textSize="@dimen/product_note_text" />
 
                     <TextView
                         android:id="@+id/reed_count_value"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="1"
+                        android:layout_weight="4"
                         android:fontFamily="@font/lato_regular"
-                        android:gravity="center"
+                        android:gravity="start"
                         android:textAllCaps="false"
                         android:textSize="@dimen/product_availability_text" />
 
@@ -561,14 +561,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_semimedium"
                     android:orientation="horizontal"
-                    android:weightSum="3">
+                    android:weightSum="10">
 
                     <ImageView
                         android:id="@+id/weight_icon"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="1"
+                        android:layout_weight="3"
                         android:src="@drawable/ic_weight_icon" />
 
                     <TextView
@@ -576,22 +576,22 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="1"
+                        android:layout_weight="3"
                         android:fontFamily="@font/lato_regular"
-                        android:gravity="center"
+                        android:gravity="start"
                         android:text="@string/weight"
                         android:textAllCaps="false"
                         android:textColor="@color/black_text"
-                        android:textSize="@dimen/product_description_text" />
+                        android:textSize="@dimen/product_note_text" />
 
                     <TextView
                         android:id="@+id/weight_value"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="1"
+                        android:layout_weight="4"
                         android:fontFamily="@font/lato_regular"
-                        android:gravity="center"
+                        android:gravity="start"
                         android:textAllCaps="false"
                         android:textSize="@dimen/product_availability_text" />
 
@@ -603,40 +603,41 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_semimedium"
                     android:orientation="horizontal"
-                    android:weightSum="3">
+                    android:weightSum="10">
 
                     <ImageView
                         android:id="@+id/dimens_icon"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="1"
+                        android:layout_weight="3"
                         android:src="@drawable/ic_dimens_icon" />
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="1"
+                        android:layout_weight="3"
                         android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/dimens_text"
                             android:layout_width="wrap_content"
                             android:layout_height="0dp"
-                            android:layout_gravity="center"
+                            android:layout_gravity="center_vertical|start"
+                            android:gravity="start"
                             android:layout_weight="1"
                             android:fontFamily="@font/lato_regular"
                             android:text="@string/dimensions"
                             android:textAllCaps="false"
                             android:textColor="@color/black_text"
-                            android:textSize="@dimen/product_description_text" />
+                            android:textSize="@dimen/product_note_text" />
 
                         <TextView
                             android:id="@+id/dimens_unit_text"
                             android:layout_width="wrap_content"
                             android:layout_height="0dp"
-                            android:layout_gravity="center"
+                            android:layout_gravity="start"
                             android:layout_weight="1"
                             android:fontFamily="@font/lato_regular"
                             android:text="@string/dimensions"
@@ -649,9 +650,8 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:layout_weight="1"
+                        android:layout_gravity="start|center_vertical"
+                        android:layout_weight="4"
                         android:orientation="vertical">
 
                         <TextView
@@ -659,7 +659,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/lato_regular"
-                            android:gravity="center"
+                            android:gravity="start"
                             android:textAllCaps="false"
                             android:textSize="@dimen/product_availability_text" />
 
@@ -675,7 +675,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/lato_regular"
-                            android:gravity="center"
+                            android:gravity="start"
                             android:textAllCaps="false"
                             android:textSize="@dimen/product_availability_text" />
 
@@ -684,27 +684,20 @@
 
                 </LinearLayout>
 
-                <View
-                    android:id="@+id/divider4"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="@dimen/margin_regular"
-                    android:background="@color/lighter_gray" />
-
                 <LinearLayout
                     android:id="@+id/gsm_details"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_semimedium"
                     android:orientation="horizontal"
-                    android:weightSum="4">
+                    android:weightSum="10">
 
                     <ImageView
                         android:id="@+id/gsm_icon"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="1"
+                        android:layout_weight="3"
                         android:src="@drawable/ic_gsm_icon" />
 
                     <TextView
@@ -712,34 +705,23 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="1"
+                        android:layout_weight="3"
                         android:fontFamily="@font/lato_regular"
-                        android:gravity="center"
+                        android:gravity="start"
                         android:text="@string/gsm"
                         android:textAllCaps="false"
                         android:textColor="@color/black_text"
                         android:textSize="@dimen/product_note_text" />
 
-                    <TextView
-                        android:id="@+id/fabric"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/lato_regular"
-                        android:gravity="center"
-                        android:text="fabric"
-                        android:textAllCaps="false"
-                        android:textSize="@dimen/product_note_text" />
 
                     <TextView
                         android:id="@+id/gsm_value"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="1"
+                        android:layout_weight="4"
                         android:fontFamily="@font/lato_regular"
-                        android:gravity="center"
+                        android:gravity="start"
                         android:text="XYZgsm"
                         android:textAllCaps="false"
                         android:textSize="@dimen/product_note_text" />

@@ -83,7 +83,7 @@
     </style>
 
     <style name="dark_spinner_item" parent="@android:style/Widget.TextView">
-        <item name="android:textColor">@color/white_text</item>
+        <item name="android:textColor">@color/lighter_gray</item>
         <item name="android:background">@color/black_text</item>
         <item name="fontFamily">@font/lato_regular</item>
         <item name="paddingStart">@dimen/margin_regular</item>

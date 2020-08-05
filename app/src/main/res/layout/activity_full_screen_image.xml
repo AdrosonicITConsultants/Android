@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="start"
+            android:layout_marginTop="@dimen/margin_regular"
+            android:layout_marginStart="@dimen/margin_regular"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:src="@drawable/ic_keyboard_backspace_black_24dp"
+            android:background="?selectableItemBackgroundBorderless"/>
+
+        <com.synnapps.carouselview.CarouselView
+            android:id="@+id/carousel_fullscreen"
+            android:layout_width="0dp"
+            android:layout_height="500dp"
+            app:fillColor="@color/carousel_dot_color"
+            app:pageColor="@color/colorSplash"
+            app:radius="6dp"
+            app:strokeWidth="3dp"
+            app:autoPlay="false"
+            app:disableAutoPlayOnUserInteraction="true"
+            app:strokeColor="@color/white_text"
+            app:animateOnBoundary="false"
+            android:layout_gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_margin="@dimen/margin_semimedium"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

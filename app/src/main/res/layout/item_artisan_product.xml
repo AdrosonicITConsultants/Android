@@ -95,7 +95,7 @@
                 android:layout_marginEnd="@dimen/margin_semimedium"
                 android:fontFamily="@font/lato_regular"
                 android:maxLines="3"
-                android:text="sadaf"
+                android:ellipsize="end"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="@+id/product_title"
                 app:layout_constraintStart_toEndOf="@+id/product_image"
