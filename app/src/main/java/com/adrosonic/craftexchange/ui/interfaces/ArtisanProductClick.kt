@@ -1,7 +1,7 @@
 package com.adrosonic.craftexchange.ui.interfaces
 
-import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCard
+import com.adrosonic.craftexchange.database.entities.realmEntities.ArtisanProducts
 
 interface ArtisanProductClick {
-    fun onItemClick(list : ProductCard)
+    fun onItemClick(list : ArtisanProducts)
 }

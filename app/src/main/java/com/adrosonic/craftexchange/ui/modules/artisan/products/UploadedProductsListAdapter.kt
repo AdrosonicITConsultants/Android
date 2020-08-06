@@ -10,21 +10,28 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
+import com.adrosonic.craftexchange.database.entities.realmEntities.ArtisanProducts
 import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCard
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.databinding.ItemArtisanProductBinding
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
+import io.realm.RealmResults
 
-class UploadedProductsListAdapter(var context: Context?, private var artisanProducts: List<ProductCard>) : RecyclerView.Adapter<UploadedProductsListAdapter.ViewHolder>(){
+class UploadedProductsListAdapter(var context: Context?, private var artisanProducts: RealmResults<ArtisanProducts>?) : RecyclerView.Adapter<UploadedProductsListAdapter.ViewHolder>(){
 
     inner class ViewHolder(var binding: ItemArtisanProductBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(artisanProduct: ProductCard){
+        fun bind(artisanProduct: ArtisanProducts){
             binding.itemArtisanProduct = artisanProduct
 //            binding.event = this@ArtisanProductAdapter
             binding.executePendingBindings()
         }
+    }
+
+    fun updateProductList(newList: RealmResults<ArtisanProducts>?){
+        this.artisanProducts=newList
+        this.notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -33,15 +40,16 @@ class UploadedProductsListAdapter(var context: Context?, private var artisanProd
         return ViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = artisanProducts.size
-
+    override fun getItemCount(): Int {
+        return artisanProducts?.size?:0
+    }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var product = artisanProducts[position]
-        holder.bind(product)
-        holder.binding.productTitle.text = product.productTitle
-        holder.binding.productDescription.text = product.productDescription
+        var product = artisanProducts?.get(position)
+        product?.let { holder.bind(it) }
+        holder.binding.productTitle.text = product?.productTag
+        holder.binding.productDescription.text = product?.productSpecs
         var status : String ?= ""
-        when(product.statusId){
+        when(product?.productStatusId){
             2.toLong() -> {
                 status = context?.getString(R.string.in_stock)
                 holder.binding.availabilityText.text = status
@@ -67,18 +75,10 @@ class UploadedProductsListAdapter(var context: Context?, private var artisanProd
             }
         }
 
-        var image = ProductPredicates.getProductDisplayImage(product.productId)
-        var url = Utility.getProductsImagesUrl(product.productId,image?.imageName)
+        var image = ProductPredicates.getProductDisplayImage(product?.productId)
+        var url = Utility.getProductsImagesUrl(product?.productId,image?.imageName)
         context?.let { ImageSetter.setImage(it,url,holder.binding.productImage) }
 //        product.productImageId?.let { holder.binding.prodImg.setImageResource(it) }
     }
-
-    internal fun setProducts(artisanProducts: List<ProductCard>) {
-        this.artisanProducts = artisanProducts
-        notifyDataSetChanged()
-    }
-
-
-
 
 }

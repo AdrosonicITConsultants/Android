@@ -9,7 +9,7 @@
     <data>
         <variable
             name="artisanProduct"
-            type="com.adrosonic.craftexchange.database.entities.realmEntities.ProductCard"/>
+            type="com.adrosonic.craftexchange.database.entities.realmEntities.ArtisanProducts"/>
 
         <variable
             name="event"

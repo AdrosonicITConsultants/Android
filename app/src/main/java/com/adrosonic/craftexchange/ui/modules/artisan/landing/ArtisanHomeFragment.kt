@@ -1,29 +1,42 @@
 package com.adrosonic.craftexchange.ui.modules.artisan.landing
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.adrosonic.craftexchange.R
+import com.adrosonic.craftexchange.database.entities.realmEntities.ArtisanProducts
 import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCard
+import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCatalogue
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.databinding.FragmentArtisanHomeBinding
 import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.addProductIntent
 import com.adrosonic.craftexchange.ui.modules.artisan.products.ArtisanProductAdapter
+import com.adrosonic.craftexchange.ui.modules.buyer.wishList.WishlistAdapter
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
+import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
+import com.adrosonic.craftexchange.viewModels.ArtisanProductsViewModel
+import com.adrosonic.craftexchange.viewModels.LandingViewModel
 import com.pixplicity.easyprefs.library.Prefs
+import io.realm.RealmResults
+import kotlinx.android.synthetic.main.fragment_wishlist.*
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class ArtisanHomeFragment : Fragment() {
+class ArtisanHomeFragment : Fragment(),
+ArtisanProductsViewModel.productsFetchInterface{
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -32,7 +45,7 @@ class ArtisanHomeFragment : Fragment() {
     private var mProduct = mutableListOf<ProductCard>()
     private var artisanProductAdapter: ArtisanProductAdapter?= null
     var artisanId : Long ?= 0
-
+    val mViewModel: ArtisanProductsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,40 +71,66 @@ class ArtisanHomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initialiseList()
-        artisanProductAdapter =
-            ArtisanProductAdapter(
-                requireContext(),
-                mProduct
-            )
+        mViewModel?.listener = this
+        if (!Utility.checkIfInternetConnected(requireContext())) {
+            Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
+        } else {
+            mViewModel.getProductCategoryListMutableData(artisanId)
+        }
         setupRecyclerView()
+        mViewModel.getProductCategoryListMutableData(artisanId)
+            .observe(viewLifecycleOwner, Observer<RealmResults<ArtisanProducts>>{
+                artisanProductAdapter?.updateCategoryList(it)
+            })
+//        TODO : Fix later Refresh issue
+//        mBinding?.swipeRefreshLayout?.isRefreshing = true
+        mBinding?.swipeRefreshLayout?.setOnRefreshListener {
+            if (!Utility.checkIfInternetConnected(requireContext())) {
+                mBinding?.swipeRefreshLayout?.isRefreshing = false
+                Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
+            } else {
+                mViewModel.getProductsOfArtisan()
+            }
+        }
     }
 
 
     private fun setupRecyclerView(){
-        mBinding?.productRecyclerList?.adapter = artisanProductAdapter
         mBinding?.productRecyclerList?.layoutManager = LinearLayoutManager(activity,LinearLayoutManager.HORIZONTAL, false)
-        artisanProductAdapter?.setProducts(mProduct)
-        artisanProductAdapter?.notifyDataSetChanged()
-
+        artisanProductAdapter = ArtisanProductAdapter(requireContext(), mViewModel.getProductCategoryListMutableData(artisanId).value)
+        mBinding?.productRecyclerList?.adapter = artisanProductAdapter
     }
 
-    private fun initialiseList(){
-        var productList = ProductPredicates.getProductCategoriesOfArtisan(artisanId)
-        mProduct.clear()
-        if (productList != null) {
-            for (size in productList){
-                Log.i("Stat","$size")
-                var artisanId = size.artisanId
-                var productId = size.productCategoryId
-                var productTitle = size.productCategoryDesc
-//                var status =size.productStatusId
-//                var desc = size.productSpecs
-                var prod = ProductCard(artisanId,productId,productTitle,null,null)
-                mProduct.add(prod)
+    override fun onSuccess() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("CAtegoryList", "Onsuccess")
+                mBinding?.swipeRefreshLayout?.isRefreshing = false
+                mViewModel?.getProductCategoryListMutableData(artisanId)
             }
+            )
+        } catch (e: Exception) {
+            Log.e("CAtegoryList", "Exception onSuccess " + e.message)
         }
     }
+
+    override fun onFailure() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("Wishlist", "OnFailure")
+                mBinding?.swipeRefreshLayout?.isRefreshing = false
+                mViewModel?.getProductCategoryListMutableData(artisanId)
+                Utility.displayMessage(
+                    "Error while fetching wishlist. Pleas try again after some time",
+                    requireContext()
+                )
+            }
+            )
+        } catch (e: Exception) {
+            Log.e("CAtegoryList", "Exception onFailure " + e.message)
+        }
+    }
+
 
     companion object {
         fun newInstance() = ArtisanHomeFragment()

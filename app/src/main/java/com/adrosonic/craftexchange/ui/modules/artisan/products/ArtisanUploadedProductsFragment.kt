@@ -4,6 +4,8 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,21 +15,28 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrosonic.craftexchange.R
+import com.adrosonic.craftexchange.database.entities.realmEntities.ArtisanProducts
 import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCard
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.databinding.FragmentArtisanHomeBinding
 import com.adrosonic.craftexchange.databinding.FragmentArtisanUploadedProductsBinding
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.adrosonic.craftexchange.utils.Utility
+import com.adrosonic.craftexchange.viewModels.ArtisanProductsViewModel
 import com.google.gson.Gson
 import com.pixplicity.easyprefs.library.Prefs
+import io.realm.RealmResults
 
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class ArtisanUploadedProductsFragment : Fragment() {
+class ArtisanUploadedProductsFragment : Fragment(),
+ArtisanProductsViewModel.productsFetchInterface{
 
     private var mBinding: FragmentArtisanUploadedProductsBinding?= null
     var productAdapter : UploadedProductsListAdapter ?= null
@@ -39,7 +48,7 @@ class ArtisanUploadedProductsFragment : Fragment() {
     var prodCatId : Long ?=0
     var prodCat : String ?= ""
     private var mProduct = mutableListOf<ProductCard>()
-
+    val mViewModel: ArtisanProductsViewModel by viewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,45 +68,45 @@ class ArtisanUploadedProductsFragment : Fragment() {
         artisanId = this.requireArguments().getLong(ConstantsDirectory.ARTISAN_ID)
         prodCatId = this.requireArguments().getLong(ConstantsDirectory.PRODUCT_CATEGORY_ID)
         prodCat = this.requireArguments().getString(ConstantsDirectory.PRODUCT_CATEGORY)
-
+        mBinding?.productTitle?.text = prodCat
         return mBinding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initialiseList()
+        mViewModel?.listener = this
         initializeView()
-        productAdapter = UploadedProductsListAdapter(requireContext(),mProduct)
+        if (!Utility.checkIfInternetConnected(requireContext())) {
+            Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
+        } else {
+            mViewModel.getProductsOfArtisan()
+            mViewModel.getProductListMutableData(artisanId,prodCat)
+        }
         setupRecyclerView()
-    }
-
-    private fun setupRecyclerView(){
-        mBinding?.categoryRecyclerList?.adapter = productAdapter
-        mBinding?.categoryRecyclerList?.layoutManager = LinearLayoutManager(activity,
-            LinearLayoutManager.VERTICAL, false)
-        productAdapter?.setProducts(mProduct)
-        productAdapter?.notifyDataSetChanged()
-
-    }
-
-    private fun initialiseList(){
-        var productList = ProductPredicates.getArtisanProductsByCategory(artisanId,prodCatId)
-        mBinding?.productTitle?.text = prodCat
-        var size = productList?.size
-        mProduct.clear()
-        if (productList != null) {
-            for (size in productList){
-                Log.i("Stat","$size")
-                var artisanId = size.artisanId
-                var productId = size.productId
-                var productTitle = size.productTag
-                var status =size.productStatusId
-                var desc = size.productSpecs
-                var prod = ProductCard(artisanId,productId,productTitle,desc,status)
-                mProduct.add(prod)
+        mViewModel.getProductListMutableData(artisanId,prodCat)
+            .observe(viewLifecycleOwner, Observer<RealmResults<ArtisanProducts>>{
+                productAdapter?.updateProductList(it)
+            })
+        mBinding?.swipeRefreshLayout?.isRefreshing = true
+        mBinding?.swipeRefreshLayout?.setOnRefreshListener {
+            if (!Utility.checkIfInternetConnected(requireContext())) {
+                mBinding?.swipeRefreshLayout?.isRefreshing = false
+                Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
+            } else {
+                mViewModel.getProductsOfArtisan()
+                mViewModel.getProductListMutableData(artisanId,prodCat)
+                initializeView()
             }
         }
     }
+
+
+    private fun setupRecyclerView(){
+        mBinding?.categoryRecyclerList?.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+        productAdapter = UploadedProductsListAdapter(requireContext(), mViewModel.getProductListMutableData(artisanId,prodCat).value)
+        mBinding?.categoryRecyclerList?.adapter = productAdapter
+    }
+
 
     private fun initializeView(){
         var catList = ProductPredicates.getProductCategoriesOfArtisan(artisanId)
@@ -121,8 +130,7 @@ class ArtisanUploadedProductsFragment : Fragment() {
         mBinding?.filterCategory?.adapter = adapter
         mBinding?.filterCategory?.onItemSelectedListener = (object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                initialiseList()
-                productAdapter?.setProducts(mProduct)
+
             }
 
             override fun onItemSelected(
@@ -134,42 +142,55 @@ class ArtisanUploadedProductsFragment : Fragment() {
                 if(position > 0){
                     filterBy = parent?.getItemAtPosition(position).toString()
                     Log.e("spin","fil : $filterBy")
-
-                    var productList = ProductPredicates.getFilteredUploadedProducts(artisanId,filterBy)
-                    var size = productList?.size
-                    mProduct.clear()
-                    if (productList != null) {
-                        for (size in productList){
-                            Log.i("Stat","$size")
-//                            var clusterId = size.clusterId
-                            var productId = size.productId
-                            var productTitle = size.productTag
-                            var status =size.productStatusId
-                            var desc = size.productSpecs
-                            var prod = ProductCard(null,productId,productTitle,desc,status)
-                            mProduct.add(prod)
-                        }
-                        prodCat = filterBy
-                        mBinding?.productTitle?.text = prodCat
-                        mBinding?.filterCategory?.setSelection(0)
-                    }
-
-                    productAdapter?.setProducts(mProduct)
-                }else{
-                    initialiseList()
+//
+//                    var productList = ProductPredicates.getFilteredUploadedProducts(artisanId,filterBy)
+//                    productAdapter?.updateProductList(productList)
+                    prodCat = filterBy
+                    mBinding?.productTitle?.text = prodCat
+                    mBinding?.filterCategory?.setSelection(0)
+                    setupRecyclerView()
                 }
             }
         })
 
     }
 
-    override fun onResume() {
-        super.onResume()
-        productAdapter?.notifyDataSetChanged()
+    override fun onSuccess() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("CAtegoryList", "Onsuccess")
+                mBinding?.swipeRefreshLayout?.isRefreshing = false
+                initializeView()
+                mViewModel?.getProductListMutableData(artisanId,prodCat)
+            }
+            )
+        } catch (e: Exception) {
+            Log.e("CAtegoryList", "Exception onSuccess " + e.message)
+        }
+    }
+
+    override fun onFailure() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("Wishlist", "OnFailure")
+                mBinding?.swipeRefreshLayout?.isRefreshing = false
+                initializeView()
+                mViewModel?.getProductListMutableData(artisanId,prodCat)
+                Utility.displayMessage(
+                    "Error while fetching wishlist. Pleas try again after some time",
+                    requireContext()
+                )
+            }
+            )
+        } catch (e: Exception) {
+            Log.e("CAtegoryList", "Exception onFailure " + e.message)
+        }
     }
 
     companion object {
         @JvmStatic
         fun newInstance() = ArtisanUploadedProductsFragment()
     }
+
+
 }

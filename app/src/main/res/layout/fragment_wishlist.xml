@@ -82,8 +82,7 @@
                 android:textSize="@dimen/edit_text"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:layout_marginBottom="@dimen/expandable_layout_std_padding"
-/>
+                android:layout_marginBottom="@dimen/expandable_layout_std_padding" />
         </RelativeLayout>
     </FrameLayout>
 </LinearLayout>

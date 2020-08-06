@@ -73,6 +73,7 @@ class ArtisanLandingActivity : AppCompatActivity(), NavigationView.OnNavigationI
         mViewModel = ViewModelProviders.of(this).get(LandingViewModel::class.java)
         mViewModel?.getProductsOfArtisan(applicationContext)
         mViewModel?.getProductUploadData()
+
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.title = ""
