@@ -2,8 +2,11 @@ package com.adrosonic.craftexchange.database.predicates
 
 import android.util.Log
 import com.adrosonic.craftexchange.database.CXRealmManager
+import com.adrosonic.craftexchange.database.entities.realmEntities.BuyerCustomProduct
 import com.adrosonic.craftexchange.database.entities.realmEntities.ProductImages
+import com.adrosonic.craftexchange.database.entities.realmEntities.ProductImages.Companion.COLUMN_PRODUCT_ID
 import com.adrosonic.craftexchange.database.entities.realmEntities.RelatedProducts
+import com.adrosonic.craftexchange.repository.data.response.buyer.ownDesign.ProductImage
 import java.lang.Exception
 
 class ProductImagePredicates
@@ -56,6 +59,7 @@ class ProductImagePredicates
             }
             return list
         }
+
         fun deleteProdImages(id:Long){
             var count=0
             val realm = CXRealmManager.getRealmInstance()
@@ -64,6 +68,45 @@ class ProductImagePredicates
                 artisonProd.deleteAllFromRealm()
             }
 
+        }
+
+        fun insertBuyerCustomProdImages(imageList:ArrayList<ProductImage>){
+            val realm = CXRealmManager.getRealmInstance()
+            try {
+
+                realm?.executeTransaction {
+                    val imageIterator = imageList.iterator()
+                    Log.e("insertProductImages", "imagelist : ${imageList.size}")
+                    while (imageIterator.hasNext()) {
+                        var image=imageIterator.next()
+                        var dbProdObj = realm.where(ProductImages::class.java).
+                        equalTo(ProductImages.COLUMN_PRODUCT_ID,image.productId).and().
+                        equalTo(ProductImages.COLUMN_IMAGE_ID,image.id).and().
+                        equalTo(ProductImages.COLUMN_IMAGE_NAME,image.lable).findAll()
+
+                        if(dbProdObj.size>0){}
+                        else {
+                            var primId =
+                                it.where<ProductImages>(ProductImages::class.java).max("_id")
+                            if (primId == null) {
+                                nextID = 1
+                            } else {
+                                nextID = primId.toLong() + 1
+                            }
+                            Log.e("insertProductImages", "nextID : ${nextID}")
+                            var relatedObj = it.createObject(ProductImages::class.java, nextID)
+                            relatedObj.productId = image.productId
+                            relatedObj.imageName = image.lable
+                            relatedObj.imageId = image.id
+                            Log.e("insertProductImages", "enddddddd ")
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("insertProductImages", "exception : ${e.printStackTrace()}")
+            } finally {
+//                realm.close()
+            }
         }
     }
 }

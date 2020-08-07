@@ -23,10 +23,6 @@ class WishlistPredicates {
             }
         }
 
-        fun getWishlistedProduct(productId: Long?){
-
-        }
-
         fun updateProductWishlisting(productId: Long?,isWishlisted : Long?,actionWishlisting : Long?){
             var realm = CXRealmManager.getRealmInstance()
             realm.executeTransaction{

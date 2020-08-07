@@ -108,6 +108,7 @@
     <string name="my_profile">My Profile</string>
     <string name="my_transactions">My Transactions</string>
     <string name="my_orders">My Orders</string>
+    <string name="custom_design">Custom Designs</string>
     <string name="my_dashboard">My Dashboard</string>
     <string name="support">Support</string>
     <string name="logout">Logout</string>
@@ -258,5 +259,20 @@
         <item>@string/home_Accessories</item>
         <item>@string/fashion_accessories</item>
     </string-array>
+    <string name="title_activity_buyer_add_own_product_design">BuyerAddOwnProductDesign</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="title_activity_custom_design">CustomDesignActivity</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">Hello Square World!</string>
+    <string name="make_it_amp_take_it"><![CDATA[Make it & take it!]]></string>
 
 </resources>

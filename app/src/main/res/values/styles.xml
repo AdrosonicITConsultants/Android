@@ -39,22 +39,24 @@
         <item name="android:background">?android:attr/listDivider</item>
     </style>
 
-     <style name="VerticalDivider">
+    <style name="VerticalDivider">
         <item name="android:layout_width">1dp</item>
         <item name="android:layout_height">36dp</item>
         <item name="android:background">?android:attr/listDivider</item>
     </style>
 
-    <style name="splashScreenTheme"
-        parent="Theme.AppCompat.NoActionBar">
+    <style name="splashScreenTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_screen</item>
     </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="AppTheme.Toolbar" parent="ThemeOverlay.AppCompat.Light">
         <!--This line changes the color of text in Toolbar-->

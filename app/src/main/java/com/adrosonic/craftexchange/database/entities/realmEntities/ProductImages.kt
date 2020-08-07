@@ -12,5 +12,7 @@ open class ProductImages : RealmObject() {
 
     companion object{
         const val COLUMN_PRODUCT_ID="productId"
+        const val COLUMN_IMAGE_ID="imageId"
+        const val COLUMN_IMAGE_NAME="imageName"
     }
 }

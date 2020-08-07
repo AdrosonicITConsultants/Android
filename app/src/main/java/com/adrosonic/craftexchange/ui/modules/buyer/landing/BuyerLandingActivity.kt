@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityBuyerLandingBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
+import com.adrosonic.craftexchange.ui.modules.buyer.ownDesign.OwnProductListFragment
 import com.adrosonic.craftexchange.ui.modules.buyer.profile.buyerProfileIntent
 import com.adrosonic.craftexchange.ui.modules.buyer.wishList.wishlistFragment
 import com.adrosonic.craftexchange.viewModels.LandingViewModel
@@ -130,7 +131,6 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
                         return true
 
                     }
-
                     R.id.action_wishlist -> {
                         if (savedInstanceState == null) {
                             supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container,   wishlistFragment.newInstance())
@@ -182,6 +182,11 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
             }
             R.id.nav_my_transactions -> {}
             R.id.nav_my_orders -> {}
+            R.id.nav_custom_design -> {
+            supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container,   OwnProductListFragment.newInstance())
+                        .addToBackStack(null)
+                        .commit()
+            }
             R.id.nav_my_dashboard -> {}
             R.id.nav_support -> {}
             R.id.nav_logout -> {

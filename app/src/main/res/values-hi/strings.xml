@@ -234,8 +234,9 @@
     <string name="are_you_sure_you_want_to_remove">Are you sure you want to remove?</string>
     <string name="heart_it_amp_take_it"><![CDATA[Heart it & take it!]]></string>
     <string name="no_results_found">No Results Found :-(</string>
-
+    <string name="custom_design">Custom Designs</string>
     <string name="compressing">Image compression in progress…</string>
+    <string name="make_it_amp_take_it"><![CDATA[Make it & take it!]]></string>
 
     <string-array name="product_array">
         <item>@string/saree</item>

@@ -18,6 +18,10 @@
             android:icon="@drawable/ic_receipt"
             android:title="@string/my_orders" />
         <item
+            android:id="@+id/nav_custom_design"
+            android:icon="@drawable/ic_custom_button_icon"
+            android:title="@string/custom_design" />
+        <item
             android:id="@+id/nav_my_dashboard"
             android:icon="@drawable/ic_icon_dashboard"
             android:title="@string/my_dashboard" />

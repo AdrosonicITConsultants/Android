@@ -2,12 +2,15 @@ package com.adrosonic.craftexchange.syncManager
 
 import android.content.Context
 import android.util.Log
+import com.adrosonic.craftexchange.database.predicates.BuyerCustomProductPredicates
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.database.predicates.WishlistPredicates
 import com.adrosonic.craftexchange.syncManager.processor.ProductDeleter
 import com.adrosonic.craftexchange.syncManager.processor.objects.ItemType
 import com.adrosonic.craftexchange.syncManager.processor.ProductAdd
 import com.adrosonic.craftexchange.syncManager.processor.ProductUpdate
+import com.adrosonic.craftexchange.syncManager.processor.customDesign.OwnDesignAdd
+import com.adrosonic.craftexchange.syncManager.processor.customDesign.OwnDesignDelete
 import com.adrosonic.craftexchange.syncManager.processor.wishlist.WishlistAction
 
 /**
@@ -18,7 +21,9 @@ class SyncCoordinator(val context: Context) {
         ProductAdd(),
         ProductUpdate(),
         ProductDeleter(),
-        WishlistAction()
+        WishlistAction(),
+        OwnDesignAdd(),
+        OwnDesignDelete()
     )
 
     fun performLocallyAvailableActions() {
@@ -37,6 +42,13 @@ class SyncCoordinator(val context: Context) {
                 if (iterator2 != null) {
                     while (iterator2.hasNext()) {
                         list.add(ItemType(iterator2.next().toString()))
+                    }
+                }
+                val queue3 =  BuyerCustomProductPredicates.getProductMarkedForActions(it.predicateForLocallyTrackedElements)
+                val iterator3 = queue3?.iterator()
+                if (iterator3 != null) {
+                    while (iterator3.hasNext()) {
+                        list.add(ItemType(iterator3.next().toString()))
                     }
                 }
             } catch (e: Exception) {

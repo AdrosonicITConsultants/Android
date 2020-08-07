@@ -14,13 +14,6 @@ object CraftExchangeRepository {
     private fun <T> builder(endpoint: Class<T>): T {
         var lists = listOf(ConnectionSpec.COMPATIBLE_TLS, ConnectionSpec.CLEARTEXT)
 
-//        var spec = ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
-//            .tlsVersions(TlsVersion.TLS_1_2)
-//            .cipherSuites(
-//                CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
-//                CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
-//                CipherSuite.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256)
-//            .build()
 
         return Retrofit.Builder()
             .baseUrl(ConstantsDirectory.BASE_URL)
@@ -64,5 +57,9 @@ object CraftExchangeRepository {
 
     fun getWishlistService():WishlistDao{
         return builder(WishlistDao::class.java)
+    }
+
+    fun getBuyerOenDesignService(): BuyerOwnDesignDao {
+        return builder(BuyerOwnDesignDao::class.java)
     }
 }

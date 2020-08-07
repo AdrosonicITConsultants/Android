@@ -25,6 +25,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.*
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
 
@@ -116,16 +117,18 @@ class Utility {
             val myDir: File
             try {
                 if (!File(context.cacheDir, BROWSING_IMGS).exists()) File(context.cacheDir, BROWSING_IMGS).mkdir()
-                if (contentUri.toString().contains("attachmentprovider")) {
-                    myDir = File(context.cacheDir, BROWSING_IMGS + "/" + contentUri.lastPathSegment + "" + System.currentTimeMillis() + ".jpg")
-                } else {
-                    if (contentUri.path!!.contains(".")) {
+
+                if (contentUri.path!!.contains(".")) {
                         if(contentUri.lastPathSegment!!.contains("/")) {
                             myDir = File(context.cacheDir, BROWSING_IMGS + "/" + contentUri.lastPathSegment!!.substring(
                                 contentUri.lastPathSegment!!.lastIndexOf("/")+1))
                         } else myDir = File(context.cacheDir, BROWSING_IMGS + "/" + contentUri.lastPathSegment + "")
                     }
                     else myDir = File(context.cacheDir, BROWSING_IMGS + "/" + contentUri.lastPathSegment + ".jpg")
+
+                if(contentUri.lastPathSegment!!.length>42){
+                    val renamed = File(context.cacheDir, BROWSING_IMGS + "/" + System.currentTimeMillis()+ ".jpg")
+                    myDir.renameTo( renamed)
                 }
                 var inputStream: InputStream? = context.contentResolver.openInputStream(contentUri)
                 var outputStream: OutputStream = FileOutputStream(myDir)
@@ -229,12 +232,57 @@ class Utility {
         fun getProductsImagesUrl(productId : Long?,imagename : String?) : String{
             return "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/Product/${productId}/${imagename}"
         }
+        fun getCustomProductImagesUrl(productId : Long?,imagename : String?) : String{
+            return "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/CustomProduct/${productId}/${imagename}"
+        }
         fun setImageResource(context: Context?,imageView:ImageView,imageId:Int){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 imageView.setImageDrawable(context?.getResources()?.getDrawable(imageId, context?.getTheme()));
             } else {
                 imageView.setImageDrawable(context?.getDrawable(imageId));
             }
+        }
+
+        fun validTotalFileSize(filePaths: ArrayList<String>): Pair<Boolean,String> {
+            var files=""
+            var statusList=ArrayList<Pair<Boolean,String>>()
+            var size = 0.00
+            val iterator = filePaths.iterator()
+            while (iterator.hasNext()) {
+                val path = iterator.next()
+                val file = File(path)
+                val fileSizeInBytes = file.length()
+                val fileSizeInKB: Double = (fileSizeInBytes / 1024).toDouble()
+                if((fileSizeInKB/1024)>1)statusList.add(Pair( false,file.name))
+                else statusList.add(Pair( true,file.name))
+                size += fileSizeInKB
+            }
+            val fileSizeInMB: Double = (size / 1024)
+            for(s in statusList)
+            {
+                if(s.first==false) files=files+s.second+","
+            }
+            Log.e("validate","files:"+files)
+            if(files.isEmpty()) return Pair(true,files)
+            else return Pair(false,files)
+        }
+
+        fun returnDisplayDate(date:String):String{
+            var dt=date.substring(0,10)//2020-08-07T10:25:02.000+0000
+            return dt
+//            if (date != null) {
+//                val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ENGLISH)
+//                format.timeZone = TimeZone.getTimeZone("UTC")
+//                try {
+//                    val datelong = format.parse(date)
+//                    val inputdate = datelong.time //1519710742000L
+//                    val formatter = SimpleDateFormat("dd MMM yyyy, hh:mm aaa", Locale.ENGLISH)
+//                    val inputdatedt = formatter.format(inputdate)//complete date time for email details screen
+//                    return inputdatedt
+//                } catch (e: Exception) {
+//                    return ""
+//                }
+//            } else ""
         }
     }
 }
