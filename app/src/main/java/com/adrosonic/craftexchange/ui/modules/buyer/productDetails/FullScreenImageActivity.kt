@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageView
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityCatalogueProductDetailsBinding
 import com.adrosonic.craftexchange.databinding.ActivityFullScreenImageBinding
@@ -33,6 +34,7 @@ class FullScreenImageActivity : AppCompatActivity() {
         var imageList = mUserConfig.imageUrlList.toString()
         if(imageList?.isNotEmpty()){
             var imageListener = ImageListener { position, imageView ->
+                imageView.scaleType = ImageView.ScaleType.FIT_CENTER
                 ImageSetter.setImage(applicationContext,imageUrlList?.get(position),imageView)
             }
             mBinding?.carouselFullscreen?.pageCount = imageUrlList?.size!!

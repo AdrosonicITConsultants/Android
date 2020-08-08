@@ -1,15 +1,20 @@
 package com.adrosonic.craftexchange.ui.modules.buyer.productDetails
 
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.util.Log
+import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.ImageView
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrosonic.craftexchange.R
@@ -17,25 +22,22 @@ import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCatalo
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.database.predicates.WishlistPredicates
 import com.adrosonic.craftexchange.databinding.ActivityCatalogueProductDetailsBinding
-import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.ProductCare
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.ProductUploadData
+import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.generateEnquiry.GenerateEnquiryResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.ProductImage
 import com.adrosonic.craftexchange.syncManager.SyncCoordinator
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
-import com.adrosonic.craftexchange.viewModels.WishlistViewModel
+import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.like.LikeButton
 import com.like.OnLikeListener
-import com.pixplicity.easyprefs.library.Prefs
 import com.synnapps.carouselview.ImageListener
-import okhttp3.ResponseBody
-import retrofit2.Call
-import javax.security.auth.callback.Callback
+import kotlinx.android.synthetic.main.dialog_gen_enquiry_update_or_new.*
 import kotlin.collections.ArrayList
 
 fun Context.catalogueProductDetailsIntent(): Intent {
@@ -58,12 +60,18 @@ var weaveSelctionList = ArrayList<Pair<Long,String>>()
 var mMoreProductList = mutableListOf<ProductImage>()
 var moreProdAdapter : MoreProductsRecyclerAdapter?= null
 var productTypeName : String?=""
+private var dialog : Dialog ?= null
+private var exDialog : Dialog ?= null
 
-class CatalogueProductDetailsActivity : AppCompatActivity() {
 
+class CatalogueProductDetailsActivity : AppCompatActivity(),
+EnquiryViewModel.GenerateEnquiryInterface{
+    val mEnqVM: EnquiryViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mEnqVM.listener = this
+        dialog = Utility?.enquiryGenProgressDialog(this)
 
         mBinding = ActivityCatalogueProductDetailsBinding.inflate(layoutInflater)
         val view = mBinding?.root
@@ -124,8 +132,12 @@ class CatalogueProductDetailsActivity : AppCompatActivity() {
         mBinding?.reedCountValue?.text = productDetails?.reedCount ?: "-"
         //TODO weight and dimensions in list view
 
-        mBinding?.gsmValue?.text = productDetails?.gsm ?: "-"
-
+        if(productDetails?.productCategoryName == "Fabric") {
+            mBinding?.gsmDetails?.visibility = View.VISIBLE
+            mBinding?.gsmValue?.text = productDetails?.gsm ?: "-"
+        }else{
+            mBinding?.gsmDetails?.visibility = View.GONE
+        }
         productTypeName = productDetails?.productTypeDesc
         var productWeight = productDetails?.weight ?: "-"
 
@@ -147,6 +159,16 @@ class CatalogueProductDetailsActivity : AppCompatActivity() {
         mBinding?.btnBack?.setOnClickListener {
             onBackPressed()
         }
+
+        mBinding?.btnGenerateEnquiry?.setOnClickListener {
+            if (!Utility.checkIfInternetConnected(applicationContext)) {
+                Utility.displayMessage(getString(R.string.no_internet_connection), applicationContext)
+            } else {
+                dialog?.show()
+                mEnqVM?.ifEnquiryExists(productId!!,false)
+//                mEnqVM?.generateEnquiry(productId!!,false, mUserConfig?.deviceName.toString())
+            }
+        }
     }
 
     fun getProductDetails(productId : Long?){
@@ -166,7 +188,7 @@ class CatalogueProductDetailsActivity : AppCompatActivity() {
             }
             if(imageUrlList!=null) {
                 var imageListener = ImageListener { position, imageView ->
-//
+                    imageView.scaleType = ImageView.ScaleType.FIT_CENTER
                     ImageSetter.setImage(applicationContext,imageUrlList?.get(position),imageView)
                 }
                 mBinding?.carouselViewProducts?.pageCount = imageUrlList?.size!!
@@ -332,6 +354,52 @@ class CatalogueProductDetailsActivity : AppCompatActivity() {
             mBinding?.weaveTypeUsedText?.top?.let {
                 mBinding?.scrollProductDetails?.scrollTo(0,it)
             }
+        }
+    }
+
+    override fun onSuccessEnquiryGeneration(enquiry : GenerateEnquiryResponse) {
+        try {
+            Handler(Looper.getMainLooper()).post {
+                dialog?.dismiss()
+                Utility?.enquiryGenSuccessDialog(this, enquiry?.data?.enquiry?.code.toString()).show()
+                Log.e("EnquiryGeneration", "Onsucces")
+            }
+        } catch (e: Exception) {
+            dialog?.dismiss()
+            Log.e("EnquiryGeneration", "Exception onSuccess " + e.message)
+        }
+    }
+
+    override fun onExistingEnquiryGeneration(productName : String, id : String) {
+        try {
+            Handler(Looper.getMainLooper()).post {
+                dialog?.dismiss()
+                var exDialog = Utility?.enquiryGenExistingDialog(this,id,productName)
+                exDialog.show()
+
+                exDialog.btn_generate_new_enquiry?.setOnClickListener {
+                    exDialog?.dismiss()
+                    dialog?.show()
+                    mEnqVM?.generateEnquiry(productId!!,false, mUserConfig?.deviceName.toString())
+                }
+                Log.e("ExistingEnqGeneration", "Onsuccess")
+            }
+        } catch (e: Exception) {
+            dialog?.dismiss()
+            Log.e("ExistingEnqGeneration", "Exception onSuccess " + e.message)
+        }
+    }
+
+    override fun onFailedEnquiryGeneration() {
+        try {
+            Handler(Looper.getMainLooper()).post {
+                dialog?.dismiss()
+                Log.e("EnquiryGeneration", "onFailure")
+                Utility.displayMessage("Enquiry Generation Failed",this)
+            }
+        } catch (e: Exception) {
+            dialog?.dismiss()
+            Log.e("EnquiryGeneration", "Exception onFailure " + e.message)
         }
     }
 }

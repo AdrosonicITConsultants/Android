@@ -685,6 +685,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:visibility="gone"
                     android:id="@+id/gsm_details"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -826,6 +827,7 @@
             android:fontFamily="@font/lato_regular"
             android:textAlignment="center"
             android:drawableEnd="@drawable/ic_arrow_right_alt_white_18dp"
+            android:paddingEnd="8dp"
             android:background="@color/black_text"
             android:elevation="8dp"
             android:layout_marginBottom="@dimen/margin_semimedium"

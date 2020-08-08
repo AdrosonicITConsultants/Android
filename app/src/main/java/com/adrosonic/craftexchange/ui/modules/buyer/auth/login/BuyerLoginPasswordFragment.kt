@@ -25,6 +25,7 @@ import com.adrosonic.craftexchange.ui.modules.authentication.register.RegisterAc
 import com.adrosonic.craftexchange.ui.modules.authentication.reset.ResetPasswordActivity
 import com.adrosonic.craftexchange.ui.modules.cx_demovideo.CXVideoActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
 import com.pixplicity.easyprefs.library.Prefs
 import retrofit2.Call
@@ -32,6 +33,8 @@ import retrofit2.Response
 import javax.security.auth.callback.Callback
 
 private const val ARG_PARAM1 = "param1"
+private var mBinding: FragmentBuyerLoginPasswordBinding ?= null
+private var mUserConfig = UserConfig()
 
 class BuyerLoginPasswordFragment : Fragment() {
 
@@ -48,7 +51,7 @@ class BuyerLoginPasswordFragment : Fragment() {
             }
     }
 
-    private var mBinding: FragmentBuyerLoginPasswordBinding ?= null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -120,6 +123,8 @@ class BuyerLoginPasswordFragment : Fragment() {
 
                                     UserPredicates.insertBuyer(response.body()!!)
                                     AddressPredicates.insertBuyerAddress(response.body()!!)
+
+                                    mUserConfig?.deviceName = "Android"
 
                                     Prefs.putString(
                                         ConstantsDirectory.USER_PWD,

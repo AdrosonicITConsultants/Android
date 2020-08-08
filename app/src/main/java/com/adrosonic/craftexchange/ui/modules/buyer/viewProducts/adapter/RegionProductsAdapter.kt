@@ -23,6 +23,7 @@ import com.adrosonic.craftexchange.ui.interfaces.ClusterProductClick
 import com.adrosonic.craftexchange.ui.modules.buyer.productDetails.catalogueProductDetailsIntent
 import com.adrosonic.craftexchange.ui.modules.buyer.productDetails.productId
 import com.adrosonic.craftexchange.ui.modules.buyer.profile.buyerProfileIntent
+import com.adrosonic.craftexchange.ui.modules.buyer.wishList.WishlistAdapter
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
@@ -43,6 +44,13 @@ class RegionProductsAdapter(var context: Context?, private var regionProduct: Li
             binding.executePendingBindings()
         }
     }
+
+    interface EnquiryGeneratedListener{
+        fun onEnquiryGenClick(productId: Long,isCustom : Boolean)
+    }
+
+    var enqListener: EnquiryGeneratedListener?=null
+
     override fun getItemCount(): Int = regionProduct.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -111,11 +119,19 @@ class RegionProductsAdapter(var context: Context?, private var regionProduct: Li
                 }
             }
         })
+
+        holder?.binding?.btnGenerateEnquiry.setOnClickListener {
+            generateEnquiry(product?.productId?:0,false)
+        }
     }
 
     internal fun setProducts(regionProduct: List<ProductCard>) {
         this.regionProduct = regionProduct
         notifyDataSetChanged()
     }
+    fun generateEnquiry(productId : Long, isCustom : Boolean){
+        enqListener?.onEnquiryGenClick(productId,isCustom)
+    }
+
 
 }

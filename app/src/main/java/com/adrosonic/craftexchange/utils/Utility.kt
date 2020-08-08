@@ -3,12 +3,18 @@ package com.adrosonic.craftexchange.utils
 import android.Manifest
 import android.R
 import android.app.AlertDialog
+import android.app.Application
+import android.app.Dialog
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Build
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -18,6 +24,8 @@ import androidx.core.content.FileProvider
 import com.adrosonic.craftexchange.database.predicates.UserPredicates
 import com.bumptech.glide.Glide
 import com.pixplicity.easyprefs.library.Prefs
+import kotlinx.android.synthetic.main.dialog_gen_enquiry_success.*
+import kotlinx.android.synthetic.main.dialog_gen_enquiry_update_or_new.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -193,6 +201,57 @@ class Utility {
                 }
             builder.create().show()
         }
+
+        fun enquiryGenProgressDialog(context : Context): Dialog {
+            var dialog = Dialog(context)
+            dialog?.setContentView(com.adrosonic.craftexchange.R.layout.dialog_gen_enquiry_holdon)
+            dialog?.setCanceledOnTouchOutside(false) // disables outside the box touch
+            dialog?.setCancelable(false) // disables backbtn click when popup visible//
+            dialog?.create()
+            return dialog
+        }
+
+        fun enquiryGenSuccessDialog(context : Context, enquiryId : String) : Dialog {
+            var dialog = Dialog(context)
+            dialog?.setContentView(com.adrosonic.craftexchange.R.layout.dialog_gen_enquiry_success)
+
+            var id = SpannableString(enquiryId)
+            id.setSpan(ForegroundColorSpan(Color.BLACK), 0, id.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            dialog?.success_enquiry_id?.append(id)
+
+            dialog?.btn_success_cancel?.setOnClickListener {
+                dialog?.dismiss()
+            }
+            dialog?.btn_success_view_enquiry?.setOnClickListener {
+                //TODO : View Enquiry details in enquiry landing page
+            }
+            dialog?.setCanceledOnTouchOutside(false)
+            dialog?.create()
+            return dialog
+        }
+
+        fun enquiryGenExistingDialog(context : Context,enquiryId: String, productName : String) : Dialog {
+            var dialog = Dialog(context)
+            dialog?.setContentView(com.adrosonic.craftexchange.R.layout.dialog_gen_enquiry_update_or_new)
+
+            var id = SpannableString(enquiryId)
+            id.setSpan(ForegroundColorSpan(Color.BLACK), 0, id.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            dialog?.existing_enquiry_id?.append(id)
+
+            dialog?.existing_product_title?.text = productName
+
+            dialog?.existing_btn_cancel?.setOnClickListener {
+                dialog?.dismiss()
+            }
+            dialog?.existing_btn_view_enquiry?.setOnClickListener {
+                //TODO : View Enquiry details in enquiry landing page
+            }
+            dialog?.setCanceledOnTouchOutside(false)
+            dialog?.create()
+
+            return dialog
+        }
+
 
         fun clearPrefs(){
             val editor = Prefs.edit()

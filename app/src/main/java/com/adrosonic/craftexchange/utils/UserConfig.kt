@@ -64,6 +64,7 @@ const val IMAGE_URL = "imageurl"
 const val FILTER = "filter"
 const val PRODUCT_CATEGORY = "productcategory"
 const val PRODUCT_CATEGORY_ID = "productcategoryid"
+const val DEVICE_NAME = "deviceName"
 
 ///////////////////ProductTemplateParams///////////////////////
 const val PRODUCT_UPLOAD_JSON = "product_upload_json"
@@ -408,6 +409,13 @@ class UserConfig {
         get() = Prefs.getString(IMAGE_URL,"")
         set(value) {
             Prefs.putString(IMAGE_URL, value)
+            field = value
+        }
+
+    var deviceName : String? = ""
+        get() = Prefs.getString(DEVICE_NAME,"")
+        set(value) {
+            Prefs.putString(DEVICE_NAME, value)
             field = value
         }
 }

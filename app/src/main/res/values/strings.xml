@@ -249,6 +249,17 @@
     <string name="no_results_found">No Results Found :-(</string>
 
     <string name="compressing">Image compression in progress…</string>
+    <string name="enquiry_is_being_generated">Enquiry is being generated</string>
+    <string name="hold_on">Hold on!</string>
+    <string name="enquiry_is_already_generated">Enquiry for this product\nhas been already generated!</string>
+    <string name="view_existing_enquiry">View Existing Enquiry</string>
+    <string name="want_to_generate_new_enquiry">Want to generate a\nnew enquiry?</string>
+    <string name="generate_new_enquiry">Generate new enquiry</string>
+    <string name="with_enquiry_id">With Enquiry Id\t</string>
+    <string name="enquiry_generated_success">Enquiry generated\nsucessfully!</string>
+    <string name="enquiry_id">Enquiry Id\t</string>
+    <string name="refer_to_ongoing_enquiries">Please refer \"Ongoing Enquiry\" tab\nto track your enquiry.</string>
+    <string name="view_enquiry">View Enquiry</string>
 
     <string-array name="product_array">
         <item>@string/saree</item>

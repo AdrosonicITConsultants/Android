@@ -83,7 +83,6 @@ ArtisanProductsViewModel.productsFetchInterface{
                 artisanProductAdapter?.updateCategoryList(it)
             })
 //        TODO : Fix later Refresh issue
-//        mBinding?.swipeRefreshLayout?.isRefreshing = true
         mBinding?.swipeRefreshLayout?.setOnRefreshListener {
             if (!Utility.checkIfInternetConnected(requireContext())) {
                 mBinding?.swipeRefreshLayout?.isRefreshing = false

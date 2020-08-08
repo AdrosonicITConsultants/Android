@@ -26,6 +26,7 @@ import com.adrosonic.craftexchange.ui.modules.authentication.register.RegisterAc
 import com.adrosonic.craftexchange.ui.modules.authentication.reset.ResetPasswordActivity
 import com.adrosonic.craftexchange.ui.modules.cx_demovideo.CXVideoActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
 import com.pixplicity.easyprefs.library.Prefs
 import retrofit2.Call
@@ -33,6 +34,8 @@ import retrofit2.Response
 import javax.security.auth.callback.Callback
 
 private const val ARG_PARAM1 = "param1"
+private var mUserConfig = UserConfig()
+
 
 class ArtisanLoginPasswordFragment : Fragment() {
 
@@ -119,6 +122,10 @@ class ArtisanLoginPasswordFragment : Fragment() {
                                     Prefs.putBoolean(ConstantsDirectory.IS_LOGGED_IN, true)
                                     UserPredicates.insertArtisan(response.body()!!)
                                     AddressPredicates.insertArtisanAddress(response.body()!!)
+
+
+                                    mUserConfig?.deviceName = "Android"
+
 
                                     Prefs.putString(
                                         ConstantsDirectory.USER_PWD,

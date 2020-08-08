@@ -1,7 +1,10 @@
 package com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.productlists
 
+import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,13 +14,20 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCard
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.databinding.FragmentCategoryProdListBinding
+import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.generateEnquiry.GenerateEnquiryResponse
 import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.adapter.CategoryProductsAdapter
+import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.adapter.RegionProductsAdapter
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.adrosonic.craftexchange.utils.UserConfig
+import com.adrosonic.craftexchange.utils.Utility
+import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
+import kotlinx.android.synthetic.main.dialog_gen_enquiry_update_or_new.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -29,7 +39,10 @@ private const val ARG_PARAM2 = "param2"
  * Use the [CategoryProdListFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class CategoryProdListFragment : Fragment() {
+class CategoryProdListFragment : Fragment(),
+
+    EnquiryViewModel.GenerateEnquiryInterface,
+    CategoryProductsAdapter.EnquiryGeneratedListener {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -43,6 +56,11 @@ class CategoryProdListFragment : Fragment() {
     private var mSpinner = mutableListOf<String>()
     private var mClusterList = mutableListOf<Pair<Long?,String?>>()
     private var filterBy : String ?= ""
+
+    val mEnqVM : EnquiryViewModel by viewModels()
+    var dialog : Dialog?= null
+    var mUser : UserConfig?= null
+    var productID : Long ?= 0L
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,6 +87,10 @@ class CategoryProdListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mEnqVM.listener = this
+        catProdAdapter?.enqListener = this
+        dialog = Utility?.enquiryGenProgressDialog(requireContext())
+
         setupRecyclerView()
     }
 
@@ -181,6 +203,62 @@ class CategoryProdListFragment : Fragment() {
         super.onResume()
         catProdAdapter?.notifyDataSetChanged()
     }
+
+    override fun onSuccessEnquiryGeneration(enquiry: GenerateEnquiryResponse) {
+        try {
+            Handler(Looper.getMainLooper()).post {
+                dialog?.dismiss()
+                Utility?.enquiryGenSuccessDialog(requireContext(), enquiry?.data?.enquiry?.code.toString()).show()
+                Log.e("EnquiryGeneration", "Onsucces")
+            }
+        } catch (e: Exception) {
+            dialog?.dismiss()
+            Log.e("EnquiryGeneration", "Exception onSuccess " + e.message)
+        }
+    }
+
+    override fun onExistingEnquiryGeneration(productName: String, id: String) {
+        try {
+            Handler(Looper.getMainLooper()).post {
+                dialog?.dismiss()
+                var exDialog = Utility?.enquiryGenExistingDialog(requireContext(),id,productName)
+                exDialog.show()
+
+                exDialog.btn_generate_new_enquiry?.setOnClickListener {
+                    exDialog?.dismiss()
+                    dialog?.show()
+                    productID?.let { it1 -> mEnqVM?.generateEnquiry(it1,false,mUser?.deviceName.toString() ) }
+                }
+                Log.e("ExistingEnqGeneration", "Onsuccess")
+            }
+        } catch (e: Exception) {
+            dialog?.dismiss()
+            Log.e("ExistingEnqGeneration", "Exception onSuccess " + e.message)
+        }
+    }
+
+    override fun onFailedEnquiryGeneration() {
+        try {
+            Handler(Looper.getMainLooper()).post {dialog?.dismiss()
+                Log.e("EnquiryGeneration", "onFailure")
+                Utility.displayMessage("Enquiry Generation Failed",requireContext())
+            }
+        } catch (e: Exception) {dialog?.dismiss()
+            Log.e("EnquiryGeneration", "Exception onFailure " + e.message)
+        }
+    }
+
+    override fun onEnquiryGenClick(productId: Long, isCustom: Boolean) {
+        mEnqVM.ifEnquiryExists(productId,isCustom)
+        if (!Utility.checkIfInternetConnected(requireContext())) {
+            Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
+        } else {
+            dialog?.show()
+            mEnqVM.ifEnquiryExists(productId,false)
+            productID = productId
+        }
+    }
+
 
     companion object {
         @JvmStatic

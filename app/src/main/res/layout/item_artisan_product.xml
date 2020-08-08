@@ -105,7 +105,7 @@
                 android:id="@+id/design_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_antaran_co_design_icon"
+                android:src="@drawable/ic_artisan_self_design_icon"
                 android:layout_marginTop="@dimen/margin_regular"
                 android:layout_marginEnd="@dimen/margin_regular"
                 app:layout_constraintTop_toTopOf="parent"

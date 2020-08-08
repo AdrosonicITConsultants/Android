@@ -20,15 +20,27 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.database.predicates.WishlistPredicates
+import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.generateEnquiry.GenerateEnquiryResponse
 import com.adrosonic.craftexchange.syncManager.SyncCoordinator
+import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
+import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
+import kotlinx.android.synthetic.main.dialog_gen_enquiry_update_or_new.*
 
 class wishlistFragment : Fragment(),
     LandingViewModel.wishlistFetchedInterface,
-    WishlistAdapter.WishListUpdatedListener {
+    EnquiryViewModel.GenerateEnquiryInterface,
+    WishlistAdapter.WishListUpdatedListener,
+    WishlistAdapter.EnquiryGeneratedListener{
+
     val mViewModel: LandingViewModel by viewModels()
+    val mEnqVM : EnquiryViewModel by viewModels()
     private lateinit var adapter: WishlistAdapter
     var coordinator: SyncCoordinator? = null
+    var dialog : Dialog ?= null
+    var mUser : UserConfig ?= null
+    var productID : Long ?= 0L
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,16 +52,23 @@ class wishlistFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mViewModel.listener = this
+        mEnqVM.listener = this
+
         if (!Utility.checkIfInternetConnected(requireContext())) {
             Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
         } else {
             mViewModel.getwishlisteProductIds()
         }
+
+        dialog = Utility?.enquiryGenProgressDialog(requireContext())
+
         buyerWishlist.layoutManager =LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         adapter = WishlistAdapter(requireContext(), mViewModel.getwishListMutableData().value)
         buyerWishlist.adapter = adapter
         adapter.listener=this
+        adapter.enqListener=this
         Log.e("Wishlist", "Size :" + mViewModel.getwishListMutableData().value?.size)
+
         mViewModel.getwishListMutableData()
             .observe(viewLifecycleOwner, Observer<RealmResults<ProductCatalogue>>() {
                 Log.e("Wishlist", "updateWishlist ${it.size}")
@@ -153,6 +172,60 @@ class wishlistFragment : Fragment(),
             deleteAll.visibility=View.GONE
             wishlist_elements.text = "Your wishlist is empty"
 
+        }
+    }
+
+    override fun onSuccessEnquiryGeneration(enquiry: GenerateEnquiryResponse) {
+        try {
+            Handler(Looper.getMainLooper()).post {dialog?.dismiss()
+                Utility?.enquiryGenSuccessDialog(requireContext(), enquiry?.data?.enquiry?.code.toString()).show()
+                Log.e("EnquiryGeneration", "Onsucces")
+            }
+        } catch (e: Exception) {
+            dialog?.dismiss()
+            Log.e("EnquiryGeneration", "Exception onSuccess " + e.message)
+        }
+    }
+
+    override fun onExistingEnquiryGeneration(productName: String, id: String) {
+        try {
+            Handler(Looper.getMainLooper()).post {
+                dialog?.dismiss()
+                var exDialog = Utility?.enquiryGenExistingDialog(requireContext(),id,productName)
+                exDialog.show()
+
+                exDialog.btn_generate_new_enquiry?.setOnClickListener {
+                    exDialog?.dismiss()
+                    dialog?.show()
+                    productID?.let { it1 -> mEnqVM?.generateEnquiry(it1,false,mUser?.deviceName.toString() ) }
+                }
+                Log.e("ExistingEnqGeneration", "Onsuccess")
+            }
+        } catch (e: Exception) {
+            dialog?.dismiss()
+            Log.e("ExistingEnqGeneration", "Exception onSuccess " + e.message)
+        }
+    }
+
+    override fun onFailedEnquiryGeneration() {
+        try {
+            Handler(Looper.getMainLooper()).post {dialog?.dismiss()
+                Log.e("EnquiryGeneration", "onFailure")
+                Utility.displayMessage("Enquiry Generation Failed",requireContext())
+            }
+        } catch (e: Exception) {dialog?.dismiss()
+            Log.e("EnquiryGeneration", "Exception onFailure " + e.message)
+        }
+    }
+
+    override fun onEnquiryGenClick(productId: Long, isCustom: Boolean) {
+        mEnqVM.ifEnquiryExists(productId,isCustom)
+        if (!Utility.checkIfInternetConnected(requireContext())) {
+            Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
+        } else {
+            dialog?.show()
+            mEnqVM.ifEnquiryExists(productId,false)
+            productID = productId
         }
     }
 

@@ -65,4 +65,8 @@ object CraftExchangeRepository {
     fun getWishlistService():WishlistDao{
         return builder(WishlistDao::class.java)
     }
+
+    fun getEnquiryService():EnquiryDao{
+        return builder(EnquiryDao::class.java)
+    }
 }

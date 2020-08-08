@@ -32,7 +32,12 @@ class WishlistAdapter(
         fun onSelected(productId:Long,isWishListed:Long)
     }
 
+    interface EnquiryGeneratedListener{
+        fun onEnquiryGenClick(productId: Long,isCustom : Boolean)
+    }
+
     var listener: WishListUpdatedListener? = null
+    var enqListener: EnquiryGeneratedListener?=null
     private var wishlistItems=categoryProduct
 
     fun updateWishlist(newFolders: RealmResults<ProductCatalogue>?){
@@ -114,15 +119,23 @@ class WishlistAdapter(
                 removeFromWishlist(pos,0,product?.productId?:0)
 //            else  removeFromWishlist(pos,1,product.productId?:0)
         }
+
+        holder.btnGenerateEnquiry.setOnClickListener {
+            generateEnquiry(product?.productId?:0,false)
+        }
     }
 
     override fun getItemCount(): Int {
         return categoryProduct?.size?:0
     }
 
-fun removeFromWishlist(pos:Int,isWishListed: Long,productId:Long){
-    notifyItemRangeChanged(pos, categoryProduct?.size?:0)
-    listener?.onSelected(productId, isWishListed)
-}
+    fun removeFromWishlist(pos:Int,isWishListed: Long,productId:Long){
+        notifyItemRangeChanged(pos, categoryProduct?.size?:0)
+        listener?.onSelected(productId, isWishListed)
+    }
+
+    fun generateEnquiry(productId : Long, isCustom : Boolean){
+        enqListener?.onEnquiryGenClick(productId,isCustom)
+    }
 
 }

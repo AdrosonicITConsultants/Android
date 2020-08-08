@@ -48,6 +48,12 @@ class BrandProductsAdapter(var context: Context?, private var brandProduct: List
         }
     }
 
+    interface EnquiryGeneratedListener{
+        fun onEnquiryGenClick(productId: Long,isCustom : Boolean)
+    }
+
+    var enqListener: EnquiryGeneratedListener?=null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding: ItemProductDescListBinding = DataBindingUtil.inflate(inflater, R.layout.item_product_desc_list,parent, false)
@@ -116,6 +122,10 @@ class BrandProductsAdapter(var context: Context?, private var brandProduct: List
                 }
             }
         })
+        holder?.binding?.btnGenerateEnquiry.setOnClickListener {
+            generateEnquiry(product?.productId?:0,false)
+        }
+
     }
 
 
@@ -125,6 +135,8 @@ class BrandProductsAdapter(var context: Context?, private var brandProduct: List
     }
 
 
-
+    fun generateEnquiry(productId : Long, isCustom : Boolean){
+        enqListener?.onEnquiryGenClick(productId,isCustom)
+    }
 
 }
