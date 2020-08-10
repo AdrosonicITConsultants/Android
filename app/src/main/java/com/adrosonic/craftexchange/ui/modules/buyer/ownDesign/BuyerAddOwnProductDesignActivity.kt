@@ -1,53 +1,54 @@
-package com.adrosonic.craftexchange.ui.modules.artisan.productTemplate
+package com.adrosonic.craftexchange.ui.modules.buyer.ownDesign
 
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.animation.AnimationUtils
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.viewpager.widget.ViewPager.OnPageChangeListener
+import androidx.viewpager.widget.ViewPager
 import com.adrosonic.craftexchange.R
-import com.adrosonic.craftexchange.database.predicates.ProductPredicates
-import com.adrosonic.craftexchange.databinding.ActivityArtisanAddProductTemplateBinding
-import com.adrosonic.craftexchange.repository.data.request.artisan.productTemplate.ArtisanAddProductRequest
+import com.adrosonic.craftexchange.database.predicates.BuyerCustomProductPredicates
+import com.adrosonic.craftexchange.databinding.ActivityBuyerAddOwnProductDesignBinding
 import com.adrosonic.craftexchange.repository.data.request.artisan.productTemplate.RelatedProduct
+import com.adrosonic.craftexchange.repository.data.request.buyer.OwnDesignRequest
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.*
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.ProductType
 import com.adrosonic.craftexchange.syncManager.SyncCoordinator
+import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.CareInstructionsSelectionAdapter
+import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.ProdImageListAdapter
+import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.WeaveSelectionAdapter
+import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.YarnViewpager
 import com.adrosonic.craftexchange.utils.*
 import com.google.gson.GsonBuilder
-import kotlinx.android.synthetic.main.activity_artisan_add_product_template.*
+import kotlinx.android.synthetic.main.activity_buyer_add_own_product_design.*
 
-
-fun Context.addProductIntent(): Intent {
-    return Intent(this, ArtisanAddProductTemplateActivity::class.java).apply {
+fun Context.ownDesignIntent(): Intent {
+    return Intent(this, BuyerAddOwnProductDesignActivity::class.java).apply {
     }
 }
 
-class ArtisanAddProductTemplateActivity : AppCompatActivity(),
+class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
     View.OnClickListener,
+    YarnViewpager.yarnListner,
     ProdImageListAdapter.ProdUpdateListener,
-    WeaveSelectionAdapter.selectionListener,
-    CareInstructionsSelectionAdapter.selectionListener,
-    YarnViewpager.yarnListner {
-    private var mBinding: ActivityArtisanAddProductTemplateBinding? = null
+    WeaveSelectionAdapter.selectionListener{
+
+    private var mBinding:ActivityBuyerAddOwnProductDesignBinding? = null
     private lateinit var prodImgListAdapter: ProdImageListAdapter
     private var pairList = ArrayList<String>()
     private var deletedPaths = ArrayList<String>()
-    private lateinit var careSelectionAdapter: CareInstructionsSelectionAdapter
     private lateinit var weaveSelectionAdapter: WeaveSelectionAdapter
-
-    var careSelctionList = ArrayList<Triple<String, Boolean, Long>>()
     var weaveSelctionList = ArrayList<Triple<String, Boolean, Long>>()
 
     private val mUserConfig = UserConfig()
@@ -56,21 +57,10 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
     var arrProductCategory: List<ProductCategory>? = null
     var arrProductType: List<ProductType>? = null
     var arrRelatedProdType: List<ProductType>? = null
-    var arrProductCare: List<ProductCare>? = null
     var arrWeaf: List<Weaf>? = null
     var arrYarn: List<Yarn>? = null
     var arrReedCount: List<ReedCount>? = null
     var arrDyes: List<Dye>? = null
-
-    var arrProdCategoryStr = ArrayList<String>()
-    var arrProdTypeStr = ArrayList<String>()
-    var arrReedCountStr = ArrayList<String>()
-    var arrProdWidthStr = ArrayList<String>()
-    var arrProdLengthStr = ArrayList<String>()
-    var arrSubProdWidthStr = ArrayList<String>()
-    var arrSubProdLengthStr = ArrayList<String>()
-    var arrListRelatedProduct=ArrayList<RelatedProduct>()
-    var productAvalability = false
 
     var warpDyeId=0L
     var warpYarnCount=""
@@ -85,31 +75,25 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
     var prodCatId:Long?=null
     var prodTypeId:Long?=null
     var weaveIdList=ArrayList<Long>()
-    var careIdList=ArrayList<Long>()
     var relatedProduct =ArrayList<RelatedProduct>()
     var status=1L
     var reedCountId=1L
     private var dots = ArrayList<TextView>()
+
+    var arrProdCategoryStr = ArrayList<String>()
+    var arrProdTypeStr = ArrayList<String>()
+    var arrReedCountStr = ArrayList<String>()
+    var arrSubProdWidthStr = ArrayList<String>()
+    var arrSubProdLengthStr = ArrayList<String>()
+    var arrListRelatedProduct=ArrayList<RelatedProduct>()
+    var arrProdWidthStr = ArrayList<String>()
+    var arrProdLengthStr = ArrayList<String>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityArtisanAddProductTemplateBinding.inflate(layoutInflater)
+        mBinding = ActivityBuyerAddOwnProductDesignBinding.inflate(layoutInflater)
         val view = mBinding?.root
         setContentView(view)
-
-        jsonProductData = mUserConfig.productUploadJson.toString()
-        val gson = GsonBuilder().create()
-        productUploadData = gson.fromJson(jsonProductData, ProductUploadData::class.java)
-        arrProductCategory = productUploadData?.data?.productCategories
-        arrProductCare = productUploadData?.data?.productCare
-        arrWeaf = productUploadData?.data?.weaves
-        arrYarn = productUploadData?.data?.yarns
-        arrReedCount = productUploadData?.data?.reedCounts
-        arrDyes = productUploadData?.data?.dyes
-
-        //todo set animation
-        //todo set click listener
-        //todo set data
-
         parent_step1.setOnClickListener(this)
         parent_step2.setOnClickListener(this)
         parent_step3.setOnClickListener(this)
@@ -118,9 +102,15 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
         parent_step6.setOnClickListener(this)
         parent_step7.setOnClickListener(this)
         parent_step8.setOnClickListener(this)
-        parent_step9.setOnClickListener(this)
-        parent_step10.setOnClickListener(this)
-        parent_step11.setOnClickListener(this)
+
+        jsonProductData = mUserConfig.productUploadJson.toString()
+        val gson = GsonBuilder().create()
+        productUploadData = gson.fromJson(jsonProductData, ProductUploadData::class.java)
+        arrProductCategory = productUploadData?.data?.productCategories
+        arrWeaf = productUploadData?.data?.weaves
+        arrYarn = productUploadData?.data?.yarns
+        arrReedCount = productUploadData?.data?.reedCounts
+        arrDyes = productUploadData?.data?.dyes
 
         btn_back.setOnClickListener{
             showCancelDialog()
@@ -130,32 +120,9 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
         txt_save_upload.setOnClickListener {saveUploadProduct() }
         txt_save_upload_top.setOnClickListener {  saveUploadProduct() }
         txt_reset.setOnClickListener { resetAll() }
-        ///////////////////////////////////////////////////////////////////
-        et_prod_name.addTextChangedListener(object : TextWatcher {
-            override fun onTextChanged(expr: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                setStatusResource()
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-
-            }
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-        })
-        et_prod_code.addTextChangedListener(object : TextWatcher {
-            override fun onTextChanged(expr: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                setStatusResource()
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-            }
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-        })
 
     }
+
     fun loadData(){
         ///////////////////////Add Photo////////////////////////
         add_photo_recycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -258,7 +225,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
             dots.add(d)
         } while (dots.size < 3)
         setDotsColor(0)
-        yarn_pager.addOnPageChangeListener(object : OnPageChangeListener {
+        yarn_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {}
             override fun onPageScrolled(
                 position: Int,
@@ -272,92 +239,15 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                 setDotsColor(position)
             }
         })
-
         /////////////////reed count/////////////////////
         arrReedCount?.forEach { arrReedCountStr.add(it.count) }
-        val spReedCountAdapter =ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrReedCountStr)
+        val spReedCountAdapter =
+            ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrReedCountStr)
         spReedCountAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         sp_reed_count.setAdapter(spReedCountAdapter)
-
-        //////////////////////////////care//////////////////
-        arrProductCare?.forEach { careSelctionList.add(Triple(it.productCareDesc ?: "", false, it.id)) }
-        wash_care_recycler_list.layoutManager = LinearLayoutManager(this)
-        careSelectionAdapter = CareInstructionsSelectionAdapter(this,  careSelctionList)
-        careSelectionAdapter.listener = this
-        wash_care_recycler_list.adapter = careSelectionAdapter
-
-        ////////////////////////availability////////////////////
-        setproductAvailability(productAvalability)
-        img_made_to_order.setOnClickListener {
-            if (productAvalability) {
-                productAvalability = false
-            } else productAvalability = true
-            setproductAvailability(productAvalability)
-        }
-        img_in_stock.setOnClickListener {
-            if (productAvalability) {
-                productAvalability = false
-            } else productAvalability = true
-            setproductAvailability(productAvalability)
-        }
-        setStatusResource()
     }
 
-    override fun onUpdate(pairList: ArrayList<String>, deletedIds: ArrayList<String>) {
-        this.pairList = pairList
-        this.deletedPaths = deletedIds
-        setStatusResource()
-    }
-
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            showCancelDialog()
-            return true
-        } else return super.onKeyDown(keyCode, event)
-    }
-
-    fun showCancelDialog() {
-        var dialog = Dialog(this)
-        dialog?.setContentView(R.layout.dialog_addprod_back)
-        dialog?.show()
-        val tvCancel = dialog?.findViewById(R.id.txt_cancel) as TextView
-        val tvBack = dialog?.findViewById(R.id.txt_back) as TextView
-        tvCancel.setOnClickListener {
-            dialog.cancel()
-        }
-        tvBack.setOnClickListener {
-            finish()
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == ConstantsDirectory.PICK_IMAGE && resultCode == AppCompatActivity.RESULT_OK && null != data)
-            when (requestCode) {
-                ConstantsDirectory.PICK_IMAGE -> {
-                    val uri = data?.data
-                    if (uri != null) {
-
-                        var absolutePath = Utility.getRealPathFromFileURI(applicationContext, uri!!)
-                        pairList.add(absolutePath)
-                        prodImgListAdapter.notifyDataSetChanged()
-                        setStatusResource()
-                    }
-                }
-            }
-    }
-
-    override fun onWeaveItemSelected(pairList: ArrayList<Triple<String, Boolean, Long>>) {
-        this.weaveSelctionList = pairList
-        setStatusResource()
-    }
-
-    override fun onCareItemSelected(pairList: ArrayList<Triple<String, Boolean, Long>>) {
-        this.careSelctionList = pairList
-        setStatusResource()
-    }
-
-    override fun sendYarnData(position:Int, yarnType:Long,yarnCount:String,dye:Long) {
+    override fun sendYarnData(position: Int, yarnType: Long, yarnCount: String, dye: Long) {
         Log.e("Viewpager","{$position} position/yarnType :"+yarnType+" :yarnCount :"+yarnCount+" : dye :"+dye)
         when(position){
             0->{
@@ -376,7 +266,16 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                 extraWeftDyeId=dye
             }
         }
-        setStatusResource()
+//        setStatusResource()
+    }
+
+    override fun onUpdate(pairList: ArrayList<String>, deletedIds: ArrayList<String>) {
+        this.pairList = pairList
+        this.deletedPaths = deletedIds
+    }
+
+    override fun onWeaveItemSelected(pairList: ArrayList<Triple<String, Boolean, Long>>) {
+        this.weaveSelctionList = pairList
     }
 
     override fun onClick(p0: View?) {
@@ -455,42 +354,37 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                     child_step8.animation = slideUp
                 }
             }
-            R.id.parent_step9 -> {
-                if (child_step9.visibility == View.GONE) {
-                    child_step9.visibility = View.VISIBLE
-                    child_step9.animation = slideDown
-                } else {
-                    child_step9.visibility = View.GONE
-                    child_step9.animation = slideUp
-                }
-            }
-            R.id.parent_step10 -> {
-                if (child_step10.visibility == View.GONE) {
-                    child_step10.visibility = View.VISIBLE
-                    child_step10.animation = slideDown
-                } else {
-                    child_step10.visibility = View.GONE
-                    child_step10.animation = slideUp
-                }
-            }
-            R.id.parent_step11 -> {
-                if (child_step11.visibility == View.GONE) {
-                    child_step11.visibility = View.VISIBLE
-                    child_step11.animation = slideDown
-                } else {
-                    child_step11.visibility = View.GONE
-                    child_step11.animation = slideUp
-                }
-            }
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == ConstantsDirectory.PICK_IMAGE && resultCode == AppCompatActivity.RESULT_OK && null != data)
+            when (requestCode) {
+                ConstantsDirectory.PICK_IMAGE -> {
+                    val uri = data?.data
+                    if (uri != null) {
+
+                        var absolutePath = Utility.getRealPathFromFileURI(applicationContext, uri!!)
+                        pairList.add(absolutePath)
+                        prodImgListAdapter.notifyDataSetChanged()
+//                        setStatusResource()
+                    }
+                }
+            }
+    }
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            showCancelDialog()
+            return true
+        } else return super.onKeyDown(keyCode, event)
+    }
     fun setVisiblitiesAndTextsOnType(type: String,arrRelatedProdType:List<ProductType>?) {
         arrProdLengthStr?.clear()
         arrProdWidthStr?.clear()
         arrSubProdLengthStr?.clear()
         arrSubProdWidthStr?.clear()
-        txt_prod_type.text = type
+
         Log.e("SetData","type :"+type)
         for (t in arrProductType!!) {
             Log.e("SetData","type :"+t.productDesc)
@@ -527,13 +421,13 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
         }
 
         if (type.equals("Fabric")) {
-            parent_step10.visibility = View.VISIBLE
-            child_step10.visibility = View.VISIBLE
-            txt_step_11.text = "Step 11 : Enter description"
+            parent_step7.visibility = View.VISIBLE
+//            child_step7.visibility = View.VISIBLE
+            txt_step_8.text = "Step 8 : Enter description"
         } else {
-            parent_step10.visibility = View.GONE
-            child_step10.visibility = View.GONE
-            txt_step_11.text = "Step 10 : Enter description"
+            parent_step7.visibility = View.GONE
+            child_step7.visibility = View.GONE
+            txt_step_8.text = "Step 7 : Enter description"
         }
         if (arrRelatedProdType!!.size>0) {
             //todo inflater to be called post API itegratipn
@@ -557,35 +451,37 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
         }
     }
 
-    fun setproductAvailability(productAvalability: Boolean) {
-        if (productAvalability) {
-            status=1
-            img_made_to_order.setBackgroundResource(R.drawable.bg_availability_unselected)
-            img_in_stock.setBackgroundResource(R.drawable.bg_availability_selected)
-            txt_made_to_order.setTextColor(this.resources.getColor(R.color.clickable_text_color))
-            txt_available.setTextColor(this.resources.getColor(R.color.black_text))
-        } else {
-            status=2
-            img_made_to_order.setBackgroundResource(R.drawable.bg_availability_selected)
-            img_in_stock.setBackgroundResource(R.drawable.bg_availability_unselected)
-            txt_made_to_order.setTextColor(this.resources.getColor(R.color.black_text))
-            txt_available.setTextColor(this.resources.getColor(R.color.clickable_text_color))
-        }
-        setStatusResource()
+    fun setDotsColor(position:Int){
+        dots.forEach { it.setTextColor(  ContextCompat.getColor(this, R.color.darker_gray)) }
+        dots.get(position).setTextColor(Color.parseColor("#009A2F"))
+    }
+    fun resetAll(){
+        et_dscrp.text.clear()
+        et_gsm.text.clear()
+        et_prod_length.text.clear()
+        et_prod_width.text.clear()
+        pairList.clear()
+        loadData()
     }
 
-    fun setDotsColor(position:Int){
-            dots.forEach { it.setTextColor(  ContextCompat.getColor(this, R.color.darker_gray)) }
-            dots.get(position).setTextColor(Color.parseColor("#009A2F"))
+    fun showCancelDialog() {
+        var dialog = Dialog(this)
+        dialog?.setContentView(R.layout.dialog_addprod_back)
+        dialog?.show()
+        val tvCancel = dialog?.findViewById(R.id.txt_cancel) as TextView
+        val tvBack = dialog?.findViewById(R.id.txt_back) as TextView
+        tvCancel.setOnClickListener {
+            dialog.cancel()
         }
+        tvBack.setOnClickListener {
+            finish()
+        }
+    }
 
     fun saveUploadProduct() {
-
         try {
             weaveIdList.clear()
-            careIdList.clear()
             weaveSelctionList.forEach { if(it.second)weaveIdList?.add(it.third) }
-            careSelctionList.forEach { if(it.second)careIdList?.add(it.third) }
             var width=if(arrProdWidthStr.size<=0)et_prod_width.text.toString() else sp_prod_width?.selectedItem.toString()
             var length=if(arrProdLengthStr.size<=0)et_prod_length.text.toString() else sp_prod_length?.selectedItem.toString()
 
@@ -610,8 +506,6 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
             Log.e("saveUploadProduct","relatedProduct :${sp_prod_category.selectedItem.toString() } ")
 
             if(pairList.isEmpty()) Utility.displayMessage("Please add atleast 1 product image",applicationContext)
-            else if(et_prod_name.text.isBlank()) Utility.displayMessage("Please enter product name at step 2",applicationContext)
-            else if(et_prod_code.text.isBlank()) Utility.displayMessage("Please enter product code at step 2",applicationContext)
             else if(sp_prod_category.selectedItem.toString().isBlank()) Utility.displayMessage("Please select product category at step 2",applicationContext)
             else if(sp_prod_type.selectedItem.toString().isBlank()) Utility.displayMessage("Please select product type at step 2",applicationContext)
             else if(weaveIdList.isEmpty()) Utility.displayMessage("Please select weave type at step 3",applicationContext)
@@ -621,12 +515,9 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
             else if(weftDyeId<=0) Utility.displayMessage("Please select weft dye Id at step 4",applicationContext)
             else if(weftYarnCount.isBlank()) Utility.displayMessage("Please select weft yarn count at step 4",applicationContext)
             else if(weftYarnId<=0) Utility.displayMessage("Please select weft yarn Id at step 4",applicationContext)
-            else if(sp_reed_count.selectedItem.toString().isBlank()) Utility.displayMessage("Please select reed count at step 5",applicationContext)
             else if(width.isBlank()) Utility.displayMessage("Please enter width at step 6",applicationContext)
             else if(length.isBlank()) Utility.displayMessage("Please enter length at step 6",applicationContext)
             //todo add step 6 validations for related items
-            else if(careIdList.isEmpty()) Utility.displayMessage("Please select weave type at step 7",applicationContext)
-            else if(et_prod_weight.text.isBlank()) Utility.displayMessage("Please enter product weight at step 9",applicationContext)
             else if(et_dscrp.text.isBlank()) Utility.displayMessage("Please enter description",applicationContext)
             else{
                 var dialog = Dialog(this)
@@ -639,16 +530,11 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                 }
                 tvSave.setOnClickListener {
                     dialog.dismiss()
-                    var template= ArtisanAddProductRequest()
-                    template.tag=et_prod_name.text.toString()
-                    template.code=et_prod_code.text.toString()
+                    var template= OwnDesignRequest()
                     template.productCategoryId=prodCatId?:0
                     template.productTypeId=prodTypeId?:0
-                    template.productSpec=et_dscrp.text.toString()
-                    template.weight=et_prod_weight.text.toString()
-                    template.careIds=careIdList
-                    template.weaveIds=weaveIdList
-                    template.statusId=status
+                    template.weaveIds="${weaveIdList}"
+                    Log.e("ArtisanProdLog","weave Ids ${template.weaveIds}")
                     template.gsm=et_gsm.text.toString()
                     template.warpDyeId=warpDyeId
                     template.warpYarnCount=warpYarnCount
@@ -661,6 +547,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                     template.extraWeftDyeId=extraWeftDyeId
                     template.width=width
                     template.length=length
+                    template.productSpec=et_dscrp.text.toString()
                     template.reedCountId=reedCountId.toString()
                     if(relatedProduct.size>0)   template.relatedProduct=relatedProduct.get(0).toString()
 
@@ -673,12 +560,11 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                             val pair=Utility.validTotalFileSize(result)
                             val status = pair.first
                             if (status) {
-                                ProductPredicates.insertArtisanProductOffline(template, pairList,relatedProduct)
+                                BuyerCustomProductPredicates.insertCustomProductOffline(template, pairList,relatedProduct)
                                 if (Utility.checkIfInternetConnected(applicationContext)) {
                                     val coordinator = SyncCoordinator(applicationContext)
                                     coordinator?.performLocallyAvailableActions()
                                 }
-
                                 finish()
                             } else
                                 Utility.displayMessage("One of image size exceeds 1MB limit, kindly remove the it to continue", applicationContext)
@@ -686,71 +572,10 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                     }).execute()
 
                 }
-             }
+            }
         } catch (e: Exception) {
             Utility.displayMessage("Please fill all details",applicationContext)
             Log.e("AddProductTemplate","while save click $e")
         }
     }
-
-
-    fun resetAll(){
-        et_dscrp.text.clear()
-        et_gsm.text.clear()
-        et_prod_length.text.clear()
-        et_prod_width.text.clear()
-        et_prod_weight.text.clear()
-        et_prod_name.text.clear()
-        et_prod_code.text.clear()
-        pairList.clear()
-        loadData()
-
-    }
-
-    fun setStatusResource(){
-
-//        var width=if(arrProdWidthStr.size<=0)et_prod_width.text.toString() else sp_prod_width?.selectedItem.toString()
-//        var length=if(arrProdLengthStr.size<=0)et_prod_length.text.toString() else sp_prod_length?.selectedItem.toString()
-//
-//
-//        if(pairList.size>0)Utility.setImageResource(applicationContext, img_status_step1, R.drawable.ic_add_prod_status_filled)
-//        else Utility.setImageResource(applicationContext, img_status_step1, R.drawable.ic_add_prod_status)
-//
-//        if(et_prod_name.text.isNotBlank() && et_prod_code.text.isNotBlank()) Utility.setImageResource(applicationContext, img_status_step2, R.drawable.ic_add_prod_status_filled)
-//        else Utility.setImageResource(applicationContext,img_status_step2, R.drawable.ic_add_prod_status)
-//
-//        if(weaveIdList.size>0)Utility.setImageResource(applicationContext, img_status_step3, R.drawable.ic_add_prod_status_filled)
-//         else Utility.setImageResource(applicationContext, img_status_step3, R.drawable.ic_add_prod_status)
-//
-//        if(warpDyeId<=0 ||warpYarnCount.isBlank() || warpYarnId<=0||weftDyeId<=0||weftYarnCount.isBlank()||weftYarnId<=0) Utility.setImageResource(applicationContext,img_status_step2, R.drawable.ic_add_prod_status)
-//        else Utility.setImageResource(applicationContext, img_status_step3, R.drawable.ic_add_prod_status_filled)
-//
-//
-//                if(sp_reed_count.selectedItem.toString().isNotBlank()) Utility.setImageResource(applicationContext, img_status_step5, R.drawable.ic_add_prod_status_filled)
-//                else Utility.setImageResource(applicationContext, img_status_step5, R.drawable.ic_add_prod_status)
-//
-//                if(width.isNotBlank() && length.isNotBlank()) Utility.setImageResource(applicationContext, img_status_step6, R.drawable.ic_add_prod_status_filled)
-//                else Utility.setImageResource(applicationContext, img_status_step6, R.drawable.ic_add_prod_status)
-//
-//
-//                if(careIdList.size>0)Utility.setImageResource(applicationContext, img_status_step7, R.drawable.ic_add_prod_status_filled)
-//                else Utility.setImageResource(applicationContext, img_status_step7, R.drawable.ic_add_prod_status)
-//
-//                if(status==null)Utility.setImageResource(applicationContext, img_status_step8, R.drawable.ic_add_prod_status_filled)
-//                else Utility.setImageResource(applicationContext, img_status_step8, R.drawable.ic_add_prod_status)
-//
-//
-//                if(et_prod_weight.text.isNotBlank())Utility.setImageResource(applicationContext, img_status_step9, R.drawable.ic_add_prod_status_filled)
-//                else Utility.setImageResource(applicationContext, img_status_step9, R.drawable.ic_add_prod_status)
-//
-//                if(et_gsm.text.isNotBlank())Utility.setImageResource(applicationContext, img_status_step10, R.drawable.ic_add_prod_status_filled)
-//                else Utility.setImageResource(applicationContext, img_status_step10, R.drawable.ic_add_prod_status)
-//
-//                if(et_gsm.text.isNotBlank())Utility.setImageResource(applicationContext, img_status_step11, R.drawable.ic_add_prod_status_filled)
-//                else Utility.setImageResource(applicationContext, img_status_step11, R.drawable.ic_add_prod_status)
-       }
-
-
 }
-
-

@@ -234,7 +234,7 @@
     <string name="are_you_sure_you_want_to_remove">Are you sure you want to remove?</string>
     <string name="heart_it_amp_take_it"><![CDATA[Heart it & take it!]]></string>
     <string name="no_results_found">No Results Found :-(</string>
-
+    <string name="custom_design">Custom Designs</string>
     <string name="compressing">Image compression in progress…</string>
     <string name="enquiry_is_being_generated">Enquiry is being generated</string>
     <string name="hold_on">Hold on!</string>
@@ -247,6 +247,7 @@
     <string name="enquiry_generated_success">Enquiry generated\nsucessfully!</string>
     <string name="refer_to_ongoing_enquiries">Please refer \"Ongoing Enquiry\" tab\nto track your enquiry.</string>
     <string name="view_enquiry">View Enquiry</string>
+    <string name="make_it_amp_take_it"><![CDATA[Make it & take it!]]></string>
 
     <string-array name="product_array">
         <item>@string/saree</item>

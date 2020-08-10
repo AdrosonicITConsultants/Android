@@ -18,10 +18,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-
-        <activity android:name=".ui.modules.buyer.productDetails.FullScreenImageActivity"
+        <activity
+            android:name=".ui.modules.buyer.ownDesign.BuyerAddOwnProductDesignActivity"
+            android:label="@string/title_activity_buyer_add_own_product_design"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.modules.buyer.productDetails.FullScreenImageActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.modules.buyer.productDetails.CatalogueProductDetailsActivity"
             android:screenOrientation="portrait" />
@@ -84,7 +87,14 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
+        <service
+            android:name=".services.customDesign.AddOwnProductService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name=".services.customDesign.DeleteOwnProductService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
         <service
             android:name=".services.ProductCreateService"
             android:exported="false"

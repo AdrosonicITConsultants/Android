@@ -21,6 +21,7 @@ import io.realm.annotations.RealmModule
     RelatedProducts::class,
     WeaveTypes::class,
     ProductCares::class,
+    BuyerCustomProduct::class,
     Enquiries::class
 ])
 class CXRealmModule {

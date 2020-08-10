@@ -100,7 +100,7 @@ class WishlistService: JobIntentService() {
 
     companion object {
         const val KEY_ID = "prod_id"
-        private const val JOB_ID = 100
+        private const val JOB_ID = 4000
         private const val TAG="WishlistAddService"
         fun enqueueWork(context: Context, work: Intent){
             try {

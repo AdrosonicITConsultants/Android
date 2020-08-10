@@ -13,14 +13,10 @@ import com.adrosonic.craftexchange.repository.data.request.artisan.productTempla
 import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.ArtisanProductTemplateRespons
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.pixplicity.easyprefs.library.Prefs
-import kotlinx.android.synthetic.main.activity_artisan_add_product_template.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
-import okhttp3.MultipartBody.Part.*
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
-import retrofit2.http.Multipart
 import java.io.File
 import java.nio.ByteBuffer
 import java.nio.charset.StandardCharsets
@@ -131,60 +127,7 @@ class ProductCreateService: JobIntentService() {
                         }
                     }
                 })
-//        }else if(imageList!!.size==2) {
-//            var file1 = File(imageList?.get(0))
-//            var file2 = File(imageList?.get(1))
-//            val body1 = prepareFilePart("file1", file1)
-//            val body2 = prepareFilePart("file2", file2)
-//
-//            CraftExchangeRepository.getProductService()
-//                .uploadProductTemplate(token, productData, body1, body2)
-//                .enqueue(object : Callback, retrofit2.Callback<ArtisanProductTemplateRespons> {
-//                    override fun onFailure(
-//                        call: Call<ArtisanProductTemplateRespons>,
-//                        t: Throwable
-//                    ) {
-//                        t.printStackTrace()
-//                        Log.e("Offline", "getProductUploadData onFailure: " + t.localizedMessage)
-//                    }
-//
-//                    override fun onResponse(
-//                        call: Call<ArtisanProductTemplateRespons>,
-//                        response: retrofit2.Response<ArtisanProductTemplateRespons>
-//                    ) {
-//                        Log.e("Offline", "onResponse :" + response.code())
-//                        if (response.body()?.valid == true) {
-//                            deleteOfflineEntries(prodId)
-//                        }
-//                    }
-//                })
-//        }
-//         else {
-//            var file1 = File(imageList?.get(0))
-//            val body1 = prepareFilePart("file1", file1)
-//
-//            CraftExchangeRepository.getProductService()
-//                .uploadProductTemplate(token, productData, body1)
-//                .enqueue(object : Callback, retrofit2.Callback<ArtisanProductTemplateRespons> {
-//                    override fun onFailure(
-//                        call: Call<ArtisanProductTemplateRespons>,
-//                        t: Throwable
-//                    ) {
-//                        t.printStackTrace()
-//                        Log.e("Offline", "getProductUploadData onFailure: " + t.localizedMessage)
-//                    }
-//
-//                    override fun onResponse(
-//                        call: Call<ArtisanProductTemplateRespons>,
-//                        response: retrofit2.Response<ArtisanProductTemplateRespons>
-//                    ) {
-//                        Log.e("Offline", "onResponse :" + response.code())
-//                        if (response.body()?.valid == true) {
-//                            deleteOfflineEntries(prodId)
-//                        }
-//                    }
-//                })
-//        }
+
     }
     private fun prepareMultiPartBody(
         boundary:String,
