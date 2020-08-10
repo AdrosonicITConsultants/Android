@@ -4,8 +4,15 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.ViewTreeObserver
 import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.lifecycle.Observer
 import com.adrosonic.craftexchange.R
+import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
+import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCatalogue
+import com.adrosonic.craftexchange.database.entities.realmEntities.UserAddress
 import com.adrosonic.craftexchange.database.predicates.AddressPredicates
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.database.predicates.UserPredicates
@@ -15,7 +22,9 @@ import com.adrosonic.craftexchange.repository.data.response.artisan.profile.Prof
 
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
+import com.adrosonic.craftexchange.viewModels.ProfileViewModel
 import com.pixplicity.easyprefs.library.Prefs
+import io.realm.RealmResults
 import retrofit2.Call
 import retrofit2.Response
 import javax.security.auth.callback.Callback
@@ -27,7 +36,8 @@ fun Context.artisanProfileIntent(): Intent {
     }
 }
 
-class ArtisanProfileActivity : AppCompatActivity() {
+class ArtisanProfileActivity : AppCompatActivity(),
+ProfileViewModel.FetchUserDetailsInterface{
 
     companion object{
         var craftUser = UserPredicates.findUser(Prefs.getString(ConstantsDirectory.USER_ID,"0").toLong())
@@ -38,6 +48,7 @@ class ArtisanProfileActivity : AppCompatActivity() {
     }
 
     private var mBinding : ActivityArtisanProfileBinding ?= null
+    val mViewModel : ProfileViewModel by viewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +57,24 @@ class ArtisanProfileActivity : AppCompatActivity() {
         val view = mBinding?.root
         setContentView(view)
 
+        mViewModel?.listener = this
+        refreshProfile()
+
+        mViewModel.getUserMutableData()
+            .observe(this, Observer<CraftUser>() {
+                craftUser = it
+            })
+
+        mViewModel.getUserAddrMutableData()
+            .observe(this, Observer<UserAddress>() {
+                regAddr = it
+            })
+
+        mBinding?.profileRefresh?.isRefreshing = true
+        mBinding?.profileRefresh?.setOnRefreshListener {
+            refreshProfile()
+        }
+
         var welcome_text = "Hello ${Prefs.getString(ConstantsDirectory.FIRST_NAME,"User")}"
         mBinding?.artisanName?.text = welcome_text
 
@@ -53,8 +82,6 @@ class ArtisanProfileActivity : AppCompatActivity() {
             mBinding?.viewPagerArtisanProfile?.adapter = ArtisanProfilePagerAdapter(it)
             mBinding?.tabLayoutArtisanProfile?.setupWithViewPager(mBinding?.viewPagerArtisanProfile)
         }
-
-        refreshProfile()
 
         mBinding?.btnBack?.setOnClickListener{
             onBackPressed()
@@ -68,29 +95,8 @@ class ArtisanProfileActivity : AppCompatActivity() {
     }
 
     private fun refreshProfile(){
-        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         if(Utility.checkIfInternetConnected(applicationContext)) {
-            CraftExchangeRepository
-                .getUserService()
-                .viewMyProfile(token).enqueue(object : Callback, retrofit2.Callback<ProfileResponse> {
-                    override fun onFailure(call: Call<ProfileResponse>, t: Throwable) {
-                        t.printStackTrace()
-                    }
-
-                    override fun onResponse(
-                        call: Call<ProfileResponse>,
-                        response: Response<ProfileResponse>
-                    ) {
-                        if(response.body()?.valid == true){
-                            UserPredicates.refreshArtisanDetails(response.body())
-                            ProductPredicates.insertArtisanProductCategory(response.body())
-                            UserPredicates.insertPaymentDetails(response.body())
-                            AddressPredicates.refreshUserAddress(response.body())
-                        }else{
-                            Toast.makeText(applicationContext,response.body()?.errorMessage,Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                })
+            mViewModel?.getProfileDetails(applicationContext)
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),applicationContext)
         }
@@ -99,5 +105,17 @@ class ArtisanProfileActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         this.finish()
+    }
+
+    override fun onSuccess() {
+        mBinding?.profileRefresh?.isRefreshing = false
+
+        Utility?.displayMessage("Welcome!",applicationContext)
+    }
+
+    override fun onFailure() {
+        mBinding?.profileRefresh?.isRefreshing = false
+
+        Utility?.displayMessage("Error in fetching user details!",applicationContext)
     }
 }

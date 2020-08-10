@@ -56,6 +56,7 @@ ArtisanProductsViewModel.productsFetchInterface{
         var welcomeText = "${activity?.getString(R.string.hello)} ${Prefs.getString(ConstantsDirectory.FIRST_NAME,"User")}"
         mBinding?.welcomeText?.text = welcomeText
 
+
         var brandLogo = Utility.craftUser?.brandLogo
         var urlBrand = Utility?.getBrandLogoUrl(Prefs.getString(ConstantsDirectory.USER_ID,"").toLong(),brandLogo)
               mBinding?.brandLogoArtisan?.let {
@@ -75,6 +76,7 @@ ArtisanProductsViewModel.productsFetchInterface{
         if (!Utility.checkIfInternetConnected(requireContext())) {
             Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
         } else {
+            mViewModel.getProductsOfArtisan()
             mViewModel.getProductCategoryListMutableData(artisanId)
         }
         setupRecyclerView()
@@ -83,6 +85,7 @@ ArtisanProductsViewModel.productsFetchInterface{
                 artisanProductAdapter?.updateCategoryList(it)
             })
 //        TODO : Fix later Refresh issue
+        mBinding?.swipeRefreshLayout?.isRefreshing = true
         mBinding?.swipeRefreshLayout?.setOnRefreshListener {
             if (!Utility.checkIfInternetConnected(requireContext())) {
                 mBinding?.swipeRefreshLayout?.isRefreshing = false
