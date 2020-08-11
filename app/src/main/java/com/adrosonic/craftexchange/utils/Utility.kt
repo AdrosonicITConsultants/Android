@@ -21,6 +21,7 @@ import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
 import com.adrosonic.craftexchange.database.predicates.UserPredicates
 import com.bumptech.glide.Glide
 import com.pixplicity.easyprefs.library.Prefs
@@ -51,8 +52,7 @@ class Utility {
         )
 
         var craftUser = UserPredicates.findUser(Prefs.getString(ConstantsDirectory.USER_ID,"0").toLong())
-
-
+        var mCraftUser = CraftUser()
         const val BROWSING_IMGS: String = "BrowsedImages/"
 
         fun displayMessage(message: String, context: Context) {

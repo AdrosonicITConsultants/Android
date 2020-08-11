@@ -39,7 +39,7 @@ class OwnProductAdapter(
 
 
     var listener: OwnProductListUpdatedListener? = null
-    var enqListener: WishlistAdapter.EnquiryGeneratedListener?=null
+    var enqListener: EnquiryGeneratedListener?=null
 
     private var wishlistItems=categoryProduct
 

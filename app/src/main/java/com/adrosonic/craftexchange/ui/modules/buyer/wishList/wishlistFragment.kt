@@ -60,7 +60,7 @@ class wishlistFragment : Fragment(),
             mViewModel.getwishlisteProductIds()
         }
 
-        dialog = Utility?.enquiryGenProgressDialog(requireContext())
+        dialog = Utility?.enquiryGenProgressDialog(requireActivity())
 
         buyerWishlist.layoutManager =LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         adapter = WishlistAdapter(requireContext(), mViewModel.getwishListMutableData().value)
@@ -191,7 +191,7 @@ class wishlistFragment : Fragment(),
         try {
             Handler(Looper.getMainLooper()).post {
                 dialog?.dismiss()
-                var exDialog = Utility?.enquiryGenExistingDialog(requireContext(),id,productName)
+                var exDialog = Utility?.enquiryGenExistingDialog(requireActivity(),id,productName)
                 exDialog.show()
 
                 exDialog.btn_generate_new_enquiry?.setOnClickListener {
@@ -199,6 +199,7 @@ class wishlistFragment : Fragment(),
                     dialog?.show()
                     productID?.let { it1 -> mEnqVM?.generateEnquiry(it1,false,mUser?.deviceName.toString() ) }
                 }
+
                 Log.e("ExistingEnqGeneration", "Onsuccess")
             }
         } catch (e: Exception) {
@@ -221,7 +222,7 @@ class wishlistFragment : Fragment(),
     override fun onEnquiryGenClick(productId: Long, isCustom: Boolean) {
         mEnqVM.ifEnquiryExists(productId,isCustom)
         if (!Utility.checkIfInternetConnected(requireContext())) {
-            Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
+            Utility.displayMessage(getString(R.string.no_internet_connection), requireActivity())
         } else {
             dialog?.show()
             mEnqVM.ifEnquiryExists(productId,false)

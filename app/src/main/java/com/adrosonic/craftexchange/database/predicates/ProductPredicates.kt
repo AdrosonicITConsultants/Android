@@ -757,6 +757,119 @@ class ProductPredicates {
 
                                         }
                                     }
+
+                                    var relatedProductList = brandProduct?.relProduct
+                                    var prodItr = relatedProductList?.iterator()
+                                    if(prodItr!=null){
+                                        while (prodItr.hasNext()){
+                                            var relProduct = prodItr.next()
+
+                                            var relPoprductObj = realm.where(RelatedProducts::class.java)
+                                                .equalTo("relatedProductId",relProduct.id)
+                                                .limit(1)
+                                                .findFirst()
+                                            if(relPoprductObj == null){
+                                                var primId = it.where(RelatedProducts::class.java).max("_id")
+                                                if (primId == null) {
+                                                    nextID = 1
+                                                } else {
+                                                    nextID = primId.toLong() + 1
+                                                }
+                                                var exRelProd= it.createObject(RelatedProducts::class.java, nextID)
+                                                exRelProd?.inProductCategoryId = brandProduct?.productCategoryId
+                                                exRelProd?.relatedToProductId = brandProduct?.id
+                                                exRelProd?.relatedProductId = relProduct?.id
+                                                exRelProd?.productTypeId = relProduct?.productTypeId
+                                                exRelProd?.productName = relProduct?.productTypeDesc
+                                                exRelProd?.productLength = relProduct?.length
+                                                exRelProd?.productWidth = relProduct?.width
+                                                exRelProd?.productWeight = relProduct?.weight
+
+                                                realm?.copyToRealmOrUpdate(exRelProd)
+                                            }else{
+                                                relPoprductObj?.inProductCategoryId = brandProduct?.productCategoryId
+                                                relPoprductObj?.relatedToProductId = brandProduct?.id
+                                                relPoprductObj?.relatedProductId = relProduct?.id
+                                                relPoprductObj?.productTypeId = relProduct?.productTypeId
+                                                relPoprductObj?.productName = relProduct?.productTypeDesc
+                                                relPoprductObj?.productLength = relProduct?.length
+                                                relPoprductObj?.productWidth = relProduct?.width
+                                                relPoprductObj?.productWeight = relProduct?.weight
+
+                                                realm.copyToRealmOrUpdate(relPoprductObj)
+                                            }
+                                        }
+                                    }
+
+                                    var weaveTypeList = brandProduct?.productWeaves
+                                    var weaveTypeItr = weaveTypeList?.iterator()
+                                    if(weaveTypeItr!=null){
+                                        while (weaveTypeItr.hasNext()){
+                                            var weaveType = weaveTypeItr.next()
+
+                                            var weaveTypeObj = realm.where(WeaveTypes::class.java)
+                                                .equalTo("productId",weaveType.productId)
+                                                .and()
+                                                .equalTo("weaveId",weaveType.weaveId)
+                                                .limit(1)
+                                                .findFirst()
+                                            if(weaveTypeObj == null){
+                                                var primId = it.where(WeaveTypes::class.java).max("_id")
+                                                if (primId == null) {
+                                                    nextID = 1
+                                                } else {
+                                                    nextID = primId.toLong() + 1
+                                                }
+                                                var exWeaveType = it.createObject(WeaveTypes::class.java, nextID)
+                                                exWeaveType?.productId = weaveType?.productId
+                                                exWeaveType?.productWeaveId = weaveType?.id
+                                                exWeaveType?.weaveId = weaveType?.weaveId
+                                                realm.copyToRealmOrUpdate(exWeaveType)
+                                            }else{
+                                                nextID = weaveTypeObj?._id ?: 0
+                                                weaveTypeObj?.productId = weaveType?.productId
+                                                weaveTypeObj?.productWeaveId = weaveType?.id
+                                                weaveTypeObj?.weaveId = weaveType?.weaveId
+                                                realm.copyToRealmOrUpdate(weaveTypeObj)
+                                            }
+
+                                        }
+                                    }
+
+                                    var careList = brandProduct?.productCares
+                                    var careItr = careList?.iterator()
+                                    if(careItr!=null){
+                                        while (careItr.hasNext()){
+                                            var care = careItr.next()
+
+                                            var careObj = realm.where(ProductCares::class.java)
+                                                .equalTo("productId",care.productId)
+                                                .and()
+                                                .equalTo("productCareId",care.productCareId)
+                                                .limit(1)
+                                                .findFirst()
+                                            if(careObj == null){
+                                                var primId = it.where(ProductCares::class.java).max("_id")
+                                                if (primId == null) {
+                                                    nextID = 1
+                                                } else {
+                                                    nextID = primId.toLong() + 1
+                                                }
+                                                var exCare = it.createObject(ProductCares::class.java, nextID)
+                                                exCare?.productId = care?.productId
+                                                exCare?.careId = care?.id
+                                                exCare?.productCareId = care?.productCareId
+                                                realm.copyToRealmOrUpdate(exCare)
+                                            }else{
+                                                nextID = careObj?._id ?: 0
+                                                careObj?.productId = care?.productId
+                                                careObj?.careId = care?.id
+                                                careObj?.productCareId = care?.productCareId
+                                                realm.copyToRealmOrUpdate(careObj)
+                                            }
+
+                                        }
+                                    }
                                 }
                             }
                         }

@@ -35,7 +35,7 @@ class OwnProductListFragment : Fragment(),
     EnquiryViewModel.GenerateEnquiryInterface,
     OwnProductViewModel.OwnProductFetchedInterface,
     OwnProductAdapter.OwnProductListUpdatedListener,
-    WishlistAdapter.EnquiryGeneratedListener{
+    OwnProductAdapter.EnquiryGeneratedListener{
 
     val mViewModel: OwnProductViewModel by viewModels()
     val mEnqVM : EnquiryViewModel by viewModels()
@@ -71,6 +71,7 @@ class OwnProductListFragment : Fragment(),
         buyerOwnProductList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         adapter = OwnProductAdapter(requireContext(), mViewModel.getCustomDesignListMutableData().value)
         buyerOwnProductList.adapter = adapter
+
         adapter.listener=this
         adapter.enqListener=this
 

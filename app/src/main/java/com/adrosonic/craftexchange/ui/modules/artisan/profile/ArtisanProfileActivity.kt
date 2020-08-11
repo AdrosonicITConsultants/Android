@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.ViewTreeObserver
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
@@ -49,6 +50,8 @@ ProfileViewModel.FetchUserDetailsInterface{
 
     private var mBinding : ActivityArtisanProfileBinding ?= null
     val mViewModel : ProfileViewModel by viewModels()
+    var craftUser : MutableLiveData<CraftUser>?= null
+    var regAddr : MutableLiveData<UserAddress>?= null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,18 +65,15 @@ ProfileViewModel.FetchUserDetailsInterface{
 
         mViewModel.getUserMutableData()
             .observe(this, Observer<CraftUser>() {
-                craftUser = it
+                craftUser = MutableLiveData(it)
             })
 
         mViewModel.getUserAddrMutableData()
             .observe(this, Observer<UserAddress>() {
-                regAddr = it
+                regAddr = MutableLiveData(it)
             })
 
-        mBinding?.profileRefresh?.isRefreshing = true
-        mBinding?.profileRefresh?.setOnRefreshListener {
-            refreshProfile()
-        }
+
 
         var welcome_text = "Hello ${Prefs.getString(ConstantsDirectory.FIRST_NAME,"User")}"
         mBinding?.artisanName?.text = welcome_text
@@ -108,14 +108,12 @@ ProfileViewModel.FetchUserDetailsInterface{
     }
 
     override fun onSuccess() {
-        mBinding?.profileRefresh?.isRefreshing = false
-
-        Utility?.displayMessage("Welcome!",applicationContext)
+//        Utility?.displayMessage("Welcome!",applicationContext)
+        Log.e("ArtPro","Success")
     }
 
     override fun onFailure() {
-        mBinding?.profileRefresh?.isRefreshing = false
-
-        Utility?.displayMessage("Error in fetching user details!",applicationContext)
+//        Utility?.displayMessage("Error in fetching user details!",applicationContext)
+        Log.e("ArtPro","Failure")
     }
 }

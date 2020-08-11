@@ -5,16 +5,23 @@ import android.content.Intent
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.annotation.NonNull
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.adrosonic.craftexchange.R
+import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
 import com.adrosonic.craftexchange.databinding.ActivityArtisanLandingBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.ui.modules.artisan.profile.artisanProfileIntent
@@ -23,6 +30,7 @@ import com.adrosonic.craftexchange.ui.modules.role.roleselectIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
+import com.adrosonic.craftexchange.viewModels.ProfileViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.iid.FirebaseInstanceId
@@ -44,7 +52,9 @@ fun Context.artisanLandingIntent(): Intent {
     }
 }
 
-class ArtisanLandingActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener  {
+class ArtisanLandingActivity : AppCompatActivity(),
+    NavigationView.OnNavigationItemSelectedListener,
+    ProfileViewModel.FetchUserDetailsInterface{
 
     companion object{
         const val TAG = "ArtisanLanding"
@@ -52,6 +62,9 @@ class ArtisanLandingActivity : AppCompatActivity(), NavigationView.OnNavigationI
 
     private var mBinding : ActivityArtisanLandingBinding ?= null
     private var mViewModel: LandingViewModel? =null
+    var craftUser : MutableLiveData<CraftUser>?= null
+    val mProVM : ProfileViewModel by viewModels()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,14 +78,21 @@ class ArtisanLandingActivity : AppCompatActivity(), NavigationView.OnNavigationI
             }
         }).execute()
 
-        var profileImage = Utility.craftUser?.profilePic
-        var urlPro = Utility.getProfilePhotoUrl(Prefs.getString(ConstantsDirectory.USER_ID, "").toLong(),profileImage)
-        ImageSetter.setImage(applicationContext,urlPro,nav_view.getHeaderView(0).logo,
-            R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
+
 
         mViewModel = ViewModelProviders.of(this).get(LandingViewModel::class.java)
-        mViewModel?.getProductsOfArtisan(applicationContext)
-        mViewModel?.getProductUploadData()
+        mProVM?.listener = this
+
+        refreshProfile()
+        mProVM.getUserMutableData()
+            .observe(this, Observer<CraftUser> {
+                craftUser = MutableLiveData(it)
+            })
+
+        var profileImage = craftUser?.value?.profilePic
+        var urlPro = Utility.getProfilePhotoUrl(Prefs.getString(ConstantsDirectory.USER_ID, "").toLong(),profileImage)
+        ImageSetter.setImageWithProgress(applicationContext,urlPro,nav_view.getHeaderView(0).logo,nav_view.getHeaderView(0).progress,
+            R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -101,6 +121,8 @@ class ArtisanLandingActivity : AppCompatActivity(), NavigationView.OnNavigationI
                 .replace(R.id.artisan_home_container,
                     ArtisanHomeFragment.newInstance()
                 )
+                .detach(ArtisanHomeFragment())
+                .attach(ArtisanHomeFragment())
                 .commitNow()
         }
 
@@ -113,6 +135,8 @@ class ArtisanLandingActivity : AppCompatActivity(), NavigationView.OnNavigationI
                                 .replace(R.id.artisan_home_container,
                                     ArtisanHomeFragment.newInstance()
                                 )
+                                .detach(ArtisanHomeFragment())
+                                .attach(ArtisanHomeFragment())
                                 .commitNow()
                         }
                         return true
@@ -248,6 +272,43 @@ class ArtisanLandingActivity : AppCompatActivity(), NavigationView.OnNavigationI
             })
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+
+    override fun onSuccess() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("LandingAct", "Onsuccess")
+                craftUser = mProVM.getUserMutableData()
+            }
+            )
+        } catch (e: Exception) {
+            Log.e("LandingAct", "Exception onSuccess " + e.message)
+        }    }
+
+    override fun onFailure() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("LandingAct", "OnFailure")
+                Utility.displayMessage(
+                    "Error while fetching User Data. Pleas try again after some time",
+                    this
+                )
+            }
+            )
+        } catch (e: Exception) {
+            Log.e("LandingAct", "Exception onFailure " + e.message)
+        }
+    }
+
+    fun refreshProfile(){
+        if (!Utility.checkIfInternetConnected(this)) {
+            Utility.displayMessage(getString(R.string.no_internet_connection), this)
+        } else {
+            mViewModel?.getProductsOfArtisan(this)
+            mViewModel?.getProductUploadData()
+            mProVM.getProfileDetails(this)
+            craftUser = mProVM.getUserMutableData()
         }
     }
 }

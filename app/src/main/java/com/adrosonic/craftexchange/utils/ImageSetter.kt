@@ -2,16 +2,23 @@ package com.adrosonic.craftexchange.utils
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.util.Log
+import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import com.adrosonic.craftexchange.R
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
+import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.target.Target
+import com.bumptech.glide.signature.ObjectKey
 //import com.synnapps.carouselview.CarouselView
 import info.abdolahi.CircularMusicProgressBar
 
@@ -44,7 +51,7 @@ object ImageSetter {
      * This method will set image into ImageView with loading time placeholder
      * and also with error.
      * */
-    fun setImage(context:Context, imagePath:String, imageView:ImageView, placeholder:Int, errImage:Int, fallbck : Int) {
+    fun setImage(context:Context, imagePath:String, imageView:ImageView,placeholder:Int, errImage:Int, fallbck : Int) {
         try
         {
             Glide.with(context)
@@ -52,15 +59,38 @@ object ImageSetter {
                 .apply(
                     RequestOptions()
                         .circleCrop()
+                        .skipMemoryCache(true)
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .override(Target.SIZE_ORIGINAL))
                 .placeholder(placeholder)
-                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-//                .priority(Priority.IMMEDIATE)
+                .priority(Priority.IMMEDIATE)
                 .error(errImage)
                 .fallback(fallbck)
-                .skipMemoryCache(false)
                 .dontAnimate()
+//                .listener(object:RequestListener<Drawable> {
+//
+//                    override fun onResourceReady(
+//                        resource: Drawable?,
+//                        model: Any?,
+//                        target: Target<Drawable>?,
+//                        dataSource: DataSource?,
+//                        isFirstResource: Boolean
+//                    ): Boolean {
+//                        mProgress?.visibility = View.GONE
+//                        return false
+//                    }
+//
+//                    override fun onLoadFailed(
+//                        e: GlideException?,
+//                        model: Any?,
+//                        target: Target<Drawable>?,
+//                        isFirstResource: Boolean
+//                    ): Boolean {
+//                        mProgress?.visibility = View.GONE
+//                        Log.e("Image loading exception",e?.printStackTrace().toString())
+//                        return false
+//                    }
+//                })
                 .into(imageView)
 
         }
@@ -68,6 +98,56 @@ object ImageSetter {
             ex.printStackTrace()
         }
     }
+
+    fun setImageWithProgress(context:Context, imagePath:String, imageView:ImageView,mProgress : ProgressBar,placeholder:Int, errImage:Int, fallbck : Int) {
+        try
+        {
+            Glide.with(context)
+                .load(imagePath)
+                .signature(ObjectKey(System.currentTimeMillis().toString()))
+                .apply(
+                    RequestOptions()
+                        .circleCrop()
+                        .skipMemoryCache(false)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .override(Target.SIZE_ORIGINAL))
+                .placeholder(placeholder)
+                .priority(Priority.IMMEDIATE)
+                .error(errImage)
+                .fallback(fallbck)
+                .dontAnimate()
+                .listener(object:RequestListener<Drawable> {
+
+                    override fun onResourceReady(
+                        resource: Drawable?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        dataSource: DataSource?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        mProgress?.visibility = View.GONE
+                        return false
+                    }
+
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        mProgress?.visibility = View.GONE
+                        Log.e("Glide","Image loading exception "+e?.printStackTrace().toString())
+                        return false
+                    }
+                })
+                .into(imageView)
+
+        }
+        catch (ex:Exception) {
+            ex.printStackTrace()
+        }
+    }
+
 
     fun setImageUri(context: Context, imagePath: Uri, imageView: ImageView, placeholder:Int, errImage:Int, fallbck : Int) {
         try
