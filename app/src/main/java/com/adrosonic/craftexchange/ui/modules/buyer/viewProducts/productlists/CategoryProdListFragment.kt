@@ -207,12 +207,12 @@ class CategoryProdListFragment : Fragment(),
     override fun onSuccessEnquiryGeneration(enquiry: GenerateEnquiryResponse) {
         try {
             Handler(Looper.getMainLooper()).post {
-                dialog?.dismiss()
-                Utility?.enquiryGenSuccessDialog(requireContext(), enquiry?.data?.enquiry?.code.toString()).show()
+                dialog?.cancel()
+                Utility?.enquiryGenSuccessDialog(requireContext(), enquiry?.data?.enquiry?.code.toString())
                 Log.e("EnquiryGeneration", "Onsucces")
             }
         } catch (e: Exception) {
-            dialog?.dismiss()
+            dialog?.cancel()
             Log.e("EnquiryGeneration", "Exception onSuccess " + e.message)
         }
     }
@@ -220,14 +220,14 @@ class CategoryProdListFragment : Fragment(),
     override fun onExistingEnquiryGeneration(productName: String, id: String) {
         try {
             Handler(Looper.getMainLooper()).post {
-                dialog?.dismiss()
+                dialog?.cancel()
                 var exDialog = Utility?.enquiryGenExistingDialog(requireContext(),id,productName)
-                exDialog.show()
+//                exDialog.show()
 
                 exDialog.btn_generate_new_enquiry?.setOnClickListener {
-                    exDialog?.dismiss()
+                    exDialog?.cancel()
                     dialog?.show()
-                    productID?.let { it1 -> mEnqVM?.generateEnquiry(it1,false,mUser?.deviceName.toString() ) }
+                    productID?.let { it1 -> mEnqVM?.generateEnquiry(it1,false,"Android" ) }
                 }
                 Log.e("ExistingEnqGeneration", "Onsuccess")
             }
@@ -239,11 +239,11 @@ class CategoryProdListFragment : Fragment(),
 
     override fun onFailedEnquiryGeneration() {
         try {
-            Handler(Looper.getMainLooper()).post {dialog?.dismiss()
+            Handler(Looper.getMainLooper()).post {dialog?.cancel()
                 Log.e("EnquiryGeneration", "onFailure")
                 Utility.displayMessage("Enquiry Generation Failed",requireContext())
             }
-        } catch (e: Exception) {dialog?.dismiss()
+        } catch (e: Exception) {dialog?.cancel()
             Log.e("EnquiryGeneration", "Exception onFailure " + e.message)
         }
     }

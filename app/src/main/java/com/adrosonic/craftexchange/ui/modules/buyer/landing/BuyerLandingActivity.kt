@@ -1,6 +1,7 @@
 package com.adrosonic.craftexchange.ui.modules.buyer.landing
 
 import android.app.AlertDialog
+import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
 import android.os.AsyncTask
@@ -15,11 +16,11 @@ import androidx.annotation.NonNull
 import androidx.appcompat.app.ActionBarDrawerToggle
 import com.google.android.material.navigation.NavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
 import com.adrosonic.craftexchange.databinding.ActivityBuyerLandingBinding
@@ -32,12 +33,13 @@ import com.adrosonic.craftexchange.ui.modules.role.roleselectIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
-import com.adrosonic.craftexchange.viewModels.ArtisanProductTemplateViewModel
 import com.adrosonic.craftexchange.viewModels.ProfileViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.iid.FirebaseInstanceId
 import com.pixplicity.easyprefs.library.Prefs
-import kotlinx.android.synthetic.main.activity_buyer_landing.*
+import kotlinx.android.synthetic.main.activity_buyer_landing.drawer_layout
+import kotlinx.android.synthetic.main.activity_buyer_landing.nav_view
+import kotlinx.android.synthetic.main.activity_buyer_landing.tab_bar
 import kotlinx.android.synthetic.main.nav_header_landing.view.*
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -64,7 +66,8 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
     val mViewModel: LandingViewModel by viewModels()
     var craftUser : MutableLiveData<CraftUser>?= null
     val mProVM : ProfileViewModel by viewModels()
-
+    var imageName : String ?= ""
+    var url : String ?= ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,13 +82,6 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
             }
         }).execute()
 
-
-//        var imageName = Utility.craftUser?.brandLogo
-//        var url = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/User/${Prefs.getString(ConstantsDirectory.USER_ID,"")}/CompanyDetails/Logo/${imageName}"
-
-
-
-
         mViewModel?.getProductUploadData()
         mViewModel.getwishlisteProductIds()
         mProVM?.listener = this
@@ -96,10 +92,6 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
                 craftUser = MutableLiveData(it)
             })
 
-        var imageName = craftUser?.value?.brandLogo
-        var url = Utility?.getBrandLogoUrl(Prefs.getString(ConstantsDirectory.USER_ID,"").toLong(),imageName)
-        ImageSetter.setImageWithProgress(applicationContext,url,nav_view.getHeaderView(0).logo,nav_view.getHeaderView(0).progress,
-            R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -127,6 +119,8 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
                 .add(R.id.buyer_home_container,
                     BuyerHomeFragment.newInstance()
                 )
+                .detach(BuyerHomeFragment())
+                .attach(BuyerHomeFragment())
                 .commitNow()
         }
 
@@ -139,6 +133,8 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
                                 .add(R.id.buyer_home_container,
                                     BuyerHomeFragment.newInstance()
                                 )
+                                .detach(BuyerHomeFragment())
+                                .attach(BuyerHomeFragment())
                                 .commitNow()
                         }
                         return true
@@ -190,6 +186,12 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.tool_menu, menu)
 
+        // Associate searchable configuration with the SearchView
+        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        (menu.findItem(R.id.action_search).actionView as SearchView).apply {
+            setSearchableInfo(searchManager.getSearchableInfo(componentName))
+        }
+
         return true
     }
 
@@ -201,7 +203,7 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
             R.id.nav_my_transactions -> {}
             R.id.nav_my_orders -> {}
             R.id.nav_custom_design -> {
-            supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container,   OwnProductListFragment.newInstance())
+            supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container,OwnProductListFragment.newInstance())
                         .addToBackStack(null)
                         .commit()
             }
@@ -246,6 +248,11 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
                 fragmentManager.popBackStack();
             }
         }
+    }
+
+    override fun onSearchRequested(): Boolean {
+        return super.onSearchRequested()
+
     }
 
 
@@ -327,11 +334,24 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
         } else {
             mViewModel?.getProductsOfArtisan(this)
             mViewModel?.getProductUploadData()
-            mProVM.getProfileDetails(this)
+            mProVM.getBuyerProfileDetails(this)
             craftUser = mProVM.getUserMutableData()
+            setBrandLogo()
         }
     }
 
+    private fun setBrandLogo(){
+        imageName = craftUser?.value?.brandLogo
+        url = Utility.getBrandLogoUrl(Prefs.getString(ConstantsDirectory.USER_ID, "").toLong(),imageName)
+        ImageSetter.setImageWithProgress(applicationContext,url!!,nav_view.getHeaderView(0).logo,nav_view.getHeaderView(0).progress,
+            R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        refreshProfile()
+        setBrandLogo()
+    }
 
 }
 

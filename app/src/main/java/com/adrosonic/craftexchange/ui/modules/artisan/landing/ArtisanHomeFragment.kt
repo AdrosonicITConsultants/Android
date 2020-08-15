@@ -18,23 +18,16 @@ import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.ArtisanProducts
 import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
 import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCard
-import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCatalogue
-import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.databinding.FragmentArtisanHomeBinding
 import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.addProductIntent
 import com.adrosonic.craftexchange.ui.modules.artisan.products.ArtisanProductAdapter
-import com.adrosonic.craftexchange.ui.modules.artisan.profile.ArtisanProfileActivity
-import com.adrosonic.craftexchange.ui.modules.buyer.wishList.WishlistAdapter
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
-import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.ArtisanProductsViewModel
-import com.adrosonic.craftexchange.viewModels.LandingViewModel
 import com.adrosonic.craftexchange.viewModels.ProfileViewModel
 import com.pixplicity.easyprefs.library.Prefs
 import io.realm.RealmResults
-import kotlinx.android.synthetic.main.fragment_wishlist.*
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -54,6 +47,7 @@ class ArtisanHomeFragment : Fragment(),
     val mProVM : ProfileViewModel by viewModels()
     var craftUser : MutableLiveData<CraftUser> ?= null
     var brandLogo : String ?= ""
+    var urlBrand : String ?=""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -84,27 +78,32 @@ class ArtisanHomeFragment : Fragment(),
 
         var welcomeText = "${activity?.getString(R.string.hello)} ${Prefs.getString(ConstantsDirectory.FIRST_NAME,"User")}"
         mBinding?.welcomeText?.text = welcomeText
-        brandLogo = craftUser?.value?.brandLogo
-        var urlBrand = Utility?.getBrandLogoUrl(Prefs.getString(ConstantsDirectory.USER_ID,"").toLong(),brandLogo)
-        mBinding?.brandLogoArtisan?.let {
-            mBinding?.progress?.let { it1 ->
-                ImageSetter.setImageWithProgress(requireActivity(),urlBrand, it, it1,
-                    R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
-            }
-        }
+        setBrandImage()
 
         mBinding?.btnAddProd?.setOnClickListener {
             startActivity(context?.addProductIntent())
         }
 
 //        TODO : Fix later Refresh issue
-        mBinding?.swipeRefreshLayout?.isRefreshing = true
+
         mBinding?.swipeRefreshLayout?.setOnRefreshListener {
             if (!Utility.checkIfInternetConnected(requireContext())) {
                 mBinding?.swipeRefreshLayout?.isRefreshing = false
                 Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
             } else {
+                mBinding?.swipeRefreshLayout?.isRefreshing = true
                 refreshProfile()
+            }
+        }
+    }
+
+    fun setBrandImage(){
+        brandLogo = craftUser?.value?.brandLogo
+        urlBrand = Utility?.getBrandLogoUrl(Prefs.getString(ConstantsDirectory.USER_ID,"").toLong(),brandLogo)
+        mBinding?.brandLogoArtisan?.let {
+            mBinding?.progress?.let { it1 ->
+                ImageSetter.setImageWithProgress(requireActivity(), urlBrand!!, it, it1,
+                    R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
             }
         }
     }
@@ -116,9 +115,9 @@ class ArtisanHomeFragment : Fragment(),
         } else {
             mViewModel.getProductsOfArtisan()
             mViewModel.getProductCategoryListMutableData(artisanId)
-            mProVM.getProfileDetails(requireContext())
+            mProVM.getArtisanProfileDetails(requireContext())
             craftUser = mProVM.getUserMutableData()
-            brandLogo = craftUser?.value?.brandLogo
+            setBrandImage()
         }
     }
 
@@ -135,6 +134,7 @@ class ArtisanHomeFragment : Fragment(),
                 mBinding?.swipeRefreshLayout?.isRefreshing = false
                 craftUser = mProVM.getUserMutableData()
                 mViewModel.getProductCategoryListMutableData(artisanId)
+                setBrandImage()
             }
             )
         } catch (e: Exception) {

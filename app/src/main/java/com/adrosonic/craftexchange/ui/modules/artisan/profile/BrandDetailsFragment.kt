@@ -15,9 +15,7 @@ import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
 import com.adrosonic.craftexchange.database.entities.realmEntities.UserAddress
 import com.adrosonic.craftexchange.databinding.FragmentBrandDetailsBinding
-import com.adrosonic.craftexchange.ui.modules.artisan.profile.ArtisanProfileActivity.Companion.craftUser
 import com.adrosonic.craftexchange.ui.modules.artisan.profile.editProfile.artisanEditProfileIntent
-import com.adrosonic.craftexchange.ui.modules.buyer.profile.editProfile.BrandEditFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
@@ -37,7 +35,8 @@ class BrandDetailsFragment : Fragment(),
     val mViewModel: ProfileViewModel by viewModels()
     var craftUser : MutableLiveData<CraftUser>?= null
     var regAddr : MutableLiveData<UserAddress>?= null
-
+    var image : String ?= ""
+    var url : String ?= ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,16 +70,20 @@ class BrandDetailsFragment : Fragment(),
                 craftUser = MutableLiveData(it)
             })
 
-        mViewModel.getUserAddrMutableData()
+        mViewModel.getRegAddrMutableData()
             .observe(viewLifecycleOwner, Observer<UserAddress>() {
                 regAddr = MutableLiveData(it)
             })
 
-        var brandLogo = craftUser?.value?.brandLogo
-        var urlBrand = Utility?.getBrandLogoUrl(Prefs.getString(ConstantsDirectory.USER_ID,"").toLong(),brandLogo)
-        mBinding?.artisanBrandLogo?.let {
-            ImageSetter.setImage(requireActivity(),urlBrand, it,
-                R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
+        mBinding?.branddetailsSwipe?.isRefreshing = true
+        mBinding?.branddetailsSwipe?.setOnRefreshListener {
+            if (!Utility.checkIfInternetConnected(requireContext())) {
+                Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
+                mBinding?.branddetailsSwipe?.isRefreshing = false
+
+            } else {
+                refreshProfile()
+            }
         }
 
         mBinding?.cluster?.text = craftUser?.value?.clusterdesc ?: " - "
@@ -99,11 +102,14 @@ class BrandDetailsFragment : Fragment(),
     override fun onSuccess() {
 //        Utility?.displayMessage("Welcome!",applicationContext)
         Log.e("ArtProBrand","Success")
+        mBinding?.branddetailsSwipe?.isRefreshing = false
+        setImage()
     }
 
     override fun onFailure() {
 //        Utility?.displayMessage("Error in fetching user details!",applicationContext)
         Log.e("ArtProBrand","Failure")
+        mBinding?.branddetailsSwipe?.isRefreshing = false
     }
 
     override fun onResume() {
@@ -111,12 +117,18 @@ class BrandDetailsFragment : Fragment(),
         refreshProfile()
     }
     private fun refreshProfile(){
-        if(Utility.checkIfInternetConnected(requireContext())) {
-            mViewModel?.getProfileDetails(requireContext())
-            craftUser = mViewModel?.getUserMutableData()
-            regAddr = mViewModel?.getUserAddrMutableData()
-        }else{
-            Utility.displayMessage(getString(R.string.no_internet_connection),requireContext())
+        mViewModel?.getArtisanProfileDetails(requireContext())
+        craftUser = mViewModel?.getUserMutableData()
+        regAddr = mViewModel?.getRegAddrMutableData()
+        setImage()
+    }
+
+    fun setImage(){
+        image = craftUser?.value?.brandLogo
+        url = Utility?.getBrandLogoUrl(Prefs.getString(ConstantsDirectory.USER_ID,"").toLong(),image)
+        mBinding?.artisanBrandLogo?.let {
+            ImageSetter.setImage(requireActivity(),url!!, it,
+                R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
         }
     }
 

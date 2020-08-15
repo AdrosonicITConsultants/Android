@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.25" />
 
-        <Button
+        <TextView
             android:id="@+id/existing_btn_cancel"
             android:layout_width="0dp"
             android:layout_height="40dp"
@@ -71,8 +71,10 @@
             android:text="@string/cancel"
             android:fontFamily="@font/lato_regular"
             android:textAllCaps="false"
-            android:textSize="@dimen/product_availability_text"
+            android:textSize="@dimen/product_note_text"
+            android:gravity="center"
             android:textColor="@color/darker_gray"
+            android:elevation="8dp"
             android:background="@drawable/rectangle_round_small"/>
 
         <TextView
@@ -80,7 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.25" />
 
-        <Button
+        <TextView
             android:id="@+id/existing_btn_view_enquiry"
             android:layout_width="0dp"
             android:layout_height="40dp"
@@ -89,8 +91,10 @@
             android:fontFamily="@font/lato_regular"
             android:text="@string/view_existing_enquiry"
             android:textAllCaps="false"
+            android:gravity="center"
+            android:elevation="8dp"
             android:textColor="@color/swipe_background"
-            android:textSize="@dimen/product_availability_text" />
+            android:textSize="@dimen/product_note_text" />
 
         <TextView
             android:layout_width="0dp"
@@ -148,19 +152,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/or_layer" />
 
-    <Button
+    <TextView
         android:id="@+id/btn_generate_new_enquiry"
-        android:layout_width="150dp"
+        android:layout_width="200dp"
         android:layout_height="40dp"
         android:background="@drawable/rectangle_round_grad_black_solid"
         android:fontFamily="@font/lato_regular"
         android:text="@string/generate_new_enquiry"
         android:textAllCaps="false"
         android:textColor="@color/white_text"
-        android:textSize="@dimen/product_availability_text"
+        android:textSize="@dimen/product_note_text"
         android:gravity="center"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
+        android:elevation="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/new_enquiry_generate_text"

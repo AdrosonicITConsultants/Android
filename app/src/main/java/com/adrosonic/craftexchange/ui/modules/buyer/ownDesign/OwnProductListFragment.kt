@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.os.HandlerCompat.postDelayed
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -189,44 +190,49 @@ class OwnProductListFragment : Fragment(),
 
     override fun onSuccessEnquiryGeneration(enquiry: GenerateEnquiryResponse) {
         try {
-            Handler(Looper.getMainLooper()).post {dialog?.dismiss()
-                Utility?.enquiryGenSuccessDialog(requireContext(), enquiry?.data?.enquiry?.code.toString()).show()
+            Handler(Looper.getMainLooper()).post {
+                Utility?.enquiryGenSuccessDialog(requireContext(), enquiry?.data?.enquiry?.code.toString())
                 Log.e("EnquiryGeneration", "Onsucces")
+                dialog?.cancel()
             }
         } catch (e: Exception) {
-            dialog?.dismiss()
             Log.e("EnquiryGeneration", "Exception onSuccess " + e.message)
+            dialog?.cancel()
         }
     }
 
     override fun onExistingEnquiryGeneration(productName: String, id: String) {
         try {
+
             Handler(Looper.getMainLooper()).post {
-                dialog?.dismiss()
+                dialog?.cancel()
                 var exDialog = Utility?.enquiryGenExistingDialog(requireContext(),id,productName)
-                exDialog.show()
+                Handler().postDelayed({ exDialog.show() }, 500)
 
                 exDialog.btn_generate_new_enquiry?.setOnClickListener {
-                    exDialog?.dismiss()
-                    dialog?.show()
-                    productID?.let { it1 -> mEnqVM?.generateEnquiry(it1,true,mUser?.deviceName.toString() ) }
+                    exDialog?.cancel()
+//                    Handler().postDelayed({ dialog?.show() }, 500)
+
+                    productID?.let { it1 -> mEnqVM?.generateEnquiry(it1,true,"Android") }
                 }
                 Log.e("ExistingEnqGeneration", "Onsuccess")
             }
         } catch (e: Exception) {
-            dialog?.dismiss()
+            dialog?.cancel()
             Log.e("ExistingEnqGeneration", "Exception onSuccess " + e.message)
         }
     }
 
     override fun onFailedEnquiryGeneration() {
         try {
-            Handler(Looper.getMainLooper()).post {dialog?.dismiss()
+            Handler(Looper.getMainLooper()).post {
                 Log.e("EnquiryGeneration", "onFailure")
                 Utility.displayMessage("Enquiry Generation Failed",requireContext())
+                dialog?.cancel()
             }
-        } catch (e: Exception) {dialog?.dismiss()
+        } catch (e: Exception) {
             Log.e("EnquiryGeneration", "Exception onFailure " + e.message)
+            dialog?.cancel()
         }
     }
 
@@ -235,9 +241,9 @@ class OwnProductListFragment : Fragment(),
         if (!Utility.checkIfInternetConnected(requireContext())) {
             Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
         } else {
-            dialog?.show()
-            mEnqVM.ifEnquiryExists(productId,false)
+            mEnqVM.ifEnquiryExists(productId,true)
             productID = productId
+            dialog?.show()
         }
     }
 

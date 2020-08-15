@@ -43,8 +43,9 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
 //                            var exEnq = EnquiryPredicates?.getExistingEnquiryDetails(productId,true)
 //                            exEnq?.let { listener?.onExistingEnquiryGeneration(it) }
                             Log.e("Enquiry Generation","Success: "+response.body()?.errorMessage)
-                            listener?.onSuccessEnquiryGeneration(response?.body()!!)
+
                             EnquiryPredicates?.insertBuyerEnquiries(response?.body()!!)
+                        listener?.onSuccessEnquiryGeneration(response?.body()!!)
 //                        }
 
                     }else{
@@ -74,12 +75,13 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
                     if(response.body()?.valid == true){
                         Log.e("Enquiry Generation","Success: "+response.body()?.errorMessage)
                         if(response?.body()?.data?.ifExists == true){
-                            listener?.onExistingEnquiryGeneration(response?.body()?.data?.productName.toString(),response?.body()?.data?.code.toString())
                             response?.body()?.data?.enquiryId?.let {
                                 EnquiryPredicates?.updateIfExistEnquiry(productId, it,
                                     response?.body()?.data?.ifExists!!
                                 )
+                                listener?.onExistingEnquiryGeneration(response?.body()?.data?.productName.toString(),response?.body()?.data?.code.toString())
                             }
+
                         }else{
                             generateEnquiry(productId,isCustom,"Android")
                         }

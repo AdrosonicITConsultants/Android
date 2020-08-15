@@ -1,6 +1,7 @@
 package com.adrosonic.craftexchange.ui.modules.artisan.profile
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,12 +14,14 @@ import com.adrosonic.craftexchange.database.predicates.UserPredicates
 import com.adrosonic.craftexchange.databinding.FragmentBankDetailsBinding
 import com.adrosonic.craftexchange.ui.modules.artisan.profile.editProfile.artisanEditProfileIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.adrosonic.craftexchange.viewModels.ProfileViewModel
 import com.pixplicity.easyprefs.library.Prefs
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class BankDetailsFragment : Fragment() {
+class BankDetailsFragment : Fragment(),
+ProfileViewModel.FetchUserDetailsInterface{
     private var param1: String? = null
     private var param2: String? = null
 
@@ -56,12 +59,18 @@ class BankDetailsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-
-
-
         mBinding?.btnEditBankDetails?.setOnClickListener {
             startActivity(context?.artisanEditProfileIntent()?.putExtra("Section","Bank"))
         }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        //TODO : Observer in this class to be implmented
+        mBinding?.bankdetailsSwipe?.isRefreshing = true
+        mBinding?.bankdetailsSwipe?.isRefreshing = false
+
     }
 
     companion object {
@@ -71,5 +80,17 @@ class BankDetailsFragment : Fragment() {
         var phonepe : PaymentAccount?=UserPredicates.getPaymentDetails(Prefs.getString(ConstantsDirectory.USER_ID,""),3)
         var paytm : PaymentAccount?= UserPredicates.getPaymentDetails(Prefs.getString(ConstantsDirectory.USER_ID,""),4)
 
+    }
+
+    override fun onSuccess() {
+//        Utility?.displayMessage("Welcome!",applicationContext)
+        Log.e("ArtProBrand","Success")
+        mBinding?.bankdetailsSwipe?.isRefreshing = false
+    }
+
+    override fun onFailure() {
+//        Utility?.displayMessage("Error in fetching user details!",applicationContext)
+        Log.e("ArtProBrand","Failure")
+        mBinding?.bankdetailsSwipe?.isRefreshing = false
     }
 }

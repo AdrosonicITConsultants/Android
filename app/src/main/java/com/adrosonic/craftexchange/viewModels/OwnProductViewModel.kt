@@ -4,12 +4,9 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.adrosonic.craftexchange.database.entities.realmEntities.BuyerCustomProduct
-import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCatalogue
 import com.adrosonic.craftexchange.database.predicates.BuyerCustomProductPredicates
-import com.adrosonic.craftexchange.database.predicates.WishlistPredicates
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.response.buyer.ownDesign.GetAllOwnDesignResponse
-import com.adrosonic.craftexchange.repository.data.response.buyer.wishList.WishListedIds
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.pixplicity.easyprefs.library.Prefs
 import io.realm.RealmResults
@@ -38,7 +35,7 @@ class OwnProductViewModel : ViewModel() {
     fun getCustomProducts(){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         CraftExchangeRepository
-            .getBuyerOenDesignService()
+            .getBuyerOwnDesignService()
             .getAllOwnDesignProducts(token)
             .enqueue(object: Callback, retrofit2.Callback<GetAllOwnDesignResponse> {
                 override fun onFailure(call: Call<GetAllOwnDesignResponse>, t: Throwable) {

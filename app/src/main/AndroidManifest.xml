@@ -18,9 +18,36 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".ui.modules.artisan.search.SuggestionActivity"></activity>
+        <activity android:name=".ui.modules.search.SearchSuggestionActivity" />
+        <activity
+            android:name=".ui.modules.artisan.search.ArtisanSearchActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+        <activity
+            android:name=".ui.modules.buyer.search.BuyerSearchActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
         <activity
             android:name=".ui.modules.buyer.ownDesign.BuyerAddOwnProductDesignActivity"
             android:label="@string/title_activity_buyer_add_own_product_design"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.modules.buyer.productDetails.FullScreenImageActivity"
@@ -37,7 +64,12 @@
         <activity
             android:name=".ui.modules.artisan.landing.ArtisanLandingActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan">
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".ui.modules.artisan.search.ArtisanSearchActivity" />
+        </activity>
         <activity
             android:name=".ui.modules.buyer.profile.editProfile.BuyerEditProfileActivity"
             android:screenOrientation="portrait" />
@@ -50,7 +82,14 @@
         <activity
             android:name=".ui.modules.buyer.landing.BuyerLandingActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan">
+
+            <!-- enable the search dialog to send searches to SearchableActivity -->
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".ui.modules.buyer.search.BuyerSearchActivity" />
+        </activity>
         <activity
             android:name=".ui.modules.authentication.register.RegisterActivity"
             android:screenOrientation="portrait" />
@@ -87,6 +126,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
         <service
             android:name=".services.customDesign.AddOwnProductService"
             android:exported="false"
@@ -99,12 +139,10 @@
             android:name=".services.ProductCreateService"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
-
         <service
             android:name=".services.wishlist.WishlistService"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
-
         <service android:name=".services.InstanceIdService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />

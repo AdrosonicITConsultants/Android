@@ -15,16 +15,11 @@ import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
 import com.adrosonic.craftexchange.database.entities.realmEntities.UserAddress
 import com.adrosonic.craftexchange.databinding.FragmentMyDetailsBinding
-import com.adrosonic.craftexchange.ui.modules.artisan.profile.ArtisanProfileActivity.Companion.craftUser
-import com.adrosonic.craftexchange.ui.modules.artisan.profile.ArtisanProfileActivity.Companion.regAddr
-import com.adrosonic.craftexchange.ui.modules.artisan.profile.editProfile.MyDetailsEditProfileFragment
 import com.adrosonic.craftexchange.ui.modules.artisan.profile.editProfile.artisanEditProfileIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
-import com.adrosonic.craftexchange.viewModels.LandingViewModel
 import com.adrosonic.craftexchange.viewModels.ProfileViewModel
-import com.google.gson.Gson
 import com.pixplicity.easyprefs.library.Prefs
 
 private const val ARG_PARAM1 = "param1"
@@ -40,6 +35,8 @@ class MyDetailsFragment : Fragment(),
     val mViewModel: ProfileViewModel by viewModels()
     var craftUser : MutableLiveData<CraftUser>?= null
     var regAddr : MutableLiveData<UserAddress>?= null
+    var image : String ?= ""
+    var url : String ?= ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,25 +70,25 @@ class MyDetailsFragment : Fragment(),
                 craftUser = MutableLiveData(it)
             })
 
-        mViewModel.getUserAddrMutableData()
+        mViewModel.getRegAddrMutableData()
             .observe(viewLifecycleOwner, Observer<UserAddress>() {
                 regAddr = MutableLiveData(it)
             })
 
-        var profileImage = craftUser?.value?.profilePic
-        var urlPro = Utility.getProfilePhotoUrl(Prefs.getString(ConstantsDirectory.USER_ID, "").toLong(),profileImage)
-        ImageSetter.setImageCircleProgress(requireContext(),urlPro,mBinding?.artisanProfileLogo,
-            R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
+        mBinding?.mydetailsSwipe?.isRefreshing = true
+        mBinding?.mydetailsSwipe?.setOnRefreshListener {
+            if (!Utility.checkIfInternetConnected(requireContext())) {
+                mBinding?.mydetailsSwipe?.isRefreshing = false
+                Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
+            } else {
+                refreshProfile()
+            }
+        }
 
-//        var rating = craftUser?.rating?.toInt()
         var rating = craftUser?.value?.rating?.toFloat()
         var ratingFloat = rating?.times(10)?.toFloat()
-        //artisan rating out of 5 (rating*20)
         ratingFloat?.let { mBinding?.artisanProfileLogo?.setValue(it) }
-
-
         mBinding?.avgRating?.text = "$rating / 10"
-
         var username = "${craftUser?.value?.firstName ?: ""} ${craftUser?.value?.lastName ?: ""}"
         mBinding?.name?.text = username
         mBinding?.email?.text = craftUser?.value?.email ?: " - "
@@ -112,28 +109,43 @@ class MyDetailsFragment : Fragment(),
 
     private fun refreshProfile(){
         if(Utility.checkIfInternetConnected(requireContext())) {
-            mViewModel?.getProfileDetails(requireContext())
+            mViewModel?.getArtisanProfileDetails(requireContext())
             craftUser = mViewModel?.getUserMutableData()
-            regAddr = mViewModel?.getUserAddrMutableData()
+            regAddr = mViewModel?.getRegAddrMutableData()
+            setImage()
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),requireContext())
         }
     }
 
+    fun setImage(){
+        image = craftUser?.value?.profilePic
+        url = Utility.getProfilePhotoUrl(Prefs.getString(ConstantsDirectory.USER_ID, "").toLong(),image)
+        ImageSetter.setImageCircleProgress(requireContext(),url!!,mBinding?.artisanProfileLogo,
+            R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
+    }
+
     override fun onSuccess() {
-//        Utility?.displayMessage("Welcome!",applicationContext)
         Log.e("ArtProPersonal","Success")
+        mBinding?.mydetailsSwipe?.isRefreshing = false
+        setImage()
     }
 
     override fun onFailure() {
-//        Utility?.displayMessage("Error in fetching user details!",applicationContext)
         Log.e("ArtProPersonal","Failure")
+        mBinding?.mydetailsSwipe?.isRefreshing = false
+
     }
 
     override fun onResume() {
         super.onResume()
-        refreshProfile()
+        if (!Utility.checkIfInternetConnected(requireContext())) {
+            Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
+        } else {
+            refreshProfile()
+        }
     }
+
     companion object {
         fun newInstance() = MyDetailsFragment()
         const val TAG = "MyDetFrag"

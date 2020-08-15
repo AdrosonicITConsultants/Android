@@ -56,10 +56,11 @@ object ImageSetter {
         {
             Glide.with(context)
                 .load(imagePath)
+                .signature(ObjectKey((System.currentTimeMillis()).div(24*60*60*1000).toString())) //periodically refreshes the image for new
                 .apply(
                     RequestOptions()
                         .circleCrop()
-                        .skipMemoryCache(true)
+                        .skipMemoryCache(false)
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .override(Target.SIZE_ORIGINAL))
                 .placeholder(placeholder)
@@ -104,12 +105,12 @@ object ImageSetter {
         {
             Glide.with(context)
                 .load(imagePath)
-                .signature(ObjectKey(System.currentTimeMillis().toString()))
+                .signature(ObjectKey((System.currentTimeMillis()).div(24*60*60*1000).toString())) //periodically refreshes the image for new
                 .apply(
                     RequestOptions()
                         .circleCrop()
                         .skipMemoryCache(false)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .override(Target.SIZE_ORIGINAL))
                 .placeholder(placeholder)
                 .priority(Priority.IMMEDIATE)
@@ -157,6 +158,7 @@ object ImageSetter {
                 .apply(
                     RequestOptions()
                         .circleCrop()
+                        .skipMemoryCache(false)
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .override(Target.SIZE_ORIGINAL))
                 .placeholder(placeholder)
@@ -164,7 +166,6 @@ object ImageSetter {
 //                .priority(Priority.IMMEDIATE)
                 .error(errImage)
                 .fallback(fallbck)
-                .skipMemoryCache(false)
                 .dontAnimate()
                 .into(imageView!!)
 

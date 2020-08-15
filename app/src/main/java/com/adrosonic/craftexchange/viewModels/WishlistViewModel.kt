@@ -18,8 +18,6 @@ class WishlistViewModel(application: Application) : AndroidViewModel(application
         fun onFailure()
     }
     var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
-
-
     var listener: WishListInterface? = null
 
     fun addProductToWishlist(productId:Long){

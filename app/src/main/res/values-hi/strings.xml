@@ -110,7 +110,7 @@
     <string name="support">Support</string>
     <string name="logout">Logout</string>
     <string name="action_notifications">Notifications</string>
-    <string name="search" />
+    <string name="search">Search</string>
     <string name="browse_text">Browse the latest collection of</string>
     <string name="choose_from">Choose from</string>
     <string name="unique_in_mind">Have something unique in mind?</string>
@@ -248,6 +248,7 @@
     <string name="refer_to_ongoing_enquiries">Please refer \"Ongoing Enquiry\" tab\nto track your enquiry.</string>
     <string name="view_enquiry">View Enquiry</string>
     <string name="make_it_amp_take_it"><![CDATA[Make it & take it!]]></string>
+    <string name="search_hint">Search products, codes, product types, weaves</string>
 
     <string-array name="product_array">
         <item>@string/saree</item>

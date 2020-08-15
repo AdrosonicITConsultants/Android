@@ -63,7 +63,11 @@ object CraftExchangeRepository {
         return builder(EnquiryDao::class.java)
     }
 
-    fun getBuyerOenDesignService(): BuyerOwnDesignDao {
+    fun getBuyerOwnDesignService(): BuyerOwnDesignDao {
         return builder(BuyerOwnDesignDao::class.java)
+    }
+
+    fun getSearchService(): SearchDao {
+        return builder(SearchDao::class.java)
     }
 }

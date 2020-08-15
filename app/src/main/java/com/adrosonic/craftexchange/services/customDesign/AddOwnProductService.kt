@@ -105,7 +105,7 @@ class AddOwnProductService : JobIntentService() {
             .addPart(body)
             .build()
         Log.e("Offline", "prepareMultiPartBody 88888 " + bodyMultipart.boundary)
-        CraftExchangeRepository.getBuyerOenDesignService()
+        CraftExchangeRepository.getBuyerOwnDesignService()
             .uploadOwnProduct(token, headerBoundary, dataLength, productData, bodyMultipart)
             .enqueue(object : Callback, retrofit2.Callback<AddOwnDesignResponse> {
                 override fun onFailure(

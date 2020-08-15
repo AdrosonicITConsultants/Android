@@ -5,30 +5,20 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.ViewTreeObserver
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
-import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCatalogue
 import com.adrosonic.craftexchange.database.entities.realmEntities.UserAddress
 import com.adrosonic.craftexchange.database.predicates.AddressPredicates
-import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.database.predicates.UserPredicates
 import com.adrosonic.craftexchange.databinding.ActivityArtisanProfileBinding
-import com.adrosonic.craftexchange.repository.CraftExchangeRepository
-import com.adrosonic.craftexchange.repository.data.response.artisan.profile.ProfileResponse
 
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.ProfileViewModel
 import com.pixplicity.easyprefs.library.Prefs
-import io.realm.RealmResults
-import retrofit2.Call
-import retrofit2.Response
-import javax.security.auth.callback.Callback
 
 fun Context.artisanProfileIntent(): Intent {
     return Intent(this, ArtisanProfileActivity::class.java).apply {
@@ -63,16 +53,17 @@ ProfileViewModel.FetchUserDetailsInterface{
         mViewModel?.listener = this
         refreshProfile()
 
+
+
         mViewModel.getUserMutableData()
             .observe(this, Observer<CraftUser>() {
                 craftUser = MutableLiveData(it)
             })
 
-        mViewModel.getUserAddrMutableData()
+        mViewModel.getRegAddrMutableData()
             .observe(this, Observer<UserAddress>() {
                 regAddr = MutableLiveData(it)
             })
-
 
 
         var welcome_text = "Hello ${Prefs.getString(ConstantsDirectory.FIRST_NAME,"User")}"
@@ -96,7 +87,7 @@ ProfileViewModel.FetchUserDetailsInterface{
 
     private fun refreshProfile(){
         if(Utility.checkIfInternetConnected(applicationContext)) {
-            mViewModel?.getProfileDetails(applicationContext)
+            mViewModel?.getArtisanProfileDetails(applicationContext)
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),applicationContext)
         }

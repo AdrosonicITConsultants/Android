@@ -40,7 +40,7 @@ class DeleteOwnProductService : JobIntentService() {
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN, "")}"
         Log.e("Offline", "prodId :" + prodId)
         CraftExchangeRepository
-            .getBuyerOenDesignService()
+            .getBuyerOwnDesignService()
             .deleteOwnDesignProducts(token,prodId.toInt())
             .enqueue(object: Callback, retrofit2.Callback<DeleteOwnProductRespons?> {
                 override fun onFailure(call: Call<DeleteOwnProductRespons?>, t: Throwable) {

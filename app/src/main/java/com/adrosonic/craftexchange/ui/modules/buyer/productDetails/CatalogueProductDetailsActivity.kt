@@ -360,12 +360,12 @@ EnquiryViewModel.GenerateEnquiryInterface{
     override fun onSuccessEnquiryGeneration(enquiry : GenerateEnquiryResponse) {
         try {
             Handler(Looper.getMainLooper()).post {
-                dialog?.dismiss()
+                dialog?.cancel()
                 Utility?.enquiryGenSuccessDialog(this, enquiry?.data?.enquiry?.code.toString()).show()
                 Log.e("EnquiryGeneration", "Onsucces")
             }
         } catch (e: Exception) {
-            dialog?.dismiss()
+            dialog?.cancel()
             Log.e("EnquiryGeneration", "Exception onSuccess " + e.message)
         }
     }
@@ -375,12 +375,12 @@ EnquiryViewModel.GenerateEnquiryInterface{
             Handler(Looper.getMainLooper()).post {
                 dialog?.dismiss()
                 var exDialog = Utility?.enquiryGenExistingDialog(this,id,productName)
-                exDialog.show()
+//                exDialog.show()
 
                 exDialog.btn_generate_new_enquiry?.setOnClickListener {
-                    exDialog?.dismiss()
+                    exDialog?.cancel()
                     dialog?.show()
-                    mEnqVM?.generateEnquiry(productId!!,false, mUserConfig?.deviceName.toString())
+                    mEnqVM?.generateEnquiry(productId!!,false, "Android")
                 }
                 Log.e("ExistingEnqGeneration", "Onsuccess")
             }
@@ -393,12 +393,12 @@ EnquiryViewModel.GenerateEnquiryInterface{
     override fun onFailedEnquiryGeneration() {
         try {
             Handler(Looper.getMainLooper()).post {
-                dialog?.dismiss()
+                dialog?.cancel()
                 Log.e("EnquiryGeneration", "onFailure")
                 Utility.displayMessage("Enquiry Generation Failed",this)
             }
         } catch (e: Exception) {
-            dialog?.dismiss()
+            dialog?.cancel()
             Log.e("EnquiryGeneration", "Exception onFailure " + e.message)
         }
     }

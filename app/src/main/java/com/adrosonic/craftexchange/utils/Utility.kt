@@ -223,13 +223,14 @@ class Utility {
             dialog?.success_enquiry_id?.append(id)
 
             dialog?.btn_success_cancel?.setOnClickListener {
-                dialog?.dismiss()
+                dialog?.cancel()
             }
             dialog?.btn_success_view_enquiry?.setOnClickListener {
                 //TODO : View Enquiry details in enquiry landing page
+                dialog?.cancel()
             }
             dialog?.setCanceledOnTouchOutside(false)
-            dialog?.create()
+            dialog?.show()
             return dialog
         }
 
@@ -244,13 +245,15 @@ class Utility {
             dialog?.existing_product_title?.text = productName
 
             dialog?.existing_btn_cancel?.setOnClickListener {
-                dialog?.dismiss()
+                dialog?.cancel()
             }
             dialog?.existing_btn_view_enquiry?.setOnClickListener {
                 //TODO : View Enquiry details in enquiry landing page
+                dialog?.cancel()
+
             }
             dialog?.setCanceledOnTouchOutside(false)
-            dialog?.create()
+
 
             return dialog
         }
