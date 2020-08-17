@@ -11,6 +11,7 @@ import com.adrosonic.craftexchange.syncManager.processor.ProductAdd
 import com.adrosonic.craftexchange.syncManager.processor.ProductUpdate
 import com.adrosonic.craftexchange.syncManager.processor.customDesign.OwnDesignAdd
 import com.adrosonic.craftexchange.syncManager.processor.customDesign.OwnDesignDelete
+import com.adrosonic.craftexchange.syncManager.processor.customDesign.OwnDesignUpdate
 import com.adrosonic.craftexchange.syncManager.processor.wishlist.WishlistAction
 
 /**
@@ -23,6 +24,7 @@ class SyncCoordinator(val context: Context) {
         ProductDeleter(),
         WishlistAction(),
         OwnDesignAdd(),
+        OwnDesignUpdate(),
         OwnDesignDelete()
     )
 

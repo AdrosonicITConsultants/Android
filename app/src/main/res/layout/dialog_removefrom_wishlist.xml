@@ -6,6 +6,7 @@
     android:padding="@dimen/expandable_layout_std_padding">
 
     <TextView
+        android:id="@+id/txt_dscrp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"

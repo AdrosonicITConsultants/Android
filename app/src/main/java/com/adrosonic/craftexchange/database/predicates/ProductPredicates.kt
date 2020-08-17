@@ -6,6 +6,7 @@ import com.adrosonic.craftexchange.database.entities.ArtisanProductCategory
 import com.adrosonic.craftexchange.database.entities.realmEntities.*
 import com.adrosonic.craftexchange.repository.data.request.artisan.productTemplate.ArtisanAddProductRequest
 import com.adrosonic.craftexchange.repository.data.request.artisan.productTemplate.RelatedProduct
+import com.adrosonic.craftexchange.repository.data.request.artisan.productTemplate.UpdateProductTemplateRequest
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.ArtisanProductDetailsResponse
 import com.adrosonic.craftexchange.repository.data.response.artisan.profile.ProfileResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.AllProductsResponse
@@ -757,6 +758,119 @@ class ProductPredicates {
 
                                         }
                                     }
+
+                                    var relatedProductList = brandProduct?.relProduct
+                                    var prodItr = relatedProductList?.iterator()
+                                    if(prodItr!=null){
+                                        while (prodItr.hasNext()){
+                                            var relProduct = prodItr.next()
+
+                                            var relPoprductObj = realm.where(RelatedProducts::class.java)
+                                                .equalTo("relatedProductId",relProduct.id)
+                                                .limit(1)
+                                                .findFirst()
+                                            if(relPoprductObj == null){
+                                                var primId = it.where(RelatedProducts::class.java).max("_id")
+                                                if (primId == null) {
+                                                    nextID = 1
+                                                } else {
+                                                    nextID = primId.toLong() + 1
+                                                }
+                                                var exRelProd= it.createObject(RelatedProducts::class.java, nextID)
+                                                exRelProd?.inProductCategoryId = brandProduct?.productCategoryId
+                                                exRelProd?.relatedToProductId = brandProduct?.id
+                                                exRelProd?.relatedProductId = relProduct?.id
+                                                exRelProd?.productTypeId = relProduct?.productTypeId
+                                                exRelProd?.productName = relProduct?.productTypeDesc
+                                                exRelProd?.productLength = relProduct?.length
+                                                exRelProd?.productWidth = relProduct?.width
+                                                exRelProd?.productWeight = relProduct?.weight
+
+                                                realm?.copyToRealmOrUpdate(exRelProd)
+                                            }else{
+                                                relPoprductObj?.inProductCategoryId = brandProduct?.productCategoryId
+                                                relPoprductObj?.relatedToProductId = brandProduct?.id
+                                                relPoprductObj?.relatedProductId = relProduct?.id
+                                                relPoprductObj?.productTypeId = relProduct?.productTypeId
+                                                relPoprductObj?.productName = relProduct?.productTypeDesc
+                                                relPoprductObj?.productLength = relProduct?.length
+                                                relPoprductObj?.productWidth = relProduct?.width
+                                                relPoprductObj?.productWeight = relProduct?.weight
+
+                                                realm.copyToRealmOrUpdate(relPoprductObj)
+                                            }
+                                        }
+                                    }
+
+                                    var weaveTypeList = brandProduct?.productWeaves
+                                    var weaveTypeItr = weaveTypeList?.iterator()
+                                    if(weaveTypeItr!=null){
+                                        while (weaveTypeItr.hasNext()){
+                                            var weaveType = weaveTypeItr.next()
+
+                                            var weaveTypeObj = realm.where(WeaveTypes::class.java)
+                                                .equalTo("productId",weaveType.productId)
+                                                .and()
+                                                .equalTo("weaveId",weaveType.weaveId)
+                                                .limit(1)
+                                                .findFirst()
+                                            if(weaveTypeObj == null){
+                                                var primId = it.where(WeaveTypes::class.java).max("_id")
+                                                if (primId == null) {
+                                                    nextID = 1
+                                                } else {
+                                                    nextID = primId.toLong() + 1
+                                                }
+                                                var exWeaveType = it.createObject(WeaveTypes::class.java, nextID)
+                                                exWeaveType?.productId = weaveType?.productId
+                                                exWeaveType?.productWeaveId = weaveType?.id
+                                                exWeaveType?.weaveId = weaveType?.weaveId
+                                                realm.copyToRealmOrUpdate(exWeaveType)
+                                            }else{
+                                                nextID = weaveTypeObj?._id ?: 0
+                                                weaveTypeObj?.productId = weaveType?.productId
+                                                weaveTypeObj?.productWeaveId = weaveType?.id
+                                                weaveTypeObj?.weaveId = weaveType?.weaveId
+                                                realm.copyToRealmOrUpdate(weaveTypeObj)
+                                            }
+
+                                        }
+                                    }
+
+                                    var careList = brandProduct?.productCares
+                                    var careItr = careList?.iterator()
+                                    if(careItr!=null){
+                                        while (careItr.hasNext()){
+                                            var care = careItr.next()
+
+                                            var careObj = realm.where(ProductCares::class.java)
+                                                .equalTo("productId",care.productId)
+                                                .and()
+                                                .equalTo("productCareId",care.productCareId)
+                                                .limit(1)
+                                                .findFirst()
+                                            if(careObj == null){
+                                                var primId = it.where(ProductCares::class.java).max("_id")
+                                                if (primId == null) {
+                                                    nextID = 1
+                                                } else {
+                                                    nextID = primId.toLong() + 1
+                                                }
+                                                var exCare = it.createObject(ProductCares::class.java, nextID)
+                                                exCare?.productId = care?.productId
+                                                exCare?.careId = care?.id
+                                                exCare?.productCareId = care?.productCareId
+                                                realm.copyToRealmOrUpdate(exCare)
+                                            }else{
+                                                nextID = careObj?._id ?: 0
+                                                careObj?.productId = care?.productId
+                                                careObj?.careId = care?.id
+                                                careObj?.productCareId = care?.productCareId
+                                                realm.copyToRealmOrUpdate(careObj)
+                                            }
+
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -767,7 +881,6 @@ class ProductPredicates {
             }
         }
 
-        //TODO : GET
 
         fun getAllBrandDetails(): RealmResults<BrandList>? {
             val realm = CXRealmManager.getRealmInstance()
@@ -928,11 +1041,25 @@ class ProductPredicates {
             return productList
         }
 
+        fun getArtisanProductsByRemoteId(productId : Long?) : ArtisanProducts?{
+            val realm = CXRealmManager.getRealmInstance()
+            return realm.where(ArtisanProducts::class.java)
+                .equalTo(ArtisanProducts.COLUMN_PRODUCT_ID,productId)
+                .findFirst()
+        }
         fun getArtisanProducts(productId : Long?) : ArtisanProducts?{
             val realm = CXRealmManager.getRealmInstance()
             return realm.where(ArtisanProducts::class.java)
                 .equalTo(ArtisanProducts.COLUMN__ID,productId)
                 .findFirst()
+        }
+
+        fun getArtisanProductsId(productId : Long?) : Long?{
+
+            val realm = CXRealmManager.getRealmInstance()
+            return realm.where(ArtisanProducts::class.java)
+                .equalTo(ArtisanProducts.COLUMN__ID,productId)
+                .findFirst()?.productId
         }
         fun getProductMarkedForActions(actionsMarked:String): ArrayList<Long>? {
             var realm = CXRealmManager.getRealmInstance()
@@ -1032,5 +1159,85 @@ class ProductPredicates {
             }
 
         }
+
+        fun updateProductForDeletion(id: Long?){
+            var realm = CXRealmManager.getRealmInstance()
+            realm.executeTransaction{
+                Log.e("Offline", "predicate id :" +id)
+                var product = realm.where(ArtisanProducts::class.java).equalTo(ArtisanProducts.COLUMN_PRODUCT_ID,id).limit(1).findFirst()
+                product?.isDeleted = 1
+                product?.actionDelete = 1
+            }
+        }
+
+        fun updateArtisanProductOffline(product : UpdateProductTemplateRequest,imageList:ArrayList<String>,delImageList:ArrayList<Pair<Long,String>>,relatedProdList:ArrayList<RelatedProduct>){
+            nextID = 0L
+            val realm = CXRealmManager.getRealmInstance()
+            try {
+                realm.executeTransaction {
+                    var prodEntry=realm.where(ArtisanProducts::class.java).equalTo(ArtisanProducts.COLUMN_PRODUCT_ID,product.id).limit(1).findFirst()
+                    nextID=prodEntry?._id
+                    prodEntry?.actionUpdate = 1
+
+                    prodEntry?.productTag = product.tag
+                    prodEntry?.productCategoryId = product.productCategoryId
+                    prodEntry?.productSpecs = product.productSpec
+                    prodEntry?.productTypeId = product.productTypeId
+                    prodEntry?.productCode = product.code
+
+                    prodEntry?.reedCountId = product.reedCountId.toLong()
+                    prodEntry?.gsm = product.gsm
+                    prodEntry?.productStatusId = product.productStatusId
+                    prodEntry?.productWidth = product.width
+                    prodEntry?.productLength = product.length
+                    prodEntry?.weight = product.weight
+
+                    prodEntry?.warpDyeId = product.warpDyeId
+                    prodEntry?.warpYarnCount = product.warpYarnCount
+                    prodEntry?.warpYarnId = product.warpYarnId
+
+                    prodEntry?.weftDyeId = product.weftDyeId
+                    prodEntry?.weftYarnCount = product.weftYarnCount
+                    prodEntry?.weftYarnId = product.weftYarnId
+
+                    prodEntry?.extraWeftDyeId = product.extraWeftDyeId
+                    prodEntry?.extraWeftYarnCount = product.extraWeftYarnCount
+                    prodEntry?.extraWeftYarnId = product.extraWeftYarnId
+
+                    realm.copyToRealmOrUpdate(prodEntry)
+                    //todo add related products, image paths,weave ids, was care instructions
+
+                }
+                Log.e("ArtisanProdLog","${product.productWeaves.size}")
+                Log.e("ArtisanProdLog","${product.productCares?.size}")
+                Log.e("ArtisanProdLog","${imageList?.joinToString()}")
+                if(relatedProdList.size>0)RelateProductPredicates.insertRelatedProduct(nextID,relatedProdList.get(0).productTypeID,relatedProdList.get(0).width,relatedProdList.get(0).length)
+                if(imageList.size>0) {
+                    ProductImagePredicates.deleteProdImages(product?.id)
+                    ProductImagePredicates.insertProductImages(product?.id, imageList)
+                }
+                if(product.productWeaves!=null){
+                    WeaveTypesPredicates.deleteWeaveIds(product?.id)
+                    WeaveTypesPredicates.insertWeaveIds(product.productWeaves)
+                }
+                if(product.productCares!=null) {
+                    ProductCaresPredicates.deleteCareIds(product?.id)
+                    ProductCaresPredicates.insertCareIds(product.productCares)
+                }
+            }catch (e:Exception){
+                Log.e("ArtisanProdLog","${e.message}")
+            }
+        }
+
+        fun updateProductEntryPostUpdate(id: Long?){
+            var realm = CXRealmManager.getRealmInstance()
+            realm.executeTransaction{
+                Log.e("Offline", "predicate id :" +id)
+                var product = realm.where(ArtisanProducts::class.java).equalTo(ArtisanProducts.COLUMN_PRODUCT_ID,id).limit(1).findFirst()
+                product?.actionUpdate = 0
+                realm.copyToRealmOrUpdate(product)
+            }
+        }
+
     }
 }

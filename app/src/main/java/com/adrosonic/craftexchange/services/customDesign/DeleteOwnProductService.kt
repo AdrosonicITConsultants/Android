@@ -28,7 +28,7 @@ class DeleteOwnProductService : JobIntentService() {
             if (prodId > 0) {
                 Log.e("Offline", "prodId :" + prodId)
                 val productEntry = BuyerCustomProductPredicates.getProductId(prodId)
-                deleteProduct( prodId)
+                deleteProduct(prodId)
             }
         } catch (e: Exception) {
             Log.e("Offline", "Exception " + e.localizedMessage)

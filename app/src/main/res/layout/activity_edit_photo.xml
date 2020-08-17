@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorSplash"
+        android:orientation="vertical"
+        tools:context=".ui.modules.artisan.productTemplate.ArtisanAddProductTemplateActivity">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/add_product_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorSplash"
+            android:theme="@style/AppTheme.Toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <ImageView
+                android:id="@+id/btn_back"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_gravity="start"
+                android:background="?selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_keyboard_backspace_black_24dp" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="40dp"
+                android:text="Edit Photo"
+                android:textColor="@color/black_text"
+                android:textSize="@dimen/edit_text" />
+
+            <TextView
+                android:id="@+id/saveImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:background="@drawable/rect_round_grad_blue_solid"
+                android:drawableRight="@drawable/ic_save_upload"
+                android:fontFamily="@font/lato_regular"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:text=" Save "
+                android:textColor="@color/white_text" />
+        </androidx.appcompat.widget.Toolbar>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:background="@color/black_text"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/imgEditable"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/img_editable_hieght"
+                    android:layout_margin="@dimen/edit_image_padding" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/img_editable_options_hieght"
+                    android:layout_marginLeft="@dimen/edit_image_padding"
+                    android:layout_marginRight="@dimen/edit_image_padding"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+                    <ImageView
+                        android:id="@+id/imgCrop"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_crop" />
+
+                    <ImageView
+                        android:id="@+id/imgRotate"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_roate_90" />
+
+                    <ImageView
+                        android:id="@+id/imgBrightness"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:src="@drawable/ic_brightness" />
+                </LinearLayout>
+
+                <SeekBar
+                    android:visibility="gone"
+                    android:id="@+id/sbAdjustBrightness"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_margin="@dimen/edit_image_padding"
+                    android:max="255"
+                    android:min="0"
+                    android:backgroundTint="@color/lighter_gray"
+                    style="@style/seekbarStyle" />
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</layout>

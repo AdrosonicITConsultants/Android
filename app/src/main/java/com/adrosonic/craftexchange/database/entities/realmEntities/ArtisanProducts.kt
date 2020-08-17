@@ -102,6 +102,7 @@ open class ArtisanProducts : RealmObject() {
     companion object {
         const val COLUMN_TABLE = "ArtisanProducts"
         const val COLUMN__ID = "_id"
+        const val COLUMN_PRODUCT_ID = "productId"
 
         const val COLUMN_ACTION_DELETE = "actionDelete"
         const val COLUMN_ACTION_UPDATE = "actionUpdate"

@@ -79,7 +79,15 @@ OwnProductAdapter.OwnProductListUpdatedListener{
 
     }
 
-
+    override fun onResume() {
+        super.onResume()
+        if (!Utility.checkIfInternetConnected(requireContext())) {
+            Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
+            mViewModel?.getCustomDesignListMutableData()
+        } else {
+            mViewModel.getCustomProducts()
+        }
+    }
 
     override fun onSuccess() {
         try {

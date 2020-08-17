@@ -36,16 +36,16 @@ class ProductCreateService: JobIntentService() {
     private fun addProductAction(prodId: Long){
         try {
             if (prodId > 0){
-                Log.e("Offline","prodId :"+prodId)
+               Log.e("Offline","prodId :"+prodId)
                val productEntry=ProductPredicates.getArtisanProducts(prodId)
                val imageEntry=ProductImagePredicates.getImagesList(prodId)
                val weaveIds=WeaveTypesPredicates.getWeaveList(prodId)
                val careIds=ProductCaresPredicates.getCareList(prodId)
                val relatedEntry=RelateProductPredicates.getRelatedProductOfProduct(prodId)
-                Log.e("Offline","imageList :"+imageEntry?.joinToString ())
+               Log.e("Offline","imageList :"+imageEntry?.joinToString ())
                var productData=createProductTemplateString(productEntry,weaveIds,careIds,relatedEntry)
-                Log.e("Offline","productData :"+productData)
-                uploadProduct(productData,imageEntry,prodId)
+               Log.e("Offline","productData :"+productData)
+               uploadProduct(productData,imageEntry,prodId)
           }
         }catch (e: Exception){
             Log.e("Offline","Exception "+e.localizedMessage)

@@ -1063,6 +1063,16 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_margin="@dimen/margin_regular"
                     android:orientation="horizontal">
+                    <ImageView
+                        android:visibility="gone"
+                        android:id="@+id/img_delete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_delete"
+                        android:drawableTint="@color/red_logo"
+                        android:fontFamily="@font/lato_regular"
+                        android:layout_marginRight="32dp"
+                        android:textColor="@color/red_logo" />
 
                     <TextView
                         android:id="@+id/txt_save_upload"

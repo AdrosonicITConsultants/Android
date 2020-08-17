@@ -67,6 +67,15 @@ const val PRODUCT_CATEGORY_ID = "productcategoryid"
 
 ///////////////////ProductTemplateParams///////////////////////
 const val PRODUCT_UPLOAD_JSON = "product_upload_json"
+const val WARP_DYE_ID = "warpDyeId"
+const val WARP_YARN_COUNT = "warpYarnCount"
+const val WARP_YARN_ID = "warpYarnId"
+const val WEFT_DYE_ID = "weftDyeId"
+const val WEFT_YARN_COUNT = "weftYarnCount"
+const val WEFT_YARN_ID = "weftYarnId"
+const val EXTRA_WEFT_DYE_ID = "extraWeftDyeId"
+const val EXTRA_WEFT_YARN_COUNT = "extraWeftYarnCount"
+const val EXTRA_WEFT_YARN_ID = "extraWeftYarnId"
 
 class UserConfig {
 
@@ -410,4 +419,59 @@ class UserConfig {
             Prefs.putString(IMAGE_URL, value)
             field = value
         }
+    var warpDyeId : Long? = 0
+        get() = Prefs.getLong(WARP_DYE_ID,0)
+        set(value) {
+            Prefs.putLong(WARP_DYE_ID, value?:0)
+            field = value
+        }
+    var warpYarnCount : String? = ""
+        get() = Prefs.getString(WARP_YARN_COUNT,"")
+        set(value) {
+            Prefs.putString(WARP_YARN_COUNT, value)
+            field = value
+        }
+    var warpYarnId : Long? = 0
+        get() = Prefs.getLong(WARP_YARN_ID,0)
+        set(value) {
+            Prefs.putLong(WARP_YARN_ID, value?:0)
+            field = value
+        }
+    var weftDyeId : Long? = 0
+        get() = Prefs.getLong(WEFT_DYE_ID,0)
+        set(value) {
+            Prefs.putLong(WEFT_DYE_ID, value?:0)
+            field = value
+        }
+    var weftYarnCount : String? = ""
+        get() = Prefs.getString(WEFT_YARN_COUNT,"")
+        set(value) {
+            Prefs.putString(WEFT_YARN_COUNT, value)
+            field = value
+        }
+    var weftYarnId : Long? = 0
+        get() = Prefs.getLong(WEFT_YARN_ID,0)
+        set(value) {
+            Prefs.putLong(WEFT_YARN_ID, value?:0)
+            field = value
+        }
+    var extraWeftDyeId : Long? = 0
+        get() = Prefs.getLong(EXTRA_WEFT_DYE_ID,0)
+        set(value) {
+            Prefs.putLong(EXTRA_WEFT_DYE_ID, value?:0)
+            field = value
+        }
+    var extraWeftYarnCount : String? = ""
+        get() = Prefs.getString(EXTRA_WEFT_YARN_COUNT,"")
+        set(value) {
+            Prefs.putString(EXTRA_WEFT_YARN_COUNT, value)
+            field = value
+        }
+    var extraWeftYarnId :Long?=0
+        get() = Prefs.getLong(EXTRA_WEFT_YARN_ID,0)
+        set(value) {
+            Prefs.putLong(EXTRA_WEFT_YARN_ID, value?:0)
+            field = value
+        }
 }
+

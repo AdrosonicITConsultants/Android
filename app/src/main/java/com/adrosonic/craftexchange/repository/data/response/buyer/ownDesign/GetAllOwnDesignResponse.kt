@@ -38,8 +38,8 @@ data class OwnDesigns (
 )
 data class ProductWeaf (
     val id: Long,
-    val productID: Long,
-    val weaveID: Long
+    val productId: Long,
+    val weaveId: Long
 )
 
 //data class Dye (

@@ -28,4 +28,8 @@
 	<dimen name="product_availability_text">7.2sp</dimen>
 	<dimen name="cat_prod_image_width">66dp</dimen>
 	<dimen name="expandable_layout_std_padding">8dp</dimen>
+	<dimen name="edit_image_padding">24dp</dimen>
+	<dimen name="img_editable_hieght">240dp</dimen>
+	<dimen name="img_editable_options_hieght">40dp</dimen>
+
 </resources>

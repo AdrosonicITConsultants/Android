@@ -274,5 +274,6 @@
     -->
     <string name="hello_world">Hello Square World!</string>
     <string name="make_it_amp_take_it"><![CDATA[Make it & take it!]]></string>
+    <string name="title_activity_edit_photo">EditPhotoActivity</string>
 
 </resources>
