@@ -100,16 +100,17 @@
                 </LinearLayout>
 
                 <SeekBar
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:id="@+id/sbAdjustBrightness"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_alignParentBottom="true"
                     android:layout_margin="@dimen/edit_image_padding"
-                    android:max="255"
+                    android:max="100"
                     android:min="0"
                     android:backgroundTint="@color/lighter_gray"
                     style="@style/seekbarStyle" />
+
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

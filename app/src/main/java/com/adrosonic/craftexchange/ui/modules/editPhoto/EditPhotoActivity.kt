@@ -1,6 +1,6 @@
 package com.adrosonic.craftexchange.ui.modules.editPhoto
 
-import android.R.attr.bitmap
+import android.R.attr.src
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -67,15 +67,19 @@ class EditPhotoActivity : AppCompatActivity() {
                 else sbAdjustBrightness.visibility=View.VISIBLE
             }
 
-            sbAdjustBrightness.setProgress(125)
+//            sbAdjustBrightness.setMax(255);
+            sbAdjustBrightness.setProgress(50);
             sbAdjustBrightness.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
                 override fun onProgressChanged(seekBar: SeekBar, progress: Int,fromUser: Boolean) {
-                    var res=setBrightness(progress)
-                    imgEditable.setColorFilter(res)
+                    var res=
+                        changeBitmapContrastBrightness( (imgEditable.drawable as BitmapDrawable).bitmap, 1f, seekBar.progress.toFloat())
+//                        adjustedContrast((imgEditable.drawable as BitmapDrawable).bitmap,progress)
+                    imgEditable.setImageBitmap(res)
                 }
                 override fun onStartTrackingTouch(seekBar: SeekBar) {}
                 override fun onStopTrackingTouch(seekBar: SeekBar) {}
             })
+
         }
 
     }
@@ -99,35 +103,108 @@ class EditPhotoActivity : AppCompatActivity() {
         }
     }
 
-    fun setBrightness(progress: Int): PorterDuffColorFilter? {
-        return if (progress >= 100) {
-            val value = (progress - 100) * 255 / 100
-            PorterDuffColorFilter(Color.argb(value, 255, 255, 255), PorterDuff.Mode.SRC_OVER)
-        } else {
-            val value = (100 - progress) * 255 / 100
-            PorterDuffColorFilter(Color.argb(value, 0, 0, 0), PorterDuff.Mode.SRC_ATOP)
+    private fun adjustedContrast(src: Bitmap, value: Double): Bitmap? {
+        // image size
+        val width = src.width
+        val height = src.height
+        // create output bitmap
+
+        // create a mutable empty bitmap
+        val bmOut = Bitmap.createBitmap(width, height, src.config)
+
+        // create a canvas so that we can draw the bmOut Bitmap from source bitmap
+        val c = Canvas()
+        c.setBitmap(bmOut)
+
+        // draw bitmap to bmOut from src bitmap so we can modify it
+        c.drawBitmap(src, 0f, 0f, Paint(Color.BLACK))
+
+
+        // color information
+        var A: Int
+        var R: Int
+        var G: Int
+        var B: Int
+        var pixel: Int
+        // get contrast value
+        val contrast = Math.pow((100 + value) / 100, 2.0)
+
+        // scan through all pixels
+        for (x in 0 until width) {
+            for (y in 0 until height) {
+                // get pixel color
+                pixel = src.getPixel(x, y)
+                A = Color.alpha(pixel)
+                // apply filter contrast for every channel R, G, B
+                R = Color.red(pixel)
+                R = (((R / 255.0 - 0.5) * contrast + 0.5) * 255.0).toInt()
+                if (R < 0) {
+                    R = 0
+                } else if (R > 255) {
+                    R = 255
+                }
+                G = Color.green(pixel)
+                G = (((G / 255.0 - 0.5) * contrast + 0.5) * 255.0).toInt()
+                if (G < 0) {
+                    G = 0
+                } else if (G > 255) {
+                    G = 255
+                }
+                B = Color.blue(pixel)
+                B = (((B / 255.0 - 0.5) * contrast + 0.5) * 255.0).toInt()
+                if (B < 0) {
+                    B = 0
+                } else if (B > 255) {
+                    B = 255
+                }
+
+                // set new pixel color to output bitmap
+                bmOut.setPixel(x, y, Color.argb(A, R, G, B))
+            }
         }
+        return bmOut
     }
-    fun enhanceImage(
-        mBitmap: Bitmap,
+    fun changeBitmapContrastBrightness(
+        bmp: Bitmap,
         contrast: Float,
         brightness: Float
     ): Bitmap? {
-        val cm = ColorMatrix(floatArrayOf(
-                contrast,  0f, 0f,  0f,
-                brightness,  0f, contrast, 0f,
-                0f, brightness, 0f, 0f,
-                contrast, 0f,  brightness,0f,
-                0f,  0f, 1f, 0f)  )
-        val mEnhancedBitmap = Bitmap.createBitmap(
-            mBitmap.width, mBitmap.height, mBitmap
-                .config
+        val cm = ColorMatrix(
+            floatArrayOf(
+                contrast,
+                0f,
+                0f,
+                0f,
+                brightness,
+                0f,
+                contrast,
+                0f,
+                0f,
+                brightness,
+                0f,
+                0f,
+                contrast,
+                0f,
+                brightness,
+                0f,
+                0f,
+                0f,
+                1f,
+                0f
+            )
         )
-        imgEditable.setImageBitmap(mEnhancedBitmap)
-        updatedBitmap=mEnhancedBitmap
-//        val canvas = Canvas(mEnhancedBitmap)
-//        val paint = Paint()
-//        paint.setColorFilter(ColorMatrixColorFilter(cm))
-        return mEnhancedBitmap
+
+        var config: Bitmap.Config = bmp.getConfig()
+        if (config == null) {
+            config = Bitmap.Config.ARGB_8888
+        }
+//        val ret = Bitmap.createBitmap(src.getWidth(), src.getHeight(), config)
+
+        val ret = Bitmap.createBitmap(bmp.width, bmp.height, config)
+        val canvas = Canvas(ret)
+        val paint = Paint()
+        paint.colorFilter = ColorMatrixColorFilter(cm)
+        canvas.drawBitmap(bmp, 0f, 0f, paint)
+        return ret
     }
 }

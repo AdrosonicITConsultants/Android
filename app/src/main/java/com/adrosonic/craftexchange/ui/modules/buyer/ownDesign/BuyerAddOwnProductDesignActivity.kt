@@ -197,6 +197,7 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
 
         ///////////general details//////////////
         arrProdCategoryStr.clear()
+        arrProdCategoryStr.add("Select product category")
         arrProductCategory?.forEach { arrProdCategoryStr.add(it.productDesc) }
         val spProdCataAdapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrProdCategoryStr)
         spProdCataAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
@@ -210,11 +211,10 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
                 id: Long
             ) {
                 arrProdTypeStr?.clear()
-
+                arrProdTypeStr.add("Select product type")
                 val prodCategory = arrProdCategoryStr.get(position)
                 for (category in arrProductCategory!!) {
                     if (category.productDesc.equals(prodCategory, true)) {
-//                        prodCatId=category.id
                         arrProductType = category.productTypes
                         category.productTypes.forEach { arrProdTypeStr?.add(it.productDesc) }
                     }
@@ -243,7 +243,7 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
                         arrRelatedProdType= it.relatedProductType
                     }
                 }
-                setVisiblitiesAndTextsOnType(arrProdTypeStr.get(position),arrRelatedProdType)
+               if(position>0) setVisiblitiesAndTextsOnType(arrProdTypeStr.get(position),arrRelatedProdType)
             }
 
         }
@@ -283,7 +283,10 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
                 setDotsColor(position)
             }
         })
+
         /////////////////reed count/////////////////////
+        arrReedCountStr.clear()
+        arrReedCountStr.add("Select reed count")
         arrReedCount?.forEach { arrReedCountStr.add(it.count) }
         val spReedCountAdapter =ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrReedCountStr)
         spReedCountAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -642,8 +645,8 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
             Log.e("saveUploadProduct","relatedProduct :${mBinding?.spSubProdWidth?.selectedItem.toString() } ")
 
             if(pairList.isEmpty()) Utility.displayMessage("Please add atleast 1 product image",applicationContext)
-            else if(mBinding?.spProdCategory?.selectedItem.toString().isBlank()) Utility.displayMessage("Please select product category at step 2",applicationContext)
-            else if(mBinding?.spProdType?.selectedItem.toString().isBlank()) Utility.displayMessage("Please select product type at step 2",applicationContext)
+            else if(mBinding?.spProdCategory?.selectedItemPosition==0) Utility.displayMessage("Please select product category at step 2",applicationContext)
+            else if(mBinding?.spProdType?.selectedItemPosition==0) Utility.displayMessage("Please select product type at step 2",applicationContext)
             else if(weaveIdList.isEmpty()) Utility.displayMessage("Please select weave type at step 3",applicationContext)
             else if(warpDyeId<=0) Utility.displayMessage("Please select warp dye Id at step 4",applicationContext)
             else if(warpYarnCount.isBlank()) Utility.displayMessage("Please select warp yarn count at step 4",applicationContext)
@@ -651,6 +654,7 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
             else if(weftDyeId<=0) Utility.displayMessage("Please select weft dye Id at step 4",applicationContext)
             else if(weftYarnCount.isBlank()) Utility.displayMessage("Please select weft yarn count at step 4",applicationContext)
             else if(weftYarnId<=0) Utility.displayMessage("Please select weft yarn Id at step 4",applicationContext)
+            else if(mBinding?.spReedCount?.selectedItemPosition==0) Utility.displayMessage("Please select reed count at setp 5",applicationContext)
             else if(width.isBlank()) Utility.displayMessage("Please enter width at step 6",applicationContext)
             else if(length.isBlank()) Utility.displayMessage("Please enter length at step 6",applicationContext)
             //todo add step 6 validations for related items

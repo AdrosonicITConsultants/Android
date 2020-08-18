@@ -212,6 +212,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
 
             ///////////general details//////////////
             arrProdCategoryStr.clear()
+            arrProdCategoryStr.add("Select product category")
             arrProductCategory?.forEach { arrProdCategoryStr.add(it.productDesc) }
             val spProdCataAdapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrProdCategoryStr)
             spProdCataAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
@@ -225,21 +226,15 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                     id: Long
                 ) {
                     arrProdTypeStr?.clear()
-
+                    arrProdTypeStr.add("Select product type")
                     val prodCategory = arrProdCategoryStr.get(position)
                     for (category in arrProductCategory!!) {
                         if (category.productDesc.equals(prodCategory, true)) {
-//                        prodCatId=category.id
                             arrProductType = category.productTypes
                             category.productTypes.forEach { arrProdTypeStr?.add(it.productDesc) }
                         }
                     }
-
-                    val spProdTypeAdapter = ArrayAdapter<String>(
-                        applicationContext,
-                        android.R.layout.simple_spinner_item,
-                        arrProdTypeStr
-                    )
+                    val spProdTypeAdapter = ArrayAdapter<String>( applicationContext,  android.R.layout.simple_spinner_item,  arrProdTypeStr)
                     spProdTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     sp_prod_type.setAdapter(spProdTypeAdapter)
                     setStatusResource()
@@ -262,7 +257,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                             arrRelatedProdType = it.relatedProductType
                         }
                     }
-                    setVisiblitiesAndTextsOnType(arrProdTypeStr.get(position), arrRelatedProdType)
+                    if(position>0) setVisiblitiesAndTextsOnType(arrProdTypeStr.get(position), arrRelatedProdType)
                     setStatusResource()
                 }
 
@@ -304,6 +299,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
             })
 
             /////////////////reed count/////////////////////
+            arrReedCountStr.add("Select reed count")
             arrReedCount?.forEach { arrReedCountStr.add(it.count) }
             val spReedCountAdapter =ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrReedCountStr)
             spReedCountAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -316,18 +312,11 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                 position: Int,
                 id: Long
             ) {
-                             setStatusResource()
-            }
-            }
+                setStatusResource()
+            }}
             //////////////////////////////care//////////////////
             arrProductCare?.forEach {
-                careSelctionList.add(
-                    Triple(
-                        it.productCareDesc ?: "",
-                        false,
-                        it.id
-                    )
-                )
+                careSelctionList.add(Triple(it.productCareDesc ?: "",false, it.id ))
             }
             wash_care_recycler_list.layoutManager = LinearLayoutManager(this)
             careSelectionAdapter = CareInstructionsSelectionAdapter(this, careSelctionList)
@@ -356,9 +345,22 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
             et_prod_name.setText(productEntry?.productTag?:"", TextView.BufferType.EDITABLE)
             et_prod_code.setText(productEntry?.productCode?:"", TextView.BufferType.EDITABLE)
             sp_prod_category.setSelection(arrProdCategoryStr.indexOf(productEntry?.productCategoryDesc?:""))
+            arrProductCategory?.forEach {
+                if(it.productDesc.equals(productEntry?.productCategoryDesc)){
+                    arrProdTypeStr.clear()
+                    arrProdTypeStr.add("Select product type")
+                    it.productTypes?.forEach { arrProdTypeStr.add(it.productDesc) }
+                }
+            }
+            Log.e("Offline", "activity arrProdTypeStr :" +arrProdTypeStr?.size)
+            Log.e("Offline", "activity productTypeDesc :" +productEntry?.productTypeDesc?:"")
+            Log.e("Offline", "activity idex :" +arrProdTypeStr.indexOf(productEntry?.productTypeDesc?:""))
+//            val spProdTypeAdapter = ArrayAdapter<String>( applicationContext,  android.R.layout.simple_spinner_item,  arrProdTypeStr)
+//            spProdTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//            sp_prod_type.setAdapter(spProdTypeAdapter)
             sp_prod_type.setSelection(arrProdTypeStr.indexOf(productEntry?.productTypeDesc?:""))
 
-            Log.e("Offline", "activity productTypeDesc :" +productEntry?.productTypeDesc?:"")
+
 
             for (category in arrProductCategory!!) {
                 if (category.productDesc.equals(productEntry?.productCategoryDesc?:"", true)) {
@@ -711,7 +713,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
             txt_related_prod_type.visibility = View.GONE
             ll_sub_prod.visibility = View.GONE
         }
-
+        setStatusResource()
     }
 
     fun setproductAvailability(productAvalability: Boolean) {
@@ -781,12 +783,8 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                 "Please enter product code at step 2",
                 applicationContext
             )
-            else if (sp_prod_category.selectedItem.toString()
-                    .isBlank()
-            ) Utility.displayMessage("Please select product category at step 2", applicationContext)
-            else if (sp_prod_type.selectedItem.toString()
-                    .isBlank()
-            ) Utility.displayMessage("Please select product type at step 2", applicationContext)
+            else if (sp_prod_category.selectedItemPosition==0) Utility.displayMessage("Please select product category at step 2", applicationContext)
+            else if (sp_prod_type.selectedItemPosition==0) Utility.displayMessage("Please select product type at step 2", applicationContext)
             else if (weaveIdList.isEmpty()) Utility.displayMessage(
                 "Please select weave type at step 3",
                 applicationContext
@@ -815,9 +813,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                 "Please select weft yarn Id at step 4",
                 applicationContext
             )
-            else if (sp_reed_count.selectedItem.toString()
-                    .isBlank()
-            ) Utility.displayMessage("Please select reed count at step 5", applicationContext)
+            else if (sp_reed_count.selectedItemPosition==0) Utility.displayMessage("Please select reed count at step 5", applicationContext)
             else if (width.isBlank()) Utility.displayMessage(
                 "Please enter width at step 6",
                 applicationContext
@@ -1008,7 +1004,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
         if(pairList.size>0)Utility.setImageResource(applicationContext, img_status_step1, R.drawable.ic_add_prod_status_filled)
         else Utility.setImageResource(applicationContext, img_status_step1, R.drawable.ic_add_prod_status)
 
-        if(mBinding?.etProdName?.text!!.isNotEmpty() && mBinding?.etProdCode?.text!!.isNotEmpty()) Utility.setImageResource(applicationContext, img_status_step2, R.drawable.ic_add_prod_status_filled)
+        if(et_prod_name?.text!!.isNotBlank() && et_prod_code.text!!.isNotBlank() && sp_prod_category.selectedItemPosition!=0 && sp_prod_type.selectedItemPosition!=0) Utility.setImageResource(applicationContext, img_status_step2, R.drawable.ic_add_prod_status_filled)
         else Utility.setImageResource(applicationContext,img_status_step2, R.drawable.ic_add_prod_status)
 
         if(weaveIdList.size>0)Utility.setImageResource(applicationContext, img_status_step3, R.drawable.ic_add_prod_status_filled)
