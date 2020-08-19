@@ -592,10 +592,10 @@ class ProductPredicates {
                                         }
                                         var exprod = it.createObject(ArtisanProducts::class.java, nextID)
                                         exprod.artisanId = brandProduct?.artitionId
-//                                    exprod.artisanName = brandProduct?.artistName
-//                                    exprod.clusterId = brandProduct?.clusterId
+                                        exprod.artisanName = brandProduct?.artistName
+                                        exprod.clusterId = brandProduct?.clusterId
                                         exprod.clusterName = brandProduct?.clusterName
-//                                    exprod.brandName = brandProduct?.brand
+                                        exprod.brandName = brandProduct?.brand
 
                                         exprod.productId = brandProduct?.id
                                         exprod.productCode = brandProduct?.code
@@ -651,17 +651,17 @@ class ProductPredicates {
 
                                         exprod.createdOn = brandProduct?.created_on
                                         exprod.modifiedOn = brandProduct?.modified_on
-//                                    exprod.madeWithAntaran = brandProduct?.madeWithAnthran
+                                        exprod.madeWithAntaran = brandProduct?.madeWithAnthran
                                         exprod.isDeleted = brandProduct?.isDeleted
 
                                         realm.copyToRealmOrUpdate(exprod)
                                     }else{
                                         nextID = productObj._id ?: 0
                                         productObj.artisanId = brandProduct?.artitionId
-//                                    exprod.artisanName = brandProduct?.artistName
-//                                    exprod.clusterId = brandProduct?.clusterId
+                                        productObj.artisanName = brandProduct?.artistName
+                                        productObj.clusterId = brandProduct?.clusterId
                                         productObj.clusterName = brandProduct?.clusterName
-//                                    exprod.brandName = brandProduct?.brand
+                                        productObj.brandName = brandProduct?.brand
 
                                         productObj.productId = brandProduct?.id
                                         productObj.productCode = brandProduct?.code
@@ -717,7 +717,7 @@ class ProductPredicates {
 
                                         productObj.createdOn = brandProduct?.created_on
                                         productObj.modifiedOn = brandProduct?.modified_on
-//                                    exprod.madeWithAntaran = brandProduct?.madeWithAnthran
+                                        productObj.madeWithAntaran = brandProduct?.madeWithAnthran
                                         productObj.isDeleted = brandProduct?.isDeleted
 
                                         realm.copyToRealmOrUpdate(productObj)
@@ -1127,7 +1127,8 @@ class ProductPredicates {
                 Log.e("ArtisanProdLog","${product.weaveIds?.joinToString()}")
                 Log.e("ArtisanProdLog","${product.careIds?.joinToString()}")
                 Log.e("ArtisanProdLog","${imageList?.joinToString()}")
-                if(relatedProdList.size>0)RelateProductPredicates.insertRelatedProduct(nextID,relatedProdList.get(0).productTypeID,relatedProdList.get(0).width,relatedProdList.get(0).length)
+                if(relatedProdList.size>0)RelateProductPredicates.insertRelatedProduct(nextID,
+                    relatedProdList[0].productTypeID, relatedProdList[0].width, relatedProdList[0].length)
                 ProductImagePredicates.insertProductImages(nextID,imageList)
                 if(product.weaveIds!=null)WeaveTypesPredicates.insertWeaveIds(nextID,product.weaveIds)
                 ProductCaresPredicates.insertCareIds(nextID,product.careIds)

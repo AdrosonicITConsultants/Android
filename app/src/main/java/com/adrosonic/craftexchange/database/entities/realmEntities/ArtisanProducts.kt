@@ -11,10 +11,10 @@ open class ArtisanProducts : RealmObject() {
     //details of brand
     var artisanId: Long? = 0
 
-    //    var artisanName : String ?= ""
-//    var clusterId : Long ?= 0
+    var artisanName : String ?= ""
+    var clusterId : Long ?= 0
     var clusterName: String? = ""
-//    var brandName : String ?= ""
+    var brandName : String ?= ""
 
     //product main
     var productId: Long? = 0
@@ -91,7 +91,7 @@ open class ArtisanProducts : RealmObject() {
     var createdOn: String? = ""
     var modifiedOn: String? = ""
 
-    //    var madeWithAntaran : Long ?= 0
+    var madeWithAntaran : Long ?= 0
     var isDeleted: Long? = 0
 
     ////////////offline manager////////////////

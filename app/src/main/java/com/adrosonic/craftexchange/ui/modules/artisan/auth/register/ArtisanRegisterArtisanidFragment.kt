@@ -72,13 +72,13 @@ class ArtisanRegisterArtisanidFragment : Fragment() {
                                         ?.commit()
                                 }
                             } else{
-                                Toast.makeText(activity,"${response.body()?.errorMessage}", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireActivity(),"${response.body()?.errorMessage}", Toast.LENGTH_SHORT).show()
                             }
                         }
 
                         override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
                             t.printStackTrace()
-                            Toast.makeText(activity,"${t.printStackTrace()}", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireActivity(),"${t.printStackTrace()}", Toast.LENGTH_SHORT).show()
                         }
                     })
             }else{ mBinding?.textBoxArtisanId?.nonEmpty{ mBinding?.textBoxArtisanId?.error = it } }

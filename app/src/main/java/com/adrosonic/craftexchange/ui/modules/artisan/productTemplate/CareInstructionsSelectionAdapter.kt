@@ -37,7 +37,7 @@ class CareInstructionsSelectionAdapter(
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
-        var item = pairList.get(position)
+        var item = pairList[position]
         holder.txtDscrp.text = item.first
 
         if (item.second) {

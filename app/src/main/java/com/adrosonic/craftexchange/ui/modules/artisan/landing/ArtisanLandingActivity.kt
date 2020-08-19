@@ -26,6 +26,7 @@ import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
 import com.adrosonic.craftexchange.databinding.ActivityArtisanLandingBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.ui.modules.artisan.profile.artisanProfileIntent
+import com.adrosonic.craftexchange.ui.modules.artisan.search.searchArtisanIntent
 import com.adrosonic.craftexchange.viewModels.LandingViewModel
 import com.adrosonic.craftexchange.ui.modules.role.roleselectIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
@@ -166,6 +167,9 @@ class ArtisanLandingActivity : AppCompatActivity(),
                 drawer_layout.openDrawer(GravityCompat.START)
                 return true
             }
+            R.id.action_search -> {
+                startActivity(searchArtisanIntent())
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -174,10 +178,13 @@ class ArtisanLandingActivity : AppCompatActivity(),
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.tool_menu, menu)
         // Associate searchable configuration with the SearchView
-        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        (menu.findItem(R.id.action_search).actionView as SearchView).apply {
-            setSearchableInfo(searchManager.getSearchableInfo(componentName))
-        }
+//        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+////        (menu.findItem(R.id.action_search).actionView as SearchView).apply {
+////            setSearchableInfo(searchManager.getSearchableInfo(componentName))
+////        }
+//        (menu.findItem(R.id.action_search)).setOnMenuItemClickListener {
+//
+//        }
         return true
     }
 

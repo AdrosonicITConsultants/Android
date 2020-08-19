@@ -249,6 +249,10 @@
     <string name="view_enquiry">View Enquiry</string>
     <string name="make_it_amp_take_it"><![CDATA[Make it & take it!]]></string>
     <string name="search_hint">Search products, codes, product types, weaves</string>
+    <string name="empty_suggestion_text">No suggestions for this keyword. Try searching \"saree\",\"fabric\",\"ikat\".</string>
+    <string name="filter_items_collection">Filter item\nby collection</string>
+    <string name="show_both">Show both</string>
+    <string name="collapse">Collapse</string>
 
     <string-array name="product_array">
         <item>@string/saree</item>

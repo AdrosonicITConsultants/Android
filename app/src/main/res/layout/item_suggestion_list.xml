@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/suggestion_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
+    android:paddingBottom="@dimen/margin_regular"
+    android:paddingTop="8dp"
+    android:background="@drawable/custom_ripple"
+    android:textSize="@dimen/product_description_text"
+    android:fontFamily="@font/lato_regular">
+</TextView>

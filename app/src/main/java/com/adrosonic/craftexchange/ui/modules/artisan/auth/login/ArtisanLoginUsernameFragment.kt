@@ -72,7 +72,7 @@ class ArtisanLoginUsernameFragment : Fragment() {
         val clickableSpan: ClickableSpan = object : ClickableSpan() {
             override fun onClick(textView: View) {
                 startActivity(
-                    Intent(activity, RegisterActivity::class.java).putExtra(
+                    Intent(requireActivity(), RegisterActivity::class.java).putExtra(
                         "profile",
                         profile
                     )
@@ -101,7 +101,7 @@ class ArtisanLoginUsernameFragment : Fragment() {
                     .enqueue(object : Callback, retrofit2.Callback<LoginValidationResponse> {
                         override fun onFailure(call: Call<LoginValidationResponse>, t: Throwable) {
                             t.printStackTrace()
-                            Toast.makeText(activity,"${t.printStackTrace()}",Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireActivity(),"${t.printStackTrace()}",Toast.LENGTH_SHORT).show()
                         }
                         override fun onResponse(
                             call: Call<LoginValidationResponse>,
@@ -123,7 +123,7 @@ class ArtisanLoginUsernameFragment : Fragment() {
                                         ?.commit()
                                 }
                             } else {
-                                Toast.makeText(activity, response.body()?.errorMessage, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireActivity(), response.body()?.errorMessage, Toast.LENGTH_SHORT).show()
                             }
                         }
 

@@ -299,7 +299,7 @@ class Utility {
         }
         fun setImageResource(context: Context?,imageView:ImageView,imageId:Int){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                imageView.setImageDrawable(context?.getResources()?.getDrawable(imageId, context?.getTheme()));
+                imageView.setImageDrawable(context?.resources?.getDrawable(imageId, context?.theme));
             } else {
                 imageView.setImageDrawable(context?.getDrawable(imageId));
             }

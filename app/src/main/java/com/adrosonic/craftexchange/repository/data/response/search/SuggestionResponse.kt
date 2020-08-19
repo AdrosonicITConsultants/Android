@@ -2,13 +2,13 @@ package com.adrosonic.craftexchange.repository.data.response.search
 
 
 data class SuggestionResponse (
-    val data: List<Data>,
+    val data: List<SuggData>,
     val valid: Boolean,
     val errorMessage: String,
     val errorCode: Long
 )
 
-data class Data (
+data class SuggData (
     val suggestion: String,
     val suggestionTypeId: Long,
     val suggestionType: String,

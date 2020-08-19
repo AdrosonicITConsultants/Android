@@ -46,10 +46,14 @@ data class Product (
     val relProduct: List<Product>,
     val productImages: List<ProductImage>,
     val artitionId: Long,
+    val clusterId: Long,
     val isDeleted: Long,
     val productCategoryDesc: String,
     val productTypeDesc: String,
-    val clusterName: String
+    val clusterName: String,
+    val artistName: String?,
+    val brand: String?,
+    val madeWithAnthran: Long?
 )
 
 data class ProductCare (
