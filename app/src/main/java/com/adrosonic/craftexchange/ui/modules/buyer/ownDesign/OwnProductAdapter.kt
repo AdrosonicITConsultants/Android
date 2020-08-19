@@ -90,7 +90,7 @@ class OwnProductAdapter(
             listener?.onDeleted(product?.id?:0)
         }
         holder.itemView.setOnClickListener {
-            val intent = Intent(context?.ownDesignIntent())
+            val intent = Intent(context?.ownDesignIntent(product?.id?:0))
             val bundle = Bundle()
             bundle.putString(ConstantsDirectory.PRODUCT_ID, product?.id?.toString())
             intent.putExtras(bundle)

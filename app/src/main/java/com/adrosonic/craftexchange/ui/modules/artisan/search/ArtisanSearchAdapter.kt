@@ -4,6 +4,7 @@ import android.content.Context
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -13,6 +14,7 @@ import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.ArtisanProducts
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.databinding.ItemArtisanProductBinding
+import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.addProductIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
@@ -73,6 +75,22 @@ class ArtisanSearchAdapter(var context: Context?, private var artisanProducts: R
                 }?.let { holder.binding.availabilityText.setTextColor(it) }
             }
         }
+
+        holder.binding.productTitle.setOnClickListener {
+            Log.e("Offline", "adpter prodId :" + product?.productId)
+            context?.startActivity(context?.addProductIntent(product?.productId?:0))
+        }
+
+        holder.binding.productDescription.setOnClickListener {
+            Log.e("Offline", "adpter prodId :" + product?.productId)
+            context?.startActivity(context?.addProductIntent(product?.productId?:0))
+        }
+
+        holder.binding.productImage.setOnClickListener {
+            Log.e("Offline", "adpter prodId :" + product?.productId)
+            context?.startActivity(context?.addProductIntent(product?.productId?:0))
+        }
+
 
         var image = ProductPredicates.getProductDisplayImage(product?.productId)
         var url = Utility.getProductsImagesUrl(product?.productId,image?.imageName)

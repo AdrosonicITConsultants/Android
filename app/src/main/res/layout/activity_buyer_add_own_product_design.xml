@@ -536,8 +536,8 @@
                             android:layout_width="0dp"
                             android:layout_height="40dp"
                             android:layout_weight="4"
-                            android:fontFamily="@font/lato_regular"
                             android:background="@drawable/rectangle_edittext_bg"
+                            android:fontFamily="@font/lato_regular"
                             android:hint="Length"
                             android:visibility="gone"
                             tools:layout_editor_absoluteX="8dp"
@@ -566,8 +566,8 @@
                             android:layout_width="0dp"
                             android:layout_height="40dp"
                             android:layout_weight="4"
-                            android:fontFamily="@font/lato_regular"
                             android:background="@drawable/rectangle_edittext_bg"
+                            android:fontFamily="@font/lato_regular"
                             android:hint="Width"
                             android:visibility="gone"
                             tools:layout_editor_absoluteX="8dp"
@@ -646,11 +646,11 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:visibility="gone"
                     android:id="@+id/parent_step7"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:visibility="gone">
 
                     <ImageView
                         android:id="@+id/img_status_step10"
@@ -700,10 +700,10 @@
                         android:layout_marginStart="@dimen/fab_margin"
                         android:layout_marginEnd="@dimen/fab_margin"
                         android:layout_marginBottom="16dp"
-                        android:fontFamily="@font/lato_regular"
                         android:background="@drawable/rectangle_edittext_bg"
-                        android:maxLength="10"
-                        android:hint="@string/enter_gsm_value" />
+                        android:fontFamily="@font/lato_regular"
+                        android:hint="@string/enter_gsm_value"
+                        android:maxLength="10" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -766,9 +766,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/rectangle_edittext_bg"
+                        android:fontFamily="@font/lato_regular"
                         android:gravity="top|left"
                         android:hint="@string/describe_your_product"
-                        android:fontFamily="@font/lato_regular"
                         android:inputType="textMultiLine"
                         android:lines="4"
                         android:maxLength="500"

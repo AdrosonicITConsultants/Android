@@ -290,5 +290,6 @@
     <string name="filter_items_collection">Filter items\nby collection</string>
     <string name="show_both">Show both</string>
     <string name="collapse">Collapse</string>
+    <string name="title_activity_edit_photo">EditPhotoActivity</string>
 
 </resources>

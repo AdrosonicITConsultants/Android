@@ -19,44 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.daimajia.swipe.SwipeLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:swipe="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/swipe"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            swipe:leftEdgeSwipeOffset="0dp"
-            swipe:rightEdgeSwipeOffset="0dp">
-
-            <LinearLayout
-                android:id="@+id/right_swipe"
-                android:layout_width="70dp"
-                android:layout_height="100dp"
-                android:orientation="vertical"
-                android:background="@color/swipe_background"
-                android:weightSum="2">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="10dp"
-                    android:layout_weight="1"
-                    android:layout_marginTop="8dp"
-                    android:src="@drawable/ic_icon_feather_edit"
-                    android:layout_gravity="center|bottom"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/view_edit"
-                    android:textColor="@color/white_text"
-                    android:textAlignment="center"
-                    android:fontFamily="@font/lato_regular"
-                    android:layout_gravity="center|bottom"/>
-
-            </LinearLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/container_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -124,7 +87,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/design_icon" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.daimajia.swipe.SwipeLayout>
+
     </androidx.cardview.widget.CardView>
 
 </layout>

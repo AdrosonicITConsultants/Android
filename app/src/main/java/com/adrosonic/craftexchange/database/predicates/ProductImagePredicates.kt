@@ -2,10 +2,7 @@ package com.adrosonic.craftexchange.database.predicates
 
 import android.util.Log
 import com.adrosonic.craftexchange.database.CXRealmManager
-import com.adrosonic.craftexchange.database.entities.realmEntities.BuyerCustomProduct
 import com.adrosonic.craftexchange.database.entities.realmEntities.ProductImages
-import com.adrosonic.craftexchange.database.entities.realmEntities.ProductImages.Companion.COLUMN_PRODUCT_ID
-import com.adrosonic.craftexchange.database.entities.realmEntities.RelatedProducts
 import com.adrosonic.craftexchange.repository.data.response.buyer.ownDesign.ProductImage
 import java.lang.Exception
 
@@ -13,6 +10,7 @@ class ProductImagePredicates
 {
     companion object {
         private var nextID: Long? = 0
+
         fun insertProductImages(productId: Long?,imageList:ArrayList<String>): Long? {
             val realm = CXRealmManager.getRealmInstance()
             try {
@@ -61,7 +59,6 @@ class ProductImagePredicates
         }
 
         fun deleteProdImages(id:Long){
-            var count=0
             val realm = CXRealmManager.getRealmInstance()
             realm?.executeTransaction {
                 val artisonProd = it.where(ProductImages::class.java).equalTo("productId", id).findAll()
@@ -70,10 +67,19 @@ class ProductImagePredicates
 
         }
 
+        fun deleteProdImageForUpdate(id:Long){
+            val realm = CXRealmManager.getRealmInstance()
+            realm?.executeTransaction {
+                Log.e("Offline", "deleteProdImageForUpdate id:" + id)
+                val artisonProd = it.where(ProductImages::class.java).equalTo(ProductImages.COLUMN_PRODUCT_ID, id).findAll()
+                Log.e("Offline", "deleteProdImageForUpdate size : ${artisonProd.size}")
+                artisonProd.deleteAllFromRealm()
+            }
+
+        }
         fun insertBuyerCustomProdImages(imageList:ArrayList<ProductImage>){
             val realm = CXRealmManager.getRealmInstance()
             try {
-
                 realm?.executeTransaction {
                     val imageIterator = imageList.iterator()
                     Log.e("insertProductImages", "imagelist : ${imageList.size}")

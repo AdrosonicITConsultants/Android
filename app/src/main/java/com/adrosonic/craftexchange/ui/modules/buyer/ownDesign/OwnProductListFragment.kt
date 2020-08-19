@@ -101,13 +101,21 @@ class OwnProductListFragment : Fragment(),
 
     }
 
-
+    override fun onResume() {
+        super.onResume()
+        if (!Utility.checkIfInternetConnected(requireContext())) {
+            Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
+            mViewModel?.getCustomDesignListMutableData()
+        } else {
+            mViewModel.getCustomProducts()
+        }
+    }
 
     override fun onSuccess() {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("Wishlist", "Onsucces")
-                swipe_refresh_layout.isRefreshing = false
+                swipe_refresh_layout?.isRefreshing = false
                 mViewModel?.getCustomDesignListMutableData()
                 setVisiblities()
             }

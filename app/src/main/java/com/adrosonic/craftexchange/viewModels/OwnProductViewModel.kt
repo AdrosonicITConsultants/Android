@@ -28,7 +28,7 @@ class OwnProductViewModel : ViewModel() {
     }
     fun loadCustomDesignListData(): RealmResults<BuyerCustomProduct> {
         var customProducts= BuyerCustomProductPredicates.getCustomProductData()
-        Log.e("CustomDesign","loadwishListData :"+customProducts?.size)
+//        Log.e("CustomDesign","loadwishListData :"+customProducts?.size)
         return customProducts!!
     }
 
@@ -48,7 +48,7 @@ class OwnProductViewModel : ViewModel() {
                     response: retrofit2.Response<GetAllOwnDesignResponse>) {
 
                     if(response.body()?.valid == true){
-                        Log.e("OwnProduct","wishlist :"+response.body()?.data?.size)
+                        Log.e("OwnProduct","ownProduct size :"+response.body()?.data?.size)
                         BuyerCustomProductPredicates.deleteAllOwnProducts()
                         response.body()?.data?.let {
                             BuyerCustomProductPredicates.insertCustomProductsProduct(response.body()?.data!!)

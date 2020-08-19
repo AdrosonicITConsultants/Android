@@ -3,6 +3,7 @@ package com.adrosonic.craftexchange.repository.remote
 import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.ArtisanProductTemplateRespons
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.ArtisanProductDetailsResponse
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.ProductUploadData
+import com.adrosonic.craftexchange.repository.data.response.buyer.ownDesign.DeleteOwnProductRespons
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.AllProductsResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.BrandListResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.singleProduct.SingleProductDetails
@@ -50,7 +51,7 @@ interface ProductDao {
     @GET("product/getArtitionProducts")
     fun getArtisanProducts(@Header("Authorization") token: String): Call<ArtisanProductDetailsResponse>
 
-    //////////////////////////////////////////add product template artisan///////////////////////////////////////////////////
+    //////////////////////////////////////////product template artisan///////////////////////////////////////////////////
     @Headers("Accept: application/json")
     @GET("product/getProductUploadData")
     fun getProductUploadData(@Header("Authorization") token: String): Call<ProductUploadData>
@@ -65,4 +66,20 @@ interface ProductDao {
         @Body file: MultipartBody
     ): Call<ArtisanProductTemplateRespons>
 
+    @Headers("Accept: application/json")
+    @PUT("/product/edit/product")
+    fun updateProductTemplate(
+        @Header("Authorization") token: String,
+        @Header("Content-Type") headerValue:String,
+        @Header("Content-Length") length: Long,
+        @Query("productData") productData: String,
+        @Body file: MultipartBody
+    ): Call<ArtisanProductTemplateRespons>
+
+    @Headers("Accept: application/json")
+    @DELETE("/product/deleteProduct/{productId}")
+    fun deleteProductsTemplate(
+        @Header("Authorization") token: String,
+        @Path("productId") productId: Int
+    ): Call<DeleteOwnProductRespons>
   }

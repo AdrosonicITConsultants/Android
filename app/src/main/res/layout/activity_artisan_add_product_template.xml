@@ -204,8 +204,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/expandable_layout_std_padding"
-                        android:fontFamily="@font/lato_regular"
                         android:background="@drawable/rectangle_edittext_bg"
+                        android:fontFamily="@font/lato_regular"
                         android:hint="Product code(Eg. NAG09_89)"
                         android:maxLength="20"
                         android:maxLines="1"
@@ -370,7 +370,8 @@
                     <androidx.viewpager.widget.ViewPager
                         android:id="@+id/yarn_pager"
                         android:layout_width="match_parent"
-                        android:layout_height="220dp" />
+                        android:layout_height="220dp"
+                        android:visibility="visible" />
 
                     <LinearLayout
                         android:id="@+id/slider_dots"
@@ -559,8 +560,8 @@
                             android:layout_width="0dp"
                             android:layout_height="40dp"
                             android:layout_weight="4"
-                            android:fontFamily="@font/lato_regular"
                             android:background="@drawable/rectangle_edittext_bg"
+                            android:fontFamily="@font/lato_regular"
                             android:hint="Length"
                             android:visibility="gone"
                             tools:layout_editor_absoluteX="8dp"
@@ -589,8 +590,8 @@
                             android:layout_width="0dp"
                             android:layout_height="40dp"
                             android:layout_weight="4"
-                            android:fontFamily="@font/lato_regular"
                             android:background="@drawable/rectangle_edittext_bg"
+                            android:fontFamily="@font/lato_regular"
                             android:hint="Width"
                             android:visibility="gone"
                             tools:layout_editor_absoluteX="8dp"
@@ -892,8 +893,8 @@
                         android:layout_marginStart="@dimen/fab_margin"
                         android:layout_marginEnd="@dimen/fab_margin"
                         android:layout_marginBottom="16dp"
-                        android:fontFamily="@font/lato_regular"
                         android:background="@drawable/rectangle_edittext_bg"
+                        android:fontFamily="@font/lato_regular"
                         android:hint="@string/weight_10_characters"
                         android:maxLength="10" />
 
@@ -903,8 +904,8 @@
                         android:layout_marginStart="@dimen/fab_margin"
                         android:layout_marginEnd="@dimen/fab_margin"
                         android:layout_marginBottom="16dp"
-                        android:fontFamily="@font/lato_regular"
                         android:background="@drawable/rectangle_edittext_bg"
+                        android:fontFamily="@font/lato_regular"
                         android:hint="@string/weight_10_characters"
                         android:visibility="gone" />
 
@@ -978,10 +979,10 @@
                         android:layout_marginStart="@dimen/fab_margin"
                         android:layout_marginEnd="@dimen/fab_margin"
                         android:layout_marginBottom="16dp"
-                        android:fontFamily="@font/lato_regular"
                         android:background="@drawable/rectangle_edittext_bg"
-                        android:maxLength="10"
-                        android:hint="@string/enter_gsm_value" />
+                        android:fontFamily="@font/lato_regular"
+                        android:hint="@string/enter_gsm_value"
+                        android:maxLength="10" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -1044,9 +1045,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/rectangle_edittext_bg"
+                        android:fontFamily="@font/lato_regular"
                         android:gravity="top|left"
                         android:hint="@string/describe_your_product"
-                        android:fontFamily="@font/lato_regular"
                         android:inputType="textMultiLine"
                         android:lines="4"
                         android:maxLength="500"
@@ -1063,6 +1064,17 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_margin="@dimen/margin_regular"
                     android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/img_delete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="32dp"
+                        android:drawableTint="@color/red_logo"
+                        android:fontFamily="@font/lato_regular"
+                        android:src="@drawable/ic_delete"
+                        android:textColor="@color/red_logo"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/txt_save_upload"

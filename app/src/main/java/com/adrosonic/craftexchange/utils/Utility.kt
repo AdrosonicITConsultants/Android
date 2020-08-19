@@ -2,12 +2,14 @@ package com.adrosonic.craftexchange.utils
 
 import android.Manifest
 import android.R
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.Application
 import android.app.Dialog
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.graphics.Bitmap
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.AsyncTask
@@ -34,7 +36,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.*
-import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
 
@@ -168,6 +169,31 @@ class Utility {
             }
         }
 
+        fun overrideFileFromUri(context: Context, bitmap: Bitmap, filename:String) {
+            var filePath = ""
+            if (!File(context.cacheDir, BROWSING_IMGS).exists()) File(context.cacheDir, BROWSING_IMGS).mkdir()
+            val pictureFile = File(context.cacheDir, BROWSING_IMGS + "/" + filename)
+            Log.e("overrideFileFromUri","filename: $filename")
+            if (pictureFile == null) {
+                Log.e("overrideFileFromUri","Error creating media file, check storage permissions: " ) // e.getMessage());
+                return
+            }
+            try {
+                if (pictureFile.exists())  pictureFile.delete()
+                Log.e("overrideFileFromUri","bitmap: "+bitmap.height )
+                val fos = FileOutputStream(pictureFile)
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos)
+                fos.flush()
+                fos.close()
+            } catch (e: FileNotFoundException) {
+                Log.e("overrideFileFromUri", "File not found: " + e.message)
+            } catch (e: IOException) {
+                Log.e("overrideFileFromUri", "Error accessing file: " + e.message)
+            }catch (e: Exception) {
+                Log.e("overrideFileFromUri", "Error accessing file: " + e.message)
+            }
+        }
+
         fun isValidPan(pan:String):Boolean {
             val mPattern = Pattern.compile("[A-Z]{5}[0-9]{4}[A-Z]{1}")
             val mMatcher = mPattern.matcher(pan)
@@ -297,11 +323,11 @@ class Utility {
         fun getCustomProductImagesUrl(productId : Long?,imagename : String?) : String{
             return "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/CustomProduct/${productId}/${imagename}"
         }
-        fun setImageResource(context: Context?,imageView:ImageView,imageId:Int){
+        fun setImageResource(context: Context?,imageView:ImageView?,imageId:Int){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                imageView.setImageDrawable(context?.resources?.getDrawable(imageId, context?.theme));
+                imageView?.setImageDrawable(context?.getResources()?.getDrawable(imageId, context?.getTheme()));
             } else {
-                imageView.setImageDrawable(context?.getDrawable(imageId));
+                imageView?.setImageDrawable(context?.getDrawable(imageId));
             }
         }
 
@@ -328,7 +354,9 @@ class Utility {
             if(files.isEmpty()) return Pair(true,files)
             else return Pair(false,files)
         }
-
+        fun requestPermission(activity: Activity) {
+            ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), ConstantsDirectory.PERMISSION_REQUEST_CODE)
+        }
         fun returnDisplayDate(date:String):String{
             var dt=date.substring(0,10)//2020-08-07T10:25:02.000+0000
             return dt
@@ -345,6 +373,17 @@ class Utility {
 //                    return ""
 //                }
 //            } else ""
+        }
+        fun resetYarnData() {
+            UserConfig.shared.warpDyeId=0
+            UserConfig.shared.warpYarnCount=""
+            UserConfig.shared.warpYarnId=0
+            UserConfig.shared.weftDyeId=0
+            UserConfig.shared.weftYarnCount=""
+            UserConfig.shared.weftYarnId=0
+            UserConfig.shared.extraWeftDyeId=0
+            UserConfig.shared.extraWeftYarnCount=""
+            UserConfig.shared.extraWeftYarnId=0
         }
     }
 }
