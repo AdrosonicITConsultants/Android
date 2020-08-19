@@ -95,15 +95,21 @@ class ArtisanSearchResultsFragment : Fragment(),
         mBinding?.filterByCollection?.setOnClickListener {
             if (mBinding?.collectionFilterWindow?.visibility == View.GONE) {
                 mBinding?.collectionFilterWindow?.visibility = View.VISIBLE
+                mBinding?.collapseBtn?.visibility = View.VISIBLE
+                mBinding?.filterRecycler?.visibility = View.VISIBLE
                 mBinding?.collectionFilterWindow?.animation = slideDown
             } else {
                 mBinding?.collectionFilterWindow?.visibility = View.GONE
+                mBinding?.collapseBtn?.visibility = View.GONE
+                mBinding?.filterRecycler?.visibility = View.GONE
                 mBinding?.collectionFilterWindow?.animation = slideUp
             }
         }
 
         mBinding?.collapseBtn?.setOnClickListener {
             mBinding?.collectionFilterWindow?.visibility = View.GONE
+            mBinding?.collapseBtn?.visibility = View.GONE
+            mBinding?.filterRecycler?.visibility = View.GONE
             mBinding?.collectionFilterWindow?.animation = slideUp
         }
     }
@@ -122,6 +128,8 @@ class ArtisanSearchResultsFragment : Fragment(),
             "Found ${adapter?.itemCount} items"
         adapter?.notifyDataSetChanged()
     }
+
+
 
     companion object {
 

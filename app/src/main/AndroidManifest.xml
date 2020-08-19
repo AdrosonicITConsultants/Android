@@ -32,6 +32,7 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
+
         <activity
             android:name=".ui.modules.buyer.search.BuyerSearchActivity"
             android:launchMode="singleTop"
@@ -44,6 +45,7 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
+
         <activity
             android:name=".ui.modules.editPhoto.EditPhotoActivity"
             android:label="@string/title_activity_edit_photo"/>

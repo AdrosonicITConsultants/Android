@@ -187,10 +187,10 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
         menuInflater.inflate(R.menu.tool_menu, menu)
 
         // Associate searchable configuration with the SearchView
-        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        (menu.findItem(R.id.action_search).actionView as SearchView).apply {
-            setSearchableInfo(searchManager.getSearchableInfo(componentName))
-        }
+//        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+//        (menu.findItem(R.id.action_search).actionView as SearchView).apply {
+//            setSearchableInfo(searchManager.getSearchableInfo(componentName))
+//        }
 
         return true
     }
