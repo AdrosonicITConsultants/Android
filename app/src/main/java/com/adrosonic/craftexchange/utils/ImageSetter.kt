@@ -2,17 +2,18 @@ package com.adrosonic.craftexchange.utils
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.PointF
 import android.net.Uri
 import android.widget.ImageView
 import com.adrosonic.craftexchange.R
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.target.Target
-//import com.synnapps.carouselview.CarouselView
 import info.abdolahi.CircularMusicProgressBar
 
 object ImageSetter {
@@ -20,6 +21,7 @@ object ImageSetter {
      * This method will set image into ImageView without using placeholder.
      * it will handel caching.
      * */
+
     fun setImage(context: Context, imagePath:String, imageView: ImageView) {
         try
         {

@@ -100,7 +100,7 @@
                 </LinearLayout>
 
                 <SeekBar
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:id="@+id/sbAdjustBrightness"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"

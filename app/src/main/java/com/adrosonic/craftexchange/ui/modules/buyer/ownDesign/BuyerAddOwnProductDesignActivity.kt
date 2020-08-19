@@ -36,9 +36,12 @@ import com.adrosonic.craftexchange.syncManager.SyncCoordinator
 import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.ProdImageListAdapter
 import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.WeaveSelectionAdapter
 import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.YarnViewpager
+import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.yarnFrgamnets.YarnFrgamentAdapter
 import com.adrosonic.craftexchange.utils.*
 import com.google.gson.GsonBuilder
+import kotlinx.android.synthetic.main.activity_artisan_add_product_template.*
 import kotlinx.android.synthetic.main.activity_buyer_add_own_product_design.*
+import kotlinx.android.synthetic.main.activity_buyer_add_own_product_design.yarn_pager
 
 
 fun Context.ownDesignIntent(): Intent {
@@ -53,7 +56,7 @@ fun Context.ownDesignIntent(id: Long): Intent {
 }
 class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
     View.OnClickListener,
-    YarnViewpager.yarnListner,
+//    YarnViewpager.yarnListner,
     ProdImageListAdapter.ProdUpdateListener,
     WeaveSelectionAdapter.selectionListener{
 
@@ -223,6 +226,13 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
                 val spProdTypeAdapter = ArrayAdapter<String>( applicationContext, android.R.layout.simple_spinner_item,   arrProdTypeStr  )
                 spProdTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 mBinding?.spProdType?.setAdapter(spProdTypeAdapter)
+                if(productId>0){
+                    var type=""
+                    arrProductType?.forEach {
+                        if(it.id.equals(productEntry?.productTypeId))type=it.productDesc
+                    }
+                    mBinding?.spProdType?.setSelection(arrProdTypeStr.indexOf(type))
+                }
                 setStatusResource()
             }
 
@@ -248,10 +258,13 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
 
         }
         ////////////////////warp_weft_yarns//////////////////////////
-
-        val viewPagerAdapter = YarnViewpager(this,0, arrYarn, arrDyes)
-        mBinding?.yarnPager?.setAdapter(viewPagerAdapter)
-        viewPagerAdapter.listener=this
+        supportFragmentManager.let{
+            yarn_pager?.adapter = YarnFrgamentAdapter(it,productId,false)
+        }
+        yarn_pager?.setOffscreenPageLimit(3)
+//        val viewPagerAdapter = YarnViewpager(this,productId, false)
+//        mBinding?.yarnPager?.setAdapter(viewPagerAdapter)
+//        viewPagerAdapter.listener=this
         dots.clear()
         mBinding?.sliderDots?.removeAllViews()
         do {
@@ -275,15 +288,14 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
                 positionOffset: Float,
                 positionOffsetPixels: Int
             ) {
+                setStatusResource()
             }
 
             override fun onPageSelected(position: Int) {
                 // Check if this is the page you want.
-                yarnPosition=position
                 setDotsColor(position)
             }
         })
-
         /////////////////reed count/////////////////////
         arrReedCountStr.clear()
         arrReedCountStr.add("Select reed count")
@@ -308,30 +320,28 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
             Log.e("Offline", "activity imageList :" +imageList.size)
             imageList.forEach {  pairList.add(Triple(true,productId,it))}
 
-            Log.e("Offline", "activity productTypeDesc :" +productEntry?.productCategoryDscrp)
-            mBinding?.spProdCategory?.setSelection(arrProdCategoryStr.indexOf(productEntry?.productCategoryDscrp?:""))
             for (category in arrProductCategory!!) {
                 if (category.productDesc.equals(productEntry?.productCategoryDscrp?:"", true)) {
                     arrProductType = category.productTypes
-                    category.productTypes.forEach { arrProdTypeStr?.add(it.productDesc) }
                 }
             }
-            arrProductType?.forEach {
-                if(it.id.equals(productEntry?.productTypeId))productTypeDescForUpdate=it.productDesc
-            }
+
             arrProductType?.forEach {
                 Log.e("Offline", "activity forEach :" +it.productDesc)
+                if(it.id.equals(productEntry?.productTypeId))productTypeDescForUpdate=it.productDesc
                 if (it.productDesc.equals(productTypeDescForUpdate)) {
                     arrRelatedProdType = it.relatedProductType
                 }
+                arrProdTypeStr?.add(it.productDesc)
             }
             Log.e("Offline", "activity arrRelatedProdType :" +arrRelatedProdType?.size)
             relatedProdStored= RelateProductPredicates.getRelatedProductOfProduct(productId)
 
+            Log.e("Offline", "activity productTypeDesc :" +productEntry?.productCategoryDscrp)
+            mBinding?.spProdCategory?.setSelection(arrProdCategoryStr.indexOf(productEntry?.productCategoryDscrp?:""))
             mBinding?.spProdType?.setSelection(arrProdTypeStr.indexOf(productTypeDescForUpdate))//todo
 
             setVisiblitiesAndTextsOnType(productTypeDescForUpdate, arrRelatedProdType)
-
             weaveIdStored= WeaveTypesPredicates.getWeaveList(productId)
             Log.e("Offline", "activity weaveIdStored :" + weaveIdStored?.joinToString())
             weaveSelctionList?.forEach {
@@ -347,42 +357,35 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
 
             mBinding?.etGsm?.setText(productEntry?.gsm?:"", TextView.BufferType.EDITABLE)
             mBinding?.etDscrp?.setText(productEntry?.productSpe?:"", TextView.BufferType.EDITABLE)
-
-            mUserConfig.warpDyeId=productEntry?.warpDyeId
-            mUserConfig.warpYarnCount=productEntry?.warpYarnCount
-            mUserConfig.warpYarnId=productEntry?.warpYarnId
-            mUserConfig.weftDyeId=productEntry?.weftDyeId
-            mUserConfig.weftYarnCount=productEntry?.weftYarnCount
-            mUserConfig.weftYarnId=productEntry?.weftYarnId
-            mUserConfig.extraWeftDyeId=productEntry?.extraWeftDyeId
-            mUserConfig.extraWeftYarnCount=productEntry?.extraWeftYarnCount
-            mUserConfig.extraWeftYarnId=productEntry?.extraWeftYarnId
-            viewPagerAdapter.notifyDataSetChanged()
+            setStatusResource()
+            Utility.setImageResource(applicationContext, mBinding?.imgStatusStep2, R.drawable.ic_add_prod_status_filled)
+            Utility.setImageResource(applicationContext, mBinding?.imgStatusStep4, R.drawable.ic_add_prod_status_filled)
         }
-        setStatusResource()
+
     }
 
-    override fun sendYarnData(position: Int, yarnType: Long, yarnCount: String, dye: Long) {
-        Log.e("Viewpager","{$yarnPosition} position/yarnType :"+yarnType+" :yarnCount :"+yarnCount+" : dye :"+dye)
-        when(yarnPosition){
-            0->{
-                warpYarnId=yarnType
-                warpYarnCount=yarnCount
-                warpDyeId=dye
-            }
-            1->{
-                weftYarnId=yarnType
-                weftYarnCount=yarnCount
-                weftDyeId=dye
-            }
-            2->{
-                extraWeftYarnId=yarnType
-                extraWeftYarnCount=yarnCount
-                extraWeftDyeId=dye
-            }
-        }
-        setStatusResource()
-    }
+//    override fun sendYarnData(position: Int, yarnType: Long, yarnCount: String, dye: Long) {
+//        Log.e("Viewpager","{$yarnPosition} position/yarnType :"+yarnType+" :yarnCount :"+yarnCount+" : dye :"+dye)
+//        when(yarnPosition){
+//            0->{
+//                warpYarnId=yarnType
+//                warpYarnCount=yarnCount
+//                warpDyeId=dye
+//            }
+//            1->{
+//                weftYarnId=yarnType
+//                weftYarnCount=yarnCount
+//                weftDyeId=dye
+//            }
+//            2->{
+//                extraWeftYarnId=yarnType
+//                extraWeftYarnCount=yarnCount
+//                extraWeftDyeId=dye
+//            }
+//        }
+////        setDotsColor(position)
+//        setStatusResource()
+//    }
 
     override fun onUpdate(pairList: ArrayList<Triple<Boolean,Long, String>>, deletedIds: ArrayList<Pair<Long,String>>) {
         this.pairList = pairList
@@ -453,7 +456,7 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
                     mBinding?.childStep6?.animation = slideUp
                 }
             }
-            R.id.parent_step6 -> {
+            R.id.parent_step7 -> {
                 if (mBinding?.childStep7?.visibility == View.GONE) {
                     mBinding?.childStep7?.visibility = View.VISIBLE
                     mBinding?.childStep7?.animation = slideDown
@@ -619,6 +622,7 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
 
     fun saveUploadProduct() {
         try {
+            getYarnData()
             weaveIdList.clear()
             weaveSelctionList.forEach { if(it.second)weaveIdList?.add(it.third) }
             var width=if(arrProdWidthStr.size<=0)mBinding?.etProdWidth?.text.toString() else mBinding?.spProdWidth?.selectedItem.toString()
@@ -780,7 +784,7 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
     }
 
     fun setStatusResource() {
-
+        getYarnData()
         weaveIdList.clear()
         weaveSelctionList.forEach { if (it.second) weaveIdList?.add(it.third) }
 
@@ -806,6 +810,9 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
         if(width.isNotBlank() && length.isNotBlank()) Utility.setImageResource(applicationContext, mBinding?.imgStatusStep6, R.drawable.ic_add_prod_status_filled)
         else Utility.setImageResource(applicationContext, mBinding?.imgStatusStep6, R.drawable.ic_add_prod_status)
 
+        if(mBinding?.etGsm?.text!!.isNotBlank())Utility.setImageResource(applicationContext, mBinding?.imgStatusStep10, R.drawable.ic_add_prod_status_filled)
+        else Utility.setImageResource(applicationContext, mBinding?.imgStatusStep10, R.drawable.ic_add_prod_status)
+
         if(mBinding?.etDscrp?.text!!.isNotBlank())Utility.setImageResource(applicationContext, mBinding?.imgStatusStep8, R.drawable.ic_add_prod_status_filled)
         else Utility.setImageResource(applicationContext, mBinding?.imgStatusStep8, R.drawable.ic_add_prod_status)
     }
@@ -816,5 +823,22 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
         override fun afterTextChanged(s: Editable) {
             setStatusResource()
         }
+    }
+    fun getYarnData(){
+        warpYarnId = mUserConfig.warpYarnId?:0
+        warpYarnCount = mUserConfig.warpYarnCount?:""
+        warpDyeId = mUserConfig.warpDyeId?:0
+
+        weftYarnId = mUserConfig.weftYarnId?:0
+        weftYarnCount = mUserConfig.weftYarnCount?:""
+        weftDyeId = mUserConfig.weftDyeId?:0
+
+        extraWeftYarnId = mUserConfig.extraWeftYarnId?:0
+        extraWeftYarnCount = mUserConfig.extraWeftYarnCount?:""
+        extraWeftDyeId = mUserConfig.extraWeftDyeId?:0
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        Utility.resetYarnData()
     }
 }

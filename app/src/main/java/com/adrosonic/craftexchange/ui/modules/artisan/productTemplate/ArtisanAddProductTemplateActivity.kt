@@ -11,7 +11,10 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.animation.AnimationUtils
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,6 +31,11 @@ import com.adrosonic.craftexchange.repository.data.request.artisan.productTempla
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.*
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.ProductType
 import com.adrosonic.craftexchange.syncManager.SyncCoordinator
+import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.yarnFrgamnets.ExtraWeftFragment
+import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.yarnFrgamnets.WarpFragment
+import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.yarnFrgamnets.WeftFragment
+import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.yarnFrgamnets.YarnFrgamentAdapter
+import com.adrosonic.craftexchange.ui.modules.buyer.profile.editProfile.BuyerEditPPagerAdapter
 import com.adrosonic.craftexchange.utils.*
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_artisan_add_product_template.*
@@ -49,8 +57,12 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
     View.OnClickListener,
     ProdImageListAdapter.ProdUpdateListener,
     WeaveSelectionAdapter.selectionListener,
-    CareInstructionsSelectionAdapter.selectionListener,
-    YarnViewpager.yarnListner {
+    CareInstructionsSelectionAdapter.selectionListener
+//    YarnViewpager.yarnListner  ,
+//    WarpFragmentListner,
+//    WeftFragment.WeftFragmentListner,
+//    ExtraWeftFragment.ExtraWeftFragmentListner
+{
     private var mBinding: ActivityArtisanAddProductTemplateBinding? = null
     private lateinit var prodImgListAdapter: ProdImageListAdapter
     private var pairList = ArrayList<Triple<Boolean,Long, String>>()
@@ -125,6 +137,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
         //todo set animation
         //todo set click listener
         //todo set data
+
 
         if (intent.extras != null) {
             productId = intent.getLongExtra("productId", 0)
@@ -238,6 +251,13 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                     spProdTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     sp_prod_type.setAdapter(spProdTypeAdapter)
                     setStatusResource()
+                    if(productId>0){
+                        var type=""
+                        arrProductType?.forEach {
+                            if(it.id.equals(productEntry?.productTypeId))type=it.productDesc
+                        }
+                        mBinding?.spProdType?.setSelection(arrProdTypeStr.indexOf(type))
+                    }
                 }
 
             }
@@ -264,9 +284,13 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
             }
 
             ////////////////////warp_weft_yarns//////////////////////////
-            val viewPagerAdapter = YarnViewpager(this,productId, arrYarn, arrDyes)
-            yarn_pager.setAdapter(viewPagerAdapter)
-            viewPagerAdapter.listener = this
+            supportFragmentManager.let{
+                yarn_pager?.adapter = YarnFrgamentAdapter(it,productId,true)
+            }
+            yarn_pager?.setOffscreenPageLimit(3)
+//            val viewPagerAdapter = YarnViewpager(this,productId, true)
+//            yarn_pager.setAdapter(viewPagerAdapter)
+//            viewPagerAdapter.listener = this
             dots.clear()
             slider_dots.removeAllViews()
             do {
@@ -290,13 +314,14 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                     positionOffset: Float,
                     positionOffsetPixels: Int
                 ) {
+                    setStatusResource()
                 }
-
                 override fun onPageSelected(position: Int) {
-                    // Check if this is the page you want.
                     setDotsColor(position)
                 }
             })
+
+
 
             /////////////////reed count/////////////////////
             arrReedCountStr.add("Select reed count")
@@ -360,15 +385,12 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
 //            sp_prod_type.setAdapter(spProdTypeAdapter)
             sp_prod_type.setSelection(arrProdTypeStr.indexOf(productEntry?.productTypeDesc?:""))
 
-
-
             for (category in arrProductCategory!!) {
                 if (category.productDesc.equals(productEntry?.productCategoryDesc?:"", true)) {
                     arrProductType = category.productTypes
                     category.productTypes.forEach { arrProdTypeStr?.add(it.productDesc) }
                 }
             }
-
             arrProductType?.forEach {
                 Log.e("Offline", "activity forEach :" +it.productDesc)
                 if (it.productDesc.equals(productEntry?.productTypeDesc?:"")) {
@@ -415,13 +437,14 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                 }
             }
 
-//            setproductAvailability(productAvalability)
             et_gsm.setText(productEntry?.gsm?:"", TextView.BufferType.EDITABLE)
             et_prod_weight.setText(productEntry?.weight?:"", TextView.BufferType.EDITABLE)
             et_dscrp.setText(productEntry?.productSpecs?:"", TextView.BufferType.EDITABLE)
-
+            getYarnData()
+            setStatusResource()
+            Utility.setImageResource(applicationContext, img_status_step4, R.drawable.ic_add_prod_status_filled)
         }
-        setStatusResource()
+
     }
 
     override fun onUpdate(pairList: ArrayList<Triple<Boolean,Long, String>>, deletedIds: ArrayList<Pair<Long,String>>) {
@@ -469,27 +492,27 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
         setStatusResource()
     }
 
-    override fun sendYarnData(position: Int, yarnType: Long, yarnCount: String, dye: Long) {
-        Log.e("Viewpager","{$position} position/yarnType :" + yarnType + " :yarnCount :" + yarnCount + " : dye :" + dye)
-        when (position) {
-            0 -> {
-                warpYarnId = yarnType
-                warpYarnCount = yarnCount
-                warpDyeId = dye
-            }
-            1 -> {
-                weftYarnId = yarnType
-                weftYarnCount = yarnCount
-                weftDyeId = dye
-            }
-            2 -> {
-                extraWeftYarnId = yarnType
-                extraWeftYarnCount = yarnCount
-                extraWeftDyeId = dye
-            }
-        }
-        setStatusResource()
-    }
+//    override fun sendYarnData(position: Int, yarnType: Long, yarnCount: String, dye: Long) {
+//        Log.e("Viewpager","{$position} position/yarnType :" + yarnType + " :yarnCount :" + yarnCount + " : dye :" + dye)
+//        when (position) {
+//            0 -> {
+//                warpYarnId = yarnType
+//                warpYarnCount = yarnCount
+//                warpDyeId = dye
+//            }
+//            1 -> {
+//                weftYarnId = yarnType
+//                weftYarnCount = yarnCount
+//                weftDyeId = dye
+//            }
+//            2 -> {
+//                extraWeftYarnId = yarnType
+//                extraWeftYarnCount = yarnCount
+//                extraWeftDyeId = dye
+//            }
+//        }
+//        setStatusResource()
+//    }
 
     override fun onClick(p0: View?) {
         val slideDown = AnimationUtils.loadAnimation(applicationContext, R.anim.slide_down)
@@ -740,6 +763,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
 
     fun saveUploadProduct() {
         try {
+            getYarnData()
             weaveIdList.clear()
             careIdList.clear()
             weaveSelctionList.forEach { if (it.second) weaveIdList?.add(it.third) }
@@ -992,7 +1016,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
     }
 
     fun setStatusResource() {
-
+        getYarnData()
         weaveIdList.clear()
         weaveSelctionList.forEach { if (it.second) weaveIdList?.add(it.third) }
         careIdList.clear()
@@ -1010,8 +1034,8 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
         if(weaveIdList.size>0)Utility.setImageResource(applicationContext, img_status_step3, R.drawable.ic_add_prod_status_filled)
          else Utility.setImageResource(applicationContext, img_status_step3, R.drawable.ic_add_prod_status)
 
-        if(warpDyeId<=0 ||warpYarnCount.isBlank() || warpYarnId<=0||weftDyeId<=0||weftYarnCount.isBlank()||weftYarnId<=0) Utility.setImageResource(applicationContext,img_status_step2, R.drawable.ic_add_prod_status)
-        else Utility.setImageResource(applicationContext, img_status_step3, R.drawable.ic_add_prod_status_filled)
+        if(warpDyeId<=0 ||warpYarnCount.isBlank() || warpYarnId<=0||weftDyeId<=0||weftYarnCount.isBlank()||weftYarnId<=0) Utility.setImageResource(applicationContext,img_status_step4, R.drawable.ic_add_prod_status)
+        else Utility.setImageResource(applicationContext, img_status_step4, R.drawable.ic_add_prod_status_filled)
 
         if(sp_reed_count.selectedItemPosition!=0) Utility.setImageResource(applicationContext, img_status_step5, R.drawable.ic_add_prod_status_filled)
         else Utility.setImageResource(applicationContext, img_status_step5, R.drawable.ic_add_prod_status)
@@ -1034,6 +1058,20 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
         if(et_dscrp.text.isNotBlank())Utility.setImageResource(applicationContext, img_status_step11, R.drawable.ic_add_prod_status_filled)
         else Utility.setImageResource(applicationContext, img_status_step11, R.drawable.ic_add_prod_status)
     }
+
+    fun getYarnData(){
+        warpYarnId = mUserConfig.warpYarnId?:0
+        warpYarnCount = mUserConfig.warpYarnCount?:""
+        warpDyeId = mUserConfig.warpDyeId?:0
+
+        weftYarnId = mUserConfig.weftYarnId?:0
+        weftYarnCount = mUserConfig.weftYarnCount?:""
+        weftDyeId = mUserConfig.weftDyeId?:0
+
+        extraWeftYarnId = mUserConfig.extraWeftYarnId?:0
+        extraWeftYarnCount = mUserConfig.extraWeftYarnCount?:""
+        extraWeftDyeId = mUserConfig.extraWeftDyeId?:0
+    }
     private val generalTextWatcher: TextWatcher = object : TextWatcher {
         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) { }
         override fun beforeTextChanged( s: CharSequence, start: Int, count: Int, after: Int ) { }
@@ -1042,6 +1080,10 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        Utility.resetYarnData()
+    }
 }
 
 

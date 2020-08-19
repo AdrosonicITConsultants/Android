@@ -96,17 +96,20 @@ class BuyerCustomProductPredicates {
                         var dbProdObj = realm.where(BuyerCustomProduct::class.java).equalTo(BuyerCustomProduct.COLUMN_ID, remoteProdId).limit(1).findFirst()
                         var uniqueId=try { dbProdObj!!.id?:0}catch (e: Exception){0}
                         if(uniqueId.equals(remoteProdId)) {
+                            Log.e("ProdImage", "11111111111111111111")
                             dbProdObj?.id = product.id
                             dbProdObj?.productCategoryId = product.productCategory.id
                             dbProdObj?.productCategoryDscrp = product.productCategory.productDesc
                             dbProdObj?.productTypeId = product.productType.id
-                            dbProdObj?.warpYarnId = product.warpYarn.id
-                            dbProdObj?.weftYarnId = product.weftYarn.id
-                            dbProdObj?.extraWeftYarnId = product.extraWeftYarn.id
+                            Log.e("ProdImage", "22222222222222222222222")
+                            dbProdObj?.warpYarnId = try{ product.warpYarn?.id} catch (e:Exception){0}
+                            dbProdObj?.weftYarnId = try{product.weftYarn?.id} catch (e:Exception){0}
+                            dbProdObj?.extraWeftYarnId = try{product.extraWeftYarn?.id} catch (e:Exception){0}
+                            Log.e("ProdImage", "333333333333333333333")
                             dbProdObj?.warpYarnCount=product.warpYarnCount
                             dbProdObj?.weftYarnCount=product.weftYarnCount
                             dbProdObj?.extraWeftYarnCount=product.extraWeftYarnCount
-
+                            Log.e("ProdImage", "444444444444444444444 "+product.warpDye.id)
                             dbProdObj?.warpDyeId=product.warpDye.id
                             dbProdObj?.weftDyeId=product.weftDye.id
                             dbProdObj?.extraWeftDyeId=product.extraWeftDye.id
@@ -126,7 +129,7 @@ class BuyerCustomProductPredicates {
                             product.productImages.forEach {
                                 arrProdImages.add(it)
                             }
-                            Log.e("ProdImage", "${product.productImages.size}")
+                            Log.e("ProdImage", "555555555555555 ${product.productImages.size}")
                             product.productWeaves.forEach {
                                 Log.e("ProdImage", "Weave Ids : ${it?.weaveId}")
                                 var weaveType=ProductWeaf(it?.id?:0,product.id,it?.weaveId?:0)
@@ -141,22 +144,24 @@ class BuyerCustomProductPredicates {
                             } else {
                                 primId.toLong() + 1
                             }
+                            Log.e("ProdImage", "11111111111111111111")
                             var prodEntry = it.createObject(BuyerCustomProduct::class.java, nextID)
                             prodEntry.id = product.id
                             prodEntry.productCategoryId = product.productCategory.id
                             prodEntry.productCategoryDscrp = product.productCategory.productDesc
                             prodEntry.productTypeId = product.productType.id
-                            prodEntry.warpYarnId = product.warpYarn.id
-                            prodEntry.weftYarnId = product.weftYarn.id
-                            prodEntry.extraWeftYarnId = product.extraWeftYarn.id
                             prodEntry.warpYarnCount=product.warpYarnCount
                             prodEntry.weftYarnCount=product.weftYarnCount
                             prodEntry.extraWeftYarnCount=product.extraWeftYarnCount
-
-                            prodEntry.warpDyeId=product.warpDye.id
-                            prodEntry.weftDyeId=product.weftDye.id
-                            prodEntry.extraWeftDyeId=product.extraWeftDye.id
-                            prodEntry.dyeDsrcp="${product.warpYarn.yarnDesc} X ${product.weftYarn.yarnDesc} X ${product.extraWeftYarn.yarnDesc}"
+                            Log.e("ProdImage", "22222222222222222222222222")
+                            prodEntry?.warpYarnId = try{ product.warpYarn?.id} catch (e:Exception){0}
+                            prodEntry?.weftYarnId = try{product.weftYarn?.id} catch (e:Exception){0}
+                            prodEntry?.extraWeftYarnId = try{product.extraWeftYarn?.id} catch (e:Exception){0}
+                            Log.e("ProdImage", "33333333333333333333333333 "+product.warpDye.id)
+                            prodEntry.warpDyeId= try{ product.warpDye?.id} catch (e:Exception){0}
+                            prodEntry.weftDyeId= try{ product.weftDye?.id} catch (e:Exception){0}
+                            prodEntry.extraWeftDyeId= try{ product.extraWeftDye?.id} catch (e:Exception){0}
+                            prodEntry.dyeDsrcp=try{"${product.warpYarn.yarnDesc} X ${product.weftYarn.yarnDesc} X ${product.extraWeftYarn.yarnDesc}"}catch (e:Exception){""}
                             prodEntry.length=product.length
                             prodEntry.width=product.width
                             prodEntry.reedCountId=product.reedCount.id
@@ -172,7 +177,7 @@ class BuyerCustomProductPredicates {
                             product.productImages.forEach {
                                 arrProdImages.add(it)
                             }
-                            Log.e("ProdImage", "${product.productImages.size}")
+                            Log.e("ProdImage", "44444444444 ${product.productImages.size}")
                             product.productWeaves.forEach {
                                 Log.e("ProdImage", "Weave Ids : ${it?.weaveId}")
                                 var weaveType=ProductWeaf(it?.id?:0,product.id,it?.weaveId?:0)

@@ -145,18 +145,17 @@ class LandingViewModel(application: Application) : AndroidViewModel(application)
             .enqueue(object: Callback, retrofit2.Callback<SingleProductDetails> {
                 override fun onFailure(call: Call<SingleProductDetails>, t: Throwable) {
                     t.printStackTrace()
-                    Log.e("LandingViewModel","wishlist onFailure: "+t.message)
+                    Log.e("LandingViewModel","ownproduct onFailure: "+t.message)
                 }
                 override fun onResponse(
                     call: Call<SingleProductDetails>,
                     response: retrofit2.Response<SingleProductDetails>) {
-
                     if(response.body()?.valid == true){
                         val response=response.body()?.data
                         if (response != null) {
                             WishlistPredicates.insertSingleProduct(response)
                         }
-                        Log.e("LandingViewModel","wishlist :"+response?.artistName)
+                        Log.e("LandingViewModel","own product :"+response?.artistName)
                     }
                 }
 

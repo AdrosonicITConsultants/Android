@@ -84,6 +84,12 @@ class UserConfig {
     companion object {
         val shared: UserConfig by lazy { Holder.INSTANCE }
     }
+
+    fun clearPreferences() {
+        val editor =Prefs.edit()
+        editor.clear()
+        editor.commit()
+    }
     var artisan: String? = ""
         get() = Prefs.getString(ARTISAN,"")
         set(value) {

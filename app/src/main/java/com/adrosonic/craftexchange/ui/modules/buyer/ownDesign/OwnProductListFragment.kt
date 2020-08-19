@@ -93,7 +93,7 @@ OwnProductAdapter.OwnProductListUpdatedListener{
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("Wishlist", "Onsucces")
-                swipe_refresh_layout.isRefreshing = false
+                swipe_refresh_layout?.isRefreshing = false
                 mViewModel?.getCustomDesignListMutableData()
                 setVisiblities()
             }

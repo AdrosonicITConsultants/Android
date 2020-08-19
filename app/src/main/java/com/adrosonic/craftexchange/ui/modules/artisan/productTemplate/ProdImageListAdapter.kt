@@ -60,6 +60,7 @@ class ProdImageListAdapter(
         var file = File(item.third)
         Log.e("ProdPath", "" + item.third)
         if(item.first){
+            //update
             var url = if(isTemplate)Utility.getProductsImagesUrl(item.second,item.third) else Utility.getCustomProductImagesUrl(item.second,item.third)
             context?.let { ImageSetter.setImage(it,url,holder.thumbnail)
             }

@@ -305,5 +305,16 @@ class Utility {
 //                }
 //            } else ""
         }
+        fun resetYarnData() {
+            UserConfig.shared.warpDyeId=0
+            UserConfig.shared.warpYarnCount=""
+            UserConfig.shared.warpYarnId=0
+            UserConfig.shared.weftDyeId=0
+            UserConfig.shared.weftYarnCount=""
+            UserConfig.shared.weftYarnId=0
+            UserConfig.shared.extraWeftDyeId=0
+            UserConfig.shared.extraWeftYarnCount=""
+            UserConfig.shared.extraWeftYarnId=0
+        }
     }
 }

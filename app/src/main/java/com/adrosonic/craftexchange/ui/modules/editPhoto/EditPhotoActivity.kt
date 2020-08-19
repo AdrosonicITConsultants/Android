@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
@@ -67,14 +68,14 @@ class EditPhotoActivity : AppCompatActivity() {
                 else sbAdjustBrightness.visibility=View.VISIBLE
             }
 
-//            sbAdjustBrightness.setMax(255);
-            sbAdjustBrightness.setProgress(50);
+//            sbAdjustBrightness.setMax(4);
+            sbAdjustBrightness.setProgress(125);
             sbAdjustBrightness.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
                 override fun onProgressChanged(seekBar: SeekBar, progress: Int,fromUser: Boolean) {
-                    var res=
-                        changeBitmapContrastBrightness( (imgEditable.drawable as BitmapDrawable).bitmap, 1f, seekBar.progress.toFloat())
-//                        adjustedContrast((imgEditable.drawable as BitmapDrawable).bitmap,progress)
-                    imgEditable.setImageBitmap(res)
+//                    var res= changeBitmapContrastBrightness( (imgEditable.drawable as BitmapDrawable).bitmap, 1f, seekBar.progress.toFloat())
+//                    imgEditable.setImageBitmap(res)
+                    var res=setBrightness(progress)
+                    imgEditable.setColorFilter(res)
                 }
                 override fun onStartTrackingTouch(seekBar: SeekBar) {}
                 override fun onStopTrackingTouch(seekBar: SeekBar) {}
@@ -103,6 +104,15 @@ class EditPhotoActivity : AppCompatActivity() {
         }
     }
 
+    fun setBrightness(progress: Int): PorterDuffColorFilter? {
+        return if (progress >= 100) {
+            val value = (progress - 100) * 255 / 100
+            PorterDuffColorFilter(Color.argb(value, 255, 255, 255), PorterDuff.Mode.SRC_OVER)
+        } else {
+            val value = (100 - progress) * 255 / 100
+            PorterDuffColorFilter(Color.argb(value, 0, 0, 0), PorterDuff.Mode.SRC_ATOP)
+        }
+    }
     private fun adjustedContrast(src: Bitmap, value: Double): Bitmap? {
         // image size
         val width = src.width

@@ -12,26 +12,36 @@ import androidx.core.widget.addTextChangedListener
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.adrosonic.craftexchange.R
-import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.Dye
-import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.Yarn
-import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.YarnCount
+import com.adrosonic.craftexchange.database.entities.realmEntities.ArtisanProducts
+import com.adrosonic.craftexchange.database.entities.realmEntities.BuyerCustomProduct
+import com.adrosonic.craftexchange.database.predicates.BuyerCustomProductPredicates
+import com.adrosonic.craftexchange.database.predicates.ProductPredicates
+import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.*
 import com.adrosonic.craftexchange.ui.modules.buyer.productDetails.productId
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
+import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_artisan_add_product_template.*
 import kotlinx.android.synthetic.main.activity_buyer_add_own_product_design.*
+import java.lang.Exception
 
 
-class YarnViewpager(context: Context, productId: Long, arrYarn: List<Yarn>?, arrDye: List<Dye>?) : PagerAdapter()
+class YarnViewpager(context: Context, productId: Long,isTemplate:Boolean) : PagerAdapter()
 //    , ViewPager.OnPageChangeListener
 {
-    var currentPosition=0
+    var yarnType=0L
+    var yarnCount=""
+    var dyeId=0L
+    private val mUserConfig = UserConfig()
+    var jsonProductData: String = ""
+    var productUploadData: ProductUploadData? = null
     lateinit var imgYarn : ImageView
     lateinit var yarnTitle : TextView
     lateinit var spYarnType: Spinner
     lateinit var spYarnCount : Spinner
     lateinit var etYarnCount: EditText
     lateinit var spYarnDye : Spinner
+    private var isTemplate: Boolean? = null
     private var context: Context? = null
     private var productId: Long = 0
     private var arrYarn: List<Yarn>? = null
@@ -43,7 +53,10 @@ class YarnViewpager(context: Context, productId: Long, arrYarn: List<Yarn>?, arr
     var arrYarnCountStr = ArrayList<String>()
     var arrDyeStr = ArrayList<String>()
     var listener: YarnViewpager.yarnListner? = null
-    private val userConfig = UserConfig()
+    var artisanProductEntry: ArtisanProducts?=null
+    var buyerProductEntry: BuyerCustomProduct?=null
+    var typeSelection=""
+    var dyeSelection=""
 
     interface yarnListner {
         fun sendYarnData(position: Int, yarnType: Long, yarnCount: String, dye: Long)
@@ -52,8 +65,7 @@ class YarnViewpager(context: Context, productId: Long, arrYarn: List<Yarn>?, arr
     init {
         this.context = context
         this.productId = productId
-        this.arrYarn = arrYarn
-        this.arrDye = arrDye
+        this.isTemplate = isTemplate
     }
 
     override fun isViewFromObject(view: View, `object`: Any): Boolean {
@@ -73,53 +85,68 @@ class YarnViewpager(context: Context, productId: Long, arrYarn: List<Yarn>?, arr
         spYarnCount = view.findViewById<View>(R.id.sp_yarn_count) as Spinner
         etYarnCount = view.findViewById<View>(R.id.et_yarn_count) as EditText
         spYarnDye = view.findViewById<View>(R.id.sp_yarn_dye) as Spinner
+
+        jsonProductData = mUserConfig.productUploadJson.toString()
+        val gson = GsonBuilder().create()
+        productUploadData = gson.fromJson(jsonProductData, ProductUploadData::class.java)
+        arrYarn = productUploadData?.data?.yarns
+        arrDye = productUploadData?.data?.dyes
+
         Log.e("YarnPager","position : $position")
         arrYarneStr.clear()
+        arrYarneStr.add("Select type")
+        arrYarnCountStr.add("Select count")
         arrYarn?.forEach { arrYarneStr.add(it.yarnDesc) }
         val spYarnAdapter =ArrayAdapter<String>(context!!, android.R.layout.simple_spinner_item, arrYarneStr)
         spYarnAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
         spYarnType.setAdapter(spYarnAdapter)
+
+        val spProdTypeAdapter = ArrayAdapter<String>(view!!.context, android.R.layout.simple_spinner_item, arrYarnCountStr)
+        spProdTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spYarnCount.setAdapter(spProdTypeAdapter)
+
         spYarnType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
             override fun onItemSelected(
                 parent: AdapterView<*>?,
                 view: View?,
-                position: Int,
+                pos: Int,
                 id: Long
             ) {
                 arrYarnCountStr?.clear()
-                val yarnType = arrYarneStr.get(position)
-                Log.e("Viewpager","yarnType: $yarnType")
-                arrYarn?.forEach {
-                    if (it.yarnDesc.equals(yarnType, true)) arrYarnCount = it.yarnType.yarnCounts
-                 }
-                Log.e("Viewpager","arrYarnCount: ${arrYarnCount?.size}")
-                if (arrYarnCount!!.size > 0) {
-                    etYarnCount.visibility = View.GONE
-                    arrYarnCount?.forEach { arrYarnCountStr.add(it.count) }
-                    Log.e("Viewpager","arrYarnCountStr 1111: ${arrYarnCountStr?.size}")
-                    val spProdTypeAdapter = ArrayAdapter<String>(context!!, android.R.layout.simple_spinner_item, arrYarnCountStr)
-                    spProdTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                    spYarnCount.setAdapter(spProdTypeAdapter)
-                } else {
-                    Log.e("Viewpager","arrYarnCountStr 2222: ${arrYarnCountStr?.size}")
-                    etYarnCount.visibility = View.VISIBLE
-                    spYarnCount.visibility = View.GONE
+                val yarnType = arrYarneStr.get(pos)
+                if (pos > 0) {
+                    arrYarn?.forEach {
+                        if (it.yarnDesc.equals(yarnType, true)) arrYarnCount =  it.yarnType.yarnCounts
+                    }
+                    Log.e("Viewpager", "arrYarnCount: ${arrYarnCount?.size}")
+                    if(arrYarnCount!=null) {
+                        if (arrYarnCount!!.size > 0) {
+                        spYarnCount.visibility = View.VISIBLE
+                        etYarnCount.visibility = View.GONE
+                        arrYarnCountStr.clear()
+                        arrYarnCountStr.add("Select count")
+                        arrYarnCount?.forEach { arrYarnCountStr.add(it.count) }
+                        Log.e("Viewpager", "arrYarnCountStr 1111: ${arrYarnCountStr?.size}")
+//                        val spProdTypeAdapter = ArrayAdapter<String>(view!!.context, android.R.layout.simple_spinner_item, arrYarnCountStr)
+//                        spProdTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//                        spYarnCount.setAdapter(spProdTypeAdapter)
+                            spProdTypeAdapter.notifyDataSetChanged()
+                        if(productId>0){
+                            spYarnCount.setSelection(arrYarnCountStr.indexOf(yarnCount))
+                        }
+                    } else {
+                        Log.e("Viewpager", "arrYarnCountStr 2222: ${arrYarnCountStr?.size}")
+                        etYarnCount.visibility = View.VISIBLE
+                        spYarnCount.visibility = View.GONE
+                    }
+                    }else {
+                        etYarnCount.visibility = View.VISIBLE
+                        spYarnCount.visibility = View.GONE
+                    }
+
+                      callListener(position)
                 }
-                Log.e("Viewpager","arrYarnCount: ${arrYarnCount?.size}")
-                if (etYarnCount.visibility == View.VISIBLE) callListener(
-                    position,
-                    spYarnType.selectedItem.toString(),
-                    etYarnCount.text.toString(),
-                    spYarnDye.selectedItem.toString()
-                )
-                else callListener(
-                    position,
-                    spYarnType.selectedItem.toString(),
-                    spYarnCount.selectedItem.toString(),
-                    spYarnDye.selectedItem.toString()
-                )
-                Log.e("Viewpager","yarnType: $yarnType")
             }
         }
         spYarnCount.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -130,45 +157,23 @@ class YarnViewpager(context: Context, productId: Long, arrYarn: List<Yarn>?, arr
                 position: Int,
                 id: Long
             ) {
-                if (etYarnCount.visibility == View.VISIBLE) callListener(
-                    position,
-                    spYarnType.selectedItem.toString(),
-                    etYarnCount.text.toString(),
-                    spYarnDye.selectedItem.toString()
-                )
-                else callListener(
-                    position,
-                    spYarnType.selectedItem.toString(),
-                    spYarnCount.selectedItem.toString(),
-                    spYarnDye.selectedItem.toString()
-                )
+                    callListener(position)
             }
 
         }
 
         arrDyeStr.clear()
+        arrDyeStr.add("Select dye")
         arrDye?.forEach { arrDyeStr.add(it.dyeDesc) }
         val spDyeAdapter = ArrayAdapter<String>(context!!, android.R.layout.simple_spinner_item, arrDyeStr)
         spDyeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spYarnDye.setAdapter(spDyeAdapter)
         spYarnDye.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
-
             }
 
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                if (etYarnCount.visibility == View.VISIBLE) callListener(
-                    position,
-                    spYarnType.selectedItem.toString(),
-                    etYarnCount.text.toString(),
-                    spYarnDye.selectedItem.toString()
-                )
-                else callListener(
-                    position,
-                    spYarnType.selectedItem.toString(),
-                    spYarnCount.selectedItem.toString(),
-                    spYarnDye.selectedItem.toString()
-                )
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, pos: Int, p3: Long) {
+                callListener(position)
             }
         }
         etYarnCount.addTextChangedListener(object : TextWatcher {
@@ -176,12 +181,7 @@ class YarnViewpager(context: Context, productId: Long, arrYarn: List<Yarn>?, arr
             }
 
             override fun afterTextChanged(p0: Editable?) {
-                callListener(
-                    position,
-                    spYarnType.selectedItem.toString(),
-                    etYarnCount.text.toString(),
-                    spYarnDye.selectedItem.toString()
-                )
+                callListener(position)
             }
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -193,100 +193,68 @@ class YarnViewpager(context: Context, productId: Long, arrYarn: List<Yarn>?, arr
             0 -> {
                 yarnTitle.text = "Warp "
                 Utility.setImageResource(context, imgYarn, R.drawable.ic_warp_icon)
-                if(productId>0) {
-                    if (userConfig.warpYarnId!! > 0) {
-                        var yarnType = ""
-                        arrYarn?.forEach {
-                            if (it.id.equals(userConfig.warpDyeId)) yarnType = it.yarnDesc
-                        }
-                        spYarnType.setSelection(arrYarneStr.indexOf(yarnType))
-                    }
-                    if (userConfig.warpYarnCount!!.isNotBlank()) {
-                        var yarnCount = userConfig.warpYarnCount
-                        arrYarnCount?.forEach {
-                            arrYarnCountStr.add(it.count)
-                            if (it.count.equals(userConfig.warpYarnCount)) yarnCount = it.count
-                        }
-                        if (arrYarnCountStr != null) {
-                            if (arrYarnCountStr!!.size > 0) spYarnCount.setSelection( arrYarnCountStr!!.indexOf(  yarnCount ))
-                            else etYarnCount.setText(yarnCount, TextView.BufferType.EDITABLE)
-                        } else etYarnCount.setText(yarnCount, TextView.BufferType.EDITABLE)
-                    }
-                    if (userConfig.warpDyeId!! > 0) {
-                        var dyeTypes = ""
-                        arrDye?.forEach {
-                            if (it.id.equals(userConfig.warpDyeId)) dyeTypes = it.dyeDesc
-                        }
-                        spYarnDye.setSelection(arrDyeStr.indexOf(dyeTypes))
-                    }
-                }
             }
             1 -> {
                 yarnTitle.text = "Weft "
                 Utility.setImageResource(context, imgYarn, R.drawable.ic_weft_icon)
-                if(productId>0) {
-                    if (userConfig.weftDyeId!! > 0) {
-                        var yarnType = ""
-                        arrYarn?.forEach {
-                            if (it.id.equals(userConfig.weftDyeId)) yarnType = it.yarnDesc
-                        }
-                        spYarnType.setSelection(arrYarneStr.indexOf(yarnType))
-                    }
-                    if (userConfig.weftYarnCount!!.isNotBlank()) {
-                        var yarnCount = userConfig.weftYarnCount
-                        arrYarnCount?.forEach {
-                            if (it.count.equals(userConfig.weftYarnCount)) yarnCount = it.count
-                        }
-                        if (arrYarnCount != null)
-                            if (arrYarnCount!!.size > 0) spYarnCount.setSelection(
-                                arrYarnCountStr!!.indexOf(
-                                    yarnCount
-                                )
-                            )
-                            else etYarnCount.setText(yarnCount, TextView.BufferType.EDITABLE)
-                    }
-                    if (userConfig.weftYarnId!! > 0) {
-                        var dyeTypes = ""
-                        arrDye?.forEach {
-                            if (it.id.equals(userConfig.weftYarnId)) dyeTypes = it.dyeDesc
-                        }
-                        spYarnDye.setSelection(arrDyeStr.indexOf(dyeTypes))
-                    }
-                }
             }
             2 -> {
                 yarnTitle.text = "Extra Weft (Optional) "
-                if(productId>0) {
-                    Utility.setImageResource(context, imgYarn, R.drawable.ic_extraweft_icon)
-                    if (userConfig.extraWeftDyeId!! > 0) {
-                        var yarnType = ""
-                        arrYarn?.forEach {
-                            if (it.id.equals(userConfig.extraWeftDyeId)) yarnType = it.yarnDesc
-                        }
-                        spYarnType.setSelection(arrYarneStr.indexOf(yarnType))
-                    }
-                    if (userConfig.extraWeftYarnCount!!.isNotBlank()) {
-                        var yarnCount = ""
-                        arrYarnCount?.forEach {
-                            if (it.count.equals(userConfig.extraWeftYarnCount)) yarnCount = it.count
-                        }
-                        if (arrYarnCount != null)
-                            if (arrYarnCount!!.size > 0) spYarnCount.setSelection(
-                                arrYarnCountStr!!.indexOf(
-                                    yarnCount
-                                )
-                            )
-                            else etYarnCount.setText(yarnCount, TextView.BufferType.EDITABLE)
-                    }
-                    if (userConfig.extraWeftYarnId!! > 0) {
-                        var dyeTypes = ""
-                        arrDye?.forEach {
-                            if (it.id.equals(userConfig.extraWeftYarnId)) dyeTypes = it.dyeDesc
-                        }
-                        spYarnDye.setSelection(arrDyeStr.indexOf(dyeTypes))
-                    }
-                }
+                Utility.setImageResource(context, imgYarn, R.drawable.ic_extraweft_icon)
             }
+        }
+
+        if(productId>0){
+          if(isTemplate!!){
+              artisanProductEntry= ProductPredicates.getArtisanProductsByRemoteId(productId)
+              when(position) {
+                  0 -> {
+                       yarnType=artisanProductEntry?.warpYarnId?:0
+                       yarnCount=artisanProductEntry?.warpYarnCount?:""
+                       dyeId=artisanProductEntry?.warpDyeId?:0
+                  }
+                  1 -> {
+                      yarnType=artisanProductEntry?.weftYarnId?:0
+                      yarnCount=artisanProductEntry?.weftYarnCount?:""
+                      dyeId=artisanProductEntry?.weftDyeId?:0
+                  }
+                  2 -> {
+                      yarnType=artisanProductEntry?.extraWeftYarnId?:0
+                      yarnCount=artisanProductEntry?.extraWeftYarnCount?:""
+                      dyeId=artisanProductEntry?.extraWeftDyeId?:0
+                  }
+              }
+          }
+          else{
+              buyerProductEntry= BuyerCustomProductPredicates.getCustomProductFormRemotId(productId)
+              when(position) {
+                  0 -> {
+                      yarnType=buyerProductEntry?.warpYarnId?:0
+                      yarnCount=buyerProductEntry?.warpYarnCount?:""
+                      dyeId=buyerProductEntry?.warpDyeId?:0
+                  }
+                  1 -> {
+                      yarnType=buyerProductEntry?.weftYarnId?:0
+                      yarnCount=buyerProductEntry?.weftYarnCount?:""
+                      dyeId=buyerProductEntry?.weftDyeId?:0
+                  }
+                  2 -> {
+                      yarnType=buyerProductEntry?.extraWeftYarnId?:0
+                      yarnCount=buyerProductEntry?.extraWeftYarnCount?:""
+                      dyeId=buyerProductEntry?.extraWeftDyeId?:0
+                  }
+              }
+          }
+          arrYarn?.forEach {if(it.id.equals(yarnType))typeSelection=it.yarnDesc }
+          spYarnType.setSelection(arrYarneStr.indexOf(typeSelection))
+
+          etYarnCount.setText(yarnCount, TextView.BufferType.EDITABLE)
+          spYarnCount.setSelection(arrYarnCountStr.indexOf(yarnCount))
+
+          arrDye?.forEach { if(it.id.equals(dyeId))dyeSelection=it.dyeDesc  }
+          spYarnDye.setSelection(arrDyeStr.indexOf(dyeSelection))
+
+          callListener(position)
         }
         val vp = container as ViewPager
         vp.addView(view, position)
@@ -303,108 +271,21 @@ class YarnViewpager(context: Context, productId: Long, arrYarn: List<Yarn>?, arr
     override fun getItemPosition(`object`: Any): Int {
         return super.getItemPosition(`object`)
     }
-    fun callListener(position: Int, yarnType: String, yarnCount: String, dye: String) {
+
+    fun callListener(position: Int) {
         var yarnTypeId = 0L
         var dyeId = 0L
-        arrYarn?.forEach { if (it.yarnDesc.equals(yarnType)) yarnTypeId = it.id }
+        var yarnCnt=""
+
+        var type= try{ spYarnType.getSelectedItem().toString()}catch (e:Exception){""}
+        var count=try{if(etYarnCount.visibility==View.VISIBLE) etYarnCount.text.toString()  else spYarnCount.getSelectedItem().toString()}catch (e:Exception){""}
+        var dye=try{spYarnDye.getSelectedItem().toString()}catch (e:Exception){""}
+
+        Log.e("Viewpager", "Type: $type, count: $count , dye: $dye")
+        arrYarn?.forEach { if (it.yarnDesc.equals(type)) yarnTypeId = it.id }
         arrDye?.forEach { if (it.dyeDesc.equals(dye)) dyeId = it.id }
-
-        when (position) {
-            0 -> {
-                //warp
-                userConfig.warpDyeId = dyeId
-                userConfig.warpYarnCount = yarnCount
-                userConfig.warpYarnId = yarnTypeId
-            }
-            1 -> {
-                //weft
-                userConfig.weftDyeId = dyeId
-                userConfig.weftYarnCount = yarnCount
-                userConfig.weftYarnId = yarnTypeId
-            }
-            2 -> {
-                //extra weft
-                userConfig.extraWeftDyeId = dyeId
-                userConfig.extraWeftYarnCount = yarnCount
-                userConfig.extraWeftYarnId = yarnTypeId
-            }
-        }
-        listener?.sendYarnData(position, yarnTypeId, yarnCount, dyeId)
+        if(!count.equals("Select count"))yarnCnt=count
+        listener?.sendYarnData(position, yarnTypeId, yarnCnt, dyeId)
     }
 
-    fun setSelections(position: Int) {
-        arrYarn?.forEach {
-            if (it.yarnDesc.equals(spYarnType.selectedItem.toString(), true)) {
-                arrYarnCount = it.yarnType.yarnCounts
-            } }
-        when (position) {
-            0 -> {
-                //warp
-                if(userConfig.warpYarnId!!>0 ){
-                    var yarnType=""
-                    arrYarn?.forEach {if(it.id.equals(userConfig.warpDyeId))yarnType=it.yarnDesc}
-                    spYarnType.setSelection(arrYarneStr.indexOf(yarnType))
-                }
-                if(userConfig.warpYarnCount!!.isNotBlank()) {
-                    var yarnCount=""
-                    arrYarnCount?.forEach { if(it.count.equals(userConfig.warpYarnCount))yarnCount=it.count }
-                    if(arrYarnCount!!.size>0)spYarnCount.setSelection(arrYarnCountStr!!.indexOf(yarnCount))
-                    else etYarnCount.setText(yarnCount,TextView.BufferType.EDITABLE)
-                }
-                if(userConfig.warpDyeId!!>0) {
-                    var dyeTypes=""
-                    arrDye?.forEach { if(it.id.equals(userConfig.warpDyeId))dyeTypes=it.dyeDesc}
-                    spYarnDye.setSelection(arrDyeStr.indexOf(dyeTypes))
-                }
-            }
-            1 -> {
-                //weft
-                if(userConfig.weftDyeId!!>0 ){
-                    var yarnType=""
-                    arrYarn?.forEach {if(it.id.equals(userConfig.weftDyeId))yarnType=it.yarnDesc}
-                    spYarnType.setSelection(arrYarneStr.indexOf(yarnType))
-                }
-                if(userConfig.weftYarnCount!!.isNotBlank()) {
-                    var yarnCount=""
-                    arrYarnCount?.forEach { if(it.count.equals(userConfig.weftYarnCount))yarnCount=it.count }
-                    if(arrYarnCount!!.size>0)spYarnCount.setSelection(arrYarnCountStr!!.indexOf(yarnCount))
-                    else etYarnCount.setText(yarnCount,TextView.BufferType.EDITABLE)
-                }
-                if(userConfig.weftYarnId!!>0) {
-                    var dyeTypes=""
-                    arrDye?.forEach { if(it.id.equals(userConfig.weftYarnId))dyeTypes=it.dyeDesc}
-                    spYarnDye.setSelection(arrDyeStr.indexOf(dyeTypes))
-                }
-            }
-            2 -> {
-                //extra weft
-                if(userConfig.extraWeftDyeId!!>0 ){
-                    var yarnType=""
-                    arrYarn?.forEach {if(it.id.equals(userConfig.extraWeftDyeId))yarnType=it.yarnDesc}
-                    spYarnType.setSelection(arrYarneStr.indexOf(yarnType))
-                }
-                if(userConfig.extraWeftYarnCount!!.isNotBlank()) {
-                    var yarnCount=""
-                    arrYarnCount?.forEach { if(it.count.equals(userConfig.extraWeftYarnCount))yarnCount=it.count }
-                    if(arrYarnCount!!.size>0)spYarnCount.setSelection(arrYarnCountStr!!.indexOf(yarnCount))
-                    else etYarnCount.setText(yarnCount,TextView.BufferType.EDITABLE)
-                }
-                if(userConfig.extraWeftYarnId!!>0) {
-                    var dyeTypes=""
-                    arrDye?.forEach { if(it.id.equals(userConfig.extraWeftYarnId))dyeTypes=it.dyeDesc}
-                    spYarnDye.setSelection(arrDyeStr.indexOf(dyeTypes))
-                }
-            }
-        }
-    }
-
-//    override fun onPageScrollStateChanged(state: Int) {
-//    }
-//
-//    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-//    }
-//
-//    override fun onPageSelected(position: Int) {
-//        currentPosition=position
-//    }
 }
