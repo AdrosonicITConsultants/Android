@@ -53,6 +53,7 @@ class ExtraWeftFragment : Fragment() {
 
     lateinit var imgYarn : ImageView
     lateinit var yarnTitle : TextView
+    lateinit var optionalText : TextView
     lateinit var spYarnType: Spinner
     lateinit var spYarnCount : Spinner
     lateinit var etYarnCount: EditText
@@ -78,12 +79,14 @@ class ExtraWeftFragment : Fragment() {
         var view=inflater.inflate(R.layout.warp_weft_yarn, container, false)
         imgYarn = view.findViewById<View>(R.id.img_yarn) as ImageView
         yarnTitle = view.findViewById<View>(R.id.txt_yarn_title) as TextView
+        optionalText = view.findViewById<View>(R.id.txt_optional) as TextView
         spYarnType = view.findViewById<View>(R.id.sp_yarn_type) as Spinner
         spYarnCount = view.findViewById<View>(R.id.sp_yarn_count) as Spinner
         etYarnCount = view.findViewById<View>(R.id.et_yarn_count) as EditText
         spYarnDye = view.findViewById<View>(R.id.sp_yarn_dye) as Spinner
 
         yarnTitle.text = "Extra weft  "
+        optionalText.visibility=View.VISIBLE
         Utility.setImageResource(context, imgYarn, R.drawable.ic_extraweft_icon)
 
         jsonProductData = mUserConfig.productUploadJson.toString()

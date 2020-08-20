@@ -161,7 +161,11 @@ class BuyerCustomProductPredicates {
                             prodEntry.warpDyeId= try{ product.warpDye?.id} catch (e:Exception){0}
                             prodEntry.weftDyeId= try{ product.weftDye?.id} catch (e:Exception){0}
                             prodEntry.extraWeftDyeId= try{ product.extraWeftDye?.id} catch (e:Exception){0}
-                            prodEntry.dyeDsrcp=try{"${product.warpYarn.yarnDesc} X ${product.weftYarn.yarnDesc} X ${product.extraWeftYarn.yarnDesc}"}catch (e:Exception){""}
+                            var warpdscrp=try{product.warpYarn.yarnDesc }catch(e:Exception){""}
+                            var weftdscrp=try{" X "+product.weftYarn.yarnDesc}catch(e:Exception){""}
+                            var eweftdscrp=try{" X "+product.extraWeftYarn.yarnDesc}catch(e:Exception){""}
+
+                            prodEntry.dyeDsrcp=try{warpdscrp+weftdscrp+eweftdscrp}catch (e:Exception){""}
                             prodEntry.length=product.length
                             prodEntry.width=product.width
                             prodEntry.reedCountId=product.reedCount.id

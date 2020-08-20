@@ -357,9 +357,21 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
 
             mBinding?.etGsm?.setText(productEntry?.gsm?:"", TextView.BufferType.EDITABLE)
             mBinding?.etDscrp?.setText(productEntry?.productSpe?:"", TextView.BufferType.EDITABLE)
+            mUserConfig.warpYarnId=productEntry?.warpYarnId
+            mUserConfig.warpYarnCount=productEntry?.warpYarnCount
+            mUserConfig.warpDyeId=productEntry?.warpDyeId
+
+            mUserConfig.weftYarnId=productEntry?.weftYarnId
+            mUserConfig.weftYarnCount=productEntry?.weftYarnCount
+            mUserConfig.weftDyeId=productEntry?.weftDyeId
+
+            mUserConfig.extraWeftYarnId=productEntry?.extraWeftYarnId
+            mUserConfig.extraWeftYarnCount=productEntry?.extraWeftYarnCount
+            mUserConfig.extraWeftDyeId=productEntry?.extraWeftDyeId
+            getYarnData()
             setStatusResource()
-            Utility.setImageResource(applicationContext, mBinding?.imgStatusStep2, R.drawable.ic_add_prod_status_filled)
-            Utility.setImageResource(applicationContext, mBinding?.imgStatusStep4, R.drawable.ic_add_prod_status_filled)
+//            Utility.setImageResource(applicationContext, mBinding?.imgStatusStep2, R.drawable.ic_add_prod_status_filled)
+//            Utility.setImageResource(applicationContext, mBinding?.imgStatusStep4, R.drawable.ic_add_prod_status_filled)
         }
 
     }
@@ -652,12 +664,12 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
             else if(mBinding?.spProdCategory?.selectedItemPosition==0) Utility.displayMessage("Please select product category at step 2",applicationContext)
             else if(mBinding?.spProdType?.selectedItemPosition==0) Utility.displayMessage("Please select product type at step 2",applicationContext)
             else if(weaveIdList.isEmpty()) Utility.displayMessage("Please select weave type at step 3",applicationContext)
-            else if(warpDyeId<=0) Utility.displayMessage("Please select warp dye Id at step 4",applicationContext)
-            else if(warpYarnCount.isBlank()) Utility.displayMessage("Please select warp yarn count at step 4",applicationContext)
-            else if(warpYarnId<=0) Utility.displayMessage("Please select warp yarn Id at step 4",applicationContext)
-            else if(weftDyeId<=0) Utility.displayMessage("Please select weft dye Id at step 4",applicationContext)
-            else if(weftYarnCount.isBlank()) Utility.displayMessage("Please select weft yarn count at step 4",applicationContext)
-            else if(weftYarnId<=0) Utility.displayMessage("Please select weft yarn Id at step 4",applicationContext)
+            else if(warpDyeId<=0) Utility.displayMessage("Please select warp details at step 4",applicationContext)
+            else if(warpYarnCount.isBlank()) Utility.displayMessage("Please select warp details at step 4",applicationContext)
+            else if(warpYarnId<=0) Utility.displayMessage("Please select warp details at step 4",applicationContext)
+            else if(weftDyeId<=0) Utility.displayMessage("Please select weft details at step 4",applicationContext)
+            else if(weftYarnCount.isBlank()) Utility.displayMessage("Please select weft details at step 4",applicationContext)
+            else if(weftYarnId<=0) Utility.displayMessage("Please select weft details at step 4",applicationContext)
             else if(mBinding?.spReedCount?.selectedItemPosition==0) Utility.displayMessage("Please select reed count at setp 5",applicationContext)
             else if(width.isBlank()) Utility.displayMessage("Please enter width at step 6",applicationContext)
             else if(length.isBlank()) Utility.displayMessage("Please enter length at step 6",applicationContext)

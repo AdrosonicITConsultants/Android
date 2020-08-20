@@ -31,10 +31,20 @@
                 android:text="Warp"
                 android:textColor="@color/black_text"
                 android:textSize="18sp"
-
                 android:textStyle="bold" />
 
-
+            <TextView
+                android:layout_marginLeft="8dp"
+                android:id="@+id/txt_optional"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:fontFamily="@font/playfair_regular"
+                android:text="(Optional)"
+                android:textColor="@color/darker_gray"
+                android:textSize="18sp"
+                android:visibility="gone"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <RelativeLayout

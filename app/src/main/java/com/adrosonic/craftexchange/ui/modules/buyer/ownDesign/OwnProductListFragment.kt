@@ -131,10 +131,7 @@ class OwnProductListFragment : Fragment(),
                 Log.e("Wishlist", "OnFailure")
                 swipe_refresh_layout.isRefreshing = false
                 mViewModel?.getCustomDesignListMutableData()
-                Utility.displayMessage(
-                    "Error while fetching custom products. Pleas try again after some time",
-                    requireContext()
-                )
+//                Utility.displayMessage("Error while fetching custom products. Pleas try again after some time", requireContext() )
                 setVisiblities()
             }
             )

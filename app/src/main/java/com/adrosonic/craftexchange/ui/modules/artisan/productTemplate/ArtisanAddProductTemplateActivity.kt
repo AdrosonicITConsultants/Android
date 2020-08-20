@@ -440,9 +440,20 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
             et_gsm.setText(productEntry?.gsm?:"", TextView.BufferType.EDITABLE)
             et_prod_weight.setText(productEntry?.weight?:"", TextView.BufferType.EDITABLE)
             et_dscrp.setText(productEntry?.productSpecs?:"", TextView.BufferType.EDITABLE)
+
+//            mUserConfig.warpYarnId=productEntry?.warpYarnId
+//            mUserConfig.warpYarnCount=productEntry?.warpYarnCount
+//            mUserConfig.warpDyeId=productEntry?.warpDyeId
+//
+//            mUserConfig.weftYarnId=productEntry?.weftYarnId
+//            mUserConfig.weftYarnCount=productEntry?.weftYarnCount
+//            mUserConfig.weftDyeId=productEntry?.weftDyeId
+//
+//            mUserConfig.extraWeftYarnId=productEntry?.extraWeftYarnId
+//            mUserConfig.extraWeftYarnCount=productEntry?.extraWeftYarnCount
+//            mUserConfig.extraWeftDyeId=productEntry?.extraWeftDyeId
             getYarnData()
             setStatusResource()
-            Utility.setImageResource(applicationContext, img_status_step4, R.drawable.ic_add_prod_status_filled)
         }
 
     }
