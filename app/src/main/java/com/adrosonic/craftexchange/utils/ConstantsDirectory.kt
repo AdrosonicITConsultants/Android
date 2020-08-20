@@ -3,6 +3,7 @@ package com.adrosonic.craftexchange.utils
 object ConstantsDirectory {
     //////////////////////////////////////////////////////////////////////
     const val BASE_URL = "http://101.53.153.96:8090/"
+    const val IMAGE_LOAD_BASE_URL = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/"
 
     //////////////////////////////////////////////////////////////////////
     const val PERMISSION_REQUEST_CODE = 20

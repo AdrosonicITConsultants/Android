@@ -121,7 +121,7 @@ class ProductCreateService: JobIntentService() {
                         call: Call<ArtisanProductTemplateRespons>,
                         response: retrofit2.Response<ArtisanProductTemplateRespons>
                     ) {
-                        Log.e("Offline", "onResponse :" + response.code())
+                        Log.e("Offline", "onResponse : ${response.isSuccessful} and ${response.message()}")
                         if (response.body()?.valid == true) {
                             deleteOfflineEntries(prodId)
                         }

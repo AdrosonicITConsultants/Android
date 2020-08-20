@@ -39,6 +39,13 @@ interface BuyerOwnDesignDao {
     ): Call<GetAllOwnDesignResponse>
 
     @Headers("Accept: application/json")
+    @GET("/CustomProduct/{productId}/{imagename}")
+    fun getProductImage(
+        @Path("productId") productId: Long,
+        @Path("imagename") imagename: String
+    ):Call<ResponseBody>
+
+    @Headers("Accept: application/json")
     @DELETE("/buyerCustomProduct/deleteProduct/{productId}")
     fun deleteOwnDesignProducts(
         @Header("Authorization") token: String,

@@ -372,12 +372,16 @@ class BuyerCustomProductPredicates {
             }
         }
         fun updateProductEntryPostUpdate(id: Long?){
-            var realm = CXRealmManager.getRealmInstance()
-            realm.executeTransaction{
-                Log.e("Offline", "updateProductEntryPostUpdate id :" +id)
-                var product = realm.where(BuyerCustomProduct::class.java).equalTo(BuyerCustomProduct.COLUMN_ID,id).limit(1).findFirst()
-                product?.actionEdited = 0
-                realm.copyToRealmOrUpdate(product)
+            try {
+                var realm = CXRealmManager.getRealmInstance()
+                realm.executeTransaction{
+                    Log.e("Offline", "updateProductEntryPostUpdate id :" +id)
+                    var product = realm.where(BuyerCustomProduct::class.java).equalTo(BuyerCustomProduct.COLUMN_ID,id).limit(1).findFirst()
+                    product?.actionEdited = 0
+                    realm.copyToRealmOrUpdate(product)
+                }
+            } catch (e: Exception) {
+                Log.e("Exception", "updateProductEntryPostUpdate  :" +e.message)
             }
         }
     }

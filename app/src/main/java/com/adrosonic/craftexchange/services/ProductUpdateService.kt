@@ -13,6 +13,7 @@ import com.adrosonic.craftexchange.repository.data.response.artisan.productTempl
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.google.gson.Gson
 import com.pixplicity.easyprefs.library.Prefs
+import com.wajahatkarim3.easyvalidation.core.view_ktx.contains
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -40,7 +41,9 @@ class ProductUpdateService: JobIntentService() {
                 val productEntry= ProductPredicates.getArtisanProducts(prodId)
                 if(productEntry!=null) {
                     Log.e("Offline", "Product Id :" + productEntry?.productId)
-                    val imageEntry =ProductImagePredicates.getImagesList(productEntry?.productId ?: 0)
+                    val imageEntry1 =ProductImagePredicates.getImagesList(productEntry?.productId ?: 0)
+                    var imageEntry=ArrayList<String>()
+                    imageEntry1?.forEach { if(it.contains("cache/BrowsedImages/"))imageEntry.add(it) }
                     val weaveIds = WeaveTypesPredicates.getWeaveList(productEntry?.productId ?: 0)
                     val careIds = ProductCaresPredicates.getCareList(productEntry?.productId ?: 0)
                     val relatedEntry = RelateProductPredicates.getRelatedProductOfProduct(productEntry?.productId ?: 0)
@@ -121,7 +124,7 @@ class ProductUpdateService: JobIntentService() {
                     call: Call<ArtisanProductTemplateRespons>,
                     response: retrofit2.Response<ArtisanProductTemplateRespons>
                 ) {
-                    Log.e("Offline", "onResponse :" + response.code())
+                    Log.e("Offline", "onResponse prod template :" + response.code()+"${response.body()?.valid} : ${response.body()?.errorMessage}")
                     if (response.body()?.valid == true) {
                         ProductPredicates.updateProductEntryPostUpdate(prodId)
                         ProductImagePredicates.deleteProdImageForUpdate(prodId)

@@ -15,8 +15,10 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager
 import com.adrosonic.craftexchange.R
@@ -38,10 +40,13 @@ import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.WeaveSelec
 import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.YarnViewpager
 import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.yarnFrgamnets.YarnFrgamentAdapter
 import com.adrosonic.craftexchange.utils.*
+import com.adrosonic.craftexchange.viewModels.DownLoadProdImagesViewModel
+import com.adrosonic.craftexchange.viewModels.OwnProductViewModel
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_artisan_add_product_template.*
 import kotlinx.android.synthetic.main.activity_buyer_add_own_product_design.*
 import kotlinx.android.synthetic.main.activity_buyer_add_own_product_design.yarn_pager
+import java.io.File
 
 
 fun Context.ownDesignIntent(): Intent {
@@ -52,14 +57,13 @@ fun Context.ownDesignIntent(id: Long): Intent {
     val intent = Intent(this, BuyerAddOwnProductDesignActivity::class.java)
     intent.putExtra("productId", id)
     return intent.apply { }
-//    return Intent(this, ArtisanAddProductTemplateActivity::class.java).apply {
 }
 class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
     View.OnClickListener,
-//    YarnViewpager.yarnListner,
+    DownLoadProdImagesViewModel.DownloadImagesCallback,
     ProdImageListAdapter.ProdUpdateListener,
     WeaveSelectionAdapter.selectionListener{
-
+    val mViewModel: DownLoadProdImagesViewModel by viewModels()
     private var mBinding:ActivityBuyerAddOwnProductDesignBinding? = null
     private lateinit var prodImgListAdapter: ProdImageListAdapter
     private var pairList = ArrayList<Triple<Boolean,Long, String>>()
@@ -318,7 +322,12 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
         if(productId>0){
             var imageList= ProductImagePredicates.getImagesList(productId)
             Log.e("Offline", "activity imageList :" +imageList.size)
-            imageList.forEach {  pairList.add(Triple(true,productId,it))}
+            if(imageList.size>0){
+                mViewModel.listener=this
+                mBinding?.pbLoader?.visibility=View.VISIBLE
+                mViewModel.downLoadImages(productId,imageList)
+            }
+//            imageList.forEach {  pairList.add(Triple(true,productId,it))}
 
             for (category in arrProductCategory!!) {
                 if (category.productDesc.equals(productEntry?.productCategoryDscrp?:"", true)) {
@@ -370,34 +379,11 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
             mUserConfig.extraWeftDyeId=productEntry?.extraWeftDyeId
             getYarnData()
             setStatusResource()
-//            Utility.setImageResource(applicationContext, mBinding?.imgStatusStep2, R.drawable.ic_add_prod_status_filled)
+            Utility.setImageResource(applicationContext, mBinding?.imgStatusStep2, R.drawable.ic_add_prod_status_filled)
 //            Utility.setImageResource(applicationContext, mBinding?.imgStatusStep4, R.drawable.ic_add_prod_status_filled)
         }
 
     }
-
-//    override fun sendYarnData(position: Int, yarnType: Long, yarnCount: String, dye: Long) {
-//        Log.e("Viewpager","{$yarnPosition} position/yarnType :"+yarnType+" :yarnCount :"+yarnCount+" : dye :"+dye)
-//        when(yarnPosition){
-//            0->{
-//                warpYarnId=yarnType
-//                warpYarnCount=yarnCount
-//                warpDyeId=dye
-//            }
-//            1->{
-//                weftYarnId=yarnType
-//                weftYarnCount=yarnCount
-//                weftDyeId=dye
-//            }
-//            2->{
-//                extraWeftYarnId=yarnType
-//                extraWeftYarnCount=yarnCount
-//                extraWeftDyeId=dye
-//            }
-//        }
-////        setDotsColor(position)
-//        setStatusResource()
-//    }
 
     override fun onUpdate(pairList: ArrayList<Triple<Boolean,Long, String>>, deletedIds: ArrayList<Pair<Long,String>>) {
         this.pairList = pairList
@@ -852,5 +838,24 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
     override fun onDestroy() {
         super.onDestroy()
         Utility.resetYarnData()
+    }
+
+    override fun onSuccess(imageList:ArrayList<String>) {
+        mBinding?.pbLoader?.visibility=View.GONE
+        pairList.clear()
+        Log.e("DownLoadProdImages", "5555555 : " + imageList.joinToString())
+        imageList.forEach {
+
+            val myDir = File(this.cacheDir, "/"+ Utility.BROWSING_IMGS+"/$it")
+            Log.e("DownLoadProdImages", "66666 : ${myDir.absolutePath}")
+            pairList.add(Triple(false, 0, myDir.absolutePath))
+        }
+        setStatusResource()
+        prodImgListAdapter.notifyDataSetChanged()
+    }
+
+    override fun onFailure() {
+      mBinding?.pbLoader?.visibility=View.GONE
+      Utility.displayMessage("Unable to download product images",this)
     }
 }

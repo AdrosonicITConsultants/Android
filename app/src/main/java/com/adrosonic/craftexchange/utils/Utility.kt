@@ -32,6 +32,7 @@ import kotlinx.android.synthetic.main.dialog_gen_enquiry_update_or_new.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -134,11 +135,13 @@ class Utility {
                         } else myDir = File(context.cacheDir, BROWSING_IMGS + "/" + contentUri.lastPathSegment + "")
                     }
                     else myDir = File(context.cacheDir, BROWSING_IMGS + "/" + contentUri.lastPathSegment + ".jpg")
-
-                if(contentUri.lastPathSegment!!.length>42){
+                Log.e("FileName","1111 ${myDir.name} : ${myDir.name.length}")
+                if(myDir.name!!.length>42){
                     val renamed = File(context.cacheDir, BROWSING_IMGS + "/" + System.currentTimeMillis()+ ".jpg")
+                    Log.e("FileName","33333  ${renamed.name}")
                     myDir.renameTo( renamed)
                 }
+                Log.e("FileName","4444  ${myDir.name}")
                 var inputStream: InputStream? = context.contentResolver.openInputStream(contentUri)
                 var outputStream: OutputStream = FileOutputStream(myDir)
                 try {
@@ -385,5 +388,7 @@ class Utility {
             UserConfig.shared.extraWeftYarnCount=""
             UserConfig.shared.extraWeftYarnId=0
         }
+
+
     }
 }
