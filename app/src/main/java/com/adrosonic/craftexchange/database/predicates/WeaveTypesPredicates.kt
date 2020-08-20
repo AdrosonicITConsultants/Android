@@ -14,7 +14,7 @@ class WeaveTypesPredicates {
         fun insertWeaveIds(productId: Long?,weaveIds:List<Long>?): Long? {
             val realm = CXRealmManager.getRealmInstance()
             try {
-                realm?.executeTransaction {
+                realm.executeTransaction {
                     val imageIterator = weaveIds?.iterator()
                     Log.e("insertWeaveIds", "000000000 "+ weaveIds?.joinToString())
                     while (imageIterator!!.hasNext()) {
@@ -48,7 +48,7 @@ class WeaveTypesPredicates {
         fun insertWeaveIds(weaveIds:List<ProductWeaf>?) {
             val realm = CXRealmManager.getRealmInstance()
             try {
-                realm?.executeTransaction {
+                realm.executeTransaction {
                     val imageIterator = weaveIds?.iterator()
                     Log.e("insertWeaveIds", "000000000 "+ weaveIds?.joinToString())
                     while (imageIterator!!.hasNext()) {
@@ -64,7 +64,7 @@ class WeaveTypesPredicates {
                             WeaveTypes::class.java,
                             nextID
                         )
-                        weaveObj.productId = id?.productId
+                        weaveObj.productId = id.productId
                         weaveObj.weaveId = id.weaveId
                         weaveObj.productWeaveId = 0
                         Log.e("insertWeaveIds", "222222222 "+  weaveObj.weaveId)
@@ -83,7 +83,7 @@ class WeaveTypesPredicates {
             var list=ArrayList<Long>()
             var realm = CXRealmManager.getRealmInstance()
             try {
-                realm?.executeTransaction {
+                realm.executeTransaction {
                     var images = realm.where(WeaveTypes::class.java).equalTo("productId", id).findAll()
                     images.forEach { list.add(it.weaveId?:0) }
                 }
@@ -97,7 +97,7 @@ class WeaveTypesPredicates {
         fun deleteWeaveIds(id:Long?){
             var count=0
             val realm = CXRealmManager.getRealmInstance()
-            realm?.executeTransaction {
+            realm.executeTransaction {
                 val artisonProd = it.where(WeaveTypes::class.java).equalTo("productId", id).findAll()
                 artisonProd.deleteAllFromRealm()
             }

@@ -74,7 +74,7 @@ ArtisanProductsViewModel.productsFetchInterface{
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mViewModel?.listener = this
+        mViewModel.listener = this
         initializeView()
         if (!Utility.checkIfInternetConnected(requireContext())) {
             Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
@@ -161,7 +161,7 @@ ArtisanProductsViewModel.productsFetchInterface{
                 Log.e("CAtegoryList", "Onsuccess")
                 mBinding?.swipeRefreshLayout?.isRefreshing = false
                 initializeView()
-                mViewModel?.getProductListMutableData(artisanId,prodCat)
+                mViewModel.getProductListMutableData(artisanId,prodCat)
             }
             )
         } catch (e: Exception) {
@@ -175,7 +175,7 @@ ArtisanProductsViewModel.productsFetchInterface{
                 Log.e("Wishlist", "OnFailure")
                 mBinding?.swipeRefreshLayout?.isRefreshing = false
                 initializeView()
-                mViewModel?.getProductListMutableData(artisanId,prodCat)
+                mViewModel.getProductListMutableData(artisanId,prodCat)
                 Utility.displayMessage(
                     "Error while fetching wishlist. Pleas try again after some time",
                     requireContext()

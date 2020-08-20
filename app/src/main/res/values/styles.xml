@@ -8,13 +8,6 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppThemeDarkAction" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorBackground</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
-
     <style name="HorizontalDivider">
         <item name="android:layout_width">100dp</item>
         <item name="android:layout_height">1dp</item>
@@ -39,12 +32,6 @@
         <item name="android:background">?android:attr/listDivider</item>
     </style>
 
-    <style name="VerticalDivider">
-        <item name="android:layout_width">1dp</item>
-        <item name="android:layout_height">36dp</item>
-        <item name="android:background">?android:attr/listDivider</item>
-    </style>
-
     <style name="splashScreenTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_screen</item>
     </style>
@@ -53,8 +40,6 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
@@ -90,10 +75,6 @@
         <item name="fontFamily">@font/lato_regular</item>
         <item name="paddingStart">@dimen/margin_regular</item>
         <item name="android:gravity">center_vertical|end</item>
-    </style>
-
-    <style name="spinner_theme" parent="android:Widget.Spinner">
-        <item name="android:background">@drawable/ic_arrow_spinner_drop_down</item>
     </style>
 
     <style name="seekbarStyle" parent="Widget.AppCompat.SeekBar">

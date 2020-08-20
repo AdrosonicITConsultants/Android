@@ -12,8 +12,8 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.FragmentArtisanSearchResultsBinding
+import com.adrosonic.craftexchange.ui.modules.artisan.search.adapter.ArtisanSearchAdapter
 import com.adrosonic.craftexchange.ui.modules.search.FilterCollectionAdapter
-import com.adrosonic.craftexchange.ui.modules.search.SuggestionFragment
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.ArtisanProductsViewModel
 import com.adrosonic.craftexchange.viewModels.SearchViewModel
@@ -54,7 +54,7 @@ class ArtisanSearchResultsFragment : Fragment(),
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_artisan_search_results, container, false)
         searchFilter = param1
 
-        filterList?.clear()
+        filterList.clear()
         filterList.add(Pair(requireActivity().getString(R.string.show_both),1))
         filterList.add(Pair(requireActivity().getString(R.string.antaran_co_design_collection),2))
         filterList.add(Pair(requireActivity().getString(R.string.artisan_self_design_collection),3))
@@ -67,11 +67,7 @@ class ArtisanSearchResultsFragment : Fragment(),
 
 
         setFilterRecycler(filterList)
-        filterAdapter?.fListener = this
-
-        mBinding?.filterByCollection?.setOnClickListener {
-            Utility?.displayMessage("Hola",requireContext())
-        }
+        filterAdapter.fListener = this
 
         var search = activity?.findViewById<SearchView>(R.id.search_artisan)
         search?.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
@@ -80,7 +76,7 @@ class ArtisanSearchResultsFragment : Fragment(),
             }
             override fun onQueryTextChange(newText:String):Boolean {
                 activity?.supportFragmentManager?.beginTransaction()
-                    ?.replace(R.id.ss_container, SuggestionFragment.newInstance())
+                    ?.replace(R.id.ss_container, ArtisanSuggestionFragment.newInstance())
                     ?.addToBackStack(null)
                     ?.commit()
                 return false
@@ -121,11 +117,18 @@ class ArtisanSearchResultsFragment : Fragment(),
     }
 
     private fun setupRecyclerView(searchFilter : String, filter : Long){
-        adapter = ArtisanSearchAdapter(requireContext(), searchFilter?.let { mViewModel.getArtisanSearchData(it,filter).value })
+        adapter =
+            ArtisanSearchAdapter(
+                requireContext(),
+                searchFilter.let { mViewModel.getArtisanSearchData(it, filter).value })
         mBinding?.artisanSearchList?.adapter = adapter
         mBinding?.artisanSearchList?.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        mBinding?.listSizeText?.text =
-            "Found ${adapter?.itemCount} items"
+        mBinding?.listSizeText?.text = "Found ${adapter?.itemCount} items"
+        if(adapter?.itemCount == 0){
+            mBinding?.emptyText?.visibility = View.VISIBLE
+        }else{
+            mBinding?.emptyText?.visibility = View.GONE
+        }
         adapter?.notifyDataSetChanged()
     }
 

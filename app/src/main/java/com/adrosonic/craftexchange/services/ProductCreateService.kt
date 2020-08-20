@@ -42,7 +42,7 @@ class ProductCreateService: JobIntentService() {
                val weaveIds=WeaveTypesPredicates.getWeaveList(prodId)
                val careIds=ProductCaresPredicates.getCareList(prodId)
                val relatedEntry=RelateProductPredicates.getRelatedProductOfProduct(prodId)
-               Log.e("Offline","imageList :"+imageEntry?.joinToString ())
+               Log.e("Offline","imageList :"+ imageEntry.joinToString ())
                var productData=createProductTemplateString(productEntry,weaveIds,careIds,relatedEntry)
                Log.e("Offline","productData :"+productData)
                uploadProduct(productData,imageEntry,prodId)
@@ -53,7 +53,7 @@ class ProductCreateService: JobIntentService() {
     }
     fun createProductTemplateString(productEntry:ArtisanProducts?,weaveIds:List<Long>,careIdList:List<Long>,realatedEntry:RelatedProducts?):String{
         var template= ArtisanAddProductRequest()
-        Log.e("Offline","createProductTemplateString 1111111111:"+weaveIds?.size)
+        Log.e("Offline","createProductTemplateString 1111111111:"+ weaveIds.size)
         template.tag=productEntry?.productTag?:""//et_prod_name.text.toString()
         template.code=productEntry?.productCode?:""
         template.productCategoryId=productEntry?.productCategoryId?:0
@@ -100,7 +100,7 @@ class ProductCreateService: JobIntentService() {
 
             val byteData=prepareMultiPartBody(boundary,dataLength,imageList)
             Log.e("Offline","prepareMultiPartBody 666666 "+byteData?.capacity())
-            val body = byteData!!.array().toRequestBody(MediaType.parse("image/*"), 0, byteData!!.capacity())
+            val body = byteData!!.array().toRequestBody(MediaType.parse("image/*"), 0, byteData.capacity())
             Log.e("Offline","prepareMultiPartBody 77777 "+body.contentLength())
             val bodyMultipart = MultipartBody.Builder()
                 .addPart(body)

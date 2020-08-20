@@ -55,7 +55,7 @@ class GeneralFragment : Fragment() {
             altmobile = "${craftUser?.alternateMobile}  (alternate)"
         }
 
-        mBinding?.mobile?.text = mobile ?: ""
+        mBinding?.mobile?.text = mobile
         mBinding?.altMobile?.text = altmobile ?: " - "
 
         return mBinding?.root

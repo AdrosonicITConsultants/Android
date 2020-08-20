@@ -15,7 +15,7 @@ class ProductCaresPredicates {
         fun insertCareIds(productId: Long?,careIds:List<Long>?): Long? {
             val realm = CXRealmManager.getRealmInstance()
             try {
-                realm?.executeTransaction {
+                realm.executeTransaction {
                     val imageIterator = careIds?.iterator()
                     while (imageIterator!!.hasNext()) {
                         var id=imageIterator.next()
@@ -40,7 +40,7 @@ class ProductCaresPredicates {
         fun insertCareIds(careIds:List<ProductCare>?) {
             val realm = CXRealmManager.getRealmInstance()
             try {
-                realm?.executeTransaction {
+                realm.executeTransaction {
                     val imageIterator = careIds?.iterator()
                     while (imageIterator!!.hasNext()) {
                         var id=imageIterator.next()
@@ -49,8 +49,8 @@ class ProductCaresPredicates {
                         else  nextID = primId.toLong() + 1
 
                         var weaveObj = it.createObject(ProductCares::class.java, nextID)
-                        weaveObj.productId = id?.productId
-                        weaveObj.careId = id?.productCareId
+                        weaveObj.productId = id.productId
+                        weaveObj.careId = id.productCareId
                         weaveObj.productCareId = 0
                     }
                 }
@@ -65,7 +65,7 @@ class ProductCaresPredicates {
             var list=ArrayList<Long>()
             var realm = CXRealmManager.getRealmInstance()
             try {
-                realm?.executeTransaction {
+                realm.executeTransaction {
                     var images = realm.where(ProductCares::class.java).equalTo("productId", id).findAll()
                     images.forEach { list.add(it.careId?:0) }
                 }
@@ -80,7 +80,7 @@ class ProductCaresPredicates {
             var list=ArrayList<Long>()
             var realm = CXRealmManager.getRealmInstance()
             try {
-                realm?.executeTransaction {
+                realm.executeTransaction {
                     var images = realm.where(ProductCares::class.java).equalTo("productId", id).findAll()
                     images.forEach { list.add(it.productCareId?:0) }
                 }
@@ -94,7 +94,7 @@ class ProductCaresPredicates {
         fun deleteCareIds(id:Long){
             var count=0
             val realm = CXRealmManager.getRealmInstance()
-            realm?.executeTransaction {
+            realm.executeTransaction {
                 val artisonProd = it.where(ProductCares::class.java).equalTo("productId", id).findAll()
                 artisonProd.deleteAllFromRealm()
             }

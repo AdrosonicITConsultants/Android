@@ -1,4 +1,4 @@
-package com.adrosonic.craftexchange.ui.modules.buyer.search
+package com.adrosonic.craftexchange.ui.modules.buyer.search.adapter
 
 import android.view.View
 import android.view.ViewGroup

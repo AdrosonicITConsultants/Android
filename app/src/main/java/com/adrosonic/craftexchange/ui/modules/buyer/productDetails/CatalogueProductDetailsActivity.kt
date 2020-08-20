@@ -71,13 +71,13 @@ EnquiryViewModel.GenerateEnquiryInterface{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mEnqVM.listener = this
-        dialog = Utility?.enquiryGenProgressDialog(this)
+        dialog = Utility.enquiryGenProgressDialog(this)
 
         mBinding = ActivityCatalogueProductDetailsBinding.inflate(layoutInflater)
         val view = mBinding?.root
         setContentView(view)
 
-        jsonProductData = mUserConfig?.productUploadJson.toString()
+        jsonProductData = mUserConfig.productUploadJson.toString()
         val gson = GsonBuilder().create()
         productUploadData = gson.fromJson(jsonProductData, ProductUploadData::class.java)
 
@@ -98,12 +98,12 @@ EnquiryViewModel.GenerateEnquiryInterface{
                 this?.let {
                     ContextCompat.getColor(
                         it, R.color.dark_green)
-                }?.let {  mBinding?.productAvailabilityText?.setTextColor(it) }
+                }.let {  mBinding?.productAvailabilityText?.setTextColor(it) }
             }
             1.toLong() -> {
-                status = this?.getString(R.string.exclusively)
+                status = this.getString(R.string.exclusively)
                 var mto = SpannableString(ConstantsDirectory.MADE_TO_ORDER)
-                mto.setSpan(this?.let { ContextCompat.getColor(it, R.color.light_green) }?.let {
+                mto.setSpan(this.let { ContextCompat.getColor(it, R.color.light_green) }.let {
                     ForegroundColorSpan(
                         it
                     )
@@ -113,7 +113,7 @@ EnquiryViewModel.GenerateEnquiryInterface{
                 this?.let {
                     ContextCompat.getColor(
                         it, R.color.dark_magenta)
-                }?.let { mBinding?.productAvailabilityText?.setTextColor(it) }
+                }.let { mBinding?.productAvailabilityText?.setTextColor(it) }
             }
         }
 
@@ -165,7 +165,7 @@ EnquiryViewModel.GenerateEnquiryInterface{
                 Utility.displayMessage(getString(R.string.no_internet_connection), applicationContext)
             } else {
                 dialog?.show()
-                mEnqVM?.ifEnquiryExists(productId!!,false)
+                mEnqVM.ifEnquiryExists(productId!!,false)
 //                mEnqVM?.generateEnquiry(productId!!,false, mUserConfig?.deviceName.toString())
             }
         }
@@ -178,20 +178,20 @@ EnquiryViewModel.GenerateEnquiryInterface{
     fun getProductImages(productId : Long?){
         var imageList = ProductPredicates.getAllImagesOfProduct(productId)
         var size = imageList
-        imageUrlList?.clear()
+        imageUrlList.clear()
         if (imageList != null) {
             for (size in imageList){
                 Log.i("Stat","$size")
                 var imagename = size?.imageName
                 var url = Utility.getProductsImagesUrl(productId,imagename)
-                imageUrlList?.add(url)
+                imageUrlList.add(url)
             }
             if(imageUrlList!=null) {
                 var imageListener = ImageListener { position, imageView ->
                     imageView.scaleType = ImageView.ScaleType.FIT_CENTER
-                    ImageSetter.setImage(applicationContext,imageUrlList?.get(position),imageView)
+                    ImageSetter.setImage(applicationContext, imageUrlList.get(position),imageView)
                 }
-                mBinding?.carouselViewProducts?.pageCount = imageUrlList?.size!!
+                mBinding?.carouselViewProducts?.pageCount = imageUrlList.size
                 mBinding?.carouselViewProducts?.setImageListener(imageListener)
                 mBinding?.carouselViewProducts?.setImageClickListener {
                     UserConfig.shared.imageUrlList= Gson().toJson(imageUrlList)
@@ -202,7 +202,7 @@ EnquiryViewModel.GenerateEnquiryInterface{
     }
 
     fun setBrandDetails(artisanId : Long?){
-        var brand = ProductPredicates?.getBrandDetailsFromId(artisanId)
+        var brand = ProductPredicates.getBrandDetailsFromId(artisanId)
         var logo = brand?.logo
         var profile = brand?.profilePic
         var url : String ?=""
@@ -331,14 +331,14 @@ EnquiryViewModel.GenerateEnquiryInterface{
                 WishlistPredicates.updateProductWishlisting(productId,1L,1L)
                 if(Utility.checkIfInternetConnected(applicationContext)){
                     val coordinator = SyncCoordinator(applicationContext)
-                    coordinator?.performLocallyAvailableActions()
+                    coordinator.performLocallyAvailableActions()
                 }
             }
             override fun unLiked(likeButton: LikeButton) {
                 WishlistPredicates.updateProductWishlisting(productId,0L,1L)
                 if(Utility.checkIfInternetConnected(applicationContext)){
                     val coordinator = SyncCoordinator(applicationContext)
-                    coordinator?.performLocallyAvailableActions()
+                    coordinator.performLocallyAvailableActions()
                 }
             }
         })
@@ -361,7 +361,7 @@ EnquiryViewModel.GenerateEnquiryInterface{
         try {
             Handler(Looper.getMainLooper()).post {
                 dialog?.cancel()
-                Utility?.enquiryGenSuccessDialog(this, enquiry?.data?.enquiry?.code.toString()).show()
+                Utility.enquiryGenSuccessDialog(this, enquiry.data.enquiry.code.toString()).show()
                 Log.e("EnquiryGeneration", "Onsucces")
             }
         } catch (e: Exception) {
@@ -374,13 +374,13 @@ EnquiryViewModel.GenerateEnquiryInterface{
         try {
             Handler(Looper.getMainLooper()).post {
                 dialog?.dismiss()
-                var exDialog = Utility?.enquiryGenExistingDialog(this,id,productName)
+                var exDialog = Utility.enquiryGenExistingDialog(this,id,productName)
 //                exDialog.show()
 
                 exDialog.btn_generate_new_enquiry?.setOnClickListener {
-                    exDialog?.cancel()
+                    exDialog.cancel()
                     dialog?.show()
-                    mEnqVM?.generateEnquiry(productId!!,false, "Android")
+                    mEnqVM.generateEnquiry(productId!!,false, "Android")
                 }
                 Log.e("ExistingEnqGeneration", "Onsuccess")
             }

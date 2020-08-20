@@ -89,7 +89,7 @@ class CategoryProdListFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
         mEnqVM.listener = this
         catProdAdapter?.enqListener = this
-        dialog = Utility?.enquiryGenProgressDialog(requireContext())
+        dialog = Utility.enquiryGenProgressDialog(requireContext())
 
         setupRecyclerView()
     }
@@ -208,7 +208,7 @@ class CategoryProdListFragment : Fragment(),
         try {
             Handler(Looper.getMainLooper()).post {
                 dialog?.cancel()
-                Utility?.enquiryGenSuccessDialog(requireContext(), enquiry?.data?.enquiry?.code.toString())
+                Utility.enquiryGenSuccessDialog(requireContext(), enquiry.data.enquiry.code.toString())
                 Log.e("EnquiryGeneration", "Onsucces")
             }
         } catch (e: Exception) {
@@ -221,13 +221,13 @@ class CategoryProdListFragment : Fragment(),
         try {
             Handler(Looper.getMainLooper()).post {
                 dialog?.cancel()
-                var exDialog = Utility?.enquiryGenExistingDialog(requireContext(),id,productName)
+                var exDialog = Utility.enquiryGenExistingDialog(requireContext(),id,productName)
 //                exDialog.show()
 
                 exDialog.btn_generate_new_enquiry?.setOnClickListener {
-                    exDialog?.cancel()
+                    exDialog.cancel()
                     dialog?.show()
-                    productID?.let { it1 -> mEnqVM?.generateEnquiry(it1,false,"Android" ) }
+                    productID?.let { it1 -> mEnqVM.generateEnquiry(it1,false,"Android" ) }
                 }
                 Log.e("ExistingEnqGeneration", "Onsuccess")
             }

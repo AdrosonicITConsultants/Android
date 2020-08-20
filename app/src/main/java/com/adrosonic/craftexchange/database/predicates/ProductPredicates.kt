@@ -26,7 +26,7 @@ class ProductPredicates {
             val realm = CXRealmManager.getRealmInstance()
             var productList = user?.data?.userProductCategories
             try {
-                realm?.executeTransaction {
+                realm.executeTransaction {
                     var prodIterator = productList?.iterator()
                     if (prodIterator != null) {
                         while (prodIterator.hasNext()) {
@@ -79,7 +79,7 @@ class ProductPredicates {
                             var product = catItr.next()
 
                             var catProdType = product.productTypes
-                            var prdtypeItr = catProdType?.iterator()
+                            var prdtypeItr = catProdType.iterator()
                             if(prdtypeItr !=null){
                                 while (prdtypeItr.hasNext()) {
                                     var catProd = prdtypeItr.next()
@@ -280,134 +280,134 @@ class ProductPredicates {
                                     nextID = primId.toLong() + 1
                                 }
                                 var exprod = it.createObject(ProductCatalogue::class.java, nextID)
-                                exprod.artisanId = catalogueProduct?.artitionId
-                                exprod.artisanName = catalogueProduct?.artistName
-                                exprod.clusterId = catalogueProduct?.clusterId
-                                exprod.clusterName = catalogueProduct?.clusterName
-                                exprod.brandName = catalogueProduct?.brand
+                                exprod.artisanId = catalogueProduct.artitionId
+                                exprod.artisanName = catalogueProduct.artistName
+                                exprod.clusterId = catalogueProduct.clusterId
+                                exprod.clusterName = catalogueProduct.clusterName
+                                exprod.brandName = catalogueProduct.brand
 
-                                exprod.productId = catalogueProduct?.id
-                                exprod.productCode = catalogueProduct?.code
-                                exprod.productTag = catalogueProduct?.tag
+                                exprod.productId = catalogueProduct.id
+                                exprod.productCode = catalogueProduct.code
+                                exprod.productTag = catalogueProduct.tag
 
-                                exprod.productCategoryId = catalogueProduct?.productCategory?.id
-                                exprod.productCategoryName = catalogueProduct?.productCategory?.productDesc
-                                exprod.productCategoryCode = catalogueProduct?.productCategory?.code
+                                exprod.productCategoryId = catalogueProduct.productCategory.id
+                                exprod.productCategoryName = catalogueProduct.productCategory.productDesc
+                                exprod.productCategoryCode = catalogueProduct.productCategory.code
 
-                                exprod.productTypeId = catalogueProduct?.productType?.id
-                                exprod.productTypeDesc = catalogueProduct?.productType?.productDesc
-                                exprod.inProductCategory = catalogueProduct?.productType?.productCategoryId
+                                exprod.productTypeId = catalogueProduct.productType.id
+                                exprod.productTypeDesc = catalogueProduct.productType.productDesc
+                                exprod.inProductCategory = catalogueProduct.productType.productCategoryId
 
-                                exprod.warpYarnId = catalogueProduct?.warpYarn?.id
-                                exprod.warpYarnDesc = catalogueProduct?.warpYarn?.yarnDesc
-                                exprod.warpYarnCount = catalogueProduct?.warpYarnCount
+                                exprod.warpYarnId = catalogueProduct.warpYarn.id
+                                exprod.warpYarnDesc = catalogueProduct.warpYarn.yarnDesc
+                                exprod.warpYarnCount = catalogueProduct.warpYarnCount
 //                                exprod.warpYarnTypeId = catalogueProduct?.warpYarn?.yarnType?.id TODO : to be used later if required
-                                exprod.warpDyeId = catalogueProduct?.warpYarn?.id
-                                exprod.warpDyeId = catalogueProduct?.warpDye?.id
-                                exprod.warpDyeDesc = catalogueProduct?.warpDye?.dyeDesc
+                                exprod.warpDyeId = catalogueProduct.warpYarn.id
+                                exprod.warpDyeId = catalogueProduct.warpDye.id
+                                exprod.warpDyeDesc = catalogueProduct.warpDye.dyeDesc
 
-                                exprod.weftYarnId = catalogueProduct?.weftYarn?.id
-                                exprod.weftYarnDesc = catalogueProduct?.weftYarn?.yarnDesc
-                                exprod.weftYarnCount = catalogueProduct?.weftYarnCount
+                                exprod.weftYarnId = catalogueProduct.weftYarn.id
+                                exprod.weftYarnDesc = catalogueProduct.weftYarn.yarnDesc
+                                exprod.weftYarnCount = catalogueProduct.weftYarnCount
 //                                exprod.weftYarnTypeId = catalogueProduct?.weftYarn?.yarnType?.id TODO : to be used later if required
-                                exprod.weftDyeId = catalogueProduct?.weftDye?.id
-                                exprod.weftDyeDesc = catalogueProduct?.weftDye?.dyeDesc
+                                exprod.weftDyeId = catalogueProduct.weftDye.id
+                                exprod.weftDyeDesc = catalogueProduct.weftDye.dyeDesc
 
-                                exprod.extraWeftYarnId = catalogueProduct?.extraWeftYarn?.id
-                                exprod.extraWeftYarnDesc = catalogueProduct?.extraWeftYarn?.yarnDesc
-                                exprod.extraWeftYarnCount = catalogueProduct?.extraWeftYarnCount
+                                exprod.extraWeftYarnId = catalogueProduct.extraWeftYarn.id
+                                exprod.extraWeftYarnDesc = catalogueProduct.extraWeftYarn.yarnDesc
+                                exprod.extraWeftYarnCount = catalogueProduct.extraWeftYarnCount
 //                                exprod.extraWeftYarnTypeId = catalogueProduct?.extraWeftYarn?.yarnType?.id TODO : to be used later if required
-                                exprod.extraWeftDyeId = catalogueProduct?.extraWeftDye?.id
-                                exprod.extraWeftDyeDesc = catalogueProduct?.extraWeftDye?.dyeDesc
+                                exprod.extraWeftDyeId = catalogueProduct.extraWeftDye.id
+                                exprod.extraWeftDyeDesc = catalogueProduct.extraWeftDye.dyeDesc
 
-                                exprod.productLength = catalogueProduct?.length
-                                exprod.productWidth = catalogueProduct?.width
+                                exprod.productLength = catalogueProduct.length
+                                exprod.productWidth = catalogueProduct.width
 
-                                exprod.reedCountId = catalogueProduct?.reedCount?.id
-                                exprod.reedCount = catalogueProduct?.reedCount?.count
+                                exprod.reedCountId = catalogueProduct.reedCount.id
+                                exprod.reedCount = catalogueProduct.reedCount.count
 
-                                exprod.productStatusId = catalogueProduct?.productStatusId
+                                exprod.productStatusId = catalogueProduct.productStatusId
 
                                 //TODO : ProductCares, ProductImages and ProductWeaves...different table
                                 //TODO : Related Product Types to be implemented later
 
-                                exprod.gsm = catalogueProduct?.gsm
-                                exprod.weight = catalogueProduct?.weight
-                                exprod.product_spe = catalogueProduct?.product_spe
+                                exprod.gsm = catalogueProduct.gsm
+                                exprod.weight = catalogueProduct.weight
+                                exprod.product_spe = catalogueProduct.product_spe
 
-                                exprod.createdOn = catalogueProduct?.createdOn
-                                exprod.modifiedOn = catalogueProduct?.modifiedOn
-                                exprod.madeWithAntaran = catalogueProduct?.madeWithAnthran
-                                exprod.isDeleted = catalogueProduct?.isDeleted
+                                exprod.createdOn = catalogueProduct.createdOn
+                                exprod.modifiedOn = catalogueProduct.modifiedOn
+                                exprod.madeWithAntaran = catalogueProduct.madeWithAnthran
+                                exprod.isDeleted = catalogueProduct.isDeleted
 
                                 realm.copyToRealmOrUpdate(exprod)
                             }else{
                                 nextID = productObj._id ?: 0
-                                productObj.artisanId = catalogueProduct?.artitionId
-                                productObj.artisanName = catalogueProduct?.artistName
-                                productObj.clusterId = catalogueProduct?.clusterId
-                                productObj.clusterName = catalogueProduct?.clusterName
-                                productObj.brandName = catalogueProduct?.brand
+                                productObj.artisanId = catalogueProduct.artitionId
+                                productObj.artisanName = catalogueProduct.artistName
+                                productObj.clusterId = catalogueProduct.clusterId
+                                productObj.clusterName = catalogueProduct.clusterName
+                                productObj.brandName = catalogueProduct.brand
 
-                                productObj.productId = catalogueProduct?.id
-                                productObj.productCode = catalogueProduct?.code
-                                productObj.productTag = catalogueProduct?.tag
+                                productObj.productId = catalogueProduct.id
+                                productObj.productCode = catalogueProduct.code
+                                productObj.productTag = catalogueProduct.tag
 
-                                productObj.productCategoryId = catalogueProduct?.productCategory?.id
-                                productObj.productCategoryName = catalogueProduct?.productCategory?.productDesc
-                                productObj.productCategoryCode = catalogueProduct?.productCategory?.code
+                                productObj.productCategoryId = catalogueProduct.productCategory.id
+                                productObj.productCategoryName = catalogueProduct.productCategory.productDesc
+                                productObj.productCategoryCode = catalogueProduct.productCategory.code
 
-                                productObj.productTypeId = catalogueProduct?.productType?.id
-                                productObj.productTypeDesc = catalogueProduct?.productType?.productDesc
-                                productObj.inProductCategory = catalogueProduct?.productType?.productCategoryId
+                                productObj.productTypeId = catalogueProduct.productType.id
+                                productObj.productTypeDesc = catalogueProduct.productType.productDesc
+                                productObj.inProductCategory = catalogueProduct.productType.productCategoryId
 
-                                productObj.warpYarnId = catalogueProduct?.warpYarn?.id
-                                productObj.warpYarnDesc = catalogueProduct?.warpYarn?.yarnDesc
-                                productObj.warpYarnCount = catalogueProduct?.warpYarnCount
+                                productObj.warpYarnId = catalogueProduct.warpYarn.id
+                                productObj.warpYarnDesc = catalogueProduct.warpYarn.yarnDesc
+                                productObj.warpYarnCount = catalogueProduct.warpYarnCount
 //                                productObj.warpYarnTypeId = catalogueProduct?.warpYarn?.yarnType?.id TODO : to be used later if required
-                                productObj.warpDyeId = catalogueProduct?.warpYarn?.id
-                                productObj.warpDyeId = catalogueProduct?.warpDye?.id
-                                productObj.warpDyeDesc = catalogueProduct?.warpDye?.dyeDesc
+                                productObj.warpDyeId = catalogueProduct.warpYarn.id
+                                productObj.warpDyeId = catalogueProduct.warpDye.id
+                                productObj.warpDyeDesc = catalogueProduct.warpDye.dyeDesc
 
-                                productObj.weftYarnId = catalogueProduct?.weftYarn?.id
-                                productObj.weftYarnDesc = catalogueProduct?.weftYarn?.yarnDesc
-                                productObj.weftYarnCount = catalogueProduct?.weftYarnCount
+                                productObj.weftYarnId = catalogueProduct.weftYarn.id
+                                productObj.weftYarnDesc = catalogueProduct.weftYarn.yarnDesc
+                                productObj.weftYarnCount = catalogueProduct.weftYarnCount
 //                                productObj.weftYarnTypeId = catalogueProduct?.weftYarn?.yarnType?.id TODO : to be used later if required
-                                productObj.weftDyeId = catalogueProduct?.weftDye?.id
-                                productObj.weftDyeDesc = catalogueProduct?.weftDye?.dyeDesc
+                                productObj.weftDyeId = catalogueProduct.weftDye.id
+                                productObj.weftDyeDesc = catalogueProduct.weftDye.dyeDesc
 
-                                productObj.extraWeftYarnId = catalogueProduct?.extraWeftYarn?.id
-                                productObj.extraWeftYarnDesc = catalogueProduct?.extraWeftYarn?.yarnDesc
-                                productObj.extraWeftYarnCount = catalogueProduct?.extraWeftYarnCount
+                                productObj.extraWeftYarnId = catalogueProduct.extraWeftYarn.id
+                                productObj.extraWeftYarnDesc = catalogueProduct.extraWeftYarn.yarnDesc
+                                productObj.extraWeftYarnCount = catalogueProduct.extraWeftYarnCount
 //                                productObj.extraWeftYarnTypeId = catalogueProduct?.extraWeftYarn?.yarnType?.id TODO : to be used later if required
-                                productObj.extraWeftDyeId = catalogueProduct?.extraWeftDye?.id
-                                productObj.extraWeftDyeDesc = catalogueProduct?.extraWeftDye?.dyeDesc
+                                productObj.extraWeftDyeId = catalogueProduct.extraWeftDye.id
+                                productObj.extraWeftDyeDesc = catalogueProduct.extraWeftDye.dyeDesc
 
-                                productObj.productLength = catalogueProduct?.length
-                                productObj.productWidth = catalogueProduct?.width
+                                productObj.productLength = catalogueProduct.length
+                                productObj.productWidth = catalogueProduct.width
 
-                                productObj.reedCountId = catalogueProduct?.reedCount?.id
-                                productObj.reedCount = catalogueProduct?.reedCount?.count
+                                productObj.reedCountId = catalogueProduct.reedCount.id
+                                productObj.reedCount = catalogueProduct.reedCount.count
 
-                                productObj.productStatusId = catalogueProduct?.productStatusId
+                                productObj.productStatusId = catalogueProduct.productStatusId
 
                                 //TODO : ProductCares, ProductImages and ProductWeaves...different table
                                 //TODO : Related Product Types to be implemented later
 
-                                productObj.gsm = catalogueProduct?.gsm
-                                productObj.weight = catalogueProduct?.weight
-                                productObj.product_spe = catalogueProduct?.product_spe
+                                productObj.gsm = catalogueProduct.gsm
+                                productObj.weight = catalogueProduct.weight
+                                productObj.product_spe = catalogueProduct.product_spe
 
-                                productObj.createdOn = catalogueProduct?.createdOn
-                                productObj.modifiedOn = catalogueProduct?.modifiedOn
-                                productObj.madeWithAntaran = catalogueProduct?.madeWithAnthran
-                                productObj.isDeleted = catalogueProduct?.isDeleted
+                                productObj.createdOn = catalogueProduct.createdOn
+                                productObj.modifiedOn = catalogueProduct.modifiedOn
+                                productObj.madeWithAntaran = catalogueProduct.madeWithAnthran
+                                productObj.isDeleted = catalogueProduct.isDeleted
 
                                 realm.copyToRealmOrUpdate(productObj)
                             }
 
-                            var imageList = catalogueProduct?.productImages
-                            var imageItr = imageList?.iterator()
+                            var imageList = catalogueProduct.productImages
+                            var imageItr = imageList.iterator()
                             if(imageItr!=null){
                                 while (imageItr.hasNext()){
                                     var image = imageItr.next()
@@ -424,16 +424,16 @@ class ProductPredicates {
                                             nextID = primId.toLong() + 1
                                         }
                                         var eximg = it.createObject(ProductImages::class.java, nextID)
-                                        eximg.productId = image?.productId
-                                        eximg.imageId = image?.id
-                                        eximg.imageName = image?.lable
+                                        eximg.productId = image.productId
+                                        eximg.imageId = image.id
+                                        eximg.imageName = image.lable
 
                                         realm.copyToRealmOrUpdate(eximg)
                                     }else{
-                                        nextID = imageObj?._id ?: 0
-                                        imageObj?.productId = image?.productId
-                                        imageObj?.imageId = image?.id
-                                        imageObj?.imageName = image?.lable
+                                        nextID = imageObj._id ?: 0
+                                        imageObj.productId = image.productId
+                                        imageObj.imageId = image.id
+                                        imageObj.imageName = image.lable
 
                                         realm.copyToRealmOrUpdate(imageObj)
                                     }
@@ -441,8 +441,8 @@ class ProductPredicates {
                                 }
                             }
 
-                            var relatedProductList = catalogueProduct?.relProduct
-                            var prodItr = relatedProductList?.iterator()
+                            var relatedProductList = catalogueProduct.relProduct
+                            var prodItr = relatedProductList.iterator()
                             if(prodItr!=null){
                                 while (prodItr.hasNext()){
                                     var relProduct = prodItr.next()
@@ -459,33 +459,33 @@ class ProductPredicates {
                                             nextID = primId.toLong() + 1
                                         }
                                         var exRelProd= it.createObject(RelatedProducts::class.java, nextID)
-                                        exRelProd?.inProductCategoryId = catalogueProduct?.productCategory?.id
-                                        exRelProd?.relatedToProductId = catalogueProduct?.id
-                                        exRelProd?.relatedProductId = relProduct?.id
-                                        exRelProd?.productTypeId = relProduct?.productType?.id
-                                        exRelProd?.productName = relProduct?.productType?.productDesc
-                                        exRelProd?.productLength = relProduct?.length
-                                        exRelProd?.productWidth = relProduct?.width
-                                        exRelProd?.productWeight = relProduct?.weight
+                                        exRelProd?.inProductCategoryId = catalogueProduct.productCategory.id
+                                        exRelProd?.relatedToProductId = catalogueProduct.id
+                                        exRelProd?.relatedProductId = relProduct.id
+                                        exRelProd?.productTypeId = relProduct.productType.id
+                                        exRelProd?.productName = relProduct.productType.productDesc
+                                        exRelProd?.productLength = relProduct.length
+                                        exRelProd?.productWidth = relProduct.width
+                                        exRelProd?.productWeight = relProduct.weight
 
-                                        realm?.copyToRealmOrUpdate(exRelProd)
+                                        realm.copyToRealmOrUpdate(exRelProd)
                                     }else{
-                                        relPoprductObj?.inProductCategoryId = catalogueProduct?.productCategory?.id
-                                        relPoprductObj?.relatedToProductId = catalogueProduct?.id
-                                        relPoprductObj?.relatedProductId = relProduct?.id
-                                        relPoprductObj?.productTypeId = relProduct?.productType?.id
-                                        relPoprductObj?.productName = relProduct?.productType?.productDesc
-                                        relPoprductObj?.productLength = relProduct?.length
-                                        relPoprductObj?.productWidth = relProduct?.width
-                                        relPoprductObj?.productWeight = relProduct?.weight
+                                        relPoprductObj.inProductCategoryId = catalogueProduct.productCategory.id
+                                        relPoprductObj.relatedToProductId = catalogueProduct.id
+                                        relPoprductObj.relatedProductId = relProduct.id
+                                        relPoprductObj.productTypeId = relProduct.productType.id
+                                        relPoprductObj.productName = relProduct.productType.productDesc
+                                        relPoprductObj.productLength = relProduct.length
+                                        relPoprductObj.productWidth = relProduct.width
+                                        relPoprductObj.productWeight = relProduct.weight
 
                                         realm.copyToRealmOrUpdate(relPoprductObj)
                                     }
                                 }
                             }
 
-                            var weaveTypeList = catalogueProduct?.productWeaves
-                            var weaveTypeItr = weaveTypeList?.iterator()
+                            var weaveTypeList = catalogueProduct.productWeaves
+                            var weaveTypeItr = weaveTypeList.iterator()
                             if(weaveTypeItr!=null){
                                 while (weaveTypeItr.hasNext()){
                                     var weaveType = weaveTypeItr.next()
@@ -504,23 +504,23 @@ class ProductPredicates {
                                             nextID = primId.toLong() + 1
                                         }
                                         var exWeaveType = it.createObject(WeaveTypes::class.java, nextID)
-                                        exWeaveType?.productId = weaveType?.productId
-                                        exWeaveType?.productWeaveId = weaveType?.id
-                                        exWeaveType?.weaveId = weaveType?.weaveId
+                                        exWeaveType?.productId = weaveType.productId
+                                        exWeaveType?.productWeaveId = weaveType.id
+                                        exWeaveType?.weaveId = weaveType.weaveId
                                         realm.copyToRealmOrUpdate(exWeaveType)
                                     }else{
-                                        nextID = weaveTypeObj?._id ?: 0
-                                        weaveTypeObj?.productId = weaveType?.productId
-                                        weaveTypeObj?.productWeaveId = weaveType?.id
-                                        weaveTypeObj?.weaveId = weaveType?.weaveId
+                                        nextID = weaveTypeObj._id ?: 0
+                                        weaveTypeObj.productId = weaveType.productId
+                                        weaveTypeObj.productWeaveId = weaveType.id
+                                        weaveTypeObj.weaveId = weaveType.weaveId
                                         realm.copyToRealmOrUpdate(weaveTypeObj)
                                     }
 
                                 }
                             }
 
-                            var careList = catalogueProduct?.productCares
-                            var careItr = careList?.iterator()
+                            var careList = catalogueProduct.productCares
+                            var careItr = careList.iterator()
                             if(careItr!=null){
                                 while (careItr.hasNext()){
                                     var care = careItr.next()
@@ -539,15 +539,15 @@ class ProductPredicates {
                                             nextID = primId.toLong() + 1
                                         }
                                         var exCare = it.createObject(ProductCares::class.java, nextID)
-                                        exCare?.productId = care?.productId
-                                        exCare?.careId = care?.id
-                                        exCare?.productCareId = care?.productCareId
+                                        exCare?.productId = care.productId
+                                        exCare?.careId = care.id
+                                        exCare?.productCareId = care.productCareId
                                         realm.copyToRealmOrUpdate(exCare)
                                     }else{
-                                        nextID = careObj?._id ?: 0
-                                        careObj?.productId = care?.productId
-                                        careObj?.careId = care?.id
-                                        careObj?.productCareId = care?.productCareId
+                                        nextID = careObj._id ?: 0
+                                        careObj.productId = care.productId
+                                        careObj.careId = care.id
+                                        careObj.productCareId = care.productCareId
                                         realm.copyToRealmOrUpdate(careObj)
                                     }
 
@@ -571,13 +571,13 @@ class ProductPredicates {
                     var dataItr = data?.iterator()
                     if (dataItr != null) {
                         while (dataItr.hasNext()){
-                            var data = dataItr?.next()
+                            var data = dataItr.next()
 
-                            var prodlist = data?.products
-                            var prodItr = prodlist?.iterator()
+                            var prodlist = data.products
+                            var prodItr = prodlist.iterator()
                             if(prodItr != null){
                                 while (prodItr.hasNext()){
-                                    var brandProduct = prodItr?.next()
+                                    var brandProduct = prodItr.next()
 
                                     var productObj = realm.where(ArtisanProducts::class.java)
                                         .equalTo("productId",brandProduct.id)
@@ -592,140 +592,140 @@ class ProductPredicates {
                                             nextID = primId.toLong() + 1
                                         }
                                         var exprod = it.createObject(ArtisanProducts::class.java, nextID)
-                                        exprod.artisanId = brandProduct?.artitionId
-                                        exprod.artisanName = brandProduct?.artistName
-                                        exprod.clusterId = brandProduct?.clusterId
-                                        exprod.clusterName = brandProduct?.clusterName
-                                        exprod.brandName = brandProduct?.brand
+                                        exprod.artisanId = brandProduct.artitionId
+                                        exprod.artisanName = brandProduct.artistName
+                                        exprod.clusterId = brandProduct.clusterId
+                                        exprod.clusterName = brandProduct.clusterName
+                                        exprod.brandName = brandProduct.brand
 
-                                        exprod.productId = brandProduct?.id
-                                        exprod.productCode = brandProduct?.code
-                                        exprod.productTag = brandProduct?.tag
+                                        exprod.productId = brandProduct.id
+                                        exprod.productCode = brandProduct.code
+                                        exprod.productTag = brandProduct.tag
 
-                                        exprod.productCategoryId = brandProduct?.productCategoryId
-                                        exprod.productCategoryDesc = brandProduct?.productCategoryDesc
+                                        exprod.productCategoryId = brandProduct.productCategoryId
+                                        exprod.productCategoryDesc = brandProduct.productCategoryDesc
 //                                    exprod.productCategoryCode = brandProduct?.productCategory?.code
 
-                                        exprod.productTypeId = brandProduct?.productTypeId
-                                        exprod.productTypeDesc = brandProduct?.productTypeDesc
+                                        exprod.productTypeId = brandProduct.productTypeId
+                                        exprod.productTypeDesc = brandProduct.productTypeDesc
 //                                    exprod.inProductCategory = brandProduct?.productType?.productCategoryId
 
-                                        exprod.warpYarnId = brandProduct?.warpYarnId
+                                        exprod.warpYarnId = brandProduct.warpYarnId
 //                                    exprod.warpYarnDesc = brandProduct?.warpYarn?.yarnDesc
 //                                    exprod.warpYarnTypeId = brandProduct?.warpYarn?.yarnType?.id
 //                                    exprod.warpDyeId = brandProduct?.warpYarn?.id
-                                        exprod.warpDyeId = brandProduct?.warpDyeId
+                                        exprod.warpDyeId = brandProduct.warpDyeId
 //                                    exprod.warpDyeDesc = brandProduct?.warpDye?.dyeDesc
-                                        exprod.warpYarnCount = brandProduct?.warpYarnCount
+                                        exprod.warpYarnCount = brandProduct.warpYarnCount
 
-                                        exprod.weftYarnId = brandProduct?.weftYarnId
+                                        exprod.weftYarnId = brandProduct.weftYarnId
 //                                    exprod.weftYarnDesc = brandProduct?.weftYarn?.yarnDesc
 //                                    exprod.weftYarnTypeId = brandProduct?.weftYarn?.yarnType?.id
-                                        exprod.weftDyeId = brandProduct?.weftDyeId
+                                        exprod.weftDyeId = brandProduct.weftDyeId
 //                                    exprod.weftDyeDesc = brandProduct?.weftDye?.dyeDesc
-                                        exprod.weftYarnCount = brandProduct?.weftYarnCount
+                                        exprod.weftYarnCount = brandProduct.weftYarnCount
 
 
-                                        exprod.extraWeftYarnId = brandProduct?.extraWeftYarnId
+                                        exprod.extraWeftYarnId = brandProduct.extraWeftYarnId
 //                                    exprod.extraWeftYarnDesc = brandProduct?.extraWeftYarn?.yarnDesc
 //                                    exprod.extraWeftYarnTypeId = brandProduct?.extraWeftYarn?.yarnType?.id
-                                        exprod.extraWeftDyeId = brandProduct?.extraWeftDyeId
+                                        exprod.extraWeftDyeId = brandProduct.extraWeftDyeId
 //                                    exprod.extraWeftDyeDesc = brandProduct?.extraWeftDye?.dyeDesc
-                                        exprod.extraWeftYarnCount = brandProduct?.extraWeftYarnCount
+                                        exprod.extraWeftYarnCount = brandProduct.extraWeftYarnCount
 
 
-                                        exprod.productLength = brandProduct?.length
-                                        exprod.productWidth = brandProduct?.width
+                                        exprod.productLength = brandProduct.length
+                                        exprod.productWidth = brandProduct.width
 
-                                        exprod.reedCountId = brandProduct?.reedCountId
+                                        exprod.reedCountId = brandProduct.reedCountId
 //                                    exprod.reedCount = brandProduct?.reedCount?.count
 
-                                        exprod.productStatusId = brandProduct?.productStatusId
+                                        exprod.productStatusId = brandProduct.productStatusId
 
                                         //TODO : ProductCares, ProductImages and ProductWeaves...different table
                                         //TODO : Related Product Types to be implemented later
 
-                                        exprod.gsm = brandProduct?.gsm
-                                        exprod.weight = brandProduct?.weight
-                                        exprod.productSpecs = brandProduct?.productSpec
+                                        exprod.gsm = brandProduct.gsm
+                                        exprod.weight = brandProduct.weight
+                                        exprod.productSpecs = brandProduct.productSpec
 
 
-                                        exprod.createdOn = brandProduct?.created_on
-                                        exprod.modifiedOn = brandProduct?.modified_on
-                                        exprod.madeWithAntaran = brandProduct?.madeWithAnthran
-                                        exprod.isDeleted = brandProduct?.isDeleted
+                                        exprod.createdOn = brandProduct.created_on
+                                        exprod.modifiedOn = brandProduct.modified_on
+                                        exprod.madeWithAntaran = brandProduct.madeWithAnthran
+                                        exprod.isDeleted = brandProduct.isDeleted
 
                                         realm.copyToRealmOrUpdate(exprod)
                                     }else{
                                         nextID = productObj._id ?: 0
-                                        productObj.artisanId = brandProduct?.artitionId
-                                        productObj.artisanName = brandProduct?.artistName
-                                        productObj.clusterId = brandProduct?.clusterId
-                                        productObj.clusterName = brandProduct?.clusterName
-                                        productObj.brandName = brandProduct?.brand
+                                        productObj.artisanId = brandProduct.artitionId
+                                        productObj.artisanName = brandProduct.artistName
+                                        productObj.clusterId = brandProduct.clusterId
+                                        productObj.clusterName = brandProduct.clusterName
+                                        productObj.brandName = brandProduct.brand
 
-                                        productObj.productId = brandProduct?.id
-                                        productObj.productCode = brandProduct?.code
-                                        productObj.productTag = brandProduct?.tag
+                                        productObj.productId = brandProduct.id
+                                        productObj.productCode = brandProduct.code
+                                        productObj.productTag = brandProduct.tag
 
-                                        productObj.productCategoryId = brandProduct?.productCategoryId
-                                        productObj.productCategoryDesc = brandProduct?.productCategoryDesc
+                                        productObj.productCategoryId = brandProduct.productCategoryId
+                                        productObj.productCategoryDesc = brandProduct.productCategoryDesc
 //                                    exprod.productCategoryCode = brandProduct?.productCategory?.code
 
-                                        productObj.productTypeId = brandProduct?.productTypeId
-                                        productObj.productTypeDesc = brandProduct?.productTypeDesc
+                                        productObj.productTypeId = brandProduct.productTypeId
+                                        productObj.productTypeDesc = brandProduct.productTypeDesc
 //                                    exprod.inProductCategory = brandProduct?.productType?.productCategoryId
 
-                                        productObj.warpYarnId = brandProduct?.warpYarnId
+                                        productObj.warpYarnId = brandProduct.warpYarnId
 //                                    exprod.warpYarnDesc = brandProduct?.warpYarn?.yarnDesc
 //                                    exprod.warpYarnTypeId = brandProduct?.warpYarn?.yarnType?.id
 //                                    exprod.warpDyeId = brandProduct?.warpYarn?.id
-                                        productObj.warpDyeId = brandProduct?.warpDyeId
+                                        productObj.warpDyeId = brandProduct.warpDyeId
 //                                    exprod.warpDyeDesc = brandProduct?.warpDye?.dyeDesc
-                                        productObj.warpYarnCount = brandProduct?.warpYarnCount
+                                        productObj.warpYarnCount = brandProduct.warpYarnCount
 
-                                        productObj.weftYarnId = brandProduct?.weftYarnId
+                                        productObj.weftYarnId = brandProduct.weftYarnId
 //                                    exprod.weftYarnDesc = brandProduct?.weftYarn?.yarnDesc
 //                                    exprod.weftYarnTypeId = brandProduct?.weftYarn?.yarnType?.id
-                                        productObj.weftDyeId = brandProduct?.weftDyeId
+                                        productObj.weftDyeId = brandProduct.weftDyeId
 //                                    exprod.weftDyeDesc = brandProduct?.weftDye?.dyeDesc
-                                        productObj.weftYarnCount = brandProduct?.weftYarnCount
+                                        productObj.weftYarnCount = brandProduct.weftYarnCount
 
 
-                                        productObj.extraWeftYarnId = brandProduct?.extraWeftYarnId
+                                        productObj.extraWeftYarnId = brandProduct.extraWeftYarnId
 //                                    exprod.extraWeftYarnDesc = brandProduct?.extraWeftYarn?.yarnDesc
 //                                    exprod.extraWeftYarnTypeId = brandProduct?.extraWeftYarn?.yarnType?.id
-                                        productObj.extraWeftDyeId = brandProduct?.extraWeftDyeId
+                                        productObj.extraWeftDyeId = brandProduct.extraWeftDyeId
 //                                    exprod.extraWeftDyeDesc = brandProduct?.extraWeftDye?.dyeDesc
-                                        productObj.extraWeftYarnCount = brandProduct?.extraWeftYarnCount
+                                        productObj.extraWeftYarnCount = brandProduct.extraWeftYarnCount
 
 
-                                        productObj.productLength = brandProduct?.length
-                                        productObj.productWidth = brandProduct?.width
+                                        productObj.productLength = brandProduct.length
+                                        productObj.productWidth = brandProduct.width
 
-                                        productObj.reedCountId = brandProduct?.reedCountId
+                                        productObj.reedCountId = brandProduct.reedCountId
 //                                    exprod.reedCount = brandProduct?.reedCount?.count
 
-                                        productObj.productStatusId = brandProduct?.productStatusId
+                                        productObj.productStatusId = brandProduct.productStatusId
 
                                         //TODO : ProductCares, ProductImages and ProductWeaves...different table
                                         //TODO : Related Product Types to be implemented later
 
-                                        productObj.gsm = brandProduct?.gsm
-                                        productObj.weight = brandProduct?.weight
-                                        productObj.productSpecs = brandProduct?.productSpec
+                                        productObj.gsm = brandProduct.gsm
+                                        productObj.weight = brandProduct.weight
+                                        productObj.productSpecs = brandProduct.productSpec
 
 
-                                        productObj.createdOn = brandProduct?.created_on
-                                        productObj.modifiedOn = brandProduct?.modified_on
-                                        productObj.madeWithAntaran = brandProduct?.madeWithAnthran
-                                        productObj.isDeleted = brandProduct?.isDeleted
+                                        productObj.createdOn = brandProduct.created_on
+                                        productObj.modifiedOn = brandProduct.modified_on
+                                        productObj.madeWithAntaran = brandProduct.madeWithAnthran
+                                        productObj.isDeleted = brandProduct.isDeleted
 
                                         realm.copyToRealmOrUpdate(productObj)
                                     }
 
-                                    var imageList = brandProduct?.productImages
-                                    var imageItr = imageList?.iterator()
+                                    var imageList = brandProduct.productImages
+                                    var imageItr = imageList.iterator()
                                     if(imageItr!=null){
                                         while (imageItr.hasNext()){
                                             var image = imageItr.next()
@@ -742,16 +742,16 @@ class ProductPredicates {
                                                     nextID = primId.toLong() + 1
                                                 }
                                                 var eximg = it.createObject(ProductImages::class.java, nextID)
-                                                eximg.productId = image?.productId
-                                                eximg.imageId = image?.id
-                                                eximg.imageName = image?.lable
+                                                eximg.productId = image.productId
+                                                eximg.imageId = image.id
+                                                eximg.imageName = image.lable
 
                                                 realm.copyToRealmOrUpdate(eximg)
                                             }else{
-                                                nextID = imageObj?._id ?: 0
-                                                imageObj?.productId = image?.productId
-                                                imageObj?.imageId = image?.id
-                                                imageObj?.imageName = image?.lable
+                                                nextID = imageObj._id ?: 0
+                                                imageObj.productId = image.productId
+                                                imageObj.imageId = image.id
+                                                imageObj.imageName = image.lable
 
                                                 realm.copyToRealmOrUpdate(imageObj)
                                             }
@@ -759,8 +759,8 @@ class ProductPredicates {
                                         }
                                     }
 
-                                    var relatedProductList = brandProduct?.relProduct
-                                    var prodItr = relatedProductList?.iterator()
+                                    var relatedProductList = brandProduct.relProduct
+                                    var prodItr = relatedProductList.iterator()
                                     if(prodItr!=null){
                                         while (prodItr.hasNext()){
                                             var relProduct = prodItr.next()
@@ -777,33 +777,33 @@ class ProductPredicates {
                                                     nextID = primId.toLong() + 1
                                                 }
                                                 var exRelProd= it.createObject(RelatedProducts::class.java, nextID)
-                                                exRelProd?.inProductCategoryId = brandProduct?.productCategoryId
-                                                exRelProd?.relatedToProductId = brandProduct?.id
-                                                exRelProd?.relatedProductId = relProduct?.id
-                                                exRelProd?.productTypeId = relProduct?.productTypeId
-                                                exRelProd?.productName = relProduct?.productTypeDesc
-                                                exRelProd?.productLength = relProduct?.length
-                                                exRelProd?.productWidth = relProduct?.width
-                                                exRelProd?.productWeight = relProduct?.weight
+                                                exRelProd?.inProductCategoryId = brandProduct.productCategoryId
+                                                exRelProd?.relatedToProductId = brandProduct.id
+                                                exRelProd?.relatedProductId = relProduct.id
+                                                exRelProd?.productTypeId = relProduct.productTypeId
+                                                exRelProd?.productName = relProduct.productTypeDesc
+                                                exRelProd?.productLength = relProduct.length
+                                                exRelProd?.productWidth = relProduct.width
+                                                exRelProd?.productWeight = relProduct.weight
 
-                                                realm?.copyToRealmOrUpdate(exRelProd)
+                                                realm.copyToRealmOrUpdate(exRelProd)
                                             }else{
-                                                relPoprductObj?.inProductCategoryId = brandProduct?.productCategoryId
-                                                relPoprductObj?.relatedToProductId = brandProduct?.id
-                                                relPoprductObj?.relatedProductId = relProduct?.id
-                                                relPoprductObj?.productTypeId = relProduct?.productTypeId
-                                                relPoprductObj?.productName = relProduct?.productTypeDesc
-                                                relPoprductObj?.productLength = relProduct?.length
-                                                relPoprductObj?.productWidth = relProduct?.width
-                                                relPoprductObj?.productWeight = relProduct?.weight
+                                                relPoprductObj.inProductCategoryId = brandProduct.productCategoryId
+                                                relPoprductObj.relatedToProductId = brandProduct.id
+                                                relPoprductObj.relatedProductId = relProduct.id
+                                                relPoprductObj.productTypeId = relProduct.productTypeId
+                                                relPoprductObj.productName = relProduct.productTypeDesc
+                                                relPoprductObj.productLength = relProduct.length
+                                                relPoprductObj.productWidth = relProduct.width
+                                                relPoprductObj.productWeight = relProduct.weight
 
                                                 realm.copyToRealmOrUpdate(relPoprductObj)
                                             }
                                         }
                                     }
 
-                                    var weaveTypeList = brandProduct?.productWeaves
-                                    var weaveTypeItr = weaveTypeList?.iterator()
+                                    var weaveTypeList = brandProduct.productWeaves
+                                    var weaveTypeItr = weaveTypeList.iterator()
                                     if(weaveTypeItr!=null){
                                         while (weaveTypeItr.hasNext()){
                                             var weaveType = weaveTypeItr.next()
@@ -822,23 +822,23 @@ class ProductPredicates {
                                                     nextID = primId.toLong() + 1
                                                 }
                                                 var exWeaveType = it.createObject(WeaveTypes::class.java, nextID)
-                                                exWeaveType?.productId = weaveType?.productId
-                                                exWeaveType?.productWeaveId = weaveType?.id
-                                                exWeaveType?.weaveId = weaveType?.weaveId
+                                                exWeaveType?.productId = weaveType.productId
+                                                exWeaveType?.productWeaveId = weaveType.id
+                                                exWeaveType?.weaveId = weaveType.weaveId
                                                 realm.copyToRealmOrUpdate(exWeaveType)
                                             }else{
-                                                nextID = weaveTypeObj?._id ?: 0
-                                                weaveTypeObj?.productId = weaveType?.productId
-                                                weaveTypeObj?.productWeaveId = weaveType?.id
-                                                weaveTypeObj?.weaveId = weaveType?.weaveId
+                                                nextID = weaveTypeObj._id ?: 0
+                                                weaveTypeObj.productId = weaveType.productId
+                                                weaveTypeObj.productWeaveId = weaveType.id
+                                                weaveTypeObj.weaveId = weaveType.weaveId
                                                 realm.copyToRealmOrUpdate(weaveTypeObj)
                                             }
 
                                         }
                                     }
 
-                                    var careList = brandProduct?.productCares
-                                    var careItr = careList?.iterator()
+                                    var careList = brandProduct.productCares
+                                    var careItr = careList.iterator()
                                     if(careItr!=null){
                                         while (careItr.hasNext()){
                                             var care = careItr.next()
@@ -857,15 +857,15 @@ class ProductPredicates {
                                                     nextID = primId.toLong() + 1
                                                 }
                                                 var exCare = it.createObject(ProductCares::class.java, nextID)
-                                                exCare?.productId = care?.productId
-                                                exCare?.careId = care?.id
-                                                exCare?.productCareId = care?.productCareId
+                                                exCare?.productId = care.productId
+                                                exCare?.careId = care.id
+                                                exCare?.productCareId = care.productCareId
                                                 realm.copyToRealmOrUpdate(exCare)
                                             }else{
-                                                nextID = careObj?._id ?: 0
-                                                careObj?.productId = care?.productId
-                                                careObj?.careId = care?.id
-                                                careObj?.productCareId = care?.productCareId
+                                                nextID = careObj._id ?: 0
+                                                careObj.productId = care.productId
+                                                careObj.careId = care.id
+                                                careObj.productCareId = care.productCareId
                                                 realm.copyToRealmOrUpdate(careObj)
                                             }
 
@@ -1065,7 +1065,7 @@ class ProductPredicates {
             var realm = CXRealmManager.getRealmInstance()
             var itemId=ArrayList<Long>()
             try {
-                realm?.executeTransaction {
+                realm.executeTransaction {
                     var message= when(actionsMarked){
                         "actionCreate=1"-> {realm.where(ArtisanProducts::class.java)
                             .equalTo(ArtisanProducts.COLUMN_ACTION_CREATE,1L)
@@ -1083,7 +1083,7 @@ class ProductPredicates {
                     if(message!=null){
                         val iterator=message.iterator()
                         while (iterator.hasNext()) {
-                            itemId?.add(iterator.next()._id?:0L)
+                            itemId.add(iterator.next()._id?:0L)
                         }
                     }
                 }
@@ -1140,7 +1140,7 @@ class ProductPredicates {
                 }
                 Log.e("ArtisanProdLog","${product.weaveIds?.joinToString()}")
                 Log.e("ArtisanProdLog","${product.careIds?.joinToString()}")
-                Log.e("ArtisanProdLog","${imageList?.joinToString()}")
+                Log.e("ArtisanProdLog","${imageList.joinToString()}")
                 if(relatedProdList.size>0)RelateProductPredicates.insertRelatedProduct(nextID,
                     relatedProdList[0].productTypeID, relatedProdList[0].width, relatedProdList[0].length)
                 ProductImagePredicates.insertProductImages(nextID,imageList)
@@ -1154,7 +1154,7 @@ class ProductPredicates {
         fun deleteArtisanProductTemplatePOstUpload(id:Long){
             var count=0
             val realm = CXRealmManager.getRealmInstance()
-            realm?.executeTransaction {
+            realm.executeTransaction {
                 val artisonProd = it.where(ArtisanProducts::class.java).equalTo("_id", id).findAll()
                 artisonProd.deleteAllFromRealm()
             }
@@ -1210,19 +1210,19 @@ class ProductPredicates {
 
                 }
                 Log.e("ArtisanProdLog","${product.productWeaves.size}")
-                Log.e("ArtisanProdLog","${product.productCares?.size}")
-                Log.e("ArtisanProdLog","${imageList?.joinToString()}")
+                Log.e("ArtisanProdLog","${product.productCares.size}")
+                Log.e("ArtisanProdLog","${imageList.joinToString()}")
                 if(relatedProdList.size>0)RelateProductPredicates.insertRelatedProduct(nextID,relatedProdList.get(0).productTypeID,relatedProdList.get(0).width,relatedProdList.get(0).length)
                 if(imageList.size>0) {
-                    ProductImagePredicates.deleteProdImages(product?.id)
-                    ProductImagePredicates.insertProductImages(product?.id, imageList)
+                    ProductImagePredicates.deleteProdImages(product.id)
+                    ProductImagePredicates.insertProductImages(product.id, imageList)
                 }
                 if(product.productWeaves!=null){
-                    WeaveTypesPredicates.deleteWeaveIds(product?.id)
+                    WeaveTypesPredicates.deleteWeaveIds(product.id)
                     WeaveTypesPredicates.insertWeaveIds(product.productWeaves)
                 }
                 if(product.productCares!=null) {
-                    ProductCaresPredicates.deleteCareIds(product?.id)
+                    ProductCaresPredicates.deleteCareIds(product.id)
                     ProductCaresPredicates.insertCareIds(product.productCares)
                 }
             }catch (e:Exception){

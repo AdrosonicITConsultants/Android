@@ -60,7 +60,7 @@ class wishlistFragment : Fragment(),
             mViewModel.getwishlisteProductIds()
         }
 
-        dialog = Utility?.enquiryGenProgressDialog(requireActivity())
+        dialog = Utility.enquiryGenProgressDialog(requireActivity())
 
         buyerWishlist.layoutManager =LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         adapter = WishlistAdapter(requireContext(), mViewModel.getwishListMutableData().value)
@@ -70,9 +70,9 @@ class wishlistFragment : Fragment(),
         Log.e("Wishlist", "Size :" + mViewModel.getwishListMutableData().value?.size)
 
         mViewModel.getwishListMutableData()
-            .observe(viewLifecycleOwner, Observer<RealmResults<ProductCatalogue>>() {
+            .observe(viewLifecycleOwner, Observer<RealmResults<ProductCatalogue>> {
                 Log.e("Wishlist", "updateWishlist ${it.size}")
-                adapter?.updateWishlist(it)
+                adapter.updateWishlist(it)
             })
         setVisiblities()
         deleteAll.setOnClickListener {
@@ -95,7 +95,7 @@ class wishlistFragment : Fragment(),
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("Wishlist", "Onsucces")
                 swipe_refresh_layout.isRefreshing = false
-                mViewModel?.getwishListMutableData()
+                mViewModel.getwishListMutableData()
                 setVisiblities()
             }
             )
@@ -109,7 +109,7 @@ class wishlistFragment : Fragment(),
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("Wishlist", "OnFailure")
                 swipe_refresh_layout.isRefreshing = false
-                mViewModel?.getwishListMutableData()
+                mViewModel.getwishListMutableData()
                Utility.displayMessage(
                     "Error while fetching wishlist. Pleas try again after some time",
                     requireContext()
@@ -124,10 +124,10 @@ class wishlistFragment : Fragment(),
 
     fun showDeleteDialog() {
         var dialog = Dialog(requireContext())
-        dialog?.setContentView(R.layout.dialog_removefrom_wishlist)
-        dialog?.show()
-        val tvCancel = dialog?.findViewById(R.id.txt_cancel) as TextView
-        val tvDelete = dialog?.findViewById(R.id.txt_back) as TextView
+        dialog.setContentView(R.layout.dialog_removefrom_wishlist)
+        dialog.show()
+        val tvCancel = dialog.findViewById(R.id.txt_cancel) as TextView
+        val tvDelete = dialog.findViewById(R.id.txt_back) as TextView
         tvCancel.setOnClickListener {
             dialog.cancel()
         }
@@ -138,7 +138,7 @@ class wishlistFragment : Fragment(),
             WishlistPredicates.getWishListedData()?.forEach {
                 WishlistPredicates.updateProductWishlisting(it.productId,0,1)
             }
-            mViewModel?.getwishListMutableData()
+            mViewModel.getwishListMutableData()
             setVisiblities()
             if(Utility.checkIfInternetConnected(requireContext())) {
                 coordinator = SyncCoordinator(requireContext())
@@ -151,7 +151,7 @@ class wishlistFragment : Fragment(),
         //todo db call
         //mutable live data
         WishlistPredicates.updateProductWishlisting(productId,isWishListed,1)
-        mViewModel?.getwishListMutableData()
+        mViewModel.getwishListMutableData()
         setVisiblities()
         if(Utility.checkIfInternetConnected(requireContext())) {
             coordinator = SyncCoordinator(requireContext())
@@ -178,7 +178,8 @@ class wishlistFragment : Fragment(),
     override fun onSuccessEnquiryGeneration(enquiry: GenerateEnquiryResponse) {
         try {
             Handler(Looper.getMainLooper()).post {dialog?.dismiss()
-                Utility?.enquiryGenSuccessDialog(requireContext(), enquiry?.data?.enquiry?.code.toString()).show()
+                Utility.enquiryGenSuccessDialog(requireContext(), enquiry.data.enquiry.code.toString())
+                    .show()
                 Log.e("EnquiryGeneration", "Onsucces")
             }
         } catch (e: Exception) {
@@ -191,13 +192,13 @@ class wishlistFragment : Fragment(),
         try {
             Handler(Looper.getMainLooper()).post {
                 dialog?.dismiss()
-                var exDialog = Utility?.enquiryGenExistingDialog(requireActivity(),id,productName)
+                var exDialog = Utility.enquiryGenExistingDialog(requireActivity(),id,productName)
                 exDialog.show()
 
                 exDialog.btn_generate_new_enquiry?.setOnClickListener {
-                    exDialog?.dismiss()
+                    exDialog.dismiss()
                     dialog?.show()
-                    productID?.let { it1 -> mEnqVM?.generateEnquiry(it1,false,mUser?.deviceName.toString() ) }
+                    productID?.let { it1 -> mEnqVM.generateEnquiry(it1,false,mUser?.deviceName.toString() ) }
                 }
 
                 Log.e("ExistingEnqGeneration", "Onsuccess")

@@ -41,9 +41,9 @@ class ClusterPredicates {
                                 realm.copyToRealmOrUpdate(excluster)
                             }else {
                                 nextID = clusterObj._id ?: 0
-                                clusterObj?.clusterid = cluster.id
-                                clusterObj?.cluster = cluster.desc
-                                clusterObj?.adjective = cluster.adjective
+                                clusterObj.clusterid = cluster.id
+                                clusterObj.cluster = cluster.desc
+                                clusterObj.adjective = cluster.adjective
 
                                 realm.copyToRealmOrUpdate(clusterObj)
                             }

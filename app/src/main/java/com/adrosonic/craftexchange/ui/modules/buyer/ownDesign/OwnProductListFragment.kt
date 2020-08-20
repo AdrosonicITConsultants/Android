@@ -61,7 +61,7 @@ class OwnProductListFragment : Fragment(),
         mViewModel.listener = this
         mEnqVM.listener = this
 
-        dialog = Utility?.enquiryGenProgressDialog(requireContext())
+        dialog = Utility.enquiryGenProgressDialog(requireContext())
 
 
         if (!Utility.checkIfInternetConnected(requireContext())) {
@@ -78,9 +78,9 @@ class OwnProductListFragment : Fragment(),
 
         Log.e("CustomProduct", "Size :" + mViewModel.getCustomDesignListMutableData().value?.size)
         mViewModel.getCustomDesignListMutableData()
-            .observe(viewLifecycleOwner, Observer<RealmResults<BuyerCustomProduct>>() {
+            .observe(viewLifecycleOwner, Observer<RealmResults<BuyerCustomProduct>> {
                 Log.e("CustomProduct", "own prod size ${it.size}")
-                adapter?.updateWishlist(it)
+                adapter.updateWishlist(it)
             })
         setVisiblities()
         deleteAll.setOnClickListener {
@@ -105,7 +105,7 @@ class OwnProductListFragment : Fragment(),
         super.onResume()
         if (!Utility.checkIfInternetConnected(requireContext())) {
             Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
-            mViewModel?.getCustomDesignListMutableData()
+            mViewModel.getCustomDesignListMutableData()
         } else {
             mViewModel.getCustomProducts()
         }
@@ -116,7 +116,7 @@ class OwnProductListFragment : Fragment(),
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("Wishlist", "Onsucces")
                 swipe_refresh_layout?.isRefreshing = false
-                mViewModel?.getCustomDesignListMutableData()
+                mViewModel.getCustomDesignListMutableData()
                 setVisiblities()
             }
             )
@@ -130,7 +130,7 @@ class OwnProductListFragment : Fragment(),
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("Wishlist", "OnFailure")
                 swipe_refresh_layout.isRefreshing = false
-                mViewModel?.getCustomDesignListMutableData()
+                mViewModel.getCustomDesignListMutableData()
                 Utility.displayMessage(
                     "Error while fetching custom products. Pleas try again after some time",
                     requireContext()
@@ -160,10 +160,10 @@ class OwnProductListFragment : Fragment(),
     }
     fun showDeleteDialog(productId: Long) {
         var dialog = Dialog(requireContext())
-        dialog?.setContentView(R.layout.dialog_removefrom_wishlist)
-        dialog?.show()
-        val tvCancel = dialog?.findViewById(R.id.txt_cancel) as TextView
-        val tvDelete = dialog?.findViewById(R.id.txt_back) as TextView
+        dialog.setContentView(R.layout.dialog_removefrom_wishlist)
+        dialog.show()
+        val tvCancel = dialog.findViewById(R.id.txt_cancel) as TextView
+        val tvDelete = dialog.findViewById(R.id.txt_back) as TextView
         tvCancel.setOnClickListener {
             dialog.cancel()
         }
@@ -179,7 +179,7 @@ class OwnProductListFragment : Fragment(),
                     BuyerCustomProductPredicates.updateProductForDeletion(it.id)
                 }
             }
-            mViewModel?.getCustomDesignListMutableData()
+            mViewModel.getCustomDesignListMutableData()
             setVisiblities()
             if(Utility.checkIfInternetConnected(requireContext())) {
                 coordinator = SyncCoordinator(requireContext())
@@ -199,7 +199,7 @@ class OwnProductListFragment : Fragment(),
     override fun onSuccessEnquiryGeneration(enquiry: GenerateEnquiryResponse) {
         try {
             Handler(Looper.getMainLooper()).post {
-                Utility?.enquiryGenSuccessDialog(requireContext(), enquiry?.data?.enquiry?.code.toString())
+                Utility.enquiryGenSuccessDialog(requireContext(), enquiry.data.enquiry.code.toString())
                 Log.e("EnquiryGeneration", "Onsucces")
                 dialog?.cancel()
             }
@@ -214,14 +214,14 @@ class OwnProductListFragment : Fragment(),
 
             Handler(Looper.getMainLooper()).post {
                 dialog?.cancel()
-                var exDialog = Utility?.enquiryGenExistingDialog(requireContext(),id,productName)
+                var exDialog = Utility.enquiryGenExistingDialog(requireContext(),id,productName)
                 Handler().postDelayed({ exDialog.show() }, 500)
 
                 exDialog.btn_generate_new_enquiry?.setOnClickListener {
-                    exDialog?.cancel()
+                    exDialog.cancel()
 //                    Handler().postDelayed({ dialog?.show() }, 500)
 
-                    productID?.let { it1 -> mEnqVM?.generateEnquiry(it1,true,"Android") }
+                    productID?.let { it1 -> mEnqVM.generateEnquiry(it1,true,"Android") }
                 }
                 Log.e("ExistingEnqGeneration", "Onsuccess")
             }

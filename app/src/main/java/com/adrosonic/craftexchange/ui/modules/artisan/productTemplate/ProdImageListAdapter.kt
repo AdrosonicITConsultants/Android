@@ -62,7 +62,7 @@ class ProdImageListAdapter(
         if(item.first){
             //update
             var url = if(isTemplate)Utility.getProductsImagesUrl(item.second,item.third) else Utility.getCustomProductImagesUrl(item.second,item.third)
-            context?.let { ImageSetter.setImage(it,url,holder.thumbnail)
+            context.let { ImageSetter.setImage(it,url,holder.thumbnail)
             }
         }else  (holder.thumbnail).setImageURI(Uri.fromFile(file))
 //            ImageSetter.setImage(context, file.absolutePath, holder.thumbnail)
@@ -75,7 +75,7 @@ class ProdImageListAdapter(
             holder.editProductImg.setOnClickListener {
 //                context?.startActivity(context?.editPhotoIntent(file.absolutePath))
                 val origin = it.context as Activity
-                val intent = Intent(context!!, EditPhotoActivity::class.java)
+                val intent = Intent(context, EditPhotoActivity::class.java)
                 val bundle = Bundle()
                 bundle.putString(ConstantsDirectory.EDIT_PATH, file.absolutePath)
                 bundle.putInt(ConstantsDirectory.EDIT_IMAGE_POSITION,position)
@@ -102,8 +102,8 @@ class ProdImageListAdapter(
         if (file.exists()) {
             val uri = FileProvider.getUriForFile(context, context.packageName + ".provider", file)
             val myIntent = Intent(Intent.ACTION_EDIT)
-            myIntent.putExtra(ShareCompat.EXTRA_CALLING_PACKAGE, context.getPackageName())
-            val componentName = (context as Activity).getComponentName()
+            myIntent.putExtra(ShareCompat.EXTRA_CALLING_PACKAGE, context.packageName)
+            val componentName = (context as Activity).componentName
             myIntent.putExtra(ShareCompat.EXTRA_CALLING_ACTIVITY, componentName)
             myIntent.setDataAndType(uri, "image/*")
             myIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)

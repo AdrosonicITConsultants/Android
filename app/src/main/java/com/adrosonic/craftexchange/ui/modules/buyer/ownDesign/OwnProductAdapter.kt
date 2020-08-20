@@ -82,7 +82,7 @@ class OwnProductAdapter(
 
         var image = ProductPredicates.getProductDisplayImage(product?.id)
         var url = Utility.getCustomProductImagesUrl(product?.id,image?.imageName)
-        context?.let { ImageSetter.setImage(it,url,holder.productImage) }
+        context.let { ImageSetter.setImage(it,url,holder.productImage) }
         holder.btnGenerateEnquiry.setOnClickListener {
 
         }
@@ -90,11 +90,11 @@ class OwnProductAdapter(
             listener?.onDeleted(product?.id?:0)
         }
         holder.itemView.setOnClickListener {
-            val intent = Intent(context?.ownDesignIntent(product?.id?:0))
+            val intent = Intent(context.ownDesignIntent(product?.id?:0))
             val bundle = Bundle()
             bundle.putString(ConstantsDirectory.PRODUCT_ID, product?.id?.toString())
             intent.putExtras(bundle)
-            context?.startActivity(intent)
+            context.startActivity(intent)
         }
 
         holder.btnGenerateEnquiry.setOnClickListener {

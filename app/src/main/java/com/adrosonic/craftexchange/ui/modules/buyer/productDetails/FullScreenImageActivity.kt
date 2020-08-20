@@ -32,12 +32,12 @@ class FullScreenImageActivity : AppCompatActivity() {
         setContentView(view)
 
         var imageList = mUserConfig.imageUrlList.toString()
-        if(imageList?.isNotEmpty()){
+        if(imageList.isNotEmpty()){
             var imageListener = ImageListener { position, imageView ->
                 imageView.scaleType = ImageView.ScaleType.FIT_CENTER
-                ImageSetter.setImage(applicationContext,imageUrlList?.get(position),imageView)
+                ImageSetter.setImage(applicationContext, imageUrlList.get(position),imageView)
             }
-            mBinding?.carouselFullscreen?.pageCount = imageUrlList?.size!!
+            mBinding?.carouselFullscreen?.pageCount = imageUrlList.size
             mBinding?.carouselFullscreen?.setImageListener(imageListener)
         }
 

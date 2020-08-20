@@ -1,7 +1,10 @@
 package com.adrosonic.craftexchange.ui.modules.search
 
-import android.app.Activity
 import android.content.Context
+import android.graphics.Color
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,11 +12,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.repository.data.response.search.SuggData
-import com.adrosonic.craftexchange.repository.data.response.search.SuggestionResponse
-import com.adrosonic.craftexchange.ui.modules.artisan.landing.ArtisanLandingActivity
-import com.adrosonic.craftexchange.ui.modules.artisan.search.ArtisanSearchActivity
 import com.adrosonic.craftexchange.ui.modules.artisan.search.ArtisanSearchResultsFragment
-import com.adrosonic.craftexchange.utils.Utility
 
 class SuggestionAdapter(
     var mContext: Context?,
@@ -22,35 +21,43 @@ class SuggestionAdapter(
 
 
     inner class MyViewHolder(view : View): RecyclerView.ViewHolder(view) {
-        var text: TextView = view.findViewById(R.id.suggestion_item)
+        var sugItem: TextView = view.findViewById(R.id.suggestion_item)
     }
+    var suggestionItem : String ?= ""
+    var suggestionType : String ?=""
+
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): SuggestionAdapter.MyViewHolder {
+    ): MyViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_suggestion_list, parent, false)
         return MyViewHolder(itemView)
     }
 
     override fun getItemCount(): Int{
-        return list?.size?:0
+        return list.size
     }
 
 
-    override fun onBindViewHolder(holder: SuggestionAdapter.MyViewHolder, position: Int) {
-        var suggestion = list?.get(position)
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        var suggestion = list.get(position)
 
+        suggestionItem = suggestion.suggestion
+        suggestionType = suggestion.suggestionType
 
+        var text = SpannableString(suggestionType)
+        text.setSpan(ForegroundColorSpan(Color.BLACK), 0, text.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
-        holder.text?.text = "${suggestion?.suggestion} in ${suggestion?.suggestionType}"
-        holder?.itemView?.setOnClickListener {
-            var activity = mContext as ArtisanSearchActivity
-            activity?.supportFragmentManager?.beginTransaction()
+        holder.sugItem.text = "$suggestionItem in "
+        holder.sugItem.append(text)
+
+        holder.itemView.setOnClickListener {
+            var activity = mContext as SearchSuggestionActivity
+            activity.supportFragmentManager.beginTransaction()
                 ?.replace(R.id.ss_container, ArtisanSearchResultsFragment.newInstance(suggestion?.suggestion))
                 ?.addToBackStack(null)
-                ?.commit()
-
+                .commit()
         }
     }
 

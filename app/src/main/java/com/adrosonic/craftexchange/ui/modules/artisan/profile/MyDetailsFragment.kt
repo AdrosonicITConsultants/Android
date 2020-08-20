@@ -66,12 +66,12 @@ class MyDetailsFragment : Fragment(),
         }
 
         mViewModel.getUserMutableData()
-            .observe(viewLifecycleOwner, Observer<CraftUser>() {
+            .observe(viewLifecycleOwner, Observer<CraftUser> {
                 craftUser = MutableLiveData(it)
             })
 
         mViewModel.getRegAddrMutableData()
-            .observe(viewLifecycleOwner, Observer<UserAddress>() {
+            .observe(viewLifecycleOwner, Observer<UserAddress> {
                 regAddr = MutableLiveData(it)
             })
 
@@ -109,9 +109,9 @@ class MyDetailsFragment : Fragment(),
 
     private fun refreshProfile(){
         if(Utility.checkIfInternetConnected(requireContext())) {
-            mViewModel?.getArtisanProfileDetails(requireContext())
-            craftUser = mViewModel?.getUserMutableData()
-            regAddr = mViewModel?.getRegAddrMutableData()
+            mViewModel.getArtisanProfileDetails(requireContext())
+            craftUser = mViewModel.getUserMutableData()
+            regAddr = mViewModel.getRegAddrMutableData()
             setImage()
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),requireContext())

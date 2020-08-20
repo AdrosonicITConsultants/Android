@@ -22,9 +22,7 @@ fun Context.artisanEditProfileIntent(): Intent {
 
 class ArtisanEditProfileActivity : AppCompatActivity() {
 
-    companion object{
-
-    }
+    companion object;
 
     private var mBinding : ActivityArtisanEditProfileBinding ?= null
 

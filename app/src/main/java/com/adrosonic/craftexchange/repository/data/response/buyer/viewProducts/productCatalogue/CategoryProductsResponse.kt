@@ -1,7 +1,6 @@
 package com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue
 
-class CategoryProductsResponse {
-}
+class CategoryProductsResponse
 
 data class CategoryProductDetailsResponse (
     val data: CategoryData,

@@ -53,7 +53,7 @@ class DeleteOwnProductService : JobIntentService() {
                     val res=response.body()
                     Log.e("deleteProduct", "onResponse: " + res?.valid)
                     if(res!=null) {
-                        if (res!!.valid) {
+                        if (res.valid) {
                             deleteOfflineEntries(prodId)
                         }
                     }

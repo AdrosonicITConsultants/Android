@@ -53,7 +53,7 @@ data class Dye (
     val hibernateLazyInitializer: HibernateLazyInitializer
 )
 
-class HibernateLazyInitializer()
+class HibernateLazyInitializer
 
 data class Yarn (
     val id: Long,

@@ -30,6 +30,7 @@ import com.adrosonic.craftexchange.ui.modules.buyer.profile.buyerProfileIntent
 import com.adrosonic.craftexchange.ui.modules.buyer.wishList.wishlistFragment
 import com.adrosonic.craftexchange.viewModels.LandingViewModel
 import com.adrosonic.craftexchange.ui.modules.role.roleselectIntent
+import com.adrosonic.craftexchange.ui.modules.search.searchSuggestionIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
@@ -82,9 +83,9 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
             }
         }).execute()
 
-        mViewModel?.getProductUploadData()
+        mViewModel.getProductUploadData()
         mViewModel.getwishlisteProductIds()
-        mProVM?.listener = this
+        mProVM.listener = this
 
         refreshProfile()
         mProVM.getUserMutableData()
@@ -178,6 +179,10 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
                 drawer_layout.openDrawer(GravityCompat.START)
                 return true
             }
+
+            R.id.action_search -> {
+                startActivity(searchSuggestionIntent())
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -185,13 +190,6 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.tool_menu, menu)
-
-        // Associate searchable configuration with the SearchView
-//        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-//        (menu.findItem(R.id.action_search).actionView as SearchView).apply {
-//            setSearchableInfo(searchManager.getSearchableInfo(componentName))
-//        }
-
         return true
     }
 
@@ -215,7 +213,7 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
                     builder.setMessage(R.string.logout_text)
                         .setPositiveButton("Yes"){ dialog, id ->
                             dialog.cancel()
-                            mViewModel?.logoutUser()
+                            mViewModel.logoutUser()
                             Utility.deleteCache(applicationContext)
                             Utility.deleteImageCache(applicationContext)
                             startActivity(roleselectIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK))
@@ -242,17 +240,12 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
             drawer_layout.closeDrawer(GravityCompat.START)
         }else{
             if(fragmentManager.backStackEntryCount == 0) {
-            super.onBackPressed();
+            super.onBackPressed()
             }
             else {
-                fragmentManager.popBackStack();
+                fragmentManager.popBackStack()
             }
         }
-    }
-
-    override fun onSearchRequested(): Boolean {
-        return super.onSearchRequested()
-
     }
 
 
@@ -285,7 +278,7 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
             deviceRegistration.enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(call: Call<ResponseBody>, response: retrofit2.Response<ResponseBody>?) {
                     response?.takeUnless { response.isSuccessful }?.apply {
-                        Log.e(TAG, "Error registering device token "+response.message()+" raw code "+response.raw().code())
+                        Log.e(TAG, "Error registering device token "+response.message()+" raw code "+ response.raw().code)
                     }
                     response?.takeIf { response.isSuccessful }?.apply {
                         Log.e(TAG, "Device registration successful")
@@ -332,8 +325,8 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
         if (!Utility.checkIfInternetConnected(this)) {
             Utility.displayMessage(getString(R.string.no_internet_connection), this)
         } else {
-            mViewModel?.getProductsOfArtisan(this)
-            mViewModel?.getProductUploadData()
+            mViewModel.getProductsOfArtisan(this)
+            mViewModel.getProductUploadData()
             mProVM.getBuyerProfileDetails(this)
             craftUser = mProVM.getUserMutableData()
             setBrandLogo()

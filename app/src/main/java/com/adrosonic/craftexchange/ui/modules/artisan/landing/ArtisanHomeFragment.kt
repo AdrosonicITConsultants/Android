@@ -61,8 +61,8 @@ class ArtisanHomeFragment : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mViewModel?.listener = this
-        mProVM?.listener = this
+        mViewModel.listener = this
+        mProVM.listener = this
         refreshProfile()
         setupRecyclerView()
 
@@ -99,7 +99,7 @@ class ArtisanHomeFragment : Fragment(),
 
     fun setBrandImage(){
         brandLogo = craftUser?.value?.brandLogo
-        urlBrand = Utility?.getBrandLogoUrl(Prefs.getString(ConstantsDirectory.USER_ID,"").toLong(),brandLogo)
+        urlBrand = Utility.getBrandLogoUrl(Prefs.getString(ConstantsDirectory.USER_ID,"").toLong(),brandLogo)
         mBinding?.brandLogoArtisan?.let {
             mBinding?.progress?.let { it1 ->
                 ImageSetter.setImageWithProgress(requireActivity(), urlBrand!!, it, it1,
@@ -147,7 +147,7 @@ class ArtisanHomeFragment : Fragment(),
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("Wishlist", "OnFailure")
                 mBinding?.swipeRefreshLayout?.isRefreshing = false
-                mViewModel?.getProductCategoryListMutableData(artisanId)
+                mViewModel.getProductCategoryListMutableData(artisanId)
                 Utility.displayMessage(
                     "Error while fetching wishlist. Pleas try again after some time",
                     requireContext()

@@ -24,5 +24,4 @@ import io.realm.annotations.RealmModule
     BuyerCustomProduct::class,
     Enquiries::class
 ])
-class CXRealmModule {
-}
+class CXRealmModule

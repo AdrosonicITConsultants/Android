@@ -129,7 +129,7 @@ object ImageSetter {
                         dataSource: DataSource?,
                         isFirstResource: Boolean
                     ): Boolean {
-                        mProgress?.visibility = View.GONE
+                        mProgress.visibility = View.GONE
                         return false
                     }
 
@@ -139,7 +139,7 @@ object ImageSetter {
                         target: Target<Drawable>?,
                         isFirstResource: Boolean
                     ): Boolean {
-                        mProgress?.visibility = View.GONE
+                        mProgress.visibility = View.GONE
                         Log.e("Glide","Image loading exception "+e?.printStackTrace().toString())
                         return false
                     }
@@ -170,7 +170,7 @@ object ImageSetter {
                 .error(errImage)
                 .fallback(fallbck)
                 .dontAnimate()
-                .into(imageView!!)
+                .into(imageView)
 
         }
         catch (ex:Exception) {

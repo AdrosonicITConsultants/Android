@@ -46,7 +46,7 @@ class UpdateOwnProductService : JobIntentService() {
                 val imageEntry = ProductImagePredicates.getImagesList(prodId)
                 val relatedEntry = RelateProductPredicates.getRelatedProductOfProduct(prodId)
                 val weaveTypes = WeaveTypesPredicates.getWeaveList(prodId)
-                Log.e("Offline", "imageList :" + imageEntry?.joinToString())
+                Log.e("Offline", "imageList :" + imageEntry.joinToString())
                 var productData =createOwnProductString(productEntry,relatedEntry,weaveTypes)
                 uploadProduct(productData, imageEntry, prodId)
             }
@@ -93,7 +93,7 @@ class UpdateOwnProductService : JobIntentService() {
 
         val byteData = prepareMultiPartBody(boundary, dataLength, imageList)
         Log.e("Offline", "prepareMultiPartBody 666666 " + byteData?.capacity())
-        val body = byteData!!.array().toRequestBody(MediaType.parse("image/*"), 0, byteData!!.capacity())
+        val body = byteData!!.array().toRequestBody(MediaType.parse("image/*"), 0, byteData.capacity())
         Log.e("Offline", "prepareMultiPartBody 77777 " + body.contentLength())
         val bodyMultipart = MultipartBody.Builder()
             .addPart(body)

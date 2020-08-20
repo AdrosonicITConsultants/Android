@@ -2,13 +2,9 @@
     <string name="app_name">Craft Xchange</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     //role select
     <string name="logo">Logo</string>
-    <string name="craftexchange">Craft Xchange</string>
-    <string name="initiative1">An initiative by Antaran</string>
-    <string name="initiative2">Part of TataTrusts</string>
     <string name="description">What describes you the best?</string>
     <string name="desc_text">Description</string>
     <string name="or">or</string>
@@ -22,15 +18,11 @@
     <string name="privacy_policy">Privacy Policy</string>
 
     //buyer login
-    <string name="back">Back</string>
     <string name="enter_username">Enter your registered mobile\nnumber or email id</string>
-    <string name="username">Username</string>
-    <string name="username_email">Mobile no / Email Id</string>
     <string name="next">Next</string>
     <string name="need">Need help ?</string>
     <string name="new_user">New User? Click here to register.</string>
     <string name="enter_password">Enter your password\nto login</string>
-    <string name="login">Login</string>
     <string name="forgot_password">Forgot Password?</string>
 
     //buyer register
@@ -124,7 +116,6 @@
     <string name="no_internet_connection">No Internet Connection</string>
     <string name="enter_email_mobile">Enter your email/mobile numner</string>
     <string name="logout_text">Are your sure you want to logout?</string>
-    <string name="success">    Success!    </string>
     <string name="profile_update_success">Profile updated successfully!</string>
     <string name="artisan_self_design">Artisan self\ndesign</string>
     <string name="explore">Explore</string>
@@ -153,7 +144,6 @@
     <string name="save">Save</string>
     <string name="alphaNumeric">ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789</string>
     <string name="alphaNumeric2">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789</string>
-    <string name="characters">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz</string>
     <string name="hello">Hello</string>
     <string name="your_product">Your Products</string>
     <string name="list_prod_text">List of your very own products sorted by categories</string>
@@ -175,14 +165,7 @@
     <string name="digital_payment_details">Digital Payment Details</string>
     <string name="edit_bank_details">Edit Bank Details</string>
     <string name="change_brand_logo">Change Brand\nProfile Image</string>
-    <string name="change_profile_logo">Change Profile\nPhoto</string>
 
-    <string name="saree">Saree</string>
-    <string name="dupatta">Dupatta</string>
-    <string name="stole">Stole</string>
-    <string name="fabric">Fabric</string>
-    <string name="home_Accessories">Home Accessories</string>
-    <string name="fashion_accessories">Fashion Accessories</string>
     <string name="gpay_field">Google Pay UPI Id</string>
     <string name="paytm_field">Paytm Registered Mobile Number</string>
     <string name="phonepe_field">PhonePe UPI Id</string>
@@ -196,13 +179,10 @@
     <string name="view_more">View More</string>
     <string name="generate_enquiry">Generate Enquiry</string>
     <string name="available_in_stock">Avalaible in stock</string>
-    <string name="change_category">Change Category</string>
 
     <string name="in_stock">In Stock</string>
-    <string name="exc_made_to_order">Exclusively\nMade To Order</string>
     <string name="exclusively_enter">Exclusively\n</string>
     <string name="exclusively">Exclusively\t</string>
-    <string name="view_edit"><![CDATA[View &\nEdit]]></string>
     <string name="you_can_check_again_by_clicking_on_cancel">You can check again by clicking on \'Cancel\'</string>
     <string name="save_n_upload">Save &amp; upload it?</string>
     <string name="ok">Ok</string>
@@ -224,7 +204,6 @@
     <string name="Kam_text"> A district in Assam, on the banks of Brahmaputra river, Kamrup is the leading eri silk cluster of India. </string>
     <string name="Nal_text"> Situated on north bank of Brahmaputra in Assam, Nalbari specialises in weave of mulberry silk; while cotton, eri and zari yarns are also used. </string>
     <string name="Dil_text">  Dimapur, Phek region weavers now weave contemporary textiles in thick cotton for home textiles, jackets, bags.. </string>
-    <string name="no_products_found">No products found :(</string>
     <string name="product_details">Product Details</string>
     <string name="see_all_prod_details">See all product details</string>
     <string name="region_of_origin">Region of origin:</string>
@@ -262,28 +241,13 @@
     <string name="refer_to_ongoing_enquiries">Please refer \"Ongoing Enquiry\" tab\nto track your enquiry.</string>
     <string name="view_enquiry">View Enquiry</string>
 
-    <string-array name="product_array">
-        <item>@string/saree</item>
-        <item>@string/dupatta</item>
-        <item>@string/stole</item>
-        <item>@string/fabric</item>
-        <item>@string/home_Accessories</item>
-        <item>@string/fashion_accessories</item>
-    </string-array>
     <string name="title_activity_buyer_add_own_product_design">BuyerAddOwnProductDesign</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="title_activity_custom_design">CustomDesignActivity</string>
     <!--
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.
     -->
-    <string name="hello_world">Hello Square World!</string>
     <string name="make_it_amp_take_it"><![CDATA[Make it & take it!]]></string>
     <string name="search_hint">Search products, codes, product types, weaves</string>
     <string name="empty_suggestion_text">No suggestions for this keyword. Try searching\n\"saree\",\"fabric\",\"ikat\".</string>
@@ -291,5 +255,7 @@
     <string name="show_both">Show both</string>
     <string name="collapse">Collapse</string>
     <string name="title_activity_edit_photo">EditPhotoActivity</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

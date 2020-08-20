@@ -19,7 +19,7 @@ class AddressPredicates {
             val realm = CXRealmManager.getRealmInstance()
             var addressList = user?.data?.user?.addressses
             try {
-                realm?.executeTransaction {
+                realm.executeTransaction {
                     var addrIterator = addressList?.iterator()
                     if (addrIterator != null) {
                         while (addrIterator.hasNext()) {
@@ -87,7 +87,7 @@ class AddressPredicates {
             val realm = CXRealmManager.getRealmInstance()
             var addressList = user?.data?.user?.addressses
             try {
-                realm?.executeTransaction {
+                realm.executeTransaction {
                     var addrIterator = addressList?.iterator()
                     if (addrIterator != null) {
                         while (addrIterator.hasNext()) {
@@ -173,12 +173,12 @@ class AddressPredicates {
             val realm = CXRealmManager.getRealmInstance()
             var addrObj : UserAddress?= null
             var user = userData.data
-            var addressList = user?.addressses
+            var addressList = user.addressses
             realm.executeTransaction {
                 try {
 
 
-                    var addrIterator = addressList?.iterator()
+                    var addrIterator = addressList.iterator()
                     while (addrIterator.hasNext()) {
                         var addr = addrIterator.next()
 
@@ -250,7 +250,7 @@ class AddressPredicates {
             val realm = CXRealmManager.getRealmInstance()
             var addressList = userData?.data?.user?.addressses
             try {
-                realm?.executeTransaction {
+                realm.executeTransaction {
                     var addrIterator = addressList?.iterator()
                     if (addrIterator != null) {
                         while (addrIterator.hasNext()) {
@@ -260,22 +260,22 @@ class AddressPredicates {
                                 .limit(1)
                                 .findFirst()
 
-                                addrObj?.id = addr.id
-                                addrObj?.userid = userData?.data?.user?.id
-                                addrObj?.addrtypeid = addr.addressType.id.toString()
-                                addrObj?.addrtype = addr.addressType.addrType
-                                addrObj?.country_id = addr.country.id.toString()
-                                addrObj?.country = addr.country.name
-                                addrObj?.pincode = addr.pincode
-                                addrObj?.city = addr.city
-                                addrObj?.street = addr.street
-                                addrObj?.district = addr.district
-                                addrObj?.state = addr.state
-                                addrObj?.landmark = addr.landmark
-                                addrObj?.line1 = addr.line1
-                                addrObj?.line2 = addr.line2
+                            addrObj?.id = addr.id
+                            addrObj?.userid = userData?.data?.user?.id
+                            addrObj?.addrtypeid = addr.addressType.id.toString()
+                            addrObj?.addrtype = addr.addressType.addrType
+                            addrObj?.country_id = addr.country.id.toString()
+                            addrObj?.country = addr.country.name
+                            addrObj?.pincode = addr.pincode
+                            addrObj?.city = addr.city
+                            addrObj?.street = addr.street
+                            addrObj?.district = addr.district
+                            addrObj?.state = addr.state
+                            addrObj?.landmark = addr.landmark
+                            addrObj?.line1 = addr.line1
+                            addrObj?.line2 = addr.line2
 
-                                realm.copyToRealmOrUpdate(addrObj)
+                            realm.copyToRealmOrUpdate(addrObj)
 
                         }
                     }

@@ -20,7 +20,7 @@ class UserPredicates{
             val realm = CXRealmManager.getRealmInstance()
             var user = userData?.data?.user
 
-            realm!!.executeTransaction {
+            realm.executeTransaction {
 
                 var userObj =realm.where(CraftUser::class.java)
                     .equalTo("id", userData?.data?.user?.id)
@@ -80,46 +80,46 @@ class UserPredicates{
                     realm.copyToRealmOrUpdate(exUser)
 
                 }else{
-                    nextID=userObj?._id?:0
-                    userObj?.id = user?.id
-                    userObj?.acctoken = userData?.data?.acctoken
-                    userObj?.firstName = user?.firstName
-                    userObj?.lastName = user?.lastName
-                    userObj?.email = user?.email
-                    userObj?.designation = user?.designation
-                    userObj?.mobile = user?.mobile
-                    userObj?.alternateMobile = user?.alternateMobile
-                    userObj?.pancard = user?.pancard
-                    userObj?.websiteLink = user?.websiteLink
-                    userObj?.socialMediaLink = user?.socialMediaLink
-                    userObj?.clusterid = user?.cluster?.id.toString()
-                    userObj?.clusterdesc = user?.cluster?.desc
-                    userObj?.clusteradjective = user?.cluster?.adjective
-                    userObj?.poc_id = user?.pointOfContact?.id
-                    userObj?.poc_firstName = user?.pointOfContact?.firstName
-                    userObj?.poc_lastName = user?.pointOfContact?.lastName
-                    userObj?.poc_email = user?.pointOfContact?.email
-                    userObj?.poc_contactNo = user?.pointOfContact?.contactNo
-                    userObj?.companyName = user?.companyDetails?.companyName
-                    userObj?.companyid = user?.companyDetails?.id
-                    userObj?.contact = user?.companyDetails?.contact
-                    userObj?.brandLogo = user?.companyDetails?.logo
+                    nextID= userObj._id ?:0
+                    userObj.id = user?.id
+                    userObj.acctoken = userData?.data?.acctoken
+                    userObj.firstName = user?.firstName
+                    userObj.lastName = user?.lastName
+                    userObj.email = user?.email
+                    userObj.designation = user?.designation
+                    userObj.mobile = user?.mobile
+                    userObj.alternateMobile = user?.alternateMobile
+                    userObj.pancard = user?.pancard
+                    userObj.websiteLink = user?.websiteLink
+                    userObj.socialMediaLink = user?.socialMediaLink
+                    userObj.clusterid = user?.cluster?.id.toString()
+                    userObj.clusterdesc = user?.cluster?.desc
+                    userObj.clusteradjective = user?.cluster?.adjective
+                    userObj.poc_id = user?.pointOfContact?.id
+                    userObj.poc_firstName = user?.pointOfContact?.firstName
+                    userObj.poc_lastName = user?.pointOfContact?.lastName
+                    userObj.poc_email = user?.pointOfContact?.email
+                    userObj.poc_contactNo = user?.pointOfContact?.contactNo
+                    userObj.companyName = user?.companyDetails?.companyName
+                    userObj.companyid = user?.companyDetails?.id
+                    userObj.contact = user?.companyDetails?.contact
+                    userObj.brandLogo = user?.companyDetails?.logo
                     userObj.companyDesc = user?.companyDetails?.desc
-                    userObj?.cin = user?.companyDetails?.cin
-                    userObj?.gstNo = user?.companyDetails?.gstNo
-                    userObj?.weaverDetails = user?.weaverDetails
-                    userObj?.refRoleId = user?.refRoleId
-                    userObj?.registeredOn = user?.registeredOn
-                    userObj?.status = user?.status
-                    userObj?.emailVerified = user?.emailVerified
-                    userObj?.lastLoggedIn = user?.lastLoggedIn
+                    userObj.cin = user?.companyDetails?.cin
+                    userObj.gstNo = user?.companyDetails?.gstNo
+                    userObj.weaverDetails = user?.weaverDetails
+                    userObj.refRoleId = user?.refRoleId
+                    userObj.registeredOn = user?.registeredOn
+                    userObj.status = user?.status
+                    userObj.emailVerified = user?.emailVerified
+                    userObj.lastLoggedIn = user?.lastLoggedIn
                     userObj.rating = user?.rating
-                    userObj?.username = user?.username
-                    userObj?.enabled = user?.enabled
-                    userObj?.authorities = user?.authorities
-                    userObj?.accountNonExpired = user?.accountNonExpired
-                    userObj?.accountNonLocked = user?.accountNonLocked
-                    userObj?.credentialsNonExpired = user?.credentialsNonExpired
+                    userObj.username = user?.username
+                    userObj.enabled = user?.enabled
+                    userObj.authorities = user?.authorities
+                    userObj.accountNonExpired = user?.accountNonExpired
+                    userObj.accountNonLocked = user?.accountNonLocked
+                    userObj.credentialsNonExpired = user?.credentialsNonExpired
 
                     realm.copyToRealmOrUpdate(userObj)
                 }
@@ -132,7 +132,7 @@ class UserPredicates{
             val realm = CXRealmManager.getRealmInstance()
             var user = userData?.data?.user
 
-            realm!!.executeTransaction {
+            realm.executeTransaction {
 
                 var userObj =realm.where(CraftUser::class.java)
                     .equalTo("id", userData?.data?.user?.id)
@@ -189,15 +189,15 @@ class UserPredicates{
                     realm.copyToRealmOrUpdate(exUser)
 
                 }else{
-                    nextID=userObj?._id?:0
-                    userObj?.id = user?.id
-                    userObj?.acctoken = userData?.data?.acctoken
-                    userObj?.firstName = user?.firstName
-                    userObj?.lastName = user?.lastName
-                    userObj?.email = user?.email
-                    userObj?.mobile = user?.mobile
-                    userObj?.alternateMobile = user?.alternateMobile
-                    userObj?.pancard = user?.pancard
+                    nextID= userObj._id ?:0
+                    userObj.id = user?.id
+                    userObj.acctoken = userData?.data?.acctoken
+                    userObj.firstName = user?.firstName
+                    userObj.lastName = user?.lastName
+                    userObj.email = user?.email
+                    userObj.mobile = user?.mobile
+                    userObj.alternateMobile = user?.alternateMobile
+                    userObj.pancard = user?.pancard
                     userObj.profilePic = user?.profilePic
 
                     //Artisan Brand
@@ -209,24 +209,24 @@ class UserPredicates{
                     userObj.gstNo = user?.companyDetails?.gstNo
                     userObj.companyDesc = user?.companyDetails?.desc
 
-                    userObj?.weaverDetails = user?.weaverDetails?.weaverId
-                    userObj?.clusterid = user?.cluster?.id.toString()
-                    userObj?.clusterdesc = user?.cluster?.desc
-                    userObj?.clusteradjective = user?.cluster?.adjective
-                    userObj?.refRoleId = user?.refRoleId
-                    userObj?.registeredOn = user?.registeredOn
-                    userObj?.status = user?.status
-                    userObj?.emailVerified = user?.emailVerified
-                    userObj?.lastLoggedIn = user?.lastLoggedIn
-                    userObj?.username = user?.username
-                    userObj?.rating = user?.rating
+                    userObj.weaverDetails = user?.weaverDetails?.weaverId
+                    userObj.clusterid = user?.cluster?.id.toString()
+                    userObj.clusterdesc = user?.cluster?.desc
+                    userObj.clusteradjective = user?.cluster?.adjective
+                    userObj.refRoleId = user?.refRoleId
+                    userObj.registeredOn = user?.registeredOn
+                    userObj.status = user?.status
+                    userObj.emailVerified = user?.emailVerified
+                    userObj.lastLoggedIn = user?.lastLoggedIn
+                    userObj.username = user?.username
+                    userObj.rating = user?.rating
 //                    userObj?.paymentAccountDetails = user.paymentAccountDetails  //TODO: to be implemented
 
-                    userObj?.enabled = user?.enabled
-                    userObj?.authorities = user?.authorities
-                    userObj?.accountNonExpired = user?.accountNonExpired
-                    userObj?.accountNonLocked = user?.accountNonLocked
-                    userObj?.credentialsNonExpired = user?.credentialsNonExpired
+                    userObj.enabled = user?.enabled
+                    userObj.authorities = user?.authorities
+                    userObj.accountNonExpired = user?.accountNonExpired
+                    userObj.accountNonLocked = user?.accountNonLocked
+                    userObj.credentialsNonExpired = user?.credentialsNonExpired
 
                     realm.copyToRealmOrUpdate(userObj)
                 }
@@ -253,7 +253,7 @@ class UserPredicates{
         fun editBuyerDetails(userData : EditProfileResponse?) {
             val realm = CXRealmManager.getRealmInstance()
             var user = userData?.data
-            realm!!.executeTransaction {
+            realm.executeTransaction {
                 var userObj =realm.where(CraftUser::class.java)
                     .equalTo("id", userData?.data?.id)
                     .limit(1)
@@ -302,7 +302,7 @@ class UserPredicates{
         fun refreshArtisanDetails(userData : ProfileResponse?){
             val realm = CXRealmManager.getRealmInstance()
             var user = userData?.data?.user
-            realm?.executeTransaction {
+            realm.executeTransaction {
 
                 var userObj = realm.where(CraftUser::class.java)
                     .equalTo("id", userData?.data?.user?.id)
@@ -312,7 +312,7 @@ class UserPredicates{
                 try {
 
                     userObj?.id = user?.id
-//                userObj?.acctoken = userData.data.acctoken
+        //                userObj?.acctoken = userData.data.acctoken
                     userObj?.firstName = user?.firstName
                     userObj?.lastName = user?.lastName
                     userObj?.email = user?.email
@@ -324,7 +324,7 @@ class UserPredicates{
                     userObj?.clusterid = user?.cluster?.id.toString()
                     userObj?.clusterdesc = user?.cluster?.desc
                     userObj?.clusteradjective = user?.cluster?.adjective
-//                userObj?.refRoleId = user.refRoleId
+        //                userObj?.refRoleId = user.refRoleId
                     userObj?.companyName = user?.companyDetails?.companyName
                     userObj?.companyid = user?.companyDetails?.id
                     userObj?.contact = user?.companyDetails?.contact
@@ -354,7 +354,7 @@ class UserPredicates{
         fun refreshBuyerDetails(userData : ProfileResponse?){
             val realm = CXRealmManager.getRealmInstance()
             var user = userData?.data?.user
-            realm!!.executeTransaction {
+            realm.executeTransaction {
 
                 var userObj = realm.where(CraftUser::class.java)
                     .equalTo("id", userData?.data?.user?.id)
@@ -411,7 +411,7 @@ class UserPredicates{
             val realm = CXRealmManager.getRealmInstance()
             var paymentList = userData?.data?.user?.paymentAccountDetails
             try {
-                realm?.executeTransaction {
+                realm.executeTransaction {
                     var payIterator = paymentList?.iterator()
                     if (payIterator != null) {
                         while (payIterator.hasNext()) {
@@ -489,7 +489,7 @@ class UserPredicates{
         fun insertAllCountries(){
             val realm = CXRealmManager.getRealmInstance()
             try {
-                realm?.executeTransaction {
+                realm.executeTransaction {
 
                 }
             }catch(e : Exception){

@@ -1,6 +1,5 @@
 package com.adrosonic.craftexchange.ui.modules.artisan.landing
 
-import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
 import android.os.AsyncTask
@@ -15,7 +14,6 @@ import androidx.activity.viewModels
 import androidx.annotation.NonNull
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.MutableLiveData
@@ -26,7 +24,7 @@ import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
 import com.adrosonic.craftexchange.databinding.ActivityArtisanLandingBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.ui.modules.artisan.profile.artisanProfileIntent
-import com.adrosonic.craftexchange.ui.modules.artisan.search.searchArtisanIntent
+import com.adrosonic.craftexchange.ui.modules.search.searchSuggestionIntent
 import com.adrosonic.craftexchange.viewModels.LandingViewModel
 import com.adrosonic.craftexchange.ui.modules.role.roleselectIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
@@ -83,7 +81,7 @@ class ArtisanLandingActivity : AppCompatActivity(),
 
 
         mViewModel = ViewModelProviders.of(this).get(LandingViewModel::class.java)
-        mProVM?.listener = this
+        mProVM.listener = this
 
         refreshProfile()
         mProVM.getUserMutableData()
@@ -168,23 +166,14 @@ class ArtisanLandingActivity : AppCompatActivity(),
                 return true
             }
             R.id.action_search -> {
-                startActivity(searchArtisanIntent())
+                startActivity(searchSuggestionIntent())
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.tool_menu, menu)
-        // Associate searchable configuration with the SearchView
-//        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-////        (menu.findItem(R.id.action_search).actionView as SearchView).apply {
-////            setSearchableInfo(searchManager.getSearchableInfo(componentName))
-////        }
-//        (menu.findItem(R.id.action_search)).setOnMenuItemClickListener {
-//
-//        }
         return true
     }
 
@@ -230,10 +219,10 @@ class ArtisanLandingActivity : AppCompatActivity(),
             drawer_layout.closeDrawer(GravityCompat.START)
         }else{
             if(fragmentManager.backStackEntryCount == 0) {
-                super.onBackPressed();
+                super.onBackPressed()
             }
             else {
-                fragmentManager.popBackStack();
+                fragmentManager.popBackStack()
             }
         }
     }
@@ -267,7 +256,7 @@ class ArtisanLandingActivity : AppCompatActivity(),
             deviceRegistration.enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(call: Call<ResponseBody>, response: retrofit2.Response<ResponseBody>?) {
                     response?.takeUnless { response.isSuccessful }?.apply {
-                        Log.e(TAG, "Error registering device token "+response.message()+" raw code "+response.raw().code())
+                        Log.e(TAG, "Error registering device token "+response.message()+" raw code "+ response.raw().code)
                     }
                     response?.takeIf { response.isSuccessful }?.apply {
                         Log.e(TAG, "Device registration successful")

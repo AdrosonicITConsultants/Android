@@ -31,6 +31,7 @@ import com.pixplicity.easyprefs.library.Prefs
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import java.io.File
 import javax.security.auth.callback.Callback
@@ -90,7 +91,7 @@ class BrandDetailsEditFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         var brandLogo = Utility.craftUser?.brandLogo
-        var urlBrand = Utility?.getBrandLogoUrl(Prefs.getString(ConstantsDirectory.USER_ID,"").toLong(),brandLogo)
+        var urlBrand = Utility.getBrandLogoUrl(Prefs.getString(ConstantsDirectory.USER_ID,"").toLong(),brandLogo)
         mBinding?.changeLogoImg?.let {
             ImageSetter.setImage(requireContext(),urlBrand, it,
                 R.drawable.buyer_logo_placeholder,R.drawable.buyer_logo_placeholder,R.drawable.buyer_logo_placeholder)
@@ -124,7 +125,7 @@ class BrandDetailsEditFragment : Fragment() {
 
             if(filePath != "" ){
                 file = File(filePath)
-                fileReqBody = RequestBody.create(MediaType.parse("image/*"), file!!)
+                fileReqBody = file!!.toRequestBody(MediaType.parse("image/*"))
                 brandLogoBody = MultipartBody.Builder()
                     .addFormDataPart("logo",file?.name,fileReqBody!!)
                     .build()

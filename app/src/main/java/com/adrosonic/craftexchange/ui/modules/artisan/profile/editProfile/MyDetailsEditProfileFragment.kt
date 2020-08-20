@@ -32,6 +32,7 @@ import com.pixplicity.easyprefs.library.Prefs
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import java.io.File
 import javax.security.auth.callback.Callback
@@ -127,7 +128,7 @@ class MyDetailsEditProfileFragment : Fragment() {
 
             if(filePath != "" ){
                 file = File(filePath)
-                fileReqBody = RequestBody.create(MediaType.parse("image/*"), file!!)
+                fileReqBody = file!!.toRequestBody(MediaType.parse("image/*"))
                 profilePicBody = MultipartBody.Builder()
                     .addFormDataPart("profilePic",file?.name,fileReqBody!!)
                     .build()

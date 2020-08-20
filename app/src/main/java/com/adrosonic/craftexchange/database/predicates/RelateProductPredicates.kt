@@ -22,7 +22,7 @@ class RelateProductPredicates {
             val realm = CXRealmManager.getRealmInstance()
             try {
                 Log.e("insertRelatedProduct", "111111111111 : ${productId}")
-                realm?.executeTransaction {
+                realm.executeTransaction {
                     Log.e("insertRelatedProduct", "productId : ${productId}")
                     var primId = it.where<RelatedProducts>(RelatedProducts::class.java).max("_id")
                     if (primId == null) {
@@ -54,7 +54,7 @@ class RelateProductPredicates {
         fun deleteRelatedProduct(id:Long){
             var count=0
             val realm = CXRealmManager.getRealmInstance()
-            realm?.executeTransaction {
+            realm.executeTransaction {
                 val artisonProd = it.where(RelatedProducts::class.java).equalTo("relatedToProductId", id).findAll()
                 artisonProd.deleteAllFromRealm()
             }

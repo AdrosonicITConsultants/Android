@@ -192,7 +192,7 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
         }
         ///////////////////////weave types////////////////////////
         weaveSelctionList.clear()
-        arrWeaf?.forEach { weaveSelctionList.add(Triple(it.weaveDesc ?: "", false, it.id)) }
+        arrWeaf?.forEach { weaveSelctionList.add(Triple(it.weaveDesc, false, it.id)) }
         mBinding?.weaveRecyclerList?.layoutManager = LinearLayoutManager(this)
         weaveSelectionAdapter = WeaveSelectionAdapter(this, weaveSelctionList)
         weaveSelectionAdapter.listener = this
@@ -204,7 +204,7 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
         arrProductCategory?.forEach { arrProdCategoryStr.add(it.productDesc) }
         val spProdCataAdapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrProdCategoryStr)
         spProdCataAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
-        mBinding?.spProdCategory?.setAdapter(spProdCataAdapter)
+        mBinding?.spProdCategory?.adapter = spProdCataAdapter
         mBinding?.spProdCategory?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
             override fun onItemSelected(
@@ -213,19 +213,19 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
                 position: Int,
                 id: Long
             ) {
-                arrProdTypeStr?.clear()
+                arrProdTypeStr.clear()
                 arrProdTypeStr.add("Select product type")
                 val prodCategory = arrProdCategoryStr.get(position)
                 for (category in arrProductCategory!!) {
                     if (category.productDesc.equals(prodCategory, true)) {
                         arrProductType = category.productTypes
-                        category.productTypes.forEach { arrProdTypeStr?.add(it.productDesc) }
+                        category.productTypes.forEach { arrProdTypeStr.add(it.productDesc) }
                     }
                 }
 
                 val spProdTypeAdapter = ArrayAdapter<String>( applicationContext, android.R.layout.simple_spinner_item,   arrProdTypeStr  )
                 spProdTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                mBinding?.spProdType?.setAdapter(spProdTypeAdapter)
+                mBinding?.spProdType?.adapter = spProdTypeAdapter
                 if(productId>0){
                     var type=""
                     arrProductType?.forEach {
@@ -261,7 +261,7 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
         supportFragmentManager.let{
             yarn_pager?.adapter = YarnFrgamentAdapter(it,productId,false)
         }
-        yarn_pager?.setOffscreenPageLimit(3)
+        yarn_pager?.offscreenPageLimit = 3
 //        val viewPagerAdapter = YarnViewpager(this,productId, false)
 //        mBinding?.yarnPager?.setAdapter(viewPagerAdapter)
 //        viewPagerAdapter.listener=this
@@ -276,7 +276,7 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
-            params.setMargins(8, 0, 8, 0);
+            params.setMargins(8, 0, 8, 0)
             mBinding?.sliderDots?.addView(d, params)
             dots.add(d)
         } while (dots.size < 3)
@@ -302,7 +302,7 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
         arrReedCount?.forEach { arrReedCountStr.add(it.count) }
         val spReedCountAdapter =ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrReedCountStr)
         spReedCountAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        mBinding?.spReedCount?.setAdapter(spReedCountAdapter)
+        mBinding?.spReedCount?.adapter = spReedCountAdapter
         mBinding?.spReedCount?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
             override fun onItemSelected(
@@ -332,7 +332,7 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
                 if (it.productDesc.equals(productTypeDescForUpdate)) {
                     arrRelatedProdType = it.relatedProductType
                 }
-                arrProdTypeStr?.add(it.productDesc)
+                arrProdTypeStr.add(it.productDesc)
             }
             Log.e("Offline", "activity arrRelatedProdType :" +arrRelatedProdType?.size)
             relatedProdStored= RelateProductPredicates.getRelatedProductOfProduct(productId)
@@ -344,7 +344,7 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
             setVisiblitiesAndTextsOnType(productTypeDescForUpdate, arrRelatedProdType)
             weaveIdStored= WeaveTypesPredicates.getWeaveList(productId)
             Log.e("Offline", "activity weaveIdStored :" + weaveIdStored?.joinToString())
-            weaveSelctionList?.forEach {
+            weaveSelctionList.forEach {
                 if(weaveIdStored!!.contains(it.third)) {
                     val pos= weaveSelctionList.indexOf(it)
                     weaveSelctionList.set(pos, Triple(it.first,true,it.third))
@@ -482,10 +482,10 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
         if (requestCode == ConstantsDirectory.PICK_IMAGE && resultCode == AppCompatActivity.RESULT_OK && null != data) {
             when (requestCode) {
                 ConstantsDirectory.PICK_IMAGE -> {
-                    val uri = data?.data
+                    val uri = data.data
                     if (uri != null) {
 
-                        var absolutePath = Utility.getRealPathFromFileURI(applicationContext, uri!!)
+                        var absolutePath = Utility.getRealPathFromFileURI(applicationContext, uri)
                         pairList.add(Triple(false, 0, absolutePath))
                         prodImgListAdapter.notifyDataSetChanged()
                         setStatusResource()
@@ -508,10 +508,10 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
     }
 
     fun setVisiblitiesAndTextsOnType(type: String,arrRelatedProdType:List<ProductType>?) {
-        arrProdLengthStr?.clear()
-        arrProdWidthStr?.clear()
-        arrSubProdLengthStr?.clear()
-        arrSubProdWidthStr?.clear()
+        arrProdLengthStr.clear()
+        arrProdWidthStr.clear()
+        arrSubProdLengthStr.clear()
+        arrSubProdWidthStr.clear()
 
         Log.e("SetData","type :"+type)
         for (t in arrProductType!!) {
@@ -520,8 +520,8 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
                 Log.e("SetData","type :"+t.productDesc)
                 Log.e("SetData","productLengths :"+t.productLengths.size)
                 Log.e("SetData","productWidths :"+t.productWidths.size)
-                t.productLengths.forEach { arrProdLengthStr?.add(it.length) }
-                t.productWidths.forEach { arrProdWidthStr?.add(it.width) }
+                t.productLengths.forEach { arrProdLengthStr.add(it.length) }
+                t.productWidths.forEach { arrProdWidthStr.add(it.width) }
             }
         }
 
@@ -535,7 +535,7 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
             mBinding?.etProdWidth?.visibility=View.GONE
             val spwidthAdapter =ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrProdWidthStr)
             spwidthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            mBinding?.spProdWidth?.setAdapter(spwidthAdapter)
+            mBinding?.spProdWidth?.adapter = spwidthAdapter
             if(productId>0)mBinding?.spProdWidth?.setSelection(arrProdWidthStr.indexOf(productEntry?.width?:""))
         }
         if(arrProdLengthStr.size<=0){
@@ -548,7 +548,7 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
             mBinding?.etProdLength?.visibility=View.GONE
             val spLenghtAdapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrProdLengthStr)
             spLenghtAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            mBinding?.spProdLength?.setAdapter(spLenghtAdapter)
+            mBinding?.spProdLength?.adapter = spLenghtAdapter
             if(productId>0)mBinding?.spProdLength?.setSelection(arrProdLengthStr.indexOf(productEntry?.length?:""))
         }
 
@@ -562,7 +562,7 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
             txt_step_8.text = "Step 7 : Enter description"
         }
         if(arrRelatedProdType!=null) {
-        if (arrRelatedProdType!!.size>0) {
+        if (arrRelatedProdType.size>0) {
             //todo inflater to be called post API itegratipn
             mBinding?.txtRelatedProdType?.visibility = View.VISIBLE
             mBinding?.llSubProd?.visibility = View.VISIBLE
@@ -571,12 +571,12 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
             arrRelatedProdType.get(0).productLengths.forEach { arrSubProdLengthStr.add(it.length) }
             val splengthAdapter =ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,arrSubProdLengthStr )
             splengthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            mBinding?.spSubProdLength?.setAdapter(splengthAdapter)
+            mBinding?.spSubProdLength?.adapter = splengthAdapter
 
             arrRelatedProdType.get(0).productWidths.forEach { arrSubProdWidthStr.add(it.width) }
             val spwidthAdapter =ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,arrSubProdWidthStr )
             spwidthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            mBinding?.spSubProdWidth?.setAdapter(spwidthAdapter)
+            mBinding?.spSubProdWidth?.adapter = spwidthAdapter
             if(productId>0){
                 mBinding?.spSubProdLength?.setSelection(arrSubProdLengthStr.indexOf(relatedProdStored?.productLength))
                 mBinding?.spSubProdWidth?.setSelection(arrSubProdWidthStr.indexOf(relatedProdStored?.productWidth))
@@ -608,10 +608,10 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
 
     fun showCancelDialog() {
         var dialog = Dialog(this)
-        dialog?.setContentView(R.layout.dialog_addprod_back)
-        dialog?.show()
-        val tvCancel = dialog?.findViewById(R.id.txt_cancel) as TextView
-        val tvBack = dialog?.findViewById(R.id.txt_back) as TextView
+        dialog.setContentView(R.layout.dialog_addprod_back)
+        dialog.show()
+        val tvCancel = dialog.findViewById(R.id.txt_cancel) as TextView
+        val tvBack = dialog.findViewById(R.id.txt_back) as TextView
         tvCancel.setOnClickListener {
             dialog.cancel()
         }
@@ -624,7 +624,7 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
         try {
             getYarnData()
             weaveIdList.clear()
-            weaveSelctionList.forEach { if(it.second)weaveIdList?.add(it.third) }
+            weaveSelctionList.forEach { if(it.second) weaveIdList.add(it.third) }
             var width=if(arrProdWidthStr.size<=0)mBinding?.etProdWidth?.text.toString() else mBinding?.spProdWidth?.selectedItem.toString()
             var length=if(arrProdLengthStr.size<=0)mBinding?.etProdLength?.text.toString() else mBinding?.spProdLength?.selectedItem.toString()
 
@@ -665,10 +665,10 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
             else if(mBinding?.etDscrp?.text!!.isBlank()) Utility.displayMessage("Please enter description",applicationContext)
             else{
                 var dialog = Dialog(this)
-                dialog?.setContentView(R.layout.dialog_save_upload)
-                dialog?.show()
-                val tvCancel = dialog?.findViewById(R.id.cancel) as TextView
-                val tvSave = dialog?.findViewById(R.id.save) as TextView
+                dialog.setContentView(R.layout.dialog_save_upload)
+                dialog.show()
+                val tvCancel = dialog.findViewById(R.id.cancel) as TextView
+                val tvSave = dialog.findViewById(R.id.save) as TextView
                 tvCancel.setOnClickListener {
                     dialog.cancel()
                 }
@@ -720,7 +720,7 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
                     BuyerCustomProductPredicates.insertCustomProductOffline(template, list,relatedProduct)
                     if (Utility.checkIfInternetConnected(applicationContext)) {
                         val coordinator = SyncCoordinator(applicationContext)
-                        coordinator?.performLocallyAvailableActions()
+                        coordinator.performLocallyAvailableActions()
                     }
                     finish()
                 } else
@@ -742,7 +742,8 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
         }
 
         var template = UpdateOwnDesignRequest(extraWeftDyeId,extraWeftYarnCount,extraWeftYarnId,mBinding?.etGsm?.text.toString(),productId,
-            length,prodCatId?:0,prodTypeId?:0,weavelist,mBinding?.etDscrp?.text.toString()?:"",reedCountId,relProdList,
+            length,prodCatId?:0,prodTypeId?:0,weavelist,
+            mBinding?.etDscrp?.text.toString(),reedCountId,relProdList,
            warpDyeId,warpYarnCount,warpYarnId,weftDyeId,weftYarnCount,weftYarnId,"",width)
 
         val dialogCompresion = CompressionProgressDialog()
@@ -769,7 +770,7 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
                     )
                     if (Utility.checkIfInternetConnected(applicationContext)) {
                         val coordinator = SyncCoordinator(applicationContext)
-                        coordinator?.performLocallyAvailableActions()
+                        coordinator.performLocallyAvailableActions()
                     }
 
                     finish()
@@ -786,7 +787,7 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
     fun setStatusResource() {
         getYarnData()
         weaveIdList.clear()
-        weaveSelctionList.forEach { if (it.second) weaveIdList?.add(it.third) }
+        weaveSelctionList.forEach { if (it.second) weaveIdList.add(it.third) }
 
         var width=if(arrProdWidthStr.size<=0)mBinding?.etProdWidth?.text.toString() else mBinding?.spProdWidth?.selectedItem.toString()
         var length=if(arrProdLengthStr.size<=0)mBinding?.etProdLength?.text.toString() else mBinding?.spProdLength?.selectedItem.toString()

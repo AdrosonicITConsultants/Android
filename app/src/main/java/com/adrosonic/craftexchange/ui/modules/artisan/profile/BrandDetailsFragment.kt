@@ -66,12 +66,12 @@ class BrandDetailsFragment : Fragment(),
         }
 
         mViewModel.getUserMutableData()
-            .observe(viewLifecycleOwner, Observer<CraftUser>() {
+            .observe(viewLifecycleOwner, Observer<CraftUser> {
                 craftUser = MutableLiveData(it)
             })
 
         mViewModel.getRegAddrMutableData()
-            .observe(viewLifecycleOwner, Observer<UserAddress>() {
+            .observe(viewLifecycleOwner, Observer<UserAddress> {
                 regAddr = MutableLiveData(it)
             })
 
@@ -117,15 +117,15 @@ class BrandDetailsFragment : Fragment(),
         refreshProfile()
     }
     private fun refreshProfile(){
-        mViewModel?.getArtisanProfileDetails(requireContext())
-        craftUser = mViewModel?.getUserMutableData()
-        regAddr = mViewModel?.getRegAddrMutableData()
+        mViewModel.getArtisanProfileDetails(requireContext())
+        craftUser = mViewModel.getUserMutableData()
+        regAddr = mViewModel.getRegAddrMutableData()
         setImage()
     }
 
     fun setImage(){
         image = craftUser?.value?.brandLogo
-        url = Utility?.getBrandLogoUrl(Prefs.getString(ConstantsDirectory.USER_ID,"").toLong(),image)
+        url = Utility.getBrandLogoUrl(Prefs.getString(ConstantsDirectory.USER_ID,"").toLong(),image)
         mBinding?.artisanBrandLogo?.let {
             ImageSetter.setImage(requireActivity(),url!!, it,
                 R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)

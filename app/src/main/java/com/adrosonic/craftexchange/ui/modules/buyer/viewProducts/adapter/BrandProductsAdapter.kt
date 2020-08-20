@@ -106,24 +106,25 @@ class BrandProductsAdapter(var context: Context?, private var brandProduct: List
         }
 
         holder.binding.wishlistButton.isLiked = product.isWishlisted == 1L
-        holder.binding?.wishlistButton?.setOnLikeListener(object: OnLikeListener {
+        holder.binding.wishlistButton.setOnLikeListener(object: OnLikeListener {
             override fun liked(likeButton: LikeButton) {
                 WishlistPredicates.updateProductWishlisting(product.productId,1L,1L)
                 if(Utility.checkIfInternetConnected(context!!)){
                     val coordinator = SyncCoordinator(context!!)
-                    coordinator?.performLocallyAvailableActions()
+                    coordinator.performLocallyAvailableActions()
                 }
             }
+
             override fun unLiked(likeButton: LikeButton) {
                 WishlistPredicates.updateProductWishlisting(product.productId,0L,1L)
                 if(Utility.checkIfInternetConnected(context!!)){
                     val coordinator = SyncCoordinator(context!!)
-                    coordinator?.performLocallyAvailableActions()
+                    coordinator.performLocallyAvailableActions()
                 }
             }
         })
-        holder?.binding?.btnGenerateEnquiry.setOnClickListener {
-            generateEnquiry(product?.productId?:0,false)
+        holder.binding.btnGenerateEnquiry.setOnClickListener {
+            generateEnquiry(product.productId ?:0,false)
         }
 
     }

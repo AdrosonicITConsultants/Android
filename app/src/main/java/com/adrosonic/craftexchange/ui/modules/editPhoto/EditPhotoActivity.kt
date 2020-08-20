@@ -46,7 +46,7 @@ class EditPhotoActivity : AppCompatActivity() {
             Log.e("EditPhotoActivity", "template activity prodId :" + photoPath)
             var file = File(photoPath)
             updatedUri=Uri.fromFile(file)
-            photoPath?.let {  (imgEditable).setImageURI(updatedUri)}
+            photoPath.let {  (imgEditable).setImageURI(updatedUri)}
 
             saveImage.setOnClickListener {
                 var bitmaps= (imgEditable.drawable as BitmapDrawable).bitmap
@@ -69,13 +69,13 @@ class EditPhotoActivity : AppCompatActivity() {
             }
 
 //            sbAdjustBrightness.setMax(4);
-            sbAdjustBrightness.setProgress(125);
+            sbAdjustBrightness.progress = 125
             sbAdjustBrightness.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
                 override fun onProgressChanged(seekBar: SeekBar, progress: Int,fromUser: Boolean) {
 //                    var res= changeBitmapContrastBrightness( (imgEditable.drawable as BitmapDrawable).bitmap, 1f, seekBar.progress.toFloat())
 //                    imgEditable.setImageBitmap(res)
                     var res=setBrightness(progress)
-                    imgEditable.setColorFilter(res)
+                    imgEditable.colorFilter = res
                 }
                 override fun onStartTrackingTouch(seekBar: SeekBar) {}
                 override fun onStopTrackingTouch(seekBar: SeekBar) {}
@@ -204,7 +204,7 @@ class EditPhotoActivity : AppCompatActivity() {
             )
         )
 
-        var config: Bitmap.Config = bmp.getConfig()
+        var config: Bitmap.Config = bmp.config
         if (config == null) {
             config = Bitmap.Config.ARGB_8888
         }

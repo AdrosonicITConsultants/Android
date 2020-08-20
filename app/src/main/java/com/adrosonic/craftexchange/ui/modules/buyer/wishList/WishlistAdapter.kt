@@ -82,7 +82,7 @@ class WishlistAdapter(
                 context?.let {
                     ContextCompat.getColor(
                         it, R.color.light_green)
-                }?.let { holder.productAvailableText.setTextColor(it) }
+                }.let { holder.productAvailableText.setTextColor(it) }
             }
             1L -> {
                 status = ConstantsDirectory.MADE_TO_ORDER
@@ -90,28 +90,28 @@ class WishlistAdapter(
                 context?.let {
                     ContextCompat.getColor(
                         it, R.color.dark_orange)
-                }?.let { holder.productAvailableText.setTextColor(it) }
+                }.let { holder.productAvailableText.setTextColor(it) }
             }
         }
         holder.productDescription.text = product?.product_spe
 
         var image = ProductPredicates.getProductDisplayImage(product?.productId)
         var url = Utility.getProductsImagesUrl(product?.productId,image?.imageName)
-        context?.let { ImageSetter.setImage(it,url,holder.productImage) }
+        context.let { ImageSetter.setImage(it,url,holder.productImage) }
 
         holder.btnViewMore.setOnClickListener {
-            val intent = Intent(context?.catalogueProductDetailsIntent())
+            val intent = Intent(context.catalogueProductDetailsIntent())
             val bundle = Bundle()
             bundle.putString(ConstantsDirectory.PRODUCT_ID, product?.productId?.toString())
             intent.putExtras(bundle)
-            context?.startActivity(intent)
+            context.startActivity(intent)
         }
         holder.itemView.setOnClickListener {
-            val intent = Intent(context?.catalogueProductDetailsIntent())
+            val intent = Intent(context.catalogueProductDetailsIntent())
             val bundle = Bundle()
             bundle.putString(ConstantsDirectory.PRODUCT_ID, product?.productId?.toString())
             intent.putExtras(bundle)
-            context?.startActivity(intent)
+            context.startActivity(intent)
         }
         holder.wishlistButton.setOnClickListener {
             //todo show dialog

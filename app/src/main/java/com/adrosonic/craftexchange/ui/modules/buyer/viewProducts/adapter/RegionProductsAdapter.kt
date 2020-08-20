@@ -54,9 +54,6 @@ class RegionProductsAdapter(var context: Context?, private var regionProduct: Li
     override fun getItemCount(): Int = regionProduct.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        if(itemCount == 0){
-
-        }
         val inflater = LayoutInflater.from(parent.context)
         val binding: ItemProductDescListBinding = DataBindingUtil.inflate(inflater, R.layout.item_product_desc_list,parent, false)
         return ViewHolder(binding)
@@ -103,25 +100,26 @@ class RegionProductsAdapter(var context: Context?, private var regionProduct: Li
         }
 
         holder.binding.wishlistButton.isLiked = product.isWishlisted == 1L
-        holder.binding?.wishlistButton?.setOnLikeListener(object: OnLikeListener {
+        holder.binding.wishlistButton.setOnLikeListener(object: OnLikeListener {
             override fun liked(likeButton: LikeButton) {
                 WishlistPredicates.updateProductWishlisting(product.productId,1L,1L)
                 if(Utility.checkIfInternetConnected(context!!)){
                     val coordinator = SyncCoordinator(context!!)
-                    coordinator?.performLocallyAvailableActions()
+                    coordinator.performLocallyAvailableActions()
                 }
             }
+
             override fun unLiked(likeButton: LikeButton) {
                 WishlistPredicates.updateProductWishlisting(product.productId,0L,1L)
                 if(Utility.checkIfInternetConnected(context!!)){
                     val coordinator = SyncCoordinator(context!!)
-                    coordinator?.performLocallyAvailableActions()
+                    coordinator.performLocallyAvailableActions()
                 }
             }
         })
 
-        holder?.binding?.btnGenerateEnquiry.setOnClickListener {
-            generateEnquiry(product?.productId?:0,false)
+        holder.binding.btnGenerateEnquiry.setOnClickListener {
+            generateEnquiry(product.productId ?:0,false)
         }
     }
 

@@ -50,7 +50,7 @@ fun onFilterSelected(pairList: Pair<String,Long>)
         when(item.second){
             1L -> {
                 //show both
-                Utility.setImageResource(context, holder.icon, R.drawable.ic_antaran_co_design_icon)
+                Utility.setImageResource(context, holder.icon, R.drawable.ic_showboth_collection)
             }
             2L -> {
                 Utility.setImageResource(context, holder.icon, R.drawable.ic_antaran_co_design_icon)
@@ -71,8 +71,8 @@ fun onFilterSelected(pairList: Pair<String,Long>)
             }
         }
 
-        holder?.itemView?.setOnClickListener {
-            selectFilter(position,Pair(item?.first,item?.second))
+        holder.itemView.setOnClickListener {
+            selectFilter(position,Pair(item.first, item.second))
             Utility.setImageResource(context, holder.chkStatus, R.drawable.ic_blue_circle_selection)
         }
     }
@@ -82,7 +82,7 @@ fun onFilterSelected(pairList: Pair<String,Long>)
 
         if (checkedPosition != position)
         {
-            checkedPosition?.let { notifyItemChanged(it) }
+            checkedPosition.let { notifyItemChanged(it) }
             checkedPosition = position
             notifyDataSetChanged()
         }

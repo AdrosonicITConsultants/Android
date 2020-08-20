@@ -124,7 +124,7 @@ class BuyerLoginPasswordFragment : Fragment() {
                                     UserPredicates.insertBuyer(response.body()!!)
                                     AddressPredicates.insertBuyerAddress(response.body()!!)
 
-                                    mUserConfig?.deviceName = "Android"
+                                    mUserConfig.deviceName = "Android"
 
                                     Prefs.putString(
                                         ConstantsDirectory.USER_PWD,

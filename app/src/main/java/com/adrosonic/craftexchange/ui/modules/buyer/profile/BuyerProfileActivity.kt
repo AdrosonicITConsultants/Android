@@ -61,7 +61,7 @@ class BuyerProfileActivity : AppCompatActivity(),
         val view = mBinding?.root
         setContentView(view)
 
-        mViewModel?.listener = this
+        mViewModel.listener = this
 
         if(Utility.checkIfInternetConnected(applicationContext)) {
            refreshProfile()
@@ -70,17 +70,17 @@ class BuyerProfileActivity : AppCompatActivity(),
         }
 
         mViewModel.getUserMutableData()
-            .observe(this, Observer<CraftUser>() {
+            .observe(this, Observer<CraftUser> {
                 craftUser = MutableLiveData(it)
             })
 
         mViewModel.getRegAddrMutableData()
-            .observe(this, Observer<UserAddress>() {
+            .observe(this, Observer<UserAddress> {
                 regAddr = MutableLiveData(it)
             })
 
         mViewModel.getDelAddrMutableData()
-            .observe(this, Observer<UserAddress>() {
+            .observe(this, Observer<UserAddress> {
                 delAddr = MutableLiveData(it)
             })
 
@@ -129,13 +129,13 @@ class BuyerProfileActivity : AppCompatActivity(),
     }
 
     fun refreshProfile(){
-        mViewModel?.getBuyerProfileDetails(this)
+        mViewModel.getBuyerProfileDetails(this)
         setImage()
     }
 
     fun setImage(){
         image = craftUser?.value?.brandLogo
-        url = Utility?.getBrandLogoUrl(Prefs.getString(ConstantsDirectory.USER_ID,"").toLong(),image)
+        url = Utility.getBrandLogoUrl(Prefs.getString(ConstantsDirectory.USER_ID,"").toLong(),image)
         mBinding?.logo?.let {
             ImageSetter.setImage(applicationContext,url!!, it,
                 R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)

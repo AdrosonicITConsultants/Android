@@ -12,9 +12,9 @@ class SearchPredicates {
         private var nextID: Long? = 0
 
         fun buyerSearch(searchFilter : String) : RealmResults<ProductCatalogue>? {
-            var realm = CXRealmManager?.getRealmInstance()
+            var realm = CXRealmManager.getRealmInstance()
             var products : RealmResults<ProductCatalogue> ?= null
-            realm?.executeTransaction {
+            realm.executeTransaction {
                 products = realm.where(ProductCatalogue::class.java)
                     .contains("productTag",searchFilter,Case.INSENSITIVE)
                     .or()
@@ -40,11 +40,11 @@ class SearchPredicates {
         }
 
         fun artisanSearch(searchFilter : String,isMadeWithAntaran : Long) : RealmResults<ArtisanProducts>? {
-            var realm = CXRealmManager?.getRealmInstance()
+            var realm = CXRealmManager.getRealmInstance()
             var products : RealmResults<ArtisanProducts> ?= null
             products?.clear()
             try {
-                realm?.executeTransaction {
+                realm.executeTransaction {
                     if(isMadeWithAntaran != -1L) {
                         // Antaran/Artisan products
                         products = realm.where(ArtisanProducts::class.java)
@@ -59,8 +59,8 @@ class SearchPredicates {
                             .contains("productTag",searchFilter, Case.INSENSITIVE)
 
 
-    //                    .or()
-    //                    .contains("product_spe",searchFilter,Case.INSENSITIVE) TODO : Search Weave type
+                            //                    .or()
+                            //                    .contains("product_spe",searchFilter,Case.INSENSITIVE) TODO : Search Weave type
                             .findAll()
                     }else{
                         //All products
@@ -73,8 +73,8 @@ class SearchPredicates {
                             .or()
                             .contains("productTag",searchFilter, Case.INSENSITIVE)
 
-    //                    .or()
-    //                    .contains("product_spe",searchFilter,Case.INSENSITIVE) TODO : Search Weave type
+                            //                    .or()
+                            //                    .contains("product_spe",searchFilter,Case.INSENSITIVE) TODO : Search Weave type
                             .findAll()
                     }
                 }

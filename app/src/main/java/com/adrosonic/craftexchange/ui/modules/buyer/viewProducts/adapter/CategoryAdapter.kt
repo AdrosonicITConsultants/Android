@@ -64,7 +64,7 @@ class CategoryAdapter(var context: Context?, private var categoryDetails: List<P
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         CraftExchangeRepository
             .getProductService()
-            .getProductByCategory(token,list.id!!)
+            .getProductByCategory(token, list.id)
             .enqueue(object : Callback, retrofit2.Callback<CatalogueProductsResponse> {
                 override fun onFailure(call: Call<CatalogueProductsResponse>, t: Throwable) {
                     t.printStackTrace()

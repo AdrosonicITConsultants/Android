@@ -33,7 +33,7 @@ data class Cluster (
     val hibernateLazyInitializer: HibernateLazyInitializer
 )
 
-class HibernateLazyInitializer()
+class HibernateLazyInitializer
 
 
 data class Product (

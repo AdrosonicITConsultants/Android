@@ -31,6 +31,7 @@ import com.google.gson.Gson
 import com.pixplicity.easyprefs.library.Prefs
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validUrl
 import okhttp3.*
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
@@ -179,7 +180,7 @@ class BuyerRegisterWebFragment : Fragment() {
                 var filePath = Prefs.getString(ConstantsDirectory.BRAND_LOGO,"")
                 if(filePath.isNotEmpty()){
                     file = File(filePath)
-                    fileReqBody = RequestBody.create(MediaType.parse("image/*"), file!!)
+                    fileReqBody = file!!.toRequestBody(MediaType.parse("image/*"))
                     profileBody = MultipartBody.Builder()
                         .addFormDataPart("profilePic", file?.name, fileReqBody!!)
                         .addFormDataPart("brandLogo",file?.name,fileReqBody!!)

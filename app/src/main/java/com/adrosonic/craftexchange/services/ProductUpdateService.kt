@@ -39,15 +39,16 @@ class ProductUpdateService: JobIntentService() {
                 Log.e("Offline","prodId :"+prodId)
                 val productEntry= ProductPredicates.getArtisanProducts(prodId)
                 if(productEntry!=null) {
-                    Log.e("Offline", "Product Id :" + productEntry?.productId)
-                    val imageEntry =ProductImagePredicates.getImagesList(productEntry?.productId ?: 0)
-                    val weaveIds = WeaveTypesPredicates.getWeaveList(productEntry?.productId ?: 0)
-                    val careIds = ProductCaresPredicates.getCareList(productEntry?.productId ?: 0)
-                    val relatedEntry = RelateProductPredicates.getRelatedProductOfProduct(productEntry?.productId ?: 0)
-                    Log.e("Offline", "imageList :" + imageEntry?.joinToString())
+                    Log.e("Offline", "Product Id :" + productEntry.productId)
+                    val imageEntry =ProductImagePredicates.getImagesList(productEntry.productId ?: 0)
+                    val weaveIds = WeaveTypesPredicates.getWeaveList(productEntry.productId ?: 0)
+                    val careIds = ProductCaresPredicates.getCareList(productEntry.productId ?: 0)
+                    val relatedEntry = RelateProductPredicates.getRelatedProductOfProduct(
+                        productEntry.productId ?: 0)
+                    Log.e("Offline", "imageList :" + imageEntry.joinToString())
                     var productData =createProductTemplateString(productEntry, weaveIds, careIds, relatedEntry)
                     Log.e("Offline", "productData :" + productData)
-                    updateProduct(productData, imageEntry, productEntry?.productId?:0)
+                    updateProduct(productData, imageEntry, productEntry.productId ?:0)
                 }
                 }
         }catch (e: Exception){
@@ -57,7 +58,7 @@ class ProductUpdateService: JobIntentService() {
 
     fun createProductTemplateString(productEntry: ArtisanProducts?, weaveIds:List<Long>, careIdList:List<Long>, realatedEntry: RelatedProducts?):String{
 
-        Log.e("Offline","createProductTemplateString 1111111111:"+weaveIds?.size)
+        Log.e("Offline","createProductTemplateString 1111111111:"+ weaveIds.size)
 
         var relList=ArrayList<RelProduct>()
         var careList=ArrayList<ProductCare>()
@@ -99,7 +100,7 @@ class ProductUpdateService: JobIntentService() {
 
         val byteData=prepareMultiPartBody(boundary,dataLength,imageList)
         Log.e("Offline","prepareMultiPartBody 666666 "+byteData?.capacity())
-        val body = byteData!!.array().toRequestBody(MediaType.parse("image/*"), 0, byteData!!.capacity())
+        val body = byteData!!.array().toRequestBody(MediaType.parse("image/*"), 0, byteData.capacity())
         Log.e("Offline","prepareMultiPartBody 77777 "+body.contentLength())
         val bodyMultipart = MultipartBody.Builder()
             .addPart(body)

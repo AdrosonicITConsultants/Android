@@ -15,7 +15,7 @@ class ProductImagePredicates
             val realm = CXRealmManager.getRealmInstance()
             try {
 
-                realm?.executeTransaction {
+                realm.executeTransaction {
                     val imageIterator = imageList.iterator()
                     Log.e("insertProductImages", "imagelist : ${imageList.size}")
                     while (imageIterator.hasNext()) {
@@ -47,9 +47,9 @@ class ProductImagePredicates
             var list=ArrayList<String>()
             var realm = CXRealmManager.getRealmInstance()
             try {
-                realm?.executeTransaction {
+                realm.executeTransaction {
                     var images = realm.where(ProductImages::class.java).equalTo(ProductImages.COLUMN_PRODUCT_ID, id).findAll()
-                   images.forEach { list.add(it.imageName?:"") }
+                    images.forEach { list.add(it.imageName?:"") }
                 }
             }catch(e : Exception){
             }finally{
@@ -60,7 +60,7 @@ class ProductImagePredicates
 
         fun deleteProdImages(id:Long){
             val realm = CXRealmManager.getRealmInstance()
-            realm?.executeTransaction {
+            realm.executeTransaction {
                 val artisonProd = it.where(ProductImages::class.java).equalTo("productId", id).findAll()
                 artisonProd.deleteAllFromRealm()
             }
@@ -69,7 +69,7 @@ class ProductImagePredicates
 
         fun deleteProdImageForUpdate(id:Long){
             val realm = CXRealmManager.getRealmInstance()
-            realm?.executeTransaction {
+            realm.executeTransaction {
                 Log.e("Offline", "deleteProdImageForUpdate id:" + id)
                 val artisonProd = it.where(ProductImages::class.java).equalTo(ProductImages.COLUMN_PRODUCT_ID, id).findAll()
                 Log.e("Offline", "deleteProdImageForUpdate size : ${artisonProd.size}")
@@ -80,18 +80,14 @@ class ProductImagePredicates
         fun insertBuyerCustomProdImages(imageList:ArrayList<ProductImage>){
             val realm = CXRealmManager.getRealmInstance()
             try {
-                realm?.executeTransaction {
+                realm.executeTransaction {
                     val imageIterator = imageList.iterator()
                     Log.e("insertProductImages", "imagelist : ${imageList.size}")
                     while (imageIterator.hasNext()) {
                         var image=imageIterator.next()
-                        var dbProdObj = realm.where(ProductImages::class.java).
-                        equalTo(ProductImages.COLUMN_PRODUCT_ID,image.productId).and().
-                        equalTo(ProductImages.COLUMN_IMAGE_ID,image.id).and().
-                        equalTo(ProductImages.COLUMN_IMAGE_NAME,image.lable).findAll()
+                        var dbProdObj = realm.where(ProductImages::class.java).equalTo(ProductImages.COLUMN_PRODUCT_ID,image.productId).and().equalTo(ProductImages.COLUMN_IMAGE_ID,image.id).and().equalTo(ProductImages.COLUMN_IMAGE_NAME,image.lable).findAll()
 
-                        if(dbProdObj.size>0){}
-                        else {
+                        if(dbProdObj.size>0){} else {
                             var primId =
                                 it.where<ProductImages>(ProductImages::class.java).max("_id")
                             if (primId == null) {

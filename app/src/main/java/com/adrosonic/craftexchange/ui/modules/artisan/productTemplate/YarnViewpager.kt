@@ -99,11 +99,11 @@ class YarnViewpager(context: Context, productId: Long,isTemplate:Boolean) : Page
         arrYarn?.forEach { arrYarneStr.add(it.yarnDesc) }
         val spYarnAdapter =ArrayAdapter<String>(context!!, android.R.layout.simple_spinner_item, arrYarneStr)
         spYarnAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
-        spYarnType.setAdapter(spYarnAdapter)
+        spYarnType.adapter = spYarnAdapter
 
-        val spProdTypeAdapter = ArrayAdapter<String>(view!!.context, android.R.layout.simple_spinner_item, arrYarnCountStr)
+        val spProdTypeAdapter = ArrayAdapter<String>(view.context, android.R.layout.simple_spinner_item, arrYarnCountStr)
         spProdTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spYarnCount.setAdapter(spProdTypeAdapter)
+        spYarnCount.adapter = spProdTypeAdapter
 
         spYarnType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -113,7 +113,7 @@ class YarnViewpager(context: Context, productId: Long,isTemplate:Boolean) : Page
                 pos: Int,
                 id: Long
             ) {
-                arrYarnCountStr?.clear()
+                arrYarnCountStr.clear()
                 val yarnType = arrYarneStr.get(pos)
                 if (pos > 0) {
                     arrYarn?.forEach {
@@ -127,7 +127,7 @@ class YarnViewpager(context: Context, productId: Long,isTemplate:Boolean) : Page
                         arrYarnCountStr.clear()
                         arrYarnCountStr.add("Select count")
                         arrYarnCount?.forEach { arrYarnCountStr.add(it.count) }
-                        Log.e("Viewpager", "arrYarnCountStr 1111: ${arrYarnCountStr?.size}")
+                        Log.e("Viewpager", "arrYarnCountStr 1111: ${arrYarnCountStr.size}")
 //                        val spProdTypeAdapter = ArrayAdapter<String>(view!!.context, android.R.layout.simple_spinner_item, arrYarnCountStr)
 //                        spProdTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 //                        spYarnCount.setAdapter(spProdTypeAdapter)
@@ -136,7 +136,7 @@ class YarnViewpager(context: Context, productId: Long,isTemplate:Boolean) : Page
                             spYarnCount.setSelection(arrYarnCountStr.indexOf(yarnCount))
                         }
                     } else {
-                        Log.e("Viewpager", "arrYarnCountStr 2222: ${arrYarnCountStr?.size}")
+                        Log.e("Viewpager", "arrYarnCountStr 2222: ${arrYarnCountStr.size}")
                         etYarnCount.visibility = View.VISIBLE
                         spYarnCount.visibility = View.GONE
                     }
@@ -167,7 +167,7 @@ class YarnViewpager(context: Context, productId: Long,isTemplate:Boolean) : Page
         arrDye?.forEach { arrDyeStr.add(it.dyeDesc) }
         val spDyeAdapter = ArrayAdapter<String>(context!!, android.R.layout.simple_spinner_item, arrDyeStr)
         spDyeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spYarnDye.setAdapter(spDyeAdapter)
+        spYarnDye.adapter = spDyeAdapter
         spYarnDye.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
             }
@@ -277,9 +277,9 @@ class YarnViewpager(context: Context, productId: Long,isTemplate:Boolean) : Page
         var dyeId = 0L
         var yarnCnt=""
 
-        var type= try{ spYarnType.getSelectedItem().toString()}catch (e:Exception){""}
-        var count=try{if(etYarnCount.visibility==View.VISIBLE) etYarnCount.text.toString()  else spYarnCount.getSelectedItem().toString()}catch (e:Exception){""}
-        var dye=try{spYarnDye.getSelectedItem().toString()}catch (e:Exception){""}
+        var type= try{ spYarnType.selectedItem.toString()}catch (e:Exception){""}
+        var count=try{if(etYarnCount.visibility==View.VISIBLE) etYarnCount.text.toString()  else spYarnCount.selectedItem.toString()}catch (e:Exception){""}
+        var dye=try{spYarnDye.selectedItem.toString()}catch (e:Exception){""}
 
         Log.e("Viewpager", "Type: $type, count: $count , dye: $dye")
         arrYarn?.forEach { if (it.yarnDesc.equals(type)) yarnTypeId = it.id }

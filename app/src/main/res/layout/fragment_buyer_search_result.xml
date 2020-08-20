@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <layout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -8,7 +7,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.modules.artisan.search.ArtisanSearchResultsFragment">
+        tools:context=".ui.modules.buyer.search.BuyerSearchResultFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/filter_layer"
@@ -48,7 +47,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="@dimen/margin_regular"/>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/collection_filter_window"
@@ -101,11 +100,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
 
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/artisan_search_list"
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/search_buyer_swipe"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="match_parent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/artisan_buyer_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
             <TextView
                 android:id="@+id/empty_text"
@@ -119,9 +125,8 @@
                 android:textSize="@dimen/Ques_text"
                 android:visibility="gone"/>
 
-            </FrameLayout>
+        </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
-

@@ -44,8 +44,8 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
 //                            exEnq?.let { listener?.onExistingEnquiryGeneration(it) }
                             Log.e("Enquiry Generation","Success: "+response.body()?.errorMessage)
 
-                            EnquiryPredicates?.insertBuyerEnquiries(response?.body()!!)
-                        listener?.onSuccessEnquiryGeneration(response?.body()!!)
+                        EnquiryPredicates.insertBuyerEnquiries(response.body()!!)
+                        listener?.onSuccessEnquiryGeneration(response.body()!!)
 //                        }
 
                     }else{
@@ -74,12 +74,14 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
                     response: retrofit2.Response<IfExistEnquiryResponse>) {
                     if(response.body()?.valid == true){
                         Log.e("Enquiry Generation","Success: "+response.body()?.errorMessage)
-                        if(response?.body()?.data?.ifExists == true){
-                            response?.body()?.data?.enquiryId?.let {
-                                EnquiryPredicates?.updateIfExistEnquiry(productId, it,
-                                    response?.body()?.data?.ifExists!!
+                        if(response.body()?.data?.ifExists == true){
+                            response.body()?.data?.enquiryId?.let {
+                                EnquiryPredicates.updateIfExistEnquiry(productId, it,
+                                    response.body()?.data?.ifExists!!
                                 )
-                                listener?.onExistingEnquiryGeneration(response?.body()?.data?.productName.toString(),response?.body()?.data?.code.toString())
+                                listener?.onExistingEnquiryGeneration(
+                                    response.body()?.data?.productName.toString(),
+                                    response.body()?.data?.code.toString())
                             }
 
                         }else{

@@ -50,18 +50,18 @@ ProfileViewModel.FetchUserDetailsInterface{
         val view = mBinding?.root
         setContentView(view)
 
-        mViewModel?.listener = this
+        mViewModel.listener = this
         refreshProfile()
 
 
 
         mViewModel.getUserMutableData()
-            .observe(this, Observer<CraftUser>() {
+            .observe(this, Observer<CraftUser> {
                 craftUser = MutableLiveData(it)
             })
 
         mViewModel.getRegAddrMutableData()
-            .observe(this, Observer<UserAddress>() {
+            .observe(this, Observer<UserAddress> {
                 regAddr = MutableLiveData(it)
             })
 
@@ -87,7 +87,7 @@ ProfileViewModel.FetchUserDetailsInterface{
 
     private fun refreshProfile(){
         if(Utility.checkIfInternetConnected(applicationContext)) {
-            mViewModel?.getArtisanProfileDetails(applicationContext)
+            mViewModel.getArtisanProfileDetails(applicationContext)
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),applicationContext)
         }

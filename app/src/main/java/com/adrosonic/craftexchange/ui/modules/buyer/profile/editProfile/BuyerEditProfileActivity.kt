@@ -21,6 +21,7 @@ import com.pixplicity.easyprefs.library.Prefs
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
@@ -88,7 +89,7 @@ class BuyerEditProfileActivity : AppCompatActivity() {
                 var filePath = Prefs.getString(ConstantsDirectory.BRAND_LOGO,"")
                 if(filePath.isNotEmpty()){
                     file = File(filePath)
-                    fileReqBody = RequestBody.create(MediaType.parse("image/*"), file!!)
+                    fileReqBody = file!!.toRequestBody(MediaType.parse("image/*"))
                     logoBody = MultipartBody.Builder()
 //                        .addFormDataPart("profilePic", file?.name, fileReqBody!!)
                         .addFormDataPart("logo",file?.name,fileReqBody!!)

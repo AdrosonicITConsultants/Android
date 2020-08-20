@@ -95,11 +95,11 @@ class WeftFragment : Fragment() {
         arrYarn?.forEach { arrYarneStr.add(it.yarnDesc) }
         val spYarnAdapter = ArrayAdapter<String>(this.requireContext(), android.R.layout.simple_spinner_item, arrYarneStr)
         spYarnAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
-        spYarnType.setAdapter(spYarnAdapter)
+        spYarnType.adapter = spYarnAdapter
 
         val spCountAdapter = ArrayAdapter<String>(this.requireContext(), android.R.layout.simple_spinner_item, arrYarnCountStr)
         spCountAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spYarnCount.setAdapter(spCountAdapter)
+        spYarnCount.adapter = spCountAdapter
 
         spYarnType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -109,7 +109,7 @@ class WeftFragment : Fragment() {
                 pos: Int,
                 id: Long
             ) {
-                arrYarnCountStr?.clear()
+                arrYarnCountStr.clear()
                 val yarnType = arrYarneStr.get(pos)
                 if (pos > 0) {
                     arrYarn?.forEach {
@@ -157,7 +157,7 @@ class WeftFragment : Fragment() {
         arrDye?.forEach { arrDyeStr.add(it.dyeDesc) }
         val spDyeAdapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, arrDyeStr)
         spDyeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spYarnDye.setAdapter(spDyeAdapter)
+        spYarnDye.adapter = spDyeAdapter
         spYarnDye.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
             }
@@ -208,9 +208,9 @@ class WeftFragment : Fragment() {
         var dyeId = 0L
         var yarnCnt=""
 
-        var type= try{ spYarnType.getSelectedItem().toString()}catch (e: Exception){""}
-        var count=try{if(etYarnCount.visibility==View.VISIBLE) etYarnCount.text.toString()  else spYarnCount.getSelectedItem().toString()}catch (e: Exception){""}
-        var dye=try{spYarnDye.getSelectedItem().toString()}catch (e: Exception){""}
+        var type= try{ spYarnType.selectedItem.toString()}catch (e: Exception){""}
+        var count=try{if(etYarnCount.visibility==View.VISIBLE) etYarnCount.text.toString()  else spYarnCount.selectedItem.toString()}catch (e: Exception){""}
+        var dye=try{spYarnDye.selectedItem.toString()}catch (e: Exception){""}
 
         Log.e("Viewpager", "Extraweft Type: $type, count: $count , dye: $dye")
         arrYarn?.forEach { if (it.yarnDesc.equals(type)) yarnTypeId = it.id }

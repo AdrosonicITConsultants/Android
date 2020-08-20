@@ -1,4 +1,4 @@
-package com.adrosonic.craftexchange.ui.modules.artisan.search
+package com.adrosonic.craftexchange.ui.modules.artisan.search.adapter
 
 import android.content.Context
 import android.text.Spannable

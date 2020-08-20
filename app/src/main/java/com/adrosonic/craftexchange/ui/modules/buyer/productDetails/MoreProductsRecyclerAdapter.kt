@@ -51,7 +51,7 @@ class MoreProductsRecyclerAdapter(var context: Context?, private var imgList: Li
     override fun onItemClick(prod: ProductImage) {
         val intent = Intent(context?.catalogueProductDetailsIntent())
         val bundle = Bundle()
-        bundle.putString(ConstantsDirectory.PRODUCT_ID, prod.productId?.toString())
+        bundle.putString(ConstantsDirectory.PRODUCT_ID, prod.productId.toString())
         intent.putExtras(bundle)
         context?.startActivity(intent)
     }
