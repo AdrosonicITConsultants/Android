@@ -1,12 +1,15 @@
 package com.adrosonic.craftexchange.viewModels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.adrosonic.craftexchange.database.entities.realmEntities.ArtisanProducts
 import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCatalogue
 import com.adrosonic.craftexchange.database.predicates.SearchPredicates
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
+import com.adrosonic.craftexchange.repository.data.request.search.SearchProduct
+import com.adrosonic.craftexchange.repository.data.response.search.SearchProductResponse
 import com.adrosonic.craftexchange.repository.data.response.search.SuggestionResponse
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.pixplicity.easyprefs.library.Prefs
@@ -27,8 +30,15 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         fun onFailureSugg()
     }
 
+    interface FetchBuyerSearchProducts{
+        fun onSuccessSearch(search : SearchProductResponse)
+        fun onFailureSearch()
+    }
+
     var artSugListener: FetchArtisanSuggestions? = null
     var buySugListener: FetchBuyerSuggestions? = null
+
+    var buySearchListener : FetchBuyerSearchProducts ? = null
 
     val searchBProducts : MutableLiveData<RealmResults<ProductCatalogue>> by lazy { MutableLiveData<RealmResults<ProductCatalogue>>() }
     val searchAProducts : MutableLiveData<RealmResults<ArtisanProducts>> by lazy { MutableLiveData<RealmResults<ArtisanProducts>>() }
@@ -94,6 +104,33 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                         buySugListener?.onSuccessSugg(response.body()!!)
                     }else{
                         buySugListener?.onFailureSugg()
+                    }
+                }
+            })
+    }
+
+    fun getProductsForBuyer(str : String , id : Long, pageNo : Long){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+
+        CraftExchangeRepository
+            .getSearchService()
+            .searchProducts(token, SearchProduct(pageNo,str,id))
+            .enqueue(object : Callback, retrofit2.Callback<SearchProductResponse> {
+                override fun onFailure(call: Call<SearchProductResponse>, t: Throwable) {
+                    t.printStackTrace()
+                    Log.e("BuyerSearchResults","Failure :"+t.printStackTrace().toString())
+                    buySearchListener?.onFailureSearch()
+                }
+                override fun onResponse(
+                    call: Call<SearchProductResponse>,
+                    response: Response<SearchProductResponse>
+                ) {
+                    if(response.body()?.data != null) {
+                        Log.e("BuyerSearchResults", "Success : " + response?.body()?.data)
+                        buySearchListener?.onSuccessSearch(response?.body()!!)
+                    }else{
+                        Log.e("BuyerSearchResults","Failure :")
+                        buySearchListener?.onFailureSearch()
                     }
                 }
             })

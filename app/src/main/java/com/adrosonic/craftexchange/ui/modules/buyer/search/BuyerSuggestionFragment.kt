@@ -24,6 +24,8 @@ import com.adrosonic.craftexchange.viewModels.SearchViewModel
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
+
+
 class BuyerSuggestionFragment : Fragment(),
     SearchViewModel.FetchBuyerSuggestions {
     private var param1: String? = null
@@ -33,6 +35,7 @@ class BuyerSuggestionFragment : Fragment(),
     val mViewModel : SearchViewModel by viewModels()
     var adapter : SuggestionAdapter?= null
     var sugList = arrayListOf<SuggData>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +65,7 @@ class BuyerSuggestionFragment : Fragment(),
             override fun onQueryTextSubmit(query:String):Boolean {
                 if(Utility.checkIfInternetConnected(requireContext())){
                     activity?.supportFragmentManager?.beginTransaction()
-                        ?.replace(R.id.ss_container, BuyerSearchResultFragment.newInstance(query))
+                        ?.replace(R.id.ss_container, BuyerSearchResultFragment.newInstance(query,5L)) //for GLOBAL(5) Search
                         ?.addToBackStack(null)
                         ?.commit()
                 }else{
@@ -77,7 +80,6 @@ class BuyerSuggestionFragment : Fragment(),
                     mBinding?.suggetionBg?.visibility = View.VISIBLE
 
                 }else{
-                    sugList.clear()
                     adapter?.notifyDataSetChanged()
                     mBinding?.suggetionBg?.visibility = View.GONE
                 }
@@ -115,9 +117,7 @@ class BuyerSuggestionFragment : Fragment(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 sugList.clear()
-                sug.data.forEach {
-                    sugList.add(it)
-                }
+                sug.data.forEach { sugList.add(it) }
                 if(sugList.isEmpty()){
                     setSuggestionListRecycler(requireContext(), null)
                     adapter?.notifyDataSetChanged()

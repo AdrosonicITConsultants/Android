@@ -1,12 +1,11 @@
 package com.adrosonic.craftexchange.repository.remote
 
+import com.adrosonic.craftexchange.repository.data.request.search.SearchProduct
 import com.adrosonic.craftexchange.repository.data.response.artisan.profile.ProfileResponse
+import com.adrosonic.craftexchange.repository.data.response.search.SearchProductResponse
 import com.adrosonic.craftexchange.repository.data.response.search.SuggestionResponse
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Headers
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface SearchDao {
 
@@ -19,4 +18,15 @@ interface SearchDao {
     @GET("search/getSuggestions")
     fun getSuggestions(@Header("Authorization") token:String,
                               @Query("str") str : String) : Call<SuggestionResponse>
+
+
+    @Headers("Accept: application/json")
+    @POST("search/searchArtisanProducts")
+    fun searchArtisanProducts(@Header("Authorization") token:String,
+                       @Body searchProduct : SearchProduct) : Call<SearchProductResponse>
+
+    @Headers("Accept: application/json")
+    @POST("search/searchProducts")
+    fun searchProducts(@Header("Authorization") token:String,
+                        @Body searchProduct : SearchProduct) : Call<SearchProductResponse>
 }

@@ -1,30 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto">
-
-    <data>
-
-        <variable
-            name="categoryDetails"
-            type="com.adrosonic.craftexchange.database.entities.realmEntities.ProductCard"/>
-
-        <variable
-            name="brandProducts"
-            type="com.adrosonic.craftexchange.database.entities.realmEntities.ProductCard"/>
-
-        <variable
-            name="regionProducts"
-            type="com.adrosonic.craftexchange.database.entities.realmEntities.ProductCard"/>
-
-    </data>
-
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="170dp"
+        android:layout_height="180dp"
         android:layout_margin="8dp"
         app:cardElevation="8dp">
 
@@ -36,12 +17,16 @@
                 android:id="@+id/product_image"
                 android:layout_width="@dimen/cat_prod_image_width"
                 android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="2dp"
                 android:scaleType="fitXY"
+                android:src="@drawable/demo_img"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/product_title" />
 
             <com.like.LikeButton
                 android:id="@+id/wishlist_button"
@@ -51,17 +36,16 @@
                 android:layout_marginTop="@dimen/margin_regular"
                 android:layout_marginEnd="@dimen/margin_regular"
                 app:icon_type="heart"
-                android:elevation="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/product_title"
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <TextView
                 android:id="@+id/product_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_small"
-                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="@dimen/margin_regular"
+                android:layout_marginStart="8dp"
                 android:ellipsize="end"
                 android:fontFamily="@font/lato_regular"
                 android:maxLines="2"
@@ -69,29 +53,27 @@
                 android:textSize="@dimen/product_description_text"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/wishlist_button"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/product_image"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/design_logo"
                 android:layout_width="16dp"
                 android:layout_height="12dp"
-                android:src="@drawable/ic_artisan_self_design_icon"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
                 app:layout_constraintBottom_toBottomOf="@+id/product_available_text"
-                app:layout_constraintStart_toStartOf="@+id/product_title"
-                app:layout_constraintTop_toTopOf="@+id/product_available_text" />
+                app:layout_constraintStart_toEndOf="@+id/product_image"
+                app:layout_constraintTop_toBottomOf="@+id/product_title" />
 
             <TextView
                 android:id="@+id/product_available_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
-                android:layout_marginTop="@dimen/margin_regular"
+                android:layout_width="88dp"
+                android:layout_height="11dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
                 android:fontFamily="@font/lato_regular"
                 android:textSize="10sp"
-                app:layout_constraintEnd_toStartOf="@+id/wishlist_button"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/design_logo"
                 app:layout_constraintTop_toBottomOf="@+id/product_title" />
 
@@ -99,7 +81,8 @@
                 android:id="@+id/product_description"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="@dimen/margin_regular"
                 android:ellipsize="end"
                 android:fontFamily="@font/lato_regular"
@@ -107,18 +90,18 @@
                 android:textSize="@dimen/product_availability_text"
                 app:layout_constraintEnd_toStartOf="@+id/wishlist_button"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/design_logo"
-                app:layout_constraintTop_toBottomOf="@+id/product_available_text" />
+                app:layout_constraintStart_toEndOf="@+id/product_image"
+                app:layout_constraintTop_toBottomOf="@+id/design_logo" />
 
             <View
                 android:id="@+id/divider"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:background="@color/lighter_gray"
                 android:layout_marginTop="@dimen/margin_regular"
-                app:layout_constraintStart_toEndOf="@+id/product_image"
+                android:background="@color/lighter_gray"
+                app:layout_constraintBottom_toTopOf="@+id/bottom_layer"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/bottom_layer"/>
+                app:layout_constraintStart_toEndOf="@+id/product_image" />
 
             <LinearLayout
                 android:id="@+id/bottom_layer"
@@ -130,7 +113,7 @@
                 app:layout_constraintStart_toEndOf="@+id/product_image">
 
                 <Button
-                    android:id="@+id/btn_view_more"
+                    android:id="@+id/btn_search_view_more"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="1"
@@ -140,7 +123,7 @@
                     android:textAlignment="center"
                     android:textAllCaps="false"
                     android:textColor="@color/black_text"
-                    android:textSize="@dimen/product_availability_text" />
+                    android:textSize="@dimen/product_availability_text"/>
 
                 <Button
                     android:id="@+id/btn_generate_enquiry"
@@ -150,7 +133,8 @@
                     android:background="@color/black_text"
                     android:drawableEnd="@drawable/ic_arrow_right_alt_white_18dp"
                     android:fontFamily="@font/lato_regular"
-                    android:text="@string/generate_enquiry"
+                    android:padding="4dp"
+                    android:text="Enquire Now"
                     android:textAlignment="center"
                     android:textAllCaps="false"
                     android:textColor="@color/white_text"

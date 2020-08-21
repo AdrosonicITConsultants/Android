@@ -19,7 +19,6 @@ import com.adrosonic.craftexchange.ui.modules.buyer.productDetails.catalogueProd
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
-import com.like.LikeButton
 import io.realm.RealmResults
 
 

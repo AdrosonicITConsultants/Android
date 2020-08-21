@@ -1,8 +1,5 @@
 package com.adrosonic.craftexchange.ui.modules.artisan.products
 
-import android.app.AlertDialog
-import android.content.Context
-import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -13,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Spinner
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -22,13 +18,10 @@ import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.ArtisanProducts
 import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCard
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
-import com.adrosonic.craftexchange.databinding.FragmentArtisanHomeBinding
 import com.adrosonic.craftexchange.databinding.FragmentArtisanUploadedProductsBinding
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.ArtisanProductsViewModel
-import com.google.gson.Gson
-import com.pixplicity.easyprefs.library.Prefs
 import io.realm.RealmResults
 
 
@@ -39,7 +32,7 @@ class ArtisanUploadedProductsFragment : Fragment(),
 ArtisanProductsViewModel.productsFetchInterface{
 
     private var mBinding: FragmentArtisanUploadedProductsBinding?= null
-    var productAdapter : UploadedProductsListAdapter ?= null
+    var productAdapter : UploadedProductsASearchAdapter ?= null
 
     private var param1: String? = null
     private var param2: String? = null
@@ -103,7 +96,7 @@ ArtisanProductsViewModel.productsFetchInterface{
 
     private fun setupRecyclerView(){
         mBinding?.categoryRecyclerList?.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-        productAdapter = UploadedProductsListAdapter(requireContext(), mViewModel.getProductListMutableData(artisanId,prodCat).value)
+        productAdapter = UploadedProductsASearchAdapter(requireContext(), mViewModel.getProductListMutableData(artisanId,prodCat).value)
         mBinding?.categoryRecyclerList?.adapter = productAdapter
     }
 
@@ -153,6 +146,17 @@ ArtisanProductsViewModel.productsFetchInterface{
             }
         })
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!Utility.checkIfInternetConnected(requireContext())) {
+            Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
+        } else {
+            mViewModel.getProductsOfArtisan()
+            mViewModel.getProductListMutableData(artisanId,prodCat)
+            mBinding?.swipeRefreshLayout?.isRefreshing = true
+        }
     }
 
     override fun onSuccess() {

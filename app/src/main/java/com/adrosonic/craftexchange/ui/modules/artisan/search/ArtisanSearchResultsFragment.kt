@@ -32,11 +32,12 @@ class ArtisanSearchResultsFragment : Fragment(),
     private var mBinding: FragmentArtisanSearchResultsBinding?= null
     val mViewModel: SearchViewModel by viewModels()
     var adapter : ArtisanSearchAdapter?= null
+
     private lateinit var filterAdapter : FilterCollectionAdapter
     var filterList = ArrayList<Pair<String,Long>>()
     var filterSelected : Pair<String,Long> ?= null
-    private var searchFilter : String ?= ""
 
+    private var searchFilter : String ?= ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +54,7 @@ class ArtisanSearchResultsFragment : Fragment(),
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_artisan_search_results, container, false)
         searchFilter = param1
+        mBinding?.searchArtisanSwipe?.isEnabled = false // disable swipte to refresh action
 
         filterList.clear()
         filterList.add(Pair(requireActivity().getString(R.string.show_both),1))
@@ -117,10 +119,7 @@ class ArtisanSearchResultsFragment : Fragment(),
     }
 
     private fun setupRecyclerView(searchFilter : String, filter : Long){
-        adapter =
-            ArtisanSearchAdapter(
-                requireContext(),
-                searchFilter.let { mViewModel.getArtisanSearchData(it, filter).value })
+        adapter = ArtisanSearchAdapter(requireContext(),searchFilter.let { mViewModel.getArtisanSearchData(it, filter).value })
         mBinding?.artisanSearchList?.adapter = adapter
         mBinding?.artisanSearchList?.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         mBinding?.listSizeText?.text = "Found ${adapter?.itemCount} items"
@@ -155,7 +154,7 @@ class ArtisanSearchResultsFragment : Fragment(),
     }
 
 //    override fun onFilterSelected(pairList: ArrayList<Triple<String, Boolean, Long>>) {
-override fun onFilterSelected(pairList: Pair<String,Long>) {
+    override fun onFilterSelected(pairList: Pair<String,Long>) {
         filterSelected = pairList
 
         when(filterSelected?.second){

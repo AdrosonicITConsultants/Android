@@ -1,7 +1,6 @@
 package com.adrosonic.craftexchange.ui.modules.buyer.ownDesign
 
 import android.app.Dialog
-import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -11,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.os.HandlerCompat.postDelayed
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,7 +18,6 @@ import com.adrosonic.craftexchange.database.entities.realmEntities.BuyerCustomPr
 import com.adrosonic.craftexchange.database.predicates.BuyerCustomProductPredicates
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.generateEnquiry.GenerateEnquiryResponse
 import com.adrosonic.craftexchange.syncManager.SyncCoordinator
-import com.adrosonic.craftexchange.ui.modules.buyer.wishList.WishlistAdapter
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel

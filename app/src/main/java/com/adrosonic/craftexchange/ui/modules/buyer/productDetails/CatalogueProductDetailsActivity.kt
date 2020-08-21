@@ -64,6 +64,7 @@ private var dialog : Dialog ?= null
 private var exDialog : Dialog ?= null
 
 
+
 class CatalogueProductDetailsActivity : AppCompatActivity(),
 EnquiryViewModel.GenerateEnquiryInterface{
     val mEnqVM: EnquiryViewModel by viewModels()

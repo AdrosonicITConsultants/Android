@@ -8,12 +8,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.ArtisanProducts
-import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCard
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.databinding.ItemArtisanProductBinding
 import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.addProductIntent
@@ -22,7 +20,7 @@ import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
 import io.realm.RealmResults
 
-class UploadedProductsListAdapter(var context: Context?, private var artisanProducts: RealmResults<ArtisanProducts>?) : RecyclerView.Adapter<UploadedProductsListAdapter.ViewHolder>(){
+class UploadedProductsASearchAdapter(var context: Context?, private var artisanProducts: RealmResults<ArtisanProducts>?) : RecyclerView.Adapter<UploadedProductsASearchAdapter.ViewHolder>(){
 
     inner class ViewHolder(var binding: ItemArtisanProductBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(artisanProduct: ArtisanProducts){

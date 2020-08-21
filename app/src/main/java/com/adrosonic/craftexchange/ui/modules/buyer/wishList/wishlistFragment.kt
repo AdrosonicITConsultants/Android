@@ -18,7 +18,6 @@ import io.realm.RealmResults
 import kotlinx.android.synthetic.main.fragment_wishlist.*
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.database.predicates.WishlistPredicates
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.generateEnquiry.GenerateEnquiryResponse
 import com.adrosonic.craftexchange.syncManager.SyncCoordinator
@@ -35,7 +34,7 @@ class wishlistFragment : Fragment(),
 
     val mViewModel: LandingViewModel by viewModels()
     val mEnqVM : EnquiryViewModel by viewModels()
-    private lateinit var adapter: WishlistAdapter
+    private lateinit var wishlistAdapter: WishlistAdapter
     var coordinator: SyncCoordinator? = null
     var dialog : Dialog ?= null
     var mUser : UserConfig ?= null
@@ -63,16 +62,16 @@ class wishlistFragment : Fragment(),
         dialog = Utility.enquiryGenProgressDialog(requireActivity())
 
         buyerWishlist.layoutManager =LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        adapter = WishlistAdapter(requireContext(), mViewModel.getwishListMutableData().value)
-        buyerWishlist.adapter = adapter
-        adapter.listener=this
-        adapter.enqListener=this
+        wishlistAdapter = WishlistAdapter(requireContext(), mViewModel.getwishListMutableData().value)
+        buyerWishlist.adapter = wishlistAdapter
+        wishlistAdapter.listener=this
+        wishlistAdapter.enqListener=this
         Log.e("Wishlist", "Size :" + mViewModel.getwishListMutableData().value?.size)
 
         mViewModel.getwishListMutableData()
             .observe(viewLifecycleOwner, Observer<RealmResults<ProductCatalogue>> {
                 Log.e("Wishlist", "updateWishlist ${it.size}")
-                adapter.updateWishlist(it)
+                wishlistAdapter.updateWishlist(it)
             })
         setVisiblities()
         deleteAll.setOnClickListener {
