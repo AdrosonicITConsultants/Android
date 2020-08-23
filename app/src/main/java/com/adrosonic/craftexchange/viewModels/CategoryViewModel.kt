@@ -7,10 +7,14 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.adrosonic.craftexchange.database.entities.realmEntities.CategoryProducts
 import com.adrosonic.craftexchange.database.entities.realmEntities.ClusterList
+import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCatalogue
 import com.adrosonic.craftexchange.database.predicates.ClusterPredicates
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.AllProductsResponse
+import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.CatalogueProductsResponse
+import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.pixplicity.easyprefs.library.Prefs
 import io.realm.RealmResults
 import retrofit2.Call
 import retrofit2.Response
@@ -25,6 +29,8 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
     var catListener : CategoryListInterface?= null
 
     val catList : MutableLiveData<RealmResults<CategoryProducts>> by lazy { MutableLiveData<RealmResults<CategoryProducts>>() }
+    val catProdList : MutableLiveData<RealmResults<ProductCatalogue>> by lazy { MutableLiveData<RealmResults<ProductCatalogue>>() }
+
 
     fun getCategoryListMutableData(): MutableLiveData<RealmResults<CategoryProducts>> {
         catList.value=loadCategoryList()
@@ -35,6 +41,17 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
         var catList = ProductPredicates.getAllCategoryProducts()
         Log.e("catList","catList :"+catList?.size)
         return catList!!
+    }
+
+    fun getCatProdListMutableData(catID : Long): MutableLiveData<RealmResults<ProductCatalogue>> {
+        catProdList.value=loadCatProdList(catID)
+        return catProdList
+    }
+
+    fun loadCatProdList(catID : Long): RealmResults<ProductCatalogue> {
+        var catProdList = ProductPredicates.getCategoryProductsFromId(catID)
+        Log.e("catProdList","catProdList :"+catProdList?.size)
+        return catProdList!!
     }
 
     fun getAllCategories(){
@@ -57,5 +74,29 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
                     }
                 }
             })
+    }
+
+    fun getProductsByCategory(catID : Long){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getProductService()
+            .getProductByCategory(token, catID)
+            .enqueue(object : Callback, retrofit2.Callback<CatalogueProductsResponse> {
+                    override fun onFailure(call: Call<CatalogueProductsResponse>, t: Throwable) {
+                        t.printStackTrace()
+                        catListener?.onFailure()
+                    }
+
+                    override fun onResponse(
+                        call: Call<CatalogueProductsResponse>, response: Response<CatalogueProductsResponse>
+                    ) {
+                        if (response.body()?.valid == true) {
+                            ProductPredicates.insertProductsInCatalogue(response.body()?.data?.products)
+                            catListener?.onSuccess()
+                        } else {
+                            catListener?.onFailure()
+                        }
+                    }
+                })
     }
 }

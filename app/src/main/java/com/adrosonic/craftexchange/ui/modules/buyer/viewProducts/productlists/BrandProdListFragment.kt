@@ -15,48 +15,52 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.adrosonic.craftexchange.R
-import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCard
+import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCatalogue
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.databinding.FragmentBrandProdListBinding
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.generateEnquiry.GenerateEnquiryResponse
-import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.adapter.BrandProductsAdapter
-import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.adapter.RegionProductsAdapter
+import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.adapter.CatalogueProductsAdapter
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
-import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
+import com.adrosonic.craftexchange.viewModels.BrandViewModel
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
-import com.adrosonic.craftexchange.viewModels.WishlistViewModel
+import io.realm.RealmResults
 import kotlinx.android.synthetic.main.dialog_gen_enquiry_update_or_new.*
-import kotlinx.android.synthetic.main.fragment_wishlist.*
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 class BrandProdListFragment : Fragment(),
-
     EnquiryViewModel.GenerateEnquiryInterface,
-    BrandProductsAdapter.EnquiryGeneratedListener{
+    BrandViewModel.BrandListInterface,
+    CatalogueProductsAdapter.EnquiryGeneratedListener{
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
     private var mBinding: FragmentBrandProdListBinding ?= null
-    var brandProductAdapter : BrandProductsAdapter?= null
-    private var mProduct = mutableListOf<ProductCard>()
+    var brandProductAdapter : CatalogueProductsAdapter?= null
+
     private var mSpinner = mutableListOf<String>()
-    private var filterBy : String ?= ""
+
+    private var mBrandProdList : RealmResults<ProductCatalogue> ?= null
+    private var mFilteredList : RealmResults<ProductCatalogue> ?= null
+
+
     var artisanId : Long ?= 0
     var artisanName : String ?= ""
     var brandName : String ?= ""
     var url : String ?=""
 
     val mEnqVM : EnquiryViewModel by viewModels()
+    val mBrandVM : BrandViewModel by viewModels()
+
     var dialog : Dialog?= null
-    var mUser : UserConfig?= null
     var productID : Long ?= 0L
 
 
@@ -66,16 +70,6 @@ class BrandProdListFragment : Fragment(),
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        mEnqVM.listener = this
-        brandProductAdapter?.enqListener = this
-        dialog = Utility.enquiryGenProgressDialog(requireContext())
-
-        initializeView()
-        setupRecyclerView()
     }
 
     override fun onCreateView(
@@ -88,36 +82,59 @@ class BrandProdListFragment : Fragment(),
         artisanId = this.requireArguments().getString(ConstantsDirectory.ARTISAN_ID)?.toLong()
         artisanName = this.requireArguments().getString(ConstantsDirectory.ARTISAN)
         brandName = this.requireArguments().getString(ConstantsDirectory.COMP_NAME)
-        mBinding?.artisanBrand?.text = brandName ?: artisanName
         var logo = this.requireArguments().getString(ConstantsDirectory.BRAND_IMG_NAME)
         var photo = this.requireArguments().getString(ConstantsDirectory.PROFILE_PHOTO_NAME)
         if(logo != null){
-            url = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/User/${artisanId}/CompanyDetails/Logo/${logo}"
+            url = Utility.getBrandLogoUrl(artisanId,logo)
         }else{
-            url = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/User/${artisanId}/ProfilePics/${photo}"
+            url =  Utility.getBrandLogoUrl(artisanId,photo)
         }
 
-        mBinding?.brandDesc?.text = "By $artisanName"
-
-        ImageSetter.setImage(requireContext(),url!!,mBinding?.logo!!,R.drawable.artisan_logo_placeholder
-                ,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
-
-        initializeView()
-        brandProductAdapter = BrandProductsAdapter(requireContext(),mProduct)
         return mBinding?.root
     }
 
-    private fun setupRecyclerView(){
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        mEnqVM.listener = this
+        mBrandVM.brandListener = this
 
-        mBinding?.brandProdRecyclerList?.adapter = brandProductAdapter
-        mBinding?.brandProdRecyclerList?.layoutManager = LinearLayoutManager(requireContext(),
-            LinearLayoutManager.VERTICAL, false)
-//        mBinding?.catProdRecyclerList?.layoutManager = AutoFitGridLayoutManager(requireContext(),500)
-        brandProductAdapter?.setProducts(mProduct)
-        brandProductAdapter?.notifyDataSetChanged()
+        brandProductAdapter?.enqListener = this
+
+        setRecyclerList()
+        setFilterList()
+        mBinding?.swipeBrandProducts?.isEnabled = false
+
+        if (!Utility.checkIfInternetConnected(requireContext())) {
+            Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
+        } else {
+            artisanId?.let { mBrandVM.getProductsByArtisan(it) }
+        }
+        artisanId?.let {
+            mBrandVM.getBrandProdListMutableData(it)
+                .observe(viewLifecycleOwner, Observer<RealmResults<ProductCatalogue>> {
+                    mBrandProdList = it
+                    brandProductAdapter?.updateProductList(mBrandProdList)
+                })
+        }
+        mBinding?.swipeBrandProducts?.isRefreshing = true
+
+
+        dialog = Utility.enquiryGenProgressDialog(requireContext())
+        ImageSetter.setImage(requireContext(),url!!,mBinding?.logo!!,R.drawable.artisan_logo_placeholder
+            ,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
+        mBinding?.brandDesc?.text = "By $artisanName"
+        mBinding?.artisanBrand?.text = brandName ?: artisanName
     }
 
-    private fun initializeView(){
+    private fun setRecyclerList(){
+        mBinding?.brandProdRecyclerList?.layoutManager = LinearLayoutManager(requireContext(),
+            LinearLayoutManager.VERTICAL, false)
+        brandProductAdapter = CatalogueProductsAdapter(requireContext(),
+            artisanId?.let { mBrandVM.getBrandProdListMutableData(it).value })
+        mBinding?.brandProdRecyclerList?.adapter = brandProductAdapter
+    }
+
+    private fun setFilterList(){
         var list =ProductPredicates.getAllCategoryProducts()
         mSpinner.clear()
         mSpinner.add("Filter by product category")
@@ -138,8 +155,7 @@ class BrandProdListFragment : Fragment(),
         spinner?.adapter = adapter
         spinner?.onItemSelectedListener = (object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                initialList()
-                brandProductAdapter?.setProducts(mProduct)
+                //do nothing
             }
 
             override fun onItemSelected(
@@ -151,68 +167,26 @@ class BrandProdListFragment : Fragment(),
                 if(position > 0){
                     filterBy = parent?.getItemAtPosition(position).toString()
                     Log.e("spin","fil : $filterBy")
-                    var productList = ProductPredicates.getFilteredBrandProducts(artisanId,filterBy)
-                    var size = productList?.size
-                    mProduct.clear()
-                    if (productList != null) {
-                        for (size in productList){
-                            Log.i("Stat","$size")
-                            var clusterId = size.clusterId
-                            var productId = size.productId
-                            var productTitle = size.productTag
-                            var status =size.productStatusId
-                            var desc = size.product_spe
-                            var isWishlisted = size.isWishlisted
-                            var prod = ProductCard(clusterId,productId,productTitle,desc,status,isWishlisted)
-                            mProduct.add(prod)
-                        }
-                    }
-                    if(mProduct.size == 0){
+                    mFilteredList = ProductPredicates.getFilteredBrandProducts(artisanId,filterBy)
+                    brandProductAdapter?.updateProductList(mFilteredList)
+
+                    if(mFilteredList?.size == 0){
                         mBinding?.emptyView?.visibility = View.VISIBLE
                         mBinding?.brandProdRecyclerList?.visibility = View.GONE
                     }else{
                         mBinding?.emptyView?.visibility = View.GONE
                         mBinding?.brandProdRecyclerList?.visibility = View.VISIBLE
-                        brandProductAdapter?.setProducts(mProduct)
                     }
                 }else{
-                    initialList()
+                    brandProductAdapter?.updateProductList(mBrandProdList)
                 }
             }
         })
     }
 
-
-    fun initialList(){
-        var productList = ProductPredicates.getBrandProductsFromId(artisanId)
-        var size = productList?.size
-        mProduct.clear()
-        if (productList != null) {
-            for (size in productList){
-                Log.i("Stat","$size")
-                var clusterId = size.clusterId
-                var productId = size.productId
-                var productTitle = size.productTag
-                var status =size.productStatusId
-                var desc = size.product_spe
-                var isWishlisted = size.isWishlisted
-                var prod = ProductCard(clusterId,productId,productTitle,desc,status,isWishlisted)
-                mProduct.add(prod)
-            }
-            if(mProduct.size == 0){
-                mBinding?.emptyView?.visibility = View.VISIBLE
-                mBinding?.brandProdRecyclerList?.visibility = View.GONE
-            }else{
-                mBinding?.emptyView?.visibility = View.GONE
-                mBinding?.brandProdRecyclerList?.visibility = View.VISIBLE
-                brandProductAdapter?.setProducts(mProduct)
-            }
-        }
-    }
-
     override fun onResume() {
         super.onResume()
-        brandProductAdapter?.notifyDataSetChanged()
+        setFilterList()
     }
 
     override fun onSuccessEnquiryGeneration(enquiry: GenerateEnquiryResponse) {
@@ -274,6 +248,36 @@ class BrandProdListFragment : Fragment(),
         @JvmStatic
         fun newInstance() = BrandProdListFragment()
         const val TAG = "BrandProducts"
+    }
+
+    override fun onFailure() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("brandProdList", "OnFailure")
+                mBinding?.swipeBrandProducts?.isRefreshing = false
+                artisanId?.let { mBrandVM.getBrandProdListMutableData(it) }
+                Utility.displayMessage(
+                    "Error while fetching list",
+                    requireContext()
+                )
+            }
+            )
+        } catch (e: Exception) {
+            Log.e("brandProdList", "Exception onFailure " + e.message)
+        }
+    }
+
+    override fun onSuccess() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("brandProdList", "onSuccess")
+                mBinding?.swipeBrandProducts?.isRefreshing = false
+                artisanId?.let { mBrandVM.getBrandProdListMutableData(it) }
+            }
+            )
+        } catch (e: Exception) {
+            Log.e("brandProdList", "Exception onFailure " + e.message)
+        }
     }
 
 }

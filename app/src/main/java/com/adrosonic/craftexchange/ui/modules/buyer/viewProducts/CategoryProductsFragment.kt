@@ -80,15 +80,6 @@ class CategoryProductsFragment : Fragment(),
             })
 
         mBinding?.swipeCategory?.isRefreshing = true
-//        mBinding?.swipeCategory?.setOnRefreshListener {
-//            if (!Utility.checkIfInternetConnected(requireContext())) {
-//                mBinding?.swipeCategory?.isRefreshing = false
-//                Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
-//            } else {
-//                mViewModel.getAllCategories()
-//            }
-//        }
-
     }
 
     private fun setRecyclerList(){

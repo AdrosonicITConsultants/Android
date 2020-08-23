@@ -8,36 +8,24 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.adrosonic.craftexchange.R
-import com.adrosonic.craftexchange.database.entities.realmEntities.ArtisanProducts
 import com.adrosonic.craftexchange.database.entities.realmEntities.ClusterList
-import com.adrosonic.craftexchange.database.predicates.ClusterPredicates
 import com.adrosonic.craftexchange.databinding.FragmentRegionProductsBinding
-import com.adrosonic.craftexchange.repository.CraftExchangeRepository
-import com.adrosonic.craftexchange.repository.data.response.clusterResponse.CLusterResponse
-import com.adrosonic.craftexchange.repository.data.response.clusterResponse.Cluster
 import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.adapter.RegionAdapter
-import com.adrosonic.craftexchange.ui.modules.buyer.wishList.WishlistAdapter
 import com.adrosonic.craftexchange.utils.Utility
-import com.adrosonic.craftexchange.viewModels.ArtisanProductsViewModel
 import com.adrosonic.craftexchange.viewModels.ClusterViewModel
 import io.realm.RealmResults
-import kotlinx.android.synthetic.main.fragment_wishlist.*
-import retrofit2.Call
-import retrofit2.Response
-import javax.security.auth.callback.Callback
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 class RegionProductsFragment : Fragment(),
-ClusterViewModel.ClusterListInterface{
+ClusterViewModel.ClusterProdInterface{
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -64,12 +52,10 @@ ClusterViewModel.ClusterListInterface{
 
         mBinding?.swipeRegion?.isEnabled = false
 
-
         if (!Utility.checkIfInternetConnected(requireContext())) {
             Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
         } else {
             mViewModel.getAllClusters()
-
         }
 
         mViewModel.getClusterListMutableData()
@@ -79,15 +65,6 @@ ClusterViewModel.ClusterListInterface{
             })
 
         mBinding?.swipeRegion?.isRefreshing = true
-//        mBinding?.swipeRegion?.setOnRefreshListener {
-//            if (!Utility.checkIfInternetConnected(requireContext())) {
-//                mBinding?.swipeRegion?.isRefreshing = false
-//                Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
-//            } else {
-//                mViewModel.getAllClusters()
-//            }
-//        }
-
     }
 
     fun setRecyclerList(){

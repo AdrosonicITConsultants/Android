@@ -1,17 +1,19 @@
 package com.adrosonic.craftexchange.viewModels
 
 import android.app.Application
-import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.adrosonic.craftexchange.database.entities.realmEntities.ArtisanProducts
 import com.adrosonic.craftexchange.database.entities.realmEntities.ClusterList
+import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCatalogue
 import com.adrosonic.craftexchange.database.predicates.ClusterPredicates
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
+import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.CatalogueProductsResponse
 import com.adrosonic.craftexchange.repository.data.response.clusterResponse.CLusterResponse
+import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.pixplicity.easyprefs.library.Prefs
 import io.realm.RealmResults
 import retrofit2.Call
 import retrofit2.Response
@@ -19,14 +21,16 @@ import javax.security.auth.callback.Callback
 
 class ClusterViewModel(application: Application) : AndroidViewModel(application) {
 
-    interface ClusterListInterface{
+    interface ClusterProdInterface{
         fun onFailure()
         fun onSuccess()
     }
 
-    var clusterListener : ClusterListInterface ?= null
+
+    var clusterListener : ClusterProdInterface ?= null
 
     val clusterList : MutableLiveData<RealmResults<ClusterList>> by lazy { MutableLiveData<RealmResults<ClusterList>>() }
+    val clusterProdList : MutableLiveData<RealmResults<ProductCatalogue>> by lazy { MutableLiveData<RealmResults<ProductCatalogue>>() }
 
     fun getClusterListMutableData(): MutableLiveData<RealmResults<ClusterList>> {
         clusterList.value=loadClusterList()
@@ -37,6 +41,17 @@ class ClusterViewModel(application: Application) : AndroidViewModel(application)
         var clusterList = ClusterPredicates.getAllClusters()
         Log.e("clusterList","clusterList :"+clusterList?.size)
         return clusterList!!
+    }
+
+    fun getClusterProdListMutableData(clusterID : Long): MutableLiveData<RealmResults<ProductCatalogue>> {
+        clusterProdList.value=loadClusterProdList(clusterID)
+        return clusterProdList
+    }
+
+    fun loadClusterProdList(clusterID : Long): RealmResults<ProductCatalogue> {
+        var clusterProdList = ProductPredicates.getClusterProductsFromId(clusterID)
+        Log.e("clusterProdList","clusterProdList :"+clusterProdList?.size)
+        return clusterProdList!!
     }
 
 
@@ -63,4 +78,30 @@ class ClusterViewModel(application: Application) : AndroidViewModel(application)
             })
     }
 
+    fun getProductsByCluster(clusterID : Long) {
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN, "")}"
+
+        CraftExchangeRepository
+            .getProductService()
+            .getProductByCluster(token, clusterID)
+            .enqueue(object : Callback, retrofit2.Callback<CatalogueProductsResponse> {
+                override fun onFailure(call: Call<CatalogueProductsResponse>, t: Throwable) {
+                    t.printStackTrace()
+                    clusterListener?.onFailure()
+                }
+
+                override fun onResponse(
+                    call: Call<CatalogueProductsResponse>,
+                    response: Response<CatalogueProductsResponse>
+                ) {
+                    if (response.body()?.valid == true) {
+                        ProductPredicates.insertProductsInCatalogue(response.body()?.data?.products)
+                        clusterListener?.onSuccess()
+                    } else {
+                        clusterListener?.onFailure()
+                    }
+                }
+            })
+
+    }
 }

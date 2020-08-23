@@ -15,60 +15,55 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.adrosonic.craftexchange.R
-import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCard
+import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCatalogue
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.databinding.FragmentRegionProdListBinding
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.generateEnquiry.GenerateEnquiryResponse
-import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.adapter.RegionProductsAdapter
+import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.adapter.CatalogueProductsAdapter
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
-import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
+import com.adrosonic.craftexchange.viewModels.ClusterViewModel
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
+import io.realm.RealmResults
 import kotlinx.android.synthetic.main.dialog_gen_enquiry_update_or_new.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [RegionProdListFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class RegionProdListFragment : Fragment(),
-
+    ClusterViewModel.ClusterProdInterface,
     EnquiryViewModel.GenerateEnquiryInterface,
-    RegionProductsAdapter.EnquiryGeneratedListener{
-    // TODO: Rename and change types of parameters
+    CatalogueProductsAdapter.EnquiryGeneratedListener{
+
     private var param1: String? = null
-    private var param2: String? = null
+    private var param2: Long? = null
 
     private var mBinding: FragmentRegionProdListBinding ?= null
     var clusterId : Long ?= 0
     var clusterName : String ?= ""
-    var clusterProductAdapter : RegionProductsAdapter?= null
-    private var mProduct = mutableListOf<ProductCard>()
+
+    var clusterProductAdapter : CatalogueProductsAdapter?= null
+
+    private var mClusProductList : RealmResults<ProductCatalogue>?= null
+    private var mFilteredList : RealmResults<ProductCatalogue>?= null
 
     private var mSpinner = mutableListOf<String>()
-    private var filterBy : String ?= ""
 
-    var productListSize : Int ?= 0
-    var filterListSize : Int ?= 0
-
+    val mClusVM : ClusterViewModel by viewModels()
     val mEnqVM : EnquiryViewModel by viewModels()
+
     var dialog : Dialog?= null
-    var mUser : UserConfig?= null
     var productID : Long ?= 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            param2 = it.getLong(ARG_PARAM2)
         }
     }
 
@@ -80,36 +75,47 @@ class RegionProdListFragment : Fragment(),
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_region_prod_list, container, false)
         clusterId = this.requireArguments().getString(ConstantsDirectory.CLUSTER_ID)?.toLong()
         clusterName = this.requireArguments().getString(ConstantsDirectory.CLUSTER_PRODUCTS)
-        clusterDescription(clusterName)
-        mBinding?.productType?.text = clusterName
-        initializeView()
-        clusterProductAdapter = RegionProductsAdapter(requireContext(),mProduct)
         return mBinding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mEnqVM.listener = this
+        mClusVM.clusterListener = this
         clusterProductAdapter?.enqListener = this
+
+        setRecyclerList()
+        setFilterList()
+        mBinding?.swipeRegionProducts?.isEnabled = false
+
         dialog = Utility.enquiryGenProgressDialog(requireContext())
+        clusterDescription(clusterName)
+        mBinding?.productType?.text = clusterName
 
-
-        initializeView()
-        setupRecyclerView()
+        if (!Utility.checkIfInternetConnected(requireContext())) {
+            Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
+        } else {
+            clusterId?.let { mClusVM.getProductsByCluster(it) }
+        }
+        clusterId?.let {
+            mClusVM.getClusterProdListMutableData(it)
+                .observe(viewLifecycleOwner, Observer<RealmResults<ProductCatalogue>> {
+                    mClusProductList = it
+                    clusterProductAdapter?.updateProductList(mClusProductList)
+                })
+        }
+        mBinding?.swipeRegionProducts?.isRefreshing = true
     }
 
-    private fun setupRecyclerView(){
-        clusterProductAdapter?.setProducts(mProduct)
-        mBinding?.regionProdRecyclerList?.adapter = clusterProductAdapter
+    private fun setRecyclerList(){
         mBinding?.regionProdRecyclerList?.layoutManager = LinearLayoutManager(requireContext(),
             LinearLayoutManager.VERTICAL, false)
-//        mBinding?.catProdRecyclerList?.layoutManager = AutoFitGridLayoutManager(requireContext(),500)
-
-        clusterProductAdapter?.notifyDataSetChanged()
+        clusterProductAdapter = CatalogueProductsAdapter(requireContext(),
+            clusterId?.let { mClusVM.getClusterProdListMutableData(it).value })
+        mBinding?.regionProdRecyclerList?.adapter = clusterProductAdapter
     }
 
-    private fun initializeView(){
-
+    private fun setFilterList(){
         var list =ProductPredicates.getAllCategoryProducts()
         mSpinner.clear()
         mSpinner.add("Filter by product category")
@@ -121,7 +127,6 @@ class RegionProdListFragment : Fragment(),
             }
         }
         filterSpinner(requireContext(),mSpinner,mBinding?.filterRegion)
-//        Utility.filterSpinner(requireContext(),mSpinner,mBinding?.filterRegion)
     }
 
     fun filterSpinner(context : Context, array : List<String>, spinner : Spinner?) {
@@ -131,8 +136,7 @@ class RegionProdListFragment : Fragment(),
         spinner?.adapter = adapter
         spinner?.onItemSelectedListener = (object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                initialList()
-                clusterProductAdapter?.setProducts(mProduct)
+                //do nothing
             }
 
             override fun onItemSelected(
@@ -144,64 +148,20 @@ class RegionProdListFragment : Fragment(),
                 if(position > 0){
                     filterBy = parent?.getItemAtPosition(position).toString()
                     Log.e("spin","fil : $filterBy")
-                    var productList = ProductPredicates.getFilteredClusterProducts(clusterId,filterBy)
-                    var size = productList?.size
-                    mProduct.clear()
-                    if (productList != null) {
-                        for (size in productList){
-                            Log.i("Stat","$size")
-                            var clusterId = size.clusterId
-                            var productId = size.productId
-                            var productTitle = size.productTag
-                            var status =size.productStatusId
-                            var desc = size.product_spe
-                            var isWishlisted = size.isWishlisted
-                            var prod = ProductCard(clusterId,productId,productTitle,desc,status,isWishlisted)
-                            mProduct.add(prod)
-                        }
-                    }
-                    if(mProduct.size == 0){
+                    mFilteredList = ProductPredicates.getFilteredClusterProducts(clusterId,filterBy)
+                    clusterProductAdapter?.updateProductList(mFilteredList)
+                    if(mFilteredList?.size == 0){
                         mBinding?.emptyView?.visibility = View.VISIBLE
                         mBinding?.regionProdRecyclerList?.visibility = View.GONE
                     }else{
                         mBinding?.emptyView?.visibility = View.GONE
                         mBinding?.regionProdRecyclerList?.visibility = View.VISIBLE
-                        clusterProductAdapter?.setProducts(mProduct)
                     }
-
-
                 }else{
-                    initialList()
+                    clusterProductAdapter?.updateProductList(mClusProductList)
                 }
             }
         })
-    }
-
-    fun initialList(){
-        var productList = ProductPredicates.getClusterProductsFromId(clusterId)
-        var size = productList?.size
-        mProduct.clear()
-        if (productList != null) {
-            for (size in productList){
-                Log.i("Stat","$size")
-                var clusterId = size.clusterId
-                var productId = size.productId
-                var productTitle = size.productTag
-                var status =size.productStatusId
-                var desc = size.product_spe
-                var isWishlisted = size.isWishlisted
-                var prod = ProductCard(clusterId,productId,productTitle,desc,status,isWishlisted)
-                mProduct.add(prod)
-            }
-            if(mProduct.size == 0){
-                mBinding?.emptyView?.visibility = View.VISIBLE
-                mBinding?.regionProdRecyclerList?.visibility = View.GONE
-            }else{
-                mBinding?.emptyView?.visibility = View.GONE
-                mBinding?.regionProdRecyclerList?.visibility = View.VISIBLE
-                clusterProductAdapter?.setProducts(mProduct)
-            }
-        }
     }
 
 //TODO : to be deleted later...only for demo purpose
@@ -218,7 +178,7 @@ class RegionProdListFragment : Fragment(),
 
     override fun onResume() {
         super.onResume()
-        clusterProductAdapter?.notifyDataSetChanged()
+        setFilterList()
     }
 
     override fun onSuccessEnquiryGeneration(enquiry: GenerateEnquiryResponse) {
@@ -280,6 +240,35 @@ class RegionProdListFragment : Fragment(),
         fun newInstance() = RegionProdListFragment()
     }
 
+    override fun onFailure() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("clusterList", "OnFailure")
+                mBinding?.swipeRegionProducts?.isRefreshing = false
+                clusterId?.let { mClusVM.getClusterProdListMutableData(it) }
+                Utility.displayMessage(
+                    "Error while fetching list",
+                    requireContext()
+                )
+            }
+            )
+        } catch (e: Exception) {
+            Log.e("clusterList", "Exception onFailure " + e.message)
+        }
+    }
+
+    override fun onSuccess() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("clusterList", "onSuccess")
+                mBinding?.swipeRegionProducts?.isRefreshing = false
+                clusterId?.let { mClusVM.getClusterProdListMutableData(it) }
+            }
+            )
+        } catch (e: Exception) {
+            Log.e("clusterList", "Exception onFailure " + e.message)
+        }
+    }
 
 
 }

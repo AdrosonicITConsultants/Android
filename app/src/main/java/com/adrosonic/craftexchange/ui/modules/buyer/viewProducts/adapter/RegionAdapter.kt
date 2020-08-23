@@ -63,27 +63,6 @@ class RegionAdapter(var context: Context?, private var regionProducts: RealmResu
     }
 
     override fun onItemClick(list: ClusterList) {
-        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
-        list.clusterid?.let {
-            CraftExchangeRepository
-                .getProductService()
-                .getProductByCluster(token, it)
-                .enqueue(object : Callback, retrofit2.Callback<CatalogueProductsResponse> {
-                    override fun onFailure(call: Call<CatalogueProductsResponse>, t: Throwable) {
-                        t.printStackTrace()
-                    }
-
-                    override fun onResponse(
-                        call: Call<CatalogueProductsResponse>, response: Response<CatalogueProductsResponse>
-                    ) {
-                        if (response.body()?.valid == true) {
-                            ProductPredicates.insertProductsInCatalogue(response.body()?.data?.products)
-                        } else {
-                            Toast.makeText(context, "${response.body()}", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                })
-        }
         var bundle = Bundle()
         bundle.putString(ConstantsDirectory.CLUSTER_ID,list.clusterid.toString())
         bundle.putString(ConstantsDirectory.CLUSTER_PRODUCTS,list.cluster)

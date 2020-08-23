@@ -75,17 +75,22 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/region_prod_recycler_list"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_region_products"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/divider"
-            app:layout_constraintVertical_bias="1.0"/>
+            app:layout_constraintTop_toBottomOf="@+id/divider">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/region_prod_recycler_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <RelativeLayout
             android:id="@+id/empty_view"

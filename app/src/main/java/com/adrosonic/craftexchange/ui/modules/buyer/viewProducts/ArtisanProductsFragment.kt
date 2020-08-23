@@ -39,13 +39,12 @@ BrandViewModel.BrandListInterface{
 
     private var mBinding: FragmentArtisanProductsBinding ?= null
     private var brandAdapter: BrandAdapter?= null
+
     private var mBrandList : RealmResults<BrandList>?= null
     private var mFilteredList : RealmResults<BrandList>?=null
 
-
     private var mSpinner = mutableListOf<String>()
     private var mClusterList = HashMap<String?,Long?>()
-    private var filterBy : String ? = ""
 
     val mViewModel : BrandViewModel by viewModels()
 
@@ -138,8 +137,6 @@ BrandViewModel.BrandListInterface{
                     filterBy = parent?.getItemAtPosition(position).toString()
                     Log.e("spin","fil : $filterBy")
                     mFilteredList = ProductPredicates.getFilteredBrands(mClusterList[filterBy])
-                    mBrandList?.size
-                    mFilteredList?.size
                     brandAdapter?.updateBrandList(mFilteredList)
                 }else{
                     brandAdapter?.updateBrandList(mBrandList)

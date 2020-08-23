@@ -65,27 +65,6 @@ class CategoryAdapter(var context: Context?, private var categoryDetails: RealmR
     }
 
     override fun onItemClick(list: CategoryProducts) {
-        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
-        list.productCategoryid?.let {
-            CraftExchangeRepository
-                .getProductService()
-                .getProductByCategory(token, it)
-                .enqueue(object : Callback, retrofit2.Callback<CatalogueProductsResponse> {
-                    override fun onFailure(call: Call<CatalogueProductsResponse>, t: Throwable) {
-                        t.printStackTrace()
-                    }
-
-                    override fun onResponse(
-                        call: Call<CatalogueProductsResponse>, response: Response<CatalogueProductsResponse>
-                    ) {
-                        if (response.body()?.valid == true) {
-                            ProductPredicates.insertProductsInCatalogue(response.body()?.data?.products)
-                        } else {
-                            Toast.makeText(context, "${response.body()}", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                })
-        }
         var bundle = Bundle()
         bundle.putString(ConstantsDirectory.VIEW_PROD_OF,list.product)
         bundle.putString(ConstantsDirectory.PRODUCT_CATEGORY_ID,list.productCategoryid.toString())

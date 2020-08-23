@@ -76,33 +76,12 @@ class BrandAdapter(var context: Context?, private var brandList: RealmResults<Br
 
 
     override fun onItemClick(list: BrandList) {
-//        Toast.makeText(context,"$list", Toast.LENGTH_SHORT).show()
-        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
-        CraftExchangeRepository
-            .getProductService()
-            .getProductsByArtisan(token,list.artisanId!!)
-            .enqueue(object : Callback, retrofit2.Callback<CatalogueProductsResponse> {
-                override fun onFailure(call: Call<CatalogueProductsResponse>, t: Throwable) {
-                    t.printStackTrace()
-                }
-                override fun onResponse(
-                    call: Call<CatalogueProductsResponse>, response: Response<CatalogueProductsResponse>
-                ) {
-                    if (response.body()?.valid == true) {
-                        ProductPredicates.insertProductsInCatalogue(response.body()?.data?.products)
-                    } else {
-                        Toast.makeText(context, "${response.body()}", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            })
         var bundle = Bundle()
         bundle.putString(ConstantsDirectory.ARTISAN_ID,list.artisanId.toString())
         bundle.putString(ConstantsDirectory.ARTISAN,list.firstName)
         bundle.putString(ConstantsDirectory.COMP_NAME,list.companyName)
-        var logo = list.logo ?: ""
-        var photo = list.profilePic ?: ""
-        bundle.putString(ConstantsDirectory.BRAND_IMG_NAME,list.logo)
-        bundle.putString(ConstantsDirectory.PROFILE_PHOTO_NAME,photo)
+        bundle.putString(ConstantsDirectory.BRAND_IMG_NAME,list.logo ?: "")
+        bundle.putString(ConstantsDirectory.PROFILE_PHOTO_NAME,list.profilePic ?: "")
         var frag2 = BrandProdListFragment()
         frag2.arguments = bundle
         var activity = context as BuyerLandingActivity
@@ -112,9 +91,5 @@ class BrandAdapter(var context: Context?, private var brandList: RealmResults<Br
             .commit()
     }
 
-
-//    override fun onItemClick(artisanProduct: ArtisanProductList) {
-//        TODO("Not yet implemented")
-//    }
 
 }

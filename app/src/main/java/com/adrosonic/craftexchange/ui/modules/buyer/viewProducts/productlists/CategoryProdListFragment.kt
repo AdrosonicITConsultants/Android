@@ -15,18 +15,19 @@ import android.widget.Spinner
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrosonic.craftexchange.R
-import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCard
+import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCatalogue
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.databinding.FragmentCategoryProdListBinding
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.generateEnquiry.GenerateEnquiryResponse
-import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.adapter.CategoryProductsAdapter
-import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.adapter.RegionProductsAdapter
+import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.adapter.CatalogueProductsAdapter
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
-import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
+import com.adrosonic.craftexchange.viewModels.CategoryViewModel
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
+import io.realm.RealmResults
 import kotlinx.android.synthetic.main.dialog_gen_enquiry_update_or_new.*
 
 // TODO: Rename parameter arguments, choose names that match
@@ -34,15 +35,10 @@ import kotlinx.android.synthetic.main.dialog_gen_enquiry_update_or_new.*
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [CategoryProdListFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class CategoryProdListFragment : Fragment(),
-
     EnquiryViewModel.GenerateEnquiryInterface,
-    CategoryProductsAdapter.EnquiryGeneratedListener {
+    CategoryViewModel.CategoryListInterface,
+    CatalogueProductsAdapter.EnquiryGeneratedListener {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -51,15 +47,20 @@ class CategoryProdListFragment : Fragment(),
 
     var productType : String ?= ""
     var categoryId : Long ?= 0
-    private var mProduct = mutableListOf<ProductCard>()
-    private var catProdAdapter: CategoryProductsAdapter?= null
+
+    private var catProdAdapter: CatalogueProductsAdapter?= null
+
     private var mSpinner = mutableListOf<String>()
     private var mClusterList = mutableListOf<Pair<Long?,String?>>()
-    private var filterBy : String ?= ""
+
+    private var mCatProdList : RealmResults<ProductCatalogue>?= null
+    private var mFilteredList : RealmResults<ProductCatalogue>?= null
+
 
     val mEnqVM : EnquiryViewModel by viewModels()
+    val mCatVM : CategoryViewModel by viewModels()
+
     var dialog : Dialog?= null
-    var mUser : UserConfig?= null
     var productID : Long ?= 0L
 
 
@@ -79,31 +80,50 @@ class CategoryProdListFragment : Fragment(),
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_category_prod_list, container, false)
         productType = this.requireArguments().getString(ConstantsDirectory.VIEW_PROD_OF)
         categoryId = this.requireArguments().getString(ConstantsDirectory.PRODUCT_CATEGORY_ID)?.toLong()
-        mBinding?.productType?.text = productType
-        initializeView()
-        catProdAdapter = CategoryProductsAdapter(requireContext(),mProduct)
+
         return mBinding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mEnqVM.listener = this
-        catProdAdapter?.enqListener = this
-        dialog = Utility.enquiryGenProgressDialog(requireContext())
+        mCatVM.catListener = this
 
-        setupRecyclerView()
+        catProdAdapter?.enqListener = this
+
+        setRecyclerList()
+        setFilterList()
+        mBinding?.swipeCategoryProducts?.isEnabled = false
+
+        dialog = Utility.enquiryGenProgressDialog(requireContext())
+        mBinding?.productType?.text = productType
+
+        if (!Utility.checkIfInternetConnected(requireContext())) {
+            Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
+        } else {
+            categoryId?.let { mCatVM.getProductsByCategory(it) }
+        }
+        categoryId?.let {
+            mCatVM.getCatProdListMutableData(it)
+                .observe(viewLifecycleOwner, Observer<RealmResults<ProductCatalogue>> {
+                    mCatProdList = it
+                    catProdAdapter?.updateProductList(mCatProdList)
+                })
+        }
+        mBinding?.swipeCategoryProducts?.isRefreshing = true
+
+
     }
 
-    private fun setupRecyclerView(){
-        catProdAdapter?.setProducts(mProduct)
-        mBinding?.categoryProdRecyclerList?.adapter = catProdAdapter
+    private fun setRecyclerList(){
         mBinding?.categoryProdRecyclerList?.layoutManager = LinearLayoutManager(requireContext(),
             LinearLayoutManager.VERTICAL, false)
-//        mBinding?.catProdRecyclerList?.layoutManager = AutoFitGridLayoutManager(requireContext(),500)
-        catProdAdapter?.notifyDataSetChanged()
+        catProdAdapter = CatalogueProductsAdapter(requireContext(),
+            categoryId?.let { mCatVM.getCatProdListMutableData(it).value })
+        mBinding?.categoryProdRecyclerList?.adapter = catProdAdapter
     }
 
-    private fun initializeView(){
+    private fun setFilterList(){
         var clusterList = ProductPredicates.getAllClusters()
         mSpinner.clear()
         mSpinner.add("Filter by Region")
@@ -126,8 +146,7 @@ class CategoryProdListFragment : Fragment(),
         spinner?.adapter = adapter
         spinner?.onItemSelectedListener = (object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                initialList()
-                catProdAdapter?.setProducts(mProduct)
+                //do nothing
             }
 
             override fun onItemSelected(
@@ -139,69 +158,26 @@ class CategoryProdListFragment : Fragment(),
                 if(position > 0){
                     filterBy = parent?.getItemAtPosition(position).toString()
                     Log.e("spin","fil : $filterBy")
-                    var productList = ProductPredicates.getFilteredCategoryProducts(categoryId,filterBy)
-                    var size = productList?.size
-                    mProduct.clear()
-                    if (productList != null) {
-                        for (size in productList){
-                            Log.i("Stat","$size")
-                            var clusterId = size.clusterId
-                            var productId = size.productId
-                            var productTitle = size.productTag
-                            var status =size.productStatusId
-                            var desc = size.product_spe
-                            var isWishlisted = size.isWishlisted
+                    mFilteredList = ProductPredicates.getFilteredCategoryProducts(categoryId,filterBy)
+                    catProdAdapter?.updateProductList(mFilteredList)
 
-                            var prod = ProductCard(clusterId,productId,productTitle,desc,status,isWishlisted)
-
-                            mProduct.add(prod)
-                        }
-                    }
-                    if(mProduct.size == 0){
+                    if(mFilteredList?.size == 0){
                         mBinding?.emptyView?.visibility = View.VISIBLE
                         mBinding?.categoryProdRecyclerList?.visibility = View.GONE
                     }else{
                         mBinding?.emptyView?.visibility = View.GONE
                         mBinding?.categoryProdRecyclerList?.visibility = View.VISIBLE
-                        catProdAdapter?.setProducts(mProduct)
                     }
                 }else{
-                    initialList()
+                catProdAdapter?.updateProductList(mCatProdList)
                 }
             }
         })
     }
 
-
-    fun initialList(){
-        var productList = ProductPredicates.getCategoryProductsFromId(categoryId)
-        mProduct.clear()
-        if (productList != null) {
-            for (size in productList){
-                Log.i("Stat","$size")
-                var artisanId = size.artisanId
-                var productId = size.productId
-                var productTitle = size.productTag
-                var status =size.productStatusId
-                var desc = size.product_spe
-                var isWishlisted = size.isWishlisted
-                var prod = ProductCard(artisanId,productId,productTitle,desc,status,isWishlisted)
-                mProduct.add(prod)
-            }
-            if(mProduct.size == 0){
-                mBinding?.emptyView?.visibility = View.VISIBLE
-                mBinding?.categoryProdRecyclerList?.visibility = View.GONE
-            }else{
-                mBinding?.emptyView?.visibility = View.GONE
-                mBinding?.categoryProdRecyclerList?.visibility = View.VISIBLE
-                catProdAdapter?.setProducts(mProduct)
-            }
-        }
-    }
-
     override fun onResume() {
         super.onResume()
-        catProdAdapter?.notifyDataSetChanged()
+        setFilterList()
     }
 
     override fun onSuccessEnquiryGeneration(enquiry: GenerateEnquiryResponse) {
@@ -263,5 +239,35 @@ class CategoryProdListFragment : Fragment(),
     companion object {
         @JvmStatic
         fun newInstance() = CategoryProdListFragment()
+    }
+
+    override fun onFailure() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("catList", "OnFailure")
+                mBinding?.swipeCategoryProducts?.isRefreshing = false
+                categoryId?.let { mCatVM.getCatProdListMutableData(it) }
+                Utility.displayMessage(
+                    "Error while fetching list",
+                    requireContext()
+                )
+            }
+            )
+        } catch (e: Exception) {
+            Log.e("catList", "Exception onFailure " + e.message)
+        }
+    }
+
+    override fun onSuccess() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("catList", "onSuccess")
+                mBinding?.swipeCategoryProducts?.isRefreshing = false
+                categoryId?.let { mCatVM.getCatProdListMutableData(it) }
+            }
+            )
+        } catch (e: Exception) {
+            Log.e("catList", "Exception onFailure " + e.message)
+        }
     }
 }
