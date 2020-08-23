@@ -1,7 +1,7 @@
 package com.adrosonic.craftexchange.ui.interfaces
 
-import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.Product
+import com.adrosonic.craftexchange.database.entities.realmEntities.CategoryProducts
 
 interface CategoryProductClick {
-    fun onItemClick(list : Product)
+    fun onItemClick(list : CategoryProducts)
 }

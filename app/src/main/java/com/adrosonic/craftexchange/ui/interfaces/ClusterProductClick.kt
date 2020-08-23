@@ -1,7 +1,7 @@
 package com.adrosonic.craftexchange.ui.interfaces
 
-import com.adrosonic.craftexchange.repository.data.response.clusterResponse.Cluster
+import com.adrosonic.craftexchange.database.entities.realmEntities.ClusterList
 
 interface ClusterProductClick {
-    fun onItemClick(list : Cluster)
+    fun onItemClick(list : ClusterList)
 }

@@ -50,7 +50,9 @@
                 android:text=" Save "
                 android:textColor="@color/white_text" />
         </androidx.appcompat.widget.Toolbar>
-
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -1107,6 +1109,15 @@
             </LinearLayout>
 
         </ScrollView>
+
+            <ProgressBar
+                android:id="@+id/pbLoader"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerInParent="true"
+                android:foregroundGravity="center"
+                android:visibility="gone" />
+        </RelativeLayout>
     </LinearLayout>
 
 </layout>

@@ -8,6 +8,8 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
+import com.adrosonic.craftexchange.database.entities.realmEntities.BrandList
+import com.adrosonic.craftexchange.database.entities.realmEntities.ClusterList
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.databinding.ItemBrandProductsBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
@@ -20,21 +22,29 @@ import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
 import com.pixplicity.easyprefs.library.Prefs
+import io.realm.RealmResults
 import retrofit2.Call
 import retrofit2.Response
 import javax.security.auth.callback.Callback
 
-class BrandAdapter(var context: Context?, private var brandDetails: List<BrandDetails>) : RecyclerView.Adapter<BrandAdapter.ViewHolder>(),
+class BrandAdapter(var context: Context?, private var brandList: RealmResults<BrandList>?) : RecyclerView.Adapter<BrandAdapter.ViewHolder>(),
     BrandProductClick {
 
     var url : String ?= ""
 
     inner class ViewHolder(val binding: ItemBrandProductsBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(brandDetails: BrandDetails){
-            binding.brandDetails = brandDetails
+        fun bind(brandList: BrandList){
+            binding.brandDetails = brandList
             binding.event = this@BrandAdapter
             binding.executePendingBindings()
         }
+    }
+
+    fun updateBrandList(newList: RealmResults<BrandList>?){
+        if (newList != null) {
+            this.brandList=newList
+        }
+        this.notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -42,31 +52,30 @@ class BrandAdapter(var context: Context?, private var brandDetails: List<BrandDe
         val binding: ItemBrandProductsBinding = DataBindingUtil.inflate(inflater, R.layout.item_brand_products,parent, false)
         return ViewHolder(binding)    }
 
-    override fun getItemCount(): Int = brandDetails.size
+
+    override fun getItemCount(): Int {
+        return brandList?.size?:0
+    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var product = brandDetails[position]
-        holder.bind(product)
-        if(product.logo != null){
+        var product = brandList?.get(position)
+        product?.let { holder.bind(it) }
+        if(product?.logo != null){
             url = Utility.getBrandLogoUrl(product.artisanId,product.logo)
         }else{
-            url = Utility.getProfilePhotoUrl(product.artisanId,product.profilePic)
+            url = Utility.getProfilePhotoUrl(product?.artisanId,product?.profilePic)
         }
 
         ImageSetter.setImage(context!!,url!!,holder.binding.prodImg,R.drawable.artisan_logo_placeholder
         ,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
 
-        holder.binding.prodText.text = product.companyName ?: product.firstName
+        holder.binding.prodText.text = product?.companyName ?: product?.firstName
         //TODO : Img to be Implemented using CMS
 //        product.productImageId?.let { holder.binding.prodImg.setImageResource(it) }
     }
 
-    internal fun setProducts(categoryDetails: List<BrandDetails>) {
-        this.brandDetails = categoryDetails
-        notifyDataSetChanged()
-    }
 
-    override fun onItemClick(list: BrandDetails) {
+    override fun onItemClick(list: BrandList) {
 //        Toast.makeText(context,"$list", Toast.LENGTH_SHORT).show()
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         CraftExchangeRepository

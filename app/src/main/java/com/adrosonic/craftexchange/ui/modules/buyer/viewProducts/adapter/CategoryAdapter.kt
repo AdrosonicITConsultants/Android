@@ -8,6 +8,8 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
+import com.adrosonic.craftexchange.database.entities.realmEntities.CategoryProducts
+import com.adrosonic.craftexchange.database.entities.realmEntities.ClusterList
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.databinding.ItemCategoryProductBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
@@ -18,15 +20,16 @@ import com.adrosonic.craftexchange.ui.modules.buyer.landing.BuyerLandingActivity
 import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.productlists.CategoryProdListFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.pixplicity.easyprefs.library.Prefs
+import io.realm.RealmResults
 import retrofit2.Call
 import retrofit2.Response
 import javax.security.auth.callback.Callback
 
-class CategoryAdapter(var context: Context?, private var categoryDetails: List<Product>) : RecyclerView.Adapter<CategoryAdapter.ViewHolder>(),
+class CategoryAdapter(var context: Context?, private var categoryDetails: RealmResults<CategoryProducts>?) : RecyclerView.Adapter<CategoryAdapter.ViewHolder>(),
     CategoryProductClick {
 
     inner class ViewHolder(val binding: ItemCategoryProductBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(categoryDetails: Product){
+        fun bind(categoryDetails: CategoryProducts){
             binding.categoryDetails = categoryDetails
             binding.event = this@CategoryAdapter
             binding.executePendingBindings()
@@ -38,50 +41,54 @@ class CategoryAdapter(var context: Context?, private var categoryDetails: List<P
         val binding: ItemCategoryProductBinding = DataBindingUtil.inflate(inflater, R.layout.item_category_product,parent, false)
         return ViewHolder(binding)    }
 
-    override fun getItemCount(): Int = categoryDetails.size
+    override fun getItemCount(): Int {
+        return categoryDetails?.size?:0
+    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var product = categoryDetails[position]
+        var product = categoryDetails?.get(position)
 //        val rnd = Random()
 //        val currentColor = Color.argb(200, rnd.nextInt(202), rnd.nextInt(256), rnd.nextInt(256))
-        holder.bind(product)
+        product?.let { holder.bind(it) }
 
 //        holder.binding.prodImg.setBackgroundColor(currentColor) // TODO : to be commented later
-        holder.binding.prodText.text= product.productDesc
+        holder.binding.prodText.text= product?.product
         //TODO : Img to be Implemented using CMS
 //        product.productImageId?.let { holder.binding.prodImg.setImageResource(it) }
     }
 
-    internal fun setProducts(categoryProduct: List<Product>) {
-        this.categoryDetails = categoryProduct
-        notifyDataSetChanged()
+    fun updateCategoryList(newList: RealmResults<CategoryProducts>?){
+        if (newList != null) {
+            this.categoryDetails=newList
+        }
+        this.notifyDataSetChanged()
     }
 
-
-
-    override fun onItemClick(list: Product) {
-//        Toast.makeText(context,"$list",Toast.LENGTH_SHORT).show()
+    override fun onItemClick(list: CategoryProducts) {
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
-        CraftExchangeRepository
-            .getProductService()
-            .getProductByCategory(token, list.id)
-            .enqueue(object : Callback, retrofit2.Callback<CatalogueProductsResponse> {
-                override fun onFailure(call: Call<CatalogueProductsResponse>, t: Throwable) {
-                    t.printStackTrace()
-                }
-                override fun onResponse(
-                    call: Call<CatalogueProductsResponse>, response: Response<CatalogueProductsResponse>
-                ) {
-                    if (response.body()?.valid == true) {
-                        ProductPredicates.insertProductsInCatalogue(response.body()?.data?.products)
-                    } else {
-                        Toast.makeText(context, "${response.body()}", Toast.LENGTH_SHORT).show()
+        list.productCategoryid?.let {
+            CraftExchangeRepository
+                .getProductService()
+                .getProductByCategory(token, it)
+                .enqueue(object : Callback, retrofit2.Callback<CatalogueProductsResponse> {
+                    override fun onFailure(call: Call<CatalogueProductsResponse>, t: Throwable) {
+                        t.printStackTrace()
                     }
-                }
-            })
+
+                    override fun onResponse(
+                        call: Call<CatalogueProductsResponse>, response: Response<CatalogueProductsResponse>
+                    ) {
+                        if (response.body()?.valid == true) {
+                            ProductPredicates.insertProductsInCatalogue(response.body()?.data?.products)
+                        } else {
+                            Toast.makeText(context, "${response.body()}", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                })
+        }
         var bundle = Bundle()
-        bundle.putString(ConstantsDirectory.VIEW_PROD_OF,list.productDesc)
-        bundle.putString(ConstantsDirectory.PRODUCT_CATEGORY_ID,list.id.toString())
+        bundle.putString(ConstantsDirectory.VIEW_PROD_OF,list.product)
+        bundle.putString(ConstantsDirectory.PRODUCT_CATEGORY_ID,list.productCategoryid.toString())
         var frag2 = CategoryProdListFragment()
         frag2.arguments = bundle
         var activity = context as BuyerLandingActivity

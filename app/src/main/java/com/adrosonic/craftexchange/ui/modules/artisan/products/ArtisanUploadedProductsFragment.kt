@@ -116,7 +116,7 @@ ArtisanProductsViewModel.productsFetchInterface{
     }
 
 
-    fun setSpinner(array : ArrayList<String>){
+    private fun setSpinner(array : ArrayList<String>){
         var filterBy : String
         var adapter=ArrayAdapter(requireActivity(),R.layout.dark_spinner_text_item, array)
         adapter.setDropDownViewResource(R.layout.dark_spinner_text_item)

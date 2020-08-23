@@ -39,6 +39,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/landing_toolbar_color"
         android:layout_marginTop="8dp">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -63,7 +64,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:gravity="center"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/empty_text"

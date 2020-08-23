@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -15,6 +17,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,8 +40,11 @@ import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.yarnFrgamn
 import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.yarnFrgamnets.YarnFrgamentAdapter
 import com.adrosonic.craftexchange.ui.modules.buyer.profile.editProfile.BuyerEditPPagerAdapter
 import com.adrosonic.craftexchange.utils.*
+import com.adrosonic.craftexchange.viewModels.DownLoadProdImagesViewModel
 import com.google.gson.GsonBuilder
+import com.wajahatkarim3.easyvalidation.core.view_ktx.contains
 import kotlinx.android.synthetic.main.activity_artisan_add_product_template.*
+import java.io.File
 
 
 fun Context.addProductIntent(): Intent {
@@ -57,12 +63,10 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
     View.OnClickListener,
     ProdImageListAdapter.ProdUpdateListener,
     WeaveSelectionAdapter.selectionListener,
-    CareInstructionsSelectionAdapter.selectionListener
-//    YarnViewpager.yarnListner  ,
-//    WarpFragmentListner,
-//    WeftFragment.WeftFragmentListner,
-//    ExtraWeftFragment.ExtraWeftFragmentListner
+    CareInstructionsSelectionAdapter.selectionListener,
+    DownLoadProdImagesViewModel.DownloadImagesCallback
 {
+    val mViewModel: DownLoadProdImagesViewModel by viewModels()
     private var mBinding: ActivityArtisanAddProductTemplateBinding? = null
     private lateinit var prodImgListAdapter: ProdImageListAdapter
     private var pairList = ArrayList<Triple<Boolean,Long, String>>()
@@ -217,7 +221,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
             }
             ///////////////////////weave types////////////////////////
             weaveSelctionList.clear()
-            arrWeaf?.forEach { weaveSelctionList.add(Triple(it.weaveDesc, false, it.id)) }
+            arrWeaf?.forEach { weaveSelctionList.add(Triple(it.weaveDesc ?: "", false, it.id)) }
             weave_recycler_list.layoutManager = LinearLayoutManager(this)
             weaveSelectionAdapter = WeaveSelectionAdapter(this, weaveSelctionList)
             weaveSelectionAdapter.listener = this
@@ -229,7 +233,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
             arrProductCategory?.forEach { arrProdCategoryStr.add(it.productDesc) }
             val spProdCataAdapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrProdCategoryStr)
             spProdCataAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
-        sp_prod_category.adapter = spProdCataAdapter
+            sp_prod_category.setAdapter(spProdCataAdapter)
             sp_prod_category.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
                 override fun onItemSelected(
@@ -238,23 +242,25 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                     position: Int,
                     id: Long
                 ) {
-                    arrProdTypeStr.clear()
+                    arrProdTypeStr?.clear()
                     arrProdTypeStr.add("Select product type")
                     val prodCategory = arrProdCategoryStr.get(position)
                     for (category in arrProductCategory!!) {
                         if (category.productDesc.equals(prodCategory, true)) {
                             arrProductType = category.productTypes
-                            category.productTypes.forEach { arrProdTypeStr.add(it.productDesc) }
+                            category.productTypes.forEach { arrProdTypeStr?.add(it.productDesc) }
                         }
                     }
                     val spProdTypeAdapter = ArrayAdapter<String>( applicationContext,  android.R.layout.simple_spinner_item,  arrProdTypeStr)
                     spProdTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                    sp_prod_type.adapter = spProdTypeAdapter
+                    sp_prod_type.setAdapter(spProdTypeAdapter)
                     setStatusResource()
                     if(productId>0){
                         var type=""
                         arrProductType?.forEach {
-                            if(it.id.equals(productEntry?.productTypeId))type=it.productDesc
+                            if(it.id.equals(productEntry?.productTypeId)){
+                                type=it.productDesc
+                            }
                         }
                         mBinding?.spProdType?.setSelection(arrProdTypeStr.indexOf(type))
                     }
@@ -272,12 +278,14 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                     val prodType = arrProdTypeStr.get(position)
                     arrProductType?.forEach {
                         if (it.productDesc.equals(prodType)) {
-//                      prodTypeId=it.id
+//                            prodTypeId=it.id
 //                      prodCatId=it.productCategoryID
                             arrRelatedProdType = it.relatedProductType
                         }
                     }
-                    if(position>0) setVisiblitiesAndTextsOnType(arrProdTypeStr.get(position), arrRelatedProdType)
+                    if(position>0){
+                        setVisiblitiesAndTextsOnType(arrProdTypeStr.get(position), arrRelatedProdType)
+                    }
                     setStatusResource()
                 }
 
@@ -287,7 +295,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
             supportFragmentManager.let{
                 yarn_pager?.adapter = YarnFrgamentAdapter(it,productId,true)
             }
-        yarn_pager?.offscreenPageLimit = 3
+            yarn_pager?.setOffscreenPageLimit(3)
 //            val viewPagerAdapter = YarnViewpager(this,productId, true)
 //            yarn_pager.setAdapter(viewPagerAdapter)
 //            viewPagerAdapter.listener = this
@@ -302,7 +310,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
                 )
-                params.setMargins(8, 0, 8, 0)
+                params.setMargins(8, 0, 8, 0);
                 slider_dots.addView(d, params)
                 dots.add(d)
             } while (dots.size < 3)
@@ -328,7 +336,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
             arrReedCount?.forEach { arrReedCountStr.add(it.count) }
             val spReedCountAdapter =ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrReedCountStr)
             spReedCountAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        sp_reed_count.adapter = spReedCountAdapter
+            sp_reed_count.setAdapter(spReedCountAdapter)
             sp_reed_count.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
             override fun onItemSelected(
@@ -341,7 +349,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
             }}
             //////////////////////////////care//////////////////
             arrProductCare?.forEach {
-                careSelctionList.add(Triple(it.productCareDesc,false, it.id ))
+                careSelctionList.add(Triple(it.productCareDesc ?: "",false, it.id ))
             }
             wash_care_recycler_list.layoutManager = LinearLayoutManager(this)
             careSelectionAdapter = CareInstructionsSelectionAdapter(this, careSelctionList)
@@ -351,18 +359,29 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
             ////////////////////////availability////////////////////
             setproductAvailability(productAvalability)
             img_made_to_order.setOnClickListener {
-                productAvalability = !productAvalability
+                if (productAvalability) {
+                    productAvalability = false
+                } else productAvalability = true
                 setproductAvailability(productAvalability)
             }
             img_in_stock.setOnClickListener {
-                productAvalability = !productAvalability
+                if (productAvalability) {
+                    productAvalability = false
+                } else productAvalability = true
                 setproductAvailability(productAvalability)
             }
 
         if(productId>0){
             var imageList=ProductImagePredicates.getImagesList(productId)
             Log.e("Offline", "activity imageList :" +imageList.size)
-            imageList.forEach {  pairList.add(Triple(true,productId,it))}
+//            imageList.forEach {  pairList.add(Triple(true,productId,it))}
+            if(imageList.size>0){
+                mViewModel.listener=this
+                mBinding?.pbLoader?.visibility=View.VISIBLE
+                var imgList=ArrayList<String>()
+                imageList?.forEach { if(!it.contains("cache/BrowsedImages/"))imgList.add(it) }
+                mViewModel.downLoadArtisanImages(productId,imgList)
+            }
             et_prod_name.setText(productEntry?.productTag?:"", TextView.BufferType.EDITABLE)
             et_prod_code.setText(productEntry?.productCode?:"", TextView.BufferType.EDITABLE)
             sp_prod_category.setSelection(arrProdCategoryStr.indexOf(productEntry?.productCategoryDesc?:""))
@@ -370,21 +389,23 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                 if(it.productDesc.equals(productEntry?.productCategoryDesc)){
                     arrProdTypeStr.clear()
                     arrProdTypeStr.add("Select product type")
-                    it.productTypes.forEach { arrProdTypeStr.add(it.productDesc) }
+                    it.productTypes?.forEach { arrProdTypeStr.add(it.productDesc) }
                 }
             }
-            Log.e("Offline", "activity arrProdTypeStr :" + arrProdTypeStr.size)
-            Log.e("Offline", "activity productTypeDesc :" +productEntry?.productTypeDesc)
+            prodTypeId=productEntry?.productTypeId
+            Log.e("Offline", "activity arrProdTypeStr :" +arrProdTypeStr?.size)
+            Log.e("Offline", "activity productTypeDesc :" +productEntry?.productTypeDesc?:"")
             Log.e("Offline", "activity idex :" +arrProdTypeStr.indexOf(productEntry?.productTypeDesc?:""))
 //            val spProdTypeAdapter = ArrayAdapter<String>( applicationContext,  android.R.layout.simple_spinner_item,  arrProdTypeStr)
 //            spProdTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 //            sp_prod_type.setAdapter(spProdTypeAdapter)
             sp_prod_type.setSelection(arrProdTypeStr.indexOf(productEntry?.productTypeDesc?:""))
 
-            for (category in arrProductCategory!!) {
-                if (category.productDesc.equals(productEntry?.productCategoryDesc?:"", true)) {
-                    arrProductType = category.productTypes
-                    category.productTypes.forEach { arrProdTypeStr.add(it.productDesc) }
+//            for (category in arrProductCategory!!)
+                arrProductCategory?.forEach{
+                if (it.productDesc.equals(productEntry?.productCategoryDesc?:"", true)) {
+                    arrProductType = it.productTypes
+                    it.productTypes.forEach { arrProdTypeStr?.add(it.productDesc) }
                 }
             }
             arrProductType?.forEach {
@@ -399,9 +420,9 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
 
             weaveIdStored=WeaveTypesPredicates.getWeaveList(productId)
             Log.e("Offline", "activity weaveIdStored :" + weaveIdStored?.joinToString())
-            weaveSelctionList.forEach {
+            weaveSelctionList?.forEach {
                 if(weaveIdStored!!.contains(it.third)) {
-                    val pos= weaveSelctionList.indexOf(it)
+                   val pos= weaveSelctionList.indexOf(it)
                     weaveSelctionList.set(pos, Triple(it.first,true,it.third))
                     weaveSelectionAdapter.notifyItemRangeChanged(pos, weaveSelctionList.size)
                 }
@@ -412,7 +433,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
 
             careIdsStored=ProductCaresPredicates.getProductCareList(productId)
             Log.e("Offline", "activity careIdsStored :" + careIdsStored?.joinToString())
-            careSelctionList.forEach {
+            careSelctionList?.forEach {
                 if(careIdsStored!!.contains(it.third)) {
                     val pos = careSelctionList.indexOf(it)
                     careSelctionList.set(pos, Triple(it.first, true, it.third))
@@ -436,9 +457,20 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
             et_gsm.setText(productEntry?.gsm?:"", TextView.BufferType.EDITABLE)
             et_prod_weight.setText(productEntry?.weight?:"", TextView.BufferType.EDITABLE)
             et_dscrp.setText(productEntry?.productSpecs?:"", TextView.BufferType.EDITABLE)
+
+            mUserConfig.warpYarnId=productEntry?.warpYarnId
+            mUserConfig.warpYarnCount=productEntry?.warpYarnCount
+            mUserConfig.warpDyeId=productEntry?.warpDyeId
+
+            mUserConfig.weftYarnId=productEntry?.weftYarnId
+            mUserConfig.weftYarnCount=productEntry?.weftYarnCount
+            mUserConfig.weftDyeId=productEntry?.weftDyeId
+
+            mUserConfig.extraWeftYarnId=productEntry?.extraWeftYarnId
+            mUserConfig.extraWeftYarnCount=productEntry?.extraWeftYarnCount
+            mUserConfig.extraWeftDyeId=productEntry?.extraWeftDyeId
             getYarnData()
             setStatusResource()
-            Utility.setImageResource(applicationContext, img_status_step4, R.drawable.ic_add_prod_status_filled)
         }
 
     }
@@ -461,10 +493,10 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
         if (requestCode == ConstantsDirectory.PICK_IMAGE && resultCode == AppCompatActivity.RESULT_OK && null != data)
             when (requestCode) {
                 ConstantsDirectory.PICK_IMAGE -> {
-                    val uri = data.data
+                    val uri = data?.data
                     if (uri != null) {
 
-                        var absolutePath = Utility.getRealPathFromFileURI(applicationContext, uri)
+                        var absolutePath = Utility.getRealPathFromFileURI(applicationContext, uri!!)
                         pairList.add(Triple(false,0,absolutePath))
                         prodImgListAdapter.notifyDataSetChanged()
                         setStatusResource()
@@ -487,28 +519,6 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
         this.careSelctionList = pairList
         setStatusResource()
     }
-
-//    override fun sendYarnData(position: Int, yarnType: Long, yarnCount: String, dye: Long) {
-//        Log.e("Viewpager","{$position} position/yarnType :" + yarnType + " :yarnCount :" + yarnCount + " : dye :" + dye)
-//        when (position) {
-//            0 -> {
-//                warpYarnId = yarnType
-//                warpYarnCount = yarnCount
-//                warpDyeId = dye
-//            }
-//            1 -> {
-//                weftYarnId = yarnType
-//                weftYarnCount = yarnCount
-//                weftDyeId = dye
-//            }
-//            2 -> {
-//                extraWeftYarnId = yarnType
-//                extraWeftYarnCount = yarnCount
-//                extraWeftDyeId = dye
-//            }
-//        }
-//        setStatusResource()
-//    }
 
     override fun onClick(p0: View?) {
         val slideDown = AnimationUtils.loadAnimation(applicationContext, R.anim.slide_down)
@@ -618,10 +628,10 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
 
     fun showDeleteDialog(productId: Long) {
         var dialog = Dialog(this)
-        dialog.setContentView(R.layout.dialog_removefrom_wishlist)
-        dialog.show()
-        val tvCancel = dialog.findViewById(R.id.txt_cancel) as TextView
-        val tvDelete = dialog.findViewById(R.id.txt_back) as TextView
+        dialog?.setContentView(R.layout.dialog_removefrom_wishlist)
+        dialog?.show()
+        val tvCancel = dialog?.findViewById(R.id.txt_cancel) as TextView
+        val tvDelete = dialog?.findViewById(R.id.txt_back) as TextView
         tvCancel.setOnClickListener {
             dialog.cancel()
         }
@@ -629,7 +639,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
             ProductPredicates.updateProductForDeletion(productId)
             if (Utility.checkIfInternetConnected(applicationContext)) {
                 val coordinator = SyncCoordinator(applicationContext)
-                coordinator.performLocallyAvailableActions()
+                coordinator?.performLocallyAvailableActions()
             }
             dialog.cancel()
             finish()
@@ -638,10 +648,10 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
 
     fun showCancelDialog() {
         var dialog = Dialog(this)
-        dialog.setContentView(R.layout.dialog_addprod_back)
-        dialog.show()
-        val tvCancel = dialog.findViewById(R.id.txt_cancel) as TextView
-        val tvBack = dialog.findViewById(R.id.txt_back) as TextView
+        dialog?.setContentView(R.layout.dialog_addprod_back)
+        dialog?.show()
+        val tvCancel = dialog?.findViewById(R.id.txt_cancel) as TextView
+        val tvBack = dialog?.findViewById(R.id.txt_back) as TextView
         tvCancel.setOnClickListener {
             dialog.cancel()
         }
@@ -651,10 +661,10 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
     }
 
     fun setVisiblitiesAndTextsOnType(type: String, arrRelatedProdType: List<ProductType>?) {
-        arrProdLengthStr.clear()
-        arrProdWidthStr.clear()
-        arrSubProdLengthStr.clear()
-        arrSubProdWidthStr.clear()
+        arrProdLengthStr?.clear()
+        arrProdWidthStr?.clear()
+        arrSubProdLengthStr?.clear()
+        arrSubProdWidthStr?.clear()
         txt_prod_type.text = type
         Log.e("SetData", "type :" + type)
         for (t in arrProductType!!) {
@@ -663,8 +673,8 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                 Log.e("SetData", "type :" + t.productDesc)
                 Log.e("SetData", "productLengths :" + t.productLengths.size)
                 Log.e("SetData", "productWidths :" + t.productWidths.size)
-                t.productLengths.forEach { arrProdLengthStr.add(it.length) }
-                t.productWidths.forEach { arrProdWidthStr.add(it.width) }
+                t.productLengths.forEach { arrProdLengthStr?.add(it.length) }
+                t.productWidths.forEach { arrProdWidthStr?.add(it.width) }
             }
         }
 
@@ -677,7 +687,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
             et_prod_width.visibility = View.GONE
             val spwidthAdapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrProdWidthStr)
             spwidthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            sp_prod_width.adapter = spwidthAdapter
+            sp_prod_width.setAdapter(spwidthAdapter)
             if(productId>0)sp_prod_width.setSelection(arrProdWidthStr.indexOf(productEntry?.productWidth?:""))
         }
         if (arrProdLengthStr.size <= 0) {
@@ -689,7 +699,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
             et_prod_length.visibility = View.GONE
             val spLenghtAdapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrProdLengthStr)
             spLenghtAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            sp_prod_length.adapter = spLenghtAdapter
+            sp_prod_length.setAdapter(spLenghtAdapter)
             if(productId>0)sp_prod_length.setSelection(arrProdLengthStr.indexOf(productEntry?.productLength?:""))
         }
 
@@ -704,7 +714,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
         }
 
         if(arrRelatedProdType!=null) {
-            if (arrRelatedProdType.size > 0) {
+            if (arrRelatedProdType!!.size > 0) {
                 //todo inflater to be called post API itegratipn
                 txt_related_prod_type.visibility = View.VISIBLE
                 ll_sub_prod.visibility = View.VISIBLE
@@ -713,12 +723,12 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                 arrRelatedProdType.get(0).productLengths.forEach { arrSubProdLengthStr.add(it.length) }
                 val splengthAdapter = ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, arrSubProdLengthStr)
                 splengthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                sp_sub_prod_length.adapter = splengthAdapter
+                sp_sub_prod_length.setAdapter(splengthAdapter)
 
                 arrRelatedProdType.get(0).productWidths.forEach { arrSubProdWidthStr.add(it.width) }
                 val spwidthAdapter =ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, arrSubProdWidthStr)
                 spwidthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                sp_sub_prod_width.adapter = spwidthAdapter
+                sp_sub_prod_width.setAdapter(spwidthAdapter)
                 if(productId>0){
                     sp_sub_prod_length.setSelection(arrSubProdLengthStr.indexOf(relatedProdStored?.productLength))
                     sp_sub_prod_width.setSelection(arrSubProdWidthStr.indexOf(relatedProdStored?.productWidth))
@@ -762,8 +772,8 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
             getYarnData()
             weaveIdList.clear()
             careIdList.clear()
-            weaveSelctionList.forEach { if (it.second) weaveIdList.add(it.third) }
-            careSelctionList.forEach { if (it.second) careIdList.add(it.third) }
+            weaveSelctionList.forEach { if (it.second) weaveIdList?.add(it.third) }
+            careSelctionList.forEach { if (it.second) careIdList?.add(it.third) }
             var width =
                 if (arrProdWidthStr.size <= 0) et_prod_width.text.toString() else sp_prod_width?.selectedItem.toString()
             var length =
@@ -788,7 +798,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
 
             Log.e(
                 "saveUploadProduct",
-                "relatedProduct :${sp_prod_category.selectedItem} "
+                "relatedProduct :${sp_prod_category.selectedItem.toString()} "
             )
 
             if (pairList.isEmpty()) Utility.displayMessage(
@@ -857,10 +867,10 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
             )
             else {
                 var dialog = Dialog(this)
-                dialog.setContentView(R.layout.dialog_save_upload)
-                dialog.show()
-                val tvCancel = dialog.findViewById(R.id.cancel) as TextView
-                val tvSave = dialog.findViewById(R.id.save) as TextView
+                dialog?.setContentView(R.layout.dialog_save_upload)
+                dialog?.show()
+                val tvCancel = dialog?.findViewById(R.id.cancel) as TextView
+                val tvSave = dialog?.findViewById(R.id.save) as TextView
                 tvCancel.setOnClickListener {
                     dialog.cancel()
                 }
@@ -930,7 +940,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                     )
                     if (Utility.checkIfInternetConnected(applicationContext)) {
                         val coordinator = SyncCoordinator(applicationContext)
-                        coordinator.performLocallyAvailableActions()
+                        coordinator?.performLocallyAvailableActions()
                     }
 
                     finish()
@@ -985,7 +995,7 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                     )
                     if (Utility.checkIfInternetConnected(applicationContext)) {
                         val coordinator = SyncCoordinator(applicationContext)
-                        coordinator.performLocallyAvailableActions()
+                        coordinator?.performLocallyAvailableActions()
                     }
 
                     finish()
@@ -1014,9 +1024,9 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
     fun setStatusResource() {
         getYarnData()
         weaveIdList.clear()
-        weaveSelctionList.forEach { if (it.second) weaveIdList.add(it.third) }
+        weaveSelctionList.forEach { if (it.second) weaveIdList?.add(it.third) }
         careIdList.clear()
-        careSelctionList.forEach { if (it.second) careIdList.add(it.third) }
+        careSelctionList.forEach { if (it.second) careIdList?.add(it.third) }
         var width=if(arrProdWidthStr.size<=0)et_prod_width.text.toString() else sp_prod_width?.selectedItem.toString()
         var length=if(arrProdLengthStr.size<=0)et_prod_length.text.toString() else sp_prod_length?.selectedItem.toString()
 
@@ -1079,6 +1089,39 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
     override fun onDestroy() {
         super.onDestroy()
         Utility.resetYarnData()
+    }
+
+    override fun onSuccess(imageList: ArrayList<String>) {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                pbLoader.visibility=View.GONE
+                pairList.clear()
+                Log.e("DownLoadProdImages", "5555555 : " + imageList.joinToString())
+                imageList.forEach {
+
+                    val myDir = File(this.cacheDir, "/"+ Utility.BROWSING_IMGS+"/$it")
+                    Log.e("DownLoadProdImages", "66666 : ${myDir.absolutePath}")
+                    pairList.add(Triple(false, 0, myDir.absolutePath))
+                }
+                setStatusResource()
+                prodImgListAdapter.notifyDataSetChanged()
+            }
+            )
+        } catch (e: Exception) {
+            Log.e("ArtisanProduct", "Exception onSuccess " + e.message)
+        }
+    }
+
+    override fun onFailure() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                pbLoader?.visibility=View.GONE
+                Utility.displayMessage("Unable to download product images",this)
+            }
+            )
+        } catch (e: Exception) {
+            Log.e("ArtisanProduct", "Exception onSuccess " + e.message)
+        }
     }
 }
 

@@ -1,5 +1,6 @@
 package com.adrosonic.craftexchange.ui.modules.buyer.search
 
+import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
@@ -17,15 +18,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.FragmentBuyerSearchResultBinding
+import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.generateEnquiry.GenerateEnquiryResponse
 import com.adrosonic.craftexchange.repository.data.response.search.SearchProductData
 import com.adrosonic.craftexchange.repository.data.response.search.SearchProductResponse
 import com.adrosonic.craftexchange.ui.modules.artisan.search.adapter.ArtisanSearchAdapter
+import com.adrosonic.craftexchange.ui.modules.buyer.ownDesign.OwnProductAdapter
 import com.adrosonic.craftexchange.ui.modules.buyer.search.adapter.BuyerSearchAdapter
 import com.adrosonic.craftexchange.ui.modules.buyer.wishList.WishlistAdapter
 import com.adrosonic.craftexchange.ui.modules.search.FilterCollectionAdapter
 import com.adrosonic.craftexchange.utils.Utility
+import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
 import com.adrosonic.craftexchange.viewModels.SearchViewModel
 import com.wajahatkarim3.easyvalidation.core.collection_ktx.startWithNonNumberList
+import kotlinx.android.synthetic.main.dialog_gen_enquiry_update_or_new.*
 
 
 private const val ARG_PARAM1 = "param1"
@@ -35,6 +40,8 @@ private const val ARG_PARAM2 = "param2"
 
 class BuyerSearchResultFragment : Fragment(),
     SearchViewModel.FetchBuyerSearchProducts,
+    EnquiryViewModel.GenerateEnquiryInterface,
+    BuyerSearchAdapter.EnquiryGeneratedListener,
     FilterCollectionAdapter.FilterSelectionListener {
 
     private var param1: String? = null
@@ -44,8 +51,11 @@ class BuyerSearchResultFragment : Fragment(),
     private var mBinding: FragmentBuyerSearchResultBinding?= null
 
     private lateinit var filterAdapter : FilterCollectionAdapter
+    private lateinit var mAdapter: BuyerSearchAdapter
+
     val mViewModel: SearchViewModel by viewModels()
-    var mAdapter : BuyerSearchAdapter?= null
+    val mEnqVM : EnquiryViewModel by viewModels()
+
 
     var filterList = ArrayList<Pair<String,Long>>()
     var filterSelected : Pair<String,Long> ?= null
@@ -56,6 +66,9 @@ class BuyerSearchResultFragment : Fragment(),
 
     var searchFilterList = arrayListOf<SearchProductData>()
     var searchProdList = arrayListOf<SearchProductData>()
+
+    var dialog : Dialog?= null
+    var productID : Long ?= 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,6 +87,7 @@ class BuyerSearchResultFragment : Fragment(),
         searchFilter = param1
         searchFilterId = param2
         mBinding?.searchBuyerSwipe?.isEnabled = false   // disable swipe to refresh action
+        dialog = Utility?.enquiryGenProgressDialog(requireContext())
 
         filterList.clear()
         filterList.add(Pair(requireActivity().getString(R.string.show_both),1))
@@ -86,7 +100,18 @@ class BuyerSearchResultFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setFilterRecycler(filterList)
+
+        mAdapter = BuyerSearchAdapter(requireContext(),searchProdList)
+        mBinding?.buyerSearchList?.adapter = mAdapter
+        mBinding?.buyerSearchList?.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+
         filterAdapter.fListener = this
+        mAdapter?.enqListener = this
+
+        mEnqVM.listener = this
+        mAdapter?.enqListener = this
+
         mViewModel?.buySearchListener = this
         if(Utility?.checkIfInternetConnected(requireContext())){
             searchFilterId?.let { searchFilter?.let { it1 -> pageNo?.let { it2 ->
@@ -98,9 +123,6 @@ class BuyerSearchResultFragment : Fragment(),
         }
 
 
-        mAdapter = BuyerSearchAdapter(requireContext(),searchProdList)
-        mBinding?.buyerSearchList?.adapter = mAdapter
-        mBinding?.buyerSearchList?.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
 
         var search = activity?.findViewById<SearchView>(R.id.search_artisan)
@@ -286,4 +308,64 @@ class BuyerSearchResultFragment : Fragment(),
             Log.e("BuyerSearchList", "Exception onFAilure " + e.message)
         }
     }
+
+    override fun onSuccessEnquiryGeneration(enquiry: GenerateEnquiryResponse) {
+        try {
+            Handler(Looper.getMainLooper()).post {
+                Utility.enquiryGenSuccessDialog(requireContext(), enquiry.data.enquiry.code.toString())
+                Log.e("EnquiryGeneration", "Onsucces")
+                dialog?.cancel()
+            }
+        } catch (e: Exception) {
+            Log.e("EnquiryGeneration", "Exception onSuccess " + e.message)
+            dialog?.cancel()
+        }
+    }
+
+    override fun onExistingEnquiryGeneration(productName: String, id: String) {
+        try {
+
+            Handler(Looper.getMainLooper()).post {
+                dialog?.cancel()
+                var exDialog = Utility.enquiryGenExistingDialog(requireContext(),id,productName)
+                Handler().postDelayed({ exDialog.show() }, 500)
+
+                exDialog.btn_generate_new_enquiry?.setOnClickListener {
+                    exDialog.cancel()
+//                    Handler().postDelayed({ dialog?.show() }, 500)
+
+                    productID?.let { it1 -> mEnqVM.generateEnquiry(it1,true,"Android") }
+                }
+                Log.e("ExistingEnqGeneration", "Onsuccess")
+            }
+        } catch (e: Exception) {
+            dialog?.cancel()
+            Log.e("ExistingEnqGeneration", "Exception onSuccess " + e.message)
+        }
+    }
+
+    override fun onFailedEnquiryGeneration() {
+        try {
+            Handler(Looper.getMainLooper()).post {
+                Log.e("EnquiryGeneration", "onFailure")
+                Utility.displayMessage("Enquiry Generation Failed",requireContext())
+                dialog?.cancel()
+            }
+        } catch (e: Exception) {
+            Log.e("EnquiryGeneration", "Exception onFailure " + e.message)
+            dialog?.cancel()
+        }
+    }
+
+    override fun onEnquiryGenClick(productId: Long, isCustom: Boolean) {
+        mEnqVM.ifEnquiryExists(productId,isCustom)
+        if (!Utility.checkIfInternetConnected(requireContext())) {
+            Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
+        } else {
+            mEnqVM.ifEnquiryExists(productId,true)
+            productID = productId
+            dialog?.show()
+        }
+    }
+
 }

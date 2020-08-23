@@ -47,8 +47,8 @@ class BuyerSearchAdapter(private val mContext : Context,
         fun onEnquiryGenClick(productId: Long,isCustom : Boolean)
     }
 
-    var listener: WishlistAdapter.WishListUpdatedListener? = null
-    var enqListener: WishlistAdapter.EnquiryGeneratedListener?=null
+    var wishlistener: WishListUpdatedListener? = null
+    var enqListener: EnquiryGeneratedListener?=null
     private var wishlistItems=productList
 
     fun updateWishlist(newFolders: ArrayList<SearchProductData>?){
@@ -63,7 +63,7 @@ class BuyerSearchAdapter(private val mContext : Context,
         var productAvailableText: TextView = view.findViewById(R.id.product_available_text)
         var productDescription: TextView = view.findViewById(R.id.product_description)
         var btnViewMore: Button = view.findViewById(R.id.btn_search_view_more)
-        var btnGenerateEnquiry: Button = view.findViewById(R.id.btn_generate_enquiry)
+        var btnGenerateEnquiry: Button = view.findViewById(R.id.btn_search_generate_enquiry)
         var collectionLogo : ImageView = view.findViewById(R.id.design_logo)
     }
 
@@ -114,8 +114,10 @@ class BuyerSearchAdapter(private val mContext : Context,
         }
 
         var image = product?.images
-        var url = Utility.getProductsImagesUrl(product?.id,image)
-        mContext.let { ImageSetter.setImage(it,url,holder.productImage) }
+        val imgArrSplit = image?.split((",").toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()
+        var first_image = imgArrSplit?.get(0)
+        var url = Utility.getProductsImagesUrl(product?.id, first_image)
+        mContext.let { ImageSetter.setImage(it,url,holder?.productImage) }
 
         holder?.wishlistButton?.setOnLikeListener(object: OnLikeListener {
             override fun liked(likeButton: LikeButton) {
@@ -188,6 +190,5 @@ class BuyerSearchAdapter(private val mContext : Context,
     fun generateEnquiry(productId : Long, isCustom : Boolean){
         enqListener?.onEnquiryGenClick(productId,isCustom)
     }
-
 
 }

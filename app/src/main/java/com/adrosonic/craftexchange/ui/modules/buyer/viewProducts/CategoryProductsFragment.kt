@@ -1,6 +1,8 @@
 package com.adrosonic.craftexchange.ui.modules.buyer.viewProducts
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -8,16 +10,26 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
+import com.adrosonic.craftexchange.database.entities.realmEntities.CategoryProducts
+import com.adrosonic.craftexchange.database.entities.realmEntities.ClusterList
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.databinding.FragmentCategoryProductsBinding
+import com.adrosonic.craftexchange.databinding.FragmentRegionProductsBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.AllProductsResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.Product
 import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.adapter.CategoryAdapter
+import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.adapter.RegionAdapter
 import com.adrosonic.craftexchange.utils.Utility
+import com.adrosonic.craftexchange.viewModels.CategoryViewModel
+import com.adrosonic.craftexchange.viewModels.ClusterViewModel
+import io.realm.RealmResults
 import retrofit2.Call
 import retrofit2.Response
 import javax.security.auth.callback.Callback
@@ -26,14 +38,16 @@ import javax.security.auth.callback.Callback
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class CategoryProductsFragment : Fragment() {
+class CategoryProductsFragment : Fragment(),
+    CategoryViewModel.CategoryListInterface {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
     private var mBinding: FragmentCategoryProductsBinding ?= null
-    private var mProduct = mutableListOf<Product>()
     private var categoryAdapter: CategoryAdapter?= null
+    private var mCategoryList : RealmResults<CategoryProducts>?= null
+    val mViewModel: CategoryViewModel by viewModels()
 
 
     override fun onCreateView(
@@ -42,72 +56,83 @@ class CategoryProductsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_category_products, container, false)
-       refreshProductCategory()
-        initializeView()
-//        mProduct.add(Product(1,"Saree",emptyList()))
-//        mProduct.add(Product(2,"Fabrics",emptyList()))
-//        mProduct.add(Product(3,"HA",emptyList()))
-//        mProduct.add(Product(4,"Stole",emptyList()))
-//        mProduct.add(Product(5,"Dupatta",emptyList()))
-//        mProduct.add(Product(6,"FA",emptyList()))
-
-        categoryAdapter = CategoryAdapter(requireContext(), mProduct)
         return mBinding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupRecyclerView()
+        mViewModel.catListener = this
+
+        setRecyclerList()
+
+        mBinding?.swipeCategory?.isEnabled = false
+
+        if (!Utility.checkIfInternetConnected(requireContext())) {
+            Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
+        } else {
+            mViewModel.getAllCategories()
+        }
+
+        mViewModel.getCategoryListMutableData()
+            .observe(viewLifecycleOwner, Observer<RealmResults<CategoryProducts>>{
+                mCategoryList = it
+                categoryAdapter?.updateCategoryList(mCategoryList)
+            })
+
+        mBinding?.swipeCategory?.isRefreshing = true
+//        mBinding?.swipeCategory?.setOnRefreshListener {
+//            if (!Utility.checkIfInternetConnected(requireContext())) {
+//                mBinding?.swipeCategory?.isRefreshing = false
+//                Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
+//            } else {
+//                mViewModel.getAllCategories()
+//            }
+//        }
+
     }
 
-    private fun setupRecyclerView(){
-
-        categoryAdapter?.setProducts(mProduct)
-        mBinding?.catProdRecyclerList?.adapter = categoryAdapter
+    private fun setRecyclerList(){
         mBinding?.catProdRecyclerList?.layoutManager = GridLayoutManager(requireContext(),2,RecyclerView.VERTICAL,false)
-        categoryAdapter?.notifyDataSetChanged()
+        categoryAdapter = CategoryAdapter(requireContext(),
+            mViewModel.getCategoryListMutableData().value
+        )
+        mBinding?.catProdRecyclerList?.adapter = categoryAdapter
     }
-
-    private fun refreshProductCategory(){
-        if(Utility.checkIfInternetConnected(requireContext())) {
-            CraftExchangeRepository
-                .getProductService()
-                .getAllProducts().enqueue(object : Callback, retrofit2.Callback<AllProductsResponse> {
-                    override fun onFailure(call: Call<AllProductsResponse>, t: Throwable) {
-                        t.printStackTrace()
-                    }
-                    override fun onResponse(
-                        call: Call<AllProductsResponse>, response: Response<AllProductsResponse>) {
-                        if (response.body()?.valid == true) {
-                            ProductPredicates.insertAllCategoryProducts(response.body())
-                        } else {
-                            Toast.makeText(activity, "${response.body()?.errorMessage}", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                })
-        }
-
-    }
-
-    private fun initializeView(){
-        var prodList = ProductPredicates.getAllCategoryProducts()
-        mProduct.clear()
-        if (prodList != null) {
-            for (prodsize in prodList){
-                Log.i("Stat","$prodsize")
-                var id = prodsize?.productCategoryid
-                var productType = prodsize?.product
-                var product = Product(id!!, productType!!, "", emptyList())
-                mProduct.add(product)
-            }
-        }
-    }
-
 
     companion object {
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance() = CategoryProductsFragment()
         const val TAG = "CategoryProducts"
+    }
+
+    override fun onFailure() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("categoryList", "OnFailure")
+                mBinding?.swipeCategory?.isRefreshing = false
+                mViewModel.getCategoryListMutableData()
+                Utility.displayMessage(
+                    "Error while fetching list",
+                    requireContext()
+                )
+            }
+            )
+        } catch (e: Exception) {
+            Log.e("categoryList", "Exception onFailure " + e.message)
+        }
+    }
+
+    override fun onSuccess() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("categoryList", "OnFailure")
+                mBinding?.swipeCategory?.isRefreshing = false
+                mViewModel.getCategoryListMutableData()
+            }
+            )
+        } catch (e: Exception) {
+            Log.e("categoryList", "Exception onFailure " + e.message)
+        }
     }
 }

@@ -58,7 +58,7 @@ class OwnProductListFragment : Fragment(),
         mViewModel.listener = this
         mEnqVM.listener = this
 
-        dialog = Utility.enquiryGenProgressDialog(requireContext())
+        dialog = Utility?.enquiryGenProgressDialog(requireContext())
 
 
         if (!Utility.checkIfInternetConnected(requireContext())) {
@@ -127,11 +127,8 @@ class OwnProductListFragment : Fragment(),
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("Wishlist", "OnFailure")
                 swipe_refresh_layout.isRefreshing = false
-                mViewModel.getCustomDesignListMutableData()
-                Utility.displayMessage(
-                    "Error while fetching custom products. Pleas try again after some time",
-                    requireContext()
-                )
+                mViewModel?.getCustomDesignListMutableData()
+//                Utility.displayMessage("Error while fetching custom products. Pleas try again after some time", requireContext() )
                 setVisiblities()
             }
             )

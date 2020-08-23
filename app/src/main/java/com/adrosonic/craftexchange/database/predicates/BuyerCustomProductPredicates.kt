@@ -48,7 +48,7 @@ class BuyerCustomProductPredicates {
             var realm = CXRealmManager.getRealmInstance()
             var itemId = ArrayList<Long>()
             try {
-                realm.executeTransaction {
+                realm?.executeTransaction {
                     var message = when (actionsMarked) {
                         "actionDelete=1" -> {
                             realm.where(BuyerCustomProduct::class.java)
@@ -70,7 +70,7 @@ class BuyerCustomProductPredicates {
                     if (message != null) {
                         val iterator = message.iterator()
                         while (iterator.hasNext()) {
-                            itemId.add(iterator.next().id ?: 0L)
+                            itemId?.add(iterator.next().id ?: 0L)
                         }
                     }
                 }
@@ -102,15 +102,9 @@ class BuyerCustomProductPredicates {
                             dbProdObj?.productCategoryDscrp = product.productCategory.productDesc
                             dbProdObj?.productTypeId = product.productType.id
                             Log.e("ProdImage", "22222222222222222222222")
-                            dbProdObj?.warpYarnId = try{
-                                product.warpYarn.id
-                            } catch (e:Exception){0}
-                            dbProdObj?.weftYarnId = try{
-                                product.weftYarn.id
-                            } catch (e:Exception){0}
-                            dbProdObj?.extraWeftYarnId = try{
-                                product.extraWeftYarn.id
-                            } catch (e:Exception){0}
+                            dbProdObj?.warpYarnId = try{ product.warpYarn?.id} catch (e:Exception){0}
+                            dbProdObj?.weftYarnId = try{product.weftYarn?.id} catch (e:Exception){0}
+                            dbProdObj?.extraWeftYarnId = try{product.extraWeftYarn?.id} catch (e:Exception){0}
                             Log.e("ProdImage", "333333333333333333333")
                             dbProdObj?.warpYarnCount=product.warpYarnCount
                             dbProdObj?.weftYarnCount=product.weftYarnCount
@@ -129,7 +123,7 @@ class BuyerCustomProductPredicates {
                             dbProdObj?.createdOn=product.createdOn
                             dbProdObj?.modifiedOn=product.modifiedOn
                             var relatedIds=""
-                            product.relProduct.forEach {relatedIds=relatedIds+it?.productTypeID+","  }
+                            product.relProduct?.forEach {relatedIds=relatedIds+it?.productTypeID+","  }
                             dbProdObj?.relatedProductId=relatedIds
                             dbProdObj?.buyerId=product.buyerId
                             product.productImages.forEach {
@@ -141,7 +135,7 @@ class BuyerCustomProductPredicates {
                                 var weaveType=ProductWeaf(it?.id?:0,product.id,it?.weaveId?:0)
                                 arrProdWeaves.add(weaveType)
                             }
-                            realm.copyToRealmOrUpdate(dbProdObj)
+                            realm?.copyToRealmOrUpdate(dbProdObj)
                         }
                         else{
                             var primId = it.where<BuyerCustomProduct>(BuyerCustomProduct::class.java)?.max(BuyerCustomProduct.COLUMN__ID)
@@ -160,26 +154,18 @@ class BuyerCustomProductPredicates {
                             prodEntry.weftYarnCount=product.weftYarnCount
                             prodEntry.extraWeftYarnCount=product.extraWeftYarnCount
                             Log.e("ProdImage", "22222222222222222222222222")
-                            prodEntry?.warpYarnId = try{
-                                product.warpYarn.id
-                            } catch (e:Exception){0}
-                            prodEntry?.weftYarnId = try{
-                                product.weftYarn.id
-                            } catch (e:Exception){0}
-                            prodEntry?.extraWeftYarnId = try{
-                                product.extraWeftYarn.id
-                            } catch (e:Exception){0}
+                            prodEntry?.warpYarnId = try{ product.warpYarn?.id} catch (e:Exception){0}
+                            prodEntry?.weftYarnId = try{product.weftYarn?.id} catch (e:Exception){0}
+                            prodEntry?.extraWeftYarnId = try{product.extraWeftYarn?.id} catch (e:Exception){0}
                             Log.e("ProdImage", "33333333333333333333333333 "+product.warpDye.id)
-                            prodEntry.warpDyeId= try{
-                                product.warpDye.id
-                            } catch (e:Exception){0}
-                            prodEntry.weftDyeId= try{
-                                product.weftDye.id
-                            } catch (e:Exception){0}
-                            prodEntry.extraWeftDyeId= try{
-                                product.extraWeftDye.id
-                            } catch (e:Exception){0}
-                            prodEntry.dyeDsrcp=try{"${product.warpYarn.yarnDesc} X ${product.weftYarn.yarnDesc} X ${product.extraWeftYarn.yarnDesc}"}catch (e:Exception){""}
+                            prodEntry.warpDyeId= try{ product.warpDye?.id} catch (e:Exception){0}
+                            prodEntry.weftDyeId= try{ product.weftDye?.id} catch (e:Exception){0}
+                            prodEntry.extraWeftDyeId= try{ product.extraWeftDye?.id} catch (e:Exception){0}
+                            var warpdscrp=try{product.warpYarn.yarnDesc }catch(e:Exception){""}
+                            var weftdscrp=try{" X "+product.weftYarn.yarnDesc}catch(e:Exception){""}
+                            var eweftdscrp=try{" X "+product.extraWeftYarn.yarnDesc}catch(e:Exception){""}
+
+                            prodEntry.dyeDsrcp=try{warpdscrp+weftdscrp+eweftdscrp}catch (e:Exception){""}
                             prodEntry.length=product.length
                             prodEntry.width=product.width
                             prodEntry.reedCountId=product.reedCount.id
@@ -189,7 +175,7 @@ class BuyerCustomProductPredicates {
                             prodEntry.createdOn=product.createdOn
                             prodEntry.modifiedOn=product.modifiedOn
                             var relatedIds=""
-                            product.relProduct.forEach {relatedIds=relatedIds+it?.productTypeID+","  }
+                            product.relProduct?.forEach {relatedIds=relatedIds+it?.productTypeID+","  }
                             prodEntry.relatedProductId=relatedIds
                             prodEntry.buyerId=product.buyerId
                             product.productImages.forEach {
@@ -205,13 +191,13 @@ class BuyerCustomProductPredicates {
                     }
                 }
                 if(arrProdImages.size>0){
-                    arrProdImages.forEach {
+                    arrProdImages?.forEach {
                         ProductImagePredicates.deleteProdImages(it.productId)
                     }
                     ProductImagePredicates.insertBuyerCustomProdImages(arrProdImages)
                 }
                 if(arrProdWeaves.size>0){
-                    arrProdWeaves.forEach {
+                    arrProdWeaves?.forEach {
                         WeaveTypesPredicates.deleteWeaveIds(it.productId)
                     }
                     WeaveTypesPredicates.insertWeaveIds(arrProdWeaves)
@@ -287,7 +273,7 @@ class BuyerCustomProductPredicates {
             val realm = CXRealmManager.getRealmInstance()
             var wishlistedItem: RealmResults<BuyerCustomProduct>? = null
             try {
-                realm.executeTransaction {
+                realm?.executeTransaction {
                     wishlistedItem = realm.where(BuyerCustomProduct::class.java)
                         .notEqualTo(BuyerCustomProduct.COLUMN_IS_DELETED,1L)
                         .and()
@@ -315,7 +301,7 @@ class BuyerCustomProductPredicates {
             val realm = CXRealmManager.getRealmInstance()
             var wishlistedItem: RealmResults<BuyerCustomProduct>? = null
             try {
-                realm.executeTransaction {
+                realm?.executeTransaction {
                     wishlistedItem = realm.where(BuyerCustomProduct::class.java)
                         .findAll()
                 }
@@ -329,7 +315,7 @@ class BuyerCustomProductPredicates {
 
         fun deleteProductEntry(id:Long){
             val realm = CXRealmManager.getRealmInstance()
-            realm.executeTransaction {
+            realm?.executeTransaction {
                 val artisonProd = it.where(BuyerCustomProduct::class.java).equalTo(BuyerCustomProduct.COLUMN_ID, id).findAll()
                 artisonProd.deleteAllFromRealm()
             }
@@ -369,29 +355,33 @@ class BuyerCustomProductPredicates {
                     realm.copyToRealmOrUpdate(prodEntry)
                 }
                 Log.e("OwnPorduct","${product.productWeaves.size}")
-                Log.e("OwnPorduct","${imageList.joinToString()}")
-                if(relatedProdList.size>0)RelateProductPredicates.insertRelatedProduct(product.id,relatedProdList.get(0).productTypeId,relatedProdList.get(0).width,relatedProdList.get(0).length)
+                Log.e("OwnPorduct","${imageList?.joinToString()}")
+                if(relatedProdList.size>0)RelateProductPredicates.insertRelatedProduct(product?.id,relatedProdList.get(0).productTypeId,relatedProdList.get(0).width,relatedProdList.get(0).length)
                 if(imageList.size>0) {
-                    ProductImagePredicates.deleteProdImages(product.id)
-                    ProductImagePredicates.insertProductImages(product.id, imageList)
+                    ProductImagePredicates.deleteProdImages(product?.id)
+                    ProductImagePredicates.insertProductImages(product?.id, imageList)
                 }
                 if(product.productWeaves!=null){
-                    WeaveTypesPredicates.deleteWeaveIds(product.id)
+                    WeaveTypesPredicates.deleteWeaveIds(product?.id)
                     var weaveIds=ArrayList<Long>()
-                    product.productWeaves.forEach {  weaveIds.add(it.weaveId)}
-                    WeaveTypesPredicates.insertWeaveIds(product.id,weaveIds)
+                    product.productWeaves?.forEach {  weaveIds.add(it.weaveId)}
+                    WeaveTypesPredicates.insertWeaveIds(product?.id,weaveIds)
                 }
             }catch (e:Exception){
                 Log.e("OwnPorduct","${e.message}")
             }
         }
         fun updateProductEntryPostUpdate(id: Long?){
-            var realm = CXRealmManager.getRealmInstance()
-            realm.executeTransaction{
-                Log.e("Offline", "updateProductEntryPostUpdate id :" +id)
-                var product = realm.where(BuyerCustomProduct::class.java).equalTo(BuyerCustomProduct.COLUMN_ID,id).limit(1).findFirst()
-                product?.actionEdited = 0
-                realm.copyToRealmOrUpdate(product)
+            try {
+                var realm = CXRealmManager.getRealmInstance()
+                realm.executeTransaction{
+                    Log.e("Offline", "updateProductEntryPostUpdate id :" +id)
+                    var product = realm.where(BuyerCustomProduct::class.java).equalTo(BuyerCustomProduct.COLUMN_ID,id).limit(1).findFirst()
+                    product?.actionEdited = 0
+                    realm.copyToRealmOrUpdate(product)
+                }
+            } catch (e: Exception) {
+                Log.e("Exception", "updateProductEntryPostUpdate  :" +e.message)
             }
         }
     }

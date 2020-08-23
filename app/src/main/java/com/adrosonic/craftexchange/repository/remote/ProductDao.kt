@@ -10,6 +10,7 @@ import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.s
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.CatalogueProductsResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.wishList.WishListedIds
 import okhttp3.MultipartBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -75,6 +76,13 @@ interface ProductDao {
         @Query("productData") productData: String,
         @Body file: MultipartBody
     ): Call<ArtisanProductTemplateRespons>
+
+    @Headers("Accept: application/json")
+    @GET("/Product/{productId}/{imagename}")
+    fun getProductImage(
+        @Path("productId") productId: Long,
+        @Path("imagename") imagename: String
+    ):Call<ResponseBody>
 
     @Headers("Accept: application/json")
     @DELETE("/product/deleteProduct/{productId}")

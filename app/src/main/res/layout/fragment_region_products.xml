@@ -15,6 +15,11 @@
             android:background="@color/landing_toolbar_color"
             tools:context=".ui.modules.buyer.viewProducts.RegionProductsFragment">
 
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_region"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/cluster_recycler_list"
                 android:layout_width="0dp"
@@ -22,6 +27,8 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
+
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

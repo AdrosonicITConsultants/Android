@@ -61,9 +61,8 @@ class ProdImageListAdapter(
         Log.e("ProdPath", "" + item.third)
         if(item.first){
             //update
-            var url = if(isTemplate)Utility.getProductsImagesUrl(item.second,item.third) else Utility.getCustomProductImagesUrl(item.second,item.third)
-            context.let { ImageSetter.setImage(it,url,holder.thumbnail)
-            }
+            var url = if(isTemplate)Utility.getProductsImagesUrl(item.second,item.third) else Utility.getCustomProductImagesUrl(item.second,item.third)//to render into glide
+            context?.let { ImageSetter.setImage(it,url,holder.thumbnail) }
         }else  (holder.thumbnail).setImageURI(Uri.fromFile(file))
 //            ImageSetter.setImage(context, file.absolutePath, holder.thumbnail)
 

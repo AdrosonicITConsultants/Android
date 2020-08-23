@@ -15,8 +15,10 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager
 import com.adrosonic.craftexchange.R
@@ -38,10 +40,13 @@ import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.WeaveSelec
 import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.YarnViewpager
 import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.yarnFrgamnets.YarnFrgamentAdapter
 import com.adrosonic.craftexchange.utils.*
+import com.adrosonic.craftexchange.viewModels.DownLoadProdImagesViewModel
+import com.adrosonic.craftexchange.viewModels.OwnProductViewModel
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_artisan_add_product_template.*
 import kotlinx.android.synthetic.main.activity_buyer_add_own_product_design.*
 import kotlinx.android.synthetic.main.activity_buyer_add_own_product_design.yarn_pager
+import java.io.File
 
 
 fun Context.ownDesignIntent(): Intent {
@@ -52,14 +57,13 @@ fun Context.ownDesignIntent(id: Long): Intent {
     val intent = Intent(this, BuyerAddOwnProductDesignActivity::class.java)
     intent.putExtra("productId", id)
     return intent.apply { }
-//    return Intent(this, ArtisanAddProductTemplateActivity::class.java).apply {
 }
 class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
     View.OnClickListener,
-//    YarnViewpager.yarnListner,
+    DownLoadProdImagesViewModel.DownloadImagesCallback,
     ProdImageListAdapter.ProdUpdateListener,
     WeaveSelectionAdapter.selectionListener{
-
+    val mViewModel: DownLoadProdImagesViewModel by viewModels()
     private var mBinding:ActivityBuyerAddOwnProductDesignBinding? = null
     private lateinit var prodImgListAdapter: ProdImageListAdapter
     private var pairList = ArrayList<Triple<Boolean,Long, String>>()
@@ -318,7 +322,12 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
         if(productId>0){
             var imageList= ProductImagePredicates.getImagesList(productId)
             Log.e("Offline", "activity imageList :" +imageList.size)
-            imageList.forEach {  pairList.add(Triple(true,productId,it))}
+            if(imageList.size>0){
+                mViewModel.listener=this
+                mBinding?.pbLoader?.visibility=View.VISIBLE
+                mViewModel.downLoadImages(productId,imageList)
+            }
+//            imageList.forEach {  pairList.add(Triple(true,productId,it))}
 
             for (category in arrProductCategory!!) {
                 if (category.productDesc.equals(productEntry?.productCategoryDscrp?:"", true)) {
@@ -357,35 +366,24 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
 
             mBinding?.etGsm?.setText(productEntry?.gsm?:"", TextView.BufferType.EDITABLE)
             mBinding?.etDscrp?.setText(productEntry?.productSpe?:"", TextView.BufferType.EDITABLE)
+            mUserConfig.warpYarnId=productEntry?.warpYarnId
+            mUserConfig.warpYarnCount=productEntry?.warpYarnCount
+            mUserConfig.warpDyeId=productEntry?.warpDyeId
+
+            mUserConfig.weftYarnId=productEntry?.weftYarnId
+            mUserConfig.weftYarnCount=productEntry?.weftYarnCount
+            mUserConfig.weftDyeId=productEntry?.weftDyeId
+
+            mUserConfig.extraWeftYarnId=productEntry?.extraWeftYarnId
+            mUserConfig.extraWeftYarnCount=productEntry?.extraWeftYarnCount
+            mUserConfig.extraWeftDyeId=productEntry?.extraWeftDyeId
+            getYarnData()
             setStatusResource()
             Utility.setImageResource(applicationContext, mBinding?.imgStatusStep2, R.drawable.ic_add_prod_status_filled)
-            Utility.setImageResource(applicationContext, mBinding?.imgStatusStep4, R.drawable.ic_add_prod_status_filled)
+//            Utility.setImageResource(applicationContext, mBinding?.imgStatusStep4, R.drawable.ic_add_prod_status_filled)
         }
 
     }
-
-//    override fun sendYarnData(position: Int, yarnType: Long, yarnCount: String, dye: Long) {
-//        Log.e("Viewpager","{$yarnPosition} position/yarnType :"+yarnType+" :yarnCount :"+yarnCount+" : dye :"+dye)
-//        when(yarnPosition){
-//            0->{
-//                warpYarnId=yarnType
-//                warpYarnCount=yarnCount
-//                warpDyeId=dye
-//            }
-//            1->{
-//                weftYarnId=yarnType
-//                weftYarnCount=yarnCount
-//                weftDyeId=dye
-//            }
-//            2->{
-//                extraWeftYarnId=yarnType
-//                extraWeftYarnCount=yarnCount
-//                extraWeftDyeId=dye
-//            }
-//        }
-////        setDotsColor(position)
-//        setStatusResource()
-//    }
 
     override fun onUpdate(pairList: ArrayList<Triple<Boolean,Long, String>>, deletedIds: ArrayList<Pair<Long,String>>) {
         this.pairList = pairList
@@ -652,12 +650,12 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
             else if(mBinding?.spProdCategory?.selectedItemPosition==0) Utility.displayMessage("Please select product category at step 2",applicationContext)
             else if(mBinding?.spProdType?.selectedItemPosition==0) Utility.displayMessage("Please select product type at step 2",applicationContext)
             else if(weaveIdList.isEmpty()) Utility.displayMessage("Please select weave type at step 3",applicationContext)
-            else if(warpDyeId<=0) Utility.displayMessage("Please select warp dye Id at step 4",applicationContext)
-            else if(warpYarnCount.isBlank()) Utility.displayMessage("Please select warp yarn count at step 4",applicationContext)
-            else if(warpYarnId<=0) Utility.displayMessage("Please select warp yarn Id at step 4",applicationContext)
-            else if(weftDyeId<=0) Utility.displayMessage("Please select weft dye Id at step 4",applicationContext)
-            else if(weftYarnCount.isBlank()) Utility.displayMessage("Please select weft yarn count at step 4",applicationContext)
-            else if(weftYarnId<=0) Utility.displayMessage("Please select weft yarn Id at step 4",applicationContext)
+            else if(warpDyeId<=0) Utility.displayMessage("Please select warp details at step 4",applicationContext)
+            else if(warpYarnCount.isBlank()) Utility.displayMessage("Please select warp details at step 4",applicationContext)
+            else if(warpYarnId<=0) Utility.displayMessage("Please select warp details at step 4",applicationContext)
+            else if(weftDyeId<=0) Utility.displayMessage("Please select weft details at step 4",applicationContext)
+            else if(weftYarnCount.isBlank()) Utility.displayMessage("Please select weft details at step 4",applicationContext)
+            else if(weftYarnId<=0) Utility.displayMessage("Please select weft details at step 4",applicationContext)
             else if(mBinding?.spReedCount?.selectedItemPosition==0) Utility.displayMessage("Please select reed count at setp 5",applicationContext)
             else if(width.isBlank()) Utility.displayMessage("Please enter width at step 6",applicationContext)
             else if(length.isBlank()) Utility.displayMessage("Please enter length at step 6",applicationContext)
@@ -841,5 +839,24 @@ class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
     override fun onDestroy() {
         super.onDestroy()
         Utility.resetYarnData()
+    }
+
+    override fun onSuccess(imageList:ArrayList<String>) {
+        mBinding?.pbLoader?.visibility=View.GONE
+        pairList.clear()
+        Log.e("DownLoadProdImages", "5555555 : " + imageList.joinToString())
+        imageList.forEach {
+
+            val myDir = File(this.cacheDir, "/"+ Utility.BROWSING_IMGS+"/$it")
+            Log.e("DownLoadProdImages", "66666 : ${myDir.absolutePath}")
+            pairList.add(Triple(false, 0, myDir.absolutePath))
+        }
+        setStatusResource()
+        prodImgListAdapter.notifyDataSetChanged()
+    }
+
+    override fun onFailure() {
+      mBinding?.pbLoader?.visibility=View.GONE
+      Utility.displayMessage("Unable to download product images",this)
     }
 }
