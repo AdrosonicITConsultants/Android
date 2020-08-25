@@ -66,7 +66,6 @@ SearchViewModel.FetchArtisanSuggestions{
                 if(newText.length >= 3) {
                     mViewModel.getArtisanSearchSuggestions(newText)
                     mBinding?.suggetionBg?.visibility = View.VISIBLE
-
                 }else{
                     sugList.clear()
                     adapter?.notifyDataSetChanged()

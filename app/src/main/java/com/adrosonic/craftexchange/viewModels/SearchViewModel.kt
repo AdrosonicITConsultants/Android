@@ -7,8 +7,10 @@ import androidx.lifecycle.MutableLiveData
 import com.adrosonic.craftexchange.database.entities.realmEntities.ArtisanProducts
 import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCatalogue
 import com.adrosonic.craftexchange.database.predicates.SearchPredicates
+import com.adrosonic.craftexchange.database.predicates.WishlistPredicates
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.request.search.SearchProduct
+import com.adrosonic.craftexchange.repository.data.response.buyer.wishList.WishListedIds
 import com.adrosonic.craftexchange.repository.data.response.search.SearchProductResponse
 import com.adrosonic.craftexchange.repository.data.response.search.SuggestionResponse
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
@@ -35,10 +37,16 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         fun onFailureSearch()
     }
 
+    interface FetchBuyerWishlistedProducts{
+        fun onWSuccess()
+        fun onWFailure()
+    }
+
     var artSugListener: FetchArtisanSuggestions? = null
     var buySugListener: FetchBuyerSuggestions? = null
 
     var buySearchListener : FetchBuyerSearchProducts ? = null
+    var wishListener : FetchBuyerWishlistedProducts ?= null
 
     val searchBProducts : MutableLiveData<RealmResults<ProductCatalogue>> by lazy { MutableLiveData<RealmResults<ProductCatalogue>>() }
     val searchAProducts : MutableLiveData<RealmResults<ArtisanProducts>> by lazy { MutableLiveData<RealmResults<ArtisanProducts>>() }
@@ -133,6 +141,37 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                         buySearchListener?.onFailureSearch()
                     }
                 }
+            })
+    }
+
+    fun getwishlisteProductIds(){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getWishlistService()
+            .getWishlistedProductIds(token)
+            .enqueue(object: Callback, retrofit2.Callback<WishListedIds> {
+                override fun onFailure(call: Call<WishListedIds>, t: Throwable) {
+                    t.printStackTrace()
+                    Log.e("LandingViewModel","wishlist onFailure: "+t.message)
+                }
+                override fun onResponse(
+                    call: Call<WishListedIds>,
+                    response: retrofit2.Response<WishListedIds>) {
+
+                    if(response.body()?.valid == true){
+                        val response=response.body()?.data
+                        Log.e("LandingViewModel","wishlist :"+response?.joinToString())
+
+                        WishlistPredicates.addToWishlist(response)
+                        wishListener?.onWSuccess()
+
+                    }else{
+                        wishListener?.onWFailure()
+                        Log.e("LandingViewModel","wishlist onFailure: "+response.body()?.errorCode)
+
+                    }
+                }
+
             })
     }
 }

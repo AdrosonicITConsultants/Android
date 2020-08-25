@@ -259,14 +259,13 @@ class Utility {
                 dialog.cancel()
             }
             dialog.setCanceledOnTouchOutside(false)
-            dialog.show()
+
             return dialog
         }
 
         fun enquiryGenExistingDialog(context : Context,enquiryId: String, productName : String) : Dialog {
             var dialog = Dialog(context)
             dialog.setContentView(com.adrosonic.craftexchange.R.layout.dialog_gen_enquiry_update_or_new)
-            dialog.show()
 
             var id = SpannableString(enquiryId)
             id.setSpan(ForegroundColorSpan(Color.BLACK), 0, id.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -278,10 +277,9 @@ class Utility {
                 dialog.cancel()
             }
             dialog.existing_btn_view_enquiry?.setOnClickListener {
-                //TODO : View Enquiry details in enquiry landing page
                 dialog.cancel()
-
             }
+
             dialog.setCanceledOnTouchOutside(false)
 
 

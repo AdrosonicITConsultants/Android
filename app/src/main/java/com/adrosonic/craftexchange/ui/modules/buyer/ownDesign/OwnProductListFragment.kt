@@ -42,8 +42,12 @@ class OwnProductListFragment : Fragment(),
     var coordinator: SyncCoordinator? = null
 
     var dialog : Dialog ?= null
-    var mUser : UserConfig?= null
+    var exDialog : Dialog ?= null
+    var sucDialog : Dialog ?= null
+
     var productID : Long ?= 0L
+    var enqID : String?=""
+    var prodName : String?=""
 
 
     override fun onCreateView(
@@ -193,55 +197,54 @@ class OwnProductListFragment : Fragment(),
     override fun onSuccessEnquiryGeneration(enquiry: GenerateEnquiryResponse) {
         try {
             Handler(Looper.getMainLooper()).post {
-                Utility.enquiryGenSuccessDialog(requireContext(), enquiry.data.enquiry.code.toString())
                 Log.e("EnquiryGeneration", "Onsucces")
-                dialog?.cancel()
+                dialog?.dismiss()
+                enqID = enquiry?.data?.enquiry?.code.toString()
+                sucDialog = Utility.enquiryGenSuccessDialog(requireActivity(),enqID.toString())
+                Handler().postDelayed({ sucDialog?.show() }, 500)
             }
         } catch (e: Exception) {
             Log.e("EnquiryGeneration", "Exception onSuccess " + e.message)
-            dialog?.cancel()
         }
     }
 
     override fun onExistingEnquiryGeneration(productName: String, id: String) {
         try {
-
             Handler(Looper.getMainLooper()).post {
-                dialog?.cancel()
-                var exDialog = Utility.enquiryGenExistingDialog(requireContext(),id,productName)
-                Handler().postDelayed({ exDialog.show() }, 500)
-
-                exDialog.btn_generate_new_enquiry?.setOnClickListener {
-                    exDialog.cancel()
-//                    Handler().postDelayed({ dialog?.show() }, 500)
-
-                    productID?.let { it1 -> mEnqVM.generateEnquiry(it1,true,"Android") }
-                }
                 Log.e("ExistingEnqGeneration", "Onsuccess")
+                dialog?.dismiss()
+
+                enqID = id
+                prodName = productName
+                exDialog = Utility.enquiryGenExistingDialog(requireActivity(),enqID.toString(), prodName.toString())
+
+                var btn_gen = exDialog?.findViewById(R.id.btn_ex_generate_new_enquiry) as TextView
+                btn_gen?.setOnClickListener {
+                    productID?.let { it1 -> mEnqVM?.generateEnquiry(it1,true,"Android") }
+                    exDialog?.cancel()
+                    Handler().postDelayed({ dialog?.show() }, 500)
+                }
+                Handler().postDelayed({ exDialog?.show() }, 500)
             }
         } catch (e: Exception) {
-            dialog?.cancel()
             Log.e("ExistingEnqGeneration", "Exception onSuccess " + e.message)
         }
     }
 
     override fun onFailedEnquiryGeneration() {
         try {
-            Handler(Looper.getMainLooper()).post {
+            Handler(Looper.getMainLooper()).post {dialog?.dismiss()
                 Log.e("EnquiryGeneration", "onFailure")
-                Utility.displayMessage("Enquiry Generation Failed",requireContext())
-                dialog?.cancel()
             }
-        } catch (e: Exception) {
+        } catch (e: Exception) {dialog?.dismiss()
             Log.e("EnquiryGeneration", "Exception onFailure " + e.message)
-            dialog?.cancel()
         }
     }
 
     override fun onEnquiryGenClick(productId: Long, isCustom: Boolean) {
-        mEnqVM.ifEnquiryExists(productId,isCustom)
+
         if (!Utility.checkIfInternetConnected(requireContext())) {
-            Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
+            Utility.displayMessage(getString(R.string.no_internet_connection), requireActivity())
         } else {
             mEnqVM.ifEnquiryExists(productId,true)
             productID = productId

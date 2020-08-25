@@ -48,7 +48,7 @@ class ProductCatalogueViewModel(application: Application) : AndroidViewModel(app
         return ProductPredicates.getAllImagesOfProduct(productId)
     }
 
-    fun getProductDetailsById(mContext : Context, productId : Long){
+    fun getProductDetailsById(productId : Long){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         CraftExchangeRepository
             .getWishlistService()

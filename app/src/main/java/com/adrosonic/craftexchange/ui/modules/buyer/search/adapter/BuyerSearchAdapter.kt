@@ -13,18 +13,15 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
-import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCatalogue
-import com.adrosonic.craftexchange.database.predicates.ProductPredicates
+import com.adrosonic.craftexchange.database.entities.realmEntities.ClusterList
+import com.adrosonic.craftexchange.database.predicates.SearchPredicates
 import com.adrosonic.craftexchange.database.predicates.WishlistPredicates
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
-import com.adrosonic.craftexchange.repository.data.request.search.SearchProduct
-import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.CatalogueProductsResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.singleProduct.SingleProductDetails
+import com.adrosonic.craftexchange.repository.data.response.search.SearchProdData
 import com.adrosonic.craftexchange.repository.data.response.search.SearchProductData
-import com.adrosonic.craftexchange.repository.data.response.search.SearchProductResponse
 import com.adrosonic.craftexchange.syncManager.SyncCoordinator
 import com.adrosonic.craftexchange.ui.modules.buyer.productDetails.catalogueProductDetailsIntent
-import com.adrosonic.craftexchange.ui.modules.buyer.wishList.WishlistAdapter
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
@@ -45,6 +42,13 @@ class BuyerSearchAdapter(private val mContext : Context,
 
     interface EnquiryGeneratedListener{
         fun onEnquiryGenClick(productId: Long,isCustom : Boolean)
+    }
+
+    fun updateList(newList:  ArrayList<SearchProductData>?){
+        if (newList != null) {
+            this.productList=newList
+        }
+        this.notifyDataSetChanged()
     }
 
     var wishlistener: WishListUpdatedListener? = null
@@ -148,6 +152,7 @@ class BuyerSearchAdapter(private val mContext : Context,
                     .enqueue(object : Callback, retrofit2.Callback<SingleProductDetails> {
                         override fun onFailure(call: Call<SingleProductDetails>, t: Throwable) {
                             t.printStackTrace()
+                            Utility.displayMessage("Try Again",mContext)
                             Log.e("prodDetails","Failure : "+t.printStackTrace())
         //                        listener?.onProdFetchFail()
                         }
@@ -167,13 +172,14 @@ class BuyerSearchAdapter(private val mContext : Context,
                                 }
                             } else {
                                 Log.e("prodDetails","Failure")
-//                                listener?.onProdFetchFail()
+                                Utility.displayMessage("Try Again",mContext)
 
                             }
                         }
                     })
             }
 
+            //TODO Wishlisted items implementation
 //            val intent = Intent(mContext.catalogueProductDetailsIntent())
 //            val bundle = Bundle()
 //            bundle.putString(ConstantsDirectory.PRODUCT_ID, product?.id?.toString())
@@ -181,6 +187,44 @@ class BuyerSearchAdapter(private val mContext : Context,
 //            mContext.startActivity(intent)
         }
 
+        holder.productImage.setOnClickListener{
+            //TODO : change this implementation later
+
+            var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+            product?.id?.let { it1 ->
+                CraftExchangeRepository
+                    .getWishlistService()
+                    .getSingleProductDetails(token, it1.toInt())
+                    .enqueue(object : Callback, retrofit2.Callback<SingleProductDetails> {
+                        override fun onFailure(call: Call<SingleProductDetails>, t: Throwable) {
+                            t.printStackTrace()
+                            Utility.displayMessage("Try Again",mContext)
+                            Log.e("prodDetails","Failure : "+t.printStackTrace())
+                            //                        listener?.onProdFetchFail()
+                        }
+
+                        override fun onResponse(
+                            call: Call<SingleProductDetails>, response: Response<SingleProductDetails>
+                        ) {
+                            if (response.body()?.valid == true) {
+                                val response=response.body()?.data
+                                if(response != null){
+                                    WishlistPredicates.insertSingleProduct(response)
+                                    val intent = Intent(mContext.catalogueProductDetailsIntent())
+                                    val bundle = Bundle()
+                                    bundle.putString(ConstantsDirectory.PRODUCT_ID, product?.id?.toString())
+                                    intent.putExtras(bundle)
+                                    mContext.startActivity(intent)
+                                }
+                            } else {
+                                Log.e("prodDetails","Failure")
+                                Utility.displayMessage("Try Again",mContext)
+
+                            }
+                        }
+                    })
+            }
+        }
 
         holder.btnGenerateEnquiry.setOnClickListener {
             generateEnquiry(product?.id?:0,false)

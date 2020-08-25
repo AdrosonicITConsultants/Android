@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -23,13 +24,12 @@ import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCatalo
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.databinding.FragmentRegionProdListBinding
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.generateEnquiry.GenerateEnquiryResponse
-import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.adapter.CatalogueProductsAdapter
+import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.adapter.CatalogueProductAdapter
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.ClusterViewModel
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
 import io.realm.RealmResults
-import kotlinx.android.synthetic.main.dialog_gen_enquiry_update_or_new.*
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -37,7 +37,7 @@ private const val ARG_PARAM2 = "param2"
 class RegionProdListFragment : Fragment(),
     ClusterViewModel.ClusterProdInterface,
     EnquiryViewModel.GenerateEnquiryInterface,
-    CatalogueProductsAdapter.EnquiryGeneratedListener{
+    CatalogueProductAdapter.EnquiryGeneratedListener{
 
     private var param1: String? = null
     private var param2: Long? = null
@@ -46,7 +46,9 @@ class RegionProdListFragment : Fragment(),
     var clusterId : Long ?= 0
     var clusterName : String ?= ""
 
-    var clusterProductAdapter : CatalogueProductsAdapter?= null
+    var clusterProductAdapter : CatalogueProductAdapter?= null
+//    private lateinit var clusterProductAdapter: ClustProdAdapter
+
 
     private var mClusProductList : RealmResults<ProductCatalogue>?= null
     private var mFilteredList : RealmResults<ProductCatalogue>?= null
@@ -56,8 +58,13 @@ class RegionProdListFragment : Fragment(),
     val mClusVM : ClusterViewModel by viewModels()
     val mEnqVM : EnquiryViewModel by viewModels()
 
-    var dialog : Dialog?= null
+    var dialog : Dialog ?= null
+    var exDialog : Dialog ?= null
+    var sucDialog : Dialog ?= null
+
     var productID : Long ?= 0L
+    var enqID : String?=""
+    var prodName : String?=""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,9 +89,10 @@ class RegionProdListFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
         mEnqVM.listener = this
         mClusVM.clusterListener = this
-        clusterProductAdapter?.enqListener = this
 
         setRecyclerList()
+
+
         setFilterList()
         mBinding?.swipeRegionProducts?.isEnabled = false
 
@@ -110,9 +118,10 @@ class RegionProdListFragment : Fragment(),
     private fun setRecyclerList(){
         mBinding?.regionProdRecyclerList?.layoutManager = LinearLayoutManager(requireContext(),
             LinearLayoutManager.VERTICAL, false)
-        clusterProductAdapter = CatalogueProductsAdapter(requireContext(),
+        clusterProductAdapter = CatalogueProductAdapter(requireContext(),
             clusterId?.let { mClusVM.getClusterProdListMutableData(it).value })
         mBinding?.regionProdRecyclerList?.adapter = clusterProductAdapter
+        clusterProductAdapter?.enqListener = this
     }
 
     private fun setFilterList(){
@@ -157,9 +166,10 @@ class RegionProdListFragment : Fragment(),
                         mBinding?.emptyView?.visibility = View.GONE
                         mBinding?.regionProdRecyclerList?.visibility = View.VISIBLE
                     }
-                }else{
-                    clusterProductAdapter?.updateProductList(mClusProductList)
                 }
+//                else{
+//                    clusterProductAdapter?.updateProductList(mClusProductList)
+//                }
             }
         })
     }
@@ -184,12 +194,13 @@ class RegionProdListFragment : Fragment(),
     override fun onSuccessEnquiryGeneration(enquiry: GenerateEnquiryResponse) {
         try {
             Handler(Looper.getMainLooper()).post {
-                dialog?.cancel()
-                Utility.enquiryGenSuccessDialog(requireContext(), enquiry.data.enquiry.code.toString())
                 Log.e("EnquiryGeneration", "Onsucces")
+                dialog?.dismiss()
+                enqID = enquiry?.data?.enquiry?.code.toString()
+                sucDialog = Utility.enquiryGenSuccessDialog(requireActivity(),enqID.toString())
+                Handler().postDelayed({ sucDialog?.show() }, 500)
             }
         } catch (e: Exception) {
-            dialog?.cancel()
             Log.e("EnquiryGeneration", "Exception onSuccess " + e.message)
         }
     }
@@ -197,44 +208,47 @@ class RegionProdListFragment : Fragment(),
     override fun onExistingEnquiryGeneration(productName: String, id: String) {
         try {
             Handler(Looper.getMainLooper()).post {
-                dialog?.cancel()
-                var exDialog = Utility.enquiryGenExistingDialog(requireContext(),id,productName)
-//                exDialog.show()
-
-                exDialog.btn_generate_new_enquiry?.setOnClickListener {
-                    exDialog.cancel()
-                    dialog?.show()
-                    productID?.let { it1 -> mEnqVM.generateEnquiry(it1,false,"Android") }
-                }
                 Log.e("ExistingEnqGeneration", "Onsuccess")
+                dialog?.dismiss()
+
+                enqID = id
+                prodName = productName
+                exDialog = Utility.enquiryGenExistingDialog(requireActivity(),enqID.toString(), prodName.toString())
+
+                var btn_gen = exDialog?.findViewById(R.id.btn_ex_generate_new_enquiry) as TextView
+                btn_gen?.setOnClickListener {
+                    productID?.let { it1 -> mEnqVM?.generateEnquiry(it1,false,"Android") }
+                    exDialog?.cancel()
+                    Handler().postDelayed({ dialog?.show() }, 500)
+                }
+                Handler().postDelayed({ exDialog?.show() }, 500)
             }
         } catch (e: Exception) {
-            dialog?.dismiss()
             Log.e("ExistingEnqGeneration", "Exception onSuccess " + e.message)
         }
     }
 
     override fun onFailedEnquiryGeneration() {
         try {
-            Handler(Looper.getMainLooper()).post {dialog?.cancel()
+            Handler(Looper.getMainLooper()).post {dialog?.dismiss()
                 Log.e("EnquiryGeneration", "onFailure")
-                Utility.displayMessage("Enquiry Generation Failed",requireContext())
             }
-        } catch (e: Exception) {dialog?.cancel()
+        } catch (e: Exception) {dialog?.dismiss()
             Log.e("EnquiryGeneration", "Exception onFailure " + e.message)
         }
     }
 
     override fun onEnquiryGenClick(productId: Long, isCustom: Boolean) {
-        mEnqVM.ifEnquiryExists(productId,isCustom)
+
         if (!Utility.checkIfInternetConnected(requireContext())) {
-            Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
+            Utility.displayMessage(getString(R.string.no_internet_connection), requireActivity())
         } else {
-            dialog?.show()
             mEnqVM.ifEnquiryExists(productId,false)
             productID = productId
+            dialog?.show()
         }
     }
+
 
     companion object {
         fun newInstance() = RegionProdListFragment()

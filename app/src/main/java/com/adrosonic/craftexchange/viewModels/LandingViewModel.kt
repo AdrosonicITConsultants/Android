@@ -11,6 +11,7 @@ import com.adrosonic.craftexchange.database.predicates.WishlistPredicates
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.ArtisanProductDetailsResponse
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.ProductUploadData
+import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.BrandListResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.*
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.singleProduct.SingleProductDetails
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.singleProduct.Data
@@ -23,6 +24,7 @@ import com.google.gson.Gson
 import com.pixplicity.easyprefs.library.Prefs
 import io.realm.RealmResults
 import retrofit2.Call
+import retrofit2.Response
 import javax.security.auth.callback.Callback
 
 class LandingViewModel(application: Application) : AndroidViewModel(application) {
@@ -159,6 +161,25 @@ class LandingViewModel(application: Application) : AndroidViewModel(application)
                     }
                 }
 
+            })
+    }
+
+    fun getArtisanBrandDetails(){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getProductService()
+            .getFilteredArtisans(token).enqueue(object : Callback, retrofit2.Callback<BrandListResponse> {
+                override fun onFailure(call: Call<BrandListResponse>, t: Throwable) {
+                    t.printStackTrace()
+                }
+                override fun onResponse(
+                    call: Call<BrandListResponse>,
+                    response: Response<BrandListResponse>
+                ) {
+                    if (response.body()?.valid == true) {
+                        ProductPredicates.insertBrands(response.body())
+                    }
+                }
             })
     }
 

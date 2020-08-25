@@ -1,51 +1,50 @@
-package com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.singleProduct
+package com.adrosonic.craftexchange.repository.data.response.search
 
-
-
-data class SingleProductDetails (
-    val data: Data,
+data class SearchProdData (
+    val data: SearchData,
     val valid: Boolean,
     val errorMessage: String,
     val errorCode: Long
 )
 
-data class Data (
+data class SearchData (
     val id: Long,
-    val code: String? = null,
-    val tag: String? = null,
-    val productCategory: ProductCategory? = null,
+    val code: String?,
+    val tag: String?,
+    val productCategory: ProductCategory?,
     val productType: ProductType,
-    val warpYarn: Yarn? = null,
-    val weftYarn: Yarn? = null,
-    val extraWeftYarn: Yarn? = null,
-    val warpYarnCount: String? = null,
-    val weftYarnCount: String? = null,
-    val extraWeftYarnCount: String? = null,
-    val warpDye: Dye? = null,
-    val weftDye: Dye? = null,
-    val extraWeftDye: Dye? = null,
+    val warpYarn: Yarn?,
+    val weftYarn: Yarn?,
+    val extraWeftYarn: Yarn?,
+    val warpYarnCount: String?,
+    val weftYarnCount: String?,
+    val extraWeftYarnCount: String?,
+    val warpDye: Dye?,
+    val weftDye: Dye?,
+    val extraWeftDye: Dye?,
     val length: String,
     val width: String,
-    val reedCount: ReedCount? = null,
-    val productStatusId: Long? = null,
-    val gsm: String? = null,
-    val weight: String? = null,
-    val product_spe: String? = null,
+    val reedCount: ReedCount?,
+    val productStatusId: Long?,
+    val gsm: String?,
+    val weight: String?,
+    val productSpe: String?,
     val productCares: List<ProductCare>,
     val productWeaves: List<ProductWeaf>,
-    val createdOn: String? = null,
-    val modifiedOn: String? = null,
-    val relProduct: List<Data>,
+    val createdOn: String?,
+    val modifiedOn: String?,
+    val relProduct: List<SearchData>,
     val productImages: List<ProductImage>,
-    val artitionId: Long,
-    val clusterId: Long,
-    val productCategoryDesc: String? = null,
-    val productTypeDesc: String? = null,
-    val clusterName: String? = null,
-    val artistName: String? = null,
-    val brand: String? = null,
-    val madeWithAnthran: Long? = null,
-    val isDeleted: Long? = null
+    val artitionId: Long?,
+    val clusterId: Long?,
+    val productCategoryDesc: String?,
+    val productTypeDesc: String?,
+    val clusterName: String?,
+    val artistName: String?,
+    val brand: String?,
+    val madeWithAnthran: Long?,
+    val isDeleted: Long?,
+    val deletedByDeactivation: String?
 )
 
 data class Dye (
@@ -88,7 +87,7 @@ data class ProductCategory (
 data class ProductType (
     val id: Long,
     val productDesc: String,
-    val productCategoryId: Long? = null,
+    val productCategoryId: Long?,
     val productLengths: List<ProductLength>,
     val productWidths: List<ProductWidth>,
     val relatedProductType: List<ProductType>
@@ -105,7 +104,6 @@ data class ProductWidth (
     val width: String,
     val productTypeId: Long
 )
-
 
 data class ProductImage (
     val id: Long,

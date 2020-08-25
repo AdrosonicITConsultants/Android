@@ -32,6 +32,8 @@ class SuggestionAdapter(
     var suggestionType : String ?=""
     var suggestionTypeId : Long ?=0
 
+    var searchQuery : String ?= ""
+
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -47,17 +49,26 @@ class SuggestionAdapter(
 
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        var suggestion = list.get(position)
+        var suggestion = list[position]
 
         suggestionItem = suggestion?.suggestion
         suggestionType = suggestion?.suggestionType
         suggestionTypeId = suggestion?.suggestionTypeId
 
-        var text = SpannableString(suggestionType)
-        text.setSpan(ForegroundColorSpan(Color.BLACK), 0, text.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-        holder.sugItem.text = "$suggestionItem in "
-        holder.sugItem.append(text)
+        when(suggestionTypeId){
+            5L -> {
+                holder.sugItem.text = suggestionItem
+            } //Global
+            8L -> {
+                holder.sugItem.text = suggestionItem
+            } //Tag
+            else -> {
+                var text = SpannableString(suggestionType)
+                text.setSpan(ForegroundColorSpan(Color.BLACK), 0, text.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                holder.sugItem.text = "$suggestionItem in "
+                holder.sugItem.append(text)
+            }
+        }
 
         holder.itemView.setOnClickListener {
             var activity = mContext as SearchSuggestionActivity

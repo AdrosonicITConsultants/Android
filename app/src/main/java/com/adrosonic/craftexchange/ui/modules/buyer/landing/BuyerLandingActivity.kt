@@ -327,6 +327,7 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
         } else {
             mViewModel.getProductsOfArtisan(this)
             mViewModel.getProductUploadData()
+            mViewModel.getArtisanBrandDetails()
             mProVM.getBuyerProfileDetails(this)
             craftUser = mProVM.getUserMutableData()
             setBrandLogo()

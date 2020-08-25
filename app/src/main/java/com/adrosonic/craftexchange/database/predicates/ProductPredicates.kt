@@ -1239,5 +1239,22 @@ class ProductPredicates {
             }
         }
 
+        fun searchProductInDB(productId : Long?):Boolean? {
+            var realm = CXRealmManager.getRealmInstance()
+            var value : Boolean ?= false
+            realm.executeTransaction {
+                var product = realm.where(ProductCatalogue::class.java)
+                    .equalTo(ProductCatalogue.COLUMN_PRODUCT_ID, productId)
+                    .limit(1)
+                    .findAll()
+
+                if(product == null){
+                    value = false
+                }else{
+                    value = true
+                }
+            }
+            return value
+        }
     }
 }

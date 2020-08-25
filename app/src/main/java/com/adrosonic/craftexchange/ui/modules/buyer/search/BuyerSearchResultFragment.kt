@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
@@ -21,21 +22,16 @@ import com.adrosonic.craftexchange.databinding.FragmentBuyerSearchResultBinding
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.generateEnquiry.GenerateEnquiryResponse
 import com.adrosonic.craftexchange.repository.data.response.search.SearchProductData
 import com.adrosonic.craftexchange.repository.data.response.search.SearchProductResponse
-import com.adrosonic.craftexchange.ui.modules.artisan.search.adapter.ArtisanSearchAdapter
-import com.adrosonic.craftexchange.ui.modules.buyer.ownDesign.OwnProductAdapter
 import com.adrosonic.craftexchange.ui.modules.buyer.search.adapter.BuyerSearchAdapter
-import com.adrosonic.craftexchange.ui.modules.buyer.wishList.WishlistAdapter
 import com.adrosonic.craftexchange.ui.modules.search.FilterCollectionAdapter
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
 import com.adrosonic.craftexchange.viewModels.SearchViewModel
-import com.wajahatkarim3.easyvalidation.core.collection_ktx.startWithNonNumberList
 import kotlinx.android.synthetic.main.dialog_gen_enquiry_update_or_new.*
 
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
-
 
 
 class BuyerSearchResultFragment : Fragment(),
@@ -59,6 +55,7 @@ class BuyerSearchResultFragment : Fragment(),
 
     var filterList = ArrayList<Pair<String,Long>>()
     var filterSelected : Pair<String,Long> ?= null
+    var filterTypeSelected : Long ? = 0
 
     private var searchFilter : String ?= ""
     private var searchFilterId : Long ?= 0
@@ -67,8 +64,15 @@ class BuyerSearchResultFragment : Fragment(),
     var searchFilterList = arrayListOf<SearchProductData>()
     var searchProdList = arrayListOf<SearchProductData>()
 
-    var dialog : Dialog?= null
+    var dialog : Dialog ?= null
+    var exDialog : Dialog ?= null
+    var sucDialog : Dialog ?= null
+
     var productID : Long ?= 0L
+    var enqID : String?=""
+    var prodName : String?=""
+
+    var isFilterEnabled : Long? = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,11 +104,8 @@ class BuyerSearchResultFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setFilterRecycler(filterList)
-
-        mAdapter = BuyerSearchAdapter(requireContext(),searchProdList)
+        mAdapter = BuyerSearchAdapter(requireContext(), arrayListOf())
         mBinding?.buyerSearchList?.adapter = mAdapter
-        mBinding?.buyerSearchList?.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-
 
         filterAdapter.fListener = this
         mAdapter?.enqListener = this
@@ -121,8 +122,6 @@ class BuyerSearchResultFragment : Fragment(),
         }else{
             Utility?.displayMessage(getString(R.string.no_internet_connection),requireContext())
         }
-
-
 
 
         var search = activity?.findViewById<SearchView>(R.id.search_artisan)
@@ -208,15 +207,24 @@ class BuyerSearchResultFragment : Fragment(),
         mBinding?.filterRecycler?.adapter = filterAdapter
     }
 
-    fun setSearchRecycler(context : Context,list : ArrayList<SearchProductData>){
+    fun setSearchResults(list : ArrayList<SearchProductData>){
+        mBinding?.buyerSearchList?.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        updateSearchList(list)
+        if(mAdapter?.itemCount == 0){
+            mBinding?.emptyText?.visibility = View.VISIBLE
+        }else{
+            mBinding?.emptyText?.visibility = View.GONE
+        }
+    }
 
+    fun updateSearchList(list : ArrayList<SearchProductData>){
+        mAdapter.updateList(list)
         mBinding?.listSizeText?.text = "Found ${mAdapter?.itemCount} items"
         if(mAdapter?.itemCount == 0){
             mBinding?.emptyText?.visibility = View.VISIBLE
         }else{
             mBinding?.emptyText?.visibility = View.GONE
         }
-        mAdapter?.notifyDataSetChanged()
     }
 
     companion object {
@@ -233,13 +241,12 @@ class BuyerSearchResultFragment : Fragment(),
 
     override fun onFilterSelected(pairList: Pair<String, Long>) {
         filterSelected = pairList
-
+        filterTypeSelected = pairList.second
         when(filterSelected?.second){
             1L -> {
                 //Show all
-                searchFilterList.clear()
-                searchFilterList = searchProdList
-                setSearchRecycler(requireContext(),searchFilterList)
+                updateSearchList(searchProdList)
+                isFilterEnabled = 0L
             }
             2L -> {
                 //Antaran
@@ -247,12 +254,16 @@ class BuyerSearchResultFragment : Fragment(),
                 var itr = searchProdList.iterator()
                 if(itr != null){
                     while (itr.hasNext()){
-                        if(itr.next().madeWithAnthran == 1L){
-                            searchFilterList.add(itr.next())
+                        var prod = itr.next()
+                        when(prod.madeWithAnthran){
+                            1L -> {
+                                searchFilterList.add(prod)
+                            }
                         }
                     }
                 }
-                setSearchRecycler(requireContext(),searchFilterList)
+                updateSearchList(searchFilterList)
+                isFilterEnabled = 1L
             }
             3L -> {
                 //Artisan
@@ -260,12 +271,16 @@ class BuyerSearchResultFragment : Fragment(),
                 var itr = searchProdList.iterator()
                 if(itr != null){
                     while (itr.hasNext()){
-                        if(itr.next().madeWithAnthran == 0L){
-                            searchFilterList.add(itr.next())
+                        var prod = itr.next()
+                        when(prod.madeWithAnthran){
+                            0L -> {
+                                searchFilterList.add(prod)
+                            }
                         }
                     }
                 }
-                setSearchRecycler(requireContext(),searchFilterList)
+                updateSearchList(searchFilterList)
+                isFilterEnabled = 1L
             }
         }
     }
@@ -273,18 +288,65 @@ class BuyerSearchResultFragment : Fragment(),
     override fun onSuccessSearch(search: SearchProductResponse) {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
-                Log.e("BuyerSearchList", "Onsuccess Size : "+search.data.size)
+                Log.e("SearchResultList", "Onsuccess Size : "+search.data.size)
                 mBinding?.searchBuyerSwipe?.isRefreshing = false
+                when(isFilterEnabled){
+                    0L -> {
+                        if(searchProdList.isEmpty()){
+                            search.data.forEach { searchProdList.add(it) }
+                            if(searchProdList.isNotEmpty()){
+                                setSearchResults(searchProdList)
+                            }
+                        }else{
+                            search.data.forEach { searchProdList.add(it) }
+                            updateSearchList(searchProdList)
+                        }
+                        Log.e("SearchResultList","Total Size : "+searchProdList.size)
 
-//                searchProdList.clear()
-                search.data.forEach { searchProdList.add(it) }
-                if(searchProdList.isEmpty()){
-                    setSearchRecycler(requireContext(), searchProdList)
-                    mAdapter?.notifyDataSetChanged()
-                }else{
-                    setSearchRecycler(requireContext(),searchProdList)
-                    mAdapter?.notifyDataSetChanged()
+                    }
+                    1L -> {
+                        search.data.forEach { searchProdList.add(it) }
+                        Log.e("SearchResultList","Total Size : "+searchProdList.size)
+                        when(filterTypeSelected){
+                                2L -> {
+                                    var itr = searchProdList.iterator()
+                                    searchFilterList.clear()
+                                    if(itr != null){
+                                        while (itr.hasNext()){
+                                            var prod = itr.next()
+                                            when(prod.madeWithAnthran){
+                                                1L -> {
+                                                    searchFilterList.add(prod)
+                                                }
+                                            }
+                                        }
+                                    }
+                                    updateSearchList(searchFilterList)
+                                    Log.e("SearchResultList", "AntTotal Size : "+searchProdList.size)
+                                    Log.e("SearchResultList", "AntFiltered Size : "+searchFilterList.size)
+                                }
+                                3L -> {
+                                    var itr = searchProdList.iterator()
+                                    searchFilterList.clear()
+                                    if(itr != null){
+                                        while (itr.hasNext()){
+                                            var prod = itr.next()
+                                            when(prod.madeWithAnthran){
+                                                0L -> {
+                                                    searchFilterList.add(prod)
+                                                }
+                                            }
+                                        }
+                                    }
+                                    updateSearchList(searchFilterList)
+                                    Log.e("SearchResultList", "ArtTotal Size : "+searchProdList.size)
+                                    Log.e("SearchResultList", "ArtFiltered Size : "+searchFilterList.size)
+                                }
+                            }
+
+                    }
                 }
+
             }
             )
         } catch (e: Exception) {
@@ -299,12 +361,10 @@ class BuyerSearchResultFragment : Fragment(),
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("BuyerSearchList", "OnFailure")
                 mBinding?.searchBuyerSwipe?.isRefreshing = false
-
             }
             )
         } catch (e: Exception) {
             mBinding?.searchBuyerSwipe?.isRefreshing = false
-
             Log.e("BuyerSearchList", "Exception onFAilure " + e.message)
         }
     }
@@ -312,57 +372,56 @@ class BuyerSearchResultFragment : Fragment(),
     override fun onSuccessEnquiryGeneration(enquiry: GenerateEnquiryResponse) {
         try {
             Handler(Looper.getMainLooper()).post {
-                Utility.enquiryGenSuccessDialog(requireContext(), enquiry.data.enquiry.code.toString())
                 Log.e("EnquiryGeneration", "Onsucces")
-                dialog?.cancel()
+                dialog?.dismiss()
+                enqID = enquiry?.data?.enquiry?.code.toString()
+                sucDialog = Utility.enquiryGenSuccessDialog(requireActivity(),enqID.toString())
+                Handler().postDelayed({ sucDialog?.show() }, 500)
             }
         } catch (e: Exception) {
             Log.e("EnquiryGeneration", "Exception onSuccess " + e.message)
-            dialog?.cancel()
         }
     }
 
     override fun onExistingEnquiryGeneration(productName: String, id: String) {
         try {
-
             Handler(Looper.getMainLooper()).post {
-                dialog?.cancel()
-                var exDialog = Utility.enquiryGenExistingDialog(requireContext(),id,productName)
-                Handler().postDelayed({ exDialog.show() }, 500)
-
-                exDialog.btn_generate_new_enquiry?.setOnClickListener {
-                    exDialog.cancel()
-//                    Handler().postDelayed({ dialog?.show() }, 500)
-
-                    productID?.let { it1 -> mEnqVM.generateEnquiry(it1,true,"Android") }
-                }
                 Log.e("ExistingEnqGeneration", "Onsuccess")
+                dialog?.dismiss()
+
+                enqID = id
+                prodName = productName
+                exDialog = Utility.enquiryGenExistingDialog(requireActivity(),enqID.toString(), prodName.toString())
+
+                var btn_gen = exDialog?.findViewById(R.id.btn_ex_generate_new_enquiry) as TextView
+                btn_gen?.setOnClickListener {
+                    productID?.let { it1 -> mEnqVM?.generateEnquiry(it1,false,"Android") }
+                    exDialog?.cancel()
+                    Handler().postDelayed({ dialog?.show() }, 500)
+                }
+                Handler().postDelayed({ exDialog?.show() }, 500)
             }
         } catch (e: Exception) {
-            dialog?.cancel()
             Log.e("ExistingEnqGeneration", "Exception onSuccess " + e.message)
         }
     }
 
     override fun onFailedEnquiryGeneration() {
         try {
-            Handler(Looper.getMainLooper()).post {
+            Handler(Looper.getMainLooper()).post {dialog?.dismiss()
                 Log.e("EnquiryGeneration", "onFailure")
-                Utility.displayMessage("Enquiry Generation Failed",requireContext())
-                dialog?.cancel()
             }
-        } catch (e: Exception) {
+        } catch (e: Exception) {dialog?.dismiss()
             Log.e("EnquiryGeneration", "Exception onFailure " + e.message)
-            dialog?.cancel()
         }
     }
 
     override fun onEnquiryGenClick(productId: Long, isCustom: Boolean) {
-        mEnqVM.ifEnquiryExists(productId,isCustom)
+
         if (!Utility.checkIfInternetConnected(requireContext())) {
-            Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
+            Utility.displayMessage(getString(R.string.no_internet_connection), requireActivity())
         } else {
-            mEnqVM.ifEnquiryExists(productId,true)
+            mEnqVM.ifEnquiryExists(productId,false)
             productID = productId
             dialog?.show()
         }

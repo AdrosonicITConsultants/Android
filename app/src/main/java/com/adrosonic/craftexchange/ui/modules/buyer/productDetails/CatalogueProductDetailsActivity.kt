@@ -66,7 +66,7 @@ private var exDialog : Dialog ?= null
 
 
 class CatalogueProductDetailsActivity : AppCompatActivity(),
-EnquiryViewModel.GenerateEnquiryInterface{
+    EnquiryViewModel.GenerateEnquiryInterface{
     val mEnqVM: EnquiryViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -376,9 +376,9 @@ EnquiryViewModel.GenerateEnquiryInterface{
             Handler(Looper.getMainLooper()).post {
                 dialog?.dismiss()
                 var exDialog = Utility.enquiryGenExistingDialog(this,id,productName)
-//                exDialog.show()
+                exDialog.show()
 
-                exDialog.btn_generate_new_enquiry?.setOnClickListener {
+                exDialog.btn_ex_generate_new_enquiry?.setOnClickListener {
                     exDialog.cancel()
                     dialog?.show()
                     mEnqVM.generateEnquiry(productId!!,false, "Android")

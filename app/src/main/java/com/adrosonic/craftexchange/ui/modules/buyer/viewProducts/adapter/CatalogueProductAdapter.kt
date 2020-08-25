@@ -22,7 +22,7 @@ import com.like.LikeButton
 import com.like.OnLikeListener
 import io.realm.RealmResults
 
-class CatalogueProductsAdapter(var context: Context?, private var regionProduct: RealmResults<ProductCatalogue>?) : RecyclerView.Adapter<CatalogueProductsAdapter.ViewHolder>() {
+class CatalogueProductAdapter(var context: Context?, private var regionProduct: RealmResults<ProductCatalogue>?) : RecyclerView.Adapter<CatalogueProductAdapter.ViewHolder>() {
 
     inner class ViewHolder(val binding: ItemProductDescListBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(regionProduct: ProductCatalogue){
@@ -94,6 +94,14 @@ class CatalogueProductsAdapter(var context: Context?, private var regionProduct:
             context?.startActivity(intent)
         }
 
+        holder.binding.productImage.setOnClickListener {
+            val intent = Intent(context?.catalogueProductDetailsIntent())
+            val bundle = Bundle()
+            bundle.putString(ConstantsDirectory.PRODUCT_ID, product?.productId?.toString())
+            intent.putExtras(bundle)
+            context?.startActivity(intent)
+        }
+
         holder.binding.wishlistButton.isLiked = product?.isWishlisted == 1L
         holder.binding.wishlistButton.setOnLikeListener(object: OnLikeListener {
             override fun liked(likeButton: LikeButton) {
@@ -121,6 +129,4 @@ class CatalogueProductsAdapter(var context: Context?, private var regionProduct:
     fun generateEnquiry(productId : Long, isCustom : Boolean){
         enqListener?.onEnquiryGenClick(productId,isCustom)
     }
-
-
 }

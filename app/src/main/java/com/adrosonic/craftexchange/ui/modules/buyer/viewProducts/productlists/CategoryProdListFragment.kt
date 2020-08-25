@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -22,13 +23,13 @@ import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCatalo
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.databinding.FragmentCategoryProdListBinding
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.generateEnquiry.GenerateEnquiryResponse
-import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.adapter.CatalogueProductsAdapter
+import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.adapter.CatProdAdapter
+import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.adapter.CatalogueProductAdapter
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.CategoryViewModel
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
 import io.realm.RealmResults
-import kotlinx.android.synthetic.main.dialog_gen_enquiry_update_or_new.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -36,9 +37,10 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 class CategoryProdListFragment : Fragment(),
+
     EnquiryViewModel.GenerateEnquiryInterface,
     CategoryViewModel.CategoryListInterface,
-    CatalogueProductsAdapter.EnquiryGeneratedListener {
+    CatalogueProductAdapter.EnquiryGeneratedListener {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -48,7 +50,7 @@ class CategoryProdListFragment : Fragment(),
     var productType : String ?= ""
     var categoryId : Long ?= 0
 
-    private var catProdAdapter: CatalogueProductsAdapter?= null
+    private var catProdAdapter: CatalogueProductAdapter?= null
 
     private var mSpinner = mutableListOf<String>()
     private var mClusterList = mutableListOf<Pair<Long?,String?>>()
@@ -60,9 +62,13 @@ class CategoryProdListFragment : Fragment(),
     val mEnqVM : EnquiryViewModel by viewModels()
     val mCatVM : CategoryViewModel by viewModels()
 
-    var dialog : Dialog?= null
-    var productID : Long ?= 0L
+    var dialog : Dialog ?= null
+    var exDialog : Dialog ?= null
+    var sucDialog : Dialog ?= null
 
+    var productID : Long ?= 0L
+    var enqID : String?=""
+    var prodName : String?=""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,7 +95,6 @@ class CategoryProdListFragment : Fragment(),
         mEnqVM.listener = this
         mCatVM.catListener = this
 
-        catProdAdapter?.enqListener = this
 
         setRecyclerList()
         setFilterList()
@@ -118,9 +123,11 @@ class CategoryProdListFragment : Fragment(),
     private fun setRecyclerList(){
         mBinding?.categoryProdRecyclerList?.layoutManager = LinearLayoutManager(requireContext(),
             LinearLayoutManager.VERTICAL, false)
-        catProdAdapter = CatalogueProductsAdapter(requireContext(),
+        catProdAdapter = CatalogueProductAdapter(requireContext(),
             categoryId?.let { mCatVM.getCatProdListMutableData(it).value })
         mBinding?.categoryProdRecyclerList?.adapter = catProdAdapter
+        catProdAdapter?.enqListener = this
+
     }
 
     private fun setFilterList(){
@@ -168,9 +175,10 @@ class CategoryProdListFragment : Fragment(),
                         mBinding?.emptyView?.visibility = View.GONE
                         mBinding?.categoryProdRecyclerList?.visibility = View.VISIBLE
                     }
-                }else{
-                catProdAdapter?.updateProductList(mCatProdList)
                 }
+//                else{
+//                    catProdAdapter?.updateProductList(mCatProdList)
+//                }
             }
         })
     }
@@ -183,12 +191,13 @@ class CategoryProdListFragment : Fragment(),
     override fun onSuccessEnquiryGeneration(enquiry: GenerateEnquiryResponse) {
         try {
             Handler(Looper.getMainLooper()).post {
-                dialog?.cancel()
-                Utility.enquiryGenSuccessDialog(requireContext(), enquiry.data.enquiry.code.toString())
                 Log.e("EnquiryGeneration", "Onsucces")
+                dialog?.dismiss()
+                enqID = enquiry?.data?.enquiry?.code.toString()
+                sucDialog = Utility.enquiryGenSuccessDialog(requireActivity(),enqID.toString())
+                Handler().postDelayed({ sucDialog?.show() }, 500)
             }
         } catch (e: Exception) {
-            dialog?.cancel()
             Log.e("EnquiryGeneration", "Exception onSuccess " + e.message)
         }
     }
@@ -196,44 +205,38 @@ class CategoryProdListFragment : Fragment(),
     override fun onExistingEnquiryGeneration(productName: String, id: String) {
         try {
             Handler(Looper.getMainLooper()).post {
-                dialog?.cancel()
-                var exDialog = Utility.enquiryGenExistingDialog(requireContext(),id,productName)
-//                exDialog.show()
-
-                exDialog.btn_generate_new_enquiry?.setOnClickListener {
-                    exDialog.cancel()
-                    dialog?.show()
-                    productID?.let { it1 -> mEnqVM.generateEnquiry(it1,false,"Android" ) }
-                }
                 Log.e("ExistingEnqGeneration", "Onsuccess")
+                dialog?.dismiss()
+
+                enqID = id
+                prodName = productName
+                exDialog = Utility.enquiryGenExistingDialog(requireActivity(),enqID.toString(), prodName.toString())
+
+                var btn_gen = exDialog?.findViewById(R.id.btn_ex_generate_new_enquiry) as TextView
+                btn_gen?.setOnClickListener {
+                    productID?.let { it1 -> mEnqVM?.generateEnquiry(it1,false,"Android") }
+                    exDialog?.cancel()
+                    Handler().postDelayed({ dialog?.show() }, 500)
+                }
+                Handler().postDelayed({ exDialog?.show() }, 500)
             }
         } catch (e: Exception) {
-            dialog?.dismiss()
             Log.e("ExistingEnqGeneration", "Exception onSuccess " + e.message)
         }
     }
 
     override fun onFailedEnquiryGeneration() {
         try {
-            Handler(Looper.getMainLooper()).post {dialog?.cancel()
+            Handler(Looper.getMainLooper()).post {dialog?.dismiss()
                 Log.e("EnquiryGeneration", "onFailure")
-                Utility.displayMessage("Enquiry Generation Failed",requireContext())
             }
-        } catch (e: Exception) {dialog?.cancel()
+        } catch (e: Exception) {dialog?.dismiss()
             Log.e("EnquiryGeneration", "Exception onFailure " + e.message)
         }
     }
 
-    override fun onEnquiryGenClick(productId: Long, isCustom: Boolean) {
-        mEnqVM.ifEnquiryExists(productId,isCustom)
-        if (!Utility.checkIfInternetConnected(requireContext())) {
-            Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
-        } else {
-            dialog?.show()
-            mEnqVM.ifEnquiryExists(productId,false)
-            productID = productId
-        }
-    }
+
+
 
 
     companion object {
@@ -268,6 +271,16 @@ class CategoryProdListFragment : Fragment(),
             )
         } catch (e: Exception) {
             Log.e("catList", "Exception onFailure " + e.message)
+        }
+    }
+
+    override fun onEnquiryGenClick(productId: Long, isCustom: Boolean) {
+        if (!Utility.checkIfInternetConnected(requireContext())) {
+            Utility.displayMessage(getString(R.string.no_internet_connection), requireActivity())
+        } else {
+            mEnqVM.ifEnquiryExists(productId,false)
+            productID = productId
+            dialog?.show()
         }
     }
 }

@@ -2,6 +2,7 @@ package com.adrosonic.craftexchange.repository.remote
 
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.singleProduct.SingleProductDetails
 import com.adrosonic.craftexchange.repository.data.response.buyer.wishList.WishListedIds
+import com.adrosonic.craftexchange.repository.data.response.search.SearchProdData
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
@@ -34,4 +35,7 @@ interface WishlistDao {
     @GET("product/getProduct/{productId}")
     fun getSingleProductDetails(@Header("Authorization") token: String,@Path("productId")productId:Int): Call<SingleProductDetails>
 
+    @Headers("Accept: application/json")
+    @GET("product/getProduct/{productId}")
+    fun searchProductDetails(@Header("Authorization") token: String,@Path("productId")productId:Int): Call<SearchProdData>
 }

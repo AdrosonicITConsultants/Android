@@ -90,9 +90,9 @@ class WishlistPredicates {
                         var exprod = it.createObject(ProductCatalogue::class.java,
                             nextID
                         )
-                        exprod.artisanId = catalogueProduct?.artitionID
+                        exprod.artisanId = catalogueProduct?.artitionId
                         exprod.artisanName = catalogueProduct?.artistName
-                        exprod.clusterId = catalogueProduct?.clusterID
+                        exprod.clusterId = catalogueProduct?.clusterId
                         exprod.clusterName = catalogueProduct?.clusterName
                         exprod.brandName = catalogueProduct?.brand
                         productId= catalogueProduct?.id
@@ -106,7 +106,7 @@ class WishlistPredicates {
 
                         exprod.productTypeId = catalogueProduct?.productType?.id
                         exprod.productTypeDesc = catalogueProduct?.productType?.productDesc
-                        exprod.inProductCategory = catalogueProduct?.productType?.productCategoryID
+                        exprod.inProductCategory = catalogueProduct?.productType?.productCategoryId
 
                         exprod.warpYarnId = catalogueProduct?.warpYarn?.id
                         exprod.warpYarnDesc = catalogueProduct?.warpYarn?.yarnDesc
@@ -154,9 +154,9 @@ class WishlistPredicates {
                     }
                     else{
                         nextID = productObj._id ?: 0
-                        productObj.artisanId = catalogueProduct?.artitionID
+                        productObj.artisanId = catalogueProduct?.artitionId
                         productObj.artisanName = catalogueProduct?.artistName
-                        productObj.clusterId = catalogueProduct?.clusterID
+                        productObj.clusterId = catalogueProduct?.clusterId
                         productObj.clusterName = catalogueProduct?.clusterName
                         productObj.brandName = catalogueProduct?.brand
 
@@ -170,7 +170,7 @@ class WishlistPredicates {
 
                         productObj.productTypeId = catalogueProduct?.productType?.id
                         productObj.productTypeDesc = catalogueProduct?.productType?.productDesc
-                        productObj.inProductCategory = catalogueProduct?.productType?.productCategoryID
+                        productObj.inProductCategory = catalogueProduct?.productType?.productCategoryId
 
                         productObj.warpYarnId = catalogueProduct?.warpYarn?.id
                         productObj.warpYarnDesc = catalogueProduct?.warpYarn?.yarnDesc
@@ -306,10 +306,9 @@ class WishlistPredicates {
                             var weaveType = weaveTypeItr.next()
 
                             var weaveTypeObj = realm.where(WeaveTypes::class.java)
-                                .equalTo("productId",weaveType.productID)
+                                .equalTo("productId",weaveType.productId)
                                 .and()
-                                .equalTo("weaveId",weaveType.weaveID)
-                                .limit(1)
+                                .equalTo("weaveId",weaveType.weaveId)
                                 .findFirst()
                             if(weaveTypeObj == null){
                                 var primId = it.where(WeaveTypes::class.java).max("_id")
@@ -322,15 +321,15 @@ class WishlistPredicates {
                                     WeaveTypes::class.java,
                                     nextID
                                 )
-                                exWeaveType?.productId = weaveType?.productID
+                                exWeaveType?.productId = weaveType?.productId
                                 exWeaveType?.productWeaveId = weaveType?.id
-                                exWeaveType?.weaveId = weaveType?.productID
+                                exWeaveType?.weaveId = weaveType?.weaveId
                                 realm.copyToRealmOrUpdate(exWeaveType)
                             }else{
                                 nextID = weaveTypeObj._id ?: 0
-                                weaveTypeObj.productId = weaveType?.productID
+                                weaveTypeObj.productId = weaveType?.productId
                                 weaveTypeObj.productWeaveId = weaveType?.id
-                                weaveTypeObj.weaveId = weaveType?.productID
+                                weaveTypeObj.weaveId = weaveType?.weaveId
                                 realm.copyToRealmOrUpdate(weaveTypeObj)
                             }
 
@@ -338,15 +337,15 @@ class WishlistPredicates {
                     }
 
                     var careList = catalogueProduct?.productCares
-                    var careItr = careList.iterator()
+                    var careItr = careList?.iterator()
                     if(careItr!=null){
                         while (careItr.hasNext()){
-                            var care = careItr?.next()
+                            var care = careItr.next()
 
                             var careObj = realm.where(ProductCares::class.java)
-                                .equalTo("productId",care?.productID)
+                                .equalTo("productId",care.productId)
                                 .and()
-                                .equalTo("productCareId",care?.productCareID)
+                                .equalTo("productCareId",care.productCareId)
                                 .limit(1)
                                 .findFirst()
                             if(careObj == null){
@@ -356,19 +355,18 @@ class WishlistPredicates {
                                 } else {
                                     nextID = primId.toLong() + 1
                                 }
-                                var exCare = it.createObject(
-                                    ProductCares::class.java,
+                                var exCare = it.createObject(ProductCares::class.java,
                                     nextID
                                 )
-                                exCare?.productId = care?.productID
+                                exCare?.productId = care?.productId
                                 exCare?.careId = care?.id
-                                exCare?.productCareId = care?.productCareID
+                                exCare?.productCareId = care?.productCareId
                                 realm.copyToRealmOrUpdate(exCare)
                             }else{
-                                nextID = careObj._id ?: 0
-                                careObj.productId = care?.productID
-                                careObj.careId = care?.id
-                                careObj.productCareId = care?.productCareID
+                                nextID = careObj?._id ?: 0
+                                careObj?.productId = care?.productId
+                                careObj?.careId = care?.id
+                                careObj?.productCareId = care?.productCareId
                                 realm.copyToRealmOrUpdate(careObj)
                             }
 

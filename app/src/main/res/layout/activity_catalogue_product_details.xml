@@ -12,13 +12,7 @@
         android:background="@color/colorSplash"
         tools:context=".ui.modules.buyer.productDetails.CatalogueProductDetailsActivity">
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/details_refresh"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+
 
         <ScrollView
             android:id="@+id/scroll_product_details"
@@ -824,7 +818,6 @@
             </LinearLayout>
 
         </ScrollView>
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <Button
             android:id="@+id/btn_generate_enquiry"
