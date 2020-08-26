@@ -435,5 +435,30 @@ class WishlistPredicates {
             }
             return wishlistedItem
         }
+
+        fun isProductWishlisted(productId : Long):Boolean{
+            var flag=false
+            val realm = CXRealmManager.getRealmInstance()
+            try {
+                realm.executeTransaction {
+
+                    var productCatalog = realm.where(ProductCatalogue::class.java)
+                        .equalTo(ProductCatalogue.COLUMN_PRODUCT_ID,productId).limit(1)
+                        .findFirst()
+
+                    flag = if(productCatalog != null){
+                        productCatalog.isWishlisted == 1L
+                    }else{
+                        false
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("isProductPresent","${e}")
+                flag= false
+            } finally {
+//            realm.close()
+            }
+            return flag
+        }
     }
 }

@@ -123,7 +123,11 @@ class BuyerSearchAdapter(private val mContext : Context,
         var url = Utility.getProductsImagesUrl(product?.id, first_image)
         mContext.let { ImageSetter.setImage(it,url,holder?.productImage) }
 
+        var isWishlisted = product?.id?.let { it1 -> WishlistPredicates.isProductWishlisted(it1) }
+
+        holder?.wishlistButton?.isLiked = isWishlisted == true
         holder?.wishlistButton?.setOnLikeListener(object: OnLikeListener {
+
             override fun liked(likeButton: LikeButton) {
                 WishlistPredicates.updateProductWishlisting(product?.id,1L,1L)
                 if(Utility.checkIfInternetConnected(mContext)){
@@ -178,13 +182,13 @@ class BuyerSearchAdapter(private val mContext : Context,
                         }
                     })
             }
-
-            //TODO Wishlisted items implementation
 //            val intent = Intent(mContext.catalogueProductDetailsIntent())
 //            val bundle = Bundle()
 //            bundle.putString(ConstantsDirectory.PRODUCT_ID, product?.id?.toString())
 //            intent.putExtras(bundle)
 //            mContext.startActivity(intent)
+
+
         }
 
         holder.productImage.setOnClickListener{
