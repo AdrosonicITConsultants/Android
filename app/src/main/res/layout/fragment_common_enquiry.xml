@@ -5,11 +5,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/buyer_enquiry_home"
+        android:id="@+id/common_enquiry_home"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorSplash"
-        tools:context=".ui.modules.buyer.enquiry.BuyerEnquiryFragment">
+        tools:context=".ui.modules.buyer.enquiry.CommonEnquiryFragment">
 
         <TextView
             android:id="@+id/your_enquiries_text"
@@ -28,7 +28,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.tabs.TabLayout
-            android:id="@+id/view_buyer_enquiries_tab"
+            android:id="@+id/view_enquiries_tab"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:tabIndicatorColor="@color/black_text"
@@ -55,7 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/lighter_gray"
-            app:layout_constraintTop_toBottomOf="@id/view_buyer_enquiries_tab"
+            app:layout_constraintTop_toBottomOf="@id/view_enquiries_tab"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 

@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/item_enquiry"
+        android:id="@+id/item_buyer_enquiry"
         android:layout_marginBottom="4dp"
         android:elevation="8dp"
         android:layout_width="match_parent"
@@ -79,14 +79,15 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="@dimen/margin_semimedium"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="@dimen/margin_regular"
+                    android:ellipsize="end"
                     android:fontFamily="@font/lato_regular"
+                    android:maxLines="2"
                     android:textSize="10sp"
                     android:textStyle="bold"
-                    android:maxLines="2"
-                    android:ellipsize="end"
                     app:layout_constraintEnd_toStartOf="@+id/product_amount"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toEndOf="@+id/product_image"
                     app:layout_constraintTop_toBottomOf="@+id/enquiry_id_text" />
 
@@ -111,14 +112,17 @@
                     android:id="@+id/product_status_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="4dp"
                     android:fontFamily="@font/lato_regular"
                     android:textSize="8sp"
-                    android:layout_marginTop="6dp"
-                    android:layout_marginStart="4dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/date_text"
                     app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@+id/product_image"
                     app:layout_constraintTop_toBottomOf="@+id/brand_name"
-                    app:layout_constraintStart_toEndOf="@+id/product_image"/>
+                    app:layout_constraintVertical_bias="0.0" />
 
                 <TextView
                     android:id="@+id/product_amount"
@@ -128,7 +132,8 @@
                     android:layout_marginEnd="10dp"
                     android:fontFamily="@font/lato_regular"
                     android:textColor="@color/black_text"
-                    android:textSize="@dimen/product_description_text"
+                    android:textSize="@dimen/product_note_text"
+                    android:text="33"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"

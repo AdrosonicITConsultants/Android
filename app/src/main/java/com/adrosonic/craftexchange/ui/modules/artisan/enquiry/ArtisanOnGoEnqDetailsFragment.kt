@@ -1,24 +1,19 @@
-package com.adrosonic.craftexchange.ui.modules.buyer.enquiry
+package com.adrosonic.craftexchange.ui.modules.artisan.enquiry
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import com.adrosonic.craftexchange.R
-import com.adrosonic.craftexchange.databinding.FragmentBuyerCompEnqBinding
-
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class BuyerCompEnqFragment : Fragment() {
+class ArtisanOnGoEnqDetailsFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-
-    var mBinding : FragmentBuyerCompEnqBinding?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,14 +28,17 @@ class BuyerCompEnqFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_buyer_comp_enq, container, false)
-        return mBinding?.root
-
+        return inflater.inflate(R.layout.fragment_artisan_on_go_enq_details, container, false)
     }
 
     companion object {
-        @JvmStatic
-        fun newInstance() =
-            BuyerCompEnqFragment()
+
+        fun newInstance(param1: String, param2: String) =
+            ArtisanOnGoEnqDetailsFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
+                }
+            }
     }
 }

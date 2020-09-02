@@ -1,4 +1,4 @@
-package com.adrosonic.craftexchange.ui.modules.buyer.enquiry.adapter
+package com.adrosonic.craftexchange.ui.modules.artisan.enquiry.adapter
 
 import android.content.Context
 import android.content.Intent
@@ -24,7 +24,7 @@ import com.adrosonic.craftexchange.utils.Utility
 import com.pixplicity.easyprefs.library.Prefs
 import io.realm.RealmResults
 
-class BuyerOnGoingRecyclerAdapter(var context: Context?, private var enquiries: RealmResults<OngoingEnquiries>) : RecyclerView.Adapter<BuyerOnGoingRecyclerAdapter.MyViewHolder>() {
+class ArtisanOnGoingRecyclerAdapter(var context: Context?, private var enquiries: RealmResults<OngoingEnquiries>) : RecyclerView.Adapter<ArtisanOnGoingRecyclerAdapter.MyViewHolder>() {
 
 
     inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -33,10 +33,9 @@ class BuyerOnGoingRecyclerAdapter(var context: Context?, private var enquiries: 
         var productName: TextView = view.findViewById(R.id.product_name)
         var brandName: TextView = view.findViewById(R.id.brand_name)
         var productStatus: TextView = view.findViewById(R.id.product_status_text)
-        var productAmount : TextView = view.findViewById(R.id.product_amount)
+        var enquiryStageStatus : TextView = view.findViewById(R.id.enquiry_stage_text)
         var dateText: TextView = view.findViewById(R.id.date_text)
-        var enquiryStage : TextView = view.findViewById(R.id.enquiry_status_text)
-        var enquiryStageDot: ImageView = view.findViewById(R.id.enquiry_status_dot)
+
         var layout : ConstraintLayout = view.findViewById(R.id.enquiry_container_layout)
     }
 
@@ -59,7 +58,7 @@ class BuyerOnGoingRecyclerAdapter(var context: Context?, private var enquiries: 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_buyer_enquiry_list, parent, false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_artisan_enquiry_list, parent, false)
         return MyViewHolder(itemView)
     }
 
@@ -71,6 +70,7 @@ class BuyerOnGoingRecyclerAdapter(var context: Context?, private var enquiries: 
             var bundle = Bundle()
             Prefs.putString(ConstantsDirectory.ENQUIRY_ID, enquiry?.enquiryID?.toString()) //TODO change later
             bundle.putString(ConstantsDirectory.ENQUIRY_ID, enquiry?.enquiryID?.toString())
+//            bundle.putString(ConstantsDirectory.ENQUIRY_CODE,enquiry?.enquiryCode)
             intent.putExtras(bundle)
             context?.startActivity(intent)
         }
@@ -117,7 +117,7 @@ class BuyerOnGoingRecyclerAdapter(var context: Context?, private var enquiries: 
             }
             var fp = SpannableString("${prodCategory} / ")
             var sp = "${warp} X ${weft} X ${extraweft}"
-            fp.setSpan(context?.let { ContextCompat.getColor(it,R.color.black_text) }?.let {
+            fp.setSpan(context?.let { ContextCompat.getColor(it, R.color.black_text) }?.let {
                 ForegroundColorSpan(
                     it
                 )
@@ -157,10 +157,6 @@ class BuyerOnGoingRecyclerAdapter(var context: Context?, private var enquiries: 
             }
         }
 
-        holder?.productAmount.text = enquiry?.totalAmount ?: "₹ 0"
-//        holder?.binding?.productAmount?.text = "RS250000000"
-
-
         if(enquiry?.lastUpdated != ""){
             date = enquiry?.lastUpdated?.split("T")?.get(0)
             holder.dateText.text = "Updated on : $date"
@@ -177,45 +173,7 @@ class BuyerOnGoingRecyclerAdapter(var context: Context?, private var enquiries: 
                 enquiryStage = it.second
             }
         }
-        when(enquiry?.enquiryStageID){
-            1L -> {
-                context?.let {
-                    ContextCompat.getColor(
-                        it, R.color.black_text)
-                }?.let { holder.enquiryStage.setTextColor(it) }
-
-                context?.let {
-                    ContextCompat.getColor(
-                        it,R.color.black_text)
-                }?.let { holder.enquiryStageDot.setBackgroundColor(it) }
-            }
-
-                2L,3L,4L,5L -> {
-                context?.let {
-                    ContextCompat.getColor(
-                        it, R.color.tab_details_selected_text)
-                }?.let { holder.enquiryStage.setTextColor(it) }
-
-                context?.let {
-                    ContextCompat.getColor(
-                        it,R.color.tab_details_selected_text)
-                }?.let { holder.enquiryStageDot.setBackgroundColor(it) }
-            }
-
-            6L,7L,8L,9L,10L -> {
-                context?.let {
-                    ContextCompat.getColor(
-                        it, R.color.dark_green)
-                }?.let { holder.enquiryStage.setTextColor(it) }
-
-                context?.let {
-                    ContextCompat.getColor(
-                        it,R.color.dark_green)
-                }?.let { holder.enquiryStageDot.setBackgroundColor(it) }
-
-            }
-        }
-        holder?.enquiryStage.text = enquiryStage
+        holder?.enquiryStageStatus.text = enquiryStage
     }
 
 }

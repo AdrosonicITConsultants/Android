@@ -21,7 +21,6 @@ import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.ArtisanProducts
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
 import com.adrosonic.craftexchange.database.predicates.WishlistPredicates
-import com.adrosonic.craftexchange.databinding.FragmentBuyerEnquiryBinding
 import com.adrosonic.craftexchange.databinding.FragmentBuyerOnGoEnqDetailsBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.singleProduct.SingleProductDetails

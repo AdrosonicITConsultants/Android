@@ -24,6 +24,7 @@ import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
 import com.adrosonic.craftexchange.databinding.ActivityArtisanLandingBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.ui.modules.artisan.profile.artisanProfileIntent
+import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.CommonEnquiryFragment
 import com.adrosonic.craftexchange.ui.modules.search.searchSuggestionIntent
 import com.adrosonic.craftexchange.viewModels.LandingViewModel
 import com.adrosonic.craftexchange.ui.modules.role.roleselectIntent
@@ -139,7 +140,11 @@ class ArtisanLandingActivity : AppCompatActivity(),
                     }
 
                     R.id.action_enquiries -> {
-                        //                        initTab(CalculatorFragment.newInstance(), CalculatorFragment.TAG)
+                        if (savedInstanceState == null) {
+                            supportFragmentManager.beginTransaction() .add(R.id.artisan_home_container, CommonEnquiryFragment.newInstance())
+                                .addToBackStack(null)
+                                .commit()
+                        }
                         return true
                     }
 
@@ -316,6 +321,8 @@ class ArtisanLandingActivity : AppCompatActivity(),
         } else {
             mViewModel?.getProductsOfArtisan(this)
             mViewModel?.getProductUploadData()
+            mViewModel?.getEnquiryStageData()
+            mViewModel?.getEnquiryStageAvailableProdsData()
             mProVM.getArtisanProfileDetails(this)
             craftUser = mProVM.getUserMutableData()
             setProfileImage()

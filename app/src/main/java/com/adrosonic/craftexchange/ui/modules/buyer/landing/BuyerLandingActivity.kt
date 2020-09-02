@@ -23,7 +23,7 @@ import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
 import com.adrosonic.craftexchange.databinding.ActivityBuyerLandingBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
-import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.BuyerEnquiryFragment
+import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.CommonEnquiryFragment
 import com.adrosonic.craftexchange.ui.modules.buyer.ownDesign.OwnProductListFragment
 import com.adrosonic.craftexchange.ui.modules.buyer.profile.buyerProfileIntent
 import com.adrosonic.craftexchange.ui.modules.buyer.wishList.wishlistFragment
@@ -142,7 +142,7 @@ class BuyerLandingActivity : AppCompatActivity(), NavigationView.OnNavigationIte
 
                     R.id.action_enquiries -> {
                         if (savedInstanceState == null) {
-                            supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container, BuyerEnquiryFragment.newInstance())
+                            supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container, CommonEnquiryFragment.newInstance())
                                 .addToBackStack(null)
                                 .commit()
                         }
