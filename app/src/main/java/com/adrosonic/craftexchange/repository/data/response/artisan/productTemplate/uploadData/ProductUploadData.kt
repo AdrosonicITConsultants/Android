@@ -1,4 +1,4 @@
-package com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData
+package com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.uploadData
 
 data class ProductUploadData (
     val data: Data,

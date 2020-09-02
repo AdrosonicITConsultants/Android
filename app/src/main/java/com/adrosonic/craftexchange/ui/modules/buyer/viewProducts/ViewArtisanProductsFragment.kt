@@ -41,10 +41,7 @@ class ViewArtisanProductsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         childFragmentManager.let{
-            mBinding?.viewPagerViewProducts?.adapter =
-                ViewArtisanProductsPagerAdapter(
-                    it
-                )
+            mBinding?.viewPagerViewProducts?.adapter = ViewArtisanProductsPagerAdapter(it)
             mBinding?.tabLayoutViewProducts?.setupWithViewPager(mBinding?.viewPagerViewProducts)
         }
     }

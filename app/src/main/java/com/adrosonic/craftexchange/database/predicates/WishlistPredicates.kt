@@ -238,13 +238,13 @@ class WishlistPredicates {
                                     ProductImages::class.java,
                                     nextID
                                 )
-                                eximg.productId = productId
+                                eximg.productId = catalogueProduct?.id
                                 eximg.imageId = image?.id
                                 eximg.imageName = image?.lable
                                 realm.copyToRealmOrUpdate(eximg)
                             }else{
                                 nextID = imageObj._id ?: 0
-                                imageObj.productId =productId
+                                imageObj.productId = catalogueProduct?.id
                                 imageObj.imageId = image?.id
                                 imageObj.imageName = image?.lable
                                 realm.copyToRealmOrUpdate(imageObj)

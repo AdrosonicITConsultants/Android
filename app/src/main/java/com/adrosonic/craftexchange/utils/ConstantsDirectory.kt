@@ -89,5 +89,6 @@ object ConstantsDirectory {
     const val PRODUCT_CATEGORY_ID = "productcategoryid"
     const val PRODUCT_ID = "productid"
 
-
+    const val ENQUIRY_ID = "enquiryid"
+    const val ENQUIRY_CODE = "enquirycode"
 }

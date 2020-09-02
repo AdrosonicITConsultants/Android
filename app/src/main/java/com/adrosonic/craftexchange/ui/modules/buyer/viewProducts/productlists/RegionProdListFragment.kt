@@ -47,8 +47,6 @@ class RegionProdListFragment : Fragment(),
     var clusterName : String ?= ""
 
     var clusterProductAdapter : CatalogueProductAdapter?= null
-//    private lateinit var clusterProductAdapter: ClustProdAdapter
-
 
     private var mClusProductList : RealmResults<ProductCatalogue>?= null
     private var mFilteredList : RealmResults<ProductCatalogue>?= null
@@ -64,6 +62,7 @@ class RegionProdListFragment : Fragment(),
 
     var productID : Long ?= 0L
     var enqID : String?=""
+    var enqCode : String?=""
     var prodName : String?=""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,7 +90,6 @@ class RegionProdListFragment : Fragment(),
         mClusVM.clusterListener = this
 
         setRecyclerList()
-
 
         setFilterList()
         mBinding?.swipeRegionProducts?.isEnabled = false
@@ -196,8 +194,9 @@ class RegionProdListFragment : Fragment(),
             Handler(Looper.getMainLooper()).post {
                 Log.e("EnquiryGeneration", "Onsucces")
                 dialog?.dismiss()
-                enqID = enquiry?.data?.enquiry?.code.toString()
-                sucDialog = Utility.enquiryGenSuccessDialog(requireActivity(),enqID.toString())
+                enqID = enquiry?.data?.enquiry?.id.toString()
+                enqCode = enquiry?.data?.enquiry?.code.toString()
+                sucDialog = Utility.enquiryGenSuccessDialog(requireActivity(),enqID.toString(),enqCode.toString())
                 Handler().postDelayed({ sucDialog?.show() }, 500)
             }
         } catch (e: Exception) {
@@ -205,15 +204,16 @@ class RegionProdListFragment : Fragment(),
         }
     }
 
-    override fun onExistingEnquiryGeneration(productName: String, id: String) {
+    override fun onExistingEnquiryGeneration(productName: String, id: String, code:String) {
         try {
             Handler(Looper.getMainLooper()).post {
                 Log.e("ExistingEnqGeneration", "Onsuccess")
                 dialog?.dismiss()
 
                 enqID = id
+                enqCode = code
                 prodName = productName
-                exDialog = Utility.enquiryGenExistingDialog(requireActivity(),enqID.toString(), prodName.toString())
+                exDialog = Utility.enquiryGenExistingDialog(requireActivity(),enqID.toString(), enqCode.toString(),prodName.toString())
 
                 var btn_gen = exDialog?.findViewById(R.id.btn_ex_generate_new_enquiry) as TextView
                 btn_gen?.setOnClickListener {
@@ -260,10 +260,7 @@ class RegionProdListFragment : Fragment(),
                 Log.e("clusterList", "OnFailure")
                 mBinding?.swipeRegionProducts?.isRefreshing = false
                 clusterId?.let { mClusVM.getClusterProdListMutableData(it) }
-                Utility.displayMessage(
-                    "Error while fetching list",
-                    requireContext()
-                )
+                Utility.displayMessage("Error while fetching list", requireContext())
             }
             )
         } catch (e: Exception) {

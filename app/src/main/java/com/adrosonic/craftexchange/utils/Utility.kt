@@ -4,9 +4,9 @@ import android.Manifest
 import android.R
 import android.app.Activity
 import android.app.AlertDialog
-import android.app.Application
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Bitmap
@@ -14,6 +14,7 @@ import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Build
+import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -22,23 +23,21 @@ import android.view.View
 import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
 import com.adrosonic.craftexchange.database.predicates.UserPredicates
+import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.uploadData.ProductUploadData
+import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryAvaProdStageData
+import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryStageData
+import com.adrosonic.craftexchange.ui.modules.buyer.productDetails.*
+import com.adrosonic.craftexchange.ui.modules.enquiry.enquiryDetails
 import com.bumptech.glide.Glide
+import com.google.gson.GsonBuilder
 import com.pixplicity.easyprefs.library.Prefs
 import kotlinx.android.synthetic.main.dialog_gen_enquiry_success.*
 import kotlinx.android.synthetic.main.dialog_gen_enquiry_update_or_new.*
-import okhttp3.MediaType
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.io.*
-import java.util.*
 import java.util.regex.Pattern
+import kotlin.collections.ArrayList
 
 class Utility {
     companion object{
@@ -243,11 +242,11 @@ class Utility {
             return dialog
         }
 
-        fun enquiryGenSuccessDialog(context : Context, enquiryId : String) : Dialog {
+        fun enquiryGenSuccessDialog(context : Context, enquiryId : String ,enquiryCode : String) : Dialog {
             var dialog = Dialog(context)
             dialog.setContentView(com.adrosonic.craftexchange.R.layout.dialog_gen_enquiry_success)
 
-            var id = SpannableString(enquiryId)
+            var id = SpannableString(enquiryCode)
             id.setSpan(ForegroundColorSpan(Color.BLACK), 0, id.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             dialog.success_enquiry_id?.append(id)
 
@@ -257,17 +256,24 @@ class Utility {
             dialog.btn_success_view_enquiry?.setOnClickListener {
                 //TODO : View Enquiry details in enquiry landing page
                 dialog.cancel()
+                val intent = Intent(context?.enquiryDetails())
+                var bundle = Bundle()
+                Prefs.putString(ConstantsDirectory.ENQUIRY_ID, enquiryId) //TODO change later
+                bundle.putString(ConstantsDirectory.ENQUIRY_ID, enquiryId)
+//                bundle.putString(ConstantsDirectory.ENQUIRY_CODE,enquiry?.enquiryCode)
+                intent.putExtras(bundle)
+                context?.startActivity(intent)
             }
             dialog.setCanceledOnTouchOutside(false)
 
             return dialog
         }
 
-        fun enquiryGenExistingDialog(context : Context,enquiryId: String, productName : String) : Dialog {
+        fun enquiryGenExistingDialog(context : Context, enquiryId : String ,enquiryCode: String, productName : String) : Dialog {
             var dialog = Dialog(context)
             dialog.setContentView(com.adrosonic.craftexchange.R.layout.dialog_gen_enquiry_update_or_new)
 
-            var id = SpannableString(enquiryId)
+            var id = SpannableString(enquiryCode)
             id.setSpan(ForegroundColorSpan(Color.BLACK), 0, id.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             dialog.existing_enquiry_id?.append(id)
 
@@ -278,6 +284,13 @@ class Utility {
             }
             dialog.existing_btn_view_enquiry?.setOnClickListener {
                 dialog.cancel()
+                val intent = Intent(context?.enquiryDetails())
+                var bundle = Bundle()
+                Prefs.putString(ConstantsDirectory.ENQUIRY_ID, enquiryId) //TODO change later
+                bundle.putString(ConstantsDirectory.ENQUIRY_ID, enquiryId)
+//                bundle.putString(ConstantsDirectory.ENQUIRY_CODE,enquiry?.enquiryCode)
+                intent.putExtras(bundle)
+                context?.startActivity(intent)
             }
 
             dialog.setCanceledOnTouchOutside(false)
@@ -390,6 +403,64 @@ class Utility {
             UserConfig.shared.extraWeftYarnId=0
         }
 
+        fun getEnquiryStagesData(): ArrayList<Pair<Long,String>>{
+            val gson = GsonBuilder().create()
+            var enqobj = gson.fromJson(UserConfig.shared.enquiryStageData.toString(), EnquiryStageData::class.java)
+            var itr = enqobj?.data?.iterator()
+            var list = ArrayList<Pair<Long,String>>()
+            list.clear()
+            if(itr!=null){
+                while(itr.hasNext()){
+                    var enq = itr.next()
+                    list.add(Pair(enq.id,enq.desc))
+                }
+            }
+            return list
+        }
 
+        fun getAvaiProdEnquiryStagesData(): ArrayList<Triple<Long,Long,String>>{
+            val gson = GsonBuilder().create()
+            var enqobj = gson.fromJson(UserConfig.shared.enquiryAvaProdStageData.toString(), EnquiryAvaProdStageData::class.java)
+            var itr = enqobj?.data?.iterator()
+            var list = ArrayList<Triple<Long,Long,String>>()
+            list.clear()
+            if(itr!=null){
+                while(itr.hasNext()){
+                    var enq = itr.next()
+                    list.add(Triple(enq?.num,enq.orderStages?.id,enq.orderStages?.desc))
+                }
+            }
+            return list
+        }
+
+        fun getWeaveType() : ArrayList<Pair<Long,String>>{
+            val gson = GsonBuilder().create()
+            var prodObj = gson.fromJson(UserConfig.shared.productUploadJson.toString(), ProductUploadData::class.java)
+            var itr = prodObj?.data?.weaves?.iterator()
+            var list = ArrayList<Pair<Long,String>>()
+            list.clear()
+            if(itr!=null){
+                while(itr.hasNext()){
+                    var enq = itr.next()
+                    list.add(Pair(enq.id,enq.weaveDesc))
+                }
+            }
+            return list
+        }
+
+        fun getProductCategory() : ArrayList<Pair<Long,String>>{
+            val gson = GsonBuilder().create()
+            var prodObj = gson.fromJson(UserConfig.shared.productUploadJson.toString(), ProductUploadData::class.java)
+            var itr = prodObj?.data?.productCategories?.iterator()
+            var list = ArrayList<Pair<Long,String>>()
+            list.clear()
+            if(itr!=null){
+                while(itr.hasNext()){
+                    var enq = itr.next()
+                    list.add(Pair(enq.id,enq.productDesc))
+                }
+            }
+            return list
+        }
     }
 }

@@ -232,5 +232,25 @@
     <string name="filter_items_collection">Filter item\nby collection</string>
     <string name="show_both">Show both</string>
     <string name="collapse">Collapse</string>
+    <string name="your_enquiries">Your Enquiries</string>
+    <string name="ongoing">Ongoing</string>
+    <string name="completed">Completed</string>
+    <string name="recent">Recent</string>
+    <string name="enquiry_details">Enquiry Details</string>
+    <string name="check_artisan_details">Check artisan\'s details</string>
+    <string name="check_moq">Check MOQ</string>
+    <string name="check_pi">Check PI</string>
+    <string name="check_product_details">Check Product Details</string>
+    <string name="moq">MOQ</string>
+    <string name="price_per_unit">Price/unit(or m)</string>
+    <string name="eta_delivery">ETA Delivery</string>
+    <string name="close_enquiry">Close Enquiry</string>
+    <string name="status">Status</string>
+    <string name="specialist_in">Specialist in</string>
+    <string name="view_pi">View\npro forma\ninvoice</string>
+    <string name="upload_trans_receipt">Upload transaction receipt</string>
+    <string name="previous">Previous</string>
+    <string name="current">Current</string>
+    <string name="requested_custom_design">Requested Custom Design</string>
 
 </resources>

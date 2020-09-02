@@ -14,14 +14,13 @@ import com.adrosonic.craftexchange.database.entities.realmEntities.ArtisanProduc
 import com.adrosonic.craftexchange.database.entities.realmEntities.BuyerCustomProduct
 import com.adrosonic.craftexchange.database.predicates.BuyerCustomProductPredicates
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
-import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.Dye
-import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.ProductUploadData
-import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.Yarn
-import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.YarnCount
+import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.uploadData.Dye
+import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.uploadData.ProductUploadData
+import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.uploadData.Yarn
+import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.uploadData.YarnCount
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
 import com.google.gson.GsonBuilder
-import kotlinx.android.synthetic.main.warp_weft_yarn.view.*
 import java.lang.Exception
 
 

@@ -70,6 +70,7 @@ class BuyerSearchResultFragment : Fragment(),
 
     var productID : Long ?= 0L
     var enqID : String?=""
+    var enqCode:String?=""
     var prodName : String?=""
 
     var isFilterEnabled : Long? = 0
@@ -184,6 +185,7 @@ class BuyerSearchResultFragment : Fragment(),
                 if (!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE)
                 {
                     Log.d("-----", "end")
+                    mBinding?.searchBuyerSwipe?.isRefreshing = true
                     pageNo = pageNo?.plus(1)
                     pageNo?.let { searchFilterId?.let { it1 ->
                         searchFilter?.let { it2 ->
@@ -375,7 +377,8 @@ class BuyerSearchResultFragment : Fragment(),
                 Log.e("EnquiryGeneration", "Onsucces")
                 dialog?.dismiss()
                 enqID = enquiry?.data?.enquiry?.code.toString()
-                sucDialog = Utility.enquiryGenSuccessDialog(requireActivity(),enqID.toString())
+                enqCode = enquiry?.data?.enquiry?.code.toString()
+                sucDialog = Utility.enquiryGenSuccessDialog(requireActivity(),enqID.toString(),enqCode.toString())
                 Handler().postDelayed({ sucDialog?.show() }, 500)
             }
         } catch (e: Exception) {
@@ -383,15 +386,16 @@ class BuyerSearchResultFragment : Fragment(),
         }
     }
 
-    override fun onExistingEnquiryGeneration(productName: String, id: String) {
+    override fun onExistingEnquiryGeneration(productName: String, id: String,code:String) {
         try {
             Handler(Looper.getMainLooper()).post {
                 Log.e("ExistingEnqGeneration", "Onsuccess")
                 dialog?.dismiss()
 
                 enqID = id
+                enqCode= code
                 prodName = productName
-                exDialog = Utility.enquiryGenExistingDialog(requireActivity(),enqID.toString(), prodName.toString())
+                exDialog = Utility.enquiryGenExistingDialog(requireActivity(),enqID.toString(), enqCode.toString(),prodName.toString())
 
                 var btn_gen = exDialog?.findViewById(R.id.btn_ex_generate_new_enquiry) as TextView
                 btn_gen?.setOnClickListener {

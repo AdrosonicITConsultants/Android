@@ -22,6 +22,8 @@ import io.realm.annotations.RealmModule
     WeaveTypes::class,
     ProductCares::class,
     BuyerCustomProduct::class,
-    Enquiries::class
+    Enquiries::class,
+    OngoingEnquiries::class,
+    EnquiryPaymentDetails::class
 ])
 class CXRealmModule

@@ -10,13 +10,12 @@ import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.database.predicates.WishlistPredicates
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.ArtisanProductDetailsResponse
-import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.ProductUploadData
+import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.uploadData.ProductUploadData
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.BrandListResponse
-import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.*
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.singleProduct.SingleProductDetails
-import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.singleProduct.Data
-import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.singleProduct.ProductCategory
 import com.adrosonic.craftexchange.repository.data.response.buyer.wishList.WishListedIds
+import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryAvaProdStageData
+import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryStageData
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
@@ -98,6 +97,62 @@ class LandingViewModel(application: Application) : AndroidViewModel(application)
 
                     }else{
                         Log.e("LandingViewModel","getProductUploadData onFailure: "+response.body()?.errorCode)
+
+                    }
+                }
+
+            })
+    }
+
+    fun getEnquiryStageData(){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getEnquiryService()
+            .getAllEnquiryStagesData(token)
+            .enqueue(object: Callback, retrofit2.Callback<EnquiryStageData> {
+                override fun onFailure(call: Call<EnquiryStageData>, t: Throwable) {
+                    t.printStackTrace()
+                    Log.e("LandingViewModel","getAllEnquiriesStages onFailure: "+t.message)
+                }
+                override fun onResponse(
+                    call: Call<EnquiryStageData>,
+                    response: retrofit2.Response<EnquiryStageData>) {
+
+                    if(response.body()?.valid == true){
+
+                        UserConfig.shared.enquiryStageData= Gson().toJson(response.body())
+                        Log.e("LandingViewModel","SPF Enquiries :"+UserConfig.shared.enquiryStageData)
+
+                    }else{
+                        Log.e("LandingViewModel","getAllEnquiriesStages onFailure: "+response.body()?.errorCode)
+
+                    }
+                }
+
+            })
+    }
+
+    fun getEnquiryStageAvailableProdsData(){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getEnquiryService()
+            .getAvailableProdEnquiryStagesData(token)
+            .enqueue(object: Callback, retrofit2.Callback<EnquiryAvaProdStageData> {
+                override fun onFailure(call: Call<EnquiryAvaProdStageData>, t: Throwable) {
+                    t.printStackTrace()
+                    Log.e("LandingViewModel","getAllEnquiriesStages onFailure: "+t.message)
+                }
+                override fun onResponse(
+                    call: Call<EnquiryAvaProdStageData>,
+                    response: retrofit2.Response<EnquiryAvaProdStageData>) {
+
+                    if(response.body()?.valid == true){
+
+                        UserConfig.shared.enquiryAvaProdStageData= Gson().toJson(response.body())
+                        Log.e("LandingViewModel","SPF Enquiries :"+UserConfig.shared.enquiryAvaProdStageData)
+
+                    }else{
+                        Log.e("LandingViewModel","getAvailableProdEnquiriesStages onFailure: "+response.body()?.errorCode)
 
                     }
                 }

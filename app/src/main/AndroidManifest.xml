@@ -19,15 +19,19 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
 
+        <activity android:name=".ui.modules.enquiry.EnquiryDetailsActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"/>
+
         <activity
             android:name=".ui.modules.search.SearchSuggestionActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".ui.modules.editPhoto.EditPhotoActivity"
-            android:label="@string/title_activity_edit_photo"/>
+            android:label="@string/title_activity_edit_photo" />
         <activity
             android:name=".ui.modules.buyer.ownDesign.BuyerAddOwnProductDesignActivity"
             android:label="@string/title_activity_buyer_add_own_product_design"
@@ -49,7 +53,7 @@
             android:name=".ui.modules.artisan.landing.ArtisanLandingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ui.modules.buyer.profile.editProfile.BuyerEditProfileActivity"
             android:screenOrientation="portrait" />
@@ -59,16 +63,15 @@
         <activity
             android:name=".ui.modules.cx_demovideo.CXVideoActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.modules.buyer.landing.BuyerLandingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan"/>
-
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ui.modules.authentication.register.RegisterActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ui.modules.role.RoleSelectActivity"
             android:screenOrientation="portrait" />
@@ -78,7 +81,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.modules.authentication.login.LoginActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ui.modules.main.MainActivity"
             android:screenOrientation="portrait"
@@ -115,7 +119,6 @@
             android:name=".services.ProductDeletingService"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
-
         <service
             android:name=".services.customDesign.AddOwnProductService"
             android:exported="false"
@@ -137,8 +140,10 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat"/>
+
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
     </application>
 
 </manifest>

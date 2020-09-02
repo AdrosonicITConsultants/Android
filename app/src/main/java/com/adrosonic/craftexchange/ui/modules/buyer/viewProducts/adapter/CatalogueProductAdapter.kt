@@ -63,7 +63,7 @@ class CatalogueProductAdapter(var context: Context?, private var regionProduct: 
         holder.binding.productTitle.text = product?.productTag
         var status : String ?= ""
         when(product?.productStatusId){
-            2.toLong() -> {
+            2L -> {
                 status = ConstantsDirectory.AVAILABLE_IN_STOCK
                 holder.binding.productAvailableText.text = status
                 context?.let {
@@ -71,7 +71,7 @@ class CatalogueProductAdapter(var context: Context?, private var regionProduct: 
                         it, R.color.light_green)
                 }?.let { holder.binding.productAvailableText.setTextColor(it) }
             }
-            1.toLong() -> {
+            1L -> {
                 status = ConstantsDirectory.MADE_TO_ORDER
                 holder.binding.productAvailableText.text = status
                 context?.let {

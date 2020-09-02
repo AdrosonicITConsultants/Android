@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.widget.addTextChangedListener
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.adrosonic.craftexchange.R
@@ -16,13 +15,13 @@ import com.adrosonic.craftexchange.database.entities.realmEntities.ArtisanProduc
 import com.adrosonic.craftexchange.database.entities.realmEntities.BuyerCustomProduct
 import com.adrosonic.craftexchange.database.predicates.BuyerCustomProductPredicates
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
-import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.*
-import com.adrosonic.craftexchange.ui.modules.buyer.productDetails.productId
+import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.uploadData.Dye
+import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.uploadData.ProductUploadData
+import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.uploadData.Yarn
+import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.uploadData.YarnCount
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
 import com.google.gson.GsonBuilder
-import kotlinx.android.synthetic.main.activity_artisan_add_product_template.*
-import kotlinx.android.synthetic.main.activity_buyer_add_own_product_design.*
 import java.lang.Exception
 
 

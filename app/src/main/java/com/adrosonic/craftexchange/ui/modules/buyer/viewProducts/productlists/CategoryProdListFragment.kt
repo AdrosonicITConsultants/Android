@@ -68,6 +68,7 @@ class CategoryProdListFragment : Fragment(),
 
     var productID : Long ?= 0L
     var enqID : String?=""
+    var enqCode:String?=""
     var prodName : String?=""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -193,8 +194,9 @@ class CategoryProdListFragment : Fragment(),
             Handler(Looper.getMainLooper()).post {
                 Log.e("EnquiryGeneration", "Onsucces")
                 dialog?.dismiss()
-                enqID = enquiry?.data?.enquiry?.code.toString()
-                sucDialog = Utility.enquiryGenSuccessDialog(requireActivity(),enqID.toString())
+                enqID = enquiry?.data?.enquiry?.id.toString()
+                enqCode = enquiry?.data?.enquiry?.code.toString()
+                sucDialog = Utility.enquiryGenSuccessDialog(requireActivity(),enqID.toString(),enqCode.toString())
                 Handler().postDelayed({ sucDialog?.show() }, 500)
             }
         } catch (e: Exception) {
@@ -202,15 +204,16 @@ class CategoryProdListFragment : Fragment(),
         }
     }
 
-    override fun onExistingEnquiryGeneration(productName: String, id: String) {
+    override fun onExistingEnquiryGeneration(productName: String, id: String, code:String) {
         try {
             Handler(Looper.getMainLooper()).post {
                 Log.e("ExistingEnqGeneration", "Onsuccess")
                 dialog?.dismiss()
 
                 enqID = id
+                enqCode = code
                 prodName = productName
-                exDialog = Utility.enquiryGenExistingDialog(requireActivity(),enqID.toString(), prodName.toString())
+                exDialog = Utility.enquiryGenExistingDialog(requireActivity(),enqID.toString(), enqCode.toString(),prodName.toString())
 
                 var btn_gen = exDialog?.findViewById(R.id.btn_ex_generate_new_enquiry) as TextView
                 btn_gen?.setOnClickListener {
