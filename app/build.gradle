@@ -17,7 +17,7 @@ android {
         applicationId "com.adrosonic.craftexchange"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 22
+        versionCode 23
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -100,6 +100,9 @@ dependencies {
 
     //caraousel
     implementation 'com.synnapps:carouselview:0.1.4'
+
+    //timelineview
+//    implementation 'com.github.vipulasri:timelineview:1.1.5'
 
     //Circular Rating Bar
     implementation 'com.github.aliab:circular-music-progressbar:v1.3.0'

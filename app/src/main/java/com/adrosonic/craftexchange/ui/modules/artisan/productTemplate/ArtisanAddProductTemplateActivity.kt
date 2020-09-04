@@ -31,14 +31,11 @@ import com.adrosonic.craftexchange.repository.data.request.artisan.productTempla
 import com.adrosonic.craftexchange.repository.data.request.artisan.productTemplate.RelProduct
 import com.adrosonic.craftexchange.repository.data.request.artisan.productTemplate.RelatedProduct
 import com.adrosonic.craftexchange.repository.data.request.artisan.productTemplate.UpdateProductTemplateRequest
-import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.*
-import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.ProductType
+import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.uploadData.*
+import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.uploadData.ProductType
+
 import com.adrosonic.craftexchange.syncManager.SyncCoordinator
-import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.yarnFrgamnets.ExtraWeftFragment
-import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.yarnFrgamnets.WarpFragment
-import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.yarnFrgamnets.WeftFragment
 import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.yarnFrgamnets.YarnFrgamentAdapter
-import com.adrosonic.craftexchange.ui.modules.buyer.profile.editProfile.BuyerEditPPagerAdapter
 import com.adrosonic.craftexchange.utils.*
 import com.adrosonic.craftexchange.viewModels.DownLoadProdImagesViewModel
 import com.google.gson.GsonBuilder

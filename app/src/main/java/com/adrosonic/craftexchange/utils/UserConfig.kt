@@ -1,7 +1,5 @@
 package com.adrosonic.craftexchange.utils
 
-import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
-import com.adrosonic.craftexchange.database.predicates.UserPredicates
 import com.pixplicity.easyprefs.library.Prefs
 
 //////////////////////////////////////////////////////////////////////
@@ -78,6 +76,11 @@ const val WEFT_YARN_ID = "weftYarnId"
 const val EXTRA_WEFT_DYE_ID = "extraWeftDyeId"
 const val EXTRA_WEFT_YARN_COUNT = "extraWeftYarnCount"
 const val EXTRA_WEFT_YARN_ID = "extraWeftYarnId"
+
+////////////////////////Enquiry/////////////////////////////
+const val ENQUIRY_STAGE_DATA = "enquiry_stage_data"
+const val ENQUIRY_AVAI_PROD_STAGE_DATA = "enquiry_available_product_stage_data"
+
 
 class UserConfig {
 
@@ -499,6 +502,20 @@ class UserConfig {
         get() = Prefs.getString(DEVICE_NAME,"")
         set(value) {
             Prefs.putString(DEVICE_NAME, value)
+            field = value
+        }
+
+    var enquiryStageData : String? = ""
+        get() = Prefs.getString(ENQUIRY_STAGE_DATA,"")
+        set(value) {
+            Prefs.putString(ENQUIRY_STAGE_DATA, value)
+            field = value
+        }
+
+    var enquiryAvaProdStageData : String? = ""
+        get() = Prefs.getString(ENQUIRY_AVAI_PROD_STAGE_DATA,"")
+        set(value) {
+            Prefs.putString(ENQUIRY_AVAI_PROD_STAGE_DATA, value)
             field = value
         }
 }

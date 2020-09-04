@@ -30,6 +30,7 @@ import com.adrosonic.craftexchange.repository.data.response.Notification.SaveUse
 import com.adrosonic.craftexchange.ui.modules.Notification.NotifcationFragment
 import com.adrosonic.craftexchange.ui.modules.artisan.landing.ArtisanLandingActivity
 import com.adrosonic.craftexchange.ui.modules.artisan.landing.artisanLandingIntent
+import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.CommonEnquiryFragment
 import com.adrosonic.craftexchange.ui.modules.buyer.ownDesign.OwnProductListFragment
 import com.adrosonic.craftexchange.ui.modules.buyer.profile.buyerProfileIntent
 import com.adrosonic.craftexchange.ui.modules.buyer.wishList.wishlistFragment
@@ -71,9 +72,6 @@ class BuyerLandingActivity : AppCompatActivity(),
     LandingViewModel.notificationInterface,
     NotifcationFragment.Companion.notifcationsInterface{
 
-//    fun AppCompatActivity.replaceContainerFragment(fragment: androidx.fragment.app.Fragment) {
-//        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit()
-//    }
 
     companion object{
         const val TAG = "buyerLanding"
@@ -100,6 +98,8 @@ class BuyerLandingActivity : AppCompatActivity(),
         }).execute()
 
         mViewModel.getProductUploadData()
+        mViewModel.getEnquiryStageData()
+        mViewModel.getEnquiryStageAvailableProdsData()
         mViewModel.getwishlisteProductIds()
         mProVM.listener = this
         mViewModel?.noficationlistener=this
@@ -154,9 +154,7 @@ class BuyerLandingActivity : AppCompatActivity(),
                     R.id.action_home -> {
                         if (savedInstanceState == null) {
                             supportFragmentManager.beginTransaction()
-                                .add(R.id.buyer_home_container,
-                                    BuyerHomeFragment.newInstance()
-                                )
+                                .add(R.id.buyer_home_container, BuyerHomeFragment.newInstance())
                                 .detach(BuyerHomeFragment())
                                 .attach(BuyerHomeFragment())
                                 .commitNow()
@@ -165,9 +163,12 @@ class BuyerLandingActivity : AppCompatActivity(),
                     }
 
                     R.id.action_enquiries -> {
-    //                        initTab(CalculatorFragment.newInstance(), CalculatorFragment.TAG)
+                        if (savedInstanceState == null) {
+                            supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container, CommonEnquiryFragment.newInstance())
+                                .addToBackStack(null)
+                                .commit()
+                        }
                         return true
-
                     }
                     R.id.action_wishlist -> {
                         if (savedInstanceState == null) {
@@ -378,7 +379,10 @@ class BuyerLandingActivity : AppCompatActivity(),
         } else {
             mViewModel.getProductsOfArtisan(this)
             mViewModel.getProductUploadData()
+            mViewModel.getEnquiryStageData()
+            mViewModel.getEnquiryStageAvailableProdsData()
             mViewModel.getArtisanBrandDetails()
+            mViewModel.getAllNotifications()
             mProVM.getBuyerProfileDetails(this)
             craftUser = mProVM.getUserMutableData()
             setBrandLogo()

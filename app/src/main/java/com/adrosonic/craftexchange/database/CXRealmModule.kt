@@ -23,6 +23,8 @@ import io.realm.annotations.RealmModule
     ProductCares::class,
     BuyerCustomProduct::class,
     Enquiries::class,
+    OngoingEnquiries::class,
+    EnquiryPaymentDetails::class,
     Notifications::class
 ])
 class CXRealmModule

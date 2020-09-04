@@ -22,8 +22,8 @@ import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCatalo
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.database.predicates.WishlistPredicates
 import com.adrosonic.craftexchange.databinding.ActivityCatalogueProductDetailsBinding
-import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.ProductCare
-import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.ProductUploadData
+import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.uploadData.ProductCare
+import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.uploadData.ProductUploadData
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.generateEnquiry.GenerateEnquiryResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.ProductImage
 import com.adrosonic.craftexchange.syncManager.SyncCoordinator
@@ -171,6 +171,12 @@ class CatalogueProductDetailsActivity : AppCompatActivity(),
             }
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        getProductImages(productId)
+    }
+
 
     fun getProductDetails(productId : Long?){
         productDetails = ProductPredicates.getProductDetails(productId)
@@ -362,7 +368,7 @@ class CatalogueProductDetailsActivity : AppCompatActivity(),
         try {
             Handler(Looper.getMainLooper()).post {
                 dialog?.cancel()
-                Utility.enquiryGenSuccessDialog(this, enquiry.data.enquiry.code.toString()).show()
+                Utility.enquiryGenSuccessDialog(this, enquiry.data.enquiry.id.toString(),enquiry.data.enquiry.code).show()
                 Log.e("EnquiryGeneration", "Onsucces")
             }
         } catch (e: Exception) {
@@ -371,12 +377,13 @@ class CatalogueProductDetailsActivity : AppCompatActivity(),
         }
     }
 
-    override fun onExistingEnquiryGeneration(productName : String, id : String) {
+    override fun onExistingEnquiryGeneration(productName : String, id : String,code :String) {
         try {
             Handler(Looper.getMainLooper()).post {
                 dialog?.dismiss()
-                var exDialog = Utility.enquiryGenExistingDialog(this,id,productName)
+                var exDialog = Utility.enquiryGenExistingDialog(this,id,code,productName)
                 exDialog.show()
+
 
                 exDialog.btn_ex_generate_new_enquiry?.setOnClickListener {
                     exDialog.cancel()

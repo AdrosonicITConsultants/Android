@@ -127,7 +127,6 @@ class BuyerSearchAdapter(private val mContext : Context,
 
         holder?.wishlistButton?.isLiked = isWishlisted == true
         holder?.wishlistButton?.setOnLikeListener(object: OnLikeListener {
-
             override fun liked(likeButton: LikeButton) {
                 WishlistPredicates.updateProductWishlisting(product?.id,1L,1L)
                 if(Utility.checkIfInternetConnected(mContext)){
@@ -135,7 +134,6 @@ class BuyerSearchAdapter(private val mContext : Context,
                     coordinator.performLocallyAvailableActions()
                 }
             }
-
             override fun unLiked(likeButton: LikeButton) {
                 WishlistPredicates.updateProductWishlisting(product?.id,0L,1L)
                 if(Utility.checkIfInternetConnected(mContext)){

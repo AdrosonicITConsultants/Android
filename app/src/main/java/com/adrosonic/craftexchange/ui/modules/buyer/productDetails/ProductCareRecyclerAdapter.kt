@@ -1,32 +1,14 @@
 package com.adrosonic.craftexchange.ui.modules.buyer.productDetails
 
 import android.content.Context
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
-import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCard
-import com.adrosonic.craftexchange.database.predicates.ProductPredicates
-import com.adrosonic.craftexchange.databinding.ItemBrandProductsBinding
 import com.adrosonic.craftexchange.databinding.ItemProductCareListBinding
-import com.adrosonic.craftexchange.repository.CraftExchangeRepository
-import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.ProductCare
+import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.uploadData.ProductCare
 //import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.ProductCare
-import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.BrandDetails
-import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.CatalogueProductsResponse
-import com.adrosonic.craftexchange.ui.interfaces.BrandProductClick
-import com.adrosonic.craftexchange.ui.modules.buyer.landing.BuyerLandingActivity
-import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.productlists.BrandProdListFragment
-import com.adrosonic.craftexchange.utils.ConstantsDirectory
-import com.adrosonic.craftexchange.utils.ImageSetter
-import com.adrosonic.craftexchange.utils.Utility
-import com.pixplicity.easyprefs.library.Prefs
-import retrofit2.Call
-import retrofit2.Response
-import javax.security.auth.callback.Callback
 
 class ProductCareRecyclerAdapter(var context: Context?, private var careList: List<ProductCare>) : RecyclerView.Adapter<ProductCareRecyclerAdapter.ViewHolder>(){
 

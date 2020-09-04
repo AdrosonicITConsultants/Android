@@ -29,6 +29,7 @@ import com.adrosonic.craftexchange.repository.data.response.Notification.SaveUse
 import com.adrosonic.craftexchange.ui.modules.Notification.NotifcationFragment
 import com.adrosonic.craftexchange.ui.modules.artisan.profile.artisanProfileIntent
 import com.adrosonic.craftexchange.ui.modules.role.roleselectIntent
+import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.CommonEnquiryFragment
 import com.adrosonic.craftexchange.ui.modules.search.searchSuggestionIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
@@ -147,7 +148,11 @@ class ArtisanLandingActivity : AppCompatActivity(),
                     }
 
                     R.id.action_enquiries -> {
-                        //                        initTab(CalculatorFragment.newInstance(), CalculatorFragment.TAG)
+                        if (savedInstanceState == null) {
+                            supportFragmentManager.beginTransaction() .add(R.id.artisan_home_container, CommonEnquiryFragment.newInstance())
+                                .addToBackStack(null)
+                                .commit()
+                        }
                         return true
                     }
 
@@ -351,9 +356,13 @@ class ArtisanLandingActivity : AppCompatActivity(),
         } else {
             mViewModel?.getProductsOfArtisan(this)
             mViewModel?.getProductUploadData()
+            mViewModel?.getEnquiryStageData()
+            mViewModel?.getEnquiryStageAvailableProdsData()
+            mViewModel?.getAllNotifications()
             mProVM.getArtisanProfileDetails(this)
             craftUser = mProVM.getUserMutableData()
             setProfileImage()
+
         }
     }
 

@@ -958,6 +958,14 @@ class ProductPredicates {
                 .findAll()
         }
 
+        fun getProdCatEnq(artisanId : Long?) : RealmResults<ArtisanProducts>?{
+            val realm = CXRealmManager.getRealmInstance()
+            return realm.where(ArtisanProducts::class.java)
+                .equalTo("artisanId",artisanId)
+                .distinct("productCategoryDesc")
+                .findAll()
+        }
+
         fun getArtisanProductsByCategory(artisanId : Long?,categoryId : Long?) : RealmResults<ArtisanProducts>?{
             val realm = CXRealmManager.getRealmInstance()
             return realm.where(ArtisanProducts::class.java)
