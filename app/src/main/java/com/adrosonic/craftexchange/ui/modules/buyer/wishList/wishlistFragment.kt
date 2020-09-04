@@ -152,8 +152,6 @@ class wishlistFragment : Fragment(),
     }
 
     override fun onSelected(productId: Long, isWishListed: Long) {
-        //todo db call
-        //mutable live data
         WishlistPredicates.updateProductWishlisting(productId,isWishListed,1)
         mViewModel.getwishListMutableData()
         setVisiblities()
@@ -241,8 +239,6 @@ class wishlistFragment : Fragment(),
         fun newInstance() =
             wishlistFragment().apply {
                 arguments = Bundle().apply {
-//                    putString(ARG_PARAM1, param1)
-//                    putString(ARG_PARAM2, param2)
                 }
             }
     }

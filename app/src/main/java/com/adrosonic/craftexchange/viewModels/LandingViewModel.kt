@@ -6,9 +6,11 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCatalogue
+import com.adrosonic.craftexchange.database.predicates.NotificationPredicates
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.database.predicates.WishlistPredicates
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
+import com.adrosonic.craftexchange.repository.data.response.Notification.NotificationResponse
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.ArtisanProductDetailsResponse
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.productTemplate.uploadData.ProductUploadData
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.BrandListResponse
@@ -17,6 +19,7 @@ import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.s
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.singleProduct.Data
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.singleProduct.ProductCategory
 import com.adrosonic.craftexchange.repository.data.response.buyer.wishList.WishListedIds
+import com.adrosonic.craftexchange.ui.modules.buyer.profile.BrandFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
@@ -28,13 +31,19 @@ import retrofit2.Response
 import javax.security.auth.callback.Callback
 
 class LandingViewModel(application: Application) : AndroidViewModel(application) {
-
+    companion object {
+        const val TAG = "LandingViewModel"
+    }
 
     interface wishlistFetchedInterface{
         fun onSuccess()
         fun onFailure()
     }
+    interface notificationInterface{
+        fun onNotificationDataFetched()
+    }
     var listener: wishlistFetchedInterface? = null
+    var noficationlistener: notificationInterface? = null
     val wishListData : MutableLiveData<RealmResults<ProductCatalogue>> by lazy { MutableLiveData<RealmResults<ProductCatalogue>>() }
 
     fun getwishListMutableData(): MutableLiveData<RealmResults<ProductCatalogue>> {
@@ -118,7 +127,7 @@ class LandingViewModel(application: Application) : AndroidViewModel(application)
                 }
                 override fun onResponse(
                     call: Call<WishListedIds>,
-                    response: retrofit2.Response<WishListedIds>) {
+                    response: Response<WishListedIds>) {
 
                     if(response.body()?.valid == true){
                         val response=response.body()?.data
@@ -178,6 +187,32 @@ class LandingViewModel(application: Application) : AndroidViewModel(application)
                 ) {
                     if (response.body()?.valid == true) {
                         ProductPredicates.insertBrands(response.body())
+                    }
+                }
+            })
+    }
+    fun getAllNotifications(){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getNotificationService()
+            .getAllNotifications(token)
+            .enqueue(object: Callback, retrofit2.Callback<NotificationResponse> {
+                override fun onFailure(call: Call<NotificationResponse>, t: Throwable) {
+                    t.printStackTrace()
+                    Log.e(TAG,"onFailure: "+t.message)
+                    noficationlistener?.onNotificationDataFetched()
+                }
+                override fun onResponse(
+                    call: Call<NotificationResponse>,
+                    response: Response<NotificationResponse>) {
+                    if(response.body()?.valid == true){
+                        Log.e(TAG,"getProductUploadData :"+response.body()?.data?.getAllNotifications?.size)
+                        NotificationPredicates.insertNotification(response.body()?.data?.getAllNotifications)
+                        UserConfig.shared?.notiBadgeCount=response.body()?.data?.count?:0
+                        noficationlistener?.onNotificationDataFetched()
+                    }else{
+                        Log.e(NotificationViewModel.TAG,"getProductUploadData onFailure: "+response.body()?.errorCode)
+                        noficationlistener?.onNotificationDataFetched()
                     }
                 }
             })

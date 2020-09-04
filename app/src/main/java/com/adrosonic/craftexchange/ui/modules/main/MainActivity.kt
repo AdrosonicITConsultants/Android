@@ -3,6 +3,7 @@ package com.adrosonic.craftexchange.ui.modules.main
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.adrosonic.craftexchange.databinding.ActivityMainBinding
 import com.adrosonic.craftexchange.ui.modules.artisan.landing.artisanLandingIntent
@@ -32,13 +33,28 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         if (Prefs.getBoolean(ConstantsDirectory.IS_LOGGED_IN, false)) {
+//            var isNotification=false
+            var title=""
+            var text=""
             var profile = Prefs.getString(ConstantsDirectory.PROFILE,null)
+            if (intent.extras != null) {
+                for (key in intent.extras!!.keySet()) {
+                    Log.e(  "notificationManager", "MainActivity Key: $key Value:${ intent.extras!!.getString(key)}" )
+                    if(key.equals("title"))title=intent.extras!!.getString(key)?:""
+                    if(key.equals("text"))text=intent.extras!!.getString(key)?:""
+                }
+            }
+//            else isNotification=false
+//            if(title.isNotEmpty())isNotification=true
+            Log.e(  "notificationManager", "title: $title" )
             when(profile){
                 ConstantsDirectory.ARTISAN -> {
-                    startActivity(artisanLandingIntent())
+                   if(title.isNotEmpty()) startActivity(artisanLandingIntent(true))
+                    else startActivity(artisanLandingIntent())
                 }
                 ConstantsDirectory.BUYER -> {
-                    startActivity(buyerLandingIntent())
+                    if(title.isNotEmpty()) startActivity(buyerLandingIntent(true))
+                    else startActivity(buyerLandingIntent())
                 }
             }
         } else {

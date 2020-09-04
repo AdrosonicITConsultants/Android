@@ -5,6 +5,8 @@ import com.adrosonic.craftexchange.repository.data.model.OtpVerifyModel
 import com.adrosonic.craftexchange.repository.data.registerResponse.RegisterResponse
 import com.adrosonic.craftexchange.repository.data.model.buyer.User
 import com.adrosonic.craftexchange.repository.data.registerResponse.CountryResponse
+import com.adrosonic.craftexchange.repository.data.response.Notification.NotificationReadResponse
+import com.adrosonic.craftexchange.repository.data.response.Notification.SaveUserTokenResponse
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -14,8 +16,13 @@ import java.io.File
 interface RegisterDao {
 
     @Headers("Accept: application/json")
+    @POST("/user/saveDeviceToken/{deviceId}/AND/{token}")
+    fun saveDeviceToken(@Header("Authorization") authtoken: String,@Path("deviceId") deviceToken : String,@Path("token") token : String) : Call<SaveUserTokenResponse>
+
+
+    @Headers("Accept: application/json")
     @GET("register/registerToken")
-    fun registerToken(@Query("token") token : String) : Call<ResponseBody>
+    fun registerToken(@Header("Authorization") token: String,@Query("token") deviceToken : String) : Call<NotificationReadResponse>
 
 
     @Headers("Accept: application/json")

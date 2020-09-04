@@ -104,6 +104,10 @@
         </provider>
 
         <service
+            android:name=".services.notification.NotificationReadService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
             android:name=".services.customDesign.UpdateOwnProductService"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
@@ -135,6 +139,11 @@
         <service android:name=".services.InstanceIdService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".services.notification.MessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"

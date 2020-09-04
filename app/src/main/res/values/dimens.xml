@@ -21,6 +21,7 @@
     <dimen name="product_note_text">7.5sp</dimen>
     <dimen name="product_availability_text">6sp</dimen>
     <dimen name="cat_prod_image_width">55dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
     <!--
     Because the window insets on round devices are larger than 15dp, this padding only applies
     to square screens.
