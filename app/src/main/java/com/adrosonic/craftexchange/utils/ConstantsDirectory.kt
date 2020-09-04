@@ -6,6 +6,8 @@ object ConstantsDirectory {
     const val IMAGE_LOAD_BASE_URL = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/"
 
     //////////////////////////////////////////////////////////////////////
+    const val CHANNEL_ID: String = "Enquiry status"
+    const val CHANNEL_NAME: String = "TTCE Notification"
     const val PERMISSION_REQUEST_CODE = 20
     const val EDIT_IMAGE_POSITION = "position"
     const val EDIT_PATH = "location"

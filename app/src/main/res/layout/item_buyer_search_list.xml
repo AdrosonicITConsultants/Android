@@ -30,7 +30,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/product_title" />
 
             <com.like.LikeButton
-                android:id="@+id/wishlist_button"
+                android:id="@+id/img_markasread"
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 app:anim_scale_factor="1"

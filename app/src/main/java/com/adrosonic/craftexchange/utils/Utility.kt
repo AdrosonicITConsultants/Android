@@ -375,8 +375,12 @@ class Utility {
             ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), ConstantsDirectory.PERMISSION_REQUEST_CODE)
         }
         fun returnDisplayDate(date:String):String{
-            var dt=date.substring(0,10)//2020-08-07T10:25:02.000+0000
-            return dt
+            try {
+                var dt = date.substring(0, 10)//2020-08-07T10:25:02.000+0000
+                return dt
+            }catch (e:Exception){
+                return ""
+            }
 //            if (date != null) {
 //                val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ENGLISH)
 //                format.timeZone = TimeZone.getTimeZone("UTC")

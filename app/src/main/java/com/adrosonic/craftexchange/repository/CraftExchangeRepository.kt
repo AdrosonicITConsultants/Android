@@ -70,4 +70,8 @@ object CraftExchangeRepository {
     fun getSearchService(): SearchDao {
         return builder(SearchDao::class.java)
     }
+
+    fun getNotificationService(): NotificationDao {
+        return builder(NotificationDao::class.java)
+    }
 }

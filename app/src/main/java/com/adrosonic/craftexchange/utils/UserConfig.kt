@@ -63,7 +63,8 @@ const val FILTER = "filter"
 const val PRODUCT_CATEGORY = "productcategory"
 const val PRODUCT_CATEGORY_ID = "productcategoryid"
 const val DEVICE_NAME = "deviceName"
-
+const val KEY_DEVICE_REGISTRATION_TOKEN = "device_registration_token"
+const val NOTI_BADGE_COUNT = "noti_badge_count"
 ///////////////////ProductTemplateParams///////////////////////
 const val PRODUCT_UPLOAD_JSON = "product_upload_json"
 const val WARP_DYE_ID = "warpDyeId"
@@ -94,6 +95,19 @@ class UserConfig {
         editor.clear()
         editor.commit()
     }
+    var notiBadgeCount = 0L
+        get() = Prefs.getLong(NOTI_BADGE_COUNT, 0L)
+        set(value) {
+            Prefs.putLong(NOTI_BADGE_COUNT, value)
+            field = value
+        }
+    var deviceRegistrationToken = ""
+        get() = Prefs.getString(KEY_DEVICE_REGISTRATION_TOKEN, "")
+        set(value) {
+            Prefs.putString(KEY_DEVICE_REGISTRATION_TOKEN, value)
+            field = value
+        }
+
     var artisan: String? = ""
         get() = Prefs.getString(ARTISAN,"")
         set(value) {

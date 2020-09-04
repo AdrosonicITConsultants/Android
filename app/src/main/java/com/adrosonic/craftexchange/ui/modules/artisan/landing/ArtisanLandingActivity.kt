@@ -3,94 +3,102 @@ package com.adrosonic.craftexchange.ui.modules.artisan.landing
 import android.content.Context
 import android.content.Intent
 import android.os.AsyncTask
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.annotation.NonNull
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
+import com.adrosonic.craftexchange.database.predicates.NotificationPredicates
 import com.adrosonic.craftexchange.databinding.ActivityArtisanLandingBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
+import com.adrosonic.craftexchange.repository.data.response.Notification.SaveUserTokenResponse
+import com.adrosonic.craftexchange.ui.modules.Notification.NotifcationFragment
 import com.adrosonic.craftexchange.ui.modules.artisan.profile.artisanProfileIntent
+import com.adrosonic.craftexchange.ui.modules.role.roleselectIntent
 import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.CommonEnquiryFragment
 import com.adrosonic.craftexchange.ui.modules.search.searchSuggestionIntent
-import com.adrosonic.craftexchange.viewModels.LandingViewModel
-import com.adrosonic.craftexchange.ui.modules.role.roleselectIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
+import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
+import com.adrosonic.craftexchange.viewModels.LandingViewModel
 import com.adrosonic.craftexchange.viewModels.ProfileViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.iid.FirebaseInstanceId
 import com.pixplicity.easyprefs.library.Prefs
-import kotlinx.android.synthetic.main.activity_artisan_landing.drawer_layout
-import kotlinx.android.synthetic.main.activity_artisan_landing.nav_view
-import kotlinx.android.synthetic.main.activity_artisan_landing.tab_bar
+import kotlinx.android.synthetic.main.activity_artisan_landing.*
+import kotlinx.android.synthetic.main.custom_bell_icon_layout.*
 import kotlinx.android.synthetic.main.nav_header_landing.view.*
-import kotlinx.android.synthetic.main.nav_header_landing.view.logo
-import okhttp3.ResponseBody
+import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Callback
+import retrofit2.Response
 
 fun Context.artisanLandingIntent(): Intent {
     return Intent(this, ArtisanLandingActivity::class.java).apply {
         flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
     }
 }
-
+fun Context.artisanLandingIntent(isNotification:Boolean): Intent {
+    val intent = Intent(this, ArtisanLandingActivity::class.java)
+    intent.putExtra("isNotification", isNotification)
+    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+    return intent
+//    return Intent(this, ArtisanLandingActivity::class.java).apply {
+//        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//    }
+}
 class ArtisanLandingActivity : AppCompatActivity(),
     NavigationView.OnNavigationItemSelectedListener,
-    ProfileViewModel.FetchUserDetailsInterface{
+    ProfileViewModel.FetchUserDetailsInterface,
+    LandingViewModel.notificationInterface,
+    NotifcationFragment.Companion.notifcationsInterface{
 
     companion object{
         const val TAG = "ArtisanLanding"
     }
 
     private var mBinding : ActivityArtisanLandingBinding ?= null
-    private var mViewModel: LandingViewModel? =null
+    val mViewModel:LandingViewModel by viewModels()
     var craftUser : MutableLiveData<CraftUser>?= null
     val mProVM : ProfileViewModel by viewModels()
     var profileImage : String ?= ""
     var urlPro : String ?= ""
-
+    var noti_badge:TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityArtisanLandingBinding.inflate(layoutInflater)
         val view = mBinding?.root
         setContentView(view)
-
+        mViewModel?.noficationlistener=this
+        mViewModel?.getAllNotifications()
         DeviceRegistration(object : DeviceTokenCallback {
             override fun registeredToken(token: String) {
                 addUserDevice(true,token)
             }
         }).execute()
-
-
-
-        mViewModel = ViewModelProviders.of(this).get(LandingViewModel::class.java)
         mProVM.listener = this
-
         refreshProfile()
         mProVM.getUserMutableData()
             .observe(this, Observer<CraftUser> {
                 craftUser = MutableLiveData(it)
             })
-
-
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.title = ""
@@ -105,24 +113,24 @@ class ArtisanLandingActivity : AppCompatActivity(),
         toggle.syncState()
 
         var firstname = Prefs.getString(ConstantsDirectory.FIRST_NAME,"Craft")
-//        var lastname = Prefs.getString(ConstantsDirectory.LAST_NAME,"User")
-
-//        var username = "$firstname $lastname"
-
 
         mBinding?.navView?.setNavigationItemSelectedListener(this)
         nav_view.getHeaderView(0).text_user.text = firstname
 
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.artisan_home_container,
-                    ArtisanHomeFragment.newInstance()
-                )
+            supportFragmentManager.beginTransaction() .replace(R.id.artisan_home_container,ArtisanHomeFragment.newInstance())
                 .detach(ArtisanHomeFragment())
                 .attach(ArtisanHomeFragment())
                 .commitNow()
-        }
 
+        }
+        if (intent.extras != null) {
+            if (intent.getBooleanExtra("isNotification", false)) {
+                supportFragmentManager.beginTransaction() .add(R.id.artisan_home_container, NotifcationFragment.newInstance())
+                    .addToBackStack(null)
+                    .commit()
+            }
+        }
         tab_bar.onNavigationItemSelectedListener = object: BottomNavigationView.OnNavigationItemSelectedListener{
             override fun onNavigationItemSelected(@NonNull item:MenuItem):Boolean {
                 when (item.itemId) {
@@ -162,9 +170,11 @@ class ArtisanLandingActivity : AppCompatActivity(),
                 }
             }
         }
+        NotifcationFragment.badgeCountListener=this
     }
     override fun onOptionsItemSelected(item:MenuItem):Boolean {
         // The action bar home/up action should open or close the drawer.
+
         when (item.itemId) {
             android.R.id.home -> {
                 drawer_layout.openDrawer(GravityCompat.START)
@@ -173,12 +183,37 @@ class ArtisanLandingActivity : AppCompatActivity(),
             R.id.action_search -> {
                 startActivity(searchSuggestionIntent())
             }
+            R.id.action_notification->{
+                    supportFragmentManager.beginTransaction() .add(R.id.artisan_home_container, NotifcationFragment.newInstance())
+                        .addToBackStack(null)
+                        .commit()
+            }
         }
+        setupBadge()
         return super.onOptionsItemSelected(item)
     }
-
+    private fun setupBadge() {
+        val count= UserConfig.shared?.notiBadgeCount?:0
+        if (noti_badge != null) {
+            if (count< 1) {
+                if (noti_badge?.getVisibility() !== View.GONE) {
+                    noti_badge?.setVisibility(View.GONE)
+                }
+            } else {
+                noti_badge?.text=if(count>99)  "99+" else  "$count"
+                if (noti_badge?.getVisibility() !== View.VISIBLE) {
+                    noti_badge?.visibility=View.VISIBLE
+                }
+            }
+        }
+    }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.tool_menu, menu)
+        val menuItem = menu.findItem(R.id.action_notification)
+        val actionView = menuItem.actionView
+        noti_badge = actionView.findViewById<View>(R.id.noti_badge) as TextView
+        setupBadge()
+        actionView.setOnClickListener { onOptionsItemSelected(menuItem) }
         return true
     }
 
@@ -243,33 +278,33 @@ class ArtisanLandingActivity : AppCompatActivity(),
             {
                 token = FirebaseInstanceId.getInstance().token
             }
-            Log.i("token",token)
+            UserConfig.shared.deviceRegistrationToken = token
+            Log.e(TAG,"token: $token")
             return token
         }
 
         override fun onPostExecute(result: String) {
             callback.registeredToken(result)
         }
-
     }
 
     private fun addUserDevice(login: Boolean,authtoken:String) {
         try {
-
-            val deviceRegistration = CraftExchangeRepository.getRegisterService().registerToken(authtoken)
-
-            deviceRegistration.enqueue(object : Callback<ResponseBody> {
-                override fun onResponse(call: Call<ResponseBody>, response: retrofit2.Response<ResponseBody>?) {
+            var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+            Log.e(TAG, "authtoken: $authtoken")
+            val deviceRegistration = CraftExchangeRepository.getRegisterService().saveDeviceToken(token,authtoken,authtoken)
+            deviceRegistration.enqueue(object : Callback<SaveUserTokenResponse> {
+                override fun onResponse(call: Call<SaveUserTokenResponse>, response: Response<SaveUserTokenResponse>?) {
                     response?.takeUnless { response.isSuccessful }?.apply {
                         Log.e(TAG, "Error registering device token "+response.message()+" raw code "+ response.raw().code)
                     }
                     response?.takeIf { response.isSuccessful }?.apply {
-                        Log.e(TAG, "Device registration successful")
+                        Log.e(TAG, "Device registration successful ${response.body()?.data?.deviceType}")
+                        Log.e(TAG, "valid ${response.body()?.valid}")
                     }
                 }
-                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                override fun onFailure(call: Call<SaveUserTokenResponse>, t: Throwable) {
                     Log.e(TAG, "Error registering device token ")
-//                    addUserDevice(true)n
                 }
             })
         } catch (e: Exception) {
@@ -323,9 +358,19 @@ class ArtisanLandingActivity : AppCompatActivity(),
             mViewModel?.getProductUploadData()
             mViewModel?.getEnquiryStageData()
             mViewModel?.getEnquiryStageAvailableProdsData()
+            mViewModel?.getAllNotifications()
             mProVM.getArtisanProfileDetails(this)
             craftUser = mProVM.getUserMutableData()
             setProfileImage()
+
         }
+    }
+
+    override fun onBadgeCOuntUpdated() {
+        setupBadge()
+    }
+
+    override fun onNotificationDataFetched() {
+        setupBadge()
     }
 }

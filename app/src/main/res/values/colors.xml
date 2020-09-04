@@ -22,6 +22,8 @@
     <color name="carousel_dot_color">#FFA2A2</color>
     <color name="table_row_text">#556b2f</color>
     <color name="length_unit_color">#8475DE</color>
+    <color name="notification_lavender">#5D21AF</color>
+    <color name="notification_bg">#F8F0FF</color>
     <color name="filter_list_background">#FFEBEB</color>
     <color name="enquiry_swipe_background">#B90C5C</color>
 

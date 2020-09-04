@@ -53,7 +53,7 @@
             android:name=".ui.modules.artisan.landing.ArtisanLandingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".ui.modules.buyer.profile.editProfile.BuyerEditProfileActivity"
             android:screenOrientation="portrait" />
@@ -108,6 +108,10 @@
         </provider>
 
         <service
+            android:name=".services.notification.NotificationReadService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
             android:name=".services.customDesign.UpdateOwnProductService"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
@@ -140,7 +144,11 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-
+        <service android:name=".services.notification.MessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
