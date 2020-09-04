@@ -55,6 +55,7 @@ EnquiryViewModel.FetchOngoingEnqInterface{
     private var currEnqStageId : Long ?= 0
     private var currEnqStageSerNo : Long ?= 0
     private var url : String?=""
+    private var status : String ?= ""
 
     var mBinding : FragmentBuyerOnGoEnqDetailsBinding?= null
 
@@ -203,14 +204,40 @@ EnquiryViewModel.FetchOngoingEnqInterface{
 
         //brand name of product & product Image
         if(enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
-            mBinding?.productBrandName?.text = "Custom Design by you"
             url = Utility.getCustomProductImagesUrl(enquiryDetails?.productID, image)
         }else{
-            mBinding?.productBrandName?.text = enquiryDetails?.ProductBrandName
             url = Utility.getProductsImagesUrl(enquiryDetails?.productID, image)
         }
         mBinding?.productImage?.let { ImageSetter.setImage(requireActivity(),
             url!!, it,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder) }
+
+        //ProductAvailability
+        when(enquiryDetails?.productStatusID){
+            2L -> {
+                status = context?.getString(R.string.in_stock)
+                mBinding?.productAvailability?.text = status
+                context?.let {
+                    ContextCompat.getColor(
+                        it, R.color.dark_green)
+                }?.let { mBinding?.productAvailability?.setTextColor(it) }
+            }
+            1L -> {
+                status = context?.getString(R.string.made_to_order)
+                mBinding?.productAvailability?.text = status
+                context?.let {
+                    ContextCompat.getColor(
+                        it, R.color.dark_magenta)
+                }?.let { mBinding?.productAvailability?.setTextColor(it) }
+            }
+            else -> {
+                status = "Custom Design by you"
+                mBinding?.productAvailability?.text = status
+                context?.let {
+                    ContextCompat.getColor(
+                        it, R.color.dark_magenta)
+                }?.let { mBinding?.productAvailability?.setTextColor(it) }
+            }
+        }
 
         //Product name or Product cloth details
         if(enquiryDetails?.productName != "") {
@@ -250,7 +277,7 @@ EnquiryViewModel.FetchOngoingEnqInterface{
             mBinding?.productNameDetails?.text = "Custom Design Product"
             }
 
-        mBinding?.productAmount?.text = enquiryDetails?.totalAmount ?: "₹ 0"
+        mBinding?.productAmount?.text = enquiryDetails?.totalAmount ?: "0"
 
 
         //enquiry stage with color

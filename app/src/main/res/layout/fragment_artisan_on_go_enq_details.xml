@@ -170,7 +170,7 @@
                             app:layout_constraintTop_toBottomOf="@id/prod_image_background" />
 
                         <TextView
-                            android:id="@+id/product_brand_name"
+                            android:id="@+id/product_availability"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/lato_regular"
@@ -191,7 +191,7 @@
                             android:textSize="@dimen/product_note_text"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/product_brand_name" />
+                            app:layout_constraintTop_toBottomOf="@+id/product_availability" />
 
                         <ImageView
                             android:id="@+id/enquiry_status_dot"
@@ -539,13 +539,74 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <LinearLayout
+                    android:id="@+id/brand_details_layer"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:orientation="horizontal"
+                    android:weightSum="10"
+                    android:background="#DEF7FF"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:layout_constraintTop_toBottomOf="@+id/middle_part"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:layout_gravity="center"
+                        android:gravity="center|start"
+                        android:layout_marginStart="8dp"
+                        android:textSize="12sp"
+                        android:textColor="#137EA6"
+                        android:text="@string/buyer"
+                        android:fontFamily="@font/lato_regular"/>
+
+                    <TextView
+                        android:id="@+id/buyer_brand"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        android:layout_gravity="center"
+                        android:gravity="start|center"
+                        android:textSize="12sp"
+                        android:maxLines="2"
+                        android:ellipsize="end"
+                        android:textStyle="bold"
+                        android:textColor="#137EA6"
+                        android:layout_marginStart="4dp"
+                        android:fontFamily="@font/lato_regular"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:layout_gravity="center"
+                        android:gravity="center|end"
+                        android:textSize="12sp"
+                        android:textColor="#137EA6"
+                        android:text="@string/check_details"
+                        android:fontFamily="@font/lato_regular"/>
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:background="?attr/selectableItemBackground"
+                        android:src="@drawable/ic_arrow_right_blue"/>
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/moq_details_layer"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:orientation="horizontal"
                     android:weightSum="10"
                     android:background="#F7FFDE"
-                    app:layout_constraintTop_toBottomOf="@+id/middle_part"
+                    app:layout_constraintTop_toBottomOf="@+id/brand_details_layer"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent">
 
@@ -693,6 +754,52 @@
 
                 </LinearLayout>
 
+
+                <LinearLayout
+                    android:id="@+id/pi_details_layer"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:orientation="horizontal"
+                    android:weightSum="10"
+                    android:background="#EDF0FF"
+                    app:layout_constraintTop_toBottomOf="@+id/moq_details"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:layout_gravity="center"
+                        android:gravity="center|start"
+                        android:layout_marginStart="8dp"
+                        android:textSize="12sp"
+                        android:textColor="#7793FF"
+                        android:text="@string/check_pi"
+                        android:fontFamily="@font/lato_regular"/>
+
+                    <TextView
+                        android:id="@+id/received_pi_date"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="7"
+                        android:layout_gravity="center"
+                        android:gravity="center|end"
+                        android:layout_marginStart="8dp"
+                        android:textSize="12sp"
+                        android:textColor="#7793FF"
+                        android:textStyle="bold"
+                        android:fontFamily="@font/lato_regular"/>
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:background="?attr/selectableItemBackground"
+                        android:src="@drawable/ic_right_arrow_violet"/>
+
+                </LinearLayout>
                 <LinearLayout
                     android:id="@+id/product_details_layer"
                     android:layout_width="match_parent"
@@ -700,7 +807,7 @@
                     android:orientation="horizontal"
                     android:weightSum="10"
                     android:background="#FFF5ED"
-                    app:layout_constraintTop_toBottomOf="@+id/moq_details_layer"
+                    app:layout_constraintTop_toBottomOf="@+id/pi_details_layer"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent">
 
@@ -738,68 +845,6 @@
                         android:src="@drawable/ic_right_arrow_brown"/>
 
                 </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/brand_details_layer"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:orientation="horizontal"
-                    android:weightSum="10"
-                    android:background="#DEF7FF"
-                    android:clickable="true"
-                    android:focusable="true"
-                    app:layout_constraintTop_toBottomOf="@+id/product_details_layer"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:layout_gravity="center"
-                        android:gravity="center|start"
-                        android:layout_marginStart="8dp"
-                        android:textSize="12sp"
-                        android:textColor="#137EA6"
-                        android:text="@string/buyer"
-                        android:fontFamily="@font/lato_regular"/>
-
-                    <TextView
-                        android:id="@+id/buyer_brand"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="4"
-                        android:layout_gravity="center"
-                        android:gravity="start|center"
-                        android:textSize="12sp"
-                        android:maxLines="2"
-                        android:ellipsize="end"
-                        android:textStyle="bold"
-                        android:textColor="#137EA6"
-                        android:layout_marginStart="4dp"
-                        android:fontFamily="@font/lato_regular"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:layout_gravity="center"
-                        android:gravity="center|end"
-                        android:textSize="12sp"
-                        android:textColor="#137EA6"
-                        android:text="@string/check_details"
-                        android:fontFamily="@font/lato_regular"/>
-
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
-                        android:background="?attr/selectableItemBackground"
-                        android:src="@drawable/ic_arrow_right_blue"/>
-
-                </LinearLayout>
-
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

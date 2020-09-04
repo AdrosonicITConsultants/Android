@@ -86,7 +86,7 @@ class ArtisanOnGoingRecyclerAdapter(var context: Context?, private var enquiries
             holder?.brandName?.text = "Custom Design"
             url = Utility.getCustomProductImagesUrl(enquiry?.productID, first_image)
         }else{
-            holder?.brandName?.text = enquiry?.ProductBrandName
+            holder?.brandName?.text = ""
             url = Utility.getProductsImagesUrl(enquiry?.productID, first_image)
         }
         context?.let { ImageSetter.setImage(it, url!!,holder?.productImage) }

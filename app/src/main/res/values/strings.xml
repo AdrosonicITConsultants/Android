@@ -282,5 +282,7 @@
     <string name="create_and_send_pi"><![CDATA[Create & Send Pro forma Invoice]]></string>
     <string name="enq_note_to_artisan">Please leverage the use of chat to discuss and finalise on the\nterms before hand to avoid any escalation,dispute or discrepancy</string>
     <string name="pi_note_to_artisan">The PI can be changed later only if change request is raised by buyer</string>
+    <string name="company_details">Company Details</string>
+    <string name="company">Company</string>
 
 </resources>

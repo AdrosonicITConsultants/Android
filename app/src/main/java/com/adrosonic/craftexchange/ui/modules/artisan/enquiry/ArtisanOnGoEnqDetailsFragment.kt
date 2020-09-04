@@ -19,6 +19,8 @@ import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
 import com.adrosonic.craftexchange.databinding.FragmentArtisanOnGoEnqDetailsBinding
 import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.addProductIntent
+import com.adrosonic.craftexchange.ui.modules.enquiry.ArtEnqDetailsFragment
+import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
@@ -44,6 +46,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
     private var currEnqStageId : Long ?= 0
     private var currEnqStageSerNo : Long ?= 0
     private var url : String?=""
+    private var status : String?= ""
 
     val mEnqVM : EnquiryViewModel by viewModels()
 
@@ -103,6 +106,16 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
             activity?.onBackPressed()
         }
 
+        mBinding?.brandDetailsLayer?.setOnClickListener {
+            if (savedInstanceState == null) {
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.enquiry_details_container,
+                        BuyEnqDetailsFragment.newInstance(enquiryDetails?.enquiryID.toString()))
+                    ?.addToBackStack(null)
+                    ?.commit()
+            }
+        }
+
         mBinding?.productDetailsLayer?.setOnClickListener {
             if(enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
 //                CustomProd()
@@ -117,6 +130,9 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
     }
 
     fun setDetails(){
+
+        setTabVisibilities()
+
         mBinding?.enquiryCode?.text = enquiryDetails?.enquiryCode
         mBinding?.enquiryStartDate?.text = "Date accepted : ${enquiryDetails?.startedOn?.split("T")?.get(0)}"
 
@@ -124,16 +140,42 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
 
         //brand name of product & product Image
         if(enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
-            mBinding?.productBrandName?.text = "Custom Design"
-            mBinding?.buyerCompany?.text = enquiryDetails?.ProductBrandName
             url = Utility.getCustomProductImagesUrl(enquiryDetails?.productID, image)
         }else{
-            mBinding?.productBrandName?.text = enquiryDetails?.ProductBrandName
             url = Utility.getProductsImagesUrl(enquiryDetails?.productID, image)
-            mBinding?.buyerCompany?.text = ""
         }
         mBinding?.productImage?.let { ImageSetter.setImage(requireActivity(),
             url!!, it,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder) }
+
+        mBinding?.buyerCompany?.text = enquiryDetails?.ProductBrandName
+
+        //ProductAvailability
+        when(enquiryDetails?.productStatusID){
+            2L -> {
+                status = context?.getString(R.string.in_stock)
+                mBinding?.productAvailability?.text = status
+                context?.let {
+                    ContextCompat.getColor(
+                        it, R.color.dark_green)
+                }?.let { mBinding?.productAvailability?.setTextColor(it) }
+            }
+            1L -> {
+                status = context?.getString(R.string.made_to_order)
+                mBinding?.productAvailability?.text = status
+                context?.let {
+                    ContextCompat.getColor(
+                        it, R.color.dark_magenta)
+                }?.let { mBinding?.productAvailability?.setTextColor(it) }
+            }
+            else -> {
+                status = context?.getString(R.string.requested_custom_design)
+                mBinding?.productAvailability?.text = status
+                context?.let {
+                    ContextCompat.getColor(
+                        it, R.color.dark_magenta)
+                }?.let { mBinding?.productAvailability?.setTextColor(it) }
+            }
+        }
 
         //Product name or Product cloth details
         if(enquiryDetails?.productName != "") {
@@ -173,7 +215,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
             mBinding?.productNameDetails?.text = "Custom Design Product"
         }
 
-        mBinding?.productAmount?.text = enquiryDetails?.totalAmount ?: "₹ 0"
+        mBinding?.productAmount?.text = enquiryDetails?.totalAmount ?: "0"
 
 
         //enquiry stage with color
@@ -336,6 +378,20 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
     fun hideLoader(){
         mBinding?.artisanOngoEnqDetails?.visibility = View.VISIBLE
         mBinding?.swipeEnquiryDetails?.isRefreshing = false
+    }
+
+    private fun setTabVisibilities(){
+        if(enquiryDetails?.isMoqSend == 1L){
+            mBinding?.moqDetailsLayer?.visibility = View.VISIBLE
+        }else{
+            mBinding?.moqDetailsLayer?.visibility = View.GONE
+        }
+
+        if(enquiryDetails?.isPiSend == 1L){
+            mBinding?.piDetailsLayer?.visibility = View.VISIBLE
+        }else{
+            mBinding?.piDetailsLayer?.visibility = View.GONE
+        }
     }
 
     override fun onResume() {
