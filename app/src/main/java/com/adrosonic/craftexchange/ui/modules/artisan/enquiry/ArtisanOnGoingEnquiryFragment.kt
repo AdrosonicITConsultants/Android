@@ -21,6 +21,7 @@ import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.adapter.BuyerOnGoing
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
 import io.realm.RealmResults
+import kotlinx.android.synthetic.main.fragment_wishlist.*
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -73,6 +74,7 @@ class ArtisanOnGoingEnquiryFragment : Fragment(),
                 mEnquiryList = it
                 mEnqListAdapter?.updateProductList(mEnquiryList)
             })
+        setVisiblities()
 
         mBinding?.swipeOngoingEnquiries?.isRefreshing = true
         mBinding?.swipeOngoingEnquiries?.setOnRefreshListener {
@@ -94,6 +96,16 @@ class ArtisanOnGoingEnquiryFragment : Fragment(),
 //        mEnqListAdapter?.enqListener = this  //important to set adapter first and then call listener
     }
 
+    fun setVisiblities() {
+        if (mEnqVM.getOnEnqListMutableData().value?.size!! > 0) {
+            mBinding?.ongoingEnqRecyclerList?.visibility = View.VISIBLE
+            mBinding?.emptyView?.visibility = View.GONE
+        } else {
+            mBinding?.ongoingEnqRecyclerList?.visibility = View.GONE
+            mBinding?.emptyView?.visibility = View.VISIBLE
+        }
+    }
+
     companion object {
 
         fun newInstance() = ArtisanOnGoingEnquiryFragment()
@@ -106,6 +118,7 @@ class ArtisanOnGoingEnquiryFragment : Fragment(),
                 mBinding?.swipeOngoingEnquiries?.isRefreshing = false
                 mEnqVM.getOnEnqListMutableData()
                 Utility.displayMessage("Error while fetching list", requireContext())
+                setVisiblities()
             })
         } catch (e: Exception) {
             Log.e("OngoingEnqList", "Exception onFailure " + e.message)
@@ -118,6 +131,7 @@ class ArtisanOnGoingEnquiryFragment : Fragment(),
                 Log.e("OngoingEnqList", "onSuccess")
                 mBinding?.swipeOngoingEnquiries?.isRefreshing = false
                 mEnqVM.getOnEnqListMutableData()
+                setVisiblities()
             })
         } catch (e: Exception) {
             Log.e("OngoingEnqList", "Exception onFailure " + e.message)

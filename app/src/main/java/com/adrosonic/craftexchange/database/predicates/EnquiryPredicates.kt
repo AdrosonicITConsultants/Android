@@ -3,11 +3,9 @@ package com.adrosonic.craftexchange.database.predicates
 import android.util.Log
 import com.adrosonic.craftexchange.database.CXRealmManager
 import com.adrosonic.craftexchange.database.entities.ArtisanProductCategory
-import com.adrosonic.craftexchange.database.entities.realmEntities.ArtisanProducts
 import com.adrosonic.craftexchange.database.entities.realmEntities.Enquiries
 import com.adrosonic.craftexchange.database.entities.realmEntities.EnquiryPaymentDetails
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
-import com.adrosonic.craftexchange.repository.data.response.artisan.profile.ProfileResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.generateEnquiry.GenerateEnquiryResponse
 import com.adrosonic.craftexchange.repository.data.response.enquiry.OnGoingEnqResponse
 import io.realm.RealmResults
@@ -184,7 +182,7 @@ class EnquiryPredicates {
                                 exEnq?.profileImage = enquiry?.openEnquiriesResponse?.profilePic
                                 exEnq?.alternateMobile = enquiry?.openEnquiriesResponse?.alternateMobile
 //                                exEnq?.companyName = enquiry?.openEnquiriesResponse?.companyName
-                                exEnq?.ArtisanBrandName = enquiry?.brandName //todo : to be changed
+                                exEnq?.ProductBrandName = enquiry?.brandName //todo : to be changed
                                 exEnq?.logo = enquiry?.openEnquiriesResponse?.logo
                                 exEnq?.city = enquiry?.openEnquiriesResponse?.city
                                 exEnq?.district = enquiry?.openEnquiriesResponse?.district
@@ -257,7 +255,7 @@ class EnquiryPredicates {
                                 enqObj?.profileImage = enquiry?.openEnquiriesResponse?.profilePic
                                 enqObj?.alternateMobile = enquiry?.openEnquiriesResponse?.alternateMobile
 //                                enqObj?.companyName = enquiry?.openEnquiriesResponse?.companyName
-                                enqObj?.ArtisanBrandName = enquiry?.openEnquiriesResponse?.companyName//todo : to be changed
+                                enqObj?.ProductBrandName = enquiry?.openEnquiriesResponse?.companyName//todo : to be changed
 
                                 enqObj?.logo = enquiry?.openEnquiriesResponse?.logo
                                 enqObj?.city = enquiry?.openEnquiriesResponse?.city

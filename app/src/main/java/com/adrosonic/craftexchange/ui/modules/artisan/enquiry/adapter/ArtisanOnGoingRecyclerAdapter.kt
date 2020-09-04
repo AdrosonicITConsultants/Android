@@ -35,6 +35,8 @@ class ArtisanOnGoingRecyclerAdapter(var context: Context?, private var enquiries
         var productStatus: TextView = view.findViewById(R.id.product_status_text)
         var enquiryStageStatus : TextView = view.findViewById(R.id.enquiry_stage_text)
         var dateText: TextView = view.findViewById(R.id.date_text)
+        var enquiryColor : ImageView = view.findViewById(R.id.enq_stage_color)
+
 
         var layout : ConstraintLayout = view.findViewById(R.id.enquiry_container_layout)
     }
@@ -81,10 +83,10 @@ class ArtisanOnGoingRecyclerAdapter(var context: Context?, private var enquiries
         var first_image = imgArrSplit?.get(0)
 
         if(enquiry?.productType == "Custom Product"){
-            holder?.brandName?.text = "Custom Design by you"
+            holder?.brandName?.text = "Custom Design"
             url = Utility.getCustomProductImagesUrl(enquiry?.productID, first_image)
         }else{
-            holder?.brandName?.text = enquiry?.ArtisanBrandName
+            holder?.brandName?.text = enquiry?.ProductBrandName
             url = Utility.getProductsImagesUrl(enquiry?.productID, first_image)
         }
         context?.let { ImageSetter.setImage(it, url!!,holder?.productImage) }
@@ -126,8 +128,29 @@ class ArtisanOnGoingRecyclerAdapter(var context: Context?, private var enquiries
             holder?.productName?.append(sp)
         }
 
+        when(enquiry?.enquiryStageID){
+            1L -> {
+                context?.let {
+                    ContextCompat.getColor(
+                        it,R.color.black_text)
+                }?.let { holder.enquiryColor.setBackgroundColor(it) }
+            }
 
+            2L,3L,4L,5L -> {
+                context?.let {
+                    ContextCompat.getColor(
+                        it,R.color.tab_details_selected_text)
+                }?.let { holder.enquiryColor.setBackgroundColor(it) }
+            }
 
+            6L,7L,8L,9L,10L -> {
+                context?.let {
+                    ContextCompat.getColor(
+                        it,R.color.dark_green)
+                }?.let { holder.enquiryColor.setBackgroundColor(it) }
+
+            }
+        }
 
         var status : String ?= ""
         when(enquiry?.productStatusID){

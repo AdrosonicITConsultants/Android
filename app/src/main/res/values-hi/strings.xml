@@ -252,5 +252,10 @@
     <string name="previous">Previous</string>
     <string name="current">Current</string>
     <string name="requested_custom_design">Requested Custom Design</string>
+    <string name="awaiting_payment_receipt">Awaiting Payment Receipt</string>
+    <string name="check_details">Check Details</string>
+    <string name="create_and_send_pi"><![CDATA[Create & Send Pro forma Invoice]]></string>
+    <string name="enq_note_to_artisan">Please leverage the use of chat to discuss and finalise on the\nterms before hand to avoid any escalation,dispute or discrepancy</string>
+    <string name="pi_note_to_artisan">The PI can be changed later only if change request is raised by buyer</string>
 
 </resources>

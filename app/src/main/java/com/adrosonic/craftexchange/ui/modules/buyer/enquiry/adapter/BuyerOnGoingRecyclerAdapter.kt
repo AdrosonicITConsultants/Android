@@ -84,7 +84,7 @@ class BuyerOnGoingRecyclerAdapter(var context: Context?, private var enquiries: 
             holder?.brandName?.text = "Custom Design by you"
             url = Utility.getCustomProductImagesUrl(enquiry?.productID, first_image)
         }else{
-            holder?.brandName?.text = enquiry?.ArtisanBrandName
+            holder?.brandName?.text = enquiry?.ProductBrandName
             url = Utility.getProductsImagesUrl(enquiry?.productID, first_image)
         }
         context?.let { ImageSetter.setImage(it, url!!,holder?.productImage) }
@@ -177,6 +177,7 @@ class BuyerOnGoingRecyclerAdapter(var context: Context?, private var enquiries: 
                 enquiryStage = it.second
             }
         }
+
         when(enquiry?.enquiryStageID){
             1L -> {
                 context?.let {

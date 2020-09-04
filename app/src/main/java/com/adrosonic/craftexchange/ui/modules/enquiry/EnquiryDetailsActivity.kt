@@ -9,6 +9,7 @@ import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityEnquiryDetailsBinding
 import com.adrosonic.craftexchange.databinding.ActivitySearchSuggestionBinding
 import com.adrosonic.craftexchange.ui.modules.artisan.auth.login.ArtisanLoginUsernameFragment
+import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.ArtisanOnGoEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.buyer.auth.login.BuyerLoginUsernameFragment
 import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.adapter.BuyerOnGoEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.search.SearchSuggestionActivity
@@ -35,7 +36,13 @@ class EnquiryDetailsActivity : AppCompatActivity() {
 
         when(profile){
             ConstantsDirectory.ARTISAN -> {
-
+                if (savedInstanceState == null) {
+                    enqID?.let { ArtisanOnGoEnqDetailsFragment.newInstance(it) }?.let {
+                        supportFragmentManager.beginTransaction()
+                            .replace(R.id.enquiry_details_container, it)
+                            .commitNow()
+                    }
+                }
             }
             ConstantsDirectory.BUYER -> {
                 if (savedInstanceState == null) {

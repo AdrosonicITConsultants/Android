@@ -11,16 +11,6 @@
         android:background="@color/colorSplash"
         tools:context=".ui.modules.artisan.enquiry.ArtisanOnGoingEnquiryFragment">
 
-        <View
-            android:id="@+id/divider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/lighter_gray"
-            android:layout_marginTop="12dp"
-            app:layout_constraintTop_toBottomOf="@+id/text_recent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe_ongoing_enquiries"
             android:layout_width="match_parent"
@@ -28,7 +18,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/divider">
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/ongoing_enq_recycler_list"
@@ -42,7 +32,7 @@
             android:id="@+id/empty_view"
             android:visibility="gone"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -50,15 +40,12 @@
             app:layout_constraintTop_toBottomOf="@+id/text_recent"
             app:layout_constraintVertical_bias="1.0">
 
-            <TextView
-                android:id="@+id/empty_text"
-                android:gravity="center"
+            <ImageView
+                android:id="@+id/empty_enq_list"
                 android:layout_centerInParent="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/playfair_regular"
-                android:text="No Ongoing BEnquiries"
-                android:textSize="@dimen/Ques_text" />
+                android:src="@drawable/zero_enq_back"/>
 
         </RelativeLayout>
 

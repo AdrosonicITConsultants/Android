@@ -18,13 +18,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.adrosonic.craftexchange.R
-import com.adrosonic.craftexchange.database.entities.realmEntities.ArtisanProducts
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
 import com.adrosonic.craftexchange.database.predicates.WishlistPredicates
 import com.adrosonic.craftexchange.databinding.FragmentBuyerOnGoEnqDetailsBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.singleProduct.SingleProductDetails
-import com.adrosonic.craftexchange.ui.modules.artisan.auth.register.ArtisanRegisterPasswordFragment
+import com.adrosonic.craftexchange.ui.modules.buyer.ownDesign.ownDesignIntent
 import com.adrosonic.craftexchange.ui.modules.buyer.productDetails.catalogueProductDetailsIntent
 import com.adrosonic.craftexchange.ui.modules.enquiry.ArtEnqDetailsFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
@@ -32,8 +31,6 @@ import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
 import com.pixplicity.easyprefs.library.Prefs
-import io.realm.RealmResults
-import io.realm.internal.Util
 import retrofit2.Call
 import retrofit2.Response
 import javax.security.auth.callback.Callback
@@ -96,6 +93,7 @@ EnquiryViewModel.FetchOngoingEnqInterface{
             viewLoader()
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
+            setDetails()
         }
 
         enqID?.let {
@@ -139,63 +137,82 @@ EnquiryViewModel.FetchOngoingEnqInterface{
             }
         }
 
-        //TODO : change this implementation later
         mBinding?.productDetailsLayer?.setOnClickListener {
-            var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
-            enquiryDetails?.productID?.let { it1 ->
-                CraftExchangeRepository
-                    .getWishlistService()
-                    .getSingleProductDetails(token, it1.toInt())
-                    .enqueue(object : Callback, retrofit2.Callback<SingleProductDetails> {
-                        override fun onFailure(call: Call<SingleProductDetails>, t: Throwable) {
-                            t.printStackTrace()
-                            Utility.displayMessage("Try Again",requireActivity())
-                            Log.e("prodDetails","Failure : "+t.printStackTrace())
-                            //                        listener?.onProdFetchFail()
-                        }
-
-                        override fun onResponse(
-                            call: Call<SingleProductDetails>, response: Response<SingleProductDetails>
-                        ) {
-                            if (response.body()?.valid == true) {
-                                val response=response.body()?.data
-                                if(response != null){
-                                    WishlistPredicates.insertSingleProduct(response)
-                                    val intent = Intent(requireActivity().catalogueProductDetailsIntent())
-                                    val bundle = Bundle()
-                                    bundle.putString(ConstantsDirectory.PRODUCT_ID, enquiryDetails?.productID?.toString())
-                                    intent.putExtras(bundle)
-                                    requireActivity().startActivity(intent)
-                                }
-                            } else {
-                                Log.e("prodDetails","Failure")
-                                Utility.displayMessage("Try Again",requireActivity())
-
-                            }
-                        }
-                    })
-            }
+           if(enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
+               CustomProduct()
+           }else{
+               CatalogueProduct()
+           }
         }
 
     }
 
+    fun CustomProduct(){
+        val intent = Intent(requireContext().ownDesignIntent( enquiryDetails?.productID?:0))
+        val bundle = Bundle()
+        bundle.putString(ConstantsDirectory.PRODUCT_ID, enquiryDetails?.productID?.toString())
+        requireContext().startActivity(intent.putExtras(bundle))
+    }
+
+    fun CatalogueProduct(){
+        //TODO : change this implementation later
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        enquiryDetails?.productID?.let { it1 ->
+            CraftExchangeRepository
+                .getWishlistService()
+                .getSingleProductDetails(token, it1.toInt())
+                .enqueue(object : Callback, retrofit2.Callback<SingleProductDetails> {
+                    override fun onFailure(call: Call<SingleProductDetails>, t: Throwable) {
+                        t.printStackTrace()
+                        Utility.displayMessage("Try Again",requireActivity())
+                        Log.e("prodDetails","Failure : "+t.printStackTrace())
+                        //                        listener?.onProdFetchFail()
+                    }
+
+                    override fun onResponse(
+                        call: Call<SingleProductDetails>, response: Response<SingleProductDetails>
+                    ) {
+                        if (response.body()?.valid == true) {
+                            val response=response.body()?.data
+                            if(response != null){
+                                WishlistPredicates.insertSingleProduct(response)
+                                val intent = Intent(requireActivity().catalogueProductDetailsIntent())
+                                val bundle = Bundle()
+                                bundle.putString(ConstantsDirectory.PRODUCT_ID, enquiryDetails?.productID?.toString())
+                                intent.putExtras(bundle)
+                                requireActivity().startActivity(intent)
+                            }
+                        } else {
+                            Log.e("prodDetails","Failure")
+                            Utility.displayMessage("Try Again",requireActivity())
+
+                        }
+                    }
+                })
+        }
+    }
+
     fun setDetails(){
+
+        setTabVisibilities()
+
         mBinding?.enquiryCode?.text = enquiryDetails?.enquiryCode
-        mBinding?.enquiryStartDate?.text = "Date Started : ${enquiryDetails?.startedOn?.split("T")?.get(0)}"
+        mBinding?.enquiryStartDate?.text = "Date started : ${enquiryDetails?.startedOn?.split("T")?.get(0)}"
 
         val image = enquiryDetails?.productImages?.split((",").toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()?.get(0)
 
         //brand name of product & product Image
-        if(enquiryDetails?.productType == "Custom Product"){
+        if(enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
             mBinding?.productBrandName?.text = "Custom Design by you"
             url = Utility.getCustomProductImagesUrl(enquiryDetails?.productID, image)
         }else{
-            mBinding?.productBrandName?.text = enquiryDetails?.ArtisanBrandName
+            mBinding?.productBrandName?.text = enquiryDetails?.ProductBrandName
             url = Utility.getProductsImagesUrl(enquiryDetails?.productID, image)
         }
-        mBinding?.productImage?.let { ImageSetter.setImageFitToCenter(requireActivity(),
+        mBinding?.productImage?.let { ImageSetter.setImage(requireActivity(),
             url!!, it,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder) }
 
+        //Product name or Product cloth details
         if(enquiryDetails?.productName != "") {
             mBinding?.productName?.text = enquiryDetails?.productName
             mBinding?.productNameDetails?.text = enquiryDetails?.productName
@@ -287,7 +304,7 @@ EnquiryViewModel.FetchOngoingEnqInterface{
 
         mBinding?.enquiryUpdateDate?.text = "Last updated : ${enquiryDetails?.lastUpdated?.split("T")?.get(0)}"
 
-        mBinding?.artisanBrand?.text = enquiryDetails?.ArtisanBrandName
+        mBinding?.artisanBrand?.text = enquiryDetails?.ProductBrandName
 
         setProgressTimeline()
 
@@ -303,27 +320,6 @@ EnquiryViewModel.FetchOngoingEnqInterface{
             }
         }
 
-    }
-
-
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String) =
-            BuyerOnGoEnqDetailsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-//                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
-
-    fun viewLoader(){
-        mBinding?.buyerOngoEnqDetails?.visibility = View.GONE
-        mBinding?.swipeEnquiryDetails?.isRefreshing = true
-    }
-    fun hideLoader(){
-        mBinding?.buyerOngoEnqDetails?.visibility = View.VISIBLE
-        mBinding?.swipeEnquiryDetails?.isRefreshing = false
     }
 
     private fun setProgressTimeline(){
@@ -391,11 +387,11 @@ EnquiryViewModel.FetchOngoingEnqInterface{
 
         if(enquiryDetails?.isBlue == 1L){
             when(currEnqStageId){
-                3L -> {
+                4L -> {
                     mBinding?.awaitingPaymentReceipt?.visibility = View.VISIBLE
                     mBinding?.transactionLayout?.visibility = View.VISIBLE
                 }
-                8L -> {
+                9L -> {
                     mBinding?.awaitingPaymentReceipt?.visibility = View.VISIBLE
                     mBinding?.transactionLayout?.visibility = View.VISIBLE
                 }
@@ -407,6 +403,31 @@ EnquiryViewModel.FetchOngoingEnqInterface{
         }
 
     }
+
+    private fun setTabVisibilities(){
+        if(enquiryDetails?.isMoqSend == 1L){
+            mBinding?.moqDetailsLayer?.visibility = View.VISIBLE
+        }else{
+            mBinding?.moqDetailsLayer?.visibility = View.GONE
+        }
+
+        if(enquiryDetails?.isPiSend == 1L){
+            mBinding?.piDetailsLayer?.visibility = View.VISIBLE
+        }else{
+            mBinding?.piDetailsLayer?.visibility = View.GONE
+        }
+    }
+
+    fun viewLoader(){
+        mBinding?.buyerOngoEnqDetails?.visibility = View.GONE
+        mBinding?.swipeEnquiryDetails?.isRefreshing = true
+    }
+    fun hideLoader(){
+        mBinding?.buyerOngoEnqDetails?.visibility = View.VISIBLE
+        mBinding?.swipeEnquiryDetails?.isRefreshing = false
+    }
+
+
 
     override fun onResume() {
         super.onResume()
@@ -437,5 +458,17 @@ EnquiryViewModel.FetchOngoingEnqInterface{
         } catch (e: Exception) {
             Log.e("Enquiry Details", "Exception onFailure " + e.message)
         }
+    }
+
+
+    companion object {
+        @JvmStatic
+        fun newInstance(param1: String) =
+            BuyerOnGoEnqDetailsFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+//                    putString(ARG_PARAM2, param2)
+                }
+            }
     }
 }

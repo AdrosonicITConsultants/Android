@@ -38,7 +38,7 @@ open class OngoingEnquiries : RealmObject() {
     var productImages: String? = ""
     var madeWithAnthran: Long?  = 0
     var brandName: String? = ""
-    var ArtisanBrandName: String? = "" // TODO : to be changed
+    var ProductBrandName: String? = "" // TODO : to be changed
 
 
     var historyProductID: Long? = 0

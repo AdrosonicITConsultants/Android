@@ -8,19 +8,13 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import com.adrosonic.craftexchange.R
-import com.adrosonic.craftexchange.database.entities.realmEntities.EnquiryPaymentDetails
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
-import com.adrosonic.craftexchange.database.entities.realmEntities.PaymentAccount
 import com.adrosonic.craftexchange.database.predicates.EnquiryPredicates
-import com.adrosonic.craftexchange.database.predicates.ProductPredicates
-import com.adrosonic.craftexchange.database.predicates.UserPredicates
 import com.adrosonic.craftexchange.databinding.FragmentArtEnqDetailsBinding
 import com.adrosonic.craftexchange.ui.modules.enquiry.adapter.ArtisanEnqDetailsAdapter
-import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
-import com.pixplicity.easyprefs.library.Prefs
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -80,7 +74,7 @@ class ArtEnqDetailsFragment : Fragment() {
         }
 
         mBinding?.clusterName?.text = enqDetails?.clusterName ?: ""
-        mBinding?.brandName?.text = enqDetails?.ArtisanBrandName ?: " - "
+        mBinding?.brandName?.text = enqDetails?.ProductBrandName ?: " - "
         mBinding?.artisanName?.text = "${enqDetails?.firstName} ${enqDetails?.lastName ?: ""}"
         mBinding?.artisanDetails?.text = enqDetails?.brandDesc ?: " - "
 
