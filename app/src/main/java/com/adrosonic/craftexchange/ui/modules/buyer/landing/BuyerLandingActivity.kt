@@ -101,6 +101,7 @@ class BuyerLandingActivity : AppCompatActivity(),
         mViewModel.getEnquiryStageData()
         mViewModel.getEnquiryStageAvailableProdsData()
         mViewModel.getwishlisteProductIds()
+        mViewModel?.getMoqDeliveryTimes()
         mProVM.listener = this
         mViewModel?.noficationlistener=this
         mViewModel?.getAllNotifications()

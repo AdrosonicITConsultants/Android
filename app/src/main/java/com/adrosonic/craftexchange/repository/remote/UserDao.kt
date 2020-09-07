@@ -3,8 +3,10 @@ package com.adrosonic.craftexchange.repository.remote
 import com.adrosonic.craftexchange.repository.data.response.artisan.profile.ProfileResponse
 import com.adrosonic.craftexchange.repository.data.response.artisan.editProfile.EditDetailsResponse
 import com.adrosonic.craftexchange.repository.data.editProfile.EditProfileResponse
+import com.adrosonic.craftexchange.repository.data.registerResponse.RegisterResponse
 import com.adrosonic.craftexchange.repository.data.request.editProfileModel.PaymentAccountDetails
 import com.adrosonic.craftexchange.repository.data.response.artisan.editProfile.EditBankDetailsResponse
+import com.adrosonic.craftexchange.repository.data.response.logout.LogoutResponse
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -60,4 +62,9 @@ interface UserDao {
     @PUT("user/edit/bankDetails")
     fun editArtisanBankDetails(@Header("Authorization") token:String,
                             @Body paymentAccountDetails : ArrayList<PaymentAccountDetails>) : Call<EditBankDetailsResponse>
+
+    @Headers("Accept: application/json")
+    @POST("/user/logoutMobile")
+    fun logoutUser(@Header("Authorization") token : String,@Query("deviceId") deviceId:String): Call<LogoutResponse>
+
 }

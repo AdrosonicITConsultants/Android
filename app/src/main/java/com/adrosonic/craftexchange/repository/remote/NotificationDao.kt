@@ -17,7 +17,7 @@ interface NotificationDao {
 
     @Headers("Accept: application/json")
     @POST("/notification/markAsRead/{notificationId}")
-    fun markSingleNotificationAsRead(@Header("Authorization") token: String,@Query("notificationId")notificationId:Long): Call<NotificationReadResponse>
+    fun markSingleNotificationAsRead(@Header("Authorization") token: String,@Path("notificationId")notificationId:Long): Call<NotificationReadResponse>
 
     @Headers("Accept: application/json")
     @POST("/notification/markAllAsRead")
