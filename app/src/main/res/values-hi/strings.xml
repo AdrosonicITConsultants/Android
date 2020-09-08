@@ -259,5 +259,7 @@
     <string name="pi_note_to_artisan">The PI can be changed later only if change request is raised by buyer</string>
     <string name="company_details">Company Details</string>
     <string name="company">Company</string>
+    <string name="fill_in_moq_to_bid">Fill in MOQ to bid for this enquiry</string>
+    <string name="type_your_note_here">Type your note here</string>
 
 </resources>

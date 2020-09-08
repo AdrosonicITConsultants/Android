@@ -88,6 +88,7 @@ class ArtisanLandingActivity : AppCompatActivity(),
         setContentView(view)
         mViewModel?.noficationlistener=this
         mViewModel?.getAllNotifications()
+        mViewModel?.getMoqDeliveryTimes()
         DeviceRegistration(object : DeviceTokenCallback {
             override fun registeredToken(token: String) {
                 addUserDevice(true,token)
@@ -102,7 +103,6 @@ class ArtisanLandingActivity : AppCompatActivity(),
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.title = ""
-
 
         val toggle = ActionBarDrawerToggle(
             this, drawer_layout, toolbar,

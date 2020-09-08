@@ -78,6 +78,7 @@ const val EXTRA_WEFT_YARN_COUNT = "extraWeftYarnCount"
 const val EXTRA_WEFT_YARN_ID = "extraWeftYarnId"
 
 ////////////////////////Enquiry/////////////////////////////
+const val MOQ_DELIVERY_DATES = "moq_delivery_dates"
 const val ENQUIRY_STAGE_DATA = "enquiry_stage_data"
 const val ENQUIRY_AVAI_PROD_STAGE_DATA = "enquiry_available_product_stage_data"
 
@@ -95,6 +96,12 @@ class UserConfig {
         editor.clear()
         editor.commit()
     }
+    var moqDeliveryDates = ""
+        get() = Prefs.getString(MOQ_DELIVERY_DATES, "")
+        set(value) {
+            Prefs.putString(MOQ_DELIVERY_DATES, value)
+            field = value
+        }
     var notiBadgeCount = 0L
         get() = Prefs.getLong(NOTI_BADGE_COUNT, 0L)
         set(value) {

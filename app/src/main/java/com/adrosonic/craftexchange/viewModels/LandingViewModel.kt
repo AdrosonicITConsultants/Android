@@ -19,6 +19,8 @@ import com.adrosonic.craftexchange.repository.data.response.buyer.wishList.WishL
 import com.adrosonic.craftexchange.ui.modules.buyer.profile.BrandFragment
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryAvaProdStageData
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryStageData
+import com.adrosonic.craftexchange.repository.data.response.logout.LogoutResponse
+import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimesResponse
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
@@ -60,6 +62,7 @@ class LandingViewModel(application: Application) : AndroidViewModel(application)
         editor.clear()
         editor.commit()
         editor.apply()
+        calllogoutUser()
     }
 
     fun getProductsOfArtisan(context : Context){
@@ -246,6 +249,7 @@ class LandingViewModel(application: Application) : AndroidViewModel(application)
                 }
             })
     }
+
     fun getAllNotifications(){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         CraftExchangeRepository
@@ -273,4 +277,44 @@ class LandingViewModel(application: Application) : AndroidViewModel(application)
             })
     }
 
+    fun calllogoutUser(){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getUserService()
+            .logoutUser(token,UserConfig.shared?.deviceRegistrationToken).enqueue(object : Callback, retrofit2.Callback<LogoutResponse> {
+                override fun onFailure(call: Call<LogoutResponse>, t: Throwable) {
+                    t.printStackTrace()
+                }
+                override fun onResponse(
+                    call: Call<LogoutResponse>,
+                    response: Response<LogoutResponse>
+                ) {
+
+                }
+            })
+    }
+
+    fun getMoqDeliveryTimes(){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getMoqService()
+            .getMoqDeliveryTimes(token).enqueue(object : Callback, retrofit2.Callback<MoqDeliveryTimesResponse> {
+                override fun onFailure(call: Call<MoqDeliveryTimesResponse>, t: Throwable) {
+                    t.printStackTrace()
+                }
+                override fun onResponse(
+                    call: Call<MoqDeliveryTimesResponse>,
+                    response: Response<MoqDeliveryTimesResponse>
+                ) {
+                    val valid=response.body()?.valid?:false
+                    Log.e(TAG,"getMoqDeliveryTimes :$valid")
+                    if(valid){
+                        Log.e(TAG,"getMoqDeliveryTimes :${response.body()?.data?.size}")
+                        Log.e(TAG,"getMoqDeliveryTimes :${Gson().toJson(response.body())}")
+                        UserConfig.shared.moqDeliveryDates=Gson().toJson(response.body())
+                        Log.e(TAG,"getMoqDeliveryTimes after:${UserConfig.shared.moqDeliveryDates}")
+                    }
+                }
+            })
+    }
 }
