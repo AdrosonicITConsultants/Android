@@ -368,7 +368,7 @@ class CatalogueProductDetailsActivity : AppCompatActivity(),
         try {
             Handler(Looper.getMainLooper()).post {
                 dialog?.cancel()
-                Utility.enquiryGenSuccessDialog(this, enquiry.data.enquiry.id.toString(),enquiry.data.enquiry.code).show()
+                Utility.enquiryGenSuccessDialog(this, enquiry.data.enquiry.id.toString(),enquiry.data.enquiry.code.toString()).show()
                 Log.e("EnquiryGeneration", "Onsucces")
             }
         } catch (e: Exception) {

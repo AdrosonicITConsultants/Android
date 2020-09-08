@@ -80,7 +80,6 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
                         if(response.body()?.data?.ifExists == true){
                             response.body()?.data?.enquiryId?.let {
 //                            TODO : save all the enquiries after login ..into DB
-//                                EnquiryPredicates.updateIfExistEnquiry(productId, it, response.body()?.data?.ifExists!!)
                                 listener?.onExistingEnquiryGeneration(
                                     response.body()?.data?.productName.toString(),
                                     response.body()?.data?.enquiryId.toString(),

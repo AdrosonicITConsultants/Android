@@ -79,10 +79,10 @@ class ArtEnqDetailsFragment : Fragment() {
         mBinding?.artisanDetails?.text = enqDetails?.brandDesc ?: " - "
 
         //Todo Product Categories
-        var catList = EnquiryPredicates?.getProdCatEnq(enqDetails?.userId)
-        catList?.forEach {
-            it.productCategoryid?.let { it1 -> list.add(it1) }
-        }
+//        var catList = EnquiryPredicates?.getProdCatEnq(enqDetails?.userId)
+//        catList?.forEach {
+//            it.productCategoryid?.let { it1 -> list.add(it1) }
+//        }
 
 
         mBinding?.btnBack?.setOnClickListener {

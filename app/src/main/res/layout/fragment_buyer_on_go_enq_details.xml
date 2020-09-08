@@ -181,7 +181,7 @@
                         android:textSize="@dimen/product_note_text"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/product_brand_name" />
+                        app:layout_constraintTop_toBottomOf="@+id/product_Availability" />
 
                     <ImageView
                         android:id="@+id/enquiry_status_dot"
