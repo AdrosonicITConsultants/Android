@@ -124,6 +124,10 @@ EnquiryViewModel.FetchOngoingEnqInterface{
             }
         }
 
+        mBinding?.btnChat?.setOnClickListener {
+            Utility?.displayMessage("Chat",requireActivity())
+        }
+
         mBinding?.btnBack?.setOnClickListener {
             activity?.onBackPressed()
         }
@@ -196,6 +200,7 @@ EnquiryViewModel.FetchOngoingEnqInterface{
     fun setDetails(){
 
         setTabVisibilities()
+        setChatIConVisibility()
 
         mBinding?.enquiryCode?.text = enquiryDetails?.enquiryCode
         mBinding?.enquiryStartDate?.text = "Date started : ${enquiryDetails?.startedOn?.split("T")?.get(0)}"
@@ -445,10 +450,21 @@ EnquiryViewModel.FetchOngoingEnqInterface{
         }
     }
 
+    private fun setChatIConVisibility(){
+        if(enquiryDetails?.innerEnquiryStageID != null){
+            mBinding?.btnChat?.visibility = View.VISIBLE
+            mBinding?.btnMenu?.visibility = View.GONE
+        }else{
+            mBinding?.btnChat?.visibility = View.GONE
+            mBinding?.btnMenu?.visibility = View.VISIBLE
+        }
+    }
+
     fun viewLoader(){
         mBinding?.buyerOngoEnqDetails?.visibility = View.GONE
         mBinding?.swipeEnquiryDetails?.isRefreshing = true
     }
+
     fun hideLoader(){
         mBinding?.buyerOngoEnqDetails?.visibility = View.VISIBLE
         mBinding?.swipeEnquiryDetails?.isRefreshing = false
