@@ -94,13 +94,13 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
                 })
         }
 
-        mBinding?.btnMenu?.setOnClickListener {
-            if(mBinding?.menuList?.visibility == View.GONE){
-                mBinding?.menuList?.visibility = View.VISIBLE
-            }else{
-                mBinding?.menuList?.visibility = View.GONE
-            }
-        }
+//        mBinding?.btnMenu?.setOnClickListener {
+//            if(mBinding?.menuList?.visibility == View.GONE){
+//                mBinding?.menuList?.visibility = View.VISIBLE
+//            }else{
+//                mBinding?.menuList?.visibility = View.GONE
+//            }
+//        }
 
         mBinding?.btnBack?.setOnClickListener {
             activity?.onBackPressed()

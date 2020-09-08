@@ -99,7 +99,7 @@
                             android:focusable="true"
                             android:fontFamily="@font/lato_regular"
                             android:gravity="center_vertical"
-                            android:padding="4dp"
+                            android:padding="6dp"
                             android:text="@string/chat"
                             android:textColor="#D6709F"
                             android:textSize="12sp" />
@@ -119,7 +119,7 @@
                             android:focusable="true"
                             android:fontFamily="@font/lato_regular"
                             android:gravity="center_vertical"
-                            android:padding="4dp"
+                            android:padding="6dp"
                             android:text="@string/close_enquiry"
                             android:textColor="#DD5A61"
                             android:textSize="12sp" />

@@ -1,5 +1,7 @@
 package com.adrosonic.craftexchange.ui.modules.buyer.enquiry.adapter
 
+import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -31,6 +33,8 @@ import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
 import com.pixplicity.easyprefs.library.Prefs
+import kotlinx.android.synthetic.main.dialog_are_you_sure.*
+import kotlinx.android.synthetic.main.dialog_gen_enquiry_success.*
 import retrofit2.Call
 import retrofit2.Response
 import javax.security.auth.callback.Callback
@@ -132,6 +136,10 @@ EnquiryViewModel.FetchOngoingEnqInterface{
             activity?.onBackPressed()
         }
 
+        mBinding?.closeEnquiry?.setOnClickListener {
+            enquiryDetails?.enquiryID?.let { it1 -> showDialog(it1) }
+        }
+
         mBinding?.brandDetailsLayer?.setOnClickListener {
             if (savedInstanceState == null) {
                 activity?.supportFragmentManager?.beginTransaction()
@@ -150,6 +158,23 @@ EnquiryViewModel.FetchOngoingEnqInterface{
            }
         }
 
+    }
+
+    fun showDialog(enquiryId : Long){
+        var dialog = Dialog(requireActivity())
+        dialog.setContentView(R.layout.dialog_are_you_sure)
+        dialog.create()
+        dialog.show()
+
+        dialog.btn_no?.setOnClickListener {
+            dialog.cancel()
+        }
+
+        dialog.btn_yes?.setOnClickListener {
+            mEnqVM.markEnquiryCompleted(enquiryId)
+            dialog.cancel()
+            activity?.onBackPressed()
+        }
     }
 
     fun CustomProduct(){
@@ -451,7 +476,7 @@ EnquiryViewModel.FetchOngoingEnqInterface{
     }
 
     private fun setChatIConVisibility(){
-        if(enquiryDetails?.innerEnquiryStageID != null){
+        if(enquiryDetails?.isBlue == null && enquiryDetails?.enquiryStageID!! >= 4L){
             mBinding?.btnChat?.visibility = View.VISIBLE
             mBinding?.btnMenu?.visibility = View.GONE
         }else{

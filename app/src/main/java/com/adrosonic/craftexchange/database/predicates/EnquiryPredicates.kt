@@ -457,5 +457,23 @@ class EnquiryPredicates {
             return enquiry
         }
 
+        fun deleteEnquiry(enquiryId: Long?){
+            var realm = CXRealmManager.getRealmInstance()
+            var enquiry : OngoingEnquiries?= null
+            realm.executeTransaction {
+                try{
+                    enquiry = realm.where(OngoingEnquiries::class.java)
+                        .equalTo(OngoingEnquiries.COLUMN_ENQUIRY_ID,enquiryId)
+                        .limit(1)
+                        .findFirst()
+
+                    enquiry?.deleteFromRealm()
+
+                }catch (e:Exception){
+                    Log.e("EnquiryDetails","Exception : "+e.printStackTrace())
+                }
+            }
+        }
+
     }
 }

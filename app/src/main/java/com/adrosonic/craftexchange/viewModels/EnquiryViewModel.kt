@@ -2,6 +2,7 @@ package com.adrosonic.craftexchange.viewModels
 
 import android.app.Application
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.adrosonic.craftexchange.database.entities.realmEntities.ClusterList
@@ -15,6 +16,9 @@ import com.adrosonic.craftexchange.repository.data.response.enquiry.OnGoingEnqRe
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.pixplicity.easyprefs.library.Prefs
 import io.realm.RealmResults
+import okhttp3.ResponseBody
+import org.json.JSONException
+import org.json.JSONObject
 import retrofit2.Call
 import javax.security.auth.callback.Callback
 
@@ -186,6 +190,30 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
                     }else{
                         fetchEnqListener?.onFailure()
                         Log.e("Enquiry Details","Failure: "+response.body()?.errorMessage)
+                    }
+                }
+
+            })
+    }
+
+    fun markEnquiryCompleted(enquiryId : Long){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getEnquiryService()
+            .markEnquiryCompleted(token,enquiryId)
+            .enqueue(object: Callback, retrofit2.Callback<ResponseBody> {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    t.printStackTrace()
+                    Log.e("Mark Complete Enquiry","Failure: "+t.message)
+                }
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: retrofit2.Response<ResponseBody>) {
+                    Log.e("Mark Complete Enquiry","Success")
+
+                    if(response?.isSuccessful){
+                        //TODO : Remove Enquiry from ongoing enquiry
+                        EnquiryPredicates.deleteEnquiry(enquiryId)
                     }
                 }
 

@@ -50,65 +50,18 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <ImageView
-                            android:id="@+id/btn_menu"
+                            android:id="@+id/btn_chat"
                             android:layout_width="35dp"
                             android:layout_height="35dp"
                             android:layout_marginTop="@dimen/margin_regular"
-                            android:layout_marginEnd="10dp"
+                            android:layout_marginEnd="@dimen/margin_regular"
                             android:background="?selectableItemBackgroundBorderless"
                             android:clickable="true"
                             android:focusable="true"
-                            android:src="@drawable/ic_enquiry_menu"
+                            android:elevation="10dp"
+                            android:src="@drawable/ic_chat_enquiry"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
-
-                        <LinearLayout
-                            android:id="@+id/menu_list"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@color/colorSplash"
-                            android:elevation="15dp"
-                            android:orientation="vertical"
-                            android:visibility="gone"
-                            app:layout_constraintEnd_toStartOf="@+id/btn_menu"
-                            app:layout_constraintTop_toBottomOf="@+id/btn_menu">
-
-                            <TextView
-                                android:id="@+id/chat"
-                                android:layout_width="140dp"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/custom_ripple"
-                                android:clickable="true"
-                                android:drawableStart="@drawable/ic_chat_enquiry"
-                                android:focusable="true"
-                                android:fontFamily="@font/lato_regular"
-                                android:gravity="center_vertical"
-                                android:padding="4dp"
-                                android:text="@string/chat"
-                                android:textColor="#D6709F"
-                                android:textSize="12sp" />
-
-                            <View
-                                android:layout_width="140dp"
-                                android:layout_height="1dp"
-                                android:background="@color/lighter_gray" />
-
-                            <TextView
-                                android:id="@+id/close_enquiry"
-                                android:layout_width="140dp"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/custom_ripple"
-                                android:clickable="true"
-                                android:drawableStart="@drawable/ic_close_enq"
-                                android:focusable="true"
-                                android:fontFamily="@font/lato_regular"
-                                android:gravity="center_vertical"
-                                android:padding="4dp"
-                                android:text="@string/close_enquiry"
-                                android:textColor="#DD5A61"
-                                android:textSize="12sp" />
-
-                        </LinearLayout>
 
                         <TextView
                             android:id="@+id/enquiry_code"
