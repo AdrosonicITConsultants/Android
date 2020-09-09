@@ -766,7 +766,7 @@
                         app:sb_swipe_bg_color="@color/black_text"
                         app:sb_swipe_text_color="@color/white_text"
                         app:sb_thumb_bg_color="@color/black_text"
-                        app:sb_thumb_image="@drawable/ic_right_arrow_white"
+                        app:sb_thumb_image="@drawable/ic_swipe_arrow"
                         />
 
                 </LinearLayout>
