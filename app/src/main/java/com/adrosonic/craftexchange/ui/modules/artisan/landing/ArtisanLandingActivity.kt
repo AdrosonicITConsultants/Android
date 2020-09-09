@@ -88,7 +88,7 @@ class ArtisanLandingActivity : AppCompatActivity(),
         setContentView(view)
         mViewModel?.noficationlistener=this
         mViewModel?.getAllNotifications()
-        mViewModel?.getMoqDeliveryTimes()
+//        mViewModel?.getMoqDeliveryTimes()
         DeviceRegistration(object : DeviceTokenCallback {
             override fun registeredToken(token: String) {
                 addUserDevice(true,token)

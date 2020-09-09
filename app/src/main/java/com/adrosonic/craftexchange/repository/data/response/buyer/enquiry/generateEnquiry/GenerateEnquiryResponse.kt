@@ -9,24 +9,31 @@ data class GenerateEnquiryResponse (
 
 data class Data (
     val enquiry: Enquiry,
-    val productName: String,
-    val ifExists: Boolean,
-    //for existing enquiry..resuing same class
-    val code: String,
-    val enquiryId: Long
+    val productName: String ?= "",
+    val ifExists: Boolean ?= false
 )
 
 data class Enquiry (
-    val id: Long,
-    val code: String,
-    val generatedBy: Long,
-    val productId: Long,
-    val customProductId: Long,
-    val enquiryStatus: Long,
-    val artisanId: Long,
-    val moqId: Long,
-    val piId: Long,
-    val enquiryOrderStageId: Long,
-    val createdOn: String,
-    val modifiedOn: String
+    val id: Long ?= 0,
+    val code: String ?= "",
+    val generatedBy: Long ?= 0,
+    val productId: Long ?= 0,
+    val customProductId:Long ?= 0,
+    val enquiryStatus: Long ?= 0,
+    val isConvertedToOrder: Long ?= 0,
+    val orderCode: Long ?= 0,
+    val artisanId: Long ?= 0,
+    val moqId: Long ?= 0,
+    val piId: Long ?= 0,
+    val enquiryOrderStageId: Long ?= 0,
+    val innerOrderStageId: Long ?= 0,
+    val productHistoryId: Long ?= 0,
+    val customProductHistoryId: Long ?= 0,
+    val createdOn: String ?= "",
+    val modifiedOn: String ?= "",
+    val orderCreatedOn: String ?= "",
+    val isChangeRequestOn: Long ?= 0,
+    val lastUpdateOn: String ?= "",
+    val lastChatDate: String ?= ""
 )
+

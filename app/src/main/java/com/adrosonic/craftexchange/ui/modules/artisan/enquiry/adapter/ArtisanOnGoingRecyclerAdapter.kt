@@ -33,10 +33,10 @@ class ArtisanOnGoingRecyclerAdapter(var context: Context?, private var enquiries
         var productName: TextView = view.findViewById(R.id.product_name)
         var brandName: TextView = view.findViewById(R.id.brand_name)
         var productStatus: TextView = view.findViewById(R.id.product_status_text)
-        var enquiryStageStatus : TextView = view.findViewById(R.id.enquiry_stage_text)
+        var enquiryStageStatus : TextView = view.findViewById(R.id.enquiry_stage_txt)
         var dateText: TextView = view.findViewById(R.id.date_text)
         var enquiryColor : ImageView = view.findViewById(R.id.enq_stage_color)
-
+        var reqDoc : TextView = view.findViewById(R.id.req_doc_text)
 
         var layout : ConstraintLayout = view.findViewById(R.id.enquiry_container_layout)
     }
@@ -134,6 +134,11 @@ class ArtisanOnGoingRecyclerAdapter(var context: Context?, private var enquiries
                     ContextCompat.getColor(
                         it,R.color.black_text)
                 }?.let { holder.enquiryColor.setBackgroundColor(it) }
+
+                context?.let {
+                    ContextCompat.getColor(
+                        it,R.color.black_text)
+                }?.let { holder.enquiryStageStatus.setTextColor(it) }
             }
 
             2L,3L,4L,5L -> {
@@ -141,6 +146,11 @@ class ArtisanOnGoingRecyclerAdapter(var context: Context?, private var enquiries
                     ContextCompat.getColor(
                         it,R.color.tab_details_selected_text)
                 }?.let { holder.enquiryColor.setBackgroundColor(it) }
+
+                context?.let {
+                    ContextCompat.getColor(
+                        it,R.color.tab_details_selected_text)
+                }?.let { holder.enquiryStageStatus.setTextColor(it) }
             }
 
             6L,7L,8L,9L,10L -> {
@@ -148,6 +158,11 @@ class ArtisanOnGoingRecyclerAdapter(var context: Context?, private var enquiries
                     ContextCompat.getColor(
                         it,R.color.dark_green)
                 }?.let { holder.enquiryColor.setBackgroundColor(it) }
+
+                context?.let {
+                    ContextCompat.getColor(
+                        it,R.color.dark_green)
+                }?.let { holder.enquiryStageStatus.setTextColor(it) }
 
             }
         }
@@ -197,6 +212,25 @@ class ArtisanOnGoingRecyclerAdapter(var context: Context?, private var enquiries
             }
         }
         holder?.enquiryStageStatus.text = enquiryStage
+
+        if(enquiry?.isMoqSend == 1L){
+            holder.reqDoc?.visibility = View.GONE
+        }else{
+            holder.reqDoc?.visibility = View.VISIBLE
+            holder.reqDoc?.text = "Requesting MOQ"
+        }
+
+//        if(enquiry?.isPiSend == 1L && enquiry?.enquiryStageID == 2L){
+//            holder.reqDoc?.visibility = View.GONE
+//        }else{
+//            holder.reqDoc?.visibility = View.VISIBLE
+//            holder.reqDoc?.text = "Requesting PI"
+//        }
+//        if(enquiry?.isMoqSend == 1L || enquiry?.isPiSend == 1L){
+//            holder?.reqDoc?.visibility = View.VISIBLE
+//        }else{
+//            holder?.reqDoc?.visibility = View.GONE
+//        }
     }
 
 }

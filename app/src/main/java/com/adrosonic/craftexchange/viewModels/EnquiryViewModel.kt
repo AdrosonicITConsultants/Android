@@ -2,6 +2,7 @@ package com.adrosonic.craftexchange.viewModels
 
 import android.app.Application
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.adrosonic.craftexchange.database.entities.realmEntities.ClusterList
@@ -21,6 +22,9 @@ import com.adrosonic.craftexchange.utils.UserConfig
 import com.google.gson.Gson
 import com.pixplicity.easyprefs.library.Prefs
 import io.realm.RealmResults
+import okhttp3.ResponseBody
+import org.json.JSONException
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Response
 import javax.security.auth.callback.Callback
@@ -95,7 +99,6 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
                         if(response.body()?.data?.ifExists == true){
                             response.body()?.data?.enquiryId?.let {
 //                            TODO : save all the enquiries after login ..into DB
-//                                EnquiryPredicates.updateIfExistEnquiry(productId, it, response.body()?.data?.ifExists!!)
                                 listener?.onExistingEnquiryGeneration(
                                     response.body()?.data?.productName.toString(),
                                     response.body()?.data?.enquiryId.toString(),
@@ -207,7 +210,29 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
 
             })
     }
+    fun markEnquiryCompleted(enquiryId : Long){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getEnquiryService()
+            .markEnquiryCompleted(token,enquiryId)
+            .enqueue(object: Callback, retrofit2.Callback<ResponseBody> {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    t.printStackTrace()
+                    Log.e("Mark Complete Enquiry","Failure: "+t.message)
+                }
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: retrofit2.Response<ResponseBody>) {
+                    Log.e("Mark Complete Enquiry","Success")
 
+                    if(response?.isSuccessful){
+                        //TODO : Remove Enquiry from ongoing enquiry
+                        EnquiryPredicates.deleteEnquiry(enquiryId)
+                    }
+                }
+
+            })
+    }
     fun getSingleMoq(enquiryId:Long){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         Log.e(TAG,"getSingleMoq :${enquiryId}")
@@ -215,8 +240,6 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
             .getMoqService()
             .getMoq(token,enquiryId.toInt()).enqueue(object : Callback, retrofit2.Callback<SendMoqResponse> {
                 override fun onFailure(call: Call<SendMoqResponse>, t: Throwable) {
-                    Log.e(TAG,"getSingleMoq :${t.message}")
-                    Log.e(TAG,"getSingleMoq :${t.localizedMessage}")
                     Log.e(TAG,"getSingleMoq :${t.stackTrace}")
                     moqListener?.onGetMoqCall()
                     t.printStackTrace()
@@ -227,9 +250,7 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
                 ) {
                     val valid=response.body()?.valid?:false
                     Log.e(TAG,"getSingleMoq :$valid")
-                    Log.e(TAG,"getSingleMoq :${response.body()?.errorMessage}")
                     if(valid){
-                        Log.e(TAG,"getSingleMoq :${response.body()?.data?.moq?.additionalInfo}")
                         response.body()?.data?.moq?.let {
                             MoqsPredicates.insertMoqs(response.body()?.data?.moq!!,response.body()?.data?.accepted?:false,enquiryId)
                         }
@@ -241,17 +262,10 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
     fun sendMoq(enquiryId:Long,additionalInfo: String,deliveryTimeID: Long,  moq: Long,ppu: String){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         val request=SendMoqRequest(additionalInfo,deliveryTimeID,moq,ppu)
-        Log.e(TAG,"sendMoq enquiryId :$enquiryId")
-        Log.e(TAG,"sendMoq request :${request.additionalInfo}")
-        Log.e(TAG,"sendMoq request :${request.deliveryTimeId}")
-        Log.e(TAG,"sendMoq request :${request.ppu}")
-        Log.e(TAG,"sendMoq request :${request.moq}")
         CraftExchangeRepository
             .getMoqService()
             .sendMoq(token,enquiryId.toInt(),request).enqueue(object : Callback, retrofit2.Callback<SendMoqResponse> {
                 override fun onFailure(call: Call<SendMoqResponse>, t: Throwable) {
-                    Log.e(TAG,"sendMoq :${t.message}")
-                    Log.e(TAG,"sendMoq :${t.localizedMessage}")
                     Log.e(TAG,"sendMoq :${t.stackTrace}")
                     moqListener?.onAddMoqFailure()
                     t.printStackTrace()
@@ -261,11 +275,9 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
                     response: Response<SendMoqResponse>
                 ) {
                     val valid=response.body()?.valid?:false
-                    Log.e(TAG,"sendMoq :$valid")
                     Log.e(TAG,"sendMoq :${response.body()?.errorMessage}")
                     if(valid){
                         moqListener?.onAddMoqSuccess()
-                        Log.e(TAG,"sendMoq :${response.body()?.data?.moq?.additionalInfo}")
                         MoqsPredicates.insertMoqs(response.body()?.data?.moq!!,response.body()?.data?.accepted?:false,enquiryId)
                     }else moqListener?.onAddMoqFailure()
                 }

@@ -98,6 +98,16 @@ EnquiryViewModel.FetchOngoingEnqInterface{
         fun newInstance() = BuyerOngoingEnquiryFragment()
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (!Utility.checkIfInternetConnected(requireContext())) {
+            Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
+        } else {
+            mEnqVM.getAllOngoingEnquiries()
+            mBinding?.swipeOngoingEnquiries?.isRefreshing= true
+        }
+    }
+
     override fun onFailure() {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {

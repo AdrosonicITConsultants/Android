@@ -50,6 +50,21 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
+                        android:id="@+id/btn_chat"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginTop="@dimen/margin_regular"
+                        android:layout_marginEnd="@dimen/margin_regular"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:elevation="10dp"
+                        android:src="@drawable/ic_chat_enquiry"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
                         android:id="@+id/btn_menu"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
@@ -58,6 +73,7 @@
                         android:background="?selectableItemBackgroundBorderless"
                         android:clickable="true"
                         android:focusable="true"
+                        android:visibility="visible"
                         android:src="@drawable/ic_enquiry_menu"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -83,7 +99,7 @@
                             android:focusable="true"
                             android:fontFamily="@font/lato_regular"
                             android:gravity="center_vertical"
-                            android:padding="4dp"
+                            android:padding="6dp"
                             android:text="@string/chat"
                             android:textColor="#D6709F"
                             android:textSize="12sp" />
@@ -103,7 +119,7 @@
                             android:focusable="true"
                             android:fontFamily="@font/lato_regular"
                             android:gravity="center_vertical"
-                            android:padding="4dp"
+                            android:padding="6dp"
                             android:text="@string/close_enquiry"
                             android:textColor="#DD5A61"
                             android:textSize="12sp" />
@@ -181,7 +197,7 @@
                         android:textSize="@dimen/product_note_text"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/product_brand_name" />
+                        app:layout_constraintTop_toBottomOf="@+id/product_Availability" />
 
                     <ImageView
                         android:id="@+id/enquiry_status_dot"

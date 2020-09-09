@@ -255,7 +255,7 @@ class EnquiryPredicates {
                                 enqObj?.profileImage = enquiry?.openEnquiriesResponse?.profilePic
                                 enqObj?.alternateMobile = enquiry?.openEnquiriesResponse?.alternateMobile
 //                                enqObj?.companyName = enquiry?.openEnquiriesResponse?.companyName
-                                enqObj?.ProductBrandName = enquiry?.openEnquiriesResponse?.companyName//todo : to be changed
+//                                enqObj?.ProductBrandName = enquiry?.openEnquiriesResponse?.companyName//todo : to be changed
 
                                 enqObj?.logo = enquiry?.openEnquiriesResponse?.logo
                                 enqObj?.city = enquiry?.openEnquiriesResponse?.city
@@ -409,8 +409,8 @@ class EnquiryPredicates {
         fun getProdCatEnq(artisanId : Long?) : RealmResults<ArtisanProductCategory>?{
             val realm = CXRealmManager.getRealmInstance()
             return realm.where(ArtisanProductCategory::class.java)
-                .equalTo("artisanId",artisanId)
-                .distinct("productCategoryDesc")
+                .equalTo("userid",artisanId)
+                .distinct("productCategoryid")
                 .findAll()
         }
 
@@ -455,6 +455,24 @@ class EnquiryPredicates {
                 }
             }
             return enquiry
+        }
+
+        fun deleteEnquiry(enquiryId: Long?){
+            var realm = CXRealmManager.getRealmInstance()
+            var enquiry : OngoingEnquiries?= null
+            realm.executeTransaction {
+                try{
+                    enquiry = realm.where(OngoingEnquiries::class.java)
+                        .equalTo(OngoingEnquiries.COLUMN_ENQUIRY_ID,enquiryId)
+                        .limit(1)
+                        .findFirst()
+
+                    enquiry?.deleteFromRealm()
+
+                }catch (e:Exception){
+                    Log.e("EnquiryDetails","Exception : "+e.printStackTrace())
+                }
+            }
         }
 
     }

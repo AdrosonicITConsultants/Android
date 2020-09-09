@@ -120,13 +120,14 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
                     enquiryDetails = it
                 })
         }
-        mBinding?.btnMenu?.setOnClickListener {
-            if(mBinding?.menuList?.visibility == View.GONE){
-                mBinding?.menuList?.visibility = View.VISIBLE
-            }else{
-                mBinding?.menuList?.visibility = View.GONE
-            }
-        }
+//        mBinding?.btnMenu?.setOnClickListener {
+//            if(mBinding?.menuList?.visibility == View.GONE){
+//                mBinding?.menuList?.visibility = View.VISIBLE
+//            }else{
+//                mBinding?.menuList?.visibility = View.GONE
+//            }
+//        }
+
 
         mBinding?.btnBack?.setOnClickListener {
             activity?.onBackPressed()
@@ -201,26 +202,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
                 //inactive function
             }
         })
-//        mBinding?.txtBidMoq?.setOnClickListener {
-//        val additionalInfo=mBinding?.etAddNote?.text.toString()
-//        val moq=mBinding?.etMoq?.text.toString()
-//        val ppu=mBinding?.etPrice?.text.toString()
-//            if(moq.isEmpty()) Utility.displayMessage("Please add MOQ",requireContext())
-//            else if(ppu.isEmpty()) Utility.displayMessage("Please add price per unit",requireContext())
-//            else if(estId<=0) Utility.displayMessage("Please select estimated days",requireContext())
-//            else {
-//                enqID?.let {
-//                    if (Utility.checkIfInternetConnected(requireContext())) {
-//                        mBinding?.txtBidMoq?.text="Sending MOQ"
-//                        viewLoader()
-//                        mEnqVM?.sendMoq(it, additionalInfo, estId, moq.toLong(), ppu)
-//                    }else {
-//                        MoqsPredicates.insertMoqForOffline(it, additionalInfo, estId, moq.toLong(), ppu)
-//                        setDetails()
-//                    }
-//                }
-//            }
-//        }
+
     }
 
     fun ArtisanProduct(){
