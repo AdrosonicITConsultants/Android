@@ -7,30 +7,41 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
+import com.adrosonic.craftexchange.database.predicates.MoqsPredicates
 import com.adrosonic.craftexchange.databinding.FragmentArtisanOnGoEnqDetailsBinding
+import com.adrosonic.craftexchange.repository.data.response.moq.Datum
+import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimesResponse
 import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.addProductIntent
-import com.adrosonic.craftexchange.ui.modules.enquiry.ArtEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
+import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
+import com.agik.swipe_button.Controller.OnSwipeCompleteListener
+import com.agik.swipe_button.View.Swipe_Button_View
+import com.google.gson.GsonBuilder
+
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 class ArtisanOnGoEnqDetailsFragment : Fragment(),
-    EnquiryViewModel.FetchOngoingEnqInterface {
+    EnquiryViewModel.FetchOngoingEnqInterface,
+    EnquiryViewModel.MoqInterface{
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -55,6 +66,10 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
     var extraweft : String ?= ""
     var prodCategory : String ?= ""
 
+    var moqDeliveryJson=""
+    var moqDeliveryTimeList=ArrayList<Datum>()
+    var arrayDeliveryDscrp=ArrayList<String>()
+    var estId=0L
     var mBinding : FragmentArtisanOnGoEnqDetailsBinding?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,11 +92,23 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        moqDeliveryJson = UserConfig.shared.moqDeliveryDates
+        val gson = GsonBuilder().create()
+        val moqDeliveryTime = gson.fromJson(moqDeliveryJson, MoqDeliveryTimesResponse::class.java)
+        moqDeliveryTimeList.addAll(moqDeliveryTime.data)
+        mEnqVM?.moqListener=this
         mEnqVM.fetchEnqListener = this
         mBinding?.swipeEnquiryDetails?.isEnabled = false
         if(Utility.checkIfInternetConnected(requireActivity())){
-            enqID?.let { mEnqVM.getSingleEnquiry(it) }
             viewLoader()
+            enqID?.let { mEnqVM.getSingleEnquiry(it) }
+            val moqId=MoqsPredicates.getSingleMoq(enqID)?.moqId?:0
+            Log.e("getSingleMoq","moqId: $moqId")
+            if(moqId<=0){
+                viewLoader()
+                mEnqVM.getSingleMoq(enqID!!)
+            }
+
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
             setDetails()
@@ -93,7 +120,6 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
                     enquiryDetails = it
                 })
         }
-
         mBinding?.btnMenu?.setOnClickListener {
             if(mBinding?.menuList?.visibility == View.GONE){
                 mBinding?.menuList?.visibility = View.VISIBLE
@@ -110,7 +136,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
             if (savedInstanceState == null) {
                 activity?.supportFragmentManager?.beginTransaction()
                     ?.replace(R.id.enquiry_details_container,
-                        BuyEnqDetailsFragment.newInstance(enquiryDetails?.enquiryID.toString()))
+                     BuyEnqDetailsFragment.newInstance(enquiryDetails?.enquiryID.toString()))
                     ?.addToBackStack(null)
                     ?.commit()
             }
@@ -124,6 +150,77 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
                 ArtisanProduct()
             }
         }
+
+        mBinding?.moqDetailsLayer?.setOnClickListener {
+        if(mBinding?.moqDetails?.visibility==View.VISIBLE)mBinding?.moqDetails?.visibility=View.GONE
+        else mBinding?.moqDetails?.visibility=View.VISIBLE
+        }
+
+        mBinding?.spEstDays?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                if(position>0){
+                    var selection=arrayDeliveryDscrp.get(position)
+                    moqDeliveryTimeList.forEach{
+                        if(it.deliveryDesc.equals(selection, true)){
+                            estId=it.id
+
+                        }
+                    }
+                }
+            }
+        }
+
+        mBinding?.txtBidMoq?.setOnSwipeCompleteListener_forward_reverse(object : OnSwipeCompleteListener {
+            override fun onSwipe_Forward(swipeView: Swipe_Button_View) {
+                val additionalInfo=mBinding?.etAddNote?.text.toString()
+                val moq=mBinding?.etMoq?.text.toString()
+                val ppu=mBinding?.etPrice?.text.toString()
+                if(moq.isEmpty()) Utility.displayMessage("Please add MOQ",requireContext())
+                else if(ppu.isEmpty()) Utility.displayMessage("Please add price per unit",requireContext())
+                else if(estId<=0) Utility.displayMessage("Please select estimated days",requireContext())
+                else {
+                    enqID?.let {
+                        if (Utility.checkIfInternetConnected(requireContext())) {
+                            mBinding?.txtBidMoq?.setText("Sending MOQ")
+                            viewLoader()
+                            mEnqVM?.sendMoq(it, additionalInfo, estId, moq.toLong(), ppu)
+                        }else {
+                            MoqsPredicates.insertMoqForOffline(it, additionalInfo, estId, moq.toLong(), ppu)
+                            setDetails()
+                        }
+                    }
+                }
+            }
+            override fun onSwipe_Reverse(swipeView: Swipe_Button_View) {
+                //inactive function
+            }
+        })
+//        mBinding?.txtBidMoq?.setOnClickListener {
+//        val additionalInfo=mBinding?.etAddNote?.text.toString()
+//        val moq=mBinding?.etMoq?.text.toString()
+//        val ppu=mBinding?.etPrice?.text.toString()
+//            if(moq.isEmpty()) Utility.displayMessage("Please add MOQ",requireContext())
+//            else if(ppu.isEmpty()) Utility.displayMessage("Please add price per unit",requireContext())
+//            else if(estId<=0) Utility.displayMessage("Please select estimated days",requireContext())
+//            else {
+//                enqID?.let {
+//                    if (Utility.checkIfInternetConnected(requireContext())) {
+//                        mBinding?.txtBidMoq?.text="Sending MOQ"
+//                        viewLoader()
+//                        mEnqVM?.sendMoq(it, additionalInfo, estId, moq.toLong(), ppu)
+//                    }else {
+//                        MoqsPredicates.insertMoqForOffline(it, additionalInfo, estId, moq.toLong(), ppu)
+//                        setDetails()
+//                    }
+//                }
+//            }
+//        }
     }
 
     fun ArtisanProduct(){
@@ -131,12 +228,9 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
     }
 
     fun setDetails(){
-
         setTabVisibilities()
-
         mBinding?.enquiryCode?.text = enquiryDetails?.enquiryCode
         mBinding?.enquiryStartDate?.text = "Date accepted : ${enquiryDetails?.startedOn?.split("T")?.get(0)}"
-
         val image = enquiryDetails?.productImages?.split((",").toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()?.get(0)
 
         //brand name of product & product Image
@@ -177,7 +271,6 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
                 }?.let { mBinding?.productAvailability?.setTextColor(it) }
             }
         }
-
         //Product name or Product cloth details
         if(enquiryDetails?.productName != "") {
             mBinding?.productName?.text = enquiryDetails?.productName
@@ -286,6 +379,34 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
             }
         }
 
+        arrayDeliveryDscrp.clear()
+        arrayDeliveryDscrp.add("Select")
+        moqDeliveryTimeList?.forEach { arrayDeliveryDscrp.add(it.deliveryDesc) }
+        val spEstDaysAdapter =ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item,arrayDeliveryDscrp)
+        spEstDaysAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        mBinding?.spEstDays?.adapter = spEstDaysAdapter
+
+        val moq=MoqsPredicates.getSingleMoq(enqID)
+        if(moq!=null){
+            mBinding?.etMoq?.setText("${moq?.moq?:""}", TextView.BufferType.EDITABLE)
+            mBinding?.etPrice?.setText("${moq?.ppu?:""}", TextView.BufferType.EDITABLE)
+            mBinding?.etAddNote?.setText("${moq?.additionalInfo?:""}", TextView.BufferType.EDITABLE)
+            mBinding?.spEstDays?.setSelection((moq?.deliveryTimeId?:0).toInt())
+            mBinding?.txtFillDetails?.text="MOQ Details"
+            mBinding?.txtBidMoq?.visibility=View.GONE
+            mBinding?.etMoq?.isEnabled=false
+            mBinding?.etPrice?.isEnabled=false
+            mBinding?.etAddNote?.isEnabled=false
+            mBinding?.spEstDays?.isEnabled=false
+
+        } else{
+            mBinding?.txtFillDetails?.text=requireContext().getString(R.string.fill_in_moq_to_bid)
+            mBinding?.txtBidMoq?.visibility=View.VISIBLE
+            mBinding?.etMoq?.isEnabled=true
+            mBinding?.etPrice?.isEnabled=true
+            mBinding?.etAddNote?.isEnabled=true
+            mBinding?.spEstDays?.isEnabled=true
+        }
     }
 
     private fun setProgressTimeline(){
@@ -371,23 +492,16 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
 
     }
 
-
     fun viewLoader(){
-        mBinding?.artisanOngoEnqDetails?.visibility = View.GONE
+//        mBinding?.artisanOngoEnqDetails?.visibility = View.GONE
         mBinding?.swipeEnquiryDetails?.isRefreshing = true
     }
     fun hideLoader(){
-        mBinding?.artisanOngoEnqDetails?.visibility = View.VISIBLE
+//        mBinding?.artisanOngoEnqDetails?.visibility = View.VISIBLE
         mBinding?.swipeEnquiryDetails?.isRefreshing = false
     }
 
     private fun setTabVisibilities(){
-        if(enquiryDetails?.isMoqSend == 1L){
-            mBinding?.moqDetailsLayer?.visibility = View.VISIBLE
-        }else{
-            mBinding?.moqDetailsLayer?.visibility = View.GONE
-        }
-
         if(enquiryDetails?.isPiSend == 1L){
             mBinding?.piDetailsLayer?.visibility = View.VISIBLE
         }else{
@@ -426,6 +540,43 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         }
     }
 
+    override fun onAddMoqFailure() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Utility.displayMessage("Unable to add MOQ, please try again after some time",requireContext())
+                hideLoader()
+                setDetails()
+            })
+        } catch (e: Exception) {
+            Log.e("Enquiry Details", "Exception onFailure " + e.message)
+        }
+    }
+
+    override fun onAddMoqSuccess() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Utility.displayMessage("MOQ added succesfully",requireContext())
+                hideLoader()
+                setDetails()
+            })
+        } catch (e: Exception) {
+            Log.e("Enquiry Details", "Exception onAddMoqSuccess " + e.message)
+        }
+    }
+
+    override fun onGetMoqCall() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                hideLoader()
+                setDetails()
+            })
+        } catch (e: Exception) {
+            Log.e("Enquiry Details", "Exception onAddMoqSuccess " + e.message)
+        }
+    }
+
+
+
     companion object {
 
         fun newInstance(param1: String) =
@@ -435,4 +586,6 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
                 }
             }
     }
+
+
 }

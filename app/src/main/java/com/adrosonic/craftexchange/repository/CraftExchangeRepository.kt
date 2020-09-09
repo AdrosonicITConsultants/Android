@@ -74,4 +74,7 @@ object CraftExchangeRepository {
     fun getNotificationService(): NotificationDao {
         return builder(NotificationDao::class.java)
     }
+    fun getMoqService(): MoqDao {
+        return builder(MoqDao::class.java)
+    }
 }

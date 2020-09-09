@@ -165,7 +165,7 @@ class UpdateOwnProductService : JobIntentService() {
 
     companion object {
         const val KEY_ID = "own_prod_id"
-        private const val JOB_ID = 5000
+        private const val JOB_ID = 9000
         private const val TAG = "AddOwnProductService"
         fun enqueueWork(context: Context, work: Intent) {
             try {
