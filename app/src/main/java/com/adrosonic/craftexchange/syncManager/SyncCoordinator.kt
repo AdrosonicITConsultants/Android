@@ -2,10 +2,7 @@ package com.adrosonic.craftexchange.syncManager
 
 import android.content.Context
 import android.util.Log
-import com.adrosonic.craftexchange.database.predicates.BuyerCustomProductPredicates
-import com.adrosonic.craftexchange.database.predicates.NotificationPredicates
-import com.adrosonic.craftexchange.database.predicates.ProductPredicates
-import com.adrosonic.craftexchange.database.predicates.WishlistPredicates
+import com.adrosonic.craftexchange.database.predicates.*
 import com.adrosonic.craftexchange.syncManager.processor.ProductDeleter
 import com.adrosonic.craftexchange.syncManager.processor.objects.ItemType
 import com.adrosonic.craftexchange.syncManager.processor.ProductAdd
@@ -13,6 +10,7 @@ import com.adrosonic.craftexchange.syncManager.processor.ProductUpdate
 import com.adrosonic.craftexchange.syncManager.processor.customDesign.OwnDesignAdd
 import com.adrosonic.craftexchange.syncManager.processor.customDesign.OwnDesignDelete
 import com.adrosonic.craftexchange.syncManager.processor.customDesign.OwnDesignUpdate
+import com.adrosonic.craftexchange.syncManager.processor.moq.SendMoqAction
 import com.adrosonic.craftexchange.syncManager.processor.notification.NotificationAction
 import com.adrosonic.craftexchange.syncManager.processor.wishlist.WishlistAction
 
@@ -28,7 +26,8 @@ class SyncCoordinator(val context: Context) {
         OwnDesignAdd(),
         OwnDesignUpdate(),
         OwnDesignDelete(),
-        NotificationAction()
+        NotificationAction(),
+        SendMoqAction()
     )
 
     fun performLocallyAvailableActions() {
@@ -61,6 +60,13 @@ class SyncCoordinator(val context: Context) {
                 if (iterator4 != null) {
                     while (iterator4.hasNext()) {
                         list.add(ItemType(iterator4.next().toString()))
+                    }
+                }
+                val queue5=  MoqsPredicates.getMoqMarkedForActions(it.predicateForLocallyTrackedElements)
+                val iterator5 = queue5?.iterator()
+                if (iterator5 != null) {
+                    while (iterator5.hasNext()) {
+                        list.add(ItemType(iterator5.next().toString()))
                     }
                 }
             } catch (e: Exception) {

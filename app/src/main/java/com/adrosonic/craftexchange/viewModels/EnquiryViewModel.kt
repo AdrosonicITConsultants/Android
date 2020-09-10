@@ -7,18 +7,28 @@ import androidx.lifecycle.MutableLiveData
 import com.adrosonic.craftexchange.database.entities.realmEntities.CompletedEnquiries
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
 import com.adrosonic.craftexchange.database.predicates.EnquiryPredicates
+import com.adrosonic.craftexchange.database.predicates.MoqsPredicates
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
+import com.adrosonic.craftexchange.repository.data.request.moq.SendMoqRequest
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.generateEnquiry.GenerateEnquiryResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.IfExistEnquiryResponse
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryResponse
+import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimesResponse
+import com.adrosonic.craftexchange.repository.data.response.moq.SendMoqResponse
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.adrosonic.craftexchange.utils.UserConfig
+import com.google.gson.Gson
 import com.pixplicity.easyprefs.library.Prefs
 import io.realm.RealmResults
 import okhttp3.ResponseBody
 import retrofit2.Call
+import retrofit2.Response
 import javax.security.auth.callback.Callback
 
 class EnquiryViewModel(application: Application) : AndroidViewModel(application){
+    companion object {
+        const val TAG = "EnquiryViewModel"
+    }
 
     interface GenerateEnquiryInterface{
         fun onSuccessEnquiryGeneration(enquiry : GenerateEnquiryResponse)
@@ -30,7 +40,11 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
         fun onFailure()
         fun onSuccess()
     }
-
+    interface MoqInterface{
+        fun onAddMoqFailure()
+        fun onAddMoqSuccess()
+        fun onGetMoqCall()
+    }
     val ongoingEnqList : MutableLiveData<RealmResults<OngoingEnquiries>> by lazy { MutableLiveData<RealmResults<OngoingEnquiries>>() }
     val onGoEnqDetails : MutableLiveData<OngoingEnquiries> by lazy { MutableLiveData<OngoingEnquiries>() }
 
@@ -39,6 +53,7 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
 
     var listener: GenerateEnquiryInterface ?= null
     var fetchEnqListener : FetchEnquiryInterface ?= null
+    var moqListener: MoqInterface ?= null
 
     fun getOnEnqListMutableData(): MutableLiveData<RealmResults<OngoingEnquiries>> {
         ongoingEnqList.value=loadOnEnqList()
@@ -276,7 +291,6 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
 
             })
     }
-
     fun markEnquiryCompleted(enquiryId : Long){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         CraftExchangeRepository
@@ -298,6 +312,56 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
                     }
                 }
 
+            })
+    }
+    fun getSingleMoq(enquiryId:Long){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        Log.e(TAG,"getSingleMoq :${enquiryId}")
+        CraftExchangeRepository
+            .getMoqService()
+            .getMoq(token,enquiryId.toInt()).enqueue(object : Callback, retrofit2.Callback<SendMoqResponse> {
+                override fun onFailure(call: Call<SendMoqResponse>, t: Throwable) {
+                    Log.e(TAG,"getSingleMoq :${t.stackTrace}")
+                    moqListener?.onGetMoqCall()
+                    t.printStackTrace()
+                }
+                override fun onResponse(
+                    call: Call<SendMoqResponse>,
+                    response: Response<SendMoqResponse>
+                ) {
+                    val valid=response.body()?.valid?:false
+                    Log.e(TAG,"getSingleMoq :$valid")
+                    if(valid){
+                        response.body()?.data?.moq?.let {
+                            MoqsPredicates.insertMoqs(response.body()?.data?.moq!!,response.body()?.data?.accepted?:false,enquiryId)
+                        }
+                    }
+                    moqListener?.onGetMoqCall()
+                }
+            })
+    }
+    fun sendMoq(enquiryId:Long,additionalInfo: String,deliveryTimeID: Long,  moq: Long,ppu: String){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        val request=SendMoqRequest(additionalInfo,deliveryTimeID,moq,ppu)
+        CraftExchangeRepository
+            .getMoqService()
+            .sendMoq(token,enquiryId.toInt(),request).enqueue(object : Callback, retrofit2.Callback<SendMoqResponse> {
+                override fun onFailure(call: Call<SendMoqResponse>, t: Throwable) {
+                    Log.e(TAG,"sendMoq :${t.stackTrace}")
+                    moqListener?.onAddMoqFailure()
+                    t.printStackTrace()
+                }
+                override fun onResponse(
+                    call: Call<SendMoqResponse>,
+                    response: Response<SendMoqResponse>
+                ) {
+                    val valid=response.body()?.valid?:false
+                    Log.e(TAG,"sendMoq :${response.body()?.errorMessage}")
+                    if(valid){
+                        moqListener?.onAddMoqSuccess()
+                        MoqsPredicates.insertMoqs(response.body()?.data?.moq!!,response.body()?.data?.accepted?:false,enquiryId)
+                    }else moqListener?.onAddMoqFailure()
+                }
             })
     }
 }

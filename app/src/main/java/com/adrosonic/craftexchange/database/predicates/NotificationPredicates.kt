@@ -105,6 +105,7 @@ class NotificationPredicates {
 //            realm.close()
             }
         }
+
         fun getAllNotifications():RealmResults<Notifications>? {
             val realm = CXRealmManager.getRealmInstance()
             var notifications: RealmResults<Notifications>? = null

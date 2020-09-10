@@ -19,12 +19,6 @@ interface RegisterDao {
     @POST("/user/saveDeviceToken/{deviceId}/AND/{token}")
     fun saveDeviceToken(@Header("Authorization") authtoken: String,@Path("deviceId") deviceToken : String,@Path("token") token : String) : Call<SaveUserTokenResponse>
 
-
-    @Headers("Accept: application/json")
-    @GET("register/registerToken")
-    fun registerToken(@Header("Authorization") token: String,@Query("token") deviceToken : String) : Call<NotificationReadResponse>
-
-
     @Headers("Accept: application/json")
     @GET("register/sendVerifyEmailOtp")
     fun sendVerifyEmailOtp(@Query("email") email : String) : Call<RegisterResponse>

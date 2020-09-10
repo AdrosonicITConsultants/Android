@@ -70,7 +70,7 @@ class NotificationReadService: JobIntentService() {
 
     companion object {
         const val KEY_ID = "prod_id"
-        private const val JOB_ID = 7000
+        private const val JOB_ID = 10000
         private const val TAG="NotificationReadService"
         fun enqueueWork(context: Context, work: Intent){
             try {
