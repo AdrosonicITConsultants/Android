@@ -9,7 +9,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
-import com.adrosonic.craftexchange.database.predicates.EnquiryPredicates
 import com.adrosonic.craftexchange.databinding.FragmentArtEnqDetailsBinding
 import com.adrosonic.craftexchange.ui.modules.enquiry.adapter.ArtisanEnqDetailsAdapter
 import com.adrosonic.craftexchange.utils.ImageSetter
@@ -25,7 +24,8 @@ class ArtEnqDetailsFragment : Fragment() {
 
     var mBinding : FragmentArtEnqDetailsBinding?= null
     var enqID : Long ?= 0
-    var enqDetails :OngoingEnquiries ?= null
+    var enqStatus : Long ?= 0
+//    var enqDetails :OngoingEnquiries ?= null
     var list = ArrayList<Long>()
     var text : String ?= ""
 
@@ -49,34 +49,66 @@ class ArtEnqDetailsFragment : Fragment() {
         if(param1!=null){
             enqID = param1?.toLong()
         }
+        if(param2!=null){
+            enqStatus = param2?.toLong()
+        }
         return mBinding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         childFragmentManager.let{
-            mBinding?.viewPagerArtEnqDetails?.adapter = ArtisanEnqDetailsAdapter(it)
+            mBinding?.viewPagerArtEnqDetails?.adapter =
+                enqStatus?.let { it1 -> enqID?.let { it2 -> ArtisanEnqDetailsAdapter(it, it2, it1) } }
             mBinding?.tabLayoutArtEnqDetails?.setupWithViewPager(mBinding?.viewPagerArtEnqDetails)
         }
 
-        enqDetails = enqID?.let { mEnqVM.getSingleEnqMutableData(it) }?.value
+        when(enqStatus){
+            //Completed
+            1L -> {
+                var enqDetails = enqID?.let { mEnqVM.getSingleCompEnqData(it) }?.value
+                var brandUrl = Utility.getBrandLogoUrl(enqDetails?.userId,enqDetails?.logo)
+                mBinding?.brandImage?.let {
+                    ImageSetter?.setImage(requireActivity(),brandUrl,
+                        it,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
+                }
 
-        var brandUrl = Utility.getBrandLogoUrl(enqDetails?.userId,enqDetails?.logo)
-        mBinding?.brandImage?.let {
-            ImageSetter?.setImage(requireActivity(),brandUrl,
-                it,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
+                var profileUrl = Utility.getProfilePhotoUrl(enqDetails?.userId,enqDetails?.profileImage) //TODO Implement profile photo
+                mBinding?.profileImage?.let {
+                    ImageSetter?.setImage(requireActivity(),profileUrl,
+                        it,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
+                }
+
+                mBinding?.clusterName?.text = enqDetails?.clusterName ?: ""
+                mBinding?.brandName?.text = enqDetails?.ProductBrandName ?: " - "
+                mBinding?.artisanName?.text = "${enqDetails?.firstName} ${enqDetails?.lastName ?: ""}"
+                mBinding?.artisanDetails?.text = enqDetails?.brandDesc ?: " - "
+
+                mBinding?.btnChat?.visibility = View.GONE
+            }
+            //Ongoing
+            2L -> {
+                var enqDetails = enqID?.let { mEnqVM.getSingleOnEnqData(it) }?.value
+                var brandUrl = Utility.getBrandLogoUrl(enqDetails?.userId,enqDetails?.logo)
+                mBinding?.brandImage?.let {
+                    ImageSetter?.setImage(requireActivity(),brandUrl,
+                        it,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
+                }
+
+                var profileUrl = Utility.getProfilePhotoUrl(enqDetails?.userId,enqDetails?.profileImage) //TODO Implement profile photo
+                mBinding?.profileImage?.let {
+                    ImageSetter?.setImage(requireActivity(),profileUrl,
+                        it,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
+                }
+
+                mBinding?.clusterName?.text = enqDetails?.clusterName ?: ""
+                mBinding?.brandName?.text = enqDetails?.ProductBrandName ?: " - "
+                mBinding?.artisanName?.text = "${enqDetails?.firstName} ${enqDetails?.lastName ?: ""}"
+                mBinding?.artisanDetails?.text = enqDetails?.brandDesc ?: " - "
+
+                mBinding?.btnChat?.visibility = View.VISIBLE
+            }
         }
-
-        var profileUrl = Utility.getProfilePhotoUrl(enqDetails?.userId,enqDetails?.profileImage) //TODO Implement profile photo
-        mBinding?.profileImage?.let {
-            ImageSetter?.setImage(requireActivity(),profileUrl,
-                it,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
-        }
-
-        mBinding?.clusterName?.text = enqDetails?.clusterName ?: ""
-        mBinding?.brandName?.text = enqDetails?.ProductBrandName ?: " - "
-        mBinding?.artisanName?.text = "${enqDetails?.firstName} ${enqDetails?.lastName ?: ""}"
-        mBinding?.artisanDetails?.text = enqDetails?.brandDesc ?: " - "
 
         //Todo Product Categories
 //        var catList = EnquiryPredicates?.getProdCatEnq(enqDetails?.userId)
@@ -91,10 +123,11 @@ class ArtEnqDetailsFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(param1 : String) = ArtEnqDetailsFragment()
+        fun newInstance(param1 : String,param2 : String) = ArtEnqDetailsFragment()
                 .apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
                 }
             }
     }

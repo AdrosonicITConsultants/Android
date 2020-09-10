@@ -15,20 +15,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
 import com.adrosonic.craftexchange.databinding.FragmentArtisanOnGoingEnquiryBinding
-import com.adrosonic.craftexchange.databinding.FragmentBuyerOngoingEnquiryBinding
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.adapter.ArtisanOnGoingRecyclerAdapter
-import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.adapter.BuyerOnGoingRecyclerAdapter
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
 import io.realm.RealmResults
-import kotlinx.android.synthetic.main.fragment_wishlist.*
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 
 class ArtisanOnGoingEnquiryFragment : Fragment(),
-    EnquiryViewModel.FetchOngoingEnqInterface {
+    EnquiryViewModel.FetchEnquiryInterface {
 
     private var param1: String? = null
     private var param2: String? = null
@@ -135,6 +132,16 @@ class ArtisanOnGoingEnquiryFragment : Fragment(),
             })
         } catch (e: Exception) {
             Log.e("OngoingEnqList", "Exception onFailure " + e.message)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!Utility.checkIfInternetConnected(requireContext())) {
+            Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
+        } else {
+            mEnqVM.getAllOngoingEnquiries()
+            mBinding?.swipeOngoingEnquiries?.isRefreshing= true
         }
     }
 }

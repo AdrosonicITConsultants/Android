@@ -24,6 +24,7 @@ import io.realm.annotations.RealmModule
     BuyerCustomProduct::class,
     Enquiries::class,
     OngoingEnquiries::class,
+    CompletedEnquiries::class,
     EnquiryPaymentDetails::class,
     Notifications::class
 ])

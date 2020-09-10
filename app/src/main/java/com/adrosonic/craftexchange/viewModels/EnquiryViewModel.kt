@@ -2,23 +2,19 @@ package com.adrosonic.craftexchange.viewModels
 
 import android.app.Application
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.adrosonic.craftexchange.database.entities.realmEntities.ClusterList
+import com.adrosonic.craftexchange.database.entities.realmEntities.CompletedEnquiries
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
-import com.adrosonic.craftexchange.database.predicates.ClusterPredicates
 import com.adrosonic.craftexchange.database.predicates.EnquiryPredicates
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.generateEnquiry.GenerateEnquiryResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.IfExistEnquiryResponse
-import com.adrosonic.craftexchange.repository.data.response.enquiry.OnGoingEnqResponse
+import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryResponse
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.pixplicity.easyprefs.library.Prefs
 import io.realm.RealmResults
 import okhttp3.ResponseBody
-import org.json.JSONException
-import org.json.JSONObject
 import retrofit2.Call
 import javax.security.auth.callback.Callback
 
@@ -30,16 +26,19 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
         fun onFailedEnquiryGeneration()
     }
 
-    interface FetchOngoingEnqInterface{
+    interface FetchEnquiryInterface{
         fun onFailure()
         fun onSuccess()
     }
 
     val ongoingEnqList : MutableLiveData<RealmResults<OngoingEnquiries>> by lazy { MutableLiveData<RealmResults<OngoingEnquiries>>() }
-    val enquiryDetails : MutableLiveData<OngoingEnquiries> by lazy { MutableLiveData<OngoingEnquiries>() }
+    val onGoEnqDetails : MutableLiveData<OngoingEnquiries> by lazy { MutableLiveData<OngoingEnquiries>() }
+
+    val compEnqList : MutableLiveData<RealmResults<CompletedEnquiries>> by lazy { MutableLiveData<RealmResults<CompletedEnquiries>>() }
+    val compEnqDetails : MutableLiveData<CompletedEnquiries> by lazy { MutableLiveData<CompletedEnquiries>() }
 
     var listener: GenerateEnquiryInterface ?= null
-    var fetchEnqListener : FetchOngoingEnqInterface ?= null
+    var fetchEnqListener : FetchEnquiryInterface ?= null
 
     fun getOnEnqListMutableData(): MutableLiveData<RealmResults<OngoingEnquiries>> {
         ongoingEnqList.value=loadOnEnqList()
@@ -52,15 +51,39 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
         return ongoingEnqList
     }
 
-    fun getSingleEnqMutableData(enqId : Long): MutableLiveData<OngoingEnquiries> {
-        enquiryDetails.value=loadSingleEnqDetails(enqId)
-        return enquiryDetails
+    fun getSingleOnEnqData(enqId : Long): MutableLiveData<OngoingEnquiries> {
+        onGoEnqDetails.value=loadSingleEnqDetails(enqId)
+        return onGoEnqDetails
     }
 
     fun loadSingleEnqDetails(enqId : Long): OngoingEnquiries?{
-        var enquiryDetails = EnquiryPredicates.getSingleEnquiryDetails(enqId)
+        var enquiryDetails = EnquiryPredicates.getSingleOnGoEnquiryDetails(enqId)
 //        Log.e("enquiryDetails","enquiryDetails :"+ongoingEnqList?.size)
         return enquiryDetails
+    }
+
+
+
+
+
+    fun getCompEnqListMutableData(): MutableLiveData<RealmResults<CompletedEnquiries>> {
+        compEnqList.value=loadCompEnqList()
+        return compEnqList
+    }
+
+    fun loadCompEnqList(): RealmResults<CompletedEnquiries>?{
+        var compEnqList = EnquiryPredicates.getAllCompletedEnquiries()
+        Log.e("compEnqList","compEnqList :"+compEnqList?.size)
+        return compEnqList
+    }
+
+    fun getSingleCompEnqData(enqId : Long): MutableLiveData<CompletedEnquiries> {
+        compEnqDetails.value=loadSingleCEnqDetails(enqId)
+        return compEnqDetails
+    }
+
+    fun loadSingleCEnqDetails(enqId : Long): CompletedEnquiries?{
+        return EnquiryPredicates.getSingleCompEnquiryDetails(enqId)
     }
 
 
@@ -143,18 +166,18 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
         CraftExchangeRepository
             .getEnquiryService()
             .getAllOngoingEnquiries(token)
-            .enqueue(object: Callback, retrofit2.Callback<OnGoingEnqResponse> {
-                override fun onFailure(call: Call<OnGoingEnqResponse>, t: Throwable) {
+            .enqueue(object: Callback, retrofit2.Callback<EnquiryResponse> {
+                override fun onFailure(call: Call<EnquiryResponse>, t: Throwable) {
                     t.printStackTrace()
                     fetchEnqListener?.onFailure()
                     Log.e("Ongoing Enquiries","Failure: "+t.message)
                 }
                 override fun onResponse(
-                    call: Call<OnGoingEnqResponse>,
-                    response: retrofit2.Response<OnGoingEnqResponse>) {
+                    call: Call<EnquiryResponse>,
+                    response: retrofit2.Response<EnquiryResponse>) {
                     if(response.body()?.valid == true){
                         Log.e("Ongoing Enquiries","Success: "+response.body()?.errorMessage)
-                        EnquiryPredicates?.insertBuyerOngoingEnquiries(response?.body()!!)
+                        EnquiryPredicates?.insertOngoingEnquiries(response?.body()!!)
                         EnquiryPredicates?.insertEnqPaymentDetails(response?.body()!!)
                         EnquiryPredicates?.insertEnqArtisanProductCategory(response?.body()!!)
                         fetchEnqListener?.onSuccess()
@@ -167,23 +190,81 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
             })
     }
 
-    fun getSingleEnquiry(enquiryId : Long){
+    fun getAllCompletedEnquiries(){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         CraftExchangeRepository
             .getEnquiryService()
-            .getSingleEnquiry(token,enquiryId)
-            .enqueue(object: Callback, retrofit2.Callback<OnGoingEnqResponse> {
-                override fun onFailure(call: Call<OnGoingEnqResponse>, t: Throwable) {
+            .getAllCompletedEnquiries(token)
+            .enqueue(object: Callback, retrofit2.Callback<EnquiryResponse> {
+                override fun onFailure(call: Call<EnquiryResponse>, t: Throwable) {
+                    t.printStackTrace()
+                    fetchEnqListener?.onFailure()
+                    Log.e("Completed Enquiries","Failure: "+t.message)
+                }
+                override fun onResponse(
+                    call: Call<EnquiryResponse>,
+                    response: retrofit2.Response<EnquiryResponse>) {
+                    if(response.body()?.valid == true){
+                        Log.e("Completed Enquiries","Success: "+response.body()?.errorMessage)
+                        EnquiryPredicates?.insertCompletedEnquiries(response?.body()!!)
+                        EnquiryPredicates?.insertEnqPaymentDetails(response?.body()!!)
+                        EnquiryPredicates?.insertEnqArtisanProductCategory(response?.body()!!)
+                        fetchEnqListener?.onSuccess()
+                    }else{
+                        fetchEnqListener?.onFailure()
+                        Log.e("Completed Enquiries","Failure: "+response.body()?.errorMessage)
+                    }
+                }
+
+            })
+    }
+
+    fun getSingleOngoingEnquiry(enquiryId : Long){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getEnquiryService()
+            .getSingleOngoingEnquiry(token,enquiryId)
+            .enqueue(object: Callback, retrofit2.Callback<EnquiryResponse> {
+                override fun onFailure(call: Call<EnquiryResponse>, t: Throwable) {
                     t.printStackTrace()
                     fetchEnqListener?.onFailure()
                     Log.e("Ongoing Enquiries","Failure: "+t.message)
                 }
                 override fun onResponse(
-                    call: Call<OnGoingEnqResponse>,
-                    response: retrofit2.Response<OnGoingEnqResponse>) {
+                    call: Call<EnquiryResponse>,
+                    response: retrofit2.Response<EnquiryResponse>) {
                     if(response.body()?.valid == true){
                         Log.e("Enquiry Details","Success: "+response.body()?.errorMessage)
-                        EnquiryPredicates?.insertBuyerOngoingEnquiries(response?.body()!!)
+                        EnquiryPredicates?.insertOngoingEnquiries(response?.body()!!)
+                        EnquiryPredicates?.insertEnqPaymentDetails(response?.body()!!)
+                        EnquiryPredicates?.insertEnqArtisanProductCategory(response?.body()!!)
+                        fetchEnqListener?.onSuccess()
+                    }else{
+                        fetchEnqListener?.onFailure()
+                        Log.e("Enquiry Details","Failure: "+response.body()?.errorMessage)
+                    }
+                }
+
+            })
+    }
+
+    fun getSingleCompletedEnquiry(enquiryId : Long){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getEnquiryService()
+            .getSingleCompletedEnquiry(token,enquiryId)
+            .enqueue(object: Callback, retrofit2.Callback<EnquiryResponse> {
+                override fun onFailure(call: Call<EnquiryResponse>, t: Throwable) {
+                    t.printStackTrace()
+                    fetchEnqListener?.onFailure()
+                    Log.e("Enquiry Details","Failure: "+t.message)
+                }
+                override fun onResponse(
+                    call: Call<EnquiryResponse>,
+                    response: retrofit2.Response<EnquiryResponse>) {
+                    if(response.body()?.valid == true){
+                        Log.e("Enquiry Details","Success: "+response.body()?.errorMessage)
+                        EnquiryPredicates?.insertCompletedEnquiries(response?.body()!!)
                         EnquiryPredicates?.insertEnqPaymentDetails(response?.body()!!)
                         EnquiryPredicates?.insertEnqArtisanProductCategory(response?.body()!!)
                         fetchEnqListener?.onSuccess()

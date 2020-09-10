@@ -3,12 +3,14 @@ package com.adrosonic.craftexchange.database.predicates
 import android.util.Log
 import com.adrosonic.craftexchange.database.CXRealmManager
 import com.adrosonic.craftexchange.database.entities.ArtisanProductCategory
+import com.adrosonic.craftexchange.database.entities.realmEntities.CompletedEnquiries
 import com.adrosonic.craftexchange.database.entities.realmEntities.Enquiries
 import com.adrosonic.craftexchange.database.entities.realmEntities.EnquiryPaymentDetails
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.generateEnquiry.GenerateEnquiryResponse
-import com.adrosonic.craftexchange.repository.data.response.enquiry.OnGoingEnqResponse
+import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryResponse
 import io.realm.RealmResults
+import io.realm.Sort
 import java.lang.Exception
 
 class EnquiryPredicates {
@@ -104,7 +106,7 @@ class EnquiryPredicates {
             }
         }
 
-        fun insertBuyerOngoingEnquiries(enquiryDetails : OnGoingEnqResponse?){
+        fun insertOngoingEnquiries(enquiryDetails : EnquiryResponse?){
             val realm = CXRealmManager.getRealmInstance()
             var enquiryList = enquiryDetails?.data
             var enqItr = enquiryList?.iterator()
@@ -285,7 +287,188 @@ class EnquiryPredicates {
             }
         }
 
-        fun insertEnqArtisanProductCategory(details : OnGoingEnqResponse?){
+        fun insertCompletedEnquiries(enquiryDetails : EnquiryResponse?){
+            val realm = CXRealmManager.getRealmInstance()
+            var enquiryList = enquiryDetails?.data
+            var enqItr = enquiryList?.iterator()
+            realm.executeTransaction{
+                try {
+                    if(enqItr!=null) {
+                        while (enqItr.hasNext()) {
+                            var enquiry = enqItr.next()
+                            var enqObj = realm.where(CompletedEnquiries::class.java)
+                                .equalTo(
+                                    CompletedEnquiries.COLUMN_ENQUIRY_ID,
+                                    enquiry.openEnquiriesResponse?.enquiryId
+                                )
+                                .or()
+                                .equalTo(CompletedEnquiries.COLUMN_ENQUIRY_CODE,enquiry?.openEnquiriesResponse?.enquiryCode)
+                                .limit(1)
+                                .findFirst()
+                            if (enqObj == null) {
+                                var primId = it.where(CompletedEnquiries::class.java).max("_id")
+                                if (primId == null) {
+                                    nextID = 1
+                                } else {
+                                    nextID = primId.toLong() + 1
+                                }
+
+                                var exEnq = it.createObject(CompletedEnquiries::class.java, nextID)
+                                exEnq?.enquiryID = enquiry?.openEnquiriesResponse?.enquiryId
+                                exEnq?.enquiryCode = enquiry?.openEnquiriesResponse?.enquiryCode
+                                exEnq?.productID = enquiry?.openEnquiriesResponse?.productId
+                                exEnq?.productName = enquiry?.openEnquiriesResponse?.productName
+                                exEnq?.productCode = enquiry?.openEnquiriesResponse?.productCode
+                                exEnq?.enquiryStatusID = enquiry?.openEnquiriesResponse?.enquiryStatusId
+                                exEnq?.enquiryStageID = enquiry?.openEnquiriesResponse?.enquiryStageId
+                                exEnq?.innerEnquiryStageID = enquiry?.openEnquiriesResponse?.innerEnquiryStageId
+                                exEnq?.productStatusID = enquiry?.openEnquiriesResponse?.productStatusId
+
+                                exEnq?.orderCode = enquiry?.openEnquiriesResponse?.orderCode
+                                exEnq?.orderCreatedOn = enquiry?.openEnquiriesResponse?.orderCreatedOn
+                                exEnq?.expectedDate = enquiry?.openEnquiriesResponse?.excpectedDate
+                                exEnq?.startedOn = enquiry?.openEnquiriesResponse?.startedOn
+                                exEnq?.lastUpdated = enquiry?.openEnquiriesResponse?.lastUpdated
+                                exEnq?.totalAmount = enquiry?.openEnquiriesResponse?.totalAmount
+
+                                exEnq?.isMoqSend = enquiry?.openEnquiriesResponse?.isMoqSend
+                                exEnq?.isPiSend = enquiry?.openEnquiriesResponse?.isPiSend
+                                exEnq?.changeRequestOn = enquiry?.openEnquiriesResponse?.changeRequestOn
+                                exEnq?.isMoqRejected = enquiry?.isMoqRejected
+                                exEnq?.isBlue = enquiry?.isBlue
+
+                                exEnq?.productType = enquiry?.openEnquiriesResponse?.productType
+                                exEnq?.productCategoryID = enquiry?.openEnquiriesResponse?.productCategoryId
+                                exEnq?.warpYarnID = enquiry?.openEnquiriesResponse?.warpYarnId
+                                exEnq?.weftYarnID = enquiry?.openEnquiriesResponse?.weftYarnId
+                                exEnq?.extraWeftYarnID = enquiry?.openEnquiriesResponse?.extraWeftYarnId
+                                exEnq?.productImages = enquiry?.openEnquiriesResponse?.productImages
+                                exEnq?.madeWithAnthran = enquiry?.openEnquiriesResponse?.isMoqSend
+//                                exEnq?.brandName = enquiry?.brandName
+
+                                exEnq?.historyProductID = enquiry?.openEnquiriesResponse?.historyProductId
+                                exEnq?.productHistoryName = enquiry?.openEnquiriesResponse?.productHistoryName
+                                exEnq?.productHistoryCode = enquiry?.openEnquiriesResponse?.productHistoryCode
+                                exEnq?.productCategoryHistoryID = enquiry?.openEnquiriesResponse?.productCategoryHistoryId
+                                exEnq?.productHistoryImages = enquiry?.openEnquiriesResponse?.productHistoryImages
+                                exEnq?.warpYarnHistoryID = enquiry?.openEnquiriesResponse?.warpYarnHistoryId
+                                exEnq?.weftYarnHistoryID = enquiry?.openEnquiriesResponse?.weftYarnHistoryId
+                                exEnq?.extraWeftYarnHistoryID = enquiry?.openEnquiriesResponse?.extraWeftYarnHistoryId
+                                exEnq?.productStatusHistoryID = enquiry?.openEnquiriesResponse?.productStatusHistoryId
+                                exEnq?.madeWithAnthranHistory = enquiry?.openEnquiriesResponse?.madeWittAnthranHistory
+
+                                exEnq?.userId = enquiry?.userId
+                                exEnq?.clusterName = enquiry?.clusterName
+                                exEnq?.firstName = enquiry?.openEnquiriesResponse?.firstName
+                                exEnq?.lastName = enquiry?.openEnquiriesResponse?.lastName
+                                exEnq?.brandDesc = enquiry?.openEnquiriesResponse?.description
+                                exEnq?.profileImage = enquiry?.openEnquiriesResponse?.profilePic
+                                exEnq?.alternateMobile = enquiry?.openEnquiriesResponse?.alternateMobile
+//                                exEnq?.companyName = enquiry?.openEnquiriesResponse?.companyName
+                                exEnq?.ProductBrandName = enquiry?.brandName //todo : to be changed
+                                exEnq?.logo = enquiry?.openEnquiriesResponse?.logo
+                                exEnq?.city = enquiry?.openEnquiriesResponse?.city
+                                exEnq?.district = enquiry?.openEnquiriesResponse?.district
+                                exEnq?.pincode = enquiry?.openEnquiriesResponse?.pincode
+                                exEnq?.line1 = enquiry?.openEnquiriesResponse?.line1
+                                exEnq?.line2 = enquiry?.openEnquiriesResponse?.line2
+                                exEnq?.street = enquiry?.openEnquiriesResponse?.street
+                                exEnq?.state = enquiry?.openEnquiriesResponse?.state
+                                exEnq?.country = enquiry?.openEnquiriesResponse?.country
+                                exEnq?.email = enquiry?.openEnquiriesResponse?.email
+                                exEnq?.mobile = enquiry?.openEnquiriesResponse?.mobile
+                                exEnq?.pocFirstName = enquiry?.openEnquiriesResponse?.pocFirstName
+                                exEnq?.pocLastName = enquiry?.openEnquiriesResponse?.pocLastName
+                                exEnq?.pocContact = enquiry?.openEnquiriesResponse?.pocContact
+                                exEnq?.pocEmail = enquiry?.openEnquiriesResponse?.pocEmail
+                                exEnq?.gst = enquiry?.openEnquiriesResponse?.gst
+
+                                realm.copyToRealmOrUpdate(exEnq)
+                            }else{
+                                nextID = enqObj?._id ?: 0
+
+                                enqObj?.enquiryID = enquiry?.openEnquiriesResponse?.enquiryId
+                                enqObj?.enquiryCode = enquiry?.openEnquiriesResponse?.enquiryCode
+                                enqObj?.productID = enquiry?.openEnquiriesResponse?.productId
+                                enqObj?.productName = enquiry?.openEnquiriesResponse?.productName
+                                enqObj?.productCode = enquiry?.openEnquiriesResponse?.productCode
+                                enqObj?.enquiryStatusID = enquiry?.openEnquiriesResponse?.enquiryStatusId
+                                enqObj?.enquiryStageID = enquiry?.openEnquiriesResponse?.enquiryStageId
+                                enqObj?.innerEnquiryStageID = enquiry?.openEnquiriesResponse?.innerEnquiryStageId
+                                enqObj?.productStatusID = enquiry?.openEnquiriesResponse?.productStatusId
+
+                                enqObj?.orderCode = enquiry?.openEnquiriesResponse?.orderCode
+                                enqObj?.orderCreatedOn = enquiry?.openEnquiriesResponse?.orderCreatedOn
+                                enqObj?.expectedDate = enquiry?.openEnquiriesResponse?.excpectedDate
+                                enqObj?.startedOn = enquiry?.openEnquiriesResponse?.startedOn
+                                enqObj?.lastUpdated = enquiry?.openEnquiriesResponse?.lastUpdated
+                                enqObj?.totalAmount = enquiry?.openEnquiriesResponse?.totalAmount
+
+                                enqObj?.isMoqSend = enquiry?.openEnquiriesResponse?.isMoqSend
+                                enqObj?.isPiSend = enquiry?.openEnquiriesResponse?.isPiSend
+                                enqObj?.changeRequestOn = enquiry?.openEnquiriesResponse?.changeRequestOn
+                                enqObj?.isMoqRejected = enquiry?.isMoqRejected
+                                enqObj?.isBlue = enquiry?.isBlue
+
+                                enqObj?.productType = enquiry?.openEnquiriesResponse?.productType
+                                enqObj?.productCategoryID = enquiry?.openEnquiriesResponse?.productCategoryId
+                                enqObj?.warpYarnID = enquiry?.openEnquiriesResponse?.warpYarnId
+                                enqObj?.weftYarnID = enquiry?.openEnquiriesResponse?.weftYarnId
+                                enqObj?.extraWeftYarnID = enquiry?.openEnquiriesResponse?.extraWeftYarnId
+                                enqObj?.productImages = enquiry?.openEnquiriesResponse?.productImages
+                                enqObj?.madeWithAnthran = enquiry?.openEnquiriesResponse?.isMoqSend
+//                                enqObj?.brandName = enquiry?.openEnquiriesResponse?.companyName //TODO uncomment after enquiry id issue is fixed
+
+                                enqObj?.historyProductID = enquiry?.openEnquiriesResponse?.historyProductId
+                                enqObj?.productHistoryName = enquiry?.openEnquiriesResponse?.productHistoryName
+                                enqObj?.productHistoryCode = enquiry?.openEnquiriesResponse?.productHistoryCode
+                                enqObj?.productCategoryHistoryID = enquiry?.openEnquiriesResponse?.productCategoryHistoryId
+                                enqObj?.productHistoryImages = enquiry?.openEnquiriesResponse?.productHistoryImages
+                                enqObj?.warpYarnHistoryID = enquiry?.openEnquiriesResponse?.warpYarnHistoryId
+                                enqObj?.weftYarnHistoryID = enquiry?.openEnquiriesResponse?.weftYarnHistoryId
+                                enqObj?.extraWeftYarnHistoryID = enquiry?.openEnquiriesResponse?.extraWeftYarnHistoryId
+                                enqObj?.productStatusHistoryID = enquiry?.openEnquiriesResponse?.productStatusHistoryId
+                                enqObj?.madeWithAnthranHistory = enquiry?.openEnquiriesResponse?.madeWittAnthranHistory
+
+                                enqObj?.userId = enquiry?.userId
+                                enqObj?.clusterName = enquiry?.clusterName
+                                enqObj?.firstName = enquiry?.openEnquiriesResponse?.firstName
+                                enqObj?.lastName = enquiry?.openEnquiriesResponse?.lastName
+                                enqObj?.brandDesc = enquiry?.openEnquiriesResponse?.description
+                                enqObj?.profileImage = enquiry?.openEnquiriesResponse?.profilePic
+                                enqObj?.alternateMobile = enquiry?.openEnquiriesResponse?.alternateMobile
+//                                enqObj?.companyName = enquiry?.openEnquiriesResponse?.companyName
+//                                enqObj?.ProductBrandName = enquiry?.openEnquiriesResponse?.companyName//todo : to be changed
+
+                                enqObj?.logo = enquiry?.openEnquiriesResponse?.logo
+                                enqObj?.city = enquiry?.openEnquiriesResponse?.city
+                                enqObj?.district = enquiry?.openEnquiriesResponse?.district
+                                enqObj?.pincode = enquiry?.openEnquiriesResponse?.pincode
+                                enqObj?.line1 = enquiry?.openEnquiriesResponse?.line1
+                                enqObj?.line2 = enquiry?.openEnquiriesResponse?.line2
+                                enqObj?.street = enquiry?.openEnquiriesResponse?.street
+                                enqObj?.state = enquiry?.openEnquiriesResponse?.state
+                                enqObj?.country = enquiry?.openEnquiriesResponse?.country
+                                enqObj?.email = enquiry?.openEnquiriesResponse?.email
+                                enqObj?.mobile = enquiry?.openEnquiriesResponse?.mobile
+                                enqObj?.pocFirstName = enquiry?.openEnquiriesResponse?.pocFirstName
+                                enqObj?.pocLastName = enquiry?.openEnquiriesResponse?.pocLastName
+                                enqObj?.pocContact = enquiry?.openEnquiriesResponse?.pocContact
+                                enqObj?.pocEmail = enquiry?.openEnquiriesResponse?.pocEmail
+                                enqObj?.gst = enquiry?.openEnquiriesResponse?.gst
+
+                                realm.copyToRealmOrUpdate(enqObj)
+                            }
+                        }
+
+                    }
+                }catch (e:Exception){
+                    Log.e("InsertCompEnquiry",e.printStackTrace().toString())
+                }
+            }
+        }
+
+        fun insertEnqArtisanProductCategory(details : EnquiryResponse?){
             val realm = CXRealmManager.getRealmInstance()
             try {
                 realm?.executeTransaction {
@@ -339,7 +522,7 @@ class EnquiryPredicates {
             }
         }
 
-        fun insertEnqPaymentDetails(details : OnGoingEnqResponse?){
+        fun insertEnqPaymentDetails(details : EnquiryResponse?){
             val realm = CXRealmManager.getRealmInstance()
             var detailsItr = details?.data?.iterator()
                 realm.executeTransaction {
@@ -435,16 +618,40 @@ class EnquiryPredicates {
 
         fun getAllOngoingEnquiries(): RealmResults<OngoingEnquiries>? {
             val realm = CXRealmManager.getRealmInstance()
-            return realm.where(OngoingEnquiries::class.java).findAll()
+            return realm.where(OngoingEnquiries::class.java).sort("_id",Sort.DESCENDING).findAll()
         }
 
-        fun getSingleEnquiryDetails(enquiryId : Long?): OngoingEnquiries? {
+        fun getAllCompletedEnquiries(): RealmResults<CompletedEnquiries>? {
+            val realm = CXRealmManager.getRealmInstance()
+            return realm.where(CompletedEnquiries::class.java).sort("_id",Sort.DESCENDING).findAll()
+        }
+
+        fun getSingleOnGoEnquiryDetails(enquiryId : Long?): OngoingEnquiries? {
             var realm = CXRealmManager.getRealmInstance()
             var enquiry : OngoingEnquiries?= null
             realm.executeTransaction {
                 try{
                     enquiry = realm.where(OngoingEnquiries::class.java)
                         .equalTo(OngoingEnquiries.COLUMN_ENQUIRY_ID,enquiryId)
+//                        .or()
+//                        .equalTo(OngoingEnquiries.COLUMN_ENQUIRY_CODE,enqCode)
+                        .limit(1)
+                        .findFirst()
+
+                }catch (e:Exception){
+                    Log.e("EnquiryDetails","Exception : "+e.printStackTrace())
+                }
+            }
+            return enquiry
+        }
+
+        fun getSingleCompEnquiryDetails(enquiryId : Long?): CompletedEnquiries? {
+            var realm = CXRealmManager.getRealmInstance()
+            var enquiry : CompletedEnquiries?= null
+            realm.executeTransaction {
+                try{
+                    enquiry = realm.where(CompletedEnquiries::class.java)
+                        .equalTo(CompletedEnquiries.COLUMN_ENQUIRY_ID,enquiryId)
 //                        .or()
 //                        .equalTo(OngoingEnquiries.COLUMN_ENQUIRY_CODE,enqCode)
                         .limit(1)

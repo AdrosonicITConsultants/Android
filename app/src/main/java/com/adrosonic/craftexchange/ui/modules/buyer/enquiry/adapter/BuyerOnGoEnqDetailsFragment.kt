@@ -1,7 +1,6 @@
 package com.adrosonic.craftexchange.ui.modules.buyer.enquiry.adapter
 
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -34,7 +33,6 @@ import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
 import com.pixplicity.easyprefs.library.Prefs
 import kotlinx.android.synthetic.main.dialog_are_you_sure.*
-import kotlinx.android.synthetic.main.dialog_gen_enquiry_success.*
 import retrofit2.Call
 import retrofit2.Response
 import javax.security.auth.callback.Callback
@@ -43,7 +41,7 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 class BuyerOnGoEnqDetailsFragment : Fragment(),
-EnquiryViewModel.FetchOngoingEnqInterface{
+EnquiryViewModel.FetchEnquiryInterface{
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -94,7 +92,7 @@ EnquiryViewModel.FetchOngoingEnqInterface{
         mEnqVM.fetchEnqListener = this
         mBinding?.swipeEnquiryDetails?.isEnabled = false
         if(Utility.checkIfInternetConnected(requireActivity())){
-            enqID?.let { mEnqVM.getSingleEnquiry(it) }
+            enqID?.let { mEnqVM.getSingleOngoingEnquiry(it) }
             viewLoader()
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
@@ -102,7 +100,7 @@ EnquiryViewModel.FetchOngoingEnqInterface{
         }
 
         enqID?.let {
-            mEnqVM.getSingleEnqMutableData(it)
+            mEnqVM.getSingleOnEnqData(it)
                 .observe(viewLifecycleOwner, Observer<OngoingEnquiries> {
                     enquiryDetails = it
                 })
@@ -144,7 +142,7 @@ EnquiryViewModel.FetchOngoingEnqInterface{
             if (savedInstanceState == null) {
                 activity?.supportFragmentManager?.beginTransaction()
                     ?.replace(R.id.enquiry_details_container,
-                        ArtEnqDetailsFragment.newInstance(enquiryDetails?.enquiryID.toString()))
+                        ArtEnqDetailsFragment.newInstance(enquiryDetails?.enquiryID.toString(),enquiryDetails?.enquiryStatusID.toString()))
                     ?.addToBackStack(null)
                     ?.commit()
             }
@@ -326,10 +324,11 @@ EnquiryViewModel.FetchOngoingEnqInterface{
                         it, R.color.black_text)
                 }?.let { mBinding?.enquiryStatusText?.setTextColor(it) }
 
+
                 context?.let {
                     ContextCompat.getColor(
                         it,R.color.black_text)
-                }?.let { mBinding?.enquiryStatusDot?.setBackgroundColor(it) }
+                }?.let { mBinding?.enquiryStatusDot?.setColorFilter(it) }
             }
 
             2L,3L,4L,5L -> {
@@ -341,7 +340,7 @@ EnquiryViewModel.FetchOngoingEnqInterface{
                 context?.let {
                     ContextCompat.getColor(
                         it,R.color.tab_details_selected_text)
-                }?.let { mBinding?.enquiryStatusDot?.setBackgroundColor(it) }
+                }?.let { mBinding?.enquiryStatusDot?.setColorFilter(it) }
             }
 
                 6L,7L,8L,9L,10L -> {
@@ -353,7 +352,7 @@ EnquiryViewModel.FetchOngoingEnqInterface{
                 context?.let {
                     ContextCompat.getColor(
                         it,R.color.dark_green)
-                }?.let { mBinding?.enquiryStatusDot?.setBackgroundColor(it) }
+                }?.let { mBinding?.enquiryStatusDot?.setColorFilter(it) }
 
             }
         }
@@ -495,11 +494,9 @@ EnquiryViewModel.FetchOngoingEnqInterface{
         mBinding?.swipeEnquiryDetails?.isRefreshing = false
     }
 
-
-
     override fun onResume() {
         super.onResume()
-        enqID?.let { mEnqVM?.getSingleEnqMutableData(it) }
+        enqID?.let { mEnqVM?.getSingleOnEnqData(it) }
         setDetails()
     }
 
@@ -507,7 +504,7 @@ EnquiryViewModel.FetchOngoingEnqInterface{
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("Enquiry Details", "onFailure")
-                enqID?.let { mEnqVM.getSingleEnqMutableData(it) }
+                enqID?.let { mEnqVM.getSingleOnEnqData(it) }
                 hideLoader()
             })
         } catch (e: Exception) {
@@ -519,7 +516,7 @@ EnquiryViewModel.FetchOngoingEnqInterface{
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("Enquiry Details", "onSuccess")
-                enqID?.let { mEnqVM.getSingleEnqMutableData(it) }
+                enqID?.let { mEnqVM.getSingleOnEnqData(it) }
                 hideLoader()
                 setDetails()
             })

@@ -13,9 +13,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrosonic.craftexchange.R
-import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
-import com.adrosonic.craftexchange.databinding.FragmentBuyerOngoingEnquiryBinding
-import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.adapter.BuyerOnGoingRecyclerAdapter
+import com.adrosonic.craftexchange.database.entities.realmEntities.CompletedEnquiries
+import com.adrosonic.craftexchange.databinding.FragmentCompletedEnquiryBinding
+import com.adrosonic.craftexchange.ui.modules.enquiry.adapter.CompletedEnqRecyclerAdapter
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
 import io.realm.RealmResults
@@ -24,20 +24,19 @@ import io.realm.RealmResults
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class BuyerOngoingEnquiryFragment : Fragment(),
-EnquiryViewModel.FetchEnquiryInterface{
-
+class CompletedEnquiryFragment : Fragment(),
+    EnquiryViewModel.FetchEnquiryInterface {
+    // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
-    var mBinding : FragmentBuyerOngoingEnquiryBinding?= null
+    var mBinding : FragmentCompletedEnquiryBinding?= null
 
     val mEnqVM : EnquiryViewModel by viewModels()
 
-    var mEnqListAdapter : BuyerOnGoingRecyclerAdapter ?= null
+    var mEnqListAdapter : CompletedEnqRecyclerAdapter?= null
 
-    var mEnquiryList : RealmResults<OngoingEnquiries> ?= null
-
+    var mEnquiryList : RealmResults<CompletedEnquiries>?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,50 +51,49 @@ EnquiryViewModel.FetchEnquiryInterface{
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_buyer_ongoing_enquiry, container, false)
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_completed_enquiry, container, false)
         return mBinding?.root
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mEnqVM.fetchEnqListener =this
         setRecyclerList()
+        setVisiblities()
 
         if (!Utility.checkIfInternetConnected(requireContext())) {
             Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
         } else {
-            mEnqVM.getAllOngoingEnquiries()
+            mEnqVM.getAllCompletedEnquiries()
         }
 
-        mEnqVM.getOnEnqListMutableData()
-            .observe(viewLifecycleOwner, Observer<RealmResults<OngoingEnquiries>> {
+        mBinding?.swipeCompletedEnquiries?.isRefreshing = true
+        mEnqVM.getCompEnqListMutableData()
+            .observe(viewLifecycleOwner, Observer<RealmResults<CompletedEnquiries>> {
                 mEnquiryList = it
                 mEnqListAdapter?.updateProductList(mEnquiryList)
             })
-
-        mBinding?.swipeOngoingEnquiries?.isRefreshing = true
-        mBinding?.swipeOngoingEnquiries?.setOnRefreshListener {
-            if (!Utility.checkIfInternetConnected(requireContext())) {
-                Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
-            } else {
-                mEnqVM.getAllOngoingEnquiries()
-            }
-        }
     }
 
     private fun setRecyclerList(){
-        mBinding?.ongoingEnqRecyclerList?.layoutManager = LinearLayoutManager(requireContext(),
+        mBinding?.completedEnqRecyclerList?.layoutManager = LinearLayoutManager(requireContext(),
             LinearLayoutManager.VERTICAL, false)
-        mEnqListAdapter = BuyerOnGoingRecyclerAdapter(requireContext(),
-            mEnqVM.getOnEnqListMutableData().value!!
+        mEnqListAdapter = CompletedEnqRecyclerAdapter(requireContext(),
+            mEnqVM.getCompEnqListMutableData().value!!
         )
-        mBinding?.ongoingEnqRecyclerList?.adapter = mEnqListAdapter
+        mBinding?.completedEnqRecyclerList?.adapter = mEnqListAdapter
 //        mEnqListAdapter?.enqListener = this  //important to set adapter first and then call listener
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance() = BuyerOngoingEnquiryFragment()
+    fun setVisiblities() {
+        if (mEnqVM.getCompEnqListMutableData().value?.size!! > 0) {
+            mBinding?.completedEnqRecyclerList?.visibility = View.VISIBLE
+            mBinding?.emptyView?.visibility = View.GONE
+        } else {
+            mBinding?.completedEnqRecyclerList?.visibility = View.GONE
+            mBinding?.emptyView?.visibility = View.VISIBLE
+        }
     }
 
     override fun onResume() {
@@ -103,33 +101,41 @@ EnquiryViewModel.FetchEnquiryInterface{
         if (!Utility.checkIfInternetConnected(requireContext())) {
             Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
         } else {
-            mEnqVM.getAllOngoingEnquiries()
-            mBinding?.swipeOngoingEnquiries?.isRefreshing= true
+            mEnqVM.getAllCompletedEnquiries()
+            mBinding?.swipeCompletedEnquiries?.isRefreshing= true
         }
     }
 
     override fun onFailure() {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
-                Log.e("OngoingEnqList", "OnFailure")
-                mBinding?.swipeOngoingEnquiries?.isRefreshing = false
-                mEnqVM.getOnEnqListMutableData()
+                Log.e("compEnqList", "OnFailure")
+                mBinding?.swipeCompletedEnquiries?.isRefreshing = false
+//                mEnqVM.getAllCompletedEnquiries()
+                mEnqVM.getCompEnqListMutableData()
                 Utility.displayMessage("Error while fetching list", requireContext())
             })
         } catch (e: Exception) {
-            Log.e("OngoingEnqList", "Exception onFailure " + e.message)
+            Log.e("compEnqList", "Exception onFailure " + e.message)
         }
     }
 
     override fun onSuccess() {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
-                Log.e("OngoingEnqList", "onSuccess")
-                mBinding?.swipeOngoingEnquiries?.isRefreshing = false
-                mEnqVM.getOnEnqListMutableData()
+                Log.e("compEnqList", "onSuccess")
+                mBinding?.swipeCompletedEnquiries?.isRefreshing = false
+//                mEnqVM.getAllCompletedEnquiries()
+                mEnqVM.getCompEnqListMutableData()
             })
         } catch (e: Exception) {
-            Log.e("OngoingEnqList", "Exception onFailure " + e.message)
+            Log.e("compEnqList", "Exception onFailure " + e.message)
         }
     }
+
+    companion object {
+        @JvmStatic
+        fun newInstance() = CompletedEnquiryFragment()
+    }
+
 }

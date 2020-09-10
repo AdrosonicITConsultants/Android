@@ -9,16 +9,17 @@ import com.adrosonic.craftexchange.ui.modules.enquiry.EnquiryDigPayFragment
 import com.adrosonic.craftexchange.ui.modules.enquiry.EnquiryGeneralFragment
 
 
-class BuyerEnqDetailsAdapter(fragmentManager: FragmentManager): FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
-
+class BuyerEnqDetailsAdapter(fragmentManager: FragmentManager , enqID : Long, enqStatus : Long): FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+    val enqID:Long = enqID
+    val enqStatus:Long = enqStatus
     override fun getItem(position: Int): Fragment {
 
         return  when (position) {
             0 -> {
-                EnquiryGeneralFragment()
+                EnquiryGeneralFragment.newInstance(enqID,enqStatus)
             }
             else -> {
-                EnquiryBrandFragment()
+                EnquiryBrandFragment.newInstance(enqID,enqStatus)
             }
         }
     }

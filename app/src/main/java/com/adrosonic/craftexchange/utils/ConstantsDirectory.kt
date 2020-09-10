@@ -94,4 +94,6 @@ object ConstantsDirectory {
     const val ENQUIRY_ID = "enquiryid"
     const val ENQUIRY_CODE = "enquirycode"
     const val CUSTOM_PRODUCT = "Custom Product"
+
+    const val ENQUIRY_STATUS_FLAG = "enquiry_status_flag"
 }

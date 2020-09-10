@@ -1,4 +1,4 @@
-package com.adrosonic.craftexchange.ui.modules.artisan.enquiry
+package com.adrosonic.craftexchange.ui.modules.enquiry
 
 import android.os.Bundle
 import android.os.Handler
@@ -16,34 +16,36 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.adrosonic.craftexchange.R
-import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
-import com.adrosonic.craftexchange.databinding.FragmentArtisanOnGoEnqDetailsBinding
-import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.addProductIntent
-import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
+import com.adrosonic.craftexchange.database.entities.realmEntities.CompletedEnquiries
+import com.adrosonic.craftexchange.databinding.FragmentCompEnqDetailsBinding
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
+import com.pixplicity.easyprefs.library.Prefs
 
+// TODO: Rename parameter arguments, choose names that match
+// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class ArtisanOnGoEnqDetailsFragment : Fragment(),
+
+class CompEnqDetailsFragment : Fragment(),
     EnquiryViewModel.FetchEnquiryInterface {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
     private var enqID : Long ?= 0
-    private var enqCode : String ?= ""
-    private var enquiryDetails : OngoingEnquiries ?= null
-    private var stageList : ArrayList<Pair<Long,String>> ?= null
-    private var stageAPList : ArrayList<Triple<Long,Long,String>> ?= null
-    private var nextEnqStage : String?=""
-    private var prevEnqStage : String?=""
-    private var currEnqStage : String ?= ""
-    private var currEnqStageId : Long ?= 0
-    private var currEnqStageSerNo : Long ?= 0
+    private var enqStatus : Long ?= 0
+    private var enquiryDetails : CompletedEnquiries?= null
+//    private var stageList : ArrayList<Pair<Long,String>> ?= null
+//    private var stageAPList : ArrayList<Triple<Long,Long,String>> ?= null
+//    private var nextEnqStage : String?=""
+//    private var prevEnqStage : String?=""
+//    private var currEnqStage : String ?= ""
+//    private var currEnqStageId : Long ?= 0
+//    private var currEnqStageSerNo : Long ?= 0
     private var url : String?=""
     private var status : String?= ""
 
@@ -54,7 +56,8 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
     var extraweft : String ?= ""
     var prodCategory : String ?= ""
 
-    var mBinding : FragmentArtisanOnGoEnqDetailsBinding?= null
+    var mBinding : FragmentCompEnqDetailsBinding?= null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,8 +72,9 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_artisan_on_go_enq_details, container, false)
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_comp_enq_details, container, false)
         enqID = param1?.toLong()
+        enqStatus = param2?.toLong()
         return mBinding?.root
     }
 
@@ -79,7 +83,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         mEnqVM.fetchEnqListener = this
         mBinding?.swipeEnquiryDetails?.isEnabled = false
         if(Utility.checkIfInternetConnected(requireActivity())){
-            enqID?.let { mEnqVM.getSingleOngoingEnquiry(it) }
+            enqID?.let { mEnqVM.getSingleCompletedEnquiry(it) }
             viewLoader()
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
@@ -87,58 +91,54 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         }
 
         enqID?.let {
-            mEnqVM.getSingleOnEnqData(it)
-                .observe(viewLifecycleOwner, Observer<OngoingEnquiries> {
+            mEnqVM.getSingleCompEnqData(it)
+                .observe(viewLifecycleOwner, Observer<CompletedEnquiries> {
                     enquiryDetails = it
                 })
         }
 
-//        mBinding?.btnMenu?.setOnClickListener {
-//            if(mBinding?.menuList?.visibility == View.GONE){
-//                mBinding?.menuList?.visibility = View.VISIBLE
-//            }else{
-//                mBinding?.menuList?.visibility = View.GONE
-//            }
-//        }
-
         mBinding?.btnBack?.setOnClickListener {
             activity?.onBackPressed()
         }
-
         mBinding?.brandDetailsLayer?.setOnClickListener {
-            if (savedInstanceState == null) {
-                activity?.supportFragmentManager?.beginTransaction()
-                    ?.replace(R.id.enquiry_details_container,
-                        BuyEnqDetailsFragment.newInstance(enquiryDetails?.enquiryID.toString(),enquiryDetails?.enquiryStatusID.toString()))
-                    ?.addToBackStack(null)
-                    ?.commit()
-            }
-        }
-
-        mBinding?.productDetailsLayer?.setOnClickListener {
-            if(enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
-//                CustomProd()
-                Utility?.displayMessage("View Custom Product Screen by buyer not implemented",requireActivity())
-            }else{
-                ArtisanProduct()
+            when(Prefs.getString(ConstantsDirectory.PROFILE,"")){
+                ConstantsDirectory.ARTISAN -> {
+                    if (savedInstanceState == null) {
+                        activity?.supportFragmentManager?.beginTransaction()
+                            ?.replace(R.id.enquiry_details_container,
+                                BuyEnqDetailsFragment.newInstance(enquiryDetails?.enquiryID.toString(),enquiryDetails?.enquiryStatusID.toString()))
+                            ?.addToBackStack(null)
+                            ?.commit()
+                    }
+                }
+                ConstantsDirectory.BUYER -> {
+                    if (savedInstanceState == null) {
+                        activity?.supportFragmentManager?.beginTransaction()
+                            ?.replace(R.id.enquiry_details_container,
+                                ArtEnqDetailsFragment.newInstance(enquiryDetails?.enquiryID.toString(),enquiryDetails?.enquiryStatusID.toString()))
+                            ?.addToBackStack(null)
+                            ?.commit()
+                    }
+                }
             }
         }
     }
-
-    fun ArtisanProduct(){
-        context?.startActivity(context?.addProductIntent(enquiryDetails?.productID?:0))
-    }
-
-//    fun BuyerCustomProduct(){
-//        context?.start
-//    }
 
     fun setDetails(){
 
         setTabVisibilities()
 
+        when(Prefs.getString(ConstantsDirectory.PROFILE,"")){
+            ConstantsDirectory.ARTISAN -> {
+                mBinding?.brand?.text = ConstantsDirectory.ARTISAN
+            }
+            ConstantsDirectory.BUYER -> {
+                mBinding?.brand?.text = ConstantsDirectory.BUYER
+            }
+        }
+
         mBinding?.enquiryCode?.text = enquiryDetails?.enquiryCode
-        mBinding?.enquiryStartDate?.text = "Date accepted : ${enquiryDetails?.startedOn?.split("T")?.get(0)}"
+        mBinding?.enquiryStartDate?.text = "Date started : ${enquiryDetails?.startedOn?.split("T")?.get(0)}"
 
         val image = enquiryDetails?.productImages?.split((",").toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()?.get(0)
 
@@ -151,7 +151,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         mBinding?.productImage?.let { ImageSetter.setImage(requireActivity(),
             url!!, it,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder) }
 
-        mBinding?.buyerCompany?.text = enquiryDetails?.ProductBrandName
+        mBinding?.company?.text = enquiryDetails?.ProductBrandName
 
         //ProductAvailability
         when(enquiryDetails?.productStatusID){
@@ -271,115 +271,42 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         }
         mBinding?.enquiryStatusText?.text = enquiryStage
 
-        mBinding?.enquiryUpdateDate?.text = "Last updated : ${enquiryDetails?.lastUpdated?.split("T")?.get(0)}"
-        mBinding?.buyerBrand?.text = enquiryDetails?.ProductBrandName
+        if(enquiryDetails?.enquiryStageID == 10L){
+            context?.let {
+                ContextCompat.getColor(
+                    it, R.color.black_text)
+            }?.let { mBinding?.closedDot?.setColorFilter(it) }
 
-        setProgressTimeline()
-
-        //TODO implement to enq stage
-        when(enquiryDetails?.enquiryStageID){
-            3L -> {
-                mBinding?.uploadDocLayout?.visibility = View.VISIBLE
-            }
-            8L -> {
-                mBinding?.uploadDocLayout?.visibility = View.VISIBLE
-            }
-            else ->{
-                mBinding?.uploadDocLayout?.visibility = View.GONE
-            }
-        }
-
-    }
-
-    private fun setProgressTimeline(){
-        stageList?.clear()
-        stageAPList?.clear()
-        if(enquiryDetails?.productType == "Custom Product" || enquiryDetails?.productStatusID == 1L){
-            stageList = Utility.getEnquiryStagesData() // custom product or made to order
-            Log.e("enqdata", "List All : $stageList")
-
-            stageList?.forEach {
-                if(it.first == enquiryDetails?.enquiryStageID){
-                    currEnqStageId = it.first
-                    currEnqStage = it.second
-                    Log.e("CurrentEnqStage","Id : $currEnqStageId")
-                    Log.e("CurrentEnqStage","current : $currEnqStage")
-                }
-            }
-
-            stageList?.forEach {
-                if(it.first == currEnqStageId?.plus(1) ?: 10){
-                    nextEnqStage = it.second
-                    Log.e("CurrentEnqStage","next : $nextEnqStage")
-                }
-            }
-
-            stageList?.forEach {
-                if(it.first == currEnqStageId?.minus(1) ?: 0){
-                    prevEnqStage = it.second
-                    Log.e("CurrentEnqStage","previous : $prevEnqStage")
-                }
-            }
+            context?.let {
+                ContextCompat.getColor(
+                    it, R.color.black_text)
+            }?.let { mBinding?.closedText?.setTextColor(it) }
+            mBinding?.closedText?.text = "Order Completed"
 
         }else{
-            stageAPList = Utility.getAvaiProdEnquiryStagesData() // available product
-            Log.e("enqdata", "List AP : $stageAPList")
+            context?.let {
+                ContextCompat.getColor(
+                    it, R.color.red_logo)
+            }?.let { mBinding?.closedDot?.setColorFilter(it) }
 
-            stageAPList?.forEach {
-                if(it.second == enquiryDetails?.enquiryStageID){
-                    currEnqStageSerNo = it.first
-                    currEnqStageId = it.second
-                    currEnqStage = it.third
-                    Log.e("CurrentEnqStage","Id : $currEnqStageId")
-                    Log.e("CurrentEnqStage","current : $currEnqStage")
-                }
-            }
-
-            stageAPList?.forEach {
-                if(it.first == currEnqStageSerNo?.plus(1) ?: 7){
-                    nextEnqStage = it.third
-                    Log.e("CurrentEnqStage","next : $nextEnqStage")
-                }
-            }
-
-            stageAPList?.forEach {
-                if(it.first == currEnqStageSerNo?.minus(1) ?: 0){
-                    prevEnqStage = it.third
-                    Log.e("CurrentEnqStage","previous : $prevEnqStage")
-                }
-            }
+            context?.let {
+                ContextCompat.getColor(
+                    it, R.color.red_logo)
+            }?.let { mBinding?.closedText?.setTextColor(it) }
+            mBinding?.closedText?.text = "Enquiry Closed"
         }
 
-        mBinding?.previousStep?.text = prevEnqStage
-        mBinding?.currentStep?.text = currEnqStage
-        mBinding?.nextStep?.text = nextEnqStage
-
-        //TODO : To implement pi moq upload
-        if(enquiryDetails?.isBlue == 1L){
-            when(currEnqStageId){
-                4L,9L -> {
-                    mBinding?.awaitingPaymentReceipt?.visibility = View.VISIBLE
-                }
-                else ->{
-                    mBinding?.awaitingPaymentReceipt?.visibility = View.GONE
-////                    mBinding?.transactionLayout?.visibility = View.GONE
-                }
-            }
-        }
-
-        when(currEnqStageId){
-            2L,7L -> mBinding?.uploadDocLayout?.visibility = View.VISIBLE
-            else -> mBinding?.uploadDocLayout?.visibility = View.GONE
-        }
+        mBinding?.enquiryUpdateDate?.text = "Last updated : ${enquiryDetails?.lastUpdated?.split("T")?.get(0)}"
+        mBinding?.brand?.text = enquiryDetails?.ProductBrandName
 
     }
 
     fun viewLoader(){
-        mBinding?.artisanOngoEnqDetails?.visibility = View.GONE
+        mBinding?.compEnqDetails?.visibility = View.GONE
         mBinding?.swipeEnquiryDetails?.isRefreshing = true
     }
     fun hideLoader(){
-        mBinding?.artisanOngoEnqDetails?.visibility = View.VISIBLE
+        mBinding?.compEnqDetails?.visibility = View.VISIBLE
         mBinding?.swipeEnquiryDetails?.isRefreshing = false
     }
 
@@ -399,7 +326,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
 
     override fun onResume() {
         super.onResume()
-        enqID?.let { mEnqVM?.getSingleOnEnqData(it) }
+        enqID?.let { mEnqVM?.getSingleCompEnqData(it) }
         setDetails()
     }
 
@@ -407,7 +334,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("Enquiry Details", "onFailure")
-                enqID?.let { mEnqVM.getSingleOnEnqData(it) }
+                enqID?.let { mEnqVM.getSingleCompEnqData(it) }
                 hideLoader()
             })
         } catch (e: Exception) {
@@ -419,7 +346,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("Enquiry Details", "onSuccess")
-                enqID?.let { mEnqVM.getSingleOnEnqData(it) }
+                enqID?.let { mEnqVM.getSingleCompEnqData(it) }
                 hideLoader()
                 setDetails()
             })
@@ -430,10 +357,11 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
 
     companion object {
 
-        fun newInstance(param1: String) =
-            ArtisanOnGoEnqDetailsFragment().apply {
+        fun newInstance(param1: String,param2 : String) =
+            CompEnqDetailsFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
                 }
             }
     }

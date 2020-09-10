@@ -23,5 +23,4 @@ interface NotificationDao {
     @POST("/notification/markAllAsRead")
     fun markAllNotificationsAsRead(@Header("Authorization") token:String) : Call<NotificationReadResponse>
 
-
 }
