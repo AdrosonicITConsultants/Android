@@ -198,7 +198,6 @@ class wishlistFragment : Fragment(),
             Handler(Looper.getMainLooper()).post {
                 Log.e("ExistingEnqGeneration", "Onsuccess")
                 dialog?.dismiss()
-
                 enqID = id
                 enqCode = code
                 prodName = productName

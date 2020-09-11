@@ -1,7 +1,6 @@
 package com.adrosonic.craftexchange.ui.modules.buyer.enquiry.adapter
 
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -14,27 +13,34 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
+import com.adrosonic.craftexchange.database.predicates.MoqsPredicates
 import com.adrosonic.craftexchange.database.predicates.WishlistPredicates
 import com.adrosonic.craftexchange.databinding.FragmentBuyerOnGoEnqDetailsBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.singleProduct.SingleProductDetails
+import com.adrosonic.craftexchange.repository.data.response.moq.Datum
+import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimesResponse
 import com.adrosonic.craftexchange.ui.modules.buyer.ownDesign.ownDesignIntent
 import com.adrosonic.craftexchange.ui.modules.buyer.productDetails.catalogueProductDetailsIntent
 import com.adrosonic.craftexchange.ui.modules.enquiry.ArtEnqDetailsFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
+import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
+import com.google.gson.GsonBuilder
 import com.pixplicity.easyprefs.library.Prefs
 import kotlinx.android.synthetic.main.dialog_are_you_sure.*
-import kotlinx.android.synthetic.main.dialog_gen_enquiry_success.*
 import retrofit2.Call
 import retrofit2.Response
 import javax.security.auth.callback.Callback
@@ -43,7 +49,9 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 class BuyerOnGoEnqDetailsFragment : Fragment(),
-EnquiryViewModel.FetchOngoingEnqInterface{
+EnquiryViewModel.FetchOngoingEnqInterface,
+EnquiryViewModel.BuyersMoqInterface,
+MoqAdapter.MoqListener{
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -70,6 +78,17 @@ EnquiryViewModel.FetchOngoingEnqInterface{
     var extraweft : String ?= ""
     var prodCategory : String ?= ""
 
+    var moqDeliveryJson=""
+    var moqDeliveryTimeList=ArrayList<Datum>()
+    private lateinit var moqAdapter: MoqAdapter
+    private lateinit var confirmDialog: Dialog
+    var dialogMoq : String ?= ""
+    var dialogPpu : String ?= ""
+    var dialogBrand : String ?= ""
+    var dialogEta =0L
+
+    private lateinit var slideDown:Animation
+    private lateinit var slideUp:Animation
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -91,11 +110,17 @@ EnquiryViewModel.FetchOngoingEnqInterface{
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mEnqVM.fetchEnqListener = this
+        moqDeliveryJson = UserConfig.shared.moqDeliveryDates
+        val gson = GsonBuilder().create()
+        val moqDeliveryTime = gson.fromJson(moqDeliveryJson, MoqDeliveryTimesResponse::class.java)
+        moqDeliveryTimeList.addAll(moqDeliveryTime.data)
+//        mEnqVM.fetchEnqListener = this
+        mEnqVM.buyerMoqListener = this
         mBinding?.swipeEnquiryDetails?.isEnabled = false
         if(Utility.checkIfInternetConnected(requireActivity())){
             enqID?.let { mEnqVM.getSingleEnquiry(it) }
             viewLoader()
+                mEnqVM.getMoqs(enqID!!)
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
             setDetails()
@@ -108,16 +133,10 @@ EnquiryViewModel.FetchOngoingEnqInterface{
                 })
         }
 
-        val slideDown = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_down)
-        val slideUp = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_up)
+        slideDown = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_down)
+        slideUp = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_up)
         mBinding?.moqDetailsLayer?.setOnClickListener {
-            if(mBinding?.moqDetails?.visibility == View.GONE){
-                mBinding?.moqDetails?.animation = slideDown
-                mBinding?.moqDetails?.visibility = View.VISIBLE
-            }else{
-                mBinding?.moqDetails?.animation = slideUp
-                mBinding?.moqDetails?.visibility = View.GONE
-            }
+            handleMoqVisiblities()
         }
 
         mBinding?.btnMenu?.setOnClickListener {
@@ -129,7 +148,7 @@ EnquiryViewModel.FetchOngoingEnqInterface{
         }
 
         mBinding?.btnChat?.setOnClickListener {
-            Utility?.displayMessage("Chat",requireActivity())
+            Utility?.displayMessage("Coming soon",requireActivity())
         }
 
         mBinding?.btnBack?.setOnClickListener {
@@ -143,8 +162,7 @@ EnquiryViewModel.FetchOngoingEnqInterface{
         mBinding?.brandDetailsLayer?.setOnClickListener {
             if (savedInstanceState == null) {
                 activity?.supportFragmentManager?.beginTransaction()
-                    ?.replace(R.id.enquiry_details_container,
-                        ArtEnqDetailsFragment.newInstance(enquiryDetails?.enquiryID.toString()))
+                    ?.replace(R.id.enquiry_details_container,ArtEnqDetailsFragment.newInstance(enquiryDetails?.enquiryID.toString(),0))
                     ?.addToBackStack(null)
                     ?.commit()
             }
@@ -157,7 +175,6 @@ EnquiryViewModel.FetchOngoingEnqInterface{
                CatalogueProduct()
            }
         }
-
     }
 
     fun showDialog(enquiryId : Long){
@@ -223,80 +240,90 @@ EnquiryViewModel.FetchOngoingEnqInterface{
     }
 
     fun setDetails(){
+        Handler(Looper.getMainLooper()).post(Runnable {
+            setTabVisibilities()
+            setChatIConVisibility()
+            mBinding?.enquiryCode?.text = enquiryDetails?.enquiryCode
+            mBinding?.enquiryStartDate?.text =
+                "Date started : ${enquiryDetails?.startedOn?.split("T")?.get(0)}"
 
-        setTabVisibilities()
-        setChatIConVisibility()
+            val image = enquiryDetails?.productImages?.split((",").toRegex())
+                ?.dropLastWhile { it.isEmpty() }?.toTypedArray()?.get(0)
 
-        mBinding?.enquiryCode?.text = enquiryDetails?.enquiryCode
-        mBinding?.enquiryStartDate?.text = "Date started : ${enquiryDetails?.startedOn?.split("T")?.get(0)}"
-
-        val image = enquiryDetails?.productImages?.split((",").toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()?.get(0)
-
-        //brand name of product & product Image
-        if(enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
-            url = Utility.getCustomProductImagesUrl(enquiryDetails?.productID, image)
-        }else{
-            url = Utility.getProductsImagesUrl(enquiryDetails?.productID, image)
-        }
-        mBinding?.productImage?.let { ImageSetter.setImage(requireActivity(),
-            url!!, it,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder) }
-
-        //ProductAvailability
-        when(enquiryDetails?.productStatusID){
-            2L -> {
-                status = context?.getString(R.string.in_stock)
-                mBinding?.productAvailability?.text = status
-                context?.let {
-                    ContextCompat.getColor(
-                        it, R.color.dark_green)
-                }?.let { mBinding?.productAvailability?.setTextColor(it) }
+            //brand name of product & product Image
+            if (enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT) {
+                url = Utility.getCustomProductImagesUrl(enquiryDetails?.productID, image)
+            } else {
+                url = Utility.getProductsImagesUrl(enquiryDetails?.productID, image)
             }
-            1L -> {
-                status = context?.getString(R.string.made_to_order)
-                mBinding?.productAvailability?.text = status
-                context?.let {
-                    ContextCompat.getColor(
-                        it, R.color.dark_magenta)
-                }?.let { mBinding?.productAvailability?.setTextColor(it) }
-            }
-            else -> {
-                status = "Custom Design by you"
-                mBinding?.productAvailability?.text = status
-                context?.let {
-                    ContextCompat.getColor(
-                        it, R.color.dark_magenta)
-                }?.let { mBinding?.productAvailability?.setTextColor(it) }
-            }
-        }
 
-        //Product name or Product cloth details
-        if(enquiryDetails?.productName != "") {
-            mBinding?.productName?.text = enquiryDetails?.productName
-            mBinding?.productNameDetails?.text = enquiryDetails?.productName
-        }else{
+            try {
+                mBinding?.productImage?.let {
+                    ImageSetter.setImage( requireContext(),url!!, it, R.drawable.artisan_logo_placeholder, R.drawable.artisan_logo_placeholder,  R.drawable.artisan_logo_placeholder)
+                }
+            } catch (e: Exception) {
+            }
+
+            //ProductAvailability
+            //todo visiblities to be handled here
+            when (enquiryDetails?.productStatusID) {
+                2L -> {
+                    status = context?.getString(R.string.in_stock)
+                    mBinding?.productAvailability?.text = status
+                    context?.let {
+                        ContextCompat.getColor(
+                            it, R.color.dark_green
+                        )
+                    }?.let { mBinding?.productAvailability?.setTextColor(it) }
+                }
+                1L -> {
+                    status = context?.getString(R.string.made_to_order)
+                    mBinding?.productAvailability?.text = status
+                    context?.let {
+                        ContextCompat.getColor(
+                            it, R.color.dark_magenta
+                        )
+                    }?.let { mBinding?.productAvailability?.setTextColor(it) }
+                }
+                else -> {
+                    status = "Custom Design by you"
+                    mBinding?.productAvailability?.text = status
+                    context?.let {
+                        ContextCompat.getColor(
+                            it, R.color.dark_magenta
+                        )
+                    }?.let { mBinding?.productAvailability?.setTextColor(it) }
+                }
+            }
+
+            //Product name or Product cloth details
+            if (enquiryDetails?.productName != "") {
+                mBinding?.productName?.text = enquiryDetails?.productName
+                mBinding?.productNameDetails?.text = enquiryDetails?.productName
+            } else {
                 //TODO : set text as prod cat / werft / warn / extraweft
                 var weaveList = Utility?.getWeaveType()
                 var catList = Utility?.getProductCategory()
 
                 weaveList?.forEach {
-                    if(it.first == enquiryDetails?.weftYarnID){
+                    if (it.first == enquiryDetails?.weftYarnID) {
                         weft = it.second
                     }
-                    if(it.first == enquiryDetails?.warpYarnID){
+                    if (it.first == enquiryDetails?.warpYarnID) {
                         warp = it.second
                     }
-                    if(it.first == enquiryDetails?.extraWeftYarnID){
+                    if (it.first == enquiryDetails?.extraWeftYarnID) {
                         extraweft = it.second
                     }
                 }
                 catList?.forEach {
-                    if(it.first == enquiryDetails?.productCategoryID){
+                    if (it.first == enquiryDetails?.productCategoryID) {
                         prodCategory = it.second
                     }
                 }
                 var fp = SpannableString("${prodCategory} / ")
                 var sp = "${warp} X ${weft} X ${extraweft}"
-                fp.setSpan(context?.let { ContextCompat.getColor(it,R.color.black_text) }?.let {
+                fp.setSpan(context?.let { ContextCompat.getColor(it, R.color.black_text) }?.let {
                     ForegroundColorSpan(
                         it
                     )
@@ -304,79 +331,165 @@ EnquiryViewModel.FetchOngoingEnqInterface{
                 mBinding?.productName?.text = fp
                 mBinding?.productName?.append(sp)
 
-            mBinding?.productNameDetails?.text = "Custom Design Product"
+                mBinding?.productNameDetails?.text = "Custom Design Product"
             }
 
-        mBinding?.productAmount?.text = enquiryDetails?.totalAmount ?: "0"
+            mBinding?.productAmount?.text = enquiryDetails?.totalAmount ?: "0"
 
-
-        //enquiry stage with color
-        var enquiryStage : String ?= ""
-        var stagList = Utility?.getEnquiryStagesData()
-        Log.e("enqDataStages", "List : $stagList")
-        stagList?.forEach {
-            if(it.first == enquiryDetails?.enquiryStageID){
-                enquiryStage = it.second
+            //enquiry stage with color
+            var enquiryStage: String? = ""
+            var stagList = Utility?.getEnquiryStagesData()
+            Log.e("enqDataStages", "List : $stagList")
+            stagList?.forEach {
+                if (it.first == enquiryDetails?.enquiryStageID) {
+                    enquiryStage = it.second
+                }
             }
-        }
-        when(enquiryDetails?.enquiryStageID){
-            1L -> {
-                context?.let {
-                    ContextCompat.getColor(
-                        it, R.color.black_text)
-                }?.let { mBinding?.enquiryStatusText?.setTextColor(it) }
+            when (enquiryDetails?.enquiryStageID) {
+                1L -> {
+                    context?.let {
+                        ContextCompat.getColor(
+                            it, R.color.black_text
+                        )
+                    }?.let { mBinding?.enquiryStatusText?.setTextColor(it) }
 
-                context?.let {
-                    ContextCompat.getColor(
-                        it,R.color.black_text)
-                }?.let { mBinding?.enquiryStatusDot?.setBackgroundColor(it) }
+                    context?.let {
+                        ContextCompat.getColor(
+                            it, R.color.black_text
+                        )
+                    }?.let { mBinding?.enquiryStatusDot?.setBackgroundColor(it) }
+                }
+
+                2L, 3L, 4L, 5L -> {
+                    context?.let {
+                        ContextCompat.getColor(
+                            it, R.color.tab_details_selected_text
+                        )
+                    }?.let { mBinding?.enquiryStatusText?.setTextColor(it) }
+
+                    context?.let {
+                        ContextCompat.getColor(
+                            it, R.color.tab_details_selected_text
+                        )
+                    }?.let { mBinding?.enquiryStatusDot?.setBackgroundColor(it) }
+                }
+
+                6L, 7L, 8L, 9L, 10L -> {
+                    context?.let {
+                        ContextCompat.getColor(
+                            it, R.color.dark_green
+                        )
+                    }?.let { mBinding?.enquiryStatusText?.setTextColor(it) }
+
+                    context?.let {
+                        ContextCompat.getColor(
+                            it, R.color.dark_green
+                        )
+                    }?.let { mBinding?.enquiryStatusDot?.setBackgroundColor(it) }
+
+                }
             }
 
-            2L,3L,4L,5L -> {
-                context?.let {
-                    ContextCompat.getColor(
-                        it, R.color.tab_details_selected_text)
-                }?.let { mBinding?.enquiryStatusText?.setTextColor(it) }
+            mBinding?.enquiryStatusText?.text = enquiryStage
 
-                context?.let {
-                    ContextCompat.getColor(
-                        it,R.color.tab_details_selected_text)
-                }?.let { mBinding?.enquiryStatusDot?.setBackgroundColor(it) }
+            mBinding?.enquiryUpdateDate?.text =
+                "Last updated : ${enquiryDetails?.lastUpdated?.split("T")?.get(0)}"
+
+            mBinding?.artisanBrand?.text = enquiryDetails?.ProductBrandName
+
+            setProgressTimeline()
+
+            when (enquiryDetails?.enquiryStageID) {
+                3L -> {
+                    mBinding?.transactionLayout?.visibility = View.VISIBLE
+                }
+                8L -> {
+                    mBinding?.transactionLayout?.visibility = View.VISIBLE
+                }
+                else -> {
+                    mBinding?.transactionLayout?.visibility = View.GONE
+                }
             }
 
-                6L,7L,8L,9L,10L -> {
-                context?.let {
-                    ContextCompat.getColor(
-                        it, R.color.dark_green)
-                }?.let { mBinding?.enquiryStatusText?.setTextColor(it) }
+            when (enquiryDetails?.productType) {
+                "Product" -> {
+                    val moq = MoqsPredicates.getSingleMoq(enqID)
+                    if (moq != null) {
+//                    if (moq.accepted!!) {
+                        mBinding?.moqDetails?.visibility = View.VISIBLE
+                        mBinding?.moqListLayout?.visibility = View.GONE
+                        mBinding?.emptyView?.visibility = View.GONE
+                        mBinding?.moqOrderQty?.text = "" + moq?.moq
+                        mBinding?.orderQuantity?.text = "" + moq?.moq
+                        mBinding?.moqOrderAmount?.text = "₹ ${moq?.ppu}"
+                        mBinding?.orderAmount?.text = "₹ ${moq?.ppu}"
+                        moqDeliveryTimeList?.forEach {
+                            if (it.id.equals(moq?.deliveryTimeId)) {
+                                mBinding?.moqOrderEta?.text = if (it?.days.equals(0L)) {
+                                    "Immediate"
+                                } else "${it?.days} Days"// "${it?.days} Days"
+                                mBinding?.orderTime?.text = if (it?.days.equals(0L)) {
+                                    "Immediate"
+                                } else "${it?.days} Days"// "${it?.days} Days"
+                            }
+                        }
+//                    } else{
+//                        //todo show simple empty view
+//                         }
+                    } else {
+                        //todo show simple empty view
+                        mBinding?.moqDetails?.visibility = View.GONE
+                        mBinding?.moqListLayout?.visibility = View.GONE
+                        mBinding?.emptyView?.visibility = View.VISIBLE
+                    }
+                }
+                "Custom Product" -> {
+                    val moq = MoqsPredicates.getMoqs(enqID)
+                    if(moq==null||moq!!.size==0){
+                        mBinding?.moqDetails?.visibility = View.GONE
+                        mBinding?.moqListLayout?.visibility = View.GONE
+                        mBinding?.emptyView?.visibility = View.VISIBLE
+                        mBinding?.emptyView?.text = "Awaiting MOQs"
+                    }
+                    else {
+                            if (moq.size == 1 && moq?.get(0)?.accepted == true) {
+                                //todo show product vala view
+                                var moq1 = moq?.get(0)
+                                mBinding?.moqDetails?.visibility = View.VISIBLE
+                                mBinding?.moqListLayout?.visibility = View.GONE
+                                mBinding?.emptyView?.visibility = View.GONE
+                                mBinding?.moqOrderQty?.text = "" + moq1?.moq
+                                mBinding?.orderQuantity?.text = "" + moq1?.moq
+                                mBinding?.moqOrderAmount?.text = "₹ ${moq1?.ppu}"
+                                mBinding?.orderAmount?.text = "₹ ${moq1?.ppu}"
+                                moqDeliveryTimeList?.forEach {
+                                    if (it.id.equals(moq1?.deliveryTimeId)) {
+                                        mBinding?.moqOrderEta?.text = if (it?.days.equals(0L)) {
+                                            "Immediate"
+                                        } else "${it?.days} Days"// "${it?.days} Days"
+                                        mBinding?.orderTime?.text = if (it?.days.equals(0L)) {
+                                            "Immediate"
+                                        } else "${it?.days} Days"//"${it?.days} Days"
+                                    }
+                                }
 
-                context?.let {
-                    ContextCompat.getColor(
-                        it,R.color.dark_green)
-                }?.let { mBinding?.enquiryStatusDot?.setBackgroundColor(it) }
-
+                            }
+                            else {
+                                mBinding?.moqDetails?.visibility = View.GONE
+                                mBinding?.moqListLayout?.visibility = View.VISIBLE
+                                mBinding?.moqList?.layoutManager = LinearLayoutManager(
+                                    requireContext(),
+                                    LinearLayoutManager.VERTICAL,
+                                    false
+                                )
+                                moqAdapter = MoqAdapter(requireContext(), moq, moqDeliveryTimeList)
+                                mBinding?.moqList?.adapter = moqAdapter
+                                moqAdapter.listener = this
+                            }
+                    }
+                }
             }
-        }
-        mBinding?.enquiryStatusText?.text = enquiryStage
-
-        mBinding?.enquiryUpdateDate?.text = "Last updated : ${enquiryDetails?.lastUpdated?.split("T")?.get(0)}"
-
-        mBinding?.artisanBrand?.text = enquiryDetails?.ProductBrandName
-
-        setProgressTimeline()
-
-        when(enquiryDetails?.enquiryStageID){
-            3L -> {
-                mBinding?.transactionLayout?.visibility = View.VISIBLE
-            }
-            8L -> {
-                mBinding?.transactionLayout?.visibility = View.VISIBLE
-            }
-            else ->{
-                mBinding?.transactionLayout?.visibility = View.GONE
-            }
-        }
-
+        })
     }
 
     private fun setProgressTimeline(){
@@ -462,11 +575,11 @@ EnquiryViewModel.FetchOngoingEnqInterface{
     }
 
     private fun setTabVisibilities(){
-        if(enquiryDetails?.isMoqSend == 1L){
-            mBinding?.moqDetailsLayer?.visibility = View.VISIBLE
-        }else{
-            mBinding?.moqDetailsLayer?.visibility = View.GONE
-        }
+//        if(enquiryDetails?.isMoqSend == 1L){
+//            mBinding?.moqDetailsLayer?.visibility = View.VISIBLE
+//        }else{
+//            mBinding?.moqDetailsLayer?.visibility = View.GONE
+//        }
 
         if(enquiryDetails?.isPiSend == 1L){
             mBinding?.piDetailsLayer?.visibility = View.VISIBLE
@@ -474,6 +587,60 @@ EnquiryViewModel.FetchOngoingEnqInterface{
             mBinding?.piDetailsLayer?.visibility = View.GONE
         }
     }
+
+    private fun handleMoqVisiblities(){
+        when(enquiryDetails?.productType){
+        "Product"-> {
+            val moq= MoqsPredicates.getSingleMoq(enqID)
+            val moqId= moq?.moqId?:0
+            mBinding?.moqListLayout?.visibility = View.GONE
+            if(moqId>0) {
+                if (mBinding?.moqDetails?.visibility == View.GONE) {
+                    mBinding?.moqDetails?.animation = slideDown
+                    mBinding?.moqDetails?.visibility = View.VISIBLE
+
+                } else {
+                    mBinding?.moqDetails?.animation = slideUp
+                    mBinding?.moqDetails?.visibility = View.GONE
+                }
+            }
+        }
+        "Custom Product"-> {
+            val moq= MoqsPredicates.getMoqs(enqID)
+            if(moq==null|| moq?.size==0){
+                mBinding?.moqDetails?.visibility = View.GONE
+                mBinding?.moqListLayout?.visibility = View.GONE
+                mBinding?.emptyView?.visibility = View.VISIBLE
+                mBinding?.emptyView?.text = "Awaiting MOQs"
+            }else {
+                mBinding?.emptyView?.visibility = View.GONE
+                val acceptedList = ArrayList<Boolean>()
+                moq?.forEach { acceptedList.add(it.accepted ?: false) }
+                if (!acceptedList.contains(true)) {
+                    mBinding?.moqDetails?.visibility = View.GONE
+                    if (mBinding?.moqListLayout?.visibility == View.GONE) {
+                        mBinding?.moqListLayout?.animation = slideDown
+                        mBinding?.moqListLayout?.visibility = View.VISIBLE
+
+                    } else {
+                        mBinding?.moqListLayout?.animation = slideUp
+                        mBinding?.moqListLayout?.visibility = View.GONE
+                    }
+                } else {
+                    mBinding?.moqListLayout?.visibility = View.GONE
+                    if (mBinding?.moqDetails?.visibility == View.GONE) {
+                        mBinding?.moqDetails?.animation = slideDown
+                        mBinding?.moqDetails?.visibility = View.VISIBLE
+
+                    } else {
+                        mBinding?.moqDetails?.animation = slideUp
+                        mBinding?.moqDetails?.visibility = View.GONE
+                    }
+                }
+            }
+        }
+    }
+}
 
     private fun setChatIConVisibility(){
         if(enquiryDetails?.isBlue == null && enquiryDetails?.enquiryStageID!! >= 4L){
@@ -528,7 +695,123 @@ EnquiryViewModel.FetchOngoingEnqInterface{
         }
     }
 
+    override fun onGetMoqCall() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                hideLoader()
+                setDetails()
+            })
+        } catch (e: Exception) {
+            Log.e("Enquiry Details", "Exception onAddMoqSuccess " + e.message)
+        }
+    }
 
+    override fun onSendCustomMoqSuccess(moqId:Long) {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("Enquiry Details", "onSendCustomMoqSuccess: $moqId")
+                if(Utility.checkIfInternetConnected(requireActivity())){
+                    enqID?.let { mEnqVM.getSingleEnquiry(it) }
+                    viewLoader()
+                    mEnqVM.getMoqs(enqID!!)
+                }else{
+                    Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
+                    setDetails()
+                }
+                showSendMoqSuccesDialog(moqId)
+            })
+        } catch (e: Exception) {
+            Log.e("Enquiry Details", "Exception onAddMoqSuccess " + e.message)
+        }
+    }
+
+    override fun onSendCustomMoqFailure() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                hideLoader()
+                setDetails()
+                Utility.displayMessage("Unable to send moq, please try again",requireContext())
+            })
+        } catch (e: Exception) {
+            Log.e("Enquiry Details", "Exception onAddMoqSuccess " + e.message)
+        }
+    }
+
+    override fun onAccepted(artisanId: Long, moqId: Long) {
+        confirmDialog = Dialog(requireContext())
+        confirmDialog.setContentView(R.layout.dialog_moq_confirmation)
+        confirmDialog.show()
+        val tvCancel = confirmDialog.findViewById(R.id.txt_cancel) as TextView
+        val txt_accept = confirmDialog.findViewById(R.id.txt_accept) as TextView
+        val brand_cluster = confirmDialog.findViewById(R.id.brand_cluster) as TextView
+        val moq_order_qty = confirmDialog.findViewById(R.id.moq_order_qty) as TextView
+        val moq_order_amount = confirmDialog.findViewById(R.id.moq_order_amount) as TextView
+        val moq_order_eta = confirmDialog.findViewById(R.id.moq_order_eta) as TextView
+        val moq= MoqsPredicates.getSingleMoqByMoqId(moqId)
+        moq?.let {
+            dialogEta =moq?.deliveryTimeId?:0
+            brand_cluster.text="${moq.brand} from ${moq.clusterName}"
+            dialogBrand="${moq.brand} from ${moq.clusterName}"
+            moq_order_qty.text="${moq.moq} pcs"
+            dialogMoq="${moq.moq} pcs"
+            moq_order_amount.text="₹ ${moq.ppu}"
+            dialogPpu="₹ ${moq.ppu}"
+                moqDeliveryTimeList?.forEach {
+                    if (it.id.equals(moq?.deliveryTimeId)) {
+                        moq_order_eta.text= if(it?.days.equals(0L)){"Immediate"} else "${it?.days} Days"
+                    }
+                }
+        }
+        tvCancel.setOnClickListener {
+            confirmDialog.dismiss()
+        }
+        txt_accept.setOnClickListener {
+            if(Utility.checkIfInternetConnected(requireActivity())){
+                viewLoader()
+                confirmDialog.dismiss()
+                mEnqVM.sendCustomMoqs(enqID?:0,moqId?:0,artisanId)
+            }else{
+                Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
+            }
+
+        }
+    }
+
+    override fun viewArtisanProfile(id: Long) {
+        activity?.supportFragmentManager?.beginTransaction()
+            ?.replace(R.id.enquiry_details_container,ArtEnqDetailsFragment.newInstance("",id))
+            ?.addToBackStack(null)
+            ?.commit()
+    }
+
+    fun showSendMoqSuccesDialog(moqId:Long){
+        confirmDialog = Dialog(requireContext())
+        confirmDialog.setContentView(R.layout.dialog_moq_accept)
+        confirmDialog.show()
+        val txt_ok = confirmDialog.findViewById(R.id.txt_ok) as TextView
+        val txt_goto_chat = confirmDialog.findViewById(R.id.txt_goto_chat) as TextView
+        val brand_cluster = confirmDialog.findViewById(R.id.brand_cluster) as TextView
+        val moq_order_qty = confirmDialog.findViewById(R.id.moq_order_qty) as TextView
+        val moq_order_amount = confirmDialog.findViewById(R.id.moq_order_amount) as TextView
+        val moq_order_eta = confirmDialog.findViewById(R.id.moq_order_eta) as TextView
+//        val moq= MoqsPredicates.getSingleMoqByMoqId(moqId)
+//        moq?.let {
+            brand_cluster.text=dialogBrand
+            moq_order_qty.text=dialogMoq
+            moq_order_amount.text=dialogPpu
+            moqDeliveryTimeList?.forEach {
+                if (it.id.equals(dialogEta)) {
+                    moq_order_eta.text= if(it?.days.equals(0L)){"Immediate"} else "${it?.days} Days"//"${it?.days} Days"
+                }
+            }
+//        }
+        txt_ok.setOnClickListener {
+            confirmDialog.dismiss()
+        }
+        txt_goto_chat.setOnClickListener {
+        Utility.displayMessage("Coming Soon",requireContext())
+        }
+    }
     companion object {
         @JvmStatic
         fun newInstance(param1: String) =
@@ -539,4 +822,6 @@ EnquiryViewModel.FetchOngoingEnqInterface{
                 }
             }
     }
+
+
 }

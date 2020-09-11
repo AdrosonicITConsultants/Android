@@ -77,4 +77,7 @@ object CraftExchangeRepository {
     fun getMoqService(): MoqDao {
         return builder(MoqDao::class.java)
     }
+    fun getMarketingService(): MarketingDao {
+        return builder(MarketingDao::class.java)
+    }
 }

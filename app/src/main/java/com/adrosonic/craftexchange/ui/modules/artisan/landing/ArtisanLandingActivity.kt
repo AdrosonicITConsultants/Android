@@ -200,7 +200,7 @@ class ArtisanLandingActivity : AppCompatActivity(),
                     noti_badge?.setVisibility(View.GONE)
                 }
             } else {
-                noti_badge?.text=if(count>99)  "99+" else  "$count"
+                noti_badge?.text="$count"
                 if (noti_badge?.getVisibility() !== View.VISIBLE) {
                     noti_badge?.visibility=View.VISIBLE
                 }
