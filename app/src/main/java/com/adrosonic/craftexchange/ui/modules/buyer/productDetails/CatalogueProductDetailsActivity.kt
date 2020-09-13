@@ -310,9 +310,6 @@ class CatalogueProductDetailsActivity : AppCompatActivity(),
         mBinding?.dimensUnitText?.append("\tX\t")
         mBinding?.dimensUnitText?.append(w)
 
-
-
-
         var length = SpannableString(details?.productLength)
         length.setSpan(ForegroundColorSpan(ContextCompat.getColor(applicationContext,R.color.length_unit_color)), 0, length.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         var width = SpannableString(details?.productWidth)

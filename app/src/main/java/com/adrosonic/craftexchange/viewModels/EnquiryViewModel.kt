@@ -101,7 +101,6 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
         return EnquiryPredicates.getSingleCompEnquiryDetails(enqId)
     }
 
-
     fun ifEnquiryExists(productId : Long,isCustom : Boolean){
 
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
@@ -291,6 +290,7 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
 
             })
     }
+
     fun markEnquiryCompleted(enquiryId : Long){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         CraftExchangeRepository
@@ -314,6 +314,7 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
 
             })
     }
+
     fun getSingleMoq(enquiryId:Long){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         Log.e(TAG,"getSingleMoq :${enquiryId}")
@@ -340,6 +341,7 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
                 }
             })
     }
+
     fun sendMoq(enquiryId:Long,additionalInfo: String,deliveryTimeID: Long,  moq: Long,ppu: String){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         val request=SendMoqRequest(additionalInfo,deliveryTimeID,moq,ppu)

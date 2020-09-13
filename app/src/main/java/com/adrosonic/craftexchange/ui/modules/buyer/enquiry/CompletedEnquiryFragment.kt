@@ -74,6 +74,14 @@ class CompletedEnquiryFragment : Fragment(),
                 mEnquiryList = it
                 mEnqListAdapter?.updateProductList(mEnquiryList)
             })
+
+        mBinding?.swipeCompletedEnquiries?.setOnRefreshListener {
+            if (!Utility.checkIfInternetConnected(requireContext())) {
+                Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
+            } else {
+                mEnqVM.getAllCompletedEnquiries()
+            }
+        }
     }
 
     private fun setRecyclerList(){

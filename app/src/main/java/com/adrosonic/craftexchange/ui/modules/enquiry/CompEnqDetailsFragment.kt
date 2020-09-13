@@ -130,10 +130,10 @@ class CompEnqDetailsFragment : Fragment(),
 
         when(Prefs.getString(ConstantsDirectory.PROFILE,"")){
             ConstantsDirectory.ARTISAN -> {
-                mBinding?.brand?.text = ConstantsDirectory.ARTISAN
+                mBinding?.profileName?.text = ConstantsDirectory.BUYER
             }
             ConstantsDirectory.BUYER -> {
-                mBinding?.brand?.text = ConstantsDirectory.BUYER
+                mBinding?.profileName?.text = ConstantsDirectory.ARTISAN
             }
         }
 

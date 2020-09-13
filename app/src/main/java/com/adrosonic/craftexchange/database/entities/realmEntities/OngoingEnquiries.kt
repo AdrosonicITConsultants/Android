@@ -81,6 +81,7 @@ open class OngoingEnquiries : RealmObject() {
         const val COLUMN_ENQUIRY_ID = "enquiryID"
         const val COLUMN_PRODUCT_ID = "productID"
         const val COLUMN_ENQUIRY_CODE = "enquiryCode"
+        const val COLUMN_LAST_UPDATED = "lastUpdated"
     }
 }
 

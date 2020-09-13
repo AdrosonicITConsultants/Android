@@ -219,8 +219,13 @@ class ArtisanOnGoingRecyclerAdapter(var context: Context?, private var enquiries
         if(enquiry?.isMoqSend == null && enquiry?.enquiryStageID == 1L){
             holder.reqDoc?.visibility = View.VISIBLE
             holder.reqDoc?.text = "Requesting MOQ"
+        }else if(enquiry?.isPiSend == null && enquiry?.enquiryStageID == 2L){
+            holder.reqDoc?.visibility = View.VISIBLE
+            holder.reqDoc?.text = "Awaiting PI"
+
         }else{
             holder.reqDoc?.visibility = View.GONE
+
         }
 
 //        if(enquiry?.isPiSend == 1L && enquiry?.enquiryStageID == 2L){

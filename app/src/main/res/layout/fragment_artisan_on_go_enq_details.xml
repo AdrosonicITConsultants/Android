@@ -635,7 +635,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="8dp"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/moq_details_layer">
@@ -762,7 +762,7 @@
                         android:layout_marginTop="4dp"
                         android:id="@+id/txt_bid_moq"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="50dp"
                         app:sb_swipe_text="Swipe to bid this MOQ now"
                         app:sb_swipe_animate_text="true"
                         app:sb_swipe_bg_color="@color/black_text"

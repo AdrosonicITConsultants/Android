@@ -26,6 +26,7 @@ import com.adrosonic.craftexchange.repository.data.response.moq.Datum
 import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimesResponse
 import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.addProductIntent
 import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
+import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.UserConfig
@@ -65,6 +66,8 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
     var warp : String ?= ""
     var extraweft : String ?= ""
     var prodCategory : String ?= ""
+    private var isCustom : Boolean ?= false
+
 
     var moqDeliveryJson=""
     var moqDeliveryTimeList=ArrayList<Datum>()
@@ -111,7 +114,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
 
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
-            setDetails()
+//            setDetails()
         }
 
         enqID?.let {
@@ -144,12 +147,27 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         }
 
         mBinding?.productDetailsLayer?.setOnClickListener {
-            if(enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
-//                CustomProd()
-                Utility?.displayMessage("View Custom Product Screen by buyer not implemented",requireActivity())
-            }else{
-                ArtisanProduct()
+//            if(enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
+////                CustomProd()
+//                Utility?.displayMessage("View Custom Product Screen by buyer not implemented",requireActivity())
+//            }else{
+//                ArtisanProduct()
+//            }
+            if (savedInstanceState == null) {
+                isCustom?.let { it1 ->
+                    ViewProductDetailsFragment.newInstance(enquiryDetails?.productID!!.toLong(),
+                        it1
+                    )
+                }?.let { it2 ->
+                    activity?.supportFragmentManager?.beginTransaction()
+                        ?.replace(R.id.enquiry_details_container,
+                            it2
+                        )
+                        ?.addToBackStack(null)
+                        ?.commit()
+                }
             }
+
         }
 
         mBinding?.moqDetailsLayer?.setOnClickListener {
@@ -222,8 +240,10 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         //brand name of product & product Image
         if(enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
             url = Utility.getCustomProductImagesUrl(enquiryDetails?.productID, image)
+            isCustom = true
         }else{
             url = Utility.getProductsImagesUrl(enquiryDetails?.productID, image)
+            isCustom = false
         }
         mBinding?.productImage?.let { ImageSetter.setImage(requireActivity(),
             url!!, it,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder) }
