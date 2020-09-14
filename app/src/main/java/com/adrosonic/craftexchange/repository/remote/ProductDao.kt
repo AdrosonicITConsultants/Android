@@ -7,6 +7,7 @@ import com.adrosonic.craftexchange.repository.data.response.buyer.ownDesign.Dele
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.AllProductsResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.BrandListResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.CatalogueProductsResponse
+import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryProductResponse
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -17,6 +18,13 @@ interface ProductDao {
     @Headers("Accept: application/json")
     @GET("product/getAllProducts")
     fun getAllProducts(): Call<AllProductsResponse>
+
+    @Headers("Accept: application/json")
+    @GET("product/getProduct/{productId}")
+    fun getSingleProduct(
+        @Header("Authorization") token: String,
+        @Path("productId") productId : Long
+    ): Call<EnquiryProductResponse>
 
     @Headers("Accept: application/json")
     @GET("filter/getFilteredArtisans")

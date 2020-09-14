@@ -3,8 +3,7 @@ package com.adrosonic.craftexchange.database.entities.realmEntities
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
-
-open class OngoingEnquiries : RealmObject() {
+open class CompletedEnquiries : RealmObject() {
     @PrimaryKey
     var _id :Long ?=0
     var enquiryID: Long? = 0
@@ -40,7 +39,6 @@ open class OngoingEnquiries : RealmObject() {
     var brandName: String? = ""
     var ProductBrandName: String? = "" // TODO : to be changed
 
-
     var historyProductID: Long? = 0
     var productHistoryCode: String? = ""
     var productHistoryName: String? = ""
@@ -60,7 +58,7 @@ open class OngoingEnquiries : RealmObject() {
     var profileImage: String ?= ""
     var brandDesc: String ?= ""
     var logo: String? = ""
-//    var companyName: String? = "" // TODO : Uncomment after issue fixed (company name)
+    //    var companyName: String? = "" // TODO : Uncomment after issue fixed (company name)
     var city: String? = ""
     var district: String? = ""
     var pincode: String? = ""
@@ -82,6 +80,6 @@ open class OngoingEnquiries : RealmObject() {
         const val COLUMN_PRODUCT_ID = "productID"
         const val COLUMN_ENQUIRY_CODE = "enquiryCode"
         const val COLUMN_LAST_UPDATED = "lastUpdated"
+
     }
 }
-

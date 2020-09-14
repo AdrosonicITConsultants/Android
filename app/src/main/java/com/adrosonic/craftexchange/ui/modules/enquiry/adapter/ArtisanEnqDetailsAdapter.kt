@@ -8,16 +8,17 @@ import com.adrosonic.craftexchange.ui.modules.enquiry.EnquiryDigPayFragment
 import com.google.android.material.tabs.TabLayout
 
 
-class ArtisanEnqDetailsAdapter(fragmentManager: FragmentManager): FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
-
+class ArtisanEnqDetailsAdapter(fragmentManager: FragmentManager,enqID : Long,enqStatus : Long): FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+    val enqID:Long = enqID
+    val enqStatus:Long = enqStatus
     override fun getItem(position: Int): Fragment {
 
         return  when (position) {
             0 -> {
-                EnquiryBankFragment()
+                EnquiryBankFragment.newInstance(enqID,enqStatus)
             }
             else -> {
-                EnquiryDigPayFragment()
+                EnquiryDigPayFragment.newInstance(enqID,enqStatus)
             }
         }
     }

@@ -4,11 +4,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.replace
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityEnquiryDetailsBinding
-import com.adrosonic.craftexchange.databinding.ActivitySearchSuggestionBinding
-import com.adrosonic.craftexchange.ui.modules.artisan.auth.login.ArtisanLoginUsernameFragment
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.ArtisanOnGoEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.buyer.auth.login.BuyerLoginUsernameFragment
 import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.adapter.BuyerOnGoEnqDetailsFragment
@@ -30,29 +27,40 @@ class EnquiryDetailsActivity : AppCompatActivity() {
         setContentView(view)
 
         var enqID = intent?.getStringExtra(ConstantsDirectory.ENQUIRY_ID)
-        var enqCode = intent?.getStringExtra(ConstantsDirectory.ENQUIRY_CODE)
+        var enqStatus = intent?.getStringExtra(ConstantsDirectory.ENQUIRY_STATUS_FLAG)?.toLong()
 
         var profile = Prefs.getString(ConstantsDirectory.PROFILE,null)
 
-        when(profile){
-            ConstantsDirectory.ARTISAN -> {
-                if (savedInstanceState == null) {
-                    enqID?.let { ArtisanOnGoEnqDetailsFragment.newInstance(it) }?.let {
-                        supportFragmentManager.beginTransaction()
-                            .replace(R.id.enquiry_details_container, it)
-                            .commitNow()
+        if(enqStatus == 2L){
+            when(profile){
+                ConstantsDirectory.ARTISAN -> {
+                    if (savedInstanceState == null) {
+                        enqID?.let { ArtisanOnGoEnqDetailsFragment.newInstance(it) }?.let {
+                            supportFragmentManager.beginTransaction()
+                                .replace(R.id.enquiry_details_container, it)
+                                .commitNow()
+                        }
+                    }
+                }
+                ConstantsDirectory.BUYER -> {
+                    if (savedInstanceState == null) {
+                        enqID?.let { BuyerOnGoEnqDetailsFragment.newInstance(it) }?.let {
+                            supportFragmentManager.beginTransaction()
+                                .replace(R.id.enquiry_details_container, it)
+                                .commitNow()
+                        }
                     }
                 }
             }
-            ConstantsDirectory.BUYER -> {
-                if (savedInstanceState == null) {
-                    enqID?.let { BuyerOnGoEnqDetailsFragment.newInstance(it) }?.let {
-                        supportFragmentManager.beginTransaction()
-                            .replace(R.id.enquiry_details_container, it)
-                            .commitNow()
-                    }
+        }else{
+            if (savedInstanceState == null) {
+                enqID?.let { CompEnqDetailsFragment.newInstance(it, enqStatus.toString()) }?.let {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.enquiry_details_container, it)
+                        .commitNow()
                 }
             }
         }
+
     }
 }

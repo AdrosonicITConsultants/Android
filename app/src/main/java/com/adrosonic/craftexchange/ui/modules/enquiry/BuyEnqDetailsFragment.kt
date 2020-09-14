@@ -9,9 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
-import com.adrosonic.craftexchange.databinding.FragmentArtEnqDetailsBinding
 import com.adrosonic.craftexchange.databinding.FragmentBuyEnqDetailsBinding
-import com.adrosonic.craftexchange.ui.modules.enquiry.adapter.ArtisanEnqDetailsAdapter
 import com.adrosonic.craftexchange.ui.modules.enquiry.adapter.BuyerEnqDetailsAdapter
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
@@ -27,10 +25,12 @@ class BuyEnqDetailsFragment : Fragment() {
 
     var mBinding : FragmentBuyEnqDetailsBinding?= null
     var enqID : Long ?= 0
-    var enqDetails : OngoingEnquiries?= null
+    var enqStatus : Long ?= 0
+//    var enqDetails : OngoingEnquiries?= null
     var text : String ?= ""
 
     val mEnqVM : EnquiryViewModel by viewModels()
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,37 +50,59 @@ class BuyEnqDetailsFragment : Fragment() {
         if(param1!=null){
             enqID = param1?.toLong()
         }
+        if(param2!=null){
+            enqStatus = param2?.toLong()
+        }
         return mBinding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         childFragmentManager.let{
-            mBinding?.viewPagerBuyEnqDetails?.adapter = BuyerEnqDetailsAdapter(it)
+            mBinding?.viewPagerBuyEnqDetails?.adapter =
+                enqID?.let { it1 -> enqStatus?.let { it2 -> BuyerEnqDetailsAdapter(it, it1, it2) } }
             mBinding?.tabLayoutBuyEnqDetails?.setupWithViewPager(mBinding?.viewPagerBuyEnqDetails)
         }
 
-        enqDetails = enqID?.let { mEnqVM.getSingleEnqMutableData(it) }?.value
+        when(enqStatus){
+            //Completed
+            1L -> {
+                var enqDetails = enqID?.let { mEnqVM.getSingleCompEnqData(it) }?.value
+                var brandUrl = Utility.getBrandLogoUrl(enqDetails?.userId,enqDetails?.logo)
+                mBinding?.brandImage?.let {
+                    ImageSetter?.setImage(requireActivity(),brandUrl,
+                        it,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
+                }
+                mBinding?.brandName?.text = enqDetails?.ProductBrandName ?: " - "
+                mBinding?.brandDescription?.text = enqDetails?.brandDesc ?: " - "
 
-        var brandUrl = Utility.getBrandLogoUrl(enqDetails?.userId,enqDetails?.logo)
-        mBinding?.brandImage?.let {
-            ImageSetter?.setImage(requireActivity(),brandUrl,
-                it,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
+                mBinding?.btnChat?.visibility = View.GONE
+            }
+            //Ongoing
+            2L -> {
+                var enqDetails = enqID?.let { mEnqVM.getSingleOnEnqData(it) }?.value
+                var brandUrl = Utility.getBrandLogoUrl(enqDetails?.userId,enqDetails?.logo)
+                mBinding?.brandImage?.let {
+                    ImageSetter?.setImage(requireActivity(),brandUrl,
+                        it,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
+                }
+                mBinding?.brandName?.text = enqDetails?.ProductBrandName ?: " - "
+                mBinding?.brandDescription?.text = enqDetails?.brandDesc ?: " - "
+
+                mBinding?.btnChat?.visibility = View.VISIBLE
+            }
         }
-
-        mBinding?.brandName?.text = enqDetails?.ProductBrandName ?: " - "
-        mBinding?.brandDescription?.text = enqDetails?.brandDesc ?: " - "
-
         mBinding?.btnBack?.setOnClickListener {
             activity?.onBackPressed()
         }
     }
 
     companion object {
-        fun newInstance(param1: String) =
+        fun newInstance(param1: String,param2: String) =
             BuyEnqDetailsFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
                 }
             }
     }

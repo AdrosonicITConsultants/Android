@@ -18,6 +18,7 @@ import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,11 +29,13 @@ import com.adrosonic.craftexchange.database.predicates.WishlistPredicates
 import com.adrosonic.craftexchange.databinding.FragmentBuyerOnGoEnqDetailsBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.singleProduct.SingleProductDetails
+import com.adrosonic.craftexchange.ui.modules.artisan.auth.register.ArtisanRegisterPasswordFragment
 import com.adrosonic.craftexchange.repository.data.response.moq.Datum
 import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimesResponse
 import com.adrosonic.craftexchange.ui.modules.buyer.ownDesign.ownDesignIntent
 import com.adrosonic.craftexchange.ui.modules.buyer.productDetails.catalogueProductDetailsIntent
 import com.adrosonic.craftexchange.ui.modules.enquiry.ArtEnqDetailsFragment
+import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.UserConfig
@@ -49,9 +52,9 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 class BuyerOnGoEnqDetailsFragment : Fragment(),
-EnquiryViewModel.FetchOngoingEnqInterface,
-EnquiryViewModel.BuyersMoqInterface,
-MoqAdapter.MoqListener{
+EnquiryViewModel.FetchEnquiryInterface,
+    EnquiryViewModel.BuyersMoqInterface,
+    MoqAdapter.MoqListener{
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -68,6 +71,8 @@ MoqAdapter.MoqListener{
     private var currEnqStageSerNo : Long ?= 0
     private var url : String?=""
     private var status : String ?= ""
+
+    private var isCustom : Boolean ?= false
 
     var mBinding : FragmentBuyerOnGoEnqDetailsBinding?= null
 
@@ -118,16 +123,16 @@ MoqAdapter.MoqListener{
         mEnqVM.buyerMoqListener = this
         mBinding?.swipeEnquiryDetails?.isEnabled = false
         if(Utility.checkIfInternetConnected(requireActivity())){
-            enqID?.let { mEnqVM.getSingleEnquiry(it) }
+            enqID?.let { mEnqVM.getSingleOngoingEnquiry(it) }
             viewLoader()
-                mEnqVM.getMoqs(enqID!!)
+            mEnqVM.getMoqs(enqID!!)
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
-            setDetails()
+//            setDetails()
         }
 
         enqID?.let {
-            mEnqVM.getSingleEnqMutableData(it)
+            mEnqVM.getSingleOnEnqData(it)
                 .observe(viewLifecycleOwner, Observer<OngoingEnquiries> {
                     enquiryDetails = it
                 })
@@ -160,20 +165,39 @@ MoqAdapter.MoqListener{
         }
 
         mBinding?.brandDetailsLayer?.setOnClickListener {
-            if (savedInstanceState == null) {
-                activity?.supportFragmentManager?.beginTransaction()
-                    ?.replace(R.id.enquiry_details_container,ArtEnqDetailsFragment.newInstance(enquiryDetails?.enquiryID.toString(),0))
-                    ?.addToBackStack(null)
-                    ?.commit()
+            if(enquiryDetails?.ProductBrandName != ""){
+                if (savedInstanceState == null) {
+                    activity?.supportFragmentManager?.beginTransaction()
+                        ?.replace(R.id.enquiry_details_container,
+                            ArtEnqDetailsFragment.newInstance(enquiryDetails?.enquiryID.toString(),enquiryDetails?.enquiryStatusID.toString(),0))
+                        ?.addToBackStack(null)
+                        ?.commit()
+                }
+            }else{
+                Utility.messageDialog(requireActivity(),"No Artisan Assigned to this enquiry")
             }
         }
 
         mBinding?.productDetailsLayer?.setOnClickListener {
-           if(enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
-               CustomProduct()
-           }else{
-               CatalogueProduct()
-           }
+//           if(enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
+//               CustomProduct()
+//           }else{
+//               CatalogueProduct()
+//           }
+            if (savedInstanceState == null) {
+                isCustom?.let { it1 ->
+                    ViewProductDetailsFragment.newInstance(enquiryDetails?.productID!!.toLong(),
+                        it1
+                    )
+                }?.let { it2 ->
+                    activity?.supportFragmentManager?.beginTransaction()
+                        ?.replace(R.id.enquiry_details_container,
+                            it2
+                        )
+                        ?.addToBackStack(null)
+                        ?.commit()
+                }
+            }
         }
     }
 
@@ -250,80 +274,73 @@ MoqAdapter.MoqListener{
             val image = enquiryDetails?.productImages?.split((",").toRegex())
                 ?.dropLastWhile { it.isEmpty() }?.toTypedArray()?.get(0)
 
-            //brand name of product & product Image
-            if (enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT) {
-                url = Utility.getCustomProductImagesUrl(enquiryDetails?.productID, image)
-            } else {
-                url = Utility.getProductsImagesUrl(enquiryDetails?.productID, image)
-            }
+        //brand name of product & product Image
+        if(enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
+            url = Utility.getCustomProductImagesUrl(enquiryDetails?.productID, image)
+            isCustom = true
+        }else{
+            url = Utility.getProductsImagesUrl(enquiryDetails?.productID, image)
+            isCustom = false
+        }
+        mBinding?.productImage?.let { ImageSetter.setImage(requireActivity(),
+            url!!, it,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder) }
 
-            try {
-                mBinding?.productImage?.let {
-                    ImageSetter.setImage( requireContext(),url!!, it, R.drawable.artisan_logo_placeholder, R.drawable.artisan_logo_placeholder,  R.drawable.artisan_logo_placeholder)
-                }
-            } catch (e: Exception) {
+        //ProductAvailability
+        when(enquiryDetails?.productStatusID){
+            2L -> {
+                status = context?.getString(R.string.in_stock)
+                mBinding?.productAvailability?.text = status
+                context?.let {
+                    ContextCompat.getColor(
+                        it, R.color.dark_green)
+                }?.let { mBinding?.productAvailability?.setTextColor(it) }
             }
-
-            //ProductAvailability
-            //todo visiblities to be handled here
-            when (enquiryDetails?.productStatusID) {
-                2L -> {
-                    status = context?.getString(R.string.in_stock)
-                    mBinding?.productAvailability?.text = status
-                    context?.let {
-                        ContextCompat.getColor(
-                            it, R.color.dark_green
-                        )
-                    }?.let { mBinding?.productAvailability?.setTextColor(it) }
-                }
-                1L -> {
-                    status = context?.getString(R.string.made_to_order)
-                    mBinding?.productAvailability?.text = status
-                    context?.let {
-                        ContextCompat.getColor(
-                            it, R.color.dark_magenta
-                        )
-                    }?.let { mBinding?.productAvailability?.setTextColor(it) }
-                }
-                else -> {
-                    status = "Custom Design by you"
-                    mBinding?.productAvailability?.text = status
-                    context?.let {
-                        ContextCompat.getColor(
-                            it, R.color.dark_magenta
-                        )
-                    }?.let { mBinding?.productAvailability?.setTextColor(it) }
-                }
+            1L -> {
+                status = context?.getString(R.string.made_to_order)
+                mBinding?.productAvailability?.text = status
+                context?.let {
+                    ContextCompat.getColor(
+                        it, R.color.dark_magenta)
+                }?.let { mBinding?.productAvailability?.setTextColor(it) }
             }
+            else -> {
+                status = "Custom Design by you"
+                mBinding?.productAvailability?.text = status
+                context?.let {
+                    ContextCompat.getColor(
+                        it, R.color.dark_magenta)
+                }?.let { mBinding?.productAvailability?.setTextColor(it) }
+            }
+        }
 
-            //Product name or Product cloth details
-            if (enquiryDetails?.productName != "") {
-                mBinding?.productName?.text = enquiryDetails?.productName
-                mBinding?.productNameDetails?.text = enquiryDetails?.productName
-            } else {
+        //Product name or Product cloth details
+        if(enquiryDetails?.productName != "") {
+            mBinding?.productName?.text = enquiryDetails?.productName
+            mBinding?.productNameDetails?.text = enquiryDetails?.productName
+        }else{
                 //TODO : set text as prod cat / werft / warn / extraweft
                 var weaveList = Utility?.getWeaveType()
                 var catList = Utility?.getProductCategory()
 
                 weaveList?.forEach {
-                    if (it.first == enquiryDetails?.weftYarnID) {
+                    if(it.first == enquiryDetails?.weftYarnID){
                         weft = it.second
                     }
-                    if (it.first == enquiryDetails?.warpYarnID) {
+                    if(it.first == enquiryDetails?.warpYarnID){
                         warp = it.second
                     }
-                    if (it.first == enquiryDetails?.extraWeftYarnID) {
+                    if(it.first == enquiryDetails?.extraWeftYarnID){
                         extraweft = it.second
                     }
                 }
                 catList?.forEach {
-                    if (it.first == enquiryDetails?.productCategoryID) {
+                    if(it.first == enquiryDetails?.productCategoryID){
                         prodCategory = it.second
                     }
                 }
                 var fp = SpannableString("${prodCategory} / ")
                 var sp = "${warp} X ${weft} X ${extraweft}"
-                fp.setSpan(context?.let { ContextCompat.getColor(it, R.color.black_text) }?.let {
+                fp.setSpan(context?.let { ContextCompat.getColor(it,R.color.black_text) }?.let {
                     ForegroundColorSpan(
                         it
                     )
@@ -331,85 +348,79 @@ MoqAdapter.MoqListener{
                 mBinding?.productName?.text = fp
                 mBinding?.productName?.append(sp)
 
-                mBinding?.productNameDetails?.text = "Custom Design Product"
+            mBinding?.productNameDetails?.text = "Custom Design Product"
             }
 
-            mBinding?.productAmount?.text = enquiryDetails?.totalAmount ?: "0"
+        mBinding?.productAmount?.text = enquiryDetails?.totalAmount ?: "0"
 
-            //enquiry stage with color
-            var enquiryStage: String? = ""
-            var stagList = Utility?.getEnquiryStagesData()
-            Log.e("enqDataStages", "List : $stagList")
-            stagList?.forEach {
-                if (it.first == enquiryDetails?.enquiryStageID) {
-                    enquiryStage = it.second
-                }
+
+        //enquiry stage with color
+        var enquiryStage : String ?= ""
+        var stagList = Utility?.getEnquiryStagesData()
+        Log.e("enqDataStages", "List : $stagList")
+        stagList?.forEach {
+            if(it.first == enquiryDetails?.enquiryStageID){
+                enquiryStage = it.second
             }
-            when (enquiryDetails?.enquiryStageID) {
-                1L -> {
-                    context?.let {
-                        ContextCompat.getColor(
-                            it, R.color.black_text
-                        )
-                    }?.let { mBinding?.enquiryStatusText?.setTextColor(it) }
+        }
+        when(enquiryDetails?.enquiryStageID){
+            1L -> {
+                context?.let {
+                    ContextCompat.getColor(
+                        it, R.color.black_text)
+                }?.let { mBinding?.enquiryStatusText?.setTextColor(it) }
 
-                    context?.let {
-                        ContextCompat.getColor(
-                            it, R.color.black_text
-                        )
-                    }?.let { mBinding?.enquiryStatusDot?.setBackgroundColor(it) }
-                }
 
-                2L, 3L, 4L, 5L -> {
-                    context?.let {
-                        ContextCompat.getColor(
-                            it, R.color.tab_details_selected_text
-                        )
-                    }?.let { mBinding?.enquiryStatusText?.setTextColor(it) }
-
-                    context?.let {
-                        ContextCompat.getColor(
-                            it, R.color.tab_details_selected_text
-                        )
-                    }?.let { mBinding?.enquiryStatusDot?.setBackgroundColor(it) }
-                }
-
-                6L, 7L, 8L, 9L, 10L -> {
-                    context?.let {
-                        ContextCompat.getColor(
-                            it, R.color.dark_green
-                        )
-                    }?.let { mBinding?.enquiryStatusText?.setTextColor(it) }
-
-                    context?.let {
-                        ContextCompat.getColor(
-                            it, R.color.dark_green
-                        )
-                    }?.let { mBinding?.enquiryStatusDot?.setBackgroundColor(it) }
-
-                }
+                context?.let {
+                    ContextCompat.getColor(
+                        it,R.color.black_text)
+                }?.let { mBinding?.enquiryStatusDot?.setColorFilter(it) }
             }
 
-            mBinding?.enquiryStatusText?.text = enquiryStage
+            2L,3L,4L,5L -> {
+                context?.let {
+                    ContextCompat.getColor(
+                        it, R.color.tab_details_selected_text)
+                }?.let { mBinding?.enquiryStatusText?.setTextColor(it) }
 
-            mBinding?.enquiryUpdateDate?.text =
-                "Last updated : ${enquiryDetails?.lastUpdated?.split("T")?.get(0)}"
-
-            mBinding?.artisanBrand?.text = enquiryDetails?.ProductBrandName
-
-            setProgressTimeline()
-
-            when (enquiryDetails?.enquiryStageID) {
-                3L -> {
-                    mBinding?.transactionLayout?.visibility = View.VISIBLE
-                }
-                8L -> {
-                    mBinding?.transactionLayout?.visibility = View.VISIBLE
-                }
-                else -> {
-                    mBinding?.transactionLayout?.visibility = View.GONE
-                }
+                context?.let {
+                    ContextCompat.getColor(
+                        it,R.color.tab_details_selected_text)
+                }?.let { mBinding?.enquiryStatusDot?.setColorFilter(it) }
             }
+
+                6L,7L,8L,9L,10L -> {
+                context?.let {
+                    ContextCompat.getColor(
+                        it, R.color.dark_green)
+                }?.let { mBinding?.enquiryStatusText?.setTextColor(it) }
+
+                context?.let {
+                    ContextCompat.getColor(
+                        it,R.color.dark_green)
+                }?.let { mBinding?.enquiryStatusDot?.setColorFilter(it) }
+
+            }
+        }
+        mBinding?.enquiryStatusText?.text = enquiryStage
+
+        mBinding?.enquiryUpdateDate?.text = "Last updated : ${enquiryDetails?.lastUpdated?.split("T")?.get(0)}"
+
+        mBinding?.artisanBrand?.text = enquiryDetails?.ProductBrandName
+
+        setProgressTimeline()
+
+        when(enquiryDetails?.enquiryStageID){
+            3L -> {
+                mBinding?.transactionLayout?.visibility = View.VISIBLE
+            }
+            8L -> {
+                mBinding?.transactionLayout?.visibility = View.VISIBLE
+            }
+            else ->{
+                mBinding?.transactionLayout?.visibility = View.GONE
+            }
+        }
 
             when (enquiryDetails?.productType) {
                 "Product" -> {
@@ -662,11 +673,9 @@ MoqAdapter.MoqListener{
         mBinding?.swipeEnquiryDetails?.isRefreshing = false
     }
 
-
-
     override fun onResume() {
         super.onResume()
-        enqID?.let { mEnqVM?.getSingleEnqMutableData(it) }
+        enqID?.let { mEnqVM?.getSingleOnEnqData(it) }
         setDetails()
     }
 
@@ -674,7 +683,7 @@ MoqAdapter.MoqListener{
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("Enquiry Details", "onFailure")
-                enqID?.let { mEnqVM.getSingleEnqMutableData(it) }
+                enqID?.let { mEnqVM.getSingleOnEnqData(it) }
                 hideLoader()
             })
         } catch (e: Exception) {
@@ -686,7 +695,7 @@ MoqAdapter.MoqListener{
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("Enquiry Details", "onSuccess")
-                enqID?.let { mEnqVM.getSingleEnqMutableData(it) }
+                enqID?.let { mEnqVM.getSingleOnEnqData(it) }
                 hideLoader()
                 setDetails()
             })
@@ -711,7 +720,7 @@ MoqAdapter.MoqListener{
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("Enquiry Details", "onSendCustomMoqSuccess: $moqId")
                 if(Utility.checkIfInternetConnected(requireActivity())){
-                    enqID?.let { mEnqVM.getSingleEnquiry(it) }
+                    enqID?.let { mEnqVM.getSingleOngoingEnquiry(it) }
                     viewLoader()
                     mEnqVM.getMoqs(enqID!!)
                 }else{
@@ -779,7 +788,7 @@ MoqAdapter.MoqListener{
 
     override fun viewArtisanProfile(id: Long) {
         activity?.supportFragmentManager?.beginTransaction()
-            ?.replace(R.id.enquiry_details_container,ArtEnqDetailsFragment.newInstance("",id))
+            ?.replace(R.id.enquiry_details_container,ArtEnqDetailsFragment.newInstance("","",id))
             ?.addToBackStack(null)
             ?.commit()
     }

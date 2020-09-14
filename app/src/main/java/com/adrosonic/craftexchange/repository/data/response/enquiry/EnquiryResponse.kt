@@ -1,15 +1,15 @@
 package com.adrosonic.craftexchange.repository.data.response.enquiry
 
 
-data class OnGoingEnqResponse (
-    val data: List<OnGoingEnqData>,
+data class EnquiryResponse (
+    val data: List<EnquiryData>,
     val valid: Boolean,
     val errorMessage: String,
     val errorCode: Long
 )
 
-data class OnGoingEnqData (
-    val openEnquiriesResponse: OpenEnquiriesResponse,
+data class EnquiryData (
+    val openEnquiriesResponse: EnquiriesResponse,
     val userId: Long?=0,
     val clusterName: String?="",
     val isBlue: Long?=0,
@@ -19,7 +19,7 @@ data class OnGoingEnqData (
     val productCategories: List<ProductCategory>
 )
 
-data class OpenEnquiriesResponse (
+data class EnquiriesResponse (
     val profilePic: String?="",
     val productCategoryId: Long?=0,
     val warpYarnId: Long?=0,

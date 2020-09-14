@@ -259,7 +259,9 @@ class Utility {
                 val intent = Intent(context?.enquiryDetails())
                 var bundle = Bundle()
                 Prefs.putString(ConstantsDirectory.ENQUIRY_ID, enquiryId) //TODO change later
+//                Prefs.putLong(ConstantsDirectory.ENQUIRY_STATUS_FLAG,2L)
                 bundle.putString(ConstantsDirectory.ENQUIRY_ID, enquiryId)
+                bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG,"2")
 //                bundle.putString(ConstantsDirectory.ENQUIRY_CODE,enquiry?.enquiryCode)
                 intent.putExtras(bundle)
                 context?.startActivity(intent)
@@ -287,7 +289,10 @@ class Utility {
                 val intent = Intent(context?.enquiryDetails())
                 var bundle = Bundle()
                 Prefs.putString(ConstantsDirectory.ENQUIRY_ID, enquiryId) //TODO change later
+//                Prefs.putLong(ConstantsDirectory.ENQUIRY_STATUS_FLAG,2L)
                 bundle.putString(ConstantsDirectory.ENQUIRY_ID, enquiryId)
+                bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG,"2")
+
 //                bundle.putString(ConstantsDirectory.ENQUIRY_CODE,enquiry?.enquiryCode)
                 intent.putExtras(bundle)
                 context?.startActivity(intent)

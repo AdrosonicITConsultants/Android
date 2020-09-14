@@ -3,6 +3,7 @@ package com.adrosonic.craftexchange.ui.modules.artisan.enquiry
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.CompletedEnquiryFragment
 
 class ArtisanEnqVPAdapter(fragmentManager: FragmentManager): FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
@@ -13,7 +14,7 @@ class ArtisanEnqVPAdapter(fragmentManager: FragmentManager): FragmentPagerAdapte
                 ArtisanOnGoingEnquiryFragment()
             }
             else -> {
-                ArtisanOnGoingEnquiryFragment()
+                CompletedEnquiryFragment()
             }
         }
     }

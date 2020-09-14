@@ -4,6 +4,7 @@ import com.adrosonic.craftexchange.repository.data.response.artisan.productTempl
 import com.adrosonic.craftexchange.repository.data.response.buyer.ownDesign.AddOwnDesignResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.ownDesign.DeleteOwnProductRespons
 import com.adrosonic.craftexchange.repository.data.response.buyer.ownDesign.GetAllOwnDesignResponse
+import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryProductResponse
 import okhttp3.MultipartBody
 import okhttp3.Response
 import okhttp3.ResponseBody
@@ -37,6 +38,13 @@ interface BuyerOwnDesignDao {
     fun getAllOwnDesignProducts(
         @Header("Authorization") token: String
     ): Call<GetAllOwnDesignResponse>
+
+    @Headers("Accept: application/json")
+    @GET("/buyerCustomProduct/getProduct/{productId}")
+    fun getSingleOwnDesignProduct(
+        @Header("Authorization") token: String,
+        @Path("productId") productId : Long
+    ): Call<EnquiryProductResponse>
 
     @Headers("Accept: application/json")
     @GET("/CustomProduct/{productId}/{imagename}")

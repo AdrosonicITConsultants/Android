@@ -2,8 +2,8 @@ package com.adrosonic.craftexchange.database.predicates
 
 import android.util.Log
 import com.adrosonic.craftexchange.database.CXRealmManager
-import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
-import com.adrosonic.craftexchange.database.entities.realmEntities.PaymentAccount
+import com.adrosonic.craftexchange.database.entities.ArtisanProductCategory
+import com.adrosonic.craftexchange.database.entities.realmEntities.*
 import com.adrosonic.craftexchange.repository.data.editProfile.EditProfileResponse
 import com.adrosonic.craftexchange.repository.data.response.artisan.login.ArtisanResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.login.BuyerResponse
@@ -490,6 +490,38 @@ class UserPredicates{
 //                realm.close()
             }
             return payment
+        }
+
+        fun deleteData(){
+            val realm = CXRealmManager.getRealmInstance()
+            realm?.executeTransaction {
+                try {
+                    realm?.where(ArtisanProductCategory::class.java).findAll().deleteAllFromRealm()
+                    realm?.where(ArtisanProducts::class.java).findAll().deleteAllFromRealm()
+                    realm?.where(BrandList::class.java).findAll().deleteAllFromRealm()
+                    realm?.where(BuyerCustomProduct::class.java).findAll().deleteAllFromRealm()
+                    realm?.where(CategoryProducts::class.java).findAll().deleteAllFromRealm()
+                    realm?.where(ClusterList::class.java).findAll().deleteAllFromRealm()
+                    realm?.where(CompletedEnquiries::class.java).findAll().deleteAllFromRealm()
+                    realm?.where(CraftUser::class.java).findAll().deleteAllFromRealm()
+                    realm?.where(Enquiries::class.java).findAll().deleteAllFromRealm()
+                    realm?.where(EnquiryPaymentDetails::class.java).findAll().deleteAllFromRealm()
+                    realm?.where(Notifications::class.java).findAll().deleteAllFromRealm()
+                    realm?.where(OngoingEnquiries::class.java).findAll().deleteAllFromRealm()
+                    realm?.where(PaymentAccount::class.java).findAll().deleteAllFromRealm()
+                    realm?.where(ProductCares::class.java).findAll().deleteAllFromRealm()
+                    realm?.where(ProductCatalogue::class.java).findAll().deleteAllFromRealm()
+                    realm?.where(ProductDimens::class.java).findAll().deleteAllFromRealm()
+                    realm?.where(ProductImages::class.java).findAll().deleteAllFromRealm()
+                    realm?.where(RelatedProducts::class.java).findAll().deleteAllFromRealm()
+                    realm?.where(UserAddress::class.java).findAll().deleteAllFromRealm()
+                    realm?.where(WeaveTypes::class.java).findAll().deleteAllFromRealm()
+                    realm?.where(Moqs::class.java).findAll().deleteAllFromRealm()
+
+                }catch (e:Exception){
+                    Log.e("DeleteData","${e.printStackTrace()}")
+                }
+            }
         }
 
         fun insertAllCountries(){

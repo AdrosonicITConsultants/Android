@@ -72,6 +72,8 @@ class ArtisanOnGoingRecyclerAdapter(var context: Context?, private var enquiries
             var bundle = Bundle()
             Prefs.putString(ConstantsDirectory.ENQUIRY_ID, enquiry?.enquiryID?.toString()) //TODO change later
             bundle.putString(ConstantsDirectory.ENQUIRY_ID, enquiry?.enquiryID?.toString())
+            bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG, enquiry?.enquiryStatusID?.toString())
+
 //            bundle.putString(ConstantsDirectory.ENQUIRY_CODE,enquiry?.enquiryCode)
             intent.putExtras(bundle)
             context?.startActivity(intent)
@@ -83,14 +85,15 @@ class ArtisanOnGoingRecyclerAdapter(var context: Context?, private var enquiries
         var first_image = imgArrSplit?.get(0)
 
         if(enquiry?.productType == "Custom Product"){
-            holder?.brandName?.text = "Custom Design"
+//            holder?.brandName?.text = "Custom Design"
             url = Utility.getCustomProductImagesUrl(enquiry?.productID, first_image)
         }else{
-            holder?.brandName?.text = ""
+//            holder?.brandName?.text = ""
             url = Utility.getProductsImagesUrl(enquiry?.productID, first_image)
         }
         context?.let { ImageSetter.setImage(it, url!!,holder?.productImage) }
 
+        holder?.brandName?.text = enquiry?.ProductBrandName
 
         holder?.enquiryCode?.text = enquiry?.enquiryCode
 
@@ -213,11 +216,16 @@ class ArtisanOnGoingRecyclerAdapter(var context: Context?, private var enquiries
         }
         holder?.enquiryStageStatus.text = enquiryStage
 
-        if(enquiry?.isMoqSend == 1L){
-            holder.reqDoc?.visibility = View.GONE
-        }else{
+        if(enquiry?.isMoqSend == null && enquiry?.enquiryStageID == 1L){
             holder.reqDoc?.visibility = View.VISIBLE
             holder.reqDoc?.text = "Requesting MOQ"
+        }else if(enquiry?.isPiSend == null && enquiry?.enquiryStageID == 2L){
+            holder.reqDoc?.visibility = View.VISIBLE
+            holder.reqDoc?.text = "Awaiting PI"
+
+        }else{
+            holder.reqDoc?.visibility = View.GONE
+
         }
 
 //        if(enquiry?.isPiSend == 1L && enquiry?.enquiryStageID == 2L){

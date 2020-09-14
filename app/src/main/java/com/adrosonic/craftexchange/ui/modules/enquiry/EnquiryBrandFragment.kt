@@ -10,7 +10,6 @@ import androidx.fragment.app.viewModels
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
 import com.adrosonic.craftexchange.databinding.FragmentEnquiryBrandBinding
-import com.adrosonic.craftexchange.databinding.FragmentEnquiryGeneralBinding
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
 import com.pixplicity.easyprefs.library.Prefs
@@ -25,7 +24,9 @@ class EnquiryBrandFragment : Fragment() {
 
     var mBinding : FragmentEnquiryBrandBinding?= null
 
-    var enqDetails : OngoingEnquiries?= null
+    //    var enqDetails : OngoingEnquiries?= null
+    var enqID : Long?= 0
+    var enqStatus : Long?= 0
 
     val mEnqVM : EnquiryViewModel by viewModels()
 
@@ -43,29 +44,50 @@ class EnquiryBrandFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_enquiry_brand, container, false)
+        arguments?.let {
+            enqID = it.getLong(ARG_PARAM1)
+            enqStatus = it.getLong(ARG_PARAM2)
+        }
         return mBinding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        enqDetails = mEnqVM.getSingleEnqMutableData(Prefs.getString(ConstantsDirectory.ENQUIRY_ID,"").toLong()).value
+        when(enqStatus){
+            //completed
+            1L -> {
+                var enqDetails = mEnqVM.getSingleCompEnqData(Prefs.getString(ConstantsDirectory.ENQUIRY_ID,"").toLong()).value
 
-        mBinding?.gst?.text = enqDetails?.gst ?: " - "
+                mBinding?.gst?.text = enqDetails?.gst ?: " - "
 
-        mBinding?.name?.text = enqDetails?.pocFirstName ?: " - "
-        mBinding?.mobile?.text = enqDetails?.pocContact ?: " - "
-        mBinding?.email?.text = enqDetails?.pocEmail ?: " - "
+                mBinding?.name?.text = enqDetails?.pocFirstName ?: " - "
+                mBinding?.mobile?.text = enqDetails?.pocContact ?: " - "
+                mBinding?.email?.text = enqDetails?.pocEmail ?: " - "
+            }
+            //ongoing
+            2L -> {
+                var enqDetails = mEnqVM.getSingleOnEnqData(Prefs.getString(ConstantsDirectory.ENQUIRY_ID,"").toLong()).value
+
+                mBinding?.gst?.text = enqDetails?.gst ?: " - "
+
+                mBinding?.name?.text = enqDetails?.pocFirstName ?: " - "
+                mBinding?.mobile?.text = enqDetails?.pocContact ?: " - "
+                mBinding?.email?.text = enqDetails?.pocEmail ?: " - "
+            }
+        }
+
 
 
     }
 
     companion object {
-
-        fun newInstance(param1: String) =
+        @JvmStatic
+        fun newInstance(param1: Long,param2: Long) =
             EnquiryBrandFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
+                    putLong(ARG_PARAM1, param1)
+                    putLong(ARG_PARAM2, param2)
                 }
             }
     }

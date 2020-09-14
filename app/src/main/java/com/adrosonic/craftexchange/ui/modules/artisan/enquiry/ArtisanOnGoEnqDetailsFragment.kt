@@ -26,6 +26,7 @@ import com.adrosonic.craftexchange.repository.data.response.moq.Datum
 import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimesResponse
 import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.addProductIntent
 import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
+import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.UserConfig
@@ -40,7 +41,7 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 class ArtisanOnGoEnqDetailsFragment : Fragment(),
-    EnquiryViewModel.FetchOngoingEnqInterface,
+    EnquiryViewModel.FetchEnquiryInterface,
     EnquiryViewModel.MoqInterface{
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -65,6 +66,8 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
     var warp : String ?= ""
     var extraweft : String ?= ""
     var prodCategory : String ?= ""
+    private var isCustom : Boolean ?= false
+
 
     var moqDeliveryJson=""
     var moqDeliveryTimeList=ArrayList<Datum>()
@@ -97,25 +100,24 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         val moqDeliveryTime = gson.fromJson(moqDeliveryJson, MoqDeliveryTimesResponse::class.java)
         moqDeliveryTimeList.addAll(moqDeliveryTime.data)
         mEnqVM?.moqListener=this
-        mEnqVM.fetchEnqListener = this
+        mEnqVM?.fetchEnqListener = this
         mBinding?.swipeEnquiryDetails?.isEnabled = false
         if(Utility.checkIfInternetConnected(requireActivity())){
             viewLoader()
-            enqID?.let { mEnqVM.getSingleEnquiry(it) }
+            enqID?.let { mEnqVM.getSingleOngoingEnquiry(it) }
             val moqId=MoqsPredicates.getSingleMoq(enqID)?.moqId?:0
             Log.e("getSingleMoq","moqId: $moqId")
             if(moqId<=0){
                 viewLoader()
                 mEnqVM.getSingleMoq(enqID!!)
             }
-
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
-            setDetails()
+//            setDetails()
         }
 
         enqID?.let {
-            mEnqVM.getSingleEnqMutableData(it)
+            mEnqVM.getSingleOnEnqData(it)
                 .observe(viewLifecycleOwner, Observer<OngoingEnquiries> {
                     enquiryDetails = it
                 })
@@ -129,19 +131,34 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
             if (savedInstanceState == null) {
                 activity?.supportFragmentManager?.beginTransaction()
                     ?.replace(R.id.enquiry_details_container,
-                     BuyEnqDetailsFragment.newInstance(enquiryDetails?.enquiryID.toString()))
+                        BuyEnqDetailsFragment.newInstance(enquiryDetails?.enquiryID.toString(),enquiryDetails?.enquiryStatusID.toString()))
                     ?.addToBackStack(null)
                     ?.commit()
             }
         }
 
         mBinding?.productDetailsLayer?.setOnClickListener {
-            if(enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
-//                CustomProd()
-                Utility?.displayMessage("View Custom Product Screen by buyer not implemented",requireActivity())
-            }else{
-                ArtisanProduct()
+//            if(enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
+////                CustomProd()
+//                Utility?.displayMessage("View Custom Product Screen by buyer not implemented",requireActivity())
+//            }else{
+//                ArtisanProduct()
+//            }
+            if (savedInstanceState == null) {
+                isCustom?.let { it1 ->
+                    ViewProductDetailsFragment.newInstance(enquiryDetails?.productID!!.toLong(),
+                        it1
+                    )
+                }?.let { it2 ->
+                    activity?.supportFragmentManager?.beginTransaction()
+                        ?.replace(R.id.enquiry_details_container,
+                            it2
+                        )
+                        ?.addToBackStack(null)
+                        ?.commit()
+                }
             }
+
         }
 
         mBinding?.moqDetailsLayer?.setOnClickListener {
@@ -201,6 +218,10 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         context?.startActivity(context?.addProductIntent(enquiryDetails?.productID?:0))
     }
 
+//    fun BuyerCustomProduct(){
+//        context?.start
+//    }
+
     fun setDetails(){
         setTabVisibilities()
         mBinding?.enquiryCode?.text = enquiryDetails?.enquiryCode
@@ -210,8 +231,10 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         //brand name of product & product Image
         if(enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
             url = Utility.getCustomProductImagesUrl(enquiryDetails?.productID, image)
+            isCustom = true
         }else{
             url = Utility.getProductsImagesUrl(enquiryDetails?.productID, image)
+            isCustom = false
         }
         mBinding?.productImage?.let { ImageSetter.setImage(requireActivity(),
             url!!, it,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder) }
@@ -305,7 +328,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
                 context?.let {
                     ContextCompat.getColor(
                         it,R.color.black_text)
-                }?.let { mBinding?.enquiryStatusDot?.setBackgroundColor(it) }
+                }?.let { mBinding?.enquiryStatusDot?.setColorFilter(it) }
             }
 
             2L,3L,4L,5L -> {
@@ -317,7 +340,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
                 context?.let {
                     ContextCompat.getColor(
                         it,R.color.tab_details_selected_text)
-                }?.let { mBinding?.enquiryStatusDot?.setBackgroundColor(it) }
+                }?.let { mBinding?.enquiryStatusDot?.setColorFilter(it) }
             }
 
             6L,7L,8L,9L,10L -> {
@@ -329,7 +352,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
                 context?.let {
                     ContextCompat.getColor(
                         it,R.color.dark_green)
-                }?.let { mBinding?.enquiryStatusDot?.setBackgroundColor(it) }
+                }?.let { mBinding?.enquiryStatusDot?.setColorFilter(it) }
 
             }
         }
@@ -476,6 +499,12 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
     }
 
     private fun setTabVisibilities(){
+//        if(enquiryDetails?.isMoqSend == 1L){
+//            mBinding?.moqDetailsLayer?.visibility = View.VISIBLE
+//        }else{
+//            mBinding?.moqDetailsLayer?.visibility = View.GONE
+//        }
+
         if(enquiryDetails?.isPiSend == 1L){
             mBinding?.piDetailsLayer?.visibility = View.VISIBLE
         }else{
@@ -485,7 +514,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
 
     override fun onResume() {
         super.onResume()
-        enqID?.let { mEnqVM?.getSingleEnqMutableData(it) }
+        enqID?.let { mEnqVM?.getSingleOnEnqData(it) }
         setDetails()
     }
 
@@ -493,7 +522,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("Enquiry Details", "onFailure")
-                enqID?.let { mEnqVM.getSingleEnqMutableData(it) }
+                enqID?.let { mEnqVM.getSingleOnEnqData(it) }
                 hideLoader()
             })
         } catch (e: Exception) {
@@ -505,7 +534,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("Enquiry Details", "onSuccess")
-                enqID?.let { mEnqVM.getSingleEnqMutableData(it) }
+                enqID?.let { mEnqVM.getSingleOnEnqData(it) }
                 hideLoader()
                 setDetails()
             })

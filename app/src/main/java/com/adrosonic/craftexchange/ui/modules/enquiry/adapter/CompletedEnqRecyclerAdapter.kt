@@ -1,4 +1,4 @@
-package com.adrosonic.craftexchange.ui.modules.buyer.enquiry.adapter
+package com.adrosonic.craftexchange.ui.modules.enquiry.adapter
 
 import android.content.Context
 import android.content.Intent
@@ -16,6 +16,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
+import com.adrosonic.craftexchange.database.entities.realmEntities.CompletedEnquiries
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
 import com.adrosonic.craftexchange.ui.modules.enquiry.enquiryDetails
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
@@ -24,7 +25,7 @@ import com.adrosonic.craftexchange.utils.Utility
 import com.pixplicity.easyprefs.library.Prefs
 import io.realm.RealmResults
 
-class BuyerOnGoingRecyclerAdapter(var context: Context?, private var enquiries: RealmResults<OngoingEnquiries>) : RecyclerView.Adapter<BuyerOnGoingRecyclerAdapter.MyViewHolder>() {
+class CompletedEnqRecyclerAdapter(var context: Context?, private var enquiries: RealmResults<CompletedEnquiries>) : RecyclerView.Adapter<CompletedEnqRecyclerAdapter.MyViewHolder>() {
 
 
     inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -33,11 +34,12 @@ class BuyerOnGoingRecyclerAdapter(var context: Context?, private var enquiries: 
         var productName: TextView = view.findViewById(R.id.product_name)
         var brandName: TextView = view.findViewById(R.id.brand_name)
         var productStatus: TextView = view.findViewById(R.id.product_status_text)
-        var productAmount : TextView = view.findViewById(R.id.product_amount)
+//        var productAmount : TextView = view.findViewById(R.id.product_amount)
         var dateText: TextView = view.findViewById(R.id.date_text)
         var enquiryStage : TextView = view.findViewById(R.id.enquiry_status_text)
-        var enquiryStageDot: ImageView = view.findViewById(R.id.enquiry_status_dot)
-        var layout : ConstraintLayout = view.findViewById(R.id.enquiry_container_layout)
+//        var enquiryStageDot: ImageView = view.findViewById(R.id.enquiry_status_dot)
+        var enquiryColor : ImageView = view.findViewById(R.id.enq_stage_color)
+        var layout : ConstraintLayout = view.findViewById(R.id.enquiry_cont_comp_layout)
     }
 
     var date : String?=""
@@ -51,7 +53,7 @@ class BuyerOnGoingRecyclerAdapter(var context: Context?, private var enquiries: 
         return enquiries?.size?:0
     }
 
-    fun updateProductList(newList: RealmResults<OngoingEnquiries>?){
+    fun updateProductList(newList: RealmResults<CompletedEnquiries>?){
         if (newList != null) {
             this.enquiries=newList
         }
@@ -59,7 +61,7 @@ class BuyerOnGoingRecyclerAdapter(var context: Context?, private var enquiries: 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_buyer_enquiry_list, parent, false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_closed_enquiry_list, parent, false)
         return MyViewHolder(itemView)
     }
 
@@ -118,7 +120,7 @@ class BuyerOnGoingRecyclerAdapter(var context: Context?, private var enquiries: 
             }
             var fp = SpannableString("${prodCategory} / ")
             var sp = "${warp} X ${weft} X ${extraweft}"
-            fp.setSpan(context?.let { ContextCompat.getColor(it,R.color.black_text) }?.let {
+            fp.setSpan(context?.let { ContextCompat.getColor(it, R.color.black_text) }?.let {
                 ForegroundColorSpan(
                     it
                 )
@@ -126,9 +128,6 @@ class BuyerOnGoingRecyclerAdapter(var context: Context?, private var enquiries: 
             holder?.productName?.text = fp
             holder?.productName?.append(sp)
         }
-
-
-
 
         var status : String ?= ""
         when(enquiry?.productStatusID){
@@ -158,10 +157,6 @@ class BuyerOnGoingRecyclerAdapter(var context: Context?, private var enquiries: 
             }
         }
 
-        holder?.productAmount.text = enquiry?.totalAmount ?: "₹ 0"
-//        holder?.binding?.productAmount?.text = "RS250000000"
-
-
         if(enquiry?.lastUpdated != ""){
             date = enquiry?.lastUpdated?.split("T")?.get(0)
             holder.dateText.text = "Updated on : $date"
@@ -170,54 +165,30 @@ class BuyerOnGoingRecyclerAdapter(var context: Context?, private var enquiries: 
             holder.dateText.text = "Created on : $date"
         }
 
-        var enquiryStage : String ?= ""
-        var stageList = Utility.getEnquiryStagesData()
-        Log.e("enqdata", "List : $stageList")
-        stageList.forEach {
-            if(it.first == enquiry?.enquiryStageID){
-                enquiryStage = it.second
-            }
+        if(enquiry?.enquiryStageID == 10L){
+            context?.let {
+                ContextCompat.getColor(
+                    it, R.color.black_text)
+            }?.let { holder.enquiryColor.setBackgroundColor(it) }
+
+            context?.let {
+                ContextCompat.getColor(
+                    it, R.color.black_text)
+            }?.let { holder.enquiryStage.setTextColor(it) }
+            holder?.enquiryStage.text = "Order Completed"
+        }else{
+            context?.let {
+                ContextCompat.getColor(
+                        it, R.color.red_logo)
+                }?.let { holder.enquiryColor.setBackgroundColor(it) }
+
+                context?.let {
+                    ContextCompat.getColor(
+                        it, R.color.red_logo)
+                }?.let { holder.enquiryStage.setTextColor(it) }
+            holder?.enquiryStage.text = "Enquiry Closed"
         }
 
-        when(enquiry?.enquiryStageID){
-            1L -> {
-                context?.let {
-                    ContextCompat.getColor(
-                        it, R.color.black_text)
-                }?.let { holder.enquiryStage.setTextColor(it) }
-
-                context?.let {
-                    ContextCompat.getColor(
-                        it,R.color.black_text)
-                }?.let { holder.enquiryStageDot.setColorFilter(it) }
-            }
-
-                2L,3L,4L,5L -> {
-                context?.let {
-                    ContextCompat.getColor(
-                        it, R.color.tab_details_selected_text)
-                }?.let { holder.enquiryStage.setTextColor(it) }
-
-                context?.let {
-                    ContextCompat.getColor(
-                        it,R.color.tab_details_selected_text)
-                }?.let { holder.enquiryStageDot.setColorFilter(it) }
-            }
-
-            6L,7L,8L,9L,10L -> {
-                context?.let {
-                    ContextCompat.getColor(
-                        it, R.color.dark_green)
-                }?.let { holder.enquiryStage.setTextColor(it) }
-
-                context?.let {
-                    ContextCompat.getColor(
-                        it,R.color.dark_green)
-                }?.let { holder.enquiryStageDot.setColorFilter(it) }
-
-            }
-        }
-        holder?.enquiryStage.text = enquiryStage
     }
 
 }

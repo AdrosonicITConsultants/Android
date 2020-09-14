@@ -10,10 +10,7 @@ import androidx.fragment.app.viewModels
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.EnquiryPaymentDetails
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
-import com.adrosonic.craftexchange.database.entities.realmEntities.PaymentAccount
 import com.adrosonic.craftexchange.database.predicates.EnquiryPredicates
-import com.adrosonic.craftexchange.database.predicates.UserPredicates
-import com.adrosonic.craftexchange.databinding.FragmentEnquiryBankBinding
 import com.adrosonic.craftexchange.databinding.FragmentEnquiryDigPayBinding
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
@@ -23,23 +20,20 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 class EnquiryDigPayFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
 
     var mBinding : FragmentEnquiryDigPayBinding?= null
 
-    var enqDetails : OngoingEnquiries?= null
+    //    var enqDetails : OngoingEnquiries?= null
+    var enqID : Long?= 0
+    var enqStatus : Long?= 0
+
+    var userID : Long ?= 0
+
 
     val mEnqVM : EnquiryViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,17 +41,33 @@ class EnquiryDigPayFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_enquiry_dig_pay, container, false)
+        arguments?.let {
+            enqID = it.getLong(ARG_PARAM1)
+            enqStatus = it.getLong(ARG_PARAM2)
+        }
         return mBinding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        enqDetails = mEnqVM.getSingleEnqMutableData(Prefs.getString(ConstantsDirectory.ENQUIRY_ID,"").toLong()).value
+        when(enqStatus){
+            //completed
+            1L -> {
+                var enqDetails = mEnqVM.getSingleCompEnqData(Prefs.getString(ConstantsDirectory.ENQUIRY_ID,"").toLong()).value
+                userID = enqDetails?.userId
+            }
+            //ongoing
+            2L -> {
+                var enqDetails = mEnqVM.getSingleOnEnqData(Prefs.getString(ConstantsDirectory.ENQUIRY_ID,"").toLong()).value
+                userID = enqDetails?.userId
+            }
+        }
 
-        var gpay : EnquiryPaymentDetails?= EnquiryPredicates.getEnqPaymentDetails(enqDetails?.userId.toString(),2)
-        var phonepe : EnquiryPaymentDetails?= EnquiryPredicates.getEnqPaymentDetails(enqDetails?.userId.toString(),3)
-        var paytm : EnquiryPaymentDetails?= EnquiryPredicates.getEnqPaymentDetails(enqDetails?.userId.toString(),4)
+
+        var gpay : EnquiryPaymentDetails?= EnquiryPredicates.getEnqPaymentDetails(userID.toString(),2)
+        var phonepe : EnquiryPaymentDetails?= EnquiryPredicates.getEnqPaymentDetails(userID.toString(),3)
+        var paytm : EnquiryPaymentDetails?= EnquiryPredicates.getEnqPaymentDetails(userID.toString(),4)
 
         mBinding?.gpay?.text = gpay?.accNoUPIMobile ?: " - "
         mBinding?.phonepe?.text = phonepe?.accNoUPIMobile ?: " - "
@@ -68,11 +78,11 @@ class EnquiryDigPayFragment : Fragment() {
     companion object {
 
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(param1: Long,param2: Long) =
             EnquiryDigPayFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putLong(ARG_PARAM1, param1)
+                    putLong(ARG_PARAM2, param2)
                 }
             }
     }

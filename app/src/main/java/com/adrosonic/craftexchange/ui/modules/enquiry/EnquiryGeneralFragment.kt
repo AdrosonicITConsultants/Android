@@ -9,7 +9,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
-import com.adrosonic.craftexchange.databinding.FragmentEnquiryBankBinding
 import com.adrosonic.craftexchange.databinding.FragmentEnquiryGeneralBinding
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
@@ -25,7 +24,9 @@ class EnquiryGeneralFragment : Fragment() {
 
     var mBinding : FragmentEnquiryGeneralBinding?= null
 
-    var enqDetails : OngoingEnquiries?= null
+    //    var enqDetails : OngoingEnquiries?= null
+    var enqID : Long?= 0
+    var enqStatus : Long?= 0
 
     val mEnqVM : EnquiryViewModel by viewModels()
 
@@ -45,35 +46,63 @@ class EnquiryGeneralFragment : Fragment() {
 
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_enquiry_general, container, false)
+        arguments?.let {
+            enqID = it.getLong(ARG_PARAM1)
+            enqStatus = it.getLong(ARG_PARAM2)
+        }
         return mBinding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        enqDetails = mEnqVM.getSingleEnqMutableData(Prefs.getString(ConstantsDirectory.ENQUIRY_ID,"").toLong()).value
+        when(enqStatus){
+            //completed
+            1L -> {
+                var enqDetails = mEnqVM.getSingleCompEnqData(Prefs.getString(ConstantsDirectory.ENQUIRY_ID,"").toLong()).value
+                mBinding?.regAddr?.text = enqDetails?.line1 ?: " - "
+                if(enqDetails?.line2 != ""){
+                    mBinding?.delAddr?.text = enqDetails?.line2
+                }else{
+                    mBinding?.delAddr?.text = enqDetails?.line1
+                }
 
-        mBinding?.regAddr?.text = enqDetails?.line1 ?: " - "
-        if(enqDetails?.line2 != ""){
-            mBinding?.delAddr?.text = enqDetails?.line2
-        }else{
-            mBinding?.delAddr?.text = enqDetails?.line1
+                mBinding?.country?.text = enqDetails?.country ?: " - "
+                mBinding?.delCountry?.text = enqDetails?.country ?: " - "
+
+                mBinding?.email?.text = enqDetails?.email ?: " - "
+                mBinding?.mobile?.text = enqDetails?.mobile ?: " - "
+            }
+            //ongoing
+            2L -> {
+                var enqDetails = mEnqVM.getSingleOnEnqData(Prefs.getString(ConstantsDirectory.ENQUIRY_ID,"").toLong()).value
+                mBinding?.regAddr?.text = enqDetails?.line1 ?: " - "
+                if(enqDetails?.line2 != ""){
+                    mBinding?.delAddr?.text = enqDetails?.line2
+                }else{
+                    mBinding?.delAddr?.text = enqDetails?.line1
+                }
+
+                mBinding?.country?.text = enqDetails?.country ?: " - "
+                mBinding?.delCountry?.text = enqDetails?.country ?: " - "
+
+                mBinding?.email?.text = enqDetails?.email ?: " - "
+                mBinding?.mobile?.text = enqDetails?.mobile ?: " - "
+            }
         }
 
-        mBinding?.country?.text = enqDetails?.country ?: " - "
-        mBinding?.delCountry?.text = enqDetails?.country ?: " - "
 
-        mBinding?.email?.text = enqDetails?.email ?: " - "
-        mBinding?.mobile?.text = enqDetails?.mobile ?: " - "
 
 
     }
 
     companion object {
-        fun newInstance(param1: String) =
+        @JvmStatic
+        fun newInstance(param1: Long,param2: Long) =
             EnquiryGeneralFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
+                    putLong(ARG_PARAM1, param1)
+                    putLong(ARG_PARAM2, param2)
                 }
             }
     }

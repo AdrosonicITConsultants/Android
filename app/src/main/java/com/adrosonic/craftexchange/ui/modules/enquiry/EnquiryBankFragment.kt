@@ -10,10 +10,7 @@ import androidx.fragment.app.viewModels
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.EnquiryPaymentDetails
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
-import com.adrosonic.craftexchange.database.entities.realmEntities.PaymentAccount
 import com.adrosonic.craftexchange.database.predicates.EnquiryPredicates
-import com.adrosonic.craftexchange.database.predicates.UserPredicates
-import com.adrosonic.craftexchange.databinding.FragmentArtEnqDetailsBinding
 import com.adrosonic.craftexchange.databinding.FragmentEnquiryBankBinding
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
@@ -24,23 +21,17 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 class EnquiryBankFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
     var mBinding : FragmentEnquiryBankBinding?= null
 
-    var enqDetails : OngoingEnquiries?= null
+//    var enqDetails : OngoingEnquiries?= null
+    var enqID : Long?= 0
+    var enqStatus : Long?= 0
+    var bank : EnquiryPaymentDetails?= null
+    var userID : Long ?= 0
 
     val mEnqVM : EnquiryViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,6 +39,11 @@ class EnquiryBankFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_enquiry_bank, container, false)
+
+        arguments?.let {
+            enqID = it.getLong(ARG_PARAM1)
+            enqStatus = it.getLong(ARG_PARAM2)
+        }
         return mBinding?.root
 
     }
@@ -55,10 +51,21 @@ class EnquiryBankFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        enqDetails = mEnqVM.getSingleEnqMutableData(Prefs.getString(ConstantsDirectory.ENQUIRY_ID,"").toLong()).value
+        when(enqStatus){
+            //completed
+            1L -> {
+                var enqDetails = mEnqVM.getSingleCompEnqData(Prefs.getString(ConstantsDirectory.ENQUIRY_ID,"").toLong()).value
+                userID = enqDetails?.userId
 
-        var bank : EnquiryPaymentDetails?= EnquiryPredicates.getEnqPaymentDetails(enqDetails?.userId.toString(),1)
+            }
+            //ongoing
+            2L -> {
+                var enqDetails = mEnqVM.getSingleOnEnqData(Prefs.getString(ConstantsDirectory.ENQUIRY_ID,"").toLong()).value
+                userID = enqDetails?.userId
+            }
+        }
 
+        bank =  EnquiryPredicates.getEnqPaymentDetails(userID.toString(),1)
         mBinding?.accNo?.text = bank?.accNoUPIMobile ?: " - "
         mBinding?.bankName?.text = bank?.bankName ?: " - "
         mBinding?.benificiaryName?.text = bank?.name ?: " - "
@@ -69,11 +76,11 @@ class EnquiryBankFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(param1: String) =
+        fun newInstance(param1: Long,param2: Long) =
             EnquiryBankFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-//                    putString(ARG_PARAM2, param2)
+                    putLong(ARG_PARAM1, param1)
+                    putLong(ARG_PARAM2, param2)
                 }
             }
     }

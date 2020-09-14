@@ -23,10 +23,12 @@ import androidx.lifecycle.Observer
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
 import com.adrosonic.craftexchange.database.predicates.NotificationPredicates
+import com.adrosonic.craftexchange.database.predicates.UserPredicates
 import com.adrosonic.craftexchange.databinding.ActivityBuyerLandingBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.response.Notification.NotificationReadResponse
 import com.adrosonic.craftexchange.repository.data.response.Notification.SaveUserTokenResponse
+import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryProductResponse
 import com.adrosonic.craftexchange.ui.modules.Notification.NotifcationFragment
 import com.adrosonic.craftexchange.ui.modules.artisan.landing.ArtisanLandingActivity
 import com.adrosonic.craftexchange.ui.modules.artisan.landing.artisanLandingIntent
@@ -265,6 +267,7 @@ class BuyerLandingActivity : AppCompatActivity(),
                         .setPositiveButton("Yes"){ dialog, id ->
                             dialog.cancel()
                             mViewModel.logoutUser()
+                            UserPredicates.deleteData()
                             Utility.deleteCache(applicationContext)
                             Utility.deleteImageCache(applicationContext)
                             startActivity(roleselectIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK))

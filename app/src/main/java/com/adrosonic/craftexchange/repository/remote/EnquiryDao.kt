@@ -1,16 +1,12 @@
 package com.adrosonic.craftexchange.repository.remote
 
-import com.adrosonic.craftexchange.repository.data.model.UserAuthModel
-import com.adrosonic.craftexchange.repository.data.response.artisan.login.ArtisanResponse
-import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.uploadData.ProductUploadData
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.generateEnquiry.GenerateEnquiryResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.IfExistEnquiryResponse
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryAvaProdStageData
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryStageData
-import com.adrosonic.craftexchange.repository.data.response.enquiry.OnGoingEnqResponse
+import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryResponse
 import okhttp3.ResponseBody
 import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.http.*
 
 interface EnquiryDao {
@@ -40,16 +36,26 @@ interface EnquiryDao {
 
     @Headers("Accept: application/json")
     @GET("enquiry/getOpenEnquiries")
-    fun getAllOngoingEnquiries(@Header("Authorization") token:String) : Call<OnGoingEnqResponse>
+    fun getAllOngoingEnquiries(@Header("Authorization") token:String) : Call<EnquiryResponse>
 
     @Headers("Accept: application/json")
     @GET("enquiry/getEnquiry/{enquiryId}")
-    fun getSingleEnquiry(@Header("Authorization") token:String,
-                            @Path("enquiryId") enquiryId : Long) : Call<OnGoingEnqResponse>
+    fun getSingleOngoingEnquiry(@Header("Authorization") token:String,
+                                @Path("enquiryId") enquiryId : Long) : Call<EnquiryResponse>
 
     @Headers("Accept: application/json")
     @POST("enquiry/markEnquiryCompleted/{enquiryId}")
     fun markEnquiryCompleted(@Header("Authorization") token:String,
                             @Path("enquiryId") enquiryId : Long
     ) : Call<ResponseBody>
+
+    @Headers("Accept: application/json")
+    @GET("enquiry/getClosedEnquiries")
+    fun getAllCompletedEnquiries(@Header("Authorization") token:String) : Call<EnquiryResponse>
+
+    @Headers("Accept: application/json")
+    @GET("enquiry/getClosedEnquiry/{enquiryId}")
+    fun getSingleCompletedEnquiry(@Header("Authorization") token:String,
+                                @Path("enquiryId") enquiryId : Long) : Call<EnquiryResponse>
+
 }
