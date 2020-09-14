@@ -351,7 +351,7 @@ class CompEnqDetailsFragment : Fragment(),
         val moq=MoqsPredicates.getSingleMoq(enqID)
         if(moq!=null){
             moqId=moq?.moqId?:0
-            mBinding?.moqDetails?.visibility=View.VISIBLE
+//            mBinding?.moqDetails?.visibility=View.VISIBLE
             mBinding?.imgDownArr?.visibility=View.VISIBLE
             mBinding?.moqOrderQty?.text=moq?.moq.toString()
             mBinding?.moqOrderAmount?.text=moq?.ppu

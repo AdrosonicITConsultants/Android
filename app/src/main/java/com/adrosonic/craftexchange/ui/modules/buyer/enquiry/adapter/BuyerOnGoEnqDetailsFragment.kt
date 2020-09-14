@@ -425,7 +425,7 @@ EnquiryViewModel.FetchEnquiryInterface,
                     val moq = MoqsPredicates.getSingleMoq(enqID)
                     if (moq != null) {
 //                    if (moq.accepted!!) {
-                        mBinding?.moqDetails?.visibility = View.VISIBLE
+//                        mBinding?.moqDetails?.visibility = View.VISIBLE
                         mBinding?.moqListLayout?.visibility = View.GONE
                         mBinding?.moqOrderQty?.text = "" + moq?.moq
                         mBinding?.orderQuantity?.text = "" + moq?.moq
@@ -463,7 +463,7 @@ EnquiryViewModel.FetchEnquiryInterface,
                             if (moq.size == 1 && moq?.get(0)?.accepted == true) {
                                 //todo show product vala view
                                 var moq1 = moq?.get(0)
-                                mBinding?.moqDetails?.visibility = View.VISIBLE
+//                                mBinding?.moqDetails?.visibility = View.VISIBLE
                                 mBinding?.moqListLayout?.visibility = View.GONE
                                 mBinding?.moqOrderQty?.text = "" + moq1?.moq
                                 mBinding?.orderQuantity?.text = "" + moq1?.moq
@@ -482,6 +482,7 @@ EnquiryViewModel.FetchEnquiryInterface,
 
                             }
                             else {
+                                mBinding?.orderTime?.text = ""
                                 mBinding?.moqDetails?.visibility = View.GONE
                                 mBinding?.moqListLayout?.visibility = View.VISIBLE
                                 mBinding?.moqList?.layoutManager = LinearLayoutManager(
