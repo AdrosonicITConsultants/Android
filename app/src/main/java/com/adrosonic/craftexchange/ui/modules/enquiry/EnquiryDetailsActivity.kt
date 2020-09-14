@@ -31,33 +31,38 @@ class EnquiryDetailsActivity : AppCompatActivity() {
 
         var profile = Prefs.getString(ConstantsDirectory.PROFILE,null)
 
-        if(enqStatus == 2L){
-            when(profile){
-                ConstantsDirectory.ARTISAN -> {
-                    if (savedInstanceState == null) {
-                        enqID?.let { ArtisanOnGoEnqDetailsFragment.newInstance(it) }?.let {
-                            supportFragmentManager.beginTransaction()
-                                .replace(R.id.enquiry_details_container, it)
-                                .commitNow()
-                        }
-                    }
-                }
-                ConstantsDirectory.BUYER -> {
-                    if (savedInstanceState == null) {
-                        enqID?.let { BuyerOnGoEnqDetailsFragment.newInstance(it) }?.let {
-                            supportFragmentManager.beginTransaction()
-                                .replace(R.id.enquiry_details_container, it)
-                                .commitNow()
-                        }
+        when(enqStatus){
+            //Closed
+            1L -> {
+                if (savedInstanceState == null) {
+                    enqID?.let { CompEnqDetailsFragment.newInstance(it, enqStatus.toString()) }?.let {
+                        supportFragmentManager.beginTransaction()
+                            .replace(R.id.enquiry_details_container, it)
+                            .commitNow()
                     }
                 }
             }
-        }else{
-            if (savedInstanceState == null) {
-                enqID?.let { CompEnqDetailsFragment.newInstance(it, enqStatus.toString()) }?.let {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.enquiry_details_container, it)
-                        .commitNow()
+            //Ongoing
+            2L -> {
+                when(profile){
+                    ConstantsDirectory.ARTISAN -> {
+                        if (savedInstanceState == null) {
+                            enqID?.let { ArtisanOnGoEnqDetailsFragment.newInstance(it) }?.let {
+                                supportFragmentManager.beginTransaction()
+                                    .replace(R.id.enquiry_details_container, it)
+                                    .commitNow()
+                            }
+                        }
+                    }
+                    ConstantsDirectory.BUYER -> {
+                        if (savedInstanceState == null) {
+                            enqID?.let { BuyerOnGoEnqDetailsFragment.newInstance(it) }?.let {
+                                supportFragmentManager.beginTransaction()
+                                    .replace(R.id.enquiry_details_container, it)
+                                    .commitNow()
+                            }
+                        }
+                    }
                 }
             }
         }

@@ -59,8 +59,9 @@ class CompletedEnquiryFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mEnqVM.fetchEnqListener =this
+
         setRecyclerList()
-        setVisiblities()
+//        setVisiblities()
 
         if (!Utility.checkIfInternetConnected(requireContext())) {
             Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
@@ -85,11 +86,8 @@ class CompletedEnquiryFragment : Fragment(),
     }
 
     private fun setRecyclerList(){
-        mBinding?.completedEnqRecyclerList?.layoutManager = LinearLayoutManager(requireContext(),
-            LinearLayoutManager.VERTICAL, false)
-        mEnqListAdapter = CompletedEnqRecyclerAdapter(requireContext(),
-            mEnqVM.getCompEnqListMutableData().value!!
-        )
+        mBinding?.completedEnqRecyclerList?.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        mEnqListAdapter = CompletedEnqRecyclerAdapter(requireContext(), mEnqVM.getCompEnqListMutableData().value!!)
         mBinding?.completedEnqRecyclerList?.adapter = mEnqListAdapter
 //        mEnqListAdapter?.enqListener = this  //important to set adapter first and then call listener
     }
@@ -121,6 +119,7 @@ class CompletedEnquiryFragment : Fragment(),
                 mBinding?.swipeCompletedEnquiries?.isRefreshing = false
 //                mEnqVM.getAllCompletedEnquiries()
                 mEnqVM.getCompEnqListMutableData()
+                setVisiblities()
                 Utility.displayMessage("Error while fetching list", requireContext())
             })
         } catch (e: Exception) {
@@ -135,6 +134,8 @@ class CompletedEnquiryFragment : Fragment(),
                 mBinding?.swipeCompletedEnquiries?.isRefreshing = false
 //                mEnqVM.getAllCompletedEnquiries()
                 mEnqVM.getCompEnqListMutableData()
+//                setRecyclerList()
+                setVisiblities()
             })
         } catch (e: Exception) {
             Log.e("compEnqList", "Exception onFailure " + e.message)

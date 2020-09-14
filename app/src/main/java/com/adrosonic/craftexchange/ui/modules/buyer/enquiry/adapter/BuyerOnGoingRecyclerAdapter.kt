@@ -158,7 +158,7 @@ class BuyerOnGoingRecyclerAdapter(var context: Context?, private var enquiries: 
             }
         }
 
-        holder?.productAmount.text = enquiry?.totalAmount ?: "₹ 0"
+        holder?.productAmount.text = "₹ ${enquiry?.totalAmount ?: 0}"
 //        holder?.binding?.productAmount?.text = "RS250000000"
 
 
