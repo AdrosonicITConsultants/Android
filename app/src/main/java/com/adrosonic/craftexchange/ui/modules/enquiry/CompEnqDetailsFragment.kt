@@ -22,6 +22,7 @@ import com.adrosonic.craftexchange.database.predicates.MoqsPredicates
 import com.adrosonic.craftexchange.databinding.FragmentCompEnqDetailsBinding
 import com.adrosonic.craftexchange.repository.data.response.moq.Datum
 import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimesResponse
+import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.UserConfig
@@ -62,6 +63,8 @@ class CompEnqDetailsFragment : Fragment(),
     var warp : String ?= ""
     var extraweft : String ?= ""
     var prodCategory : String ?= ""
+    private var isCustom : Boolean ?= false
+
 
     var mBinding : FragmentCompEnqDetailsBinding?= null
     var moqDeliveryJson=""
@@ -147,6 +150,25 @@ class CompEnqDetailsFragment : Fragment(),
                 else mBinding?.moqDetails?.visibility = View.VISIBLE
             }
         }
+
+        mBinding?.productDetailsLayer?.setOnClickListener {
+            if (savedInstanceState == null) {
+                isCustom?.let { it1 ->
+                    ViewProductDetailsFragment.newInstance(enquiryDetails?.productID!!.toLong(),
+                        it1
+                    )
+                }?.let { it2 ->
+                    activity?.supportFragmentManager?.beginTransaction()
+                        ?.replace(R.id.enquiry_details_container,
+                            it2
+                        )
+                        ?.addToBackStack(null)
+                        ?.commit()
+                }
+            }
+
+        }
+
     }
 
     fun setDetails(){
@@ -170,8 +192,10 @@ class CompEnqDetailsFragment : Fragment(),
         //brand name of product & product Image
         if(enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
             url = Utility.getCustomProductImagesUrl(enquiryDetails?.productID, image)
+            isCustom = true
         }else{
             url = Utility.getProductsImagesUrl(enquiryDetails?.productID, image)
+            isCustom = false
         }
         mBinding?.productImage?.let { ImageSetter.setImage(requireActivity(),
             url!!, it,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder) }
