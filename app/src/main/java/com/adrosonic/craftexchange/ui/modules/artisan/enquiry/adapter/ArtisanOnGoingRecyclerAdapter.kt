@@ -72,7 +72,7 @@ class ArtisanOnGoingRecyclerAdapter(var context: Context?, private var enquiries
             var bundle = Bundle()
             Prefs.putString(ConstantsDirectory.ENQUIRY_ID, enquiry?.enquiryID?.toString()) //TODO change later
             bundle.putString(ConstantsDirectory.ENQUIRY_ID, enquiry?.enquiryID?.toString())
-            bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG, enquiry?.enquiryStatusID?.toString())
+            bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG, "2")
 
 //            bundle.putString(ConstantsDirectory.ENQUIRY_CODE,enquiry?.enquiryCode)
             intent.putExtras(bundle)

@@ -51,6 +51,7 @@ ViewProductsViewModel.ViewProductsInterface{
     var mCare = mutableListOf<ProductCare>()
     var prodCareAdapter : ProductCareRecyclerAdapter?= null
     var weaveSelctionList = ArrayList<Pair<Long,String>>()
+    var url : String?= ""
 
     private var productDetails : EnquiryProductDetails?= null
 
@@ -192,16 +193,24 @@ ViewProductsViewModel.ViewProductsInterface{
             for (size in imageList){
                 Log.i("Stat","$size")
                 var imagename = size?.imageName
-                var url = Utility.getProductsImagesUrl(productId,imagename)
-                imageUrlList.add(url)
+                if(isCustomProduct == true){
+//            holder?.brandName?.text = "Custom Design"
+                    url = Utility.getCustomProductImagesUrl(productDetails?.productId, imagename)
+                }else{
+//            holder?.brandName?.text = ""
+                    url = Utility.getProductsImagesUrl(productDetails?.productId, imagename)
+                }
+//                var url = Utility.getProductsImagesUrl(productId,imagename)
+                imageUrlList.add(url!!)
             }
             if(imageUrlList !=null) {
                 var imageListener = ImageListener { position, imageView ->
                     imageView.scaleType = ImageView.ScaleType.FIT_CENTER
                     ImageSetter.setImage(requireActivity(), imageUrlList[position],imageView)
                 }
-                mBinding?.carouselViewProducts?.pageCount = imageUrlList.size
                 mBinding?.carouselViewProducts?.setImageListener(imageListener)
+                mBinding?.carouselViewProducts?.pageCount = imageUrlList.size
+
                 mBinding?.carouselViewProducts?.setImageClickListener {
                     UserConfig.shared.imageUrlList= Gson().toJson(imageUrlList)
                     startActivity(requireActivity().fullScreenImageIntent())
