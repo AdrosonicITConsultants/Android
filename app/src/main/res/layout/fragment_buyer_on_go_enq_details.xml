@@ -150,6 +150,7 @@
                             app:layout_constraintStart_toStartOf="@+id/enquiry_code"
                             app:layout_constraintTop_toBottomOf="@+id/enquiry_code" />
 
+
                         <FrameLayout
                             android:id="@+id/prod_image_background"
                             android:layout_width="match_parent"

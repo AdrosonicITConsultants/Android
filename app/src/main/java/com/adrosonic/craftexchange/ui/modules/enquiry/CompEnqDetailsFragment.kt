@@ -67,6 +67,7 @@ class CompEnqDetailsFragment : Fragment(),
     var moqDeliveryJson=""
     var moqDeliveryTimeList=ArrayList<Datum>()
     var moqId=0L
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -243,7 +244,7 @@ class CompEnqDetailsFragment : Fragment(),
             mBinding?.productNameDetails?.text = "Custom Design Product"
         }
 
-        mBinding?.productAmount?.text = enquiryDetails?.totalAmount ?: "0"
+        mBinding?.productAmount?.text = "₹ ${enquiryDetails?.totalAmount ?: 0}"
 
 
         //enquiry stage with color

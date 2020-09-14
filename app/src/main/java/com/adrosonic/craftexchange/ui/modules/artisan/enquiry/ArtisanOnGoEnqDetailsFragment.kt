@@ -306,8 +306,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
             mBinding?.productNameDetails?.text = "Custom Design Product"
         }
 
-        mBinding?.productAmount?.text = enquiryDetails?.totalAmount ?: "0"
-
+        mBinding?.productAmount?.text = "₹ ${enquiryDetails?.totalAmount ?: 0}"
 
         //enquiry stage with color
         var enquiryStage : String ?= ""

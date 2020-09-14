@@ -121,7 +121,7 @@ class ArtisanOnGoingRecyclerAdapter(var context: Context?, private var enquiries
                 }
             }
             var fp = SpannableString("${prodCategory} / ")
-            var sp = "${warp} X ${weft} X ${extraweft}"
+            var sp = "${warp} X ${weft} X ${extraweft ?: "N.A"}"
             fp.setSpan(context?.let { ContextCompat.getColor(it, R.color.black_text) }?.let {
                 ForegroundColorSpan(
                     it

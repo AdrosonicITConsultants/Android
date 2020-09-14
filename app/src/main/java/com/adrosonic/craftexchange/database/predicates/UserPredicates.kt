@@ -461,7 +461,6 @@ class UserPredicates{
                                 payObj.accountDesc = pay.accountType.accountDesc
 
                                 realm.copyToRealmOrUpdate(payObj)
-
                             }
                         }
                     }
@@ -517,6 +516,7 @@ class UserPredicates{
                     realm?.where(UserAddress::class.java).findAll().deleteAllFromRealm()
                     realm?.where(WeaveTypes::class.java).findAll().deleteAllFromRealm()
                     realm?.where(Moqs::class.java).findAll().deleteAllFromRealm()
+                    realm?.where(EnquiryProductDetails::class.java).findAll().deleteAllFromRealm()
 
                 }catch (e:Exception){
                     Log.e("DeleteData","${e.printStackTrace()}")

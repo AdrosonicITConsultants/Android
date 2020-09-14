@@ -142,6 +142,7 @@
                             android:fontFamily="@font/lato_regular"
                             android:textColor="@color/black_text"
                             android:textSize="@dimen/product_note_text"
+                            android:inputType="number"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/product_availability" />

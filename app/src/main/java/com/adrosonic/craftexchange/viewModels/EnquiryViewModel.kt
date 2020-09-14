@@ -41,6 +41,7 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
         fun onFailure()
         fun onSuccess()
     }
+
     interface MoqInterface{
         fun onAddMoqFailure()
         fun onAddMoqSuccess()
