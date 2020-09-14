@@ -262,9 +262,11 @@ EnquiryViewModel.FetchEnquiryInterface,
         }
     }
 
-    private fun setDetails(){
+    fun setDetails(){
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
+                setTabVisibilities()
+                setChatIConVisibility()
                 mBinding?.enquiryCode?.text = enquiryDetails?.enquiryCode
                 mBinding?.enquiryStartDate?.text =
                     "Date started : ${enquiryDetails?.startedOn?.split("T")?.get(0)}"
@@ -690,7 +692,7 @@ EnquiryViewModel.FetchEnquiryInterface,
     override fun onResume() {
         super.onResume()
         enqID?.let { mEnqVM?.getSingleOnEnqData(it) }
-//        setDetails()
+        setDetails()
     }
 
     override fun onFailure() {
@@ -712,9 +714,6 @@ EnquiryViewModel.FetchEnquiryInterface,
                 enqID?.let { mEnqVM.getSingleOnEnqData(it) }
                 hideLoader()
                 setDetails()
-                setTabVisibilities()
-                setChatIConVisibility()
-
             })
         } catch (e: Exception) {
             Log.e("Enquiry Details", "Exception onFailure " + e.message)
