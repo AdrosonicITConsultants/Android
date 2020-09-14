@@ -138,12 +138,6 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         }
 
         mBinding?.productDetailsLayer?.setOnClickListener {
-//            if(enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
-////                CustomProd()
-//                Utility?.displayMessage("View Custom Product Screen by buyer not implemented",requireActivity())
-//            }else{
-//                ArtisanProduct()
-//            }
             if (savedInstanceState == null) {
                 isCustom?.let { it1 ->
                     ViewProductDetailsFragment.newInstance(enquiryDetails?.productID!!.toLong(),
