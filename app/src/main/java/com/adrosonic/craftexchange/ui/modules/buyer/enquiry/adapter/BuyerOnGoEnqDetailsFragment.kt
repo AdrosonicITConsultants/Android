@@ -168,8 +168,7 @@ EnquiryViewModel.FetchEnquiryInterface,
             if(enquiryDetails?.ProductBrandName != ""){
                 if (savedInstanceState == null) {
                     activity?.supportFragmentManager?.beginTransaction()
-                        ?.replace(R.id.enquiry_details_container,
-                            ArtEnqDetailsFragment.newInstance(enquiryDetails?.enquiryID.toString(),enquiryDetails?.enquiryStatusID.toString(),0))
+                        ?.replace(R.id.enquiry_details_container,ArtEnqDetailsFragment.newInstance(enquiryDetails?.enquiryID.toString(),enquiryDetails?.enquiryStatusID.toString(),0))
                         ?.addToBackStack(null)
                         ?.commit()
                 }
@@ -429,7 +428,6 @@ EnquiryViewModel.FetchEnquiryInterface,
 //                    if (moq.accepted!!) {
                         mBinding?.moqDetails?.visibility = View.VISIBLE
                         mBinding?.moqListLayout?.visibility = View.GONE
-                        mBinding?.emptyView?.visibility = View.GONE
                         mBinding?.moqOrderQty?.text = "" + moq?.moq
                         mBinding?.orderQuantity?.text = "" + moq?.moq
                         mBinding?.moqOrderAmount?.text = "₹ ${moq?.ppu}"
@@ -451,7 +449,8 @@ EnquiryViewModel.FetchEnquiryInterface,
                         //todo show simple empty view
                         mBinding?.moqDetails?.visibility = View.GONE
                         mBinding?.moqListLayout?.visibility = View.GONE
-                        mBinding?.emptyView?.visibility = View.VISIBLE
+                        mBinding?.orderTime?.visibility = View.VISIBLE
+                        mBinding?.orderTime?.text = "No MOQs received"
                     }
                 }
                 "Custom Product" -> {
@@ -459,8 +458,7 @@ EnquiryViewModel.FetchEnquiryInterface,
                     if(moq==null||moq!!.size==0){
                         mBinding?.moqDetails?.visibility = View.GONE
                         mBinding?.moqListLayout?.visibility = View.GONE
-                        mBinding?.emptyView?.visibility = View.VISIBLE
-                        mBinding?.emptyView?.text = "Awaiting MOQs"
+                        mBinding?.orderTime?.text = "Awaiting MOQs"
                     }
                     else {
                             if (moq.size == 1 && moq?.get(0)?.accepted == true) {
@@ -468,7 +466,6 @@ EnquiryViewModel.FetchEnquiryInterface,
                                 var moq1 = moq?.get(0)
                                 mBinding?.moqDetails?.visibility = View.VISIBLE
                                 mBinding?.moqListLayout?.visibility = View.GONE
-                                mBinding?.emptyView?.visibility = View.GONE
                                 mBinding?.moqOrderQty?.text = "" + moq1?.moq
                                 mBinding?.orderQuantity?.text = "" + moq1?.moq
                                 mBinding?.moqOrderAmount?.text = "₹ ${moq1?.ppu}"
@@ -621,10 +618,8 @@ EnquiryViewModel.FetchEnquiryInterface,
             if(moq==null|| moq?.size==0){
                 mBinding?.moqDetails?.visibility = View.GONE
                 mBinding?.moqListLayout?.visibility = View.GONE
-                mBinding?.emptyView?.visibility = View.VISIBLE
-                mBinding?.emptyView?.text = "Awaiting MOQs"
+                mBinding?.orderTime?.text = "Awaiting MOQs"
             }else {
-                mBinding?.emptyView?.visibility = View.GONE
                 val acceptedList = ArrayList<Boolean>()
                 moq?.forEach { acceptedList.add(it.accepted ?: false) }
                 if (!acceptedList.contains(true)) {

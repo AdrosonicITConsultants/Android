@@ -28,7 +28,6 @@ class EnquiryDetailsActivity : AppCompatActivity() {
 
         var enqID = intent?.getStringExtra(ConstantsDirectory.ENQUIRY_ID)
         var enqStatus = intent?.getStringExtra(ConstantsDirectory.ENQUIRY_STATUS_FLAG)?.toLong()
-
         var profile = Prefs.getString(ConstantsDirectory.PROFILE,null)
 
         if(enqStatus == 2L){

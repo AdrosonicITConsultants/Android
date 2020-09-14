@@ -593,6 +593,7 @@
                         android:src="@drawable/ic_right_arrow_violet"/>
 
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/product_details_layer"
                     android:layout_width="match_parent"

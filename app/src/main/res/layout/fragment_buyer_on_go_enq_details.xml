@@ -674,21 +674,6 @@
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/emptyView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/margin_regular"
-                    android:fontFamily="@font/lato_regular"
-                    android:gravity="center"
-                    android:text="No MOQ received for this enquiry"
-                    android:textSize="@dimen/product_note_text"
-                    android:visibility="gone"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/moq_details_layer" />
-
                 <LinearLayout
                     android:id="@+id/moq_details"
                     android:layout_width="match_parent"
@@ -698,7 +683,7 @@
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/emptyView">
+                    app:layout_constraintTop_toBottomOf="@+id/moq_details_layer">
 
                     <TextView
                         android:layout_width="wrap_content"
