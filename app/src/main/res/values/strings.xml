@@ -291,5 +291,7 @@
     <string name="are_you_sure">Are you sure?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="accept_moq_from_this_list">Accept MOQ from this list which suits your needs the best</string>
+    <string name="you_can_find_this_moq">You can find this MOQ in ongoing enquiry, under enquirues tab to track your enquiry</string>
 
 </resources>

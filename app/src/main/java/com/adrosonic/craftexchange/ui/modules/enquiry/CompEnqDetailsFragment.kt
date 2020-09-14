@@ -11,17 +11,23 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.CompletedEnquiries
+import com.adrosonic.craftexchange.database.predicates.MoqsPredicates
 import com.adrosonic.craftexchange.databinding.FragmentCompEnqDetailsBinding
+import com.adrosonic.craftexchange.repository.data.response.moq.Datum
+import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimesResponse
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
+import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
+import com.google.gson.GsonBuilder
 import com.pixplicity.easyprefs.library.Prefs
 
 // TODO: Rename parameter arguments, choose names that match
@@ -31,7 +37,8 @@ private const val ARG_PARAM2 = "param2"
 
 
 class CompEnqDetailsFragment : Fragment(),
-    EnquiryViewModel.FetchEnquiryInterface {
+    EnquiryViewModel.FetchEnquiryInterface,
+    EnquiryViewModel.MoqInterface{
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -57,7 +64,9 @@ class CompEnqDetailsFragment : Fragment(),
     var prodCategory : String ?= ""
 
     var mBinding : FragmentCompEnqDetailsBinding?= null
-
+    var moqDeliveryJson=""
+    var moqDeliveryTimeList=ArrayList<Datum>()
+    var moqId=0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,11 +89,21 @@ class CompEnqDetailsFragment : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        moqDeliveryJson = UserConfig.shared.moqDeliveryDates
+        val gson = GsonBuilder().create()
+        val moqDeliveryTime = gson.fromJson(moqDeliveryJson, MoqDeliveryTimesResponse::class.java)
+        moqDeliveryTimeList.addAll(moqDeliveryTime.data)
         mEnqVM.fetchEnqListener = this
         mBinding?.swipeEnquiryDetails?.isEnabled = false
         if(Utility.checkIfInternetConnected(requireActivity())){
             enqID?.let { mEnqVM.getSingleCompletedEnquiry(it) }
             viewLoader()
+            moqId= MoqsPredicates.getSingleMoq(enqID)?.moqId?:0
+            Log.e("getSingleMoq","moqId: $moqId")
+            if(moqId<=0){
+                viewLoader()
+                mEnqVM.getMoqs(enqID!!)
+            }
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
             setDetails()
@@ -115,11 +134,17 @@ class CompEnqDetailsFragment : Fragment(),
                     if (savedInstanceState == null) {
                         activity?.supportFragmentManager?.beginTransaction()
                             ?.replace(R.id.enquiry_details_container,
-                                ArtEnqDetailsFragment.newInstance(enquiryDetails?.enquiryID.toString(),enquiryDetails?.enquiryStatusID.toString()))
+                                ArtEnqDetailsFragment.newInstance(enquiryDetails?.enquiryID.toString(),enquiryDetails?.enquiryStatusID.toString(),0))
                             ?.addToBackStack(null)
                             ?.commit()
                     }
                 }
+            }
+        }
+        mBinding?.moqDetailsLayer?.setOnClickListener {
+            if(moqId>0) {
+                if (mBinding?.moqDetails?.visibility == View.VISIBLE) mBinding?.moqDetails?.visibility = View.GONE
+                else mBinding?.moqDetails?.visibility = View.VISIBLE
             }
         }
     }
@@ -299,6 +324,25 @@ class CompEnqDetailsFragment : Fragment(),
         mBinding?.enquiryUpdateDate?.text = "Last updated : ${enquiryDetails?.lastUpdated?.split("T")?.get(0)}"
         mBinding?.brand?.text = enquiryDetails?.ProductBrandName
 
+        val moq=MoqsPredicates.getSingleMoq(enqID)
+        if(moq!=null){
+            moqId=moq?.moqId?:0
+            mBinding?.moqDetails?.visibility=View.VISIBLE
+            mBinding?.imgDownArr?.visibility=View.VISIBLE
+            mBinding?.moqOrderQty?.text=moq?.moq.toString()
+            mBinding?.moqOrderAmount?.text=moq?.ppu
+            mBinding?.orderQuantity?.text=moq?.moq.toString()
+            mBinding?.orderAmount?.text=moq?.ppu
+            moqDeliveryTimeList.forEach {
+                mBinding?.moqOrderEta?.text=if(it?.days.equals(0L)){"Immediate"} else "${it?.days} Days"
+                mBinding?.orderTime?.text=if(it?.days.equals(0L)){"Immediate"} else "${it?.days} Days"
+            }
+        }else{
+            mBinding?.moqDetails?.visibility=View.GONE
+            mBinding?.imgDownArr?.visibility=View.GONE
+            mBinding?.orderTime?.text="No MOQs present"
+
+        }
     }
 
     fun viewLoader(){
@@ -311,11 +355,11 @@ class CompEnqDetailsFragment : Fragment(),
     }
 
     private fun setTabVisibilities(){
-        if(enquiryDetails?.isMoqSend == 1L){
-            mBinding?.moqDetailsLayer?.visibility = View.VISIBLE
-        }else{
-            mBinding?.moqDetailsLayer?.visibility = View.GONE
-        }
+//        if(enquiryDetails?.isMoqSend == 1L){
+//            mBinding?.moqDetailsLayer?.visibility = View.VISIBLE
+//        }else{
+//            mBinding?.moqDetailsLayer?.visibility = View.GONE
+//        }
 
         if(enquiryDetails?.isPiSend == 1L){
             mBinding?.piDetailsLayer?.visibility = View.VISIBLE
@@ -364,5 +408,22 @@ class CompEnqDetailsFragment : Fragment(),
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    override fun onAddMoqFailure() {
+    }
+
+    override fun onAddMoqSuccess() {
+    }
+
+    override fun onGetMoqCall() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                hideLoader()
+                setDetails()
+            })
+        } catch (e: Exception) {
+            Log.e("Enquiry Details", "Exception onAddMoqSuccess " + e.message)
+        }
     }
 }

@@ -17,11 +17,20 @@ open class Moqs : RealmObject() {
     var modifiedOn: String?=""
     var accepted: Boolean?=false
     var actionMarkMoqForSend: Long?=0
+    var artisanId: Long?=0
+    var brand: String?=""
+    var logo: String?=""
+    var clusterName: String?=""
+    var state: String?=""
+
     companion object {
         const val COLUMN_TABLE = "Moqs"
         const val COLUMN__ID = "_id"
         const val COLUMN_MOQ_ID = "moqId"
         const val COLUMN_ENQUIRY_ID = "enquiryId"
+        const val COLUMN_PPU = "ppu"
+        const val COLUMN_MOQ = "moq"
+        const val COLUMN_DELIVERY_TIME_ID = "deliveryTimeId"
         const val COLUMN_MARK_MOQ_FOR_SENDING = "actionMarkMoqForSend"
     }
 }

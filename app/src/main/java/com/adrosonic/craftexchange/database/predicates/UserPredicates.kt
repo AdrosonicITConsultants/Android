@@ -461,7 +461,6 @@ class UserPredicates{
                                 payObj.accountDesc = pay.accountType.accountDesc
 
                                 realm.copyToRealmOrUpdate(payObj)
-
                             }
                         }
                     }

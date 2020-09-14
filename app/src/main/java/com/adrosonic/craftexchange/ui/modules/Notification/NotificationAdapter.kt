@@ -112,20 +112,14 @@ class NotificationAdapter(
 
     private fun getIcon(name:String): Int {
         return when (name) {
-            "Enquiry Generated" -> {
+            "Enquiry Generated", "Enquiry Closed" -> {
                 R.drawable.ic_status_recipt
             }
-            "Moq Received" -> {
-                R.drawable.ic_receipt//todo change
+            "Moq Received","Moq accepted"  -> {
+                R.drawable.ic_moq_received
             }
-            "Moq accepted" -> {
-                R.drawable.ic_receipt
-            }
-            "Pi finalized" -> {
+            "Pi finalized", "Tax Invoice Raised","Delivery Challan Uploaded","Order Received" -> {
                 R.drawable.ic_status_invoice
-            }
-            "Enquiry Closed" -> {
-                R.drawable.ic_receipt
             }
             "Advance Payment Received" -> {
                 R.drawable.ic_advance_payent_received
@@ -136,11 +130,8 @@ class NotificationAdapter(
             "Advanced Payment Rejected" -> {
                 R.drawable.ic_receipt
             }
-            "Change Requested Initiated" -> {
-                R.drawable.ic_receipt
-            }
-            "Change Requested Accepted" -> {
-                R.drawable.ic_receipt
+            "Change Requested Initiated","Change Requested Accepted" -> {
+                R.drawable.ic_cr_accepted
             }
             "Change Request Rejected" -> {
                 R.drawable.ic_receipt
@@ -149,13 +140,6 @@ class NotificationAdapter(
                 R.drawable.ic_receipt
             }
             "Account Enabled" -> {
-                R.drawable.ic_receipt
-            }
-            "Tax Invoice Raised" -> {
-                R.drawable.ic_receipt
-            }
-
-            "Delivery Challan Uploaded" -> {
                 R.drawable.ic_receipt
             }
             "Yarn procured" -> {

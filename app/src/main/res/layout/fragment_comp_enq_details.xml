@@ -458,6 +458,7 @@
                         android:textStyle="bold" />
 
                     <ImageView
+                        android:id="@+id/img_down_arr"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -513,13 +514,13 @@
                         android:id="@+id/moq_order_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/title_text"
-                        android:textColor="@color/swipe_background"
-                        android:textStyle="bold"
+                        android:layout_gravity="center"
                         android:layout_marginTop="8dp"
                         android:fontFamily="@font/lato_regular"
-                        android:layout_gravity="center"
-                        android:gravity="center"/>
+                        android:gravity="center"
+                        android:textColor="@color/swipe_background"
+                        android:textSize="@dimen/title_text"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"

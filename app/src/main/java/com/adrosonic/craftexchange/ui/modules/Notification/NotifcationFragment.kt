@@ -124,7 +124,7 @@ class NotifcationFragment : Fragment(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("Notifications", "Onsucces")
-                swipe_refresh_layout.isRefreshing = false
+                if(swipe_refresh_layout!=null)swipe_refresh_layout.isRefreshing = false
                 mViewModel.getNotificationsMutableData()
                 setVisiblities()
             }

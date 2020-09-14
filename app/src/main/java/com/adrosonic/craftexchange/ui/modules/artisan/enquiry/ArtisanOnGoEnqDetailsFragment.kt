@@ -111,7 +111,6 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
                 viewLoader()
                 mEnqVM.getSingleMoq(enqID!!)
             }
-
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
 //            setDetails()
@@ -123,14 +122,6 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
                     enquiryDetails = it
                 })
         }
-//        mBinding?.btnMenu?.setOnClickListener {
-//            if(mBinding?.menuList?.visibility == View.GONE){
-//                mBinding?.menuList?.visibility = View.VISIBLE
-//            }else{
-//                mBinding?.menuList?.visibility = View.GONE
-//            }
-//        }
-
 
         mBinding?.btnBack?.setOnClickListener {
             activity?.onBackPressed()
@@ -191,7 +182,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
 
                         }
                     }
-                }
+                } else estId=0
             }
         }
 
@@ -585,8 +576,6 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
             Log.e("Enquiry Details", "Exception onAddMoqSuccess " + e.message)
         }
     }
-
-
 
     companion object {
 

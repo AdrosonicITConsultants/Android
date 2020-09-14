@@ -4,123 +4,122 @@
     xmlns:swipe="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-        <com.daimajia.swipe.SwipeLayout
-            android:background="@drawable/bd_underline"
-            android:id="@+id/swipeLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            swipe:rightEdgeSwipeOffset="0dp">
+    <com.daimajia.swipe.SwipeLayout
+        android:id="@+id/swipeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bd_underline"
+        swipe:rightEdgeSwipeOffset="0dp">
 
-            <LinearLayout
-                android:id="@+id/ll_markasread"
+        <LinearLayout
+            android:id="@+id/ll_markasread"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/notification_lavender"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <ImageView
+                android:id="@+id/file_icon"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_mark"
+                android:tint="@color/white_text" />
+
+            <TextView
+                android:id="@+id/file"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="@color/notification_lavender"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="8dp">
+                android:text="Mark as read"
+                android:textColor="@color/white_text"
+                android:textSize="16sp" />
+        </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/file_icon"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/ic_mark"
-                    android:tint="@color/white_text" />
-
-                <TextView
-                    android:id="@+id/file"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="Mark as read"
-                    android:textColor="@color/white_text"
-                    android:textSize="16sp" />
-            </LinearLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraint_bg"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint_bg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
 
-                <ImageView
-                    android:id="@+id/img_status"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:src="@drawable/ic_status_recipt"
-                    android:tint="@color/notification_lavender"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/txt_inquiry_id"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    />
+            <ImageView
+                android:id="@+id/img_status"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:src="@drawable/ic_status_recipt"
+                android:tint="@color/notification_lavender"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/txt_inquiry_id"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/txt_inquiry_id"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:text="Enquiry Id:"
-                    android:textColor="@color/notification_lavender"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toEndOf="@+id/img_status"
-                    app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/txt_inquiry_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Enquiry Id:"
+                android:textColor="@color/notification_lavender"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/img_status"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/txt_buyer_brand"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="8dp"
-                    android:ellipsize="end"
-                    android:maxLines="2"
-                    android:text="Product Description Product Description Product DescriptionProduct Description"
-                    app:layout_constraintEnd_toStartOf="@+id/txt_status"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/img_status"
-                    app:layout_constraintTop_toBottomOf="@+id/txt_inquiry_id" />
+            <TextView
+                android:id="@+id/txt_buyer_brand"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="Product Description Product Description Product DescriptionProduct Description"
+                app:layout_constraintEnd_toStartOf="@+id/txt_status"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/img_status"
+                app:layout_constraintTop_toBottomOf="@+id/txt_inquiry_id" />
 
-                <TextView
-                    android:id="@+id/txt_prod_details"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="8dp"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:text="Artisan Brand: Chidiya"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/img_status"
-                    app:layout_constraintTop_toBottomOf="@+id/txt_buyer_brand" />
+            <TextView
+                android:id="@+id/txt_prod_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="8dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Artisan Brand: Chidiya"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/img_status"
+                app:layout_constraintTop_toBottomOf="@+id/txt_buyer_brand" />
 
-                <TextView
-                    android:id="@+id/txt_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="10sp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="8dp"
-                    android:text="Status: In transit"
-                    android:maxLines="2"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txt_date" />
+            <TextView
+                android:id="@+id/txt_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
+                android:maxLines="2"
+                android:text="Status: In transit"
+                android:textSize="10sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txt_date" />
 
-                <TextView
-                    android:id="@+id/txt_date"
-                    android:textSize="10sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:text="12/12/2020"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.daimajia.swipe.SwipeLayout>
+            <TextView
+                android:id="@+id/txt_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="12/12/2020"
+                android:textSize="10sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.daimajia.swipe.SwipeLayout>
 </layout>

@@ -675,15 +675,31 @@
 
                 </LinearLayout>
 
+                <TextView
+                    android:id="@+id/emptyView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/margin_regular"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center"
+                    android:text="No MOQ received for this enquiry"
+                    android:textSize="@dimen/product_note_text"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/moq_details_layer" />
+
                 <LinearLayout
                     android:id="@+id/moq_details"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/expandable_layout_std_padding"
                     android:orientation="vertical"
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/moq_details_layer">
+                    app:layout_constraintTop_toBottomOf="@+id/emptyView">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -755,6 +771,79 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/moq_list_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/moq_details">
+
+                    <TextView
+                        android:id="@+id/txt_fill_details"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:fontFamily="@font/lato_regular"
+                        android:text="@string/accept_moq_from_this_list"
+                        android:textColor="@color/black_text"
+                        android:textSize="@dimen/product_note_text" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/bd_underline"
+                        android:orientation="horizontal"
+                        android:weightSum="10">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2.25"
+                            android:gravity="center"
+                            android:text="Sort By"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+                            android:drawableRight="@drawable/ic_arrow_upward_20"
+                            android:gravity="center"
+                            android:text="Qty"
+                            android:textColor="#7F8D54"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2.5"
+                            android:drawableRight="@drawable/ic_arrow_upward_20"
+                            android:gravity="center"
+                            android:text="Price"
+                            android:textColor="#7F8D54"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2.5"
+                            android:drawableRight="@drawable/ic_arrow_upward_20"
+                            android:gravity="center"
+                            android:text="ETA"
+                            android:textColor="#7F8D54"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/moq_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/pi_details_layer"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
@@ -763,7 +852,7 @@
                     android:weightSum="10"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/moq_details">
+                    app:layout_constraintTop_toBottomOf="@+id/moq_list_layout">
 
                     <TextView
                         android:layout_width="0dp"
