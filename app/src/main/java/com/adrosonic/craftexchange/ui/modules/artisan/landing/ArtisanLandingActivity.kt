@@ -31,6 +31,7 @@ import com.adrosonic.craftexchange.ui.modules.Notification.NotifcationFragment
 import com.adrosonic.craftexchange.ui.modules.artisan.profile.artisanProfileIntent
 import com.adrosonic.craftexchange.ui.modules.role.roleselectIntent
 import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.CommonEnquiryFragment
+import com.adrosonic.craftexchange.ui.modules.dashboard.dashboardIntent
 import com.adrosonic.craftexchange.ui.modules.search.searchSuggestionIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
@@ -225,7 +226,9 @@ class ArtisanLandingActivity : AppCompatActivity(),
             }
             R.id.nav_my_transactions -> {}
             R.id.nav_my_orders -> {}
-            R.id.nav_my_dashboard -> {}
+            R.id.nav_my_dashboard -> {
+                startActivity(dashboardIntent())
+            }
             R.id.nav_support -> {}
             R.id.nav_logout -> {
                 if (Utility.checkIfInternetConnected(this)) {

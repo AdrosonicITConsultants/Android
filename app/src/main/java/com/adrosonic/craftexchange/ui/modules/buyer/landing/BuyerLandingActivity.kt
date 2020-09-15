@@ -36,6 +36,7 @@ import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.CommonEnquiryFragmen
 import com.adrosonic.craftexchange.ui.modules.buyer.ownDesign.OwnProductListFragment
 import com.adrosonic.craftexchange.ui.modules.buyer.profile.buyerProfileIntent
 import com.adrosonic.craftexchange.ui.modules.buyer.wishList.wishlistFragment
+import com.adrosonic.craftexchange.ui.modules.dashboard.dashboardIntent
 import com.adrosonic.craftexchange.ui.modules.role.roleselectIntent
 import com.adrosonic.craftexchange.ui.modules.search.searchSuggestionIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
@@ -258,7 +259,9 @@ class BuyerLandingActivity : AppCompatActivity(),
                         .addToBackStack(null)
                         .commit()
             }
-            R.id.nav_my_dashboard -> {}
+            R.id.nav_my_dashboard -> {
+                startActivity(dashboardIntent())
+            }
             R.id.nav_support -> {}
             R.id.nav_logout -> {
                 if (Utility.checkIfInternetConnected(this)) {
