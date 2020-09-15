@@ -30,7 +30,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/product_title" />
 
             <com.like.LikeButton
-                android:id="@+id/img_markasread"
+                android:id="@+id/search_wishlist_button"
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 app:anim_scale_factor="1"
@@ -53,7 +53,7 @@
                 android:textColor="@color/black_text"
                 android:textSize="@dimen/product_description_text"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/wishlist_button"
+                app:layout_constraintEnd_toStartOf="@+id/search_wishlist_button"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -89,7 +89,7 @@
                 android:fontFamily="@font/lato_regular"
                 android:maxLines="2"
                 android:textSize="@dimen/product_availability_text"
-                app:layout_constraintEnd_toStartOf="@+id/wishlist_button"
+                app:layout_constraintEnd_toStartOf="@+id/search_wishlist_button"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/product_image"
                 app:layout_constraintTop_toBottomOf="@+id/design_logo" />
