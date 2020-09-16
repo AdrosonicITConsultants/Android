@@ -35,14 +35,17 @@ import com.pixplicity.easyprefs.library.Prefs
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+private const val ARG_PARAM3 = "isAritsan"
 
 
 class CompEnqDetailsFragment : Fragment(),
     EnquiryViewModel.FetchEnquiryInterface,
-    EnquiryViewModel.MoqInterface{
+    EnquiryViewModel.MoqInterface,
+    EnquiryViewModel.BuyersMoqInterface{
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private var param3: Boolean? = false
 
     private var enqID : Long ?= 0
     private var enqStatus : Long ?= 0
@@ -76,6 +79,7 @@ class CompEnqDetailsFragment : Fragment(),
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
+            param3 = it.getBoolean(ARG_PARAM3)
         }
     }
 
@@ -97,6 +101,8 @@ class CompEnqDetailsFragment : Fragment(),
         val moqDeliveryTime = gson.fromJson(moqDeliveryJson, MoqDeliveryTimesResponse::class.java)
         moqDeliveryTimeList.addAll(moqDeliveryTime.data)
         mEnqVM.fetchEnqListener = this
+        mEnqVM.moqListener = this
+        mEnqVM.buyerMoqListener = this
         mBinding?.swipeEnquiryDetails?.isEnabled = false
         if(Utility.checkIfInternetConnected(requireActivity())){
             enqID?.let { mEnqVM.getSingleCompletedEnquiry(it) }
@@ -105,7 +111,8 @@ class CompEnqDetailsFragment : Fragment(),
             Log.e("getSingleMoq","moqId: $moqId")
             if(moqId<=0){
                 viewLoader()
-                mEnqVM.getMoqs(enqID!!)
+                if(param3!!) mEnqVM.getSingleMoq(enqID!!)
+                else mEnqVM.getMoqs(enqID!!)
             }
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
@@ -172,9 +179,7 @@ class CompEnqDetailsFragment : Fragment(),
     }
 
     fun setDetails(){
-
         setTabVisibilities()
-
         when(Prefs.getString(ConstantsDirectory.PROFILE,"")){
             ConstantsDirectory.ARTISAN -> {
                 mBinding?.profileName?.text = ConstantsDirectory.BUYER
@@ -358,8 +363,10 @@ class CompEnqDetailsFragment : Fragment(),
             mBinding?.orderQuantity?.text=moq?.moq.toString()
             mBinding?.orderAmount?.text=moq?.ppu
             moqDeliveryTimeList.forEach {
+                if (it.id.equals(moq?.deliveryTimeId)) {
                 mBinding?.moqOrderEta?.text=if(it?.days.equals(0L)){"Immediate"} else "${it?.days} Days"
                 mBinding?.orderTime?.text=if(it?.days.equals(0L)){"Immediate"} else "${it?.days} Days"
+                }
             }
         }else{
             mBinding?.moqDetails?.visibility=View.GONE
@@ -425,11 +432,12 @@ class CompEnqDetailsFragment : Fragment(),
 
     companion object {
 
-        fun newInstance(param1: String,param2 : String) =
+        fun newInstance(param1: String,param2 : String,param3 : Boolean) =
             CompEnqDetailsFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
+                    putBoolean(ARG_PARAM3, param3)
                 }
             }
     }
@@ -449,5 +457,13 @@ class CompEnqDetailsFragment : Fragment(),
         } catch (e: Exception) {
             Log.e("Enquiry Details", "Exception onAddMoqSuccess " + e.message)
         }
+    }
+
+    override fun onSendCustomMoqSuccess(moq: Long) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onSendCustomMoqFailure() {
+        TODO("Not yet implemented")
     }
 }

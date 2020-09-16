@@ -29,12 +29,16 @@ class EnquiryDetailsActivity : AppCompatActivity() {
         var enqID = intent?.getStringExtra(ConstantsDirectory.ENQUIRY_ID)
         var enqStatus = intent?.getStringExtra(ConstantsDirectory.ENQUIRY_STATUS_FLAG)?.toLong()
         var profile = Prefs.getString(ConstantsDirectory.PROFILE,null)
+        val isArtsan= when(profile) {
+            ConstantsDirectory.ARTISAN -> true
+            else-> false
+        }
 
         when(enqStatus){
             //Closed
             1L -> {
                 if (savedInstanceState == null) {
-                    enqID?.let { CompEnqDetailsFragment.newInstance(it, enqStatus.toString()) }?.let {
+                    enqID?.let { CompEnqDetailsFragment.newInstance(it, enqStatus.toString(),isArtsan) }?.let {
                         supportFragmentManager.beginTransaction()
                             .replace(R.id.enquiry_details_container, it)
                             .commitNow()
