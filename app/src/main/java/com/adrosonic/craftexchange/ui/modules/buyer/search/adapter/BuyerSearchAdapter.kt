@@ -62,7 +62,7 @@ class BuyerSearchAdapter(private val mContext : Context,
 
     inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var productImage: ImageView = view.findViewById(R.id.product_image)
-        var wishlistButton: LikeButton = view.findViewById(R.id.wishlist_button)
+        var wishlistButton: LikeButton? = view?.findViewById(R.id.wishlist_button)
         var productTitle: TextView = view.findViewById(R.id.product_title)
         var productAvailableText: TextView = view.findViewById(R.id.product_available_text)
         var productDescription: TextView = view.findViewById(R.id.product_description)
