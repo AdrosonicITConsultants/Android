@@ -827,7 +827,7 @@
             android:textAllCaps="false"
             android:fontFamily="@font/lato_regular"
             android:textAlignment="center"
-            android:drawableEnd="@drawable/ic_arrow_right_alt_white_18dp"
+            android:drawableEnd="@drawable/ic_right_arrow_white"
             android:paddingEnd="8dp"
             android:background="@color/black_text"
             android:elevation="8dp"

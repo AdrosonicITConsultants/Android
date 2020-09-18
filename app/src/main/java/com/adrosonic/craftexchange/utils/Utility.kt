@@ -256,6 +256,8 @@ class Utility {
             dialog.btn_success_view_enquiry?.setOnClickListener {
                 //TODO : View Enquiry details in enquiry landing page
                 dialog.cancel()
+                messageDialog(context,"Fix in Progress") // TODO : to fix FC issue in view enquiry from popup
+
 //                val intent = Intent(context?.enquiryDetails())
 //                var bundle = Bundle()
 //                Prefs.putString(ConstantsDirectory.ENQUIRY_ID, enquiryId) //TODO change later
@@ -265,7 +267,6 @@ class Utility {
 ////                bundle.putString(ConstantsDirectory.ENQUIRY_CODE,enquiry?.enquiryCode)
 //                intent.putExtras(bundle)
 //                context?.startActivity(intent)
-                messageDialog(context,"Fix in Progress")
             }
             dialog.setCanceledOnTouchOutside(false)
 
@@ -287,6 +288,7 @@ class Utility {
             }
             dialog.existing_btn_view_enquiry?.setOnClickListener {
                 dialog.cancel()
+                messageDialog(context,"Fix in Progress") // TODO : to fix FC issue in view enquiry from popup
 //                val intent = Intent(context?.enquiryDetails())
 //                var bundle = Bundle()
 //                Prefs.putString(ConstantsDirectory.ENQUIRY_ID, enquiryId) //TODO change later
@@ -297,9 +299,6 @@ class Utility {
 ////                bundle.putString(ConstantsDirectory.ENQUIRY_CODE,enquiry?.enquiryCode)
 //                intent.putExtras(bundle)
 //                context?.startActivity(intent)
-
-                messageDialog(context,"Fix in Progress")
-
             }
 
             dialog.setCanceledOnTouchOutside(false)
