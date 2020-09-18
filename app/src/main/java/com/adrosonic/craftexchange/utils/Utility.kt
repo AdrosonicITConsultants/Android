@@ -256,15 +256,16 @@ class Utility {
             dialog.btn_success_view_enquiry?.setOnClickListener {
                 //TODO : View Enquiry details in enquiry landing page
                 dialog.cancel()
-                val intent = Intent(context?.enquiryDetails())
-                var bundle = Bundle()
-                Prefs.putString(ConstantsDirectory.ENQUIRY_ID, enquiryId) //TODO change later
-//                Prefs.putLong(ConstantsDirectory.ENQUIRY_STATUS_FLAG,2L)
-                bundle.putString(ConstantsDirectory.ENQUIRY_ID, enquiryId)
-                bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG,"2")
-//                bundle.putString(ConstantsDirectory.ENQUIRY_CODE,enquiry?.enquiryCode)
-                intent.putExtras(bundle)
-                context?.startActivity(intent)
+//                val intent = Intent(context?.enquiryDetails())
+//                var bundle = Bundle()
+//                Prefs.putString(ConstantsDirectory.ENQUIRY_ID, enquiryId) //TODO change later
+////                Prefs.putLong(ConstantsDirectory.ENQUIRY_STATUS_FLAG,2L)
+//                bundle.putString(ConstantsDirectory.ENQUIRY_ID, enquiryId)
+//                bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG,"2")
+////                bundle.putString(ConstantsDirectory.ENQUIRY_CODE,enquiry?.enquiryCode)
+//                intent.putExtras(bundle)
+//                context?.startActivity(intent)
+                messageDialog(context,"Fix in Progress")
             }
             dialog.setCanceledOnTouchOutside(false)
 
@@ -286,16 +287,19 @@ class Utility {
             }
             dialog.existing_btn_view_enquiry?.setOnClickListener {
                 dialog.cancel()
-                val intent = Intent(context?.enquiryDetails())
-                var bundle = Bundle()
-                Prefs.putString(ConstantsDirectory.ENQUIRY_ID, enquiryId) //TODO change later
-//                Prefs.putLong(ConstantsDirectory.ENQUIRY_STATUS_FLAG,2L)
-                bundle.putString(ConstantsDirectory.ENQUIRY_ID, enquiryId)
-                bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG,"2")
+//                val intent = Intent(context?.enquiryDetails())
+//                var bundle = Bundle()
+//                Prefs.putString(ConstantsDirectory.ENQUIRY_ID, enquiryId) //TODO change later
+////                Prefs.putLong(ConstantsDirectory.ENQUIRY_STATUS_FLAG,2L)
+//                bundle.putString(ConstantsDirectory.ENQUIRY_ID, enquiryId)
+//                bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG,"2")
+//
+////                bundle.putString(ConstantsDirectory.ENQUIRY_CODE,enquiry?.enquiryCode)
+//                intent.putExtras(bundle)
+//                context?.startActivity(intent)
 
-//                bundle.putString(ConstantsDirectory.ENQUIRY_CODE,enquiry?.enquiryCode)
-                intent.putExtras(bundle)
-                context?.startActivity(intent)
+                messageDialog(context,"Fix in Progress")
+
             }
 
             dialog.setCanceledOnTouchOutside(false)
