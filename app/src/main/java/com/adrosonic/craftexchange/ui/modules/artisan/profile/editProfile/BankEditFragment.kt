@@ -89,19 +89,19 @@ class BankEditFragment : Fragment() {
 
             paymentList.add(PaymentAccountDetails(mBinding?.accNo?.text.toString(), AccountType("bank",1),
                 mBinding?.bankName?.text.toString(),mBinding?.branch?.text.toString(),0,mBinding?.ifscCode?.text.toString(),
-                mBinding?.benificiaryName?.text.toString(), bank?.userid!!))
+                mBinding?.benificiaryName?.text.toString(), Prefs.getString(ConstantsDirectory.USER_ID,"").toLong()))
 
             paymentList.add(PaymentAccountDetails(mBinding?.gpay?.text.toString(), AccountType("gpay",2),
                 "",mBinding?.branch?.text.toString(),0,"",
-                "",bank?.userid!!))
+                "",Prefs.getString(ConstantsDirectory.USER_ID,"").toLong()))
 
             paymentList.add(PaymentAccountDetails(mBinding?.paytm?.text.toString(), AccountType("phonp",3),
                "",mBinding?.branch?.text.toString(),0,"",
-                "",bank?.userid!!))
+                "",Prefs.getString(ConstantsDirectory.USER_ID,"").toLong()))
 
             paymentList.add(PaymentAccountDetails(mBinding?.phonepe?.text.toString(), AccountType("paytm",4),
                 "",mBinding?.branch?.text.toString(),0,"",
-               "", bank?.userid!!))
+               "",Prefs.getString(ConstantsDirectory.USER_ID,"").toLong()))
 
             var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
             CraftExchangeRepository
