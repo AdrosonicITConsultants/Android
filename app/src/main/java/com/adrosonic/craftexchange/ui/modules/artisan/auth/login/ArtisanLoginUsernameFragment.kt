@@ -96,8 +96,7 @@ class ArtisanLoginUsernameFragment : Fragment() {
                 if (Utility.checkIfInternetConnected(requireContext())){
                 CraftExchangeRepository
                     .getLoginService()
-                    .validateUserName(mBinding?.textBoxUsername?.text.toString(),
-                        Prefs.getLong(ConstantsDirectory.REF_ROLE_ID,0))
+                    .validateUserName(mBinding?.textBoxUsername?.text.toString(),Prefs.getLong(ConstantsDirectory.REF_ROLE_ID,0))
                     .enqueue(object : Callback, retrofit2.Callback<LoginValidationResponse> {
                         override fun onFailure(call: Call<LoginValidationResponse>, t: Throwable) {
                             t.printStackTrace()
@@ -108,10 +107,7 @@ class ArtisanLoginUsernameFragment : Fragment() {
                             response: Response<LoginValidationResponse>
                         ) {
                             if (response.body()?.valid == true) {
-                                Prefs.putString(
-                                    ConstantsDirectory.USER_EMAIL,
-                                    mBinding?.textBoxUsername?.text.toString()
-                                )
+                                Prefs.putString(ConstantsDirectory.USER_EMAIL, mBinding?.textBoxUsername?.text.toString())
                                 if (savedInstanceState == null) {
                                     activity?.supportFragmentManager?.beginTransaction()
                                         ?.replace(

@@ -333,18 +333,18 @@ class Utility {
         }
 
         fun getBrandLogoUrl(userId : Long?, imagename : String?) : String{
-            return "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/User/${userId}/CompanyDetails/Logo/${imagename}"
+            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_UAT}User/${userId}/CompanyDetails/Logo/${imagename}"
         }
 
         fun getProfilePhotoUrl(artisanId : Long?, imagename : String?) : String{
-            return "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/User/${artisanId}/ProfilePics/${imagename}"
+            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_UAT}User/${artisanId}/ProfilePics/${imagename}"
         }
 
         fun getProductsImagesUrl(productId : Long?,imagename : String?) : String{
-            return "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/Product/${productId}/${imagename}"
+            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_UAT}Product/${productId}/${imagename}"
         }
         fun getCustomProductImagesUrl(productId : Long?,imagename : String?) : String{
-            return "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/CustomProduct/${productId}/${imagename}"
+            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_UAT}CustomProduct/${productId}/${imagename}"
         }
         fun setImageResource(context: Context?,imageView:ImageView?,imageId:Int){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
