@@ -121,20 +121,11 @@ class NotificationAdapter(
             "Pi finalized", "Tax Invoice Raised","Delivery Challan Uploaded","Order Received" -> {
                 R.drawable.ic_status_invoice
             }
-            "Advance Payment Received" -> {
+            "Advance Payment Received","Advanced Payment Accepted","Advanced Payment Rejected" -> {
                 R.drawable.ic_advance_payent_received
             }
-            "Advanced Payment Accepted" -> {
-                R.drawable.ic_advance_payent_received
-            }
-            "Advanced Payment Rejected" -> {
-                R.drawable.ic_receipt
-            }
-            "Change Requested Initiated","Change Requested Accepted" -> {
+            "Change Requested Initiated","Change Requested Accepted","Change Request Rejected"  -> {
                 R.drawable.ic_cr_accepted
-            }
-            "Change Request Rejected" -> {
-                R.drawable.ic_receipt
             }
             "Account Disable" -> {
                 R.drawable.ic_receipt

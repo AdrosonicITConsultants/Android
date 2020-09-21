@@ -30,7 +30,7 @@ import kotlin.collections.ArrayList
 class NotificationReadService: JobIntentService() {
 
     override fun onHandleWork(intent: Intent) {
-        var itemId = intent.getStringExtra(NotificationReadService.KEY_ID)
+        var itemId = intent.getStringExtra(KEY_ID)
         if(itemId.isEmpty())itemId="-1"
         var longId=itemId.toLong()
         updateNotfication(longId)
@@ -69,7 +69,7 @@ class NotificationReadService: JobIntentService() {
     }
 
     companion object {
-        const val KEY_ID = "prod_id"
+        const val KEY_ID = "noti_id"
         private const val JOB_ID = 10000
         private const val TAG="NotificationReadService"
         fun enqueueWork(context: Context, work: Intent){

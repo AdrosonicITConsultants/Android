@@ -1,5 +1,7 @@
 package com.adrosonic.craftexchange.ui.modules.artisan.enquiry
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -22,8 +24,11 @@ import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
 import com.adrosonic.craftexchange.database.predicates.MoqsPredicates
 import com.adrosonic.craftexchange.databinding.FragmentArtisanOnGoEnqDetailsBinding
+import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.repository.data.response.moq.Datum
 import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimesResponse
+import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.piContext
+import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
 import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.addProductIntent
 import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
@@ -206,6 +211,15 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
             }
         })
 
+        mBinding?.btnUploadDocReceipt?.setOnClickListener {
+            Log.e("RaisePi", "upload : $enqID")
+            Log.e("RaisePi", "upload : ${enquiryDetails?.enquiryID}")
+            enqID?.let {startActivity(requireContext().piContext(it))}
+        }
+        mBinding?.viewPiLayout?.setOnClickListener {
+            enqID?.let {  startActivity(requireContext().raisePiContext(it,true, SendPiRequest()))
+            }
+        }
     }
 
     fun ArtisanProduct(){
@@ -357,18 +371,28 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         setProgressTimeline()
 
         //TODO implement to enq stage
-        when(enquiryDetails?.enquiryStageID){
-            3L -> {
-                mBinding?.uploadDocLayout?.visibility = View.VISIBLE
-            }
-            8L -> {
-                mBinding?.uploadDocLayout?.visibility = View.VISIBLE
-            }
-            else ->{
+
+        if(enquiryDetails?.isMoqRejected!!.equals(1L)){
+            mBinding?.uploadDocLayout?.visibility = View.GONE
+            mBinding?.viewPiLayout?.visibility = View.GONE
+        }else{
+            Log.e("PITag","enquiryStageID: ${enquiryDetails?.enquiryStageID}")
+            Log.e("PITag","enquiryStageID: ${enquiryDetails?.enquiryStatusID}")
+            if(enquiryDetails?.enquiryStageID!!.equals(3L)){
                 mBinding?.uploadDocLayout?.visibility = View.GONE
+                mBinding?.viewPiLayout?.visibility = View.VISIBLE
+              }
+            else if(enquiryDetails?.isPiSend!!.equals(1L)){
+                mBinding?.uploadDocLayout?.visibility = View.GONE
+                mBinding?.viewPiLayout?.visibility = View.VISIBLE
+            }else if(enquiryDetails?.isPiSend!!.equals(0L)&&enquiryDetails?.isMoqSend!!.equals(1L)){
+                mBinding?.uploadDocLayout?.visibility = View.VISIBLE
+                mBinding?.viewPiLayout?.visibility = View.GONE
+            }else{
+                mBinding?.uploadDocLayout?.visibility = View.GONE
+                mBinding?.viewPiLayout?.visibility = View.GONE
             }
         }
-
         arrayDeliveryDscrp.clear()
         arrayDeliveryDscrp.add("Select")
         moqDeliveryTimeList?.forEach { arrayDeliveryDscrp.add(it.deliveryDesc) }
@@ -498,11 +522,11 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
 //            mBinding?.moqDetailsLayer?.visibility = View.GONE
 //        }
 
-        if(enquiryDetails?.isPiSend == 1L){
-            mBinding?.piDetailsLayer?.visibility = View.VISIBLE
-        }else{
-            mBinding?.piDetailsLayer?.visibility = View.GONE
-        }
+//        if(enquiryDetails?.isPiSend == 1L){
+//            mBinding?.piDetailsLayer?.visibility = View.VISIBLE
+//        }else{
+//            mBinding?.piDetailsLayer?.visibility = View.GONE
+//        }
     }
 
     override fun onResume() {
@@ -581,5 +605,18 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
             }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.e("PiActivity", "onActivityResult $requestCode")
+        Log.e("PiActivity", "onActivityResult $resultCode")
+        Log.e("PiActivity", "onActivityResult RESULT_OK ${Activity.RESULT_OK}")
+        if (requestCode == ConstantsDirectory.RESULT_PI) { // Please, use a final int instead of hardcoded int value
+            if (resultCode == Activity.RESULT_OK) {
+                viewLoader()
+                Log.e("PiActivity", "onActivityResult enqID ${enqID}")
+                enqID?.let { mEnqVM.getSingleOngoingEnquiry(it) }
+            }
+        }
+    }
 
 }

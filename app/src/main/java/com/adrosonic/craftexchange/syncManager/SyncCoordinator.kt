@@ -12,6 +12,7 @@ import com.adrosonic.craftexchange.syncManager.processor.customDesign.OwnDesignD
 import com.adrosonic.craftexchange.syncManager.processor.customDesign.OwnDesignUpdate
 import com.adrosonic.craftexchange.syncManager.processor.moq.SendMoqAction
 import com.adrosonic.craftexchange.syncManager.processor.notification.NotificationAction
+import com.adrosonic.craftexchange.syncManager.processor.pi.PiActions
 import com.adrosonic.craftexchange.syncManager.processor.wishlist.WishlistAction
 
 /**
@@ -27,7 +28,8 @@ class SyncCoordinator(val context: Context) {
         OwnDesignUpdate(),
         OwnDesignDelete(),
         NotificationAction(),
-        SendMoqAction()
+        SendMoqAction(),
+        PiActions()
     )
 
     fun performLocallyAvailableActions() {
@@ -67,6 +69,14 @@ class SyncCoordinator(val context: Context) {
                 if (iterator5 != null) {
                     while (iterator5.hasNext()) {
                         list.add(ItemType(iterator5.next().toString()))
+                    }
+                }
+                val queue6=  PiPredicates.getPiMarkedForActions(it.predicateForLocallyTrackedElements)
+                Log.e("Offline","itemId :${queue6?.joinToString()}")
+                val iterator6 = queue6?.iterator()
+                if (iterator6 != null) {
+                    while (iterator6.hasNext()) {
+                        list.add(ItemType(iterator6.next().toString()))
                     }
                 }
             } catch (e: Exception) {

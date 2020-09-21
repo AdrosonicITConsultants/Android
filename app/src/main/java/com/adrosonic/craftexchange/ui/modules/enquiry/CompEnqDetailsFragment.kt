@@ -20,8 +20,10 @@ import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.CompletedEnquiries
 import com.adrosonic.craftexchange.database.predicates.MoqsPredicates
 import com.adrosonic.craftexchange.databinding.FragmentCompEnqDetailsBinding
+import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.repository.data.response.moq.Datum
 import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimesResponse
+import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
@@ -151,6 +153,7 @@ class CompEnqDetailsFragment : Fragment(),
                 }
             }
         }
+
         mBinding?.moqDetailsLayer?.setOnClickListener {
             if(moqId>0) {
                 if (mBinding?.moqDetails?.visibility == View.VISIBLE) mBinding?.moqDetails?.visibility = View.GONE
@@ -174,6 +177,10 @@ class CompEnqDetailsFragment : Fragment(),
                 }
             }
 
+        }
+        mBinding?.viewPiLayout?.setOnClickListener {
+            enqID?.let {  startActivity(requireContext().raisePiContext(it,true, null))
+            }
         }
 
     }
@@ -374,6 +381,10 @@ class CompEnqDetailsFragment : Fragment(),
             mBinding?.orderTime?.text="No MOQs present"
 
         }
+        if(enquiryDetails?.isPiSend!!.equals(1)){
+            mBinding?.viewPiLayout?.visibility=View.VISIBLE
+        }else  mBinding?.viewPiLayout?.visibility=View.GONE
+
     }
 
     fun viewLoader(){
@@ -392,11 +403,11 @@ class CompEnqDetailsFragment : Fragment(),
 //            mBinding?.moqDetailsLayer?.visibility = View.GONE
 //        }
 
-        if(enquiryDetails?.isPiSend == 1L){
-            mBinding?.piDetailsLayer?.visibility = View.VISIBLE
-        }else{
-            mBinding?.piDetailsLayer?.visibility = View.GONE
-        }
+//        if(enquiryDetails?.isPiSend == 1L){
+//            mBinding?.piDetailsLayer?.visibility = View.VISIBLE
+//        }else{
+//            mBinding?.piDetailsLayer?.visibility = View.GONE
+//        }
     }
 
     override fun onResume() {

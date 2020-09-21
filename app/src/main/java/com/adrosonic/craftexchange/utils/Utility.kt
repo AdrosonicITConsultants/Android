@@ -8,8 +8,8 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.AsyncTask
@@ -22,22 +22,23 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.core.app.ActivityCompat
+import androidx.core.app.ShareCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
 import com.adrosonic.craftexchange.database.predicates.UserPredicates
 import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.uploadData.ProductUploadData
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryAvaProdStageData
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryStageData
-import com.adrosonic.craftexchange.ui.modules.buyer.productDetails.*
 import com.adrosonic.craftexchange.ui.modules.enquiry.enquiryDetails
 import com.bumptech.glide.Glide
 import com.google.gson.GsonBuilder
 import com.pixplicity.easyprefs.library.Prefs
 import kotlinx.android.synthetic.main.dialog_gen_enquiry_success.*
 import kotlinx.android.synthetic.main.dialog_gen_enquiry_update_or_new.*
+import okhttp3.ResponseBody
 import java.io.*
 import java.util.regex.Pattern
-import kotlin.collections.ArrayList
 
 class Utility {
     companion object{
@@ -55,6 +56,7 @@ class Utility {
         var craftUser = UserPredicates.findUser(Prefs.getString(ConstantsDirectory.USER_ID,"0").toLong())
         var mCraftUser = CraftUser()
         const val BROWSING_IMGS: String = "BrowsedImages/"
+
 
         fun displayMessage(message: String, context: Context) {
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
@@ -470,6 +472,65 @@ class Utility {
                 }
             }
             return list
+        }
+
+        fun writeResponseBodyToDisk(
+            body: ResponseBody,
+            enquiryId: String,
+            context: Context
+        ): Boolean {
+            try {
+                if (!File(context.cacheDir, ConstantsDirectory.PI_PDF_PATH).exists()) File(context.cacheDir,ConstantsDirectory.PI_PDF_PATH).mkdir()
+//                if (!File(context.cacheDir, Utility.PI_PDF_PATH+ enquiryId).exists()) File(context.cacheDir,Utility.MANAGED_DOC_PATH+ enquiryId).mkdir()
+                val myDir = File(context.cacheDir, "/"+ConstantsDirectory.PI_PDF_PATH + "Pi${enquiryId}.pdf")
+                var inputStream: InputStream = body.byteStream()
+                var outputStream: OutputStream = FileOutputStream(myDir)
+                try {
+                    var fileReader = ByteArray(4096)
+                    var fileSize = body.contentLength()
+                    var fileSizeDownloaded = 0
+                    while (true) {
+                        var read = inputStream.read(fileReader)
+                        if (read == -1) {
+                            break
+                        }
+                        outputStream.write(fileReader, 0, read)
+                        fileSizeDownloaded += read
+                    }
+                    outputStream.flush()
+                    return true
+                } catch (e: IOException) {
+                    Log.e("SavePiPdf", "Exception : "+e.printStackTrace())
+                    return false
+                } finally {
+                    if (inputStream != null) {
+                        inputStream.close()
+                    }
+                    if (outputStream != null) {
+                        outputStream.close()
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("SavePiPdf", "Exception : "+e.printStackTrace())
+                return false
+            }
+        }
+
+        fun openFile(context: Context,enquiryId:Long){
+            val cacheFile = File(context.cacheDir, ConstantsDirectory.PI_PDF_PATH + "Pi${enquiryId}.pdf")
+            try {
+                val uri = FileProvider.getUriForFile(context, "com.adrosonic.craftexchange.provider", cacheFile)
+                val myIntent = Intent(Intent.ACTION_VIEW)
+                myIntent.putExtra(ShareCompat.EXTRA_CALLING_PACKAGE, context.getPackageName())
+//                val componentName = (context as Activity).componentName
+//                myIntent.putExtra(ShareCompat.EXTRA_CALLING_ACTIVITY, componentName)
+                myIntent.setDataAndType(uri, "application/pdf")
+                myIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                context.startActivity(Intent.createChooser(myIntent, "Open with"))
+
+            } catch (e: Exception) {
+                displayMessage("  Application not installed " + e, context)
+            }
         }
     }
 }

@@ -148,10 +148,10 @@ class EnquiryPredicates {
                                 exEnq?.lastUpdated = enquiry?.openEnquiriesResponse?.lastUpdated
                                 exEnq?.totalAmount = enquiry?.openEnquiriesResponse?.totalAmount
 
-                                exEnq?.isMoqSend = enquiry?.openEnquiriesResponse?.isMoqSend
-                                exEnq?.isPiSend = enquiry?.openEnquiriesResponse?.isPiSend
+                                exEnq?.isMoqSend = enquiry?.openEnquiriesResponse?.isMoqSend?:0
+                                exEnq?.isPiSend = enquiry?.openEnquiriesResponse?.isPiSend?:0
                                 exEnq?.changeRequestOn = enquiry?.openEnquiriesResponse?.changeRequestOn
-                                exEnq?.isMoqRejected = enquiry?.isMoqRejected
+                                exEnq?.isMoqRejected = enquiry?.isMoqRejected?:0
                                 exEnq?.isBlue = enquiry?.isBlue
 
                                 exEnq?.productType = enquiry?.openEnquiriesResponse?.productType
@@ -221,10 +221,10 @@ class EnquiryPredicates {
                                 enqObj?.lastUpdated = enquiry?.openEnquiriesResponse?.lastUpdated
                                 enqObj?.totalAmount = enquiry?.openEnquiriesResponse?.totalAmount
 
-                                enqObj?.isMoqSend = enquiry?.openEnquiriesResponse?.isMoqSend
-                                enqObj?.isPiSend = enquiry?.openEnquiriesResponse?.isPiSend
+                                enqObj?.isMoqSend = enquiry?.openEnquiriesResponse?.isMoqSend?:0
+                                enqObj?.isPiSend = enquiry?.openEnquiriesResponse?.isPiSend?:0
                                 enqObj?.changeRequestOn = enquiry?.openEnquiriesResponse?.changeRequestOn
-                                enqObj?.isMoqRejected = enquiry?.isMoqRejected
+                                enqObj?.isMoqRejected = enquiry?.isMoqRejected?:0
                                 enqObj?.isBlue = enquiry?.isBlue
 
                                 enqObj?.productType = enquiry?.openEnquiriesResponse?.productType
@@ -329,10 +329,10 @@ class EnquiryPredicates {
                                 exEnq?.lastUpdated = enquiry?.openEnquiriesResponse?.lastUpdated
                                 exEnq?.totalAmount = enquiry?.openEnquiriesResponse?.totalAmount
 
-                                exEnq?.isMoqSend = enquiry?.openEnquiriesResponse?.isMoqSend
-                                exEnq?.isPiSend = enquiry?.openEnquiriesResponse?.isPiSend
+                                exEnq?.isMoqSend = enquiry?.openEnquiriesResponse?.isMoqSend?:0
+                                exEnq?.isPiSend = enquiry?.openEnquiriesResponse?.isPiSend?:0
                                 exEnq?.changeRequestOn = enquiry?.openEnquiriesResponse?.changeRequestOn
-                                exEnq?.isMoqRejected = enquiry?.isMoqRejected
+                                exEnq?.isMoqRejected = enquiry?.isMoqRejected?:0
                                 exEnq?.isBlue = enquiry?.isBlue
 
                                 exEnq?.productType = enquiry?.openEnquiriesResponse?.productType
@@ -402,10 +402,10 @@ class EnquiryPredicates {
                                 enqObj?.lastUpdated = enquiry?.openEnquiriesResponse?.lastUpdated
                                 enqObj?.totalAmount = enquiry?.openEnquiriesResponse?.totalAmount
 
-                                enqObj?.isMoqSend = enquiry?.openEnquiriesResponse?.isMoqSend
-                                enqObj?.isPiSend = enquiry?.openEnquiriesResponse?.isPiSend
+                                enqObj?.isMoqSend = enquiry?.openEnquiriesResponse?.isMoqSend?:0
+                                enqObj?.isPiSend = enquiry?.openEnquiriesResponse?.isPiSend?:0
                                 enqObj?.changeRequestOn = enquiry?.openEnquiriesResponse?.changeRequestOn
-                                enqObj?.isMoqRejected = enquiry?.isMoqRejected
+                                enqObj?.isMoqRejected = enquiry?.isMoqRejected?:0
                                 enqObj?.isBlue = enquiry?.isBlue
 
                                 enqObj?.productType = enquiry?.openEnquiriesResponse?.productType
