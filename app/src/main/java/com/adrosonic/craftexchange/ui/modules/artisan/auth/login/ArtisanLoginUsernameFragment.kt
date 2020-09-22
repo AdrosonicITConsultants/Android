@@ -123,7 +123,6 @@ class ArtisanLoginUsernameFragment : Fragment() {
                                         ?.commit()
                                 }
                             } else {
-                                Toast.makeText(requireActivity(), response.body()?.errorMessage, Toast.LENGTH_SHORT).show()
                             }
                         }
 

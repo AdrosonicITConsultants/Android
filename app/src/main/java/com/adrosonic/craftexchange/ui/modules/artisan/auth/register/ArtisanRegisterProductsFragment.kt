@@ -232,9 +232,6 @@ class ArtisanRegisterProductsFragment : Fragment() {
                     }else{
                         Utility.messageDialog(requireContext(), requireActivity().getString(R.string.file_size_exceeded))
                     }
-
-
-
                 }
             }
     }

@@ -33,7 +33,7 @@ class ResetPasswordActivity : AppCompatActivity() {
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.reset_container,
                             ResetUsernameFragment.newInstance(),"Reset Username")
-                        .commitNow()
+                        .commit()
                 }
 //            }
 //        }

@@ -50,6 +50,28 @@ object ImageSetter {
             ex.printStackTrace()
         }
     }
+
+    fun setCircleImage(context: Context, imagePath:Uri, imageView: ImageView) {
+        try
+        {
+            Glide.with(context)
+                .load(imagePath) // it can be a remote URL or a local absolute file path.
+                .apply(
+                    RequestOptions()
+                        .centerCrop()
+                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                        .override(Target.SIZE_ORIGINAL))
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+//                .priority(Priority.IMMEDIATE)
+                .skipMemoryCache(false)
+                .dontAnimate()
+                .into(imageView)
+        }
+        catch (ex:Exception) {
+            ex.printStackTrace()
+        }
+    }
+
     /**
      * This method will set image into ImageView with loading time placeholder
      * and also with error.

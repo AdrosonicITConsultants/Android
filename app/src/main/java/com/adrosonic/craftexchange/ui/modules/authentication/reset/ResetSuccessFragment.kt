@@ -18,8 +18,7 @@ import com.pixplicity.easyprefs.library.Prefs
 class ResetSuccessFragment : Fragment() {
 
     companion object {
-        fun newInstance() =
-            ResetSuccessFragment()
+        fun newInstance() = ResetSuccessFragment()
         const val TAG = "BuyerResetSuccess"
     }
 

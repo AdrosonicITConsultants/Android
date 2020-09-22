@@ -27,11 +27,14 @@ import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquir
 import com.adrosonic.craftexchange.database.predicates.MoqsPredicates
 import com.adrosonic.craftexchange.database.predicates.WishlistPredicates
 import com.adrosonic.craftexchange.databinding.FragmentBuyerOnGoEnqDetailsBinding
+import com.adrosonic.craftexchange.enums.AvailableStatus
+import com.adrosonic.craftexchange.enums.getId
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.singleProduct.SingleProductDetails
 import com.adrosonic.craftexchange.ui.modules.artisan.auth.register.ArtisanRegisterPasswordFragment
 import com.adrosonic.craftexchange.repository.data.response.moq.Datum
 import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimesResponse
+import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.advPay.enquiryPayment
 import com.adrosonic.craftexchange.ui.modules.buyer.ownDesign.ownDesignIntent
 import com.adrosonic.craftexchange.ui.modules.buyer.productDetails.catalogueProductDetailsIntent
 import com.adrosonic.craftexchange.ui.modules.enquiry.ArtEnqDetailsFragment
@@ -164,6 +167,14 @@ EnquiryViewModel.FetchEnquiryInterface,
             enquiryDetails?.enquiryID?.let { it1 -> showDialog(it1) }
         }
 
+        mBinding?.btnUploadTransacReceipt?.setOnClickListener {
+            if(Utility.checkIfInternetConnected(requireActivity())){
+                startActivity(context?.enquiryPayment()?.putExtra(ConstantsDirectory.ENQUIRY_ID,enqID))
+            }else{
+                Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
+            }
+        }
+
         mBinding?.brandDetailsLayer?.setOnClickListener {
             if(enquiryDetails?.ProductBrandName != ""){
                 if (savedInstanceState == null) {
@@ -217,50 +228,6 @@ EnquiryViewModel.FetchEnquiryInterface,
         }
     }
 
-    fun CustomProduct(){
-        val intent = Intent(requireContext().ownDesignIntent( enquiryDetails?.productID?:0))
-        val bundle = Bundle()
-        bundle.putString(ConstantsDirectory.PRODUCT_ID, enquiryDetails?.productID?.toString())
-        requireContext().startActivity(intent.putExtras(bundle))
-    }
-
-    fun CatalogueProduct(){
-        //TODO : change this implementation later
-        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
-        enquiryDetails?.productID?.let { it1 ->
-            CraftExchangeRepository
-                .getWishlistService()
-                .getSingleProductDetails(token, it1.toInt())
-                .enqueue(object : Callback, retrofit2.Callback<SingleProductDetails> {
-                    override fun onFailure(call: Call<SingleProductDetails>, t: Throwable) {
-                        t.printStackTrace()
-                        Utility.displayMessage("Try Again",requireActivity())
-                        Log.e("prodDetails","Failure : "+t.printStackTrace())
-                        //                        listener?.onProdFetchFail()
-                    }
-
-                    override fun onResponse(
-                        call: Call<SingleProductDetails>, response: Response<SingleProductDetails>
-                    ) {
-                        if (response.body()?.valid == true) {
-                            val response=response.body()?.data
-                            if(response != null){
-                                WishlistPredicates.insertSingleProduct(response)
-                                val intent = Intent(requireActivity().catalogueProductDetailsIntent())
-                                val bundle = Bundle()
-                                bundle.putString(ConstantsDirectory.PRODUCT_ID, enquiryDetails?.productID?.toString())
-                                intent.putExtras(bundle)
-                                requireActivity().startActivity(intent)
-                            }
-                        } else {
-                            Log.e("prodDetails","Failure")
-                            Utility.displayMessage("Try Again",requireActivity())
-
-                        }
-                    }
-                })
-        }
-    }
 
     fun setDetails(){
         try {
@@ -295,7 +262,7 @@ EnquiryViewModel.FetchEnquiryInterface,
 
                 //ProductAvailability
                 when (enquiryDetails?.productStatusID) {
-                    2L -> {
+                    AvailableStatus.IN_STOCK.getId() -> {
                         status = context?.getString(R.string.in_stock)
                         mBinding?.productAvailability?.text = status
                         context?.let {
@@ -304,7 +271,7 @@ EnquiryViewModel.FetchEnquiryInterface,
                             )
                         }?.let { mBinding?.productAvailability?.setTextColor(it) }
                     }
-                    1L -> {
+                    AvailableStatus.MADE_TO_ORDER.getId() -> {
                         status = context?.getString(R.string.made_to_order)
                         mBinding?.productAvailability?.text = status
                         context?.let {

@@ -303,5 +303,15 @@
     <string name="proceed_with_pay">Proceed with advance payment</string>
     <string name="notify_tt_team"><![CDATA[The following will be notified to Artisan &\nthe Administration team at Tata Trusts]]></string>
     <string name="payment_upload_confirmation">Upload the payment receipt to confirm</string>
+    <string name="upload_and_send_transac">Upload and send for confirmation</string>
+    <string name="account_details">Account Details : </string>
+    <string name="amount_paid">Amount paid</string>
+    <string name="thankyou_upload_transac_receipt_text">Thankyou! Your receipt has been uploaded\nsuccessfully and Artisan is notified.\nThe acceptance will be notified within 3 days\nmaximum from now.</string>
+    <string name="ps_updated_pi">Please Note: The Pro forma invoice will be updated</string>
+    <string name="enq_to_order_text">The enquiry will be converted to order\nonce payment is approved. Check Orders tab.</string>
+    <string name="view_transaction">View transaction</string>
+    <string name="amt_to_be_paid">Amount to be paid</string>
+    <string name="select_advance_payment">Select Advanced Payment</string>
+    <string name="upload_payment_receipt">Upload Advance Payment Receipt</string>
 
 </resources>

@@ -9,6 +9,7 @@ import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquir
 import com.adrosonic.craftexchange.database.predicates.EnquiryPredicates
 import com.adrosonic.craftexchange.database.predicates.MoqsPredicates
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
+import com.adrosonic.craftexchange.repository.data.request.enquiry.BuyerPayment
 import com.adrosonic.craftexchange.repository.data.request.moq.SendMoqRequest
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.generateEnquiry.GenerateEnquiryResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.IfExistEnquiryResponse
@@ -22,9 +23,13 @@ import com.adrosonic.craftexchange.utils.UserConfig
 import com.google.gson.Gson
 import com.pixplicity.easyprefs.library.Prefs
 import io.realm.RealmResults
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
+import java.io.File
 import javax.security.auth.callback.Callback
 
 class EnquiryViewModel(application: Application) : AndroidViewModel(application){
@@ -55,6 +60,12 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
     interface ArtisanDetailsInterface{
         fun onFetch(data:ArtisanDetailsResponse?)
     }
+
+    interface UploadPaymentInterface{
+        fun onFailure()
+        fun onSuccess()
+    }
+
     val ongoingEnqList : MutableLiveData<RealmResults<OngoingEnquiries>> by lazy { MutableLiveData<RealmResults<OngoingEnquiries>>() }
     val onGoEnqDetails : MutableLiveData<OngoingEnquiries> by lazy { MutableLiveData<OngoingEnquiries>() }
 
@@ -66,6 +77,7 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
     var moqListener: MoqInterface ?= null
     var buyerMoqListener : BuyersMoqInterface ?= null
     var artisanListener : ArtisanDetailsInterface ?= null
+    var uploadPaymentListener : UploadPaymentInterface ?= null
 
     fun getOnEnqListMutableData(): MutableLiveData<RealmResults<OngoingEnquiries>> {
         ongoingEnqList.value=loadOnEnqList()
@@ -458,6 +470,32 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
                     else  artisanListener?.onFetch(null)
                 }
             })
+    }
+
+    fun uploadPaymentReceipt(payObj : BuyerPayment, filePath : String) {
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+
+        var file = File(filePath)
+        var fileReqBody = file!!.toRequestBody(MediaType.parse("image/*"))
+        var fileBody = MultipartBody.Builder()
+            .addFormDataPart("file", file?.name, fileReqBody!!)
+            .build()
+        var headerBoundary="multipart/form-data;boundary="+ fileBody?.boundary
+
+         CraftExchangeRepository
+            .getTransactionService()
+            .uploadPaymentDetails(headerBoundary,token,payObj,fileBody!!).enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    uploadPaymentListener?.onFailure()
+                }
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    uploadPaymentListener?.onSuccess()
+                }
+            })
+
     }
 }
 
