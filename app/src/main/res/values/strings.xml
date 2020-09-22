@@ -313,5 +313,8 @@
     <string name="amt_to_be_paid">Amount to be paid</string>
     <string name="select_advance_payment">Select Advanced Payment</string>
     <string name="upload_payment_receipt">Upload Advance Payment Receipt</string>
+    <string name="proforma_invoice">Proforma invoice</string>
+    <string name="fill_in_pi_for_this_enquiry">Fill in PI for this enquiry</string>
+    <string name="preview_not_available"><![CDATA[<B>Sorry!<br> Preview not available due to internet connection unavailability.</B>]]></string>
 
 </resources>

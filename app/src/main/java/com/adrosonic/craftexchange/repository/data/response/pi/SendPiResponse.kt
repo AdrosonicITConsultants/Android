@@ -9,9 +9,9 @@ data class SendPiResponse (
 
 data class Data (
     val id: Long,
-    val enquiryID: Long,
-    val orderID: Long,
-    val artisanID: Long,
+    val enquiryId: Long,
+    val orderId: Long,
+    val artisanId: Long,
     val date: String,
     val orderName: String,
     val productCode: String,
@@ -25,5 +25,5 @@ data class Data (
     val isSend: Long,
     val createdOn: String,
     val modifiedOn: String,
-    val parentID: Any? = null
+    val parentId: Any? = null
 )

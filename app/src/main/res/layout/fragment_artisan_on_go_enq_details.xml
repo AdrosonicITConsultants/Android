@@ -14,7 +14,6 @@
             android:layout_height="match_parent"
             android:fillViewport="true">
 
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/artisan_ongo_enq_details"
                 android:layout_width="match_parent"
@@ -489,7 +488,69 @@
                             app:layout_constraintTop_toBottomOf="@+id/note_to_artisan" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/view_pi_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/upload_doc_layout">
 
+                        <TextView
+                            android:id="@+id/text_next_steps_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_regular"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/lato_regular"
+                            android:text="Next Step  - - - - - - - - - - - - ->"
+                            android:textSize="@dimen/product_availability_text"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/next_step_arrow_text_view"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="Upload Payment Receipt"
+                            android:textSize="@dimen/product_availability_text"
+                            app:layout_constraintBottom_toBottomOf="@+id/text_next_steps_view"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/text_next_steps_view"
+                            app:layout_constraintTop_toTopOf="@+id/text_next_steps_view" />
+
+                        <ImageView
+                            android:id="@+id/pi_thumbnail"
+                            android:layout_width="60dp"
+                            android:layout_height="80dp"
+                            android:layout_marginTop="@dimen/margin_regular"
+                            android:layout_marginBottom="8dp"
+                            android:background="@drawable/layout_red_border"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/text_next_steps_view" />
+
+                        <TextView
+                            android:id="@+id/view_pi"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="32dp"
+                            android:layout_marginBottom="@dimen/margin_semimedium"
+                            android:fontFamily="@font/lato_regular"
+                            android:text="@string/view_pi"
+                            android:textColor="@drawable/on_click_blue"
+                            android:textSize="@dimen/product_availability_text"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="@id/pi_thumbnail"
+                            app:layout_constraintStart_toEndOf="@+id/pi_thumbnail"
+                            app:layout_constraintTop_toTopOf="@+id/pi_thumbnail" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -785,6 +846,7 @@
                     android:background="#EDF0FF"
                     android:orientation="horizontal"
                     android:weightSum="10"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/moq_details">

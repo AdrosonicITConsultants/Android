@@ -63,7 +63,7 @@ class WishlistPredicates {
             } catch (e: Exception) {
                 Log.e("offline","while fetching actions : "+e.message)
             } finally {
-                realm.close()
+//                realm.close()
             }
             return itemId
         }

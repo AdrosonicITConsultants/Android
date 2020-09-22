@@ -28,6 +28,7 @@ import io.realm.annotations.RealmModule
     EnquiryPaymentDetails::class,
     Notifications::class,
     Moqs::class,
+    PiDetails::class,
     EnquiryProductDetails::class
 ])
 class CXRealmModule

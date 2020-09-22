@@ -4,4 +4,7 @@
     <cache-path
         name="BrowsedImages"
         path="BrowsedImages/" />
+    <cache-path
+        name="PiPdfs"
+        path="PiPdfs/" />
 </paths>

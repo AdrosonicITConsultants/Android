@@ -8,9 +8,11 @@ import com.adrosonic.craftexchange.database.entities.realmEntities.CompletedEnqu
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
 import com.adrosonic.craftexchange.database.predicates.EnquiryPredicates
 import com.adrosonic.craftexchange.database.predicates.MoqsPredicates
+import com.adrosonic.craftexchange.database.predicates.PiPredicates
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.request.enquiry.BuyerPayment
 import com.adrosonic.craftexchange.repository.data.request.moq.SendMoqRequest
+import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.generateEnquiry.GenerateEnquiryResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.IfExistEnquiryResponse
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryResponse
@@ -18,9 +20,12 @@ import com.adrosonic.craftexchange.repository.data.response.marketing.ArtisanDet
 import com.adrosonic.craftexchange.repository.data.response.moq.GetMoqsResponse
 import com.adrosonic.craftexchange.repository.data.response.moq.SendMoqResponse
 import com.adrosonic.craftexchange.repository.data.response.moq.SendSelectedMoqResponse
+import com.adrosonic.craftexchange.repository.data.response.pi.SendPiResponse
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.UserConfig
+import com.adrosonic.craftexchange.utils.Utility
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.pixplicity.easyprefs.library.Prefs
 import io.realm.RealmResults
 import okhttp3.MediaType
@@ -29,6 +34,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
+import java.util.*
 import java.io.File
 import javax.security.auth.callback.Callback
 
@@ -60,6 +66,12 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
     interface ArtisanDetailsInterface{
         fun onFetch(data:ArtisanDetailsResponse?)
     }
+    interface piInterface{
+        fun onPiFailure()
+        fun onPiSuccess()
+        fun onPiDownloadSuccess()
+        fun onPiDownloadFailure()
+    }
 
     interface UploadPaymentInterface{
         fun onFailure()
@@ -77,6 +89,7 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
     var moqListener: MoqInterface ?= null
     var buyerMoqListener : BuyersMoqInterface ?= null
     var artisanListener : ArtisanDetailsInterface ?= null
+    var piLisener : piInterface ?= null
     var uploadPaymentListener : UploadPaymentInterface ?= null
 
     fun getOnEnqListMutableData(): MutableLiveData<RealmResults<OngoingEnquiries>> {
@@ -468,6 +481,98 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
                         artisanListener?.onFetch(response.body())
                     }
                     else  artisanListener?.onFetch(null)
+                }
+            })
+    }
+
+    fun savePi(enquiryId:Long,_id:Long,pi: SendPiRequest){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        Log.e(TAG,"savePi :${enquiryId}")
+        Log.e(TAG,"pi :${Gson().toJson(pi)}")
+        CraftExchangeRepository
+            .getPiService()
+            .savePI(token,enquiryId.toInt(),pi).enqueue(object : Callback, retrofit2.Callback<SendPiResponse> {
+                override fun onFailure(call: Call<SendPiResponse>, t: Throwable) {
+                    Log.e(TAG,"savePi :${t.message}")
+                    t.printStackTrace()
+                    piLisener?.onPiFailure()
+                }
+                override fun onResponse(
+                    call: Call<SendPiResponse>,
+                    response: Response<SendPiResponse>
+                ) {
+                    val valid=response.body()?.valid?:false
+                    Log.e(TAG,"savePi :$valid")
+                    if(valid){
+                        Log.e(TAG,"savePi :${response.body()?.data}")
+                        response.body()?.data?.let {
+                            piLisener?.onPiSuccess()
+                        }
+                    } else piLisener?.onPiFailure()
+                }
+            })
+    }
+
+    fun sendPi(enquiryId:Long,pi: SendPiRequest){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        Log.e(TAG,"sendPi :${enquiryId}")
+        Log.e(TAG,"sendPi pi :${Gson().toJson(pi)}")
+        CraftExchangeRepository
+            .getPiService()
+            .sendPI(token,enquiryId.toInt(),pi).enqueue(object : Callback, retrofit2.Callback<SendPiResponse> {
+                override fun onFailure(call: Call<SendPiResponse>, t: Throwable) {
+                    Log.e(TAG,"sendPi :${t.message}")
+                    t.printStackTrace()
+                    piLisener?.onPiFailure()
+                }
+                override fun onResponse(
+                    call: Call<SendPiResponse>,
+                    response: Response<SendPiResponse>
+                ) {
+                    val valid=response.body()?.valid?:false
+                    Log.e(TAG,"sendPi :$valid")
+                    if(valid){
+                        Log.e(TAG,"sendPi :${response.body()?.data}")
+                        response.body()?.data?.let {
+                            piLisener?.onPiSuccess()
+                        }
+                    } else piLisener?.onPiFailure()
+                }
+            })
+    }
+
+    fun downloadPi(enquiryId:Long){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        Log.e(TAG,"downloadPi :${enquiryId}")
+        CraftExchangeRepository
+            .getPiService()
+            .getPreviewPiPDF(token,enquiryId.toInt()).enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Log.e(TAG,"downloadPi :${t.message}")
+                    t.printStackTrace()
+                    piLisener?.onPiDownloadFailure()
+                }
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    val body=response.body()
+                    if(body!=null) {
+                        body?.let {
+                            //todo
+                            Utility.writeResponseBodyToDisk(
+                                it,
+                                enquiryId.toString(),
+                                getApplication()
+                            )
+                            Timer().schedule(object : TimerTask() {
+                                override fun run() {
+                                    piLisener?.onPiDownloadSuccess()
+                                }
+                            }, 500)
+
+                        }
+                    }else  piLisener?.onPiDownloadFailure()
                 }
             })
     }

@@ -29,6 +29,10 @@
         <!-- <meta-data -->
         <!-- android:name="com.google.android.wearable.standalone" -->
         <!-- android:value="true" /> -->
+        <activity android:name=".ui.modules.artisan.enquiry.pi.RaisePiActivity"
+            android:configChanges="orientation|screenSize"/>
+        <activity android:name=".ui.modules.artisan.enquiry.pi.PiActivity"
+            android:configChanges="orientation|screenSize"/>
         <activity
             android:name=".ui.modules.dashboard.DashboardActivity"
             android:configChanges="orientation|screenSize"
@@ -154,6 +158,10 @@
             android:permission="android.permission.BIND_JOB_SERVICE" />
         <service
             android:name=".services.wishlist.WishlistService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name=".services.pi.PiService"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
         <service android:name=".services.InstanceIdService">

@@ -7,6 +7,7 @@ import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimes
 import com.adrosonic.craftexchange.repository.data.response.moq.SendMoqResponse
 import com.adrosonic.craftexchange.repository.data.response.moq.SendSelectedMoqResponse
 import com.adrosonic.craftexchange.repository.data.response.pi.SendPiResponse
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -18,10 +19,17 @@ interface PIDao {
                         @Body pi: SendPiRequest
     ) : Call<SendPiResponse>
 
-//    @Headers("Accept: application/json")
-//    @GET("/enquiry/getMoqDeliveryTimes")
-//    fun getMoqDeliveryTimes(@Header("Authorization") token:String) : Call<MoqDeliveryTimesResponse>
-//
+    @Headers("Accept: application/json")
+    @POST("/enquiry/savePi/{enquiryId}")
+    fun savePI(@Header("Authorization") token:String,
+               @Path("enquiryId") enquiryId : Int,
+               @Body pi: SendPiRequest
+    ) : Call<SendPiResponse>
+
+    @Headers("Accept: application/pdf")
+    @GET("/enquiry/getPreviewPiPDF")
+    fun getPreviewPiPDF(@Header("Authorization") token:String, @Query("enquiryId") enquiryId : Int) : Call<ResponseBody>
+
 //    @Headers("Accept: application/json")
 //    @GET("/enquiry/getMoq/{enquiryId}")
 //    fun getMoq(@Header("Authorization") token:String, @Path("enquiryId") enquiryId : Int) : Call<SendMoqResponse>

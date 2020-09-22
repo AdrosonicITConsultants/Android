@@ -131,7 +131,6 @@ EnquiryViewModel.FetchEnquiryInterface,
             mEnqVM.getMoqs(enqID!!)
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
-//            setDetails()
         }
 
         enqID?.let {
@@ -637,12 +636,14 @@ EnquiryViewModel.FetchEnquiryInterface,
 }
 
     private fun setChatIConVisibility(){
-        if(enquiryDetails?.isBlue == null && enquiryDetails?.enquiryStageID!! >= 4L){
-            mBinding?.btnChat?.visibility = View.VISIBLE
-            mBinding?.btnMenu?.visibility = View.GONE
-        }else{
-            mBinding?.btnChat?.visibility = View.GONE
-            mBinding?.btnMenu?.visibility = View.VISIBLE
+        if(enquiryDetails?.enquiryStageID!=null){
+            if(enquiryDetails?.isBlue == null && enquiryDetails?.enquiryStageID!! >= 4L){
+                mBinding?.btnChat?.visibility = View.VISIBLE
+                mBinding?.btnMenu?.visibility = View.GONE
+            }else{
+                mBinding?.btnChat?.visibility = View.GONE
+                mBinding?.btnMenu?.visibility = View.VISIBLE
+            }
         }
     }
 
