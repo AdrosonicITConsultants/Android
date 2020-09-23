@@ -1,11 +1,14 @@
 package com.adrosonic.craftexchange.utils
 
+enum class Instances{
+    DEV,UAT,PROD
+}
 object ConstantsDirectory {
     //////////////////////////////////////////////////////////////////////
-
-    const val BASE_URL = "http://101.53.153.96:8090/"
-    const val BASE_URL_UAT = "http://164.52.192.98/"
-    const val IMAGE_LOAD_BASE_URL = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/"
+    const val BASE_URL_DEV = "http://101.53.153.96:8090/"
+    const val BASE_URL_UAT = "http://164.52.192.15:8090/"//"http://164.52.192.98:8090/"
+    const val IMAGE_LOAD_BASE_URL_DEV = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/"
+    const val IMAGE_LOAD_BASE_URL_UAT = "https://tatacrftexchangeuat.objectstore.e2enetworks.net/"
     const val BUYER_DASHBOARD_URL = "https://datastudio.google.com/embed/reporting/0ede1d26-5dbf-4564-a7c4-4f850493a89f/page/i56cB?params="
     const val ARTISAN_DASHBOARD_URL = "https://datastudio.google.com/embed/reporting/cef7a3b2-e37f-48a2-9f28-0c3f45a07585/page/RJ8dB?params="
     const val VIEW_PI_URL = "http://101.53.153.96:8090/enquiry/getPreviewPiHTML?enquiryId="
@@ -103,5 +106,4 @@ object ConstantsDirectory {
     const val CUSTOM_PRODUCT = "Custom Product"
 
     const val ENQUIRY_STATUS_FLAG = "enquiry_status_flag"
-
 }

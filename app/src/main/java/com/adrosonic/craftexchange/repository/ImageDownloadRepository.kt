@@ -16,7 +16,7 @@ object ImageDownloadRepository {
 
 
         return Retrofit.Builder()
-            .baseUrl(ConstantsDirectory.IMAGE_LOAD_BASE_URL)
+            .baseUrl(ConstantsDirectory.IMAGE_LOAD_BASE_URL_UAT)
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
             .client(OkHttpClient.Builder()
                 .addInterceptor(HttpLoggingInterceptor()

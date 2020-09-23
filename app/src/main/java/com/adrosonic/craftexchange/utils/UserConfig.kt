@@ -3,7 +3,7 @@ package com.adrosonic.craftexchange.utils
 import com.pixplicity.easyprefs.library.Prefs
 
 //////////////////////////////////////////////////////////////////////
-const val BASE_URL = "http://101.53.153.96:8090/"
+//const val BASE_URL = "http://101.53.153.96:8090/"
 //////////////////////////////////////////////////////////////////////
 
 const val PREFS_NAME = "craft_exchange"

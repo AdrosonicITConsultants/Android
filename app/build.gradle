@@ -17,16 +17,14 @@ android {
         applicationId "com.adrosonic.craftexchange"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 30
-        versionName "1.0"
+        versionCode 31
+        versionName "1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    buildFeatures {
-
-        dataBinding = true
-
+    dataBinding {
+        enabled = true
     }
     viewBinding {
         enabled = true
@@ -36,9 +34,14 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            debuggable false
         }
     }
-
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+        ignoreWarnings true //false
+    }
 // To inline the bytecode built with JVM target 1.8 into
 // bytecode that is being built with JVM target 1.6. (e.g. navArgs)
 

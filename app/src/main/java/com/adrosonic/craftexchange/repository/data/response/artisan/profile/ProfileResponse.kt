@@ -25,7 +25,7 @@ data class Address (
     val state: String,
     val pincode: String,
     val landmark: String,
-    val userID: Long,
+    val userId: Long,
     val addressType: AddressType,
     val country: Country
 )
