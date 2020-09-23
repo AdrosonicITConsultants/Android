@@ -12,14 +12,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 
 import com.adrosonic.craftexchange.R
+import com.adrosonic.craftexchange.database.entities.ArtisanProductCategory
 import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
 import com.adrosonic.craftexchange.database.entities.realmEntities.UserAddress
+import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.databinding.FragmentBrandDetailsBinding
+import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.uploadData.ProductUploadData
 import com.adrosonic.craftexchange.ui.modules.artisan.profile.editProfile.artisanEditProfileIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
+import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.ProfileViewModel
+import com.google.gson.GsonBuilder
 import com.pixplicity.easyprefs.library.Prefs
 
 private const val ARG_PARAM1 = "param1"
@@ -89,9 +94,26 @@ class BrandDetailsFragment : Fragment(),
         mBinding?.cluster?.text = craftUser?.value?.clusterdesc ?: " - "
         mBinding?.name?.text = craftUser?.value?.companyName ?: " - "
         mBinding?.description?.text = craftUser?.value?.companyDesc ?: " - "
-//        mBinding?.prodCategory?.text = craftUser?.p
-    }
 
+
+        mBinding?.prodCategory?.text = getProductCategories()
+    }
+    fun getProductCategories():String{
+        var categories=""
+        val jsonProductData = UserConfig.shared.productUploadJson.toString()
+        val gson = GsonBuilder().create()
+        val productUploadData = gson.fromJson(jsonProductData, ProductUploadData::class.java)
+        val arrProductCategory = productUploadData?.data?.productCategories
+        val categoriesIdList=ProductPredicates.getProductCategoryIds(UserConfig.shared.userId?.toLong())
+        arrProductCategory?.forEach {
+            if(categoriesIdList!!.contains(it.id))categories=categories+"${it.productDesc},"
+        }
+        if (categories.endsWith(",")) {
+            categories = categories.substring(0, categories.length - 1);
+        }
+        if(categories.isEmpty()) return "NA"
+        else return categories
+    }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 

@@ -43,6 +43,11 @@ ProfileViewModel.FetchUserDetailsInterface{
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_bank_details, container, false)
 
+        var bank : PaymentAccount?= UserPredicates.getPaymentDetails(Prefs.getString(ConstantsDirectory.USER_ID,""),1)
+        var gpay : PaymentAccount?= UserPredicates.getPaymentDetails(Prefs.getString(ConstantsDirectory.USER_ID,""),2)
+        var phonepe : PaymentAccount?=UserPredicates.getPaymentDetails(Prefs.getString(ConstantsDirectory.USER_ID,""),3)
+        var paytm : PaymentAccount?= UserPredicates.getPaymentDetails(Prefs.getString(ConstantsDirectory.USER_ID,""),4)
+
         mBinding?.accNo?.text = bank?.accNoUPIMobile ?:" - "
         mBinding?.bankName?.text = bank?.bankName ?:" - "
         mBinding?.benificiaryName?.text = bank?.name ?:" - "
@@ -74,12 +79,11 @@ ProfileViewModel.FetchUserDetailsInterface{
     }
 
     companion object {
+//        var bank : PaymentAccount?= UserPredicates.getPaymentDetails(Prefs.getString(ConstantsDirectory.USER_ID,""),1)
+//        var gpay : PaymentAccount?= UserPredicates.getPaymentDetails(Prefs.getString(ConstantsDirectory.USER_ID,""),2)
+//        var phonepe : PaymentAccount?=UserPredicates.getPaymentDetails(Prefs.getString(ConstantsDirectory.USER_ID,""),3)
+//        var paytm : PaymentAccount?= UserPredicates.getPaymentDetails(Prefs.getString(ConstantsDirectory.USER_ID,""),4)
         fun newInstance() = BankDetailsFragment()
-        var bank : PaymentAccount?= UserPredicates.getPaymentDetails(Prefs.getString(ConstantsDirectory.USER_ID,""),1)
-        var gpay : PaymentAccount?= UserPredicates.getPaymentDetails(Prefs.getString(ConstantsDirectory.USER_ID,""),2)
-        var phonepe : PaymentAccount?=UserPredicates.getPaymentDetails(Prefs.getString(ConstantsDirectory.USER_ID,""),3)
-        var paytm : PaymentAccount?= UserPredicates.getPaymentDetails(Prefs.getString(ConstantsDirectory.USER_ID,""),4)
-
     }
 
     override fun onSuccess() {
