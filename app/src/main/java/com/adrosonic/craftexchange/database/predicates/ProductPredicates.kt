@@ -880,7 +880,6 @@ class ProductPredicates {
             }
         }
 
-
         fun getAllBrandDetails(): RealmResults<BrandList>? {
             val realm = CXRealmManager.getRealmInstance()
             return realm.where(BrandList::class.java).findAll()
@@ -1264,5 +1263,20 @@ class ProductPredicates {
             }
             return value
         }
+
+        fun getProductCategoryIds(userId: Long?): ArrayList<Long>?{
+            var categoryidList=ArrayList<Long>()
+            val realm = CXRealmManager.getRealmInstance()
+            realm.executeTransaction {
+                realm.where(ArtisanProductCategory::class.java)
+                    .equalTo("userid", userId)
+                    .findAll().forEach {
+                        categoryidList.add(it.productCategoryid?:0)
+                    }
+
+            }
+                return categoryidList
+        }
+
     }
 }

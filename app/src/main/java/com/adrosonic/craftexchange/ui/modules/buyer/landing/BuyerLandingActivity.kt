@@ -135,7 +135,7 @@ class BuyerLandingActivity : AppCompatActivity(),
         mBinding?.navView?.setNavigationItemSelectedListener(this)
 //        mBinding?.navView?.menu?.getItem(0)?.isChecked = false
         nav_view.getHeaderView(0).text_user.text = firstname
-
+        mBinding?.txtVerTag?.text="23-09-20 V-1.1"
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .add(R.id.buyer_home_container,

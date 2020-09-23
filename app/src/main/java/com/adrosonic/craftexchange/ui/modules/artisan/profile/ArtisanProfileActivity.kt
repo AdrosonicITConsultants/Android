@@ -53,8 +53,6 @@ ProfileViewModel.FetchUserDetailsInterface{
         mViewModel.listener = this
         refreshProfile()
 
-
-
         mViewModel.getUserMutableData()
             .observe(this, Observer<CraftUser> {
                 craftUser = MutableLiveData(it)

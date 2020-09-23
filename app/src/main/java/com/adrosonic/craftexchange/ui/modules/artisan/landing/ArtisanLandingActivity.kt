@@ -22,16 +22,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
-import com.adrosonic.craftexchange.database.predicates.NotificationPredicates
 import com.adrosonic.craftexchange.database.predicates.UserPredicates
 import com.adrosonic.craftexchange.databinding.ActivityArtisanLandingBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.response.Notification.SaveUserTokenResponse
 import com.adrosonic.craftexchange.ui.modules.Notification.NotifcationFragment
 import com.adrosonic.craftexchange.ui.modules.artisan.profile.artisanProfileIntent
-import com.adrosonic.craftexchange.ui.modules.role.roleselectIntent
 import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.CommonEnquiryFragment
 import com.adrosonic.craftexchange.ui.modules.dashboard.dashboardIntent
+import com.adrosonic.craftexchange.ui.modules.role.roleselectIntent
 import com.adrosonic.craftexchange.ui.modules.search.searchSuggestionIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
@@ -44,9 +43,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.firebase.iid.FirebaseInstanceId
 import com.pixplicity.easyprefs.library.Prefs
 import kotlinx.android.synthetic.main.activity_artisan_landing.*
-import kotlinx.android.synthetic.main.custom_bell_icon_layout.*
 import kotlinx.android.synthetic.main.nav_header_landing.view.*
-import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -118,7 +115,8 @@ class ArtisanLandingActivity : AppCompatActivity(),
 
         mBinding?.navView?.setNavigationItemSelectedListener(this)
         nav_view.getHeaderView(0).text_user.text = firstname
-
+        
+        mBinding?.txtVerTag?.text="23-09-20 V-1.1"
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction() .replace(R.id.artisan_home_container,ArtisanHomeFragment.newInstance())
                 .detach(ArtisanHomeFragment())
