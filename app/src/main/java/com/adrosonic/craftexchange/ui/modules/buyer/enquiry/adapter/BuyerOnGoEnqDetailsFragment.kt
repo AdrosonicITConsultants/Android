@@ -267,6 +267,7 @@ EnquiryViewModel.FetchEnquiryInterface,
             Handler(Looper.getMainLooper()).post(Runnable {
                 setTabVisibilities()
                 setChatIConVisibility()
+//                handleMoqVisiblities()
                 mBinding?.enquiryCode?.text = enquiryDetails?.enquiryCode
                 mBinding?.enquiryStartDate?.text =
                     "Date started : ${enquiryDetails?.startedOn?.split("T")?.get(0)}"
@@ -442,34 +443,48 @@ EnquiryViewModel.FetchEnquiryInterface,
 
                 when (enquiryDetails?.productType) {
                     "Product" -> {
-                        val moq = MoqsPredicates.getSingleMoq(enqID)
-                        if (moq != null) {
-//                    if (moq.accepted!!) {
-//                        mBinding?.moqDetails?.visibility = View.VISIBLE
-                            mBinding?.moqListLayout?.visibility = View.GONE
-                            mBinding?.moqOrderQty?.text = "" + moq?.moq
-                            mBinding?.orderQuantity?.text = "" + moq?.moq
-                            mBinding?.moqOrderAmount?.text = "₹ ${moq?.ppu}"
-                            mBinding?.orderAmount?.text = "₹ ${moq?.ppu}"
-                            moqDeliveryTimeList?.forEach {
-                                if (it.id.equals(moq?.deliveryTimeId)) {
-                                    mBinding?.moqOrderEta?.text = if (it?.days.equals(0L)) {
-                                        "Immediate"
-                                    } else "${it?.days} Days"// "${it?.days} Days"
-                                    mBinding?.orderTime?.text = if (it?.days.equals(0L)) {
-                                        "Immediate"
-                                    } else "${it?.days} Days"// "${it?.days} Days"
-                                }
-                            }
-//                    } else{
-//                        //todo show simple empty view
-//                         }
-                        } else {
+                        val moq = MoqsPredicates.getMoqs(enqID)
+                        if (moq == null || moq!!.size == 0) {
                             //todo show simple empty view
                             mBinding?.moqDetails?.visibility = View.GONE
                             mBinding?.moqListLayout?.visibility = View.GONE
                             mBinding?.orderTime?.visibility = View.VISIBLE
-                            mBinding?.orderTime?.text = "No MOQs received"
+                            mBinding?.orderTime?.text = "No MOQs Received"
+                        }
+                        else {
+                                if (moq.size == 1 && moq?.get(0)?.accepted == true) {
+                                    //todo show product vala view
+                                    var moq1 = moq?.get(0)
+                                    mBinding?.moqListLayout?.visibility = View.GONE
+                                    mBinding?.moqOrderQty?.text = "" + moq1?.moq
+                                    mBinding?.orderQuantity?.text = "" + moq1?.moq
+                                    mBinding?.moqOrderAmount?.text = "₹ ${moq1?.ppu}"
+                                    mBinding?.orderAmount?.text = "₹ ${moq1?.ppu}"
+                                    moqDeliveryTimeList?.forEach {
+                                        if (it.id.equals(moq1?.deliveryTimeId)) {
+                                            mBinding?.moqOrderEta?.text = if (it?.days.equals(0L)) {
+                                                "Immediate"
+                                            } else "${it?.days} Days"// "${it?.days} Days"
+                                            mBinding?.orderTime?.text = if (it?.days.equals(0L)) {
+                                                "Immediate"
+                                            } else "${it?.days} Days"//"${it?.days} Days"
+                                        }
+                                    }
+                                }
+                                else {
+                                    mBinding?.orderTime?.text = ""
+                                    mBinding?.moqDetails?.visibility = View.GONE
+                                    mBinding?.moqListLayout?.visibility = View.VISIBLE
+                                    mBinding?.moqList?.layoutManager = LinearLayoutManager(
+                                        requireContext(),
+                                        LinearLayoutManager.VERTICAL,
+                                        false
+                                    )
+                                    moqAdapter =  MoqAdapter(requireContext(), moq, moqDeliveryTimeList)
+                                    mBinding?.moqList?.adapter = moqAdapter
+                                    moqAdapter.listener = this
+                                }
+
                         }
                     }
                     "Custom Product" -> {
@@ -478,11 +493,11 @@ EnquiryViewModel.FetchEnquiryInterface,
                             mBinding?.moqDetails?.visibility = View.GONE
                             mBinding?.moqListLayout?.visibility = View.GONE
                             mBinding?.orderTime?.text = "Awaiting MOQs"
-                        } else {
+                        }
+                        else {
                             if (moq.size == 1 && moq?.get(0)?.accepted == true) {
                                 //todo show product vala view
                                 var moq1 = moq?.get(0)
-//                                mBinding?.moqDetails?.visibility = View.VISIBLE
                                 mBinding?.moqListLayout?.visibility = View.GONE
                                 mBinding?.moqOrderQty?.text = "" + moq1?.moq
                                 mBinding?.orderQuantity?.text = "" + moq1?.moq
@@ -498,16 +513,12 @@ EnquiryViewModel.FetchEnquiryInterface,
                                         } else "${it?.days} Days"//"${it?.days} Days"
                                     }
                                 }
-
-                            } else {
+                            }
+                            else {
                                 mBinding?.orderTime?.text = ""
                                 mBinding?.moqDetails?.visibility = View.GONE
                                 mBinding?.moqListLayout?.visibility = View.VISIBLE
-                                mBinding?.moqList?.layoutManager = LinearLayoutManager(
-                                    requireContext(),
-                                    LinearLayoutManager.VERTICAL,
-                                    false
-                                )
+                                mBinding?.moqList?.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false )
                                 moqAdapter = MoqAdapter(requireContext(), moq, moqDeliveryTimeList)
                                 mBinding?.moqList?.adapter = moqAdapter
                                 moqAdapter.listener = this
@@ -620,19 +631,48 @@ EnquiryViewModel.FetchEnquiryInterface,
     private fun handleMoqVisiblities(){
         when(enquiryDetails?.productType){
         "Product"-> {
-            val moq= MoqsPredicates.getSingleMoq(enqID)
-            val moqId= moq?.moqId?:0
-            mBinding?.moqListLayout?.visibility = View.GONE
-            if(moqId>0) {
-                if (mBinding?.moqDetails?.visibility == View.GONE) {
-                    mBinding?.moqDetails?.animation = slideDown
-                    mBinding?.moqDetails?.visibility = View.VISIBLE
-
-                } else {
-                    mBinding?.moqDetails?.animation = slideUp
+            val moq= MoqsPredicates.getMoqs(enqID)
+            if(moq==null|| moq?.size==0){
+                mBinding?.moqDetails?.visibility = View.GONE
+                mBinding?.moqListLayout?.visibility = View.GONE
+                mBinding?.orderTime?.text = "No MOQs Received"
+            }else {
+                val acceptedList = ArrayList<Boolean>()
+                moq?.forEach { acceptedList.add(it.accepted ?: false) }
+                if (!acceptedList.contains(true)) {
                     mBinding?.moqDetails?.visibility = View.GONE
+                    if (mBinding?.moqListLayout?.visibility == View.GONE) {
+                        mBinding?.moqListLayout?.animation = slideDown
+                        mBinding?.moqListLayout?.visibility = View.VISIBLE
+                    } else {
+                        mBinding?.moqListLayout?.animation = slideUp
+                        mBinding?.moqListLayout?.visibility = View.GONE
+                    }
+                } else {
+                    mBinding?.moqListLayout?.visibility = View.GONE
+                    if (mBinding?.moqDetails?.visibility == View.GONE) {
+                        mBinding?.moqDetails?.animation = slideDown
+                        mBinding?.moqDetails?.visibility = View.VISIBLE
+
+                    } else {
+                        mBinding?.moqDetails?.animation = slideUp
+                        mBinding?.moqDetails?.visibility = View.GONE
+                    }
                 }
             }
+//            val moq= MoqsPredicates.getMoqs(enqID)
+//            val moqId= moq?.moqId?:0
+//            mBinding?.moqListLayout?.visibility = View.GONE
+//            if(moqId>0) {
+//                if (mBinding?.moqDetails?.visibility == View.GONE) {
+//                    mBinding?.moqDetails?.animation = slideDown
+//                    mBinding?.moqDetails?.visibility = View.VISIBLE
+//
+//                } else {
+//                    mBinding?.moqDetails?.animation = slideUp
+//                    mBinding?.moqDetails?.visibility = View.GONE
+//                }
+//            }
         }
         "Custom Product"-> {
             val moq= MoqsPredicates.getMoqs(enqID)
