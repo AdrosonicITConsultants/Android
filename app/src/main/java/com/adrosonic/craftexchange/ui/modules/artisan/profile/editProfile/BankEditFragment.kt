@@ -13,15 +13,17 @@ import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 
 import com.adrosonic.craftexchange.R
+import com.adrosonic.craftexchange.database.entities.realmEntities.PaymentAccount
+import com.adrosonic.craftexchange.database.predicates.UserPredicates
 import com.adrosonic.craftexchange.databinding.FragmentBankEditBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.request.editProfileModel.AccountType
 import com.adrosonic.craftexchange.repository.data.request.editProfileModel.PaymentAccountDetails
 import com.adrosonic.craftexchange.repository.data.response.artisan.editProfile.EditBankDetailsResponse
-import com.adrosonic.craftexchange.ui.modules.artisan.profile.BankDetailsFragment.Companion.bank
-import com.adrosonic.craftexchange.ui.modules.artisan.profile.BankDetailsFragment.Companion.gpay
-import com.adrosonic.craftexchange.ui.modules.artisan.profile.BankDetailsFragment.Companion.paytm
-import com.adrosonic.craftexchange.ui.modules.artisan.profile.BankDetailsFragment.Companion.phonepe
+//import com.adrosonic.craftexchange.ui.modules.artisan.profile.BankDetailsFragment.Companion.bank
+//import com.adrosonic.craftexchange.ui.modules.artisan.profile.BankDetailsFragment.Companion.gpay
+//import com.adrosonic.craftexchange.ui.modules.artisan.profile.BankDetailsFragment.Companion.paytm
+//import com.adrosonic.craftexchange.ui.modules.artisan.profile.BankDetailsFragment.Companion.phonepe
 import com.adrosonic.craftexchange.ui.modules.artisan.profile.artisanProfileIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.pixplicity.easyprefs.library.Prefs
@@ -56,6 +58,12 @@ class BankEditFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_bank_edit, container, false)
+
+        var bank : PaymentAccount?= UserPredicates.getPaymentDetails(Prefs.getString(ConstantsDirectory.USER_ID,""),1)
+        var gpay : PaymentAccount?= UserPredicates.getPaymentDetails(Prefs.getString(ConstantsDirectory.USER_ID,""),2)
+        var phonepe : PaymentAccount?=
+            UserPredicates.getPaymentDetails(Prefs.getString(ConstantsDirectory.USER_ID,""),3)
+        var paytm : PaymentAccount?= UserPredicates.getPaymentDetails(Prefs.getString(ConstantsDirectory.USER_ID,""),4)
 
         mBinding?.accNo?.setText(bank?.accNoUPIMobile ?:"")
         mBinding?.bankName?.setText(bank?.bankName ?:"")

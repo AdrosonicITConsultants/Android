@@ -115,7 +115,7 @@ class ArtisanLandingActivity : AppCompatActivity(),
 
         mBinding?.navView?.setNavigationItemSelectedListener(this)
         nav_view.getHeaderView(0).text_user.text = firstname
-        
+
         mBinding?.txtVerTag?.text="23-09-20 V-1.1"
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction() .replace(R.id.artisan_home_container,ArtisanHomeFragment.newInstance())
