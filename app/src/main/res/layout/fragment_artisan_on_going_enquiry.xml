@@ -45,7 +45,7 @@
                 android:layout_centerInParent="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/zero_enq_back"/>
+                android:src="@drawable/zero_ong_enq_back"/>
 
         </RelativeLayout>
 

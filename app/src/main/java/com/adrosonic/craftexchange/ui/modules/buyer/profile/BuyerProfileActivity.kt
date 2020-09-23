@@ -49,9 +49,9 @@ class BuyerProfileActivity : AppCompatActivity(),
 
     private var mBinding : ActivityBuyerProfileBinding ?= null
     val mViewModel : ProfileViewModel by viewModels()
-    var craftUser : MutableLiveData<CraftUser>?= null
-    var regAddr : MutableLiveData<UserAddress>?= null
-    var delAddr : MutableLiveData<UserAddress>?= null
+    var craftUser : CraftUser ?= null
+    var regAddr : UserAddress?= null
+    var delAddr : UserAddress?= null
     var image : String ?= ""
     var url : String ?= ""
 
@@ -60,46 +60,27 @@ class BuyerProfileActivity : AppCompatActivity(),
         mBinding = ActivityBuyerProfileBinding.inflate(layoutInflater)
         val view = mBinding?.root
         setContentView(view)
-
         mViewModel.listener = this
-
-        if(Utility.checkIfInternetConnected(applicationContext)) {
-           refreshProfile()
-        }else{
-            Utility.displayMessage(getString(R.string.no_internet_connection),applicationContext)
-        }
+        refreshProfile()
 
         mViewModel.getUserMutableData()
             .observe(this, Observer<CraftUser> {
-                craftUser = MutableLiveData(it)
+                craftUser = it
             })
 
         mViewModel.getRegAddrMutableData()
             .observe(this, Observer<UserAddress> {
-                regAddr = MutableLiveData(it)
+                regAddr = it
             })
 
         mViewModel.getDelAddrMutableData()
             .observe(this, Observer<UserAddress> {
-                delAddr = MutableLiveData(it)
+                delAddr = it
             })
-
-        var rating = "${craftUser?.value?.rating} / 5"
-        mBinding?.rating?.text = rating
-        mBinding?.textFirstname?.text = Prefs.getString(ConstantsDirectory.FIRST_NAME,"Craft")
-        mBinding?.textLastname?.text = Prefs.getString(ConstantsDirectory.LAST_NAME,"User")
 
         supportFragmentManager.let{
             mBinding?.viewPagerDetails?.adapter = BuyerProfilePagerAdapter(it)
             mBinding?.tabLayoutDetails?.setupWithViewPager(mBinding?.viewPagerDetails)
-        }
-
-
-        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
-        if(Utility.checkIfInternetConnected(applicationContext)) {
-
-        }else{
-            Utility.displayMessage(getString(R.string.no_internet_connection),applicationContext)
         }
 
         mBinding?.btnEditProfile?.setOnClickListener {
@@ -112,33 +93,50 @@ class BuyerProfileActivity : AppCompatActivity(),
         this.finish()
     }
 
-    override fun onSuccess() {
-//        Utility?.displayMessage("Welcome!",applicationContext)
-        Log.e("BuyPro","Success")
+    fun setDetails(){
+        var rating = "${craftUser?.rating} / 5"
+        mBinding?.rating?.text = rating
+
+        mBinding?.textFirstname?.text = Prefs.getString(ConstantsDirectory.FIRST_NAME,"Craft")
+        mBinding?.textLastname?.text = Prefs.getString(ConstantsDirectory.LAST_NAME,"User")
+
         setImage()
     }
 
+    override fun onSuccess() {
+//        Utility?.displayMessage("Welcome!",applicationContext)
+        Log.e("BuyPro","Success")
+        setDetails()
+    }
+
     override fun onFailure() {
-//        Utility?.displayMessage("Error in fetching user details!",applicationContext)
         Log.e("BuyPro","Failure")
     }
 
     override fun onResume() {
         super.onResume()
-        refreshProfile()
+        mViewModel.getUserMutableData()
+        setDetails()
     }
 
     fun refreshProfile(){
-        mViewModel.getBuyerProfileDetails(this)
-        setImage()
+        if(Utility.checkIfInternetConnected(applicationContext)){
+            mViewModel.getBuyerProfileDetails(this)
+        }else{
+            Utility.displayMessage(getString(R.string.no_internet_connection),applicationContext)
+        }
     }
 
-    fun setImage(){
-        image = craftUser?.value?.brandLogo
-        url = Utility.getBrandLogoUrl(Prefs.getString(ConstantsDirectory.USER_ID,"").toLong(),image)
-        mBinding?.logo?.let {
-            ImageSetter.setImage(applicationContext,url!!, it,
-                R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
-        }
+    fun setImage() {
+        image = craftUser?.brandLogo
+        url = Utility.getBrandLogoUrl(Prefs.getString(ConstantsDirectory.USER_ID, "").toLong(), image)
+        ImageSetter.setImage(
+            applicationContext,
+            url!!,
+            mBinding?.logo!!,
+            R.drawable.buyer_logo_placeholder,
+            R.drawable.buyer_logo_placeholder,
+            R.drawable.buyer_logo_placeholder
+        )
     }
 }
