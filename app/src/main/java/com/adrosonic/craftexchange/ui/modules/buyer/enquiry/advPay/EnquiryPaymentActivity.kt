@@ -20,6 +20,7 @@ class EnquiryPaymentActivity : AppCompatActivity() {
     private var mBinding: ActivityEnquiryPaymentBinding? = null
 
     var enqID : Long?= 0
+    var piID : Long?= 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,11 +29,12 @@ class EnquiryPaymentActivity : AppCompatActivity() {
         setContentView(view)
 
         enqID = intent?.getLongExtra(ConstantsDirectory.ENQUIRY_ID,0)
+        piID = intent?.getLongExtra("PIID",0)
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.enquiry_payment_container,
-                    AdvPay1Fragment.newInstance(enqID.toString()))
+                    AdvPay1Fragment.newInstance(enqID.toString(),piID.toString()))
 //                ?.addToBackStack(null)
                 .commit()
         }

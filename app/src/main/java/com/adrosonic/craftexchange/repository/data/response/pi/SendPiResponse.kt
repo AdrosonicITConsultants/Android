@@ -25,5 +25,8 @@ data class Data (
     val isSend: Long,
     val createdOn: String,
     val modifiedOn: String,
-    val parentId: Any? = null
+    val parentId: Any? = null,
+    val hibernateLazyInitializer: HibernateLazyInitializer
 )
+
+class HibernateLazyInitializer

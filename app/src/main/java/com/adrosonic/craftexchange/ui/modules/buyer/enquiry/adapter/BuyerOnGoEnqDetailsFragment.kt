@@ -57,11 +57,13 @@ private const val ARG_PARAM2 = "param2"
 class BuyerOnGoEnqDetailsFragment : Fragment(),
 EnquiryViewModel.FetchEnquiryInterface,
     EnquiryViewModel.BuyersMoqInterface,
-    MoqAdapter.MoqListener{
+    MoqAdapter.MoqListener,
+EnquiryViewModel.singlePiInterface{
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
+    private var piID : Long?= 0
     private var enqID : Long ?= 0
     private var enqCode : String ?= ""
     private var enquiryDetails : OngoingEnquiries ?= null
@@ -124,11 +126,13 @@ EnquiryViewModel.FetchEnquiryInterface,
         moqDeliveryTimeList.addAll(moqDeliveryTime.data)
 //        mEnqVM.fetchEnqListener = this
         mEnqVM.buyerMoqListener = this
+        mEnqVM.singlePiListener = this
         mBinding?.swipeEnquiryDetails?.isEnabled = false
         if(Utility.checkIfInternetConnected(requireActivity())){
             enqID?.let { mEnqVM.getSingleOngoingEnquiry(it) }
             viewLoader()
             mEnqVM.getMoqs(enqID!!)
+            mEnqVM?.getSinglePi(enqID!!)
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
         }
@@ -168,7 +172,13 @@ EnquiryViewModel.FetchEnquiryInterface,
 
         mBinding?.btnUploadTransacReceipt?.setOnClickListener {
             if(Utility.checkIfInternetConnected(requireActivity())){
-                startActivity(context?.enquiryPayment()?.putExtra(ConstantsDirectory.ENQUIRY_ID,enqID))
+                if(piID != 0L){
+                    startActivity(context?.enquiryPayment()
+                        ?.putExtra(ConstantsDirectory.ENQUIRY_ID,enqID)
+                        ?.putExtra("PIID",piID))
+                }else{
+                    Utility.messageDialog(requireActivity(),"PI not generated")
+                }
             }else{
                 Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
             }
@@ -805,6 +815,17 @@ EnquiryViewModel.FetchEnquiryInterface,
         Utility.displayMessage("Coming Soon",requireContext())
         }
     }
+
+    override fun onPiFailure() {
+        Utility.displayMessage("PI Failure",requireActivity())
+    }
+
+    override fun getPiSuccess(id: Long) {
+        if(id != 0L){
+            piID = id
+        }
+    }
+
     companion object {
         @JvmStatic
         fun newInstance(param1: String) =
@@ -815,6 +836,5 @@ EnquiryViewModel.FetchEnquiryInterface,
                 }
             }
     }
-
 
 }

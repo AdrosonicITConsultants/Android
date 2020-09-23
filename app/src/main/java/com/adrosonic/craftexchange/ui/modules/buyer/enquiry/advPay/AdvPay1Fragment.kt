@@ -31,7 +31,10 @@ private const val ARG_PARAM2 = "param2"
 class AdvPay1Fragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
+    private var param2: String? = null
+
     var enqID : String?= ""
+    var piID : String?= ""
 
     private var mBinding: FragmentAdvPay1Binding?= null
 
@@ -45,7 +48,7 @@ class AdvPay1Fragment : Fragment() {
     var extraweft : String ?= ""
     var prodCategory : String ?= ""
     var status : String ?= ""
-    var calculatedAmount : Float?= 0f
+    var calculatedAmount : Float?= 0F
 
     var percentSelected : Long?= 30L
 
@@ -54,6 +57,7 @@ class AdvPay1Fragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
+            param2 = it.getString(ARG_PARAM2)
         }
     }
 
@@ -65,6 +69,9 @@ class AdvPay1Fragment : Fragment() {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_adv_pay1, container, false)
         if(param1!=null){
             enqID = if(param1!!.isNotEmpty())param1 else "0"
+        }
+        if(param2!=null){
+            piID = if(param2!!.isNotEmpty())param2 else "0"
         }
         return mBinding?.root
     }
@@ -97,7 +104,8 @@ class AdvPay1Fragment : Fragment() {
             if (savedInstanceState == null) {
                 activity?.supportFragmentManager?.beginTransaction()
                     ?.replace(R.id.enquiry_payment_container,
-                        AdvPay2Fragment.newInstance(enqID.toString(),calculatedAmount.toString(),percentSelected.toString()))
+                        AdvPay2Fragment.newInstance(enqID.toString(),
+                            calculatedAmount!!,percentSelected.toString(),piID.toString()))
                     ?.commit()
             }
         }
@@ -229,11 +237,11 @@ class AdvPay1Fragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(param1: String) =
+        fun newInstance(param1: String,param2: String) =
             AdvPay1Fragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
-//                    putString(ARG_PARAM2, param2)
+                    putString(ARG_PARAM2, param2)
                 }
             }
     }

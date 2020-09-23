@@ -2,6 +2,7 @@ package com.adrosonic.craftexchange.viewModels
 
 import android.app.Application
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.adrosonic.craftexchange.database.entities.realmEntities.CompletedEnquiries
@@ -32,6 +33,8 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody
+import org.json.JSONException
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Response
 import java.util.*
@@ -73,6 +76,11 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
         fun onPiDownloadFailure()
     }
 
+    interface singlePiInterface{
+        fun onPiFailure()
+        fun getPiSuccess(id : Long)
+    }
+
     interface UploadPaymentInterface{
         fun onFailure()
         fun onSuccess()
@@ -90,6 +98,7 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
     var buyerMoqListener : BuyersMoqInterface ?= null
     var artisanListener : ArtisanDetailsInterface ?= null
     var piLisener : piInterface ?= null
+    var singlePiListener : singlePiInterface ?= null
     var uploadPaymentListener : UploadPaymentInterface ?= null
 
     fun getOnEnqListMutableData(): MutableLiveData<RealmResults<OngoingEnquiries>> {
@@ -577,6 +586,27 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
             })
     }
 
+
+    fun getSinglePi(enquiryId : Long){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        Log.e(TAG,"getSinglePi :${enquiryId}")
+        CraftExchangeRepository
+            .getPiService()
+            .getSinglePi(token,enquiryId).enqueue(object : Callback, retrofit2.Callback<SendPiResponse> {
+                override fun onFailure(call: Call<SendPiResponse>, t: Throwable) {
+                    Log.e(TAG,"getSinglePi :${t.message}")
+                    t.printStackTrace()
+                    singlePiListener?.onPiFailure()
+                }
+                override fun onResponse(
+                    call: Call<SendPiResponse>,
+                    response: Response<SendPiResponse>
+                ) {
+                    response?.body()?.data?.id?.let { singlePiListener?.getPiSuccess(it) }
+                }
+            })
+    }
+
     fun uploadPaymentReceipt(payObj : BuyerPayment, filePath : String) {
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
 
@@ -598,6 +628,7 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
                     response: Response<ResponseBody>
                 ) {
                     uploadPaymentListener?.onSuccess()
+
                 }
             })
 

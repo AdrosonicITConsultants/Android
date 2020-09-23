@@ -24,6 +24,7 @@ import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.EnquiryPaymentDetails
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
 import com.adrosonic.craftexchange.database.predicates.EnquiryPredicates
+import com.adrosonic.craftexchange.database.predicates.PiPredicates
 import com.adrosonic.craftexchange.databinding.FragmentAdvPay1Binding
 import com.adrosonic.craftexchange.databinding.FragmentAdvPay2Binding
 import com.adrosonic.craftexchange.enums.PaymentStatus
@@ -40,19 +41,21 @@ import com.pixplicity.easyprefs.library.Prefs
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 private const val ARG_PARAM3 = "param3"
+private const val ARG_PARAM4 = "param4"
 
 
 class AdvPay2Fragment : Fragment(),
 EnquiryViewModel.UploadPaymentInterface{
 
     private var param1: String? = null
-    private var param2: String?= null
+    private var param2: Float?= 0F
     private var param3: String?= null
+    private var param4: String?= null
 
-
-    var enqID : String?= ""
-    var calculatedAmount : String?= ""
-    var percentSelected : String?=""
+    var piID : Long ?= 0
+    var enqID : Long?= 0
+    var calculatedAmount : Long?= 0
+    var percentSelected : Long?= 0
 
     private var mBinding: FragmentAdvPay2Binding?= null
 
@@ -67,8 +70,6 @@ EnquiryViewModel.UploadPaymentInterface{
     var filename : String?= ""
     var absolutePath : String?= ""
 
-    var paymentObj : BuyerPayment ?= null
-
     private var PICK_IMAGE: Int = 1
     private val PERMISSION_REQUEST_CODE = 200
 
@@ -77,7 +78,9 @@ EnquiryViewModel.UploadPaymentInterface{
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            param2 = it.getFloat(ARG_PARAM2)
+            param3 = it.getString(ARG_PARAM3)
+            param4 = it.getString(ARG_PARAM4)
         }
     }
 
@@ -88,21 +91,27 @@ EnquiryViewModel.UploadPaymentInterface{
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_adv_pay2, container, false)
         if(param1!=null){
-            enqID = if(param1!!.isNotEmpty())param1 else "0"
+            enqID = if(param1!!.isNotEmpty()) param1!!.toLong() else 0
         }
         if(param2!=null){
-            calculatedAmount = if(param2!!.isNotEmpty())param2 else "0"
+            calculatedAmount = if(param2 != 0F)param2!!.toLong() else 0
         }
         if(param3!=null){
-            percentSelected = if(param3!!.isNotEmpty())param3 else "30"
+            percentSelected = if(param3!!.isNotEmpty())param3!!.toLong() else 30
+        }
+        if(param4!=null){
+            piID = if(param4!!.isNotEmpty())param4!!.toLong() else 0
         }
         return mBinding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mEnqVM?.uploadPaymentListener = this
 
         enquiryDetails = enqID?.toLong()?.let { mEnqVM?.getSingleOnEnqData(it) }?.value
+//        var piDetails = PiPredicates?.getSinglePi(enqID?.toLong())
+
         slideDown = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_down)
         slideUp = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_up)
 
@@ -139,14 +148,27 @@ EnquiryViewModel.UploadPaymentInterface{
 
         mBinding?.btnUploadSend?.setOnClickListener {
 
+            var amount = enquiryDetails?.totalAmount?.toLong()
+
             if(Utility.checkIfInternetConnected(requireActivity())){
-                if(absolutePath != null){
-                    paymentObj?.enquiryId = enqID?.toLong()!!
-                    paymentObj?.paidAmount = calculatedAmount?.toLong()!!
-                    paymentObj?.percentage = percentSelected?.toLong()!!
-                    paymentObj?.totalAmount = enquiryDetails?.totalAmount?.toLong()!!
-                    paymentObj?.pid = 0L
-                    paymentObj?.type = PaymentStatus.ADVANCE.getId()
+                if(absolutePath != ""){
+                    var paymentObj = enqID?.let { it1 ->
+                        calculatedAmount?.let { it2 ->
+                            percentSelected?.let { it3 ->
+                                piID?.let { it4 ->
+                                    amount?.let { it5 ->
+                                        BuyerPayment(
+                                            it1,
+                                            it2,
+                                            it3,
+                                            it4,
+                                            it5,
+                                            PaymentStatus.ADVANCE.getId())
+                                    }
+                                }
+                            }
+                        }
+                    }
 
                     absolutePath?.let { it1 -> paymentObj?.let { it2 -> mEnqVM?.uploadPaymentReceipt(it2, it1) } }
                 }else{
@@ -287,12 +309,14 @@ EnquiryViewModel.UploadPaymentInterface{
 
     companion object {
 
-        fun newInstance(param1: String,param2: String,param3:String) =
+        fun newInstance(param1: String,param2: Float,param3:String,param4:String) =
             AdvPay2Fragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putFloat(ARG_PARAM2, param2)
                     putString(ARG_PARAM3, param3)
+                    putString(ARG_PARAM4, param4)
+
                 }
             }
     }
