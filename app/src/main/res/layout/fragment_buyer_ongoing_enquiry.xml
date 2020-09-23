@@ -65,15 +65,12 @@
             app:layout_constraintTop_toBottomOf="@+id/text_recent"
             app:layout_constraintVertical_bias="1.0">
 
-            <TextView
-                android:id="@+id/empty_text"
-                android:gravity="center"
+            <ImageView
+                android:id="@+id/empty_enq_list"
                 android:layout_centerInParent="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/playfair_regular"
-                android:text="No Ongoing BEnquiries"
-                android:textSize="@dimen/Ques_text" />
+                android:src="@drawable/zero_ong_enq_back"/>
 
         </RelativeLayout>
 

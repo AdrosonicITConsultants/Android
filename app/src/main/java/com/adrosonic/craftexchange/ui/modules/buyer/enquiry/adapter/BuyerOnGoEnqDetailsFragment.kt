@@ -217,50 +217,6 @@ EnquiryViewModel.FetchEnquiryInterface,
         }
     }
 
-    fun CustomProduct(){
-        val intent = Intent(requireContext().ownDesignIntent( enquiryDetails?.productID?:0))
-        val bundle = Bundle()
-        bundle.putString(ConstantsDirectory.PRODUCT_ID, enquiryDetails?.productID?.toString())
-        requireContext().startActivity(intent.putExtras(bundle))
-    }
-
-    fun CatalogueProduct(){
-        //TODO : change this implementation later
-        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
-        enquiryDetails?.productID?.let { it1 ->
-            CraftExchangeRepository
-                .getWishlistService()
-                .getSingleProductDetails(token, it1.toInt())
-                .enqueue(object : Callback, retrofit2.Callback<SingleProductDetails> {
-                    override fun onFailure(call: Call<SingleProductDetails>, t: Throwable) {
-                        t.printStackTrace()
-                        Utility.displayMessage("Try Again",requireActivity())
-                        Log.e("prodDetails","Failure : "+t.printStackTrace())
-                        //                        listener?.onProdFetchFail()
-                    }
-
-                    override fun onResponse(
-                        call: Call<SingleProductDetails>, response: Response<SingleProductDetails>
-                    ) {
-                        if (response.body()?.valid == true) {
-                            val response=response.body()?.data
-                            if(response != null){
-                                WishlistPredicates.insertSingleProduct(response)
-                                val intent = Intent(requireActivity().catalogueProductDetailsIntent())
-                                val bundle = Bundle()
-                                bundle.putString(ConstantsDirectory.PRODUCT_ID, enquiryDetails?.productID?.toString())
-                                intent.putExtras(bundle)
-                                requireActivity().startActivity(intent)
-                            }
-                        } else {
-                            Log.e("prodDetails","Failure")
-                            Utility.displayMessage("Try Again",requireActivity())
-
-                        }
-                    }
-                })
-        }
-    }
 
     fun setDetails(){
         try {

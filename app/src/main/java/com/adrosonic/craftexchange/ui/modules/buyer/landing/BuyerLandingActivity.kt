@@ -82,7 +82,7 @@ class BuyerLandingActivity : AppCompatActivity(),
 
     private var mBinding : ActivityBuyerLandingBinding ?= null
     val mViewModel: LandingViewModel by viewModels()
-    var craftUser : MutableLiveData<CraftUser>?= null
+    var craftUser : CraftUser?= null
     val mProVM : ProfileViewModel by viewModels()
     var imageName : String ?= ""
     var url : String ?= ""
@@ -109,9 +109,10 @@ class BuyerLandingActivity : AppCompatActivity(),
         mViewModel?.noficationlistener=this
         mViewModel?.getAllNotifications()
         refreshProfile()
+
         mProVM.getUserMutableData()
             .observe(this, Observer<CraftUser> {
-                craftUser = MutableLiveData(it)
+                craftUser = it
             })
 
 
@@ -358,7 +359,7 @@ class BuyerLandingActivity : AppCompatActivity(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("LandingAct", "Onsuccess")
-                craftUser = mProVM.getUserMutableData()
+                mProVM.getUserMutableData()
             }
             )
         } catch (e: Exception) {
@@ -391,13 +392,12 @@ class BuyerLandingActivity : AppCompatActivity(),
             mViewModel.getArtisanBrandDetails()
             mViewModel.getAllNotifications()
             mProVM.getBuyerProfileDetails(this)
-            craftUser = mProVM.getUserMutableData()
-            setBrandLogo()
+            mProVM.getUserMutableData()
         }
     }
 
     private fun setBrandLogo(){
-        imageName = craftUser?.value?.brandLogo
+        imageName = craftUser?.brandLogo
         url = Utility.getBrandLogoUrl(Prefs.getString(ConstantsDirectory.USER_ID, "").toLong(),imageName)
         ImageSetter.setImageWithProgress(applicationContext,url!!,nav_view.getHeaderView(0).logo,nav_view.getHeaderView(0).progress,
             R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
@@ -409,6 +409,11 @@ class BuyerLandingActivity : AppCompatActivity(),
         setBrandLogo()
     }
 
+    override fun onResume() {
+        super.onResume()
+        mProVM.getUserMutableData()
+        setBrandLogo()
+    }
     override fun onBadgeCOuntUpdated() {
         setupBadge()
     }

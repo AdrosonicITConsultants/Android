@@ -93,6 +93,16 @@ EnquiryViewModel.FetchEnquiryInterface{
 //        mEnqListAdapter?.enqListener = this  //important to set adapter first and then call listener
     }
 
+    fun setVisiblities() {
+        if (mEnqVM.getOnEnqListMutableData().value?.size!! > 0) {
+            mBinding?.ongoingEnqRecyclerList?.visibility = View.VISIBLE
+            mBinding?.emptyView?.visibility = View.GONE
+        } else {
+            mBinding?.ongoingEnqRecyclerList?.visibility = View.GONE
+            mBinding?.emptyView?.visibility = View.VISIBLE
+        }
+    }
+
     companion object {
         @JvmStatic
         fun newInstance() = BuyerOngoingEnquiryFragment()
@@ -115,6 +125,7 @@ EnquiryViewModel.FetchEnquiryInterface{
                 mBinding?.swipeOngoingEnquiries?.isRefreshing = false
                 mEnqVM.getOnEnqListMutableData()
                 Utility.displayMessage("Error while fetching list", requireContext())
+                setVisiblities()
             })
         } catch (e: Exception) {
             Log.e("OngoingEnqList", "Exception onFailure " + e.message)
@@ -127,6 +138,7 @@ EnquiryViewModel.FetchEnquiryInterface{
                 Log.e("OngoingEnqList", "onSuccess")
                 mBinding?.swipeOngoingEnquiries?.isRefreshing = false
                 mEnqVM.getOnEnqListMutableData()
+                setVisiblities()
             })
         } catch (e: Exception) {
             Log.e("OngoingEnqList", "Exception onFailure " + e.message)
