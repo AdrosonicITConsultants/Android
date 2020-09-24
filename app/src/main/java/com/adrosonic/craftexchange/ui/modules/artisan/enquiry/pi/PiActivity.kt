@@ -259,6 +259,12 @@ class PiActivity : AppCompatActivity(),
     override fun onPiDownloadFailure() {
     }
 
+    override fun onPiHTMLSuccess(data:String) {
+    }
+
+    override fun onPiHTMLFailure() {
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         Log.e("PiActivity", "onActivityResult $requestCode")

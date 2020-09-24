@@ -74,6 +74,8 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
         fun onPiSuccess()
         fun onPiDownloadSuccess()
         fun onPiDownloadFailure()
+        fun onPiHTMLSuccess(data:String)
+        fun onPiHTMLFailure()
     }
 
     interface singlePiInterface{
@@ -568,7 +570,6 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
                     val body=response.body()
                     if(body!=null) {
                         body?.let {
-                            //todo
                             Utility.writeResponseBodyToDisk(
                                 it,
                                 enquiryId.toString(),
@@ -586,6 +587,34 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
             })
     }
 
+    fun previewPi(enquiryId:Long){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        Log.e(TAG,"previewPi :${enquiryId}")
+        CraftExchangeRepository
+            .getPiService()
+            .getPreviewPiHTML(token,enquiryId.toInt()).enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Log.e(TAG,"previewPi :${t.message}")
+                    t.printStackTrace()
+                    piLisener?.onPiHTMLFailure()
+                }
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    val body=response.body()
+                    if(body!=null) {
+                        Log.e(TAG,"previewPi :${body}")
+                        body?.let {
+                            piLisener?.onPiHTMLSuccess(it.string())
+                        }
+                    }else  {
+                        Log.e(TAG,"previewPi :${body}")
+                        piLisener?.onPiHTMLFailure()
+                    }
+                }
+            })
+    }
 
     fun getSinglePi(enquiryId : Long){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"

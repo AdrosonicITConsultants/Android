@@ -58,6 +58,10 @@ EnquiryViewModel.piInterface{
             enquiryDetails=mEnqVM?.loadSingleEnqDetails(enquiryId)
 //            piDetails=PiPredicates.getSinglePi(enquiryId)
             pi=intent.getSerializableExtra("piRequest") as SendPiRequest
+            enquiryId?.let{
+                viewLoader()
+                mEnqVM?.previewPi(enquiryId)
+            }
         }
         mBinding?.btnBack?.setOnClickListener {
             finish()
@@ -103,7 +107,7 @@ EnquiryViewModel.piInterface{
         webSettings?.javaScriptEnabled = true
         webSettings?.builtInZoomControls = true
         if(Utility.checkIfInternetConnected(applicationContext)){
-            mBinding?.webviewPiPreview?.loadUrl(ConstantsDirectory.VIEW_PI_URL+enquiryId)
+            mBinding?.webviewPiPreview?.loadDataWithBaseURL(null,"Please wait...", "text/html", "utf-8", null)
         }else{
             mBinding?.webviewPiPreview?.loadDataWithBaseURL(null, getString(R.string.preview_not_available), "text/html", "utf-8", null)
         }
@@ -146,20 +150,6 @@ EnquiryViewModel.piInterface{
                 Log.e("Enquiry Details", "onSuccess")
                 hideLoader()
                 Utility.openFile(applicationContext,enquiryId)
-//                    val cacheFile = File(applicationContext.cacheDir, ConstantsDirectory.PI_PDF_PATH + "Pi${enquiryId}.pdf")
-//                    try {
-//                        val uri = FileProvider.getUriForFile(applicationContext, "com.adrosonic.android.knowledgemill.provider", cacheFile)
-//                        val myIntent = Intent(Intent.ACTION_VIEW)
-//                        myIntent.putExtra(ShareCompat.EXTRA_CALLING_PACKAGE, applicationContext.getPackageName())
-//                        val componentName = this.componentName
-//                        myIntent.putExtra(ShareCompat.EXTRA_CALLING_ACTIVITY, componentName)
-//                        myIntent.setDataAndType(uri, "application/pdf")
-//                        myIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-//                        this.startActivity(Intent.createChooser(myIntent, "Open with"))
-//                    } catch (e: Exception) {
-//                        Utility.displayMessage("  Application not installed " + e, applicationContext)
-//                    }
-
             })
         } catch (e: Exception) {
             Log.e("Enquiry Details", "Exception onFailure " + e.message)
@@ -171,6 +161,30 @@ EnquiryViewModel.piInterface{
             Handler(Looper.getMainLooper()).post(Runnable {
                 hideLoader()
                 Utility.displayMessage("Unable to download PDF, pleas try again later",applicationContext)
+            })
+        } catch (e: Exception) {
+            Log.e("Enquiry Details", "Exception onFailure " + e.message)
+        }
+    }
+
+    override fun onPiHTMLSuccess( data:String) {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("Enquiry Details", "onSuccess")
+                hideLoader()
+                mBinding?.webviewPiPreview?.loadDataWithBaseURL(null, data, "text/html", "utf-8", null)
+            })
+        } catch (e: Exception) {
+            Log.e("Enquiry Details", "Exception onFailure " + e.message)
+        }
+    }
+
+    override fun onPiHTMLFailure() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("Enquiry Details", "onSuccess")
+                hideLoader()
+                mBinding?.webviewPiPreview?.loadDataWithBaseURL(null, getString(R.string.preview_not_available), "text/html", "utf-8", null)
             })
         } catch (e: Exception) {
             Log.e("Enquiry Details", "Exception onFailure " + e.message)

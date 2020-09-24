@@ -30,10 +30,12 @@ import com.adrosonic.craftexchange.databinding.FragmentBuyerOnGoEnqDetailsBindin
 import com.adrosonic.craftexchange.enums.AvailableStatus
 import com.adrosonic.craftexchange.enums.getId
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
+import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.singleProduct.SingleProductDetails
 import com.adrosonic.craftexchange.ui.modules.artisan.auth.register.ArtisanRegisterPasswordFragment
 import com.adrosonic.craftexchange.repository.data.response.moq.Datum
 import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimesResponse
+import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
 import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.advPay.enquiryPayment
 import com.adrosonic.craftexchange.ui.modules.buyer.ownDesign.ownDesignIntent
 import com.adrosonic.craftexchange.ui.modules.buyer.productDetails.catalogueProductDetailsIntent
@@ -217,6 +219,10 @@ EnquiryViewModel.singlePiInterface{
                         ?.commit()
                 }
             }
+        }
+
+        mBinding?.viewPi?.setOnClickListener {
+            enqID?.let {  startActivity(requireContext().raisePiContext(it,true, SendPiRequest())) }
         }
     }
 
@@ -597,11 +603,11 @@ EnquiryViewModel.singlePiInterface{
 //            mBinding?.moqDetailsLayer?.visibility = View.GONE
 //        }
 
-        if(enquiryDetails?.isPiSend == 1L){
-            mBinding?.piDetailsLayer?.visibility = View.VISIBLE
-        }else{
-            mBinding?.piDetailsLayer?.visibility = View.GONE
-        }
+//        if(enquiryDetails?.isPiSend == 1L){
+//            mBinding?.piDetailsLayer?.visibility = View.VISIBLE
+//        }else{
+//            mBinding?.piDetailsLayer?.visibility = View.GONE
+//        }
     }
 
     private fun handleMoqVisiblities(){

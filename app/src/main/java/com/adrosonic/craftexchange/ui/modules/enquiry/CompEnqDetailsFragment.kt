@@ -99,7 +99,8 @@ class CompEnqDetailsFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         moqDeliveryJson = UserConfig.shared.moqDeliveryDates
-        val gson = GsonBuilder().create()
+        val gson
+                = GsonBuilder().create()
         val moqDeliveryTime = gson.fromJson(moqDeliveryJson, MoqDeliveryTimesResponse::class.java)
         moqDeliveryTimeList.addAll(moqDeliveryTime.data)
         mEnqVM.fetchEnqListener = this
@@ -178,9 +179,8 @@ class CompEnqDetailsFragment : Fragment(),
             }
 
         }
-        mBinding?.viewPiLayout?.setOnClickListener {
-            enqID?.let {  startActivity(requireContext().raisePiContext(it,true, null))
-            }
+        mBinding?.viewPi?.setOnClickListener {
+            enqID?.let {  startActivity(requireContext().raisePiContext(it,true, SendPiRequest())) }
         }
 
     }
@@ -381,7 +381,8 @@ class CompEnqDetailsFragment : Fragment(),
             mBinding?.orderTime?.text="No MOQs present"
 
         }
-        if(enquiryDetails?.isPiSend!!.equals(1)){
+        Log.e("Completed","isPiSend: ${enquiryDetails?.isPiSend}")
+        if(enquiryDetails?.isPiSend!!.equals(1L)){
             mBinding?.viewPiLayout?.visibility=View.VISIBLE
         }else  mBinding?.viewPiLayout?.visibility=View.GONE
 

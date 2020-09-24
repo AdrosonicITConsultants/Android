@@ -5,11 +5,7 @@
     tools:context=".ui.modules.artisan.enquiry.pi.RaisePiActivity">
 
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_enquiry_details"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white_text">
+
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -171,7 +167,6 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </layout>
 
