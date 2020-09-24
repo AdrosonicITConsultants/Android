@@ -405,6 +405,7 @@ EnquiryViewModel.singlePiInterface{
 
                 setProgressTimeline()
 
+                if(enquiryDetails?.productStatusID == AvailableStatus.MADE_TO_ORDER.getId() || isCustom == true){
                 when (enquiryDetails?.enquiryStageID) {
                     3L -> {
                         mBinding?.transactionLayout?.visibility = View.VISIBLE
@@ -415,6 +416,8 @@ EnquiryViewModel.singlePiInterface{
                     else -> {
                         mBinding?.transactionLayout?.visibility = View.GONE
                     }
+                }}else{
+                    mBinding?.transactionLayout?.visibility = View.GONE
                 }
 
                 when (enquiryDetails?.productType) {
@@ -575,15 +578,15 @@ EnquiryViewModel.singlePiInterface{
             when(currEnqStageId){
                 3L -> {
                     mBinding?.awaitingPaymentReceipt?.visibility = View.VISIBLE
-                    mBinding?.transactionLayout?.visibility = View.VISIBLE
+//                    mBinding?.transactionLayout?.visibility = View.VISIBLE
                 }
                 8L -> {
                     mBinding?.awaitingPaymentReceipt?.visibility = View.VISIBLE
-                    mBinding?.transactionLayout?.visibility = View.VISIBLE
+//                    mBinding?.transactionLayout?.visibility = View.VISIBLE
                 }
                 else ->{
                     mBinding?.awaitingPaymentReceipt?.visibility = View.GONE
-                    mBinding?.transactionLayout?.visibility = View.GONE
+//                    mBinding?.transactionLayout?.visibility = View.GONE
                 }
             }
         }
