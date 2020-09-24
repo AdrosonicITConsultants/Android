@@ -573,11 +573,11 @@ EnquiryViewModel.singlePiInterface{
 
         if(enquiryDetails?.isBlue == 1L){
             when(currEnqStageId){
-                4L -> {
+                3L -> {
                     mBinding?.awaitingPaymentReceipt?.visibility = View.VISIBLE
                     mBinding?.transactionLayout?.visibility = View.VISIBLE
                 }
-                9L -> {
+                8L -> {
                     mBinding?.awaitingPaymentReceipt?.visibility = View.VISIBLE
                     mBinding?.transactionLayout?.visibility = View.VISIBLE
                 }
@@ -738,6 +738,20 @@ EnquiryViewModel.singlePiInterface{
         }
     }
 
+    override fun startActivityForResult(intent: Intent?, requestCode: Int) {
+        super.startActivityForResult(intent, requestCode)
+        if(requestCode == 75){
+            if(Utility.checkIfInternetConnected(requireActivity())){
+                enqID?.let { mEnqVM.getSingleOngoingEnquiry(it) }
+                viewLoader()
+                mEnqVM.getMoqs(enqID!!)
+                mEnqVM?.getSinglePi(enqID!!)
+            }else{
+                Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
+            }
+        }
+    }
+
     override fun onGetMoqCall() {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
@@ -865,6 +879,7 @@ EnquiryViewModel.singlePiInterface{
             piID = id
         }
     }
+
 
     companion object {
         @JvmStatic

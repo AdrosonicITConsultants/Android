@@ -610,6 +610,9 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
     fun uploadPaymentReceipt(payObj : BuyerPayment, filePath : String) {
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
 
+        var gson = Gson()
+        var payObjString = gson.toJson(payObj)
+
         var file = File(filePath)
         var fileReqBody = file!!.toRequestBody(MediaType.parse("image/*"))
         var fileBody = MultipartBody.Builder()
@@ -619,7 +622,7 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
 
          CraftExchangeRepository
             .getTransactionService()
-            .uploadPaymentDetails(headerBoundary,token,payObj,fileBody!!).enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
+            .uploadPaymentDetails(token,headerBoundary,payObjString,fileBody!!).enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     uploadPaymentListener?.onFailure()
                 }

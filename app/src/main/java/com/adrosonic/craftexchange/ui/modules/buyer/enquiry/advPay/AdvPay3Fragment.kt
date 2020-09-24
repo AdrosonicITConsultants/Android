@@ -1,5 +1,6 @@
 package com.adrosonic.craftexchange.ui.modules.buyer.enquiry.advPay
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
@@ -17,10 +19,12 @@ import com.adrosonic.craftexchange.databinding.FragmentAdvPay2Binding
 import com.adrosonic.craftexchange.databinding.FragmentAdvPay3Binding
 import com.adrosonic.craftexchange.enums.AvailableStatus
 import com.adrosonic.craftexchange.enums.getId
+import com.adrosonic.craftexchange.ui.modules.enquiry.enquiryDetails
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
+import com.pixplicity.easyprefs.library.Prefs
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -31,6 +35,8 @@ private const val ARG_PARAM2 = "param2"
 class AdvPay3Fragment : Fragment() {
 
     private var param1: String? = null
+    private var param2: String? = null
+
     var enqID : String?= ""
 
     private var mBinding: FragmentAdvPay3Binding?= null
@@ -46,12 +52,16 @@ class AdvPay3Fragment : Fragment() {
     var prodCategory : String ?= ""
     var status : String ?= ""
 
+    var amountPaid : String?=""
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
+            param2 = it.getString(ARG_PARAM2)
         }
+
     }
 
     override fun onCreateView(
@@ -62,6 +72,10 @@ class AdvPay3Fragment : Fragment() {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_adv_pay3, container, false)
         if(param1!=null){
             enqID = if(param1!!.isNotEmpty())param1 else "0"
+        }
+
+        if(param2!=null){
+            amountPaid = if(param2!!.isNotEmpty())param2 else "0"
         }
         return mBinding?.root
     }
@@ -84,11 +98,14 @@ class AdvPay3Fragment : Fragment() {
         }
     }
 
+
     fun setDetails(){
         mBinding?.enquiryCode?.text = enquiryDetails?.enquiryCode ?: "N.A"
+        mBinding?.amountPaid?.text = "₹ $amountPaid"
 
         setProductImage()
         setProductName()
+        setProductAvailability()
     }
 
     fun setProductImage(){
@@ -186,10 +203,11 @@ class AdvPay3Fragment : Fragment() {
 
 
     companion object {
-        fun newInstance(param1: String) =
+        fun newInstance(param1: String, param2:String) =
             AdvPay3Fragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
                 }
             }
     }

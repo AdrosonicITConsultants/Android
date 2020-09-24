@@ -316,5 +316,8 @@
     <string name="proforma_invoice">Proforma invoice</string>
     <string name="fill_in_pi_for_this_enquiry">Fill in PI for this enquiry</string>
     <string name="preview_not_available"><![CDATA[<B>Sorry!<br> Preview not available due to internet connection unavailability.</B>]]></string>
+    <string name="awaiting_artisan_confirmation">Awaiting artisan confirmation</string>
+    <string name="payment_receipt_upload_confirmation">Payment Receipt Uploaded!</string>
+    <string name="awaiting_payment_confirmation">Awaiting payment confirmation</string>
 
 </resources>

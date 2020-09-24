@@ -310,6 +310,15 @@ class Utility {
             return dialog
         }
 
+        fun loadingDialog(context: Context) : Dialog {
+            var dialog = Dialog(context)
+            dialog.setContentView(com.adrosonic.craftexchange.R.layout.dialog_loading)
+            dialog.setCanceledOnTouchOutside(false) // disables outside the box touch
+            dialog.setCancelable(false) // disables backbtn click when popup visible//
+            dialog.create()
+            return dialog
+        }
+
 
         fun clearPrefs(){
             val editor = Prefs.edit()
@@ -336,18 +345,18 @@ class Utility {
         }
 
         fun getBrandLogoUrl(userId : Long?, imagename : String?) : String{
-            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_UAT}User/${userId}/CompanyDetails/Logo/${imagename}"
+            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV}User/${userId}/CompanyDetails/Logo/${imagename}"
         }
 
         fun getProfilePhotoUrl(artisanId : Long?, imagename : String?) : String{
-            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_UAT}User/${artisanId}/ProfilePics/${imagename}"
+            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV}User/${artisanId}/ProfilePics/${imagename}"
         }
 
         fun getProductsImagesUrl(productId : Long?,imagename : String?) : String{
-            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_UAT}Product/${productId}/${imagename}"
+            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV}Product/${productId}/${imagename}"
         }
         fun getCustomProductImagesUrl(productId : Long?,imagename : String?) : String{
-            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_UAT}CustomProduct/${productId}/${imagename}"
+            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV}CustomProduct/${productId}/${imagename}"
         }
         fun setImageResource(context: Context?,imageView:ImageView?,imageId:Int){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
