@@ -123,7 +123,6 @@
                             android:layout_centerInParent="true"
                             android:fontFamily="@font/lato_regular"
                             android:padding="4dp"
-                            android:text="Rs. 363476"
                             android:textColor="#5D82FF"
                             android:textSize="@dimen/product_description_text" />
                     </RelativeLayout>
@@ -136,7 +135,7 @@
                         android:layout_marginTop="@dimen/margin_regular"
                         android:layout_marginBottom="@dimen/margin_regular"
                         android:fontFamily="@font/lato_regular"
-                        android:text="10 days to go...."
+                        android:text="10 days to upload transaction receipt."
                         android:textColor="@color/darker_gray"
                         android:textSize="@dimen/product_availability_text"
                         app:layout_constraintBottom_toBottomOf="parent"

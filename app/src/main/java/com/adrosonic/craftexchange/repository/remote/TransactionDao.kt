@@ -11,9 +11,9 @@ interface TransactionDao {
 
     @Headers("Accept: application/json")
     @POST("enquiry/Payment")
-    fun uploadPaymentDetails(@Header("Content-Type") headerValue:String,
-                             @Header("Authorization") token:String,
-                             @Query("payment") payment : BuyerPayment,
+    fun uploadPaymentDetails(@Header("Authorization") token: String,
+                             @Header("Content-Type") headerValue:String,
+                             @Query("payment") payment : String,
                              @Body file : MultipartBody) : Call<ResponseBody>
 
 //    fun registerUserPhoto(@Header("Content-Type") headerValue:String,

@@ -8,13 +8,18 @@ import androidx.fragment.app.replace
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityEnquiryDetailsBinding
 import com.adrosonic.craftexchange.databinding.ActivityEnquiryPaymentBinding
+import com.adrosonic.craftexchange.ui.modules.authentication.login.LoginActivity
+import com.adrosonic.craftexchange.ui.modules.enquiry.EnquiryDetailsActivity
+import com.adrosonic.craftexchange.ui.modules.enquiry.enquiryDetails
 import com.adrosonic.craftexchange.ui.modules.role.RoleSelectFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.pixplicity.easyprefs.library.Prefs
 
 fun Context.enquiryPayment(): Intent {
     return Intent(this, EnquiryPaymentActivity::class.java).apply {}
 }
 
+const val ENQ_SCREEN = 75
 class EnquiryPaymentActivity : AppCompatActivity() {
 
     private var mBinding: ActivityEnquiryPaymentBinding? = null
@@ -39,4 +44,14 @@ class EnquiryPaymentActivity : AppCompatActivity() {
                 .commit()
         }
     }
+
+//    override fun onBackPressed() {
+//        super.onBackPressed()
+//        var bundle = Bundle()
+//        Prefs.putString(ConstantsDirectory.ENQUIRY_ID, enqID.toString()) //TODO change later
+//        bundle.putString(ConstantsDirectory.ENQUIRY_ID, enqID.toString())
+//        bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG, "2")
+//
+//        startActivity(this.enquiryDetails().putExtras(bundle).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+//    }
 }

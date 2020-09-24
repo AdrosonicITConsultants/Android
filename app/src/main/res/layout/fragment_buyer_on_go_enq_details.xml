@@ -391,7 +391,7 @@
                             android:layout_marginBottom="8dp"
                             android:fontFamily="@font/lato_regular"
                             android:gravity="center"
-                            android:text="@string/awaiting_payment_receipt"
+                            android:text="@string/awaiting_artisan_confirmation"
                             android:textColor="@color/tab_details_selected_text"
                             android:textSize="12sp"
                             android:textStyle="bold"

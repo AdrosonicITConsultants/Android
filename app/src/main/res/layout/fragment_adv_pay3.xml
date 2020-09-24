@@ -50,10 +50,10 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="4dp"
                         android:fontFamily="@font/lato_regular"
+                        android:text="@string/payment_receipt_upload_confirmation"
                         android:textColor="@color/black_text"
                         android:textSize="@dimen/product_note_text"
                         android:textStyle="bold"
-                        android:text="@string/upload_payment_receipt"
                         app:layout_constraintStart_toEndOf="@+id/btn_back"
                         app:layout_constraintTop_toTopOf="@+id/btn_back" />
 
@@ -90,6 +90,20 @@
 
                     </FrameLayout>
 
+                    <ImageView
+                        android:id="@+id/btn_chat"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginTop="@dimen/margin_regular"
+                        android:layout_marginEnd="@dimen/margin_regular"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:elevation="10dp"
+                        android:focusable="true"
+                        android:src="@drawable/ic_chat_enquiry"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
                     <TextView
                         android:id="@+id/product_name"
                         android:layout_width="wrap_content"
@@ -114,18 +128,47 @@
                         app:layout_constraintTop_toBottomOf="@id/product_name" />
 
                     <TextView
-                        android:id="@+id/amount_paid"
+                        android:id="@+id/amount_paid_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_regular"
                         android:fontFamily="@font/lato_regular"
                         android:text="@string/amount_paid"
                         android:textColor="@color/light_green"
                         android:textSize="@dimen/product_availability_text"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.4"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/product_Availability" />
+                        app:layout_constraintTop_toTopOf="@+id/amount_paid" />
 
+                    <TextView
+                        android:id="@+id/amount_paid"
+                        android:layout_width="wrap_content"
+                        android:layout_height="35dp"
+                        android:layout_centerInParent="true"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/lato_regular"
+                        android:textColor="#5D82FF"
+                        android:textSize="@dimen/product_description_text"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/amount_paid_text"
+                        app:layout_constraintTop_toBottomOf="@+id/product_Availability"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <TextView
+                        android:id="@+id/awaiting_payment_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:fontFamily="@font/lato_regular"
+                        android:text="@string/awaiting_artisan_confirmation"
+                        android:textColor="@color/tab_details_selected_text"
+                        android:textSize="@dimen/product_availability_text"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/amount_paid" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>

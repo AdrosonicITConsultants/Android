@@ -1,6 +1,7 @@
 package com.adrosonic.craftexchange.ui.modules.buyer.enquiry.advPay
 
 import android.Manifest
+import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -70,6 +71,8 @@ EnquiryViewModel.UploadPaymentInterface{
     var filename : String?= ""
     var absolutePath : String?= ""
 
+    private var dialog : Dialog?= null
+
     private var PICK_IMAGE: Int = 1
     private val PERMISSION_REQUEST_CODE = 200
 
@@ -102,6 +105,8 @@ EnquiryViewModel.UploadPaymentInterface{
         if(param4!=null){
             piID = if(param4!!.isNotEmpty())param4!!.toLong() else 0
         }
+        dialog = Utility.loadingDialog(requireActivity())
+
         return mBinding?.root
     }
 
@@ -148,7 +153,7 @@ EnquiryViewModel.UploadPaymentInterface{
 
         mBinding?.btnUploadSend?.setOnClickListener {
 
-            var amount = enquiryDetails?.totalAmount?.toLong()
+            var amount = enquiryDetails?.totalAmount?.toFloat()?.toLong()
 
             if(Utility.checkIfInternetConnected(requireActivity())){
                 if(absolutePath != ""){
@@ -171,6 +176,7 @@ EnquiryViewModel.UploadPaymentInterface{
                     }
 
                     absolutePath?.let { it1 -> paymentObj?.let { it2 -> mEnqVM?.uploadPaymentReceipt(it2, it1) } }
+                    dialog?.show()
                 }else{
                     Utility?.displayMessage("Upload Transaction Receipt",requireActivity())
                 }
@@ -307,27 +313,16 @@ EnquiryViewModel.UploadPaymentInterface{
             .show()
     }
 
-    companion object {
 
-        fun newInstance(param1: String,param2: Float,param3:String,param4:String) =
-            AdvPay2Fragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putFloat(ARG_PARAM2, param2)
-                    putString(ARG_PARAM3, param3)
-                    putString(ARG_PARAM4, param4)
-
-                }
-            }
-    }
 
     override fun onSuccess() {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("AdvancePAyUpload", "OnSuccess")
+                dialog?.cancel()
                 activity?.supportFragmentManager?.beginTransaction()
                     ?.replace(R.id.enquiry_payment_container,
-                        AdvPay3Fragment.newInstance(enqID.toString()))
+                        AdvPay3Fragment.newInstance(enqID.toString(),calculatedAmount.toString()))
                     ?.commit()
             }
             )
@@ -340,11 +335,26 @@ EnquiryViewModel.UploadPaymentInterface{
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("AdvancePAyUpload", "OnFailure")
+                dialog?.cancel()
                 Utility.messageDialog(requireActivity(),"Failed to Upload receipt! Please try again.")
             }
             )
         } catch (e: Exception) {
             Log.e("AdvancePAyUpload", "Exception onFailure " + e.message)
         }
+    }
+
+    companion object {
+
+        fun newInstance(param1: String,param2: Float,param3:String,param4:String) =
+            AdvPay2Fragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                    putFloat(ARG_PARAM2, param2)
+                    putString(ARG_PARAM3, param3)
+                    putString(ARG_PARAM4, param4)
+
+                }
+            }
     }
 }

@@ -310,6 +310,15 @@ class Utility {
             return dialog
         }
 
+        fun loadingDialog(context: Context) : Dialog {
+            var dialog = Dialog(context)
+            dialog.setContentView(com.adrosonic.craftexchange.R.layout.dialog_loading)
+            dialog.setCanceledOnTouchOutside(false) // disables outside the box touch
+            dialog.setCancelable(false) // disables backbtn click when popup visible//
+            dialog.create()
+            return dialog
+        }
+
 
         fun clearPrefs(){
             val editor = Prefs.edit()
