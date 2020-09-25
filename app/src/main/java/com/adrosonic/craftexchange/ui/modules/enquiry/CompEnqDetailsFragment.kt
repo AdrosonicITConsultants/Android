@@ -20,10 +20,14 @@ import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.CompletedEnquiries
 import com.adrosonic.craftexchange.database.predicates.MoqsPredicates
 import com.adrosonic.craftexchange.databinding.FragmentCompEnqDetailsBinding
+import com.adrosonic.craftexchange.enums.AvailableStatus
+import com.adrosonic.craftexchange.enums.EnquiryStatus
+import com.adrosonic.craftexchange.enums.getId
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.repository.data.response.moq.Datum
 import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimesResponse
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
+import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.advPay.enquiryPayment
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
@@ -69,10 +73,11 @@ class CompEnqDetailsFragment : Fragment(),
     var extraweft : String ?= ""
     var prodCategory : String ?= ""
     private var isCustom : Boolean ?= false
+    var profile : String ?= ""
 
 
     var mBinding : FragmentCompEnqDetailsBinding?= null
-    var moqDeliveryJson=""
+//    var moqDeliveryJson=""
     var moqDeliveryTimeList=ArrayList<Datum>()
     var moqId=0L
 
@@ -98,10 +103,12 @@ class CompEnqDetailsFragment : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        moqDeliveryJson = UserConfig.shared.moqDeliveryDates
-        val gson = GsonBuilder().create()
-        val moqDeliveryTime = gson.fromJson(moqDeliveryJson, MoqDeliveryTimesResponse::class.java)
-        moqDeliveryTimeList.addAll(moqDeliveryTime.data)
+//        moqDeliveryJson = UserConfig.shared.moqDeliveryDates
+//        val gson= GsonBuilder().create()
+//        val moqDeliveryTime = gson.fromJson(moqDeliveryJson, MoqDeliveryTimesResponse::class.java)
+//        moqDeliveryTimeList.addAll(moqDeliveryTime.data)
+        profile = Prefs.getString(ConstantsDirectory.PROFILE,"")
+        Utility.getDeliveryTimeList()?.let {moqDeliveryTimeList.addAll(it)  }
         mEnqVM.fetchEnqListener = this
         mEnqVM.moqListener = this
         mEnqVM.buyerMoqListener = this
@@ -132,7 +139,7 @@ class CompEnqDetailsFragment : Fragment(),
             activity?.onBackPressed()
         }
         mBinding?.brandDetailsLayer?.setOnClickListener {
-            when(Prefs.getString(ConstantsDirectory.PROFILE,"")){
+            when(profile){
                 ConstantsDirectory.ARTISAN -> {
                     if (savedInstanceState == null) {
                         activity?.supportFragmentManager?.beginTransaction()
@@ -178,16 +185,24 @@ class CompEnqDetailsFragment : Fragment(),
             }
 
         }
-        mBinding?.viewPiLayout?.setOnClickListener {
-            enqID?.let {  startActivity(requireContext().raisePiContext(it,true, null))
-            }
+        mBinding?.viewPi?.setOnClickListener {
+            enqID?.let {  startActivity(requireContext().raisePiContext(it,true, SendPiRequest())) }
+        }
+
+        mBinding?.viewPaymentLayer?.setOnClickListener {
+            startActivity(context?.enquiryPayment()
+                ?.putExtra(ConstantsDirectory.ENQUIRY_ID,enqID)
+                ?.putExtra(ConstantsDirectory.ENQUIRY_STATUS_FLAG,EnquiryStatus.COMPLETED.getId())
+                ?.putExtra(ConstantsDirectory.PI_ID,0))
+
         }
 
     }
 
     fun setDetails(){
         setTabVisibilities()
-        when(Prefs.getString(ConstantsDirectory.PROFILE,"")){
+        //client profile
+        when(profile){
             ConstantsDirectory.ARTISAN -> {
                 mBinding?.profileName?.text = ConstantsDirectory.BUYER
             }
@@ -381,7 +396,8 @@ class CompEnqDetailsFragment : Fragment(),
             mBinding?.orderTime?.text="No MOQs present"
 
         }
-        if(enquiryDetails?.isPiSend!!.equals(1)){
+        Log.e("Completed","isPiSend: ${enquiryDetails?.isPiSend}")
+        if(enquiryDetails?.isPiSend!!.equals(1L)){
             mBinding?.viewPiLayout?.visibility=View.VISIBLE
         }else  mBinding?.viewPiLayout?.visibility=View.GONE
 
@@ -408,6 +424,23 @@ class CompEnqDetailsFragment : Fragment(),
 //        }else{
 //            mBinding?.piDetailsLayer?.visibility = View.GONE
 //        }
+
+        when(profile){
+            ConstantsDirectory.ARTISAN -> {
+                if(enquiryDetails?.productStatusID == AvailableStatus.MADE_TO_ORDER.getId() || enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
+                    if(enquiryDetails?.enquiryStageID!! >= 4L){
+                        mBinding?.viewPaymentLayer?.visibility = View.VISIBLE
+                    }else{
+                        mBinding?.viewPaymentLayer?.visibility = View.GONE
+                    }
+                }else{
+                    mBinding?.viewPaymentLayer?.visibility = View.GONE
+                }
+            }
+            else -> {
+                mBinding?.viewPaymentLayer?.visibility = View.GONE
+            }
+        }
     }
 
     override fun onResume() {

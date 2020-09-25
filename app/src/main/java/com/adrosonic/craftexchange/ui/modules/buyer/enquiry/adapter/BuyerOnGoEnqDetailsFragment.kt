@@ -30,10 +30,12 @@ import com.adrosonic.craftexchange.databinding.FragmentBuyerOnGoEnqDetailsBindin
 import com.adrosonic.craftexchange.enums.AvailableStatus
 import com.adrosonic.craftexchange.enums.getId
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
+import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.singleProduct.SingleProductDetails
 import com.adrosonic.craftexchange.ui.modules.artisan.auth.register.ArtisanRegisterPasswordFragment
 import com.adrosonic.craftexchange.repository.data.response.moq.Datum
 import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimesResponse
+import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
 import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.advPay.enquiryPayment
 import com.adrosonic.craftexchange.ui.modules.buyer.ownDesign.ownDesignIntent
 import com.adrosonic.craftexchange.ui.modules.buyer.productDetails.catalogueProductDetailsIntent
@@ -88,7 +90,7 @@ EnquiryViewModel.singlePiInterface{
     var extraweft : String ?= ""
     var prodCategory : String ?= ""
 
-    var moqDeliveryJson=""
+//    var moqDeliveryJson=""
     var moqDeliveryTimeList=ArrayList<Datum>()
     private lateinit var moqAdapter: MoqAdapter
     private lateinit var confirmDialog: Dialog
@@ -120,10 +122,10 @@ EnquiryViewModel.singlePiInterface{
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        moqDeliveryJson = UserConfig.shared.moqDeliveryDates
-        val gson = GsonBuilder().create()
-        val moqDeliveryTime = gson.fromJson(moqDeliveryJson, MoqDeliveryTimesResponse::class.java)
-        moqDeliveryTimeList.addAll(moqDeliveryTime.data)
+//        moqDeliveryJson = UserConfig.shared.moqDeliveryDates
+//        val gson = GsonBuilder().create()
+//        val moqDeliveryTime = gson.fromJson(moqDeliveryJson, MoqDeliveryTimesResponse::class.java)
+        Utility.getDeliveryTimeList()?.let {moqDeliveryTimeList.addAll(it)  }
 //        mEnqVM.fetchEnqListener = this
         mEnqVM.buyerMoqListener = this
         mEnqVM.singlePiListener = this
@@ -218,6 +220,10 @@ EnquiryViewModel.singlePiInterface{
                 }
             }
         }
+
+        mBinding?.viewPi?.setOnClickListener {
+            enqID?.let {  startActivity(requireContext().raisePiContext(it,true, SendPiRequest())) }
+        }
     }
 
     fun showDialog(enquiryId : Long){
@@ -243,7 +249,6 @@ EnquiryViewModel.singlePiInterface{
             Handler(Looper.getMainLooper()).post(Runnable {
                 setTabVisibilities()
                 setChatIConVisibility()
-                setViewTransactionButton()
 //                handleMoqVisiblities()
                 mBinding?.enquiryCode?.text = enquiryDetails?.enquiryCode
                 mBinding?.enquiryStartDate?.text =
@@ -405,7 +410,24 @@ EnquiryViewModel.singlePiInterface{
                 mBinding?.artisanBrand?.text = enquiryDetails?.ProductBrandName
 
                 setProgressTimeline()
+                if(enquiryDetails?.isMoqRejected!!.equals(1L)){
+                    mBinding?.piDetailsLayout?.visibility = View.GONE
+                }else{
+                    Log.e("PITag","enquiryStageID: ${enquiryDetails?.enquiryStageID}")
+                    Log.e("PITag","enquiryStageID: ${enquiryDetails?.enquiryStatusID}")
+                    if(enquiryDetails?.enquiryStageID!!.equals(3L)){
+                        mBinding?.piDetailsLayout?.visibility = View.VISIBLE
+                    }
+                    else if(enquiryDetails?.isPiSend!!.equals(1L)){
+                        mBinding?.piDetailsLayout?.visibility = View.VISIBLE
+                    }else if(enquiryDetails?.isPiSend!!.equals(0L)&&enquiryDetails?.isMoqSend!!.equals(1L)){
+                        mBinding?.piDetailsLayout?.visibility = View.GONE
+                    }else{
+                        mBinding?.piDetailsLayout?.visibility = View.GONE
+                    }
+                }
 
+                setViewTransactionButton()
 
                 when (enquiryDetails?.productType) {
                     "Product" -> {
@@ -417,8 +439,8 @@ EnquiryViewModel.singlePiInterface{
                             mBinding?.orderTime?.visibility = View.VISIBLE
                             mBinding?.orderTime?.text = "No MOQs Received"
                         }
-                        else {
-                                if (moq.size == 1 && moq?.get(0)?.accepted == true) {
+                        else{
+                            if (moq.size == 1 && moq?.get(0)?.accepted == true) {
                                     //todo show product vala view
                                     var moq1 = moq?.get(0)
                                     mBinding?.moqListLayout?.visibility = View.GONE
@@ -437,7 +459,7 @@ EnquiryViewModel.singlePiInterface{
                                         }
                                     }
                                 }
-                                else {
+                            else {
                                     mBinding?.orderTime?.text = ""
                                     mBinding?.moqDetails?.visibility = View.GONE
                                     mBinding?.moqListLayout?.visibility = View.VISIBLE
@@ -450,7 +472,6 @@ EnquiryViewModel.singlePiInterface{
                                     mBinding?.moqList?.adapter = moqAdapter
                                     moqAdapter.listener = this
                                 }
-
                         }
                     }
                     "Custom Product" -> {
@@ -492,6 +513,7 @@ EnquiryViewModel.singlePiInterface{
                         }
                     }
                 }
+
             })
         }catch (e:Exception){
             Log.e("ViewEnqProd","Details : "+e.printStackTrace())
@@ -499,13 +521,15 @@ EnquiryViewModel.singlePiInterface{
     }
 
     fun setViewTransactionButton(){
-        if(enquiryDetails?.productStatusID == AvailableStatus.MADE_TO_ORDER.getId() || enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
+        if(enquiryDetails?.productStatusID == AvailableStatus.MADE_TO_ORDER.getId() || isCustom == true){
             when (enquiryDetails?.enquiryStageID) {
                 3L -> {
                     mBinding?.transactionLayout?.visibility = View.VISIBLE
+                    mBinding?.piDetailsLayout?.visibility = View.VISIBLE
                 }
                 8L -> {
                     mBinding?.transactionLayout?.visibility = View.VISIBLE
+                    mBinding?.piDetailsLayout?.visibility = View.VISIBLE
                 }
                 else -> {
                     mBinding?.transactionLayout?.visibility = View.GONE
@@ -545,7 +569,8 @@ EnquiryViewModel.singlePiInterface{
                 }
             }
 
-        }else{
+        }
+        else{
             stageAPList = Utility.getAvaiProdEnquiryStagesData() // available product
             Log.e("enqdata", "List AP : $stageAPList")
 
@@ -604,11 +629,11 @@ EnquiryViewModel.singlePiInterface{
 //            mBinding?.moqDetailsLayer?.visibility = View.GONE
 //        }
 
-        if(enquiryDetails?.isPiSend == 1L){
-            mBinding?.piDetailsLayer?.visibility = View.VISIBLE
-        }else{
-            mBinding?.piDetailsLayer?.visibility = View.GONE
-        }
+//        if(enquiryDetails?.isPiSend == 1L){
+//            mBinding?.piDetailsLayer?.visibility = View.VISIBLE
+//        }else{
+//            mBinding?.piDetailsLayer?.visibility = View.GONE
+//        }
     }
 
     private fun handleMoqVisiblities(){

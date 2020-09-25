@@ -962,6 +962,7 @@
                     android:background="#FFDDF3"
                     android:orientation="horizontal"
                     android:weightSum="10"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/product_details_layer">

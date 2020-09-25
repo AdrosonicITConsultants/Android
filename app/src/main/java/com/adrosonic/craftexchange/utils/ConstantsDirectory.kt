@@ -106,4 +106,6 @@ object ConstantsDirectory {
     const val CUSTOM_PRODUCT = "Custom Product"
 
     const val ENQUIRY_STATUS_FLAG = "enquiry_status_flag"
+
+    const val PI_ID ="piid"
 }

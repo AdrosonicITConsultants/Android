@@ -456,13 +456,49 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/transaction_layout"
+                        android:id="@+id/pi_details_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:paddingTop="@dimen/margin_regular"
+                        android:paddingBottom="@dimen/margin_regular"
                         android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/timeline_layout">
+
+                        <ImageView
+                            android:id="@+id/pi_thumbnail"
+                            android:layout_width="60dp"
+                            android:layout_height="80dp"
+                            android:background="@drawable/layout_red_border"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/view_pi"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:fontFamily="@font/lato_regular"
+                            android:text="@string/view_pi"
+                            android:textColor="@drawable/on_click_blue"
+                            android:textSize="@dimen/product_availability_text"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="@id/pi_thumbnail"
+                            app:layout_constraintStart_toEndOf="@+id/pi_thumbnail"
+                            app:layout_constraintTop_toTopOf="@+id/pi_thumbnail" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/transaction_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="@dimen/expandable_layout_std_padding"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/pi_details_layout">
 
                         <TextView
                             android:id="@+id/text_next_steps"
@@ -489,30 +525,6 @@
                             app:layout_constraintStart_toEndOf="@+id/text_next_steps"
                             app:layout_constraintTop_toTopOf="@+id/text_next_steps" />
 
-                        <ImageView
-                            android:id="@+id/pi_thumbnail"
-                            android:layout_width="60dp"
-                            android:layout_height="80dp"
-                            android:layout_marginTop="@dimen/margin_regular"
-                            android:background="@drawable/layout_red_border"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/text_next_steps" />
-
-                        <TextView
-                            android:id="@+id/view_pi"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:fontFamily="@font/lato_regular"
-                            android:text="@string/view_pi"
-                            android:textColor="@drawable/on_click_blue"
-                            android:textSize="@dimen/product_availability_text"
-                            android:textStyle="bold"
-                            app:layout_constraintBottom_toBottomOf="@id/pi_thumbnail"
-                            app:layout_constraintStart_toEndOf="@+id/pi_thumbnail"
-                            app:layout_constraintTop_toTopOf="@+id/pi_thumbnail" />
-
                         <Button
                             android:id="@+id/btn_upload_transac_receipt"
                             android:layout_width="300dp"
@@ -532,7 +544,7 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/pi_thumbnail" />
+                            app:layout_constraintTop_toBottomOf="@id/text_next_steps" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -547,6 +559,7 @@
                     android:focusable="true"
                     android:orientation="horizontal"
                     android:weightSum="10"
+                    android:paddingTop="@dimen/margin_regular"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/middle_part">
@@ -828,51 +841,6 @@
                         android:layout_height="wrap_content" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/pi_details_layer"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:background="#EDF0FF"
-                    android:orientation="horizontal"
-                    android:weightSum="10"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/moq_list_layout">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="8dp"
-                        android:layout_weight="2"
-                        android:fontFamily="@font/lato_regular"
-                        android:gravity="center|start"
-                        android:text="@string/check_pi"
-                        android:textColor="#7793FF"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:id="@+id/received_pi_date"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="8dp"
-                        android:layout_weight="7"
-                        android:fontFamily="@font/lato_regular"
-                        android:gravity="center|end"
-                        android:textColor="#7793FF"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
-
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:background="?attr/selectableItemBackground"
-                        android:src="@drawable/ic_right_arrow_violet" />
-
-                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/product_details_layer"
@@ -883,7 +851,7 @@
                     android:weightSum="10"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/pi_details_layer">
+                    app:layout_constraintTop_toBottomOf="@+id/moq_list_layout">
 
                     <TextView
                         android:layout_width="0dp"

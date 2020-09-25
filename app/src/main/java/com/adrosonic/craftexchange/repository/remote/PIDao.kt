@@ -30,6 +30,10 @@ interface PIDao {
     @GET("/enquiry/getPreviewPiPDF")
     fun getPreviewPiPDF(@Header("Authorization") token:String, @Query("enquiryId") enquiryId : Int) : Call<ResponseBody>
 
+    @Headers("Accept: text/html")
+    @GET("/enquiry/getPreviewPiHTML")
+    fun getPreviewPiHTML(@Header("Authorization") token:String, @Query("enquiryId") enquiryId : Int) : Call<ResponseBody>
+
     @Headers("Accept: application/json")
     @GET("enquiry/getPi/{enquiryId}")
     fun getSinglePi(@Header("Authorization") token:String, @Path("enquiryId") enquiryId : Long) : Call<SendPiResponse>

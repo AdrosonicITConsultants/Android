@@ -27,13 +27,10 @@ import com.adrosonic.craftexchange.database.predicates.PiPredicates
 import com.adrosonic.craftexchange.databinding.ActivityPiBinding
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.repository.data.response.moq.Datum
-import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimesResponse
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
-import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
-import com.google.gson.GsonBuilder
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -50,7 +47,7 @@ class PiActivity : AppCompatActivity(),
     val mEnqVM : EnquiryViewModel by viewModels()
     var moqs: Moqs? = null
     var enquiryDetails: OngoingEnquiries? = null
-    var moqDeliveryJson=""
+//    var moqDeliveryJson=""
     var moqDeliveryTimeList=ArrayList<Datum>()
 //    private var mBinding: FragmentCreatePiBinding? = null
     private var url : String?=""
@@ -74,17 +71,17 @@ class PiActivity : AppCompatActivity(),
             enquiryId = intent.getLongExtra("enquiryId",0)
             enquiryDetails = mEnqVM?.loadSingleEnqDetails(enquiryId)
             moqs = MoqsPredicates.getSingleMoq(enquiryId)
-            moqDeliveryJson = UserConfig.shared.moqDeliveryDates
-            val gson = GsonBuilder().create()
-            val moqDeliveryTime = gson.fromJson(moqDeliveryJson, MoqDeliveryTimesResponse::class.java)
-            moqDeliveryTimeList.addAll(moqDeliveryTime.data)
+//            moqDeliveryJson = UserConfig.shared.moqDeliveryDates
+//            val gson = GsonBuilder().create()
+//            val moqDeliveryTime = gson.fromJson(moqDeliveryJson, MoqDeliveryTimesResponse::class.java)
+            Utility.getDeliveryTimeList()?.let {moqDeliveryTimeList.addAll(it)  }
             setDetails()
         }
         Log.e("RaisePi", "pi enquiryId : ${enquiryId}")
         mBinding?.btnBack?.setOnClickListener {
             finish()
         }
-        mBinding?.etDeliveryDate?.setOnTouchListener { view, motionEvent ->
+        mBinding?.etDeliveryDate?.setOnClickListener {
             val c: Calendar = Calendar.getInstance()
             val mYear = c.get(Calendar.YEAR)
             val mMonth = c.get(Calendar.MONTH)
@@ -97,7 +94,7 @@ class PiActivity : AppCompatActivity(),
             datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000)
             datePickerDialog.show()
 
-            view?.onTouchEvent(motionEvent) ?: true
+//            view?.onTouchEvent(motionEvent) ?: true
         }
         mBinding?.txtPiSwipe?.setOnClickListener {
             val qty = mBinding?.etQty?.text.toString()
@@ -123,6 +120,7 @@ class PiActivity : AppCompatActivity(),
                 pi.sgst=sgst.toLong()
                 if (Utility.checkIfInternetConnected(applicationContext)) {
                     mBinding?.txtPiSwipe?.setText("Pi preview being genrated")
+                    mBinding?.txtPiSwipe?.isEnabled=false
                     viewLoader()
                     mEnqVM?.savePi(enquiryId, 0, pi)
                 } else {
@@ -132,7 +130,6 @@ class PiActivity : AppCompatActivity(),
                 }
             }
         }
-
     }
 
     fun setDetails(){
@@ -234,6 +231,8 @@ class PiActivity : AppCompatActivity(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 hideLoader()
+                mBinding?.txtPiSwipe?.setText("Swipe to generate PI preview")
+                mBinding?.txtPiSwipe?.isEnabled=true
                 Utility.displayMessage("Unable to raise PI, please try after some time",applicationContext)
             })
         } catch (e: Exception) {
@@ -259,10 +258,14 @@ class PiActivity : AppCompatActivity(),
     override fun onPiDownloadFailure() {
     }
 
+    override fun onPiHTMLSuccess(data:String) {
+    }
+
+    override fun onPiHTMLFailure() {
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.e("PiActivity", "onActivityResult $requestCode")
-        Log.e("PiActivity", "onActivityResult $resultCode")
         Log.e("PiActivity", "onActivityResult RESULT_OK ${Activity.RESULT_OK}")
         if (requestCode == ConstantsDirectory.RESULT_PI) { // Please, use a final int instead of hardcoded int value
             if (resultCode == Activity.RESULT_OK) {

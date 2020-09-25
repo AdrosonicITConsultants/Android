@@ -22,9 +22,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
+import com.adrosonic.craftexchange.database.predicates.EnquiryPredicates
 import com.adrosonic.craftexchange.database.predicates.MoqsPredicates
 import com.adrosonic.craftexchange.databinding.FragmentArtisanOnGoEnqDetailsBinding
 import com.adrosonic.craftexchange.enums.AvailableStatus
+import com.adrosonic.craftexchange.enums.EnquiryStatus
 import com.adrosonic.craftexchange.enums.getId
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.repository.data.response.moq.Datum
@@ -77,7 +79,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
     private var isCustom : Boolean ?= false
 
 
-    var moqDeliveryJson=""
+//    var moqDeliveryJson=""
     var moqDeliveryTimeList=ArrayList<Datum>()
     var arrayDeliveryDscrp=ArrayList<String>()
     var estId=0L
@@ -103,10 +105,10 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        moqDeliveryJson = UserConfig.shared.moqDeliveryDates
-        val gson = GsonBuilder().create()
-        val moqDeliveryTime = gson.fromJson(moqDeliveryJson, MoqDeliveryTimesResponse::class.java)
-        moqDeliveryTimeList.addAll(moqDeliveryTime.data)
+//        moqDeliveryJson = UserConfig.shared.moqDeliveryDates
+//        val gson = GsonBuilder().create()
+//        val moqDeliveryTime = gson.fromJson(moqDeliveryJson, MoqDeliveryTimesResponse::class.java)
+        Utility.getDeliveryTimeList()?.let {moqDeliveryTimeList.addAll(it)  }
         mEnqVM?.moqListener=this
         mEnqVM?.fetchEnqListener = this
         mBinding?.swipeEnquiryDetails?.isEnabled = false
@@ -217,7 +219,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         mBinding?.btnUploadDocReceipt?.setOnClickListener {
             Log.e("RaisePi", "upload : $enqID")
             Log.e("RaisePi", "upload : ${enquiryDetails?.enquiryID}")
-            enqID?.let {startActivity(requireContext().piContext(it))}
+            enqID?.let {startActivityForResult(requireContext().piContext(it),ConstantsDirectory.RESULT_PI)}
         }
 
         mBinding?.viewPiLayout?.setOnClickListener {
@@ -228,7 +230,15 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         mBinding?.btnViewApprovePayment?.setOnClickListener {
             startActivity(context?.enquiryPayment()
                 ?.putExtra(ConstantsDirectory.ENQUIRY_ID,enqID)
-                ?.putExtra("PIID",0))
+                ?.putExtra(ConstantsDirectory.ENQUIRY_STATUS_FLAG,EnquiryStatus.ONGOING.getId())
+                ?.putExtra(ConstantsDirectory.PI_ID,0))
+        }
+
+        mBinding?.viewPaymentLayer?.setOnClickListener {
+            startActivity(context?.enquiryPayment()
+                ?.putExtra(ConstantsDirectory.ENQUIRY_ID,enqID)
+                ?.putExtra(ConstantsDirectory.ENQUIRY_STATUS_FLAG, EnquiryStatus.ONGOING.getId())
+                ?.putExtra(ConstantsDirectory.PI_ID,0))
         }
     }
 
@@ -286,7 +296,8 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         if(enquiryDetails?.productName != "") {
             mBinding?.productName?.text = enquiryDetails?.productName
             mBinding?.productNameDetails?.text = enquiryDetails?.productName
-        }else{
+        }
+        else{
             //TODO : set text as prod cat / werft / warn / extraweft
             var weaveList = Utility?.getWeaveType()
             var catList = Utility?.getProductCategory()
@@ -460,7 +471,8 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
                 }
             }
 
-        }else{
+        }
+        else{
             stageAPList = Utility.getAvaiProdEnquiryStagesData() // available product
             Log.e("enqdata", "List AP : $stageAPList")
 
@@ -534,8 +546,12 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
 //        }else{
 //            mBinding?.piDetailsLayer?.visibility = View.GONE
 //        }
-        if(enquiryDetails?.enquiryStageID!! >= 4L){
-            mBinding?.viewPaymentLayer?.visibility = View.VISIBLE
+        if(enquiryDetails?.productStatusID == AvailableStatus.MADE_TO_ORDER.getId() || enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
+            if(enquiryDetails?.enquiryStageID!! >= 4L){
+                mBinding?.viewPaymentLayer?.visibility = View.VISIBLE
+            }else{
+                mBinding?.viewPaymentLayer?.visibility = View.GONE
+            }
         }else{
             mBinding?.viewPaymentLayer?.visibility = View.GONE
         }
@@ -636,9 +652,13 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         Log.e("PiActivity", "onActivityResult RESULT_OK ${Activity.RESULT_OK}")
         if (requestCode == ConstantsDirectory.RESULT_PI) { // Please, use a final int instead of hardcoded int value
             if (resultCode == Activity.RESULT_OK) {
-                viewLoader()
+//                viewLoader()
                 Log.e("PiActivity", "onActivityResult enqID ${enqID}")
-                enqID?.let { mEnqVM.getSingleOngoingEnquiry(it) }
+                enqID?.let {
+//                    mEnqVM.getSingleOngoingEnquiry(it)
+                    EnquiryPredicates.updatePiStatus(it)
+                    setDetails()
+                }
             }
         }
     }

@@ -8,6 +8,9 @@ import androidx.fragment.app.replace
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityEnquiryDetailsBinding
 import com.adrosonic.craftexchange.databinding.ActivityEnquiryPaymentBinding
+import com.adrosonic.craftexchange.enums.EnquiryStatus
+import com.adrosonic.craftexchange.enums.getId
+import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.advPay.CompPaymentReceiptFragment
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.advPay.PaymentReceiptFragment
 import com.adrosonic.craftexchange.ui.modules.authentication.login.LoginActivity
 import com.adrosonic.craftexchange.ui.modules.enquiry.EnquiryDetailsActivity
@@ -27,6 +30,7 @@ class EnquiryPaymentActivity : AppCompatActivity() {
 
     var enqID : Long?= 0
     var piID : Long?= 0
+    var enqStatus : Long ?= 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,16 +39,30 @@ class EnquiryPaymentActivity : AppCompatActivity() {
         setContentView(view)
 
         enqID = intent?.getLongExtra(ConstantsDirectory.ENQUIRY_ID,0)
-        piID = intent?.getLongExtra("PIID",0)
+        piID = intent?.getLongExtra(ConstantsDirectory.PI_ID,0)
+        enqStatus = intent?.getLongExtra(ConstantsDirectory.ENQUIRY_STATUS_FLAG,0)
 
         when(Prefs.getString(ConstantsDirectory.PROFILE,"")){
             ConstantsDirectory.ARTISAN -> {
-                if (savedInstanceState == null) {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.enquiry_payment_container,
-                            PaymentReceiptFragment.newInstance(enqID.toString(),piID.toString()))
-                        .commit()
+                when(enqStatus){
+                    EnquiryStatus.COMPLETED.getId() ->{
+                        if (savedInstanceState == null) {
+                            supportFragmentManager.beginTransaction()
+                                .replace(R.id.enquiry_payment_container,
+                                    CompPaymentReceiptFragment.newInstance(enqID.toString()))
+                                .commit()
+                        }
+                    }
+                    EnquiryStatus.ONGOING.getId() -> {
+                        if (savedInstanceState == null) {
+                            supportFragmentManager.beginTransaction()
+                                .replace(R.id.enquiry_payment_container,
+                                    PaymentReceiptFragment.newInstance(enqID.toString()))
+                                .commit()
+                        }
+                    }
                 }
+
             }
 
             ConstantsDirectory.BUYER -> {

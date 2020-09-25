@@ -18,7 +18,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/colorSplash"
-                tools:context=".ui.modules.artisan.enquiry.advPay.PaymentReceiptFragment">
+                tools:context=".ui.modules.artisan.enquiry.advPay.CompPaymentReceiptFragment">
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/top_part"
@@ -260,67 +260,6 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/bottom_validation_part"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_regular"
-                    android:visibility="gone"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/middle_receipt_layer">
-
-                    <Button
-                        android:id="@+id/btn_accept"
-                        android:layout_width="wrap_content"
-                        android:layout_height="45dp"
-                        android:layout_marginTop="@dimen/margin_regular"
-                        android:background="@color/dark_green"
-                        android:elevation="8dp"
-                        android:fontFamily="@font/lato_regular"
-                        android:padding="4dp"
-                        android:text="@string/approve_advance_payment_by_buyer"
-                        android:textAlignment="center"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white_text"
-                        android:textSize="18sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/btn_reject"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_regular"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:fontFamily="@font/lato_regular"
-                        android:text="@string/reject_payment"
-                        android:textColor="@drawable/on_click_red"
-                        android:textSize="@dimen/product_description_text"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/btn_accept" />
-
-                    <TextView
-                        android:id="@+id/note_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_regular"
-                        android:layout_marginBottom="@dimen/margin_semimedium"
-                        android:gravity="center"
-                        android:text="@string/note_to_artisan_validate_pay"
-                        android:textColor="@color/darker_gray"
-                        android:textSize="@dimen/product_availability_text"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/btn_reject"
-                        app:layout_constraintVertical_bias="0.0" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>
@@ -329,4 +268,5 @@
 
 
 </layout>
+
 

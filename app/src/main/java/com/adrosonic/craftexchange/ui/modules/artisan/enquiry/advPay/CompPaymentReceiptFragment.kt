@@ -12,21 +12,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import com.adrosonic.craftexchange.R
+import com.adrosonic.craftexchange.database.entities.realmEntities.CompletedEnquiries
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
-import com.adrosonic.craftexchange.database.predicates.WishlistPredicates
-import com.adrosonic.craftexchange.databinding.FragmentAdvPay1Binding
+import com.adrosonic.craftexchange.databinding.FragmentCompPaymentReceiptBinding
 import com.adrosonic.craftexchange.databinding.FragmentPaymentReceiptBinding
 import com.adrosonic.craftexchange.enums.AvailableStatus
-import com.adrosonic.craftexchange.enums.PaymentActionStatus
 import com.adrosonic.craftexchange.enums.getId
-import com.adrosonic.craftexchange.syncManager.SyncCoordinator
-import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.advPay.AdvPay3Fragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
@@ -34,18 +29,18 @@ import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
 import com.adrosonic.craftexchange.viewModels.TransactionViewModel
 import com.bogdwellers.pinchtozoom.ImageMatrixTouchHandler
 
+
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class PaymentReceiptFragment : Fragment(),
-TransactionViewModel.ValidatePaymentInterface,
-TransactionViewModel.PaymentReceiptInterface{
 
+class CompPaymentReceiptFragment : Fragment(),
+    TransactionViewModel.PaymentReceiptInterface{
     private var param1: String? = null
 
     var enqID : String?= ""
 
-    private var enquiryDetails : OngoingEnquiries?= null
+    private var enquiryDetails : CompletedEnquiries?= null
     private var url : String?=""
 
     var weft : String ?= ""
@@ -54,11 +49,8 @@ TransactionViewModel.PaymentReceiptInterface{
     var prodCategory : String ?= ""
     var status : String ?= ""
 
-    var isAccepted : Boolean ?= false
 
-    private var loadingDialog : Dialog?= null
-
-    private var mBinding: FragmentPaymentReceiptBinding?= null
+    private var mBinding: FragmentCompPaymentReceiptBinding?= null
 
     val mEnqVM : EnquiryViewModel by viewModels()
     val mTransVM : TransactionViewModel by viewModels()
@@ -76,7 +68,7 @@ TransactionViewModel.PaymentReceiptInterface{
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_payment_receipt, container, false)
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_comp_payment_receipt, container, false)
         if(param1!=null){
             enqID = if(param1!!.isNotEmpty())param1 else "0"
         }
@@ -85,12 +77,10 @@ TransactionViewModel.PaymentReceiptInterface{
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mTransVM.validatePaymentListener = this
         mTransVM.paymentReceiptListener = this
         mBinding?.swipeReceipt?.isEnabled = false
 
-
-        enquiryDetails = enqID?.toLong()?.let { mEnqVM?.getSingleOnEnqData(it) }?.value
+        enquiryDetails = enqID?.toLong()?.let { mEnqVM?.getSingleCompEnqData(it) }?.value
 
         if(enquiryDetails != null){
             setDetails()
@@ -103,27 +93,12 @@ TransactionViewModel.PaymentReceiptInterface{
             Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
         }
 
-        loadingDialog = Utility.loadingDialog(requireActivity())
-
         mBinding?.btnBack?.setOnClickListener {
             activity?.onBackPressed()
         }
 
-        mBinding?.btnAccept?.setOnClickListener {
-            if(Utility.checkIfInternetConnected(requireActivity())){
-                loadingDialog?.show()
-                enquiryDetails?.enquiryID?.let { it1 -> mTransVM.validateAdvancePayment(it1,PaymentActionStatus.ACCEPT.getId().toString()) }
-                isAccepted = true
-            }else{
-                Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
-            }
-        }
-
-        mBinding?.btnReject?.setOnClickListener {
-            showConfirmDialog()
-        }
-
         mBinding?.paymentImg?.setOnTouchListener(ImageMatrixTouchHandler(requireActivity()))
+
     }
 
     fun setDetails(){
@@ -136,7 +111,6 @@ TransactionViewModel.PaymentReceiptInterface{
         setProductName()
         setProductAvailability()
         setEnquiryStage()
-        setButtonVisibility()
     }
 
     fun setProductImage(){
@@ -282,71 +256,17 @@ TransactionViewModel.PaymentReceiptInterface{
         mBinding?.enquiryStatusText?.text = enquiryStage
     }
 
-    fun showConfirmDialog(){
-        var confirmDialog = Dialog(requireContext())
-        confirmDialog.setContentView(R.layout.dialog_are_you_sure)
-        confirmDialog.show()
-
-        val yes = confirmDialog.findViewById(R.id.btn_yes) as Button
-        val no = confirmDialog.findViewById(R.id.btn_no) as Button
-
-        no.setOnClickListener{
-            confirmDialog.cancel()
-        }
-
-        yes.setOnClickListener {
-            confirmDialog.cancel()
-            if(Utility.checkIfInternetConnected(requireActivity())){
-                loadingDialog?.show()
-                enquiryDetails?.enquiryID?.let { it1 -> mTransVM.validateAdvancePayment(it1,PaymentActionStatus.REJECT.getId().toString()) }
-                isAccepted = false
-            }else{
-                Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
-            }
-        }
-    }
 
     fun viewLoader(){
         mBinding?.swipeReceipt?.isRefreshing = true
         mBinding?.middleReceiptLayer?.visibility = View.GONE
-        mBinding?.bottomValidationPart?.visibility = View.GONE
     }
 
     fun hideLoader(){
         mBinding?.swipeReceipt?.isRefreshing = false
         mBinding?.middleReceiptLayer?.visibility = View.VISIBLE
-        setButtonVisibility()
     }
 
-    override fun onPaymentFailure() {
-        try {
-            Handler(Looper.getMainLooper()).post(Runnable {
-                Log.e("PaymentValidation", "OnFailure")
-                loadingDialog?.cancel()
-            }
-            )
-        } catch (e: Exception) {
-            Log.e("PaymentValidation", "Exception onFailure " + e.message)
-        }
-    }
-
-    override fun onPaymentSuccess() {
-        try {
-            Handler(Looper.getMainLooper()).post(Runnable {
-                Log.e("PaymentValidation", "OnSuccess")
-                loadingDialog?.cancel()
-                if(isAccepted == true){
-                    Utility.displayMessage("Payment Accepted",requireActivity())
-                }else{
-                    Utility.displayMessage("Payment Rejected",requireActivity())
-                }
-
-                activity?.onBackPressed()
-            }
-            )
-        } catch (e: Exception) {
-            Log.e("PaymentValidation", "Exception onSuccess " + e.message)
-        }    }
 
     override fun onFailure() {
         try {
@@ -379,18 +299,10 @@ TransactionViewModel.PaymentReceiptInterface{
         }
     }
 
-    fun setButtonVisibility(){
-        if (enquiryDetails?.enquiryStageID!! >=4L){
-            mBinding?.bottomValidationPart?.visibility = View.GONE
-        }else{
-            mBinding?.bottomValidationPart?.visibility = View.VISIBLE
-        }
-    }
-
-
     companion object {
+
         fun newInstance(param1: String) =
-            PaymentReceiptFragment().apply {
+            CompPaymentReceiptFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                 }

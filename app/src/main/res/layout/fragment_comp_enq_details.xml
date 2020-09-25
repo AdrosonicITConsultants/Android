@@ -338,30 +338,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/middle_part">
 
-                    <TextView
-                        android:id="@+id/text_next_steps_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_regular"
-                        android:layout_marginTop="8dp"
-                        android:fontFamily="@font/lato_regular"
-                        android:text="Next Step  - - - - - - - - - - - - ->"
-                        android:textSize="@dimen/product_availability_text"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/next_step_arrow_text_view"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="Upload Payment Receipt"
-                        android:textSize="@dimen/product_availability_text"
-                        app:layout_constraintBottom_toBottomOf="@+id/text_next_steps_view"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/text_next_steps_view"
-                        app:layout_constraintTop_toTopOf="@+id/text_next_steps_view" />
 
                     <ImageView
                         android:id="@+id/pi_thumbnail"
@@ -373,7 +349,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/text_next_steps_view" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/view_pi"
@@ -653,6 +629,53 @@
                         android:layout_gravity="center"
                         android:background="?attr/selectableItemBackground"
                         android:src="@drawable/ic_right_arrow_brown"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/view_payment_layer"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:background="#FFDDF3"
+                    android:orientation="horizontal"
+                    android:weightSum="10"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/product_details_layer">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="6"
+                        android:fontFamily="@font/lato_regular"
+                        android:gravity="center|start"
+                        android:text="@string/chck_adv_pay_receipt"
+                        android:textColor="#D43A9E"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="3"
+                        android:fontFamily="@font/lato_regular"
+                        android:gravity="center|end"
+                        android:textColor="#D43A9E"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:text="@string/view"/>
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="?attr/selectableItemBackground"
+                        android:src="@drawable/ic_right_arrow_purple" />
 
                 </LinearLayout>
 
