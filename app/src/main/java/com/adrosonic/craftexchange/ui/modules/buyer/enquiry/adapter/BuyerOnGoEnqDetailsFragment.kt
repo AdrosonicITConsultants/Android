@@ -410,14 +410,32 @@ EnquiryViewModel.singlePiInterface{
                 mBinding?.artisanBrand?.text = enquiryDetails?.ProductBrandName
 
                 setProgressTimeline()
+                if(enquiryDetails?.isMoqRejected!!.equals(1L)){
+                    mBinding?.piDetailsLayout?.visibility = View.GONE
+                }else{
+                    Log.e("PITag","enquiryStageID: ${enquiryDetails?.enquiryStageID}")
+                    Log.e("PITag","enquiryStageID: ${enquiryDetails?.enquiryStatusID}")
+                    if(enquiryDetails?.enquiryStageID!!.equals(3L)){
+                        mBinding?.piDetailsLayout?.visibility = View.VISIBLE
+                    }
+                    else if(enquiryDetails?.isPiSend!!.equals(1L)){
+                        mBinding?.piDetailsLayout?.visibility = View.VISIBLE
+                    }else if(enquiryDetails?.isPiSend!!.equals(0L)&&enquiryDetails?.isMoqSend!!.equals(1L)){
+                        mBinding?.piDetailsLayout?.visibility = View.GONE
+                    }else{
+                        mBinding?.piDetailsLayout?.visibility = View.GONE
+                    }
+                }
 
                 if(enquiryDetails?.productStatusID == AvailableStatus.MADE_TO_ORDER.getId() || isCustom == true){
                 when (enquiryDetails?.enquiryStageID) {
                     3L -> {
                         mBinding?.transactionLayout?.visibility = View.VISIBLE
+                        mBinding?.piDetailsLayout?.visibility = View.VISIBLE
                     }
                     8L -> {
                         mBinding?.transactionLayout?.visibility = View.VISIBLE
+                        mBinding?.piDetailsLayout?.visibility = View.VISIBLE
                     }
                     else -> {
                         mBinding?.transactionLayout?.visibility = View.GONE
@@ -510,6 +528,7 @@ EnquiryViewModel.singlePiInterface{
                         }
                     }
                 }
+
             })
         }catch (e:Exception){
             Log.e("ViewEnqProd","Details : "+e.printStackTrace())
