@@ -72,7 +72,7 @@ class CompEnqDetailsFragment : Fragment(),
 
 
     var mBinding : FragmentCompEnqDetailsBinding?= null
-    var moqDeliveryJson=""
+//    var moqDeliveryJson=""
     var moqDeliveryTimeList=ArrayList<Datum>()
     var moqId=0L
 
@@ -98,11 +98,11 @@ class CompEnqDetailsFragment : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        moqDeliveryJson = UserConfig.shared.moqDeliveryDates
-        val gson
-                = GsonBuilder().create()
-        val moqDeliveryTime = gson.fromJson(moqDeliveryJson, MoqDeliveryTimesResponse::class.java)
-        moqDeliveryTimeList.addAll(moqDeliveryTime.data)
+//        moqDeliveryJson = UserConfig.shared.moqDeliveryDates
+//        val gson= GsonBuilder().create()
+//        val moqDeliveryTime = gson.fromJson(moqDeliveryJson, MoqDeliveryTimesResponse::class.java)
+//        moqDeliveryTimeList.addAll(moqDeliveryTime.data)
+        Utility.getDeliveryTimeList()?.let {moqDeliveryTimeList.addAll(it)  }
         mEnqVM.fetchEnqListener = this
         mEnqVM.moqListener = this
         mEnqVM.buyerMoqListener = this

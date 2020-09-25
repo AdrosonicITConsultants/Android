@@ -84,6 +84,8 @@ EnquiryViewModel.piInterface{
         mBinding?.btnRaisePi?.setOnClickListener {
             if (Utility.checkIfInternetConnected(applicationContext)) {
                 viewLoader()
+                mBinding?.btnRaisePi?.setText("Pi request being raise")
+                mBinding?.btnRaisePi?.isEnabled=true
                 mEnqVM?.sendPi(enquiryId,pi)
             } else {
                 PiPredicates.insertPiForOffline(enquiryId,1,1,pi)
@@ -124,6 +126,8 @@ EnquiryViewModel.piInterface{
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 hideLoader()
+                mBinding?.btnRaisePi?.setText("Swipe to raise PI")
+                mBinding?.btnRaisePi?.isEnabled=true
                 Utility.displayMessage("Unable to raise PI, please try after some time",applicationContext)
             })
         } catch (e: Exception) {

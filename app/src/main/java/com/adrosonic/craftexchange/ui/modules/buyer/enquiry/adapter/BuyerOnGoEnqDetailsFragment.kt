@@ -90,7 +90,7 @@ EnquiryViewModel.singlePiInterface{
     var extraweft : String ?= ""
     var prodCategory : String ?= ""
 
-    var moqDeliveryJson=""
+//    var moqDeliveryJson=""
     var moqDeliveryTimeList=ArrayList<Datum>()
     private lateinit var moqAdapter: MoqAdapter
     private lateinit var confirmDialog: Dialog
@@ -122,10 +122,10 @@ EnquiryViewModel.singlePiInterface{
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        moqDeliveryJson = UserConfig.shared.moqDeliveryDates
-        val gson = GsonBuilder().create()
-        val moqDeliveryTime = gson.fromJson(moqDeliveryJson, MoqDeliveryTimesResponse::class.java)
-        moqDeliveryTimeList.addAll(moqDeliveryTime.data)
+//        moqDeliveryJson = UserConfig.shared.moqDeliveryDates
+//        val gson = GsonBuilder().create()
+//        val moqDeliveryTime = gson.fromJson(moqDeliveryJson, MoqDeliveryTimesResponse::class.java)
+        Utility.getDeliveryTimeList()?.let {moqDeliveryTimeList.addAll(it)  }
 //        mEnqVM.fetchEnqListener = this
         mEnqVM.buyerMoqListener = this
         mEnqVM.singlePiListener = this
@@ -433,8 +433,8 @@ EnquiryViewModel.singlePiInterface{
                             mBinding?.orderTime?.visibility = View.VISIBLE
                             mBinding?.orderTime?.text = "No MOQs Received"
                         }
-                        else {
-                                if (moq.size == 1 && moq?.get(0)?.accepted == true) {
+                        else{
+                            if (moq.size == 1 && moq?.get(0)?.accepted == true) {
                                     //todo show product vala view
                                     var moq1 = moq?.get(0)
                                     mBinding?.moqListLayout?.visibility = View.GONE
@@ -453,7 +453,7 @@ EnquiryViewModel.singlePiInterface{
                                         }
                                     }
                                 }
-                                else {
+                            else {
                                     mBinding?.orderTime?.text = ""
                                     mBinding?.moqDetails?.visibility = View.GONE
                                     mBinding?.moqListLayout?.visibility = View.VISIBLE
@@ -466,7 +466,6 @@ EnquiryViewModel.singlePiInterface{
                                     mBinding?.moqList?.adapter = moqAdapter
                                     moqAdapter.listener = this
                                 }
-
                         }
                     }
                     "Custom Product" -> {
@@ -544,7 +543,8 @@ EnquiryViewModel.singlePiInterface{
                 }
             }
 
-        }else{
+        }
+        else{
             stageAPList = Utility.getAvaiProdEnquiryStagesData() // available product
             Log.e("enqdata", "List AP : $stageAPList")
 

@@ -31,6 +31,8 @@ import com.adrosonic.craftexchange.database.predicates.UserPredicates
 import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.uploadData.ProductUploadData
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryAvaProdStageData
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryStageData
+import com.adrosonic.craftexchange.repository.data.response.moq.Datum
+import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimesResponse
 import com.adrosonic.craftexchange.ui.modules.enquiry.enquiryDetails
 import com.bumptech.glide.Glide
 import com.google.gson.GsonBuilder
@@ -487,6 +489,12 @@ class Utility {
             return list
         }
 
+        fun getDeliveryTimeList():List<Datum>?{
+            val moqDeliveryJson = UserConfig.shared.moqDeliveryDates
+            val gson = GsonBuilder().create()
+            val moqDeliveryTime = gson.fromJson(moqDeliveryJson, MoqDeliveryTimesResponse::class.java)
+            return moqDeliveryTime.data
+        }
         fun writeResponseBodyToDisk(
             body: ResponseBody,
             enquiryId: String,

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    <RelativeLayout
         android:id="@+id/swipe_enquiry_details"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -617,11 +617,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
                         android:layout_margin="8dp"
+                        android:background="@drawable/rect_round_grad_blue_solid_swipe"
+                        android:drawableLeft="@drawable/ic_swipe_arrow"
                         android:paddingLeft="4dp"
                         android:paddingRight="4dp"
-                        android:background="@color/clickable_text_color"
-                        android:drawableLeft="@drawable/ic_swipe_arrow"
-                        android:text="Swipe to generate PI preview"
+                        android:text="Click to generate PI preview"
                         android:textColor="@color/white_text" />
 
                 </LinearLayout>
@@ -629,7 +629,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </RelativeLayout>
 
 </layout>
 
