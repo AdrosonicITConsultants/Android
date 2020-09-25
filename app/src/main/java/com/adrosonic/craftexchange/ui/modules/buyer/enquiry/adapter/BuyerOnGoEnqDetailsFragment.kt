@@ -243,6 +243,7 @@ EnquiryViewModel.singlePiInterface{
             Handler(Looper.getMainLooper()).post(Runnable {
                 setTabVisibilities()
                 setChatIConVisibility()
+                setViewTransactionButton()
 //                handleMoqVisiblities()
                 mBinding?.enquiryCode?.text = enquiryDetails?.enquiryCode
                 mBinding?.enquiryStartDate?.text =
@@ -405,20 +406,6 @@ EnquiryViewModel.singlePiInterface{
 
                 setProgressTimeline()
 
-                if(enquiryDetails?.productStatusID == AvailableStatus.MADE_TO_ORDER.getId() || isCustom == true){
-                when (enquiryDetails?.enquiryStageID) {
-                    3L -> {
-                        mBinding?.transactionLayout?.visibility = View.VISIBLE
-                    }
-                    8L -> {
-                        mBinding?.transactionLayout?.visibility = View.VISIBLE
-                    }
-                    else -> {
-                        mBinding?.transactionLayout?.visibility = View.GONE
-                    }
-                }}else{
-                    mBinding?.transactionLayout?.visibility = View.GONE
-                }
 
                 when (enquiryDetails?.productType) {
                     "Product" -> {
@@ -508,6 +495,23 @@ EnquiryViewModel.singlePiInterface{
             })
         }catch (e:Exception){
             Log.e("ViewEnqProd","Details : "+e.printStackTrace())
+        }
+    }
+
+    fun setViewTransactionButton(){
+        if(enquiryDetails?.productStatusID == AvailableStatus.MADE_TO_ORDER.getId() || enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
+            when (enquiryDetails?.enquiryStageID) {
+                3L -> {
+                    mBinding?.transactionLayout?.visibility = View.VISIBLE
+                }
+                8L -> {
+                    mBinding?.transactionLayout?.visibility = View.VISIBLE
+                }
+                else -> {
+                    mBinding?.transactionLayout?.visibility = View.GONE
+                }
+            }}else{
+            mBinding?.transactionLayout?.visibility = View.GONE
         }
     }
 

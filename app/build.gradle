@@ -122,6 +122,10 @@ dependencies {
     //swipe button
     implementation 'com.github.gratusik:AGIKSwipeButton:1.0.1'
     implementation 'com.ebanx:swipe-button:0.8.3'
+
+    //pinch to zoom image
+    implementation 'com.bogdwellers:pinchtozoom:0.1'
+
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.0'

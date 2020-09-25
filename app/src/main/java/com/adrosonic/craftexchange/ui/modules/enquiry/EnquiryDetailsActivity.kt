@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityEnquiryDetailsBinding
+import com.adrosonic.craftexchange.enums.EnquiryStatus
+import com.adrosonic.craftexchange.enums.getId
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.ArtisanOnGoEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.buyer.auth.login.BuyerLoginUsernameFragment
 import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.adapter.BuyerOnGoEnqDetailsFragment
@@ -36,7 +38,7 @@ class EnquiryDetailsActivity : AppCompatActivity() {
 
         when(enqStatus){
             //Closed
-            1L -> {
+            EnquiryStatus.COMPLETED.getId() -> {
                 if (savedInstanceState == null) {
                     enqID?.let { CompEnqDetailsFragment.newInstance(it, enqStatus.toString(),isArtsan) }?.let {
                         supportFragmentManager.beginTransaction()
@@ -46,7 +48,7 @@ class EnquiryDetailsActivity : AppCompatActivity() {
                 }
             }
             //Ongoing
-            2L -> {
+            EnquiryStatus.ONGOING.getId() -> {
                 when(profile){
                     ConstantsDirectory.ARTISAN -> {
                         if (savedInstanceState == null) {

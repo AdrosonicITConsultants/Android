@@ -8,6 +8,7 @@ import androidx.fragment.app.replace
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityEnquiryDetailsBinding
 import com.adrosonic.craftexchange.databinding.ActivityEnquiryPaymentBinding
+import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.advPay.PaymentReceiptFragment
 import com.adrosonic.craftexchange.ui.modules.authentication.login.LoginActivity
 import com.adrosonic.craftexchange.ui.modules.enquiry.EnquiryDetailsActivity
 import com.adrosonic.craftexchange.ui.modules.enquiry.enquiryDetails
@@ -36,13 +37,27 @@ class EnquiryPaymentActivity : AppCompatActivity() {
         enqID = intent?.getLongExtra(ConstantsDirectory.ENQUIRY_ID,0)
         piID = intent?.getLongExtra("PIID",0)
 
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.enquiry_payment_container,
-                    AdvPay1Fragment.newInstance(enqID.toString(),piID.toString()))
-//                ?.addToBackStack(null)
-                .commit()
+        when(Prefs.getString(ConstantsDirectory.PROFILE,"")){
+            ConstantsDirectory.ARTISAN -> {
+                if (savedInstanceState == null) {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.enquiry_payment_container,
+                            PaymentReceiptFragment.newInstance(enqID.toString(),piID.toString()))
+                        .commit()
+                }
+            }
+
+            ConstantsDirectory.BUYER -> {
+                if (savedInstanceState == null) {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.enquiry_payment_container,
+                            AdvPay1Fragment.newInstance(enqID.toString(),piID.toString()))
+                        .commit()
+                }
+            }
         }
+
+
     }
 
 //    override fun onBackPressed() {

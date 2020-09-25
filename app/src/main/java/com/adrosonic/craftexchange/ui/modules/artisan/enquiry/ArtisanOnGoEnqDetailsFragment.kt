@@ -24,12 +24,15 @@ import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
 import com.adrosonic.craftexchange.database.predicates.MoqsPredicates
 import com.adrosonic.craftexchange.databinding.FragmentArtisanOnGoEnqDetailsBinding
+import com.adrosonic.craftexchange.enums.AvailableStatus
+import com.adrosonic.craftexchange.enums.getId
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.repository.data.response.moq.Datum
 import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimesResponse
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.piContext
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
 import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.addProductIntent
+import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.advPay.enquiryPayment
 import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
@@ -216,22 +219,25 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
             Log.e("RaisePi", "upload : ${enquiryDetails?.enquiryID}")
             enqID?.let {startActivity(requireContext().piContext(it))}
         }
+
         mBinding?.viewPiLayout?.setOnClickListener {
             enqID?.let {  startActivity(requireContext().raisePiContext(it,true, SendPiRequest()))
             }
         }
-    }
 
-    fun ArtisanProduct(){
-        context?.startActivity(context?.addProductIntent(enquiryDetails?.productID?:0))
+        mBinding?.btnViewApprovePayment?.setOnClickListener {
+            startActivity(context?.enquiryPayment()
+                ?.putExtra(ConstantsDirectory.ENQUIRY_ID,enqID)
+                ?.putExtra("PIID",0))
+        }
     }
-
-//    fun BuyerCustomProduct(){
-//        context?.start
-//    }
 
     fun setDetails(){
+
         setTabVisibilities()
+
+        setViewApprovePaymentButton()
+
         mBinding?.enquiryCode?.text = enquiryDetails?.enquiryCode
         mBinding?.enquiryStartDate?.text = "Date accepted : ${enquiryDetails?.startedOn?.split("T")?.get(0)}"
         val image = enquiryDetails?.productImages?.split((",").toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()?.get(0)
@@ -385,6 +391,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
             else if(enquiryDetails?.isPiSend!!.equals(1L)){
                 mBinding?.uploadDocLayout?.visibility = View.GONE
                 mBinding?.viewPiLayout?.visibility = View.VISIBLE
+
             }else if(enquiryDetails?.isPiSend!!.equals(0L)&&enquiryDetails?.isMoqSend!!.equals(1L)){
                 mBinding?.uploadDocLayout?.visibility = View.VISIBLE
                 mBinding?.viewPiLayout?.visibility = View.GONE
@@ -489,7 +496,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         //TODO : To implement pi moq upload
         if(enquiryDetails?.isBlue == 1L){
             when(currEnqStageId){
-                4L,9L -> {
+                3L,8L -> {
                     mBinding?.awaitingPaymentReceipt?.visibility = View.VISIBLE
                 }
                 else ->{
@@ -527,6 +534,23 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
 //        }else{
 //            mBinding?.piDetailsLayer?.visibility = View.GONE
 //        }
+        if(enquiryDetails?.enquiryStageID!! >= 4L){
+            mBinding?.viewPaymentLayer?.visibility = View.VISIBLE
+        }else{
+            mBinding?.viewPaymentLayer?.visibility = View.GONE
+        }
+    }
+
+    fun setViewApprovePaymentButton(){
+        if(enquiryDetails?.productStatusID == AvailableStatus.MADE_TO_ORDER.getId() || enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
+            if(enquiryDetails?.isBlue==1L && enquiryDetails?.enquiryStageID == 3L){
+                mBinding?.btnViewApprovePayment?.visibility = View.VISIBLE
+            }else{
+                mBinding?.btnViewApprovePayment?.visibility = View.GONE
+            }
+        }else{
+            mBinding?.btnViewApprovePayment?.visibility = View.GONE
+        }
     }
 
     override fun onResume() {

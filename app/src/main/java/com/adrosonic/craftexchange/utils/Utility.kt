@@ -355,9 +355,16 @@ class Utility {
         fun getProductsImagesUrl(productId : Long?,imagename : String?) : String{
             return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV}Product/${productId}/${imagename}"
         }
+
         fun getCustomProductImagesUrl(productId : Long?,imagename : String?) : String{
             return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV}CustomProduct/${productId}/${imagename}"
         }
+
+        fun getAdvancePaymentImageUrl(receiptId : Long?,imagename : String?) : String{
+            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV}AdvancedPayment/${receiptId}/${imagename}"
+        }
+
+
         fun setImageResource(context: Context?,imageView:ImageView?,imageId:Int){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 imageView?.setImageDrawable(context?.resources?.getDrawable(imageId,

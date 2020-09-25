@@ -87,7 +87,6 @@ class AdvPay1Fragment : Fragment() {
 
         mBinding?.per30Btn?.setOnClickListener {
             percentSelected = 30L
-            Utility?.displayMessage("30 percent",requireContext())
             setAdvancePercent(percentSelected)
         }
 
@@ -101,6 +100,7 @@ class AdvPay1Fragment : Fragment() {
         }
 
         mBinding?.btnProceedAdvPay?.setOnClickListener {
+
             if (savedInstanceState == null) {
                 activity?.supportFragmentManager?.beginTransaction()
                     ?.replace(R.id.enquiry_payment_container,

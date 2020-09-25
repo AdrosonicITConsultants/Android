@@ -81,17 +81,13 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
         fun getPiSuccess(id : Long)
     }
 
-    interface UploadPaymentInterface{
-        fun onFailure()
-        fun onSuccess()
-    }
-
     val ongoingEnqList : MutableLiveData<RealmResults<OngoingEnquiries>> by lazy { MutableLiveData<RealmResults<OngoingEnquiries>>() }
     val onGoEnqDetails : MutableLiveData<OngoingEnquiries> by lazy { MutableLiveData<OngoingEnquiries>() }
 
     val compEnqList : MutableLiveData<RealmResults<CompletedEnquiries>> by lazy { MutableLiveData<RealmResults<CompletedEnquiries>>() }
     val compEnqDetails : MutableLiveData<CompletedEnquiries> by lazy { MutableLiveData<CompletedEnquiries>() }
 
+    //listeners
     var listener: GenerateEnquiryInterface ?= null
     var fetchEnqListener : FetchEnquiryInterface ?= null
     var moqListener: MoqInterface ?= null
@@ -99,7 +95,6 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
     var artisanListener : ArtisanDetailsInterface ?= null
     var piLisener : piInterface ?= null
     var singlePiListener : singlePiInterface ?= null
-    var uploadPaymentListener : UploadPaymentInterface ?= null
 
     fun getOnEnqListMutableData(): MutableLiveData<RealmResults<OngoingEnquiries>> {
         ongoingEnqList.value=loadOnEnqList()
@@ -605,36 +600,6 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
                     response?.body()?.data?.id?.let { singlePiListener?.getPiSuccess(it) }
                 }
             })
-    }
-
-    fun uploadPaymentReceipt(payObj : BuyerPayment, filePath : String) {
-        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
-
-        var gson = Gson()
-        var payObjString = gson.toJson(payObj)
-
-        var file = File(filePath)
-        var fileReqBody = file!!.toRequestBody(MediaType.parse("image/*"))
-        var fileBody = MultipartBody.Builder()
-            .addFormDataPart("file", file?.name, fileReqBody!!)
-            .build()
-        var headerBoundary="multipart/form-data;boundary="+ fileBody?.boundary
-
-         CraftExchangeRepository
-            .getTransactionService()
-            .uploadPaymentDetails(token,headerBoundary,payObjString,fileBody!!).enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
-                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                    uploadPaymentListener?.onFailure()
-                }
-                override fun onResponse(
-                    call: Call<ResponseBody>,
-                    response: Response<ResponseBody>
-                ) {
-                    uploadPaymentListener?.onSuccess()
-
-                }
-            })
-
     }
 }
 

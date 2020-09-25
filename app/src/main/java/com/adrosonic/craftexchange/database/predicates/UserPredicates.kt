@@ -36,6 +36,7 @@ class UserPredicates{
                     } else {
                         nextID = primId.toLong() + 1
                     }
+
                     var exUser = it.createObject(CraftUser::class.java, nextID)
                     exUser.id = user?.id
                     exUser.acctoken = userData?.data?.acctoken

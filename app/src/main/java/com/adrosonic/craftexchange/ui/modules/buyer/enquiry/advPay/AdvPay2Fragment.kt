@@ -36,6 +36,7 @@ import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
+import com.adrosonic.craftexchange.viewModels.TransactionViewModel
 import com.bumptech.glide.Glide
 import com.pixplicity.easyprefs.library.Prefs
 
@@ -46,7 +47,7 @@ private const val ARG_PARAM4 = "param4"
 
 
 class AdvPay2Fragment : Fragment(),
-EnquiryViewModel.UploadPaymentInterface{
+TransactionViewModel.UploadPaymentInterface{
 
     private var param1: String? = null
     private var param2: Float?= 0F
@@ -61,6 +62,7 @@ EnquiryViewModel.UploadPaymentInterface{
     private var mBinding: FragmentAdvPay2Binding?= null
 
     val mEnqVM : EnquiryViewModel by viewModels()
+    val mTransVM : TransactionViewModel by viewModels()
 
     private var enquiryDetails : OngoingEnquiries?= null
     private var url : String?=""
@@ -112,7 +114,7 @@ EnquiryViewModel.UploadPaymentInterface{
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mEnqVM?.uploadPaymentListener = this
+        mTransVM?.uploadPaymentListener = this
 
         enquiryDetails = enqID?.toLong()?.let { mEnqVM?.getSingleOnEnqData(it) }?.value
 //        var piDetails = PiPredicates?.getSinglePi(enqID?.toLong())
@@ -175,7 +177,7 @@ EnquiryViewModel.UploadPaymentInterface{
                         }
                     }
 
-                    absolutePath?.let { it1 -> paymentObj?.let { it2 -> mEnqVM?.uploadPaymentReceipt(it2, it1) } }
+                    absolutePath?.let { it1 -> paymentObj?.let { it2 -> mTransVM?.uploadPaymentReceipt(it2, it1) } }
                     dialog?.show()
                 }else{
                     Utility?.displayMessage("Upload Transaction Receipt",requireActivity())
