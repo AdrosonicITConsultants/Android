@@ -17,6 +17,10 @@ interface EnquiryDao {
     fun getAllEnquiryStagesData(@Header("Authorization") token: String): Call<EnquiryStageData>
 
     @Headers("Accept: application/json")
+    @GET("enquiry/getProgressBar")
+    fun getProgressTimelineData(@Header("Authorization") token: String): Call<EnquiryStageData>
+
+    @Headers("Accept: application/json")
     @GET("enquiry/getEnquiryStagesForAvailableProduct")
     fun getAvailableProdEnquiryStagesData(@Header("Authorization") token: String): Call<EnquiryAvaProdStageData>
 
