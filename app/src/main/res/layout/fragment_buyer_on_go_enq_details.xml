@@ -559,7 +559,6 @@
                     android:focusable="true"
                     android:orientation="horizontal"
                     android:weightSum="10"
-                    android:paddingTop="@dimen/margin_regular"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/middle_part">
