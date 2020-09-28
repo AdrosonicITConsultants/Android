@@ -121,7 +121,6 @@ dependencies {
 
     //swipe button
     implementation 'com.github.gratusik:AGIKSwipeButton:1.0.1'
-    implementation 'in.shadowfax:proswipebutton:1.2.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.0'
