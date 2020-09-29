@@ -71,6 +71,7 @@ EnquiryViewModel.singlePiInterface{
     private var enquiryDetails : OngoingEnquiries ?= null
     private var stageList : ArrayList<Pair<Long,String>> ?= null
     private var stageAPList : ArrayList<Triple<Long,Long,String>> ?= null
+    private var innerStageList : ArrayList<Pair<Long,String>> ?= null
     private var nextEnqStage : String?=""
     private var prevEnqStage : String?=""
     private var currEnqStage : String ?= ""
@@ -521,59 +522,140 @@ EnquiryViewModel.singlePiInterface{
     }
 
     fun setViewTransactionButton(){
-        if(enquiryDetails?.productStatusID == AvailableStatus.MADE_TO_ORDER.getId() || isCustom == true){
-            when (enquiryDetails?.enquiryStageID) {
-                3L -> {
-                    mBinding?.transactionLayout?.visibility = View.VISIBLE
-                    mBinding?.piDetailsLayout?.visibility = View.VISIBLE
+        if(enquiryDetails?.productStatusID == AvailableStatus.MADE_TO_ORDER.getId() || enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
+//            if(enquiryDetails?.isBlue == 1L){
+                when (enquiryDetails?.enquiryStageID) {
+                    3L -> {
+                        mBinding?.transactionLayout?.visibility = View.VISIBLE
+                        mBinding?.piDetailsLayout?.visibility = View.VISIBLE
+                    }
+                    8L -> {
+                        mBinding?.transactionLayout?.visibility = View.VISIBLE
+                        mBinding?.piDetailsLayout?.visibility = View.VISIBLE
+                    }
+                    else -> {
+                        mBinding?.transactionLayout?.visibility = View.GONE
+                    }
                 }
-                8L -> {
-                    mBinding?.transactionLayout?.visibility = View.VISIBLE
-                    mBinding?.piDetailsLayout?.visibility = View.VISIBLE
-                }
-                else -> {
-                    mBinding?.transactionLayout?.visibility = View.GONE
-                }
-            }}else{
+//            }else{
+//                mBinding?.transactionLayout?.visibility = View.GONE
+//            }
+        }else{
             mBinding?.transactionLayout?.visibility = View.GONE
         }
     }
 
     private fun setProgressTimeline(){
-        stageList?.clear()
         stageAPList?.clear()
-        if(enquiryDetails?.productType == "Custom Product" || enquiryDetails?.productStatusID == 1L){
+        innerStageList?.clear()
+        stageList?.clear()
+        if(enquiryDetails?.productType == "Custom Product" || enquiryDetails?.productStatusID == AvailableStatus.MADE_TO_ORDER.getId()){
             stageList = Utility.getEnquiryStagesData() // custom product or made to order
             Log.e("enqdata", "List All : $stageList")
 
-            stageList?.forEach {
-                if(it.first == enquiryDetails?.enquiryStageID){
-                    currEnqStageId = it.first
-                    currEnqStage = it.second
-                    Log.e("CurrentEnqStage","Id : $currEnqStageId")
-                    Log.e("CurrentEnqStage","current : $currEnqStage")
+            innerStageList = Utility.getInnerEnquiryStagesData()
+            Log.e("enqdata", "List Inner : $innerStageList")
+
+
+            if(enquiryDetails?.innerEnquiryStageID != null && enquiryDetails?.enquiryStageID == 5L){
+                when(enquiryDetails?.innerEnquiryStageID){
+                    1L -> {
+                        innerStageList?.forEach {
+                            if(it.first == enquiryDetails?.innerEnquiryStageID){
+                                currEnqStageId = it.first
+                                currEnqStage = it.second
+                                Log.e("CurrentEnqStage","Id : $currEnqStageId")
+                                Log.e("CurrentEnqStage","current : $currEnqStage")
+                            }
+                        }
+                        innerStageList?.forEach {
+                            if(it.first == currEnqStageId?.plus(1) ?: 5){
+                                nextEnqStage = it.second
+                                Log.e("CurrentEnqStage","next : $nextEnqStage")
+                            }
+                        }
+
+                        stageList?.forEach {
+                            if(it.first == 4L){
+                                prevEnqStage = it.second
+                                Log.e("CurrentEnqStage","previous : $prevEnqStage")
+                            }
+                        }
+                    }
+                    5L -> {
+                        innerStageList?.forEach {
+                            if(it.first == enquiryDetails?.innerEnquiryStageID){
+                                currEnqStageId = it.first
+                                currEnqStage = it.second
+                                Log.e("CurrentEnqStage","Id : $currEnqStageId")
+                                Log.e("CurrentEnqStage","current : $currEnqStage")
+                            }
+                        }
+                        innerStageList?.forEach {
+                            if(it.first == currEnqStageId?.minus(1) ?: 5){
+                                prevEnqStage = it.second
+                                Log.e("CurrentEnqStage","next : $prevEnqStage")
+                            }
+                        }
+
+                        stageList?.forEach {
+                            if(it.first == 6L){
+                                nextEnqStage = it.second
+                                Log.e("CurrentEnqStage","previous : $nextEnqStage")
+                            }
+                        }
+                    }
+                    else -> {
+                        innerStageList?.forEach {
+                            if(it.first == enquiryDetails?.innerEnquiryStageID){
+                                currEnqStageId = it.first
+                                currEnqStage = it.second
+                                Log.e("CurrentEnqStage","Id : $currEnqStageId")
+                                Log.e("CurrentEnqStage","current : $currEnqStage")
+                            }
+                        }
+                        innerStageList?.forEach {
+                            if(it.first == currEnqStageId?.plus(1) ?: 5){
+                                nextEnqStage = it.second
+                                Log.e("CurrentEnqStage","next : $nextEnqStage")
+                            }
+                        }
+
+                        innerStageList?.forEach {
+                            if(it.first == currEnqStageId?.minus(1) ?: 1){
+                                prevEnqStage = it.second
+                                Log.e("CurrentEnqStage","previous : $prevEnqStage")
+                            }
+                        }
+                    }
+                }
+            }else{
+                stageList?.forEach {
+                    if(it.first == enquiryDetails?.enquiryStageID){
+                        currEnqStageId = it.first
+                        currEnqStage = it.second
+                        Log.e("CurrentEnqStage","Id : $currEnqStageId")
+                        Log.e("CurrentEnqStage","current : $currEnqStage")
+                    }
+                }
+
+                stageList?.forEach {
+                    if(it.first == currEnqStageId?.plus(1) ?: 10){
+                        nextEnqStage = it.second
+                        Log.e("CurrentEnqStage","next : $nextEnqStage")
+                    }
+                }
+
+                stageList?.forEach {
+                    if(it.first == currEnqStageId?.minus(1) ?: 0){
+                        prevEnqStage = it.second
+                        Log.e("CurrentEnqStage","previous : $prevEnqStage")
+                    }
                 }
             }
-
-            stageList?.forEach {
-                if(it.first == currEnqStageId?.plus(1) ?: 10){
-                    nextEnqStage = it.second
-                    Log.e("CurrentEnqStage","next : $nextEnqStage")
-                }
-            }
-
-            stageList?.forEach {
-                if(it.first == currEnqStageId?.minus(1) ?: 0){
-                    prevEnqStage = it.second
-                    Log.e("CurrentEnqStage","previous : $prevEnqStage")
-                }
-            }
-
-        }
-        else{
+        }else{
             stageAPList = Utility.getAvaiProdEnquiryStagesData() // available product
             Log.e("enqdata", "List AP : $stageAPList")
-
             stageAPList?.forEach {
                 if(it.second == enquiryDetails?.enquiryStageID){
                     currEnqStageSerNo = it.first

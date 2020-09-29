@@ -5,20 +5,20 @@ import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.IfExis
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryAvaProdStageData
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryStageData
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryResponse
+import com.adrosonic.craftexchange.repository.data.response.enquiry.InnerStageData
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
 
 interface EnquiryDao {
+//    GET /enquiry/getAllInnerEnquiryStages
+    @Headers("Accept: application/json")
+    @GET("enquiry/getAllInnerEnquiryStages")
+    fun getInnerEnquiryStagesData(@Header("Authorization") token: String): Call<InnerStageData>
 
-//    GET /enquiry/getAllEnquiryStages
     @Headers("Accept: application/json")
     @GET("enquiry/getAllEnquiryStages")
     fun getAllEnquiryStagesData(@Header("Authorization") token: String): Call<EnquiryStageData>
-
-    @Headers("Accept: application/json")
-    @GET("enquiry/getProgressBar")
-    fun getProgressTimelineData(@Header("Authorization") token: String): Call<EnquiryStageData>
 
     @Headers("Accept: application/json")
     @GET("enquiry/getEnquiryStagesForAvailableProduct")
@@ -62,4 +62,17 @@ interface EnquiryDao {
     fun getSingleCompletedEnquiry(@Header("Authorization") token:String,
                                 @Path("enquiryId") enquiryId : Long) : Call<EnquiryResponse>
 
+
+    @Headers("Accept: application/json")
+    @POST("enquiry/setEnquiryOrderStages/{stageId}/{enquiryId}/{innerStageId}")
+    fun setEnquiryStages(@Header("Authorization") token:String,
+                         @Path("stageId") stageId : Long,
+                         @Path("enquiryId") enquiryId : Long,
+                         @Query("innerStageId") innerStageId : Long) : Call<ResponseBody>
+
+    @Headers("Accept: application/json")
+    @POST("enquiry/setEnquiryOrderStages/{stageId}/{enquiryId}/{innerStageId}")
+    fun setCompleteOrderStage(@Header("Authorization") token:String,
+                         @Path("stageId") stageId : Long,
+                         @Path("enquiryId") enquiryId : Long) : Call<ResponseBody>
 }

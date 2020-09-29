@@ -102,6 +102,7 @@ class BuyerLandingActivity : AppCompatActivity(),
 
         mViewModel.getProductUploadData()
         mViewModel.getEnquiryStageData()
+        mViewModel?.getInnerEnquiryStageData()
         mViewModel.getEnquiryStageAvailableProdsData()
         mViewModel.getwishlisteProductIds()
         mViewModel?.getMoqDeliveryTimes()
@@ -389,6 +390,7 @@ class BuyerLandingActivity : AppCompatActivity(),
             mViewModel.getProductsOfArtisan(this)
             mViewModel.getProductUploadData()
             mViewModel.getEnquiryStageData()
+            mViewModel?.getInnerEnquiryStageData()
             mViewModel.getEnquiryStageAvailableProdsData()
             mViewModel.getArtisanBrandDetails()
             mViewModel.getAllNotifications()

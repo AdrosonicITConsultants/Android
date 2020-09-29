@@ -7,7 +7,6 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -15,7 +14,6 @@ import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Build
-import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -31,9 +29,9 @@ import com.adrosonic.craftexchange.database.predicates.UserPredicates
 import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.uploadData.ProductUploadData
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryAvaProdStageData
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryStageData
+import com.adrosonic.craftexchange.repository.data.response.enquiry.InnerStageData
 import com.adrosonic.craftexchange.repository.data.response.moq.Datum
 import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimesResponse
-import com.adrosonic.craftexchange.ui.modules.enquiry.enquiryDetails
 import com.bumptech.glide.Glide
 import com.google.gson.GsonBuilder
 import com.pixplicity.easyprefs.library.Prefs
@@ -450,6 +448,38 @@ class Utility {
             }
             return list
         }
+
+        fun getInnerEnquiryStagesData(): ArrayList<Pair<Long,String>>{
+            val gson = GsonBuilder().create()
+            var enqobj = gson.fromJson(UserConfig.shared.innerEnquiryStageData.toString(), InnerStageData::class.java)
+            var itr = enqobj?.data?.iterator()
+            var list = ArrayList<Pair<Long,String>>()
+            list.clear()
+            if(itr!=null){
+                while(itr.hasNext()){
+                    var enq = itr.next()
+                    list.add(Pair(enq.id,enq.stage))
+                }
+            }
+            return list
+        }
+
+//        fun getProgressTimelineData(): ArrayList<Triple<Long,Long,String>>{
+//            var i = 0L
+//            val gson = GsonBuilder().create()
+//            var enqobj = gson.fromJson(UserConfig.shared.progressTimeData.toString(), InnerStageData::class.java)
+//            var itr = enqobj?.data?.iterator()
+//            var list = ArrayList<Triple<Long,Long,String>>()
+//            list.clear()
+//            if(itr!=null){
+//                while(itr.hasNext()){
+//                    var enq = itr.next()
+//                    list.add(Triple(i,enq.id,enq.stageDesc))
+//                    i++
+//                }
+//            }
+//            return list
+//        }
 
         fun getAvaiProdEnquiryStagesData(): ArrayList<Triple<Long,Long,String>>{
             val gson = GsonBuilder().create()
