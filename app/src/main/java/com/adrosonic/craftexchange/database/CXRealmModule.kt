@@ -9,6 +9,7 @@ import io.realm.annotations.RealmModule
 @RealmModule(classes = [
     UserAddress::class,
     CraftUser::class,
+    CraftAdmin::class,
     PaymentAccount::class,
     ArtisanProducts::class,
     BrandList::class,

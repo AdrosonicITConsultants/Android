@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityLoginBinding
+import com.adrosonic.craftexchange.ui.modules.admin.auth.login.AdminLoginFragment
+import com.adrosonic.craftexchange.ui.modules.artisan.auth.login.ArtisanLoginPasswordFragment
 import com.adrosonic.craftexchange.ui.modules.artisan.auth.login.ArtisanLoginUsernameFragment
 import com.adrosonic.craftexchange.ui.modules.buyer.auth.login.BuyerLoginUsernameFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
@@ -30,20 +32,20 @@ class LoginActivity : AppCompatActivity() {
         var profile = Prefs.getString(ConstantsDirectory.PROFILE,null)
 
         when(profile){
-            ConstantsDirectory.ARTISAN -> {
+            ConstantsDirectory.ADMIN -> {
                 if (savedInstanceState == null) {
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.login_container, ArtisanLoginUsernameFragment.newInstance(profile))
+                        .replace(R.id.login_container,AdminLoginFragment.newInstance(profile))
                         .commitNow()
                 }
             }
-            ConstantsDirectory.BUYER -> {
-                if (savedInstanceState == null) {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.login_container, BuyerLoginUsernameFragment.newInstance(profile))
-                        .commitNow()
-                }
-            }
+//            ConstantsDirectory.BUYER -> {
+//                if (savedInstanceState == null) {
+//                    supportFragmentManager.beginTransaction()
+//                        .replace(R.id.login_container, BuyerLoginUsernameFragment.newInstance(profile))
+//                        .commitNow()
+//                }
+//            }
         }
     }
 }

@@ -37,7 +37,7 @@ class ResetUsernameFragment : Fragment() {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_reset_username, container, false)
         mBinding?.textBoxOtp?.setText("")
-        mBinding?.profileTag?.text = Prefs.getString(ConstantsDirectory.PROFILE,"")
+//        mBinding?.profileTag?.text = Prefs.getString(ConstantsDirectory.PROFILE,"")
         return mBinding?.root
     }
 
@@ -47,7 +47,7 @@ class ResetUsernameFragment : Fragment() {
         mBinding?.textBoxOtp?.isFocusableInTouchMode = false
         mBinding?.buttonSendOtp?.isClickable = false
         mBinding?.buttonVerify?.isClickable = false
-        mBinding?.buttonReach?.isClickable = false
+//        mBinding?.buttonReach?.isClickable = false
     }
     private fun hideProgress(){
         mBinding?.sendOtpLoader = false
@@ -55,7 +55,7 @@ class ResetUsernameFragment : Fragment() {
         mBinding?.textBoxOtp?.isFocusableInTouchMode = true
         mBinding?.buttonSendOtp?.isClickable = true
         mBinding?.buttonVerify?.isClickable = true
-        mBinding?.buttonReach?.isClickable = true
+//        mBinding?.buttonReach?.isClickable = true
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -66,7 +66,7 @@ class ResetUsernameFragment : Fragment() {
                 showProgress()
                 CraftExchangeRepository
                     .getResetPwdService()
-                    .sendOtp(mBinding?.textBoxUsername?.text.toString(),Prefs.getLong(ConstantsDirectory.REF_ROLE_ID,0))
+                    .sendOtp(mBinding?.textBoxUsername?.text.toString())
                     .enqueue(object : Callback, retrofit2.Callback<ResetResponse> {
                         override fun onResponse(
                             call: Call<ResetResponse>, response: Response<ResetResponse>) {
@@ -101,7 +101,7 @@ class ResetUsernameFragment : Fragment() {
                         OtpVerifyModel(
                             mBinding?.textBoxUsername?.text.toString(),
                             mBinding?.textBoxOtp?.text.toString(),
-                            Prefs.getLong(ConstantsDirectory.REF_ROLE_ID, 0)
+                            0
                         )
                     )
                     .enqueue(object : Callback, retrofit2.Callback<ResetResponse> {

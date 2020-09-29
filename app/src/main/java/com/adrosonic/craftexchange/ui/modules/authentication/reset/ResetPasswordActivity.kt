@@ -24,19 +24,13 @@ class ResetPasswordActivity : AppCompatActivity() {
         val view = mBinding?.root
         setContentView(view)
 
-//        var profile = Prefs.getString(ConstantsDirectory.PROFILE,"")
-
-//        when(profile){
-//            ConstantsDirectory.ARTISAN -> {}
-//            ConstantsDirectory.BUYER -> {
                 if (savedInstanceState == null) {
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.reset_container,
                             ResetUsernameFragment.newInstance(),"Reset Username")
                         .commit()
                 }
-//            }
-//        }
+
 
 
     }

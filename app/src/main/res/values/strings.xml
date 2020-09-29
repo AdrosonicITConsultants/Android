@@ -319,5 +319,11 @@
     <string name="awaiting_artisan_confirmation">Awaiting artisan confirmation</string>
     <string name="payment_receipt_upload_confirmation">Payment Receipt Uploaded!</string>
     <string name="awaiting_payment_confirmation">Awaiting payment confirmation</string>
+    <string name="login">Login</string>
+    <string name="enter_Username">Enter Username</string>
+    <string name="enterPassword">Enter Password</string>
+    <string name="signIn">Sign in</string>
+    <string name="resertPassword">Reset your password</string>
+    <string name="password">Password</string>
 
 </resources>

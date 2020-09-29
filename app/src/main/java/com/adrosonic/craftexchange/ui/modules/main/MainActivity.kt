@@ -7,6 +7,8 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.adrosonic.craftexchange.databinding.ActivityMainBinding
 import com.adrosonic.craftexchange.ui.modules.artisan.landing.artisanLandingIntent
+import com.adrosonic.craftexchange.ui.modules.authentication.login.LoginActivity
+import com.adrosonic.craftexchange.ui.modules.authentication.login.loginIntent
 import com.adrosonic.craftexchange.ui.modules.buyer.landing.buyerLandingIntent
 import com.adrosonic.craftexchange.ui.modules.role.roleselectIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
@@ -47,18 +49,22 @@ class MainActivity : AppCompatActivity() {
 //            else isNotification=false
 //            if(title.isNotEmpty())isNotification=true
             Log.e(  "notificationManager", "title: $title" )
-            when(profile){
-                ConstantsDirectory.ARTISAN -> {
-                   if(title.isNotEmpty()) startActivity(artisanLandingIntent(true))
-                    else startActivity(artisanLandingIntent())
-                }
-                ConstantsDirectory.BUYER -> {
-                    if(title.isNotEmpty()) startActivity(buyerLandingIntent(true))
-                    else startActivity(buyerLandingIntent())
-                }
-            }
+//            when(profile){
+//                ConstantsDirectory.ARTISAN -> {
+//                   if(title.isNotEmpty()) startActivity(artisanLandingIntent(true))
+//                    else startActivity(artisanLandingIntent())
+//                }
+//                ConstantsDirectory.BUYER -> {
+//                    if(title.isNotEmpty()) startActivity(buyerLandingIntent(true))
+//                    else startActivity(buyerLandingIntent())
+//                }
+//            }
         } else {
-            startActivity(roleselectIntent())
+            startActivity(loginIntent())
+            Prefs.putString(ConstantsDirectory.PROFILE,"Admin")
+
+//            startActivity(Intent(activity, LoginActivity::class.java))
+
         }
     }
 }

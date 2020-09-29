@@ -14,6 +14,7 @@ import com.adrosonic.craftexchange.databinding.FragmentResetPasswordBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.resetResponse.ResetResponse
 import com.adrosonic.craftexchange.repository.data.model.UserAuthModel
+import com.adrosonic.craftexchange.repository.data.request.authModel.AdminAuthModel
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
 import com.pixplicity.easyprefs.library.Prefs
@@ -69,10 +70,9 @@ class ResetPasswordFragment : Fragment() {
                     CraftExchangeRepository
                         .getResetPwdService()
                         .resetPassword("application/json",
-                            UserAuthModel(
+                            AdminAuthModel(
                                 email,
-                                mBinding?.textBoxRetypePwd?.text.toString(),
-                                Prefs.getLong(ConstantsDirectory.REF_ROLE_ID, 0)
+                                mBinding?.textBoxRetypePwd?.text.toString()
                             )
                         )
                         .enqueue(object : Callback,retrofit2.Callback<ResetResponse>{

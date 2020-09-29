@@ -19,7 +19,6 @@ class ResetSuccessFragment : Fragment() {
 
     companion object {
         fun newInstance() = ResetSuccessFragment()
-        const val TAG = "BuyerResetSuccess"
     }
 
     private var mBinding: FragmentResetSuccessBinding?= null
@@ -42,14 +41,9 @@ class ResetSuccessFragment : Fragment() {
         mBinding?.buttonLoginNow?.setOnClickListener {
             when(profile){
 
-                ConstantsDirectory.ARTISAN -> {
+                ConstantsDirectory.ADMIN -> {
                     startActivity(Intent(activity, LoginActivity::class.java).addFlags(FLAG_ACTIVITY_CLEAR_TOP))
-                    Prefs.putString(ConstantsDirectory.PROFILE,"Artisan")
-                }
-
-                ConstantsDirectory.BUYER -> {
-                    startActivity(Intent(activity, LoginActivity::class.java).addFlags(FLAG_ACTIVITY_CLEAR_TOP))
-                    Prefs.putString(ConstantsDirectory.PROFILE,"Buyer")
+                    Prefs.putString(ConstantsDirectory.PROFILE,"Admin")
                 }
 
             }

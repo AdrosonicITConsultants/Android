@@ -13,124 +13,125 @@
     android:layout_height="match_parent"
     android:fillViewport="true">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/buyer_reset_password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorBackground"
-        tools:context=".ui.modules.authentication.reset.ResetSuccessFragment">
-
-        <TextView
-            android:id="@+id/profile_tag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_small"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.9"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.02"/>
-
-        <include
-            android:id="@+id/logo_part"
-            layout="@layout/logo_side"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.050000012" />
-
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/success_part"
-            android:layout_width="wrap_content"
+            android:id="@+id/buyer_reset_password"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/logo_part"
-            app:layout_constraintVertical_bias="0.19999999">
-
-            <ImageView
-                android:id="@+id/tick"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rectangle_round_grad_green"
-                android:contentDescription="@string/success_tick"
-                android:outlineSpotShadowColor="@color/light_green"
-                android:src="@drawable/ic_tick"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            android:background="@color/black_text"
+            tools:context=".ui.modules.authentication.reset.ResetSuccessFragment">
 
             <TextView
-                android:id="@+id/success_msg"
+                android:id="@+id/profile_tag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_small"
+                android:layout_margin="@dimen/margin_small"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.9"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.02" />
+
+            <include
+                android:id="@+id/logo_part"
+                layout="@layout/logo_side"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.050000012" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/success_part"
+                android:layout_width="353dp"
+                android:layout_height="136dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/logo_part"
+                app:layout_constraintVertical_bias="0.18">
+
+                <ImageView
+                    android:id="@+id/tick"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rectangle_round_grad_green"
+                    android:contentDescription="@string/success_tick"
+                    android:outlineSpotShadowColor="@color/light_green"
+                    android:src="@drawable/ic_tick"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/success_msg"
+                    android:layout_width="324dp"
+                    android:layout_height="57dp"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/lato_regular"
+                    android:paddingStart="75dp"
+                    android:paddingEnd="75dp"
+                    android:text="@string/success_pwd_reset_msg"
+                    android:textAlignment="center"
+                    android:textColor="@color/dark_green"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.486"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tick" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/confirmation_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_regular"
                 android:fontFamily="@font/lato_regular"
-                android:paddingStart="75dp"
-                android:paddingEnd="75dp"
-                android:text="@string/success_pwd_reset_msg"
+                android:text="@string/confirmation_text"
                 android:textAlignment="center"
-                android:textColor="@color/dark_green"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="@+id/tick"
-                app:layout_constraintStart_toStartOf="@+id/tick"
-                app:layout_constraintTop_toBottomOf="@+id/tick" />
+                android:textColor="@color/colorBackground"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/success_part" />
+
+            <Button
+                android:id="@+id/button_login_now"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_regular"
+                android:background="@drawable/rectangle_round_green_solid"
+                android:fontFamily="@font/lato_regular"
+                android:text="@string/loginnow"
+                android:textAllCaps="false"
+                android:textColor="@color/black_text"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/privacy_policy"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/confirmation_text"
+                app:layout_constraintVertical_bias="0.0" />
+
+
+            <TextView
+                android:id="@+id/privacy_policy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="40dp"
+                android:fontFamily="@font/lato_regular"
+                android:text="@string/privacy_policy"
+                android:textColor="@android:color/holo_blue_bright"
+                android:textColorLink="#FFFFFF"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <TextView
-            android:id="@+id/confirmation_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/lato_regular"
-            android:layout_marginTop="@dimen/margin_regular"
-            android:text="@string/confirmation_text"
-            android:textAlignment="center"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/success_part" />
-
-        <Button
-            android:id="@+id/button_login_now"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_regular"
-            android:background="@drawable/rectangle_round_green_solid"
-            android:fontFamily="@font/lato_regular"
-            android:text="@string/loginnow"
-            android:textAllCaps="false"
-            android:textColor="#fff"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/privacy_policy"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/confirmation_text"
-            app:layout_constraintVertical_bias="0.0" />
-
-
-
-        <TextView
-            android:id="@+id/privacy_policy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_regular"
-            android:fontFamily="@font/lato_regular"
-            android:text="@string/privacy_policy"
-            android:textColor="@color/lighter_gray"
-            android:textSize="10sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </layout>
 

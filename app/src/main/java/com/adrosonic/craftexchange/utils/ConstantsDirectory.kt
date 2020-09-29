@@ -30,6 +30,7 @@ object ConstantsDirectory {
     const val PROFILE = "profile"
     const val REF_ROLE_ID = "roleId"
     const val ACC_TOKEN = "accesstoken"
+    const val ADMIN = "Admin"
 
     const val USER_ID = "userid"
 
