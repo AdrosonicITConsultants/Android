@@ -1,4 +1,4 @@
-package com.adrosonic.craftexchange.ui.modules.artisan.enquiry
+package com.adrosonic.craftexchange.ui.modules.order
 
 import android.app.Activity
 import android.content.Intent
@@ -22,9 +22,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
+import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
 import com.adrosonic.craftexchange.database.predicates.EnquiryPredicates
 import com.adrosonic.craftexchange.database.predicates.MoqsPredicates
+import com.adrosonic.craftexchange.database.predicates.OrdersPredicates
 import com.adrosonic.craftexchange.databinding.FragmentArtisanOnGoEnqDetailsBinding
+import com.adrosonic.craftexchange.databinding.FragmentArtisanOngoingOrderDetailsBinding
 import com.adrosonic.craftexchange.enums.AvailableStatus
 import com.adrosonic.craftexchange.enums.EnquiryStatus
 import com.adrosonic.craftexchange.enums.getId
@@ -42,6 +45,7 @@ import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
+import com.adrosonic.craftexchange.viewModels.OrdersViewModel
 import com.agik.swipe_button.Controller.OnSwipeCompleteListener
 import com.agik.swipe_button.View.Swipe_Button_View
 import com.google.gson.GsonBuilder
@@ -50,16 +54,15 @@ import com.google.gson.GsonBuilder
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class ArtisanOnGoEnqDetailsFragment : Fragment(),
-    EnquiryViewModel.FetchEnquiryInterface,
-    EnquiryViewModel.MoqInterface{
-    // TODO: Rename and change types of parameters
+class ArtisanOngoinOrderDetailsFragment : Fragment(),
+    OrdersViewModel.FetchOrderInterface{
+
     private var param1: String? = null
     private var param2: String? = null
 
     private var enqID : Long ?= 0
     private var enqCode : String ?= ""
-    private var enquiryDetails : OngoingEnquiries ?= null
+    private var orderDetails : Orders ?= null
     private var stageList : ArrayList<Pair<Long,String>> ?= null
     private var stageAPList : ArrayList<Triple<Long,Long,String>> ?= null
     private var nextEnqStage : String?=""
@@ -70,7 +73,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
     private var url : String?=""
     private var status : String?= ""
 
-    val mEnqVM : EnquiryViewModel by viewModels()
+    val mOrderVm : OrdersViewModel by viewModels()
 
     var weft : String ?= ""
     var warp : String ?= ""
@@ -79,11 +82,10 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
     private var isCustom : Boolean ?= false
 
 
-//    var moqDeliveryJson=""
     var moqDeliveryTimeList=ArrayList<Datum>()
     var arrayDeliveryDscrp=ArrayList<String>()
     var estId=0L
-    var mBinding : FragmentArtisanOnGoEnqDetailsBinding?= null
+    var mBinding : FragmentArtisanOngoingOrderDetailsBinding?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,38 +100,27 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_artisan_on_go_enq_details, container, false)
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_artisan_ongoing_order_details, container, false)
         enqID = param1?.toLong()
         return mBinding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        moqDeliveryJson = UserConfig.shared.moqDeliveryDates
-//        val gson = GsonBuilder().create()
-//        val moqDeliveryTime = gson.fromJson(moqDeliveryJson, MoqDeliveryTimesResponse::class.java)
         Utility.getDeliveryTimeList()?.let {moqDeliveryTimeList.addAll(it)  }
-        mEnqVM?.moqListener=this
-        mEnqVM?.fetchEnqListener = this
+        mOrderVm?.fetchEnqListener = this
         mBinding?.swipeEnquiryDetails?.isEnabled = false
         if(Utility.checkIfInternetConnected(requireActivity())){
             viewLoader()
-            enqID?.let { mEnqVM.getSingleOngoingEnquiry(it) }
-            val moqId=MoqsPredicates.getSingleMoq(enqID)?.moqId?:0
-            Log.e("getSingleMoq","moqId: $moqId")
-            if(moqId<=0){
-                viewLoader()
-                mEnqVM.getSingleMoq(enqID!!)
-            }
+            enqID?.let { mOrderVm.getSingleOngoingOrder(it) }
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
-//            setDetails()
         }
 
         enqID?.let {
-            mEnqVM.getSingleOnEnqData(it)
-                .observe(viewLifecycleOwner, Observer<OngoingEnquiries> {
-                    enquiryDetails = it
+            mOrderVm.getSingleOnOrderData(it,0)
+                .observe(viewLifecycleOwner, Observer<Orders> {
+                    orderDetails = it
                 })
         }
 
@@ -141,7 +132,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
             if (savedInstanceState == null) {
                 activity?.supportFragmentManager?.beginTransaction()
                     ?.replace(R.id.enquiry_details_container,
-                        BuyEnqDetailsFragment.newInstance(enquiryDetails?.enquiryID.toString(),enquiryDetails?.enquiryStatusID.toString()))
+                        BuyEnqDetailsFragment.newInstance(orderDetails?.enquiryId.toString(),orderDetails?.enquiryStatusId.toString()))
                     ?.addToBackStack(null)
                     ?.commit()
             }
@@ -150,7 +141,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         mBinding?.productDetailsLayer?.setOnClickListener {
             if (savedInstanceState == null) {
                 isCustom?.let { it1 ->
-                    ViewProductDetailsFragment.newInstance(enquiryDetails?.productID!!.toLong(),
+                    ViewProductDetailsFragment.newInstance(orderDetails?.productId!!.toLong(),
                         it1
                     )
                 }?.let { it2 ->
@@ -165,73 +156,9 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
 
         }
 
-        mBinding?.moqDetailsLayer?.setOnClickListener {
-        if(mBinding?.moqDetails?.visibility==View.VISIBLE)mBinding?.moqDetails?.visibility=View.GONE
-        else mBinding?.moqDetails?.visibility=View.VISIBLE
-        }
-
-        mBinding?.spEstDays?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                if(position>0){
-                    var selection=arrayDeliveryDscrp.get(position)
-                    moqDeliveryTimeList.forEach{
-                        if(it.deliveryDesc.equals(selection, true)){
-                            estId=it.id
-
-                        }
-                    }
-                } else estId=0
-            }
-        }
-
-        mBinding?.txtBidMoq?.setOnSwipeCompleteListener_forward_reverse(object : OnSwipeCompleteListener {
-            override fun onSwipe_Forward(swipeView: Swipe_Button_View) {
-                val additionalInfo=mBinding?.etAddNote?.text.toString()
-                val moq=mBinding?.etMoq?.text.toString()
-                val ppu=mBinding?.etPrice?.text.toString()
-                if(moq.isEmpty()) Utility.displayMessage("Please add MOQ",requireContext())
-                else if(ppu.isEmpty()) Utility.displayMessage("Please add price per unit",requireContext())
-                else if(estId<=0) Utility.displayMessage("Please select estimated days",requireContext())
-                else {
-                    enqID?.let {
-                        if (Utility.checkIfInternetConnected(requireContext())) {
-                            mBinding?.txtBidMoq?.setText("Sending MOQ")
-                            viewLoader()
-                            mEnqVM?.sendMoq(it, additionalInfo, estId, moq.toLong(), ppu)
-                        }else {
-                            MoqsPredicates.insertMoqForOffline(it, additionalInfo, estId, moq.toLong(), ppu)
-                            setDetails()
-                        }
-                    }
-                }
-            }
-            override fun onSwipe_Reverse(swipeView: Swipe_Button_View) {
-                //inactive function
-            }
-        })
-
-        mBinding?.btnUploadDocReceipt?.setOnClickListener {
-            Log.e("RaisePi", "upload : $enqID")
-            Log.e("RaisePi", "upload : ${enquiryDetails?.enquiryID}")
-            enqID?.let {startActivityForResult(requireContext().piContext(it),ConstantsDirectory.RESULT_PI)}
-        }
-
-        mBinding?.viewPiLayout?.setOnClickListener {
+        mBinding?.piDetailsLayer?.setOnClickListener {
             enqID?.let {  startActivity(requireContext().raisePiContext(it,true, SendPiRequest()))
             }
-        }
-
-        mBinding?.btnViewApprovePayment?.setOnClickListener {
-            startActivity(context?.enquiryPayment()
-                ?.putExtra(ConstantsDirectory.ENQUIRY_ID,enqID)
-                ?.putExtra(ConstantsDirectory.ENQUIRY_STATUS_FLAG,EnquiryStatus.ONGOING.getId())
-                ?.putExtra(ConstantsDirectory.PI_ID,0))
         }
 
         mBinding?.viewPaymentLayer?.setOnClickListener {
@@ -240,33 +167,41 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
                 ?.putExtra(ConstantsDirectory.ENQUIRY_STATUS_FLAG, EnquiryStatus.ONGOING.getId())
                 ?.putExtra(ConstantsDirectory.PI_ID,0))
         }
+
+        mBinding?.qualityCheckLayer?.setOnClickListener {
+            //todo call intent
+        }
+        mBinding?.changeRequestLayer?.setOnClickListener {
+            //todo call intent
+        }
+        mBinding?.taxInvoiceLayer?.setOnClickListener {
+            //todo call intent
+        }
     }
 
     fun setDetails(){
 
         setTabVisibilities()
 
-        setViewApprovePaymentButton()
-
-        mBinding?.enquiryCode?.text = enquiryDetails?.enquiryCode
-        mBinding?.enquiryStartDate?.text = "Date accepted : ${enquiryDetails?.startedOn?.split("T")?.get(0)}"
-        val image = enquiryDetails?.productImages?.split((",").toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()?.get(0)
+        mBinding?.orderCode?.text = orderDetails?.orderCode
+        mBinding?.enquiryStartDate?.text = "Date accepted : ${orderDetails?.startedOn?.split("T")?.get(0)}"
+        val image = orderDetails?.productImages?.split((",").toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()?.get(0)
 
         //brand name of product & product Image
-        if(enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
-            url = Utility.getCustomProductImagesUrl(enquiryDetails?.productID, image)
+        if(orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
+            url = Utility.getCustomProductImagesUrl(orderDetails?.productId, image)
             isCustom = true
         }else{
-            url = Utility.getProductsImagesUrl(enquiryDetails?.productID, image)
+            url = Utility.getProductsImagesUrl(orderDetails?.productId, image)
             isCustom = false
         }
         mBinding?.productImage?.let { ImageSetter.setImage(requireActivity(),
             url!!, it,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder) }
 
-        mBinding?.buyerCompany?.text = enquiryDetails?.ProductBrandName
+        mBinding?.buyerCompany?.text = orderDetails?.brandName
 
         //ProductAvailability
-        when(enquiryDetails?.productStatusID){
+        when(orderDetails?.productStatusId){
             2L -> {
                 status = context?.getString(R.string.in_stock)
                 mBinding?.productAvailability?.text = status
@@ -293,9 +228,9 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
             }
         }
         //Product name or Product cloth details
-        if(enquiryDetails?.productName != "") {
-            mBinding?.productName?.text = enquiryDetails?.productName
-            mBinding?.productNameDetails?.text = enquiryDetails?.productName
+        if(orderDetails?.productName != "") {
+            mBinding?.productName?.text = orderDetails?.productName
+            mBinding?.productNameDetails?.text = orderDetails?.productName
         }
         else{
             //TODO : set text as prod cat / werft / warn / extraweft
@@ -303,18 +238,18 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
             var catList = Utility?.getProductCategory()
 
             weaveList?.forEach {
-                if(it.first == enquiryDetails?.weftYarnID){
+                if(it.first == orderDetails?.weftYarnId){
                     weft = it.second
                 }
-                if(it.first == enquiryDetails?.warpYarnID){
+                if(it.first == orderDetails?.warpYarnId){
                     warp = it.second
                 }
-                if(it.first == enquiryDetails?.extraWeftYarnID){
+                if(it.first == orderDetails?.extraWeftYarnId){
                     extraweft = it.second
                 }
             }
             catList?.forEach {
-                if(it.first == enquiryDetails?.productCategoryID){
+                if(it.first == orderDetails?.productCategoryId){
                     prodCategory = it.second
                 }
             }
@@ -331,18 +266,18 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
             mBinding?.productNameDetails?.text = "Custom Design Product"
         }
 
-        mBinding?.productAmount?.text = "₹ ${enquiryDetails?.totalAmount ?: 0}"
+        mBinding?.productAmount?.text = "₹ ${orderDetails?.totalAmount ?: 0}"
 
         //enquiry stage with color
         var enquiryStage : String ?= ""
         var stagList = Utility?.getEnquiryStagesData()
         Log.e("enqDataStages", "List : $stagList")
         stagList?.forEach {
-            if(it.first == enquiryDetails?.enquiryStageID){
+            if(it.first == orderDetails?.enquiryStageId){
                 enquiryStage = it.second
             }
         }
-        when(enquiryDetails?.enquiryStageID){
+        when(orderDetails?.enquiryStageId){
             1L -> {
                 context?.let {
                     ContextCompat.getColor(
@@ -382,74 +317,24 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         }
         mBinding?.enquiryStatusText?.text = enquiryStage
 
-        mBinding?.enquiryUpdateDate?.text = "Last updated : ${enquiryDetails?.lastUpdated?.split("T")?.get(0)}"
-        mBinding?.buyerBrand?.text = enquiryDetails?.ProductBrandName
+        mBinding?.enquiryUpdateDate?.text = "Last updated : ${orderDetails?.lastUpdated?.split("T")?.get(0)}"
+        mBinding?.buyerBrand?.text = orderDetails?.brandName
 
         setProgressTimeline()
-
         //TODO implement to enq stage
-
-        if(enquiryDetails?.isMoqRejected!!.equals(1L)){
-            mBinding?.uploadDocLayout?.visibility = View.GONE
-            mBinding?.viewPiLayout?.visibility = View.GONE
-        }else{
-            Log.e("PITag","enquiryStageID: ${enquiryDetails?.enquiryStageID}")
-            Log.e("PITag","enquiryStageID: ${enquiryDetails?.enquiryStatusID}")
-            if(enquiryDetails?.enquiryStageID!!.equals(3L)){
-                mBinding?.uploadDocLayout?.visibility = View.GONE
-                mBinding?.viewPiLayout?.visibility = View.VISIBLE
-              }
-            else if(enquiryDetails?.isPiSend!!.equals(1L)){
-                mBinding?.uploadDocLayout?.visibility = View.GONE
-                mBinding?.viewPiLayout?.visibility = View.VISIBLE
-
-            }else if(enquiryDetails?.isPiSend!!.equals(0L)&&enquiryDetails?.isMoqSend!!.equals(1L)){
-                mBinding?.uploadDocLayout?.visibility = View.VISIBLE
-                mBinding?.viewPiLayout?.visibility = View.GONE
-            }else{
-                mBinding?.uploadDocLayout?.visibility = View.GONE
-                mBinding?.viewPiLayout?.visibility = View.GONE
-            }
-        }
-        arrayDeliveryDscrp.clear()
-        arrayDeliveryDscrp.add("Select")
-        moqDeliveryTimeList?.forEach { arrayDeliveryDscrp.add(it.deliveryDesc) }
-        val spEstDaysAdapter =ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item,arrayDeliveryDscrp)
-        spEstDaysAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        mBinding?.spEstDays?.adapter = spEstDaysAdapter
-
         val moq=MoqsPredicates.getSingleMoq(enqID)
-        if(moq!=null){
-            mBinding?.etMoq?.setText("${moq?.moq?:""}", TextView.BufferType.EDITABLE)
-            mBinding?.etPrice?.setText("${moq?.ppu?:""}", TextView.BufferType.EDITABLE)
-            mBinding?.etAddNote?.setText("${moq?.additionalInfo?:""}", TextView.BufferType.EDITABLE)
-            mBinding?.spEstDays?.setSelection((moq?.deliveryTimeId?:0).toInt())
-            mBinding?.txtFillDetails?.text="MOQ Details"
-            mBinding?.txtBidMoq?.visibility=View.GONE
-            mBinding?.etMoq?.isEnabled=false
-            mBinding?.etPrice?.isEnabled=false
-            mBinding?.etAddNote?.isEnabled=false
-            mBinding?.spEstDays?.isEnabled=false
-
-        } else{
-            mBinding?.txtFillDetails?.text=requireContext().getString(R.string.fill_in_moq_to_bid)
-            mBinding?.txtBidMoq?.visibility=View.VISIBLE
-            mBinding?.etMoq?.isEnabled=true
-            mBinding?.etPrice?.isEnabled=true
-            mBinding?.etAddNote?.isEnabled=true
-            mBinding?.spEstDays?.isEnabled=true
-        }
+       //todo render MOQ details
     }
 
     private fun setProgressTimeline(){
         stageList?.clear()
         stageAPList?.clear()
-        if(enquiryDetails?.productType == "Custom Product" || enquiryDetails?.productStatusID == 1L){
+        if(orderDetails?.productType == "Custom Product" || orderDetails?.productStatusId == 1L){
             stageList = Utility.getEnquiryStagesData() // custom product or made to order
             Log.e("enqdata", "List All : $stageList")
 
             stageList?.forEach {
-                if(it.first == enquiryDetails?.enquiryStageID){
+                if(it.first == orderDetails?.enquiryStageId){
                     currEnqStageId = it.first
                     currEnqStage = it.second
                     Log.e("CurrentEnqStage","Id : $currEnqStageId")
@@ -477,7 +362,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
             Log.e("enqdata", "List AP : $stageAPList")
 
             stageAPList?.forEach {
-                if(it.second == enquiryDetails?.enquiryStageID){
+                if(it.second == orderDetails?.enquiryStageId){
                     currEnqStageSerNo = it.first
                     currEnqStageId = it.second
                     currEnqStage = it.third
@@ -504,50 +389,36 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         mBinding?.previousStep?.text = prevEnqStage
         mBinding?.currentStep?.text = currEnqStage
         mBinding?.nextStep?.text = nextEnqStage
-
+        mBinding?.nextStepArrowText?.text=nextEnqStage
         //TODO : To implement pi moq upload
-        if(enquiryDetails?.isBlue == 1L){
+        if(orderDetails?.isBlue == 1L){
             when(currEnqStageId){
                 3L,8L -> {
                     mBinding?.awaitingPaymentReceipt?.visibility = View.VISIBLE
                 }
                 else ->{
                     mBinding?.awaitingPaymentReceipt?.visibility = View.GONE
-////                    mBinding?.transactionLayout?.visibility = View.GONE
                 }
             }
         }
 
-        when(currEnqStageId){
-            2L,7L -> mBinding?.uploadDocLayout?.visibility = View.VISIBLE
-            else -> mBinding?.uploadDocLayout?.visibility = View.GONE
-        }
+//        when(currEnqStageId){
+//            2L,7L -> mBinding?.uploadDocLayout?.visibility = View.VISIBLE
+//            else -> mBinding?.uploadDocLayout?.visibility = View.GONE
+//        }
 
     }
 
     fun viewLoader(){
-//        mBinding?.artisanOngoEnqDetails?.visibility = View.GONE
         mBinding?.swipeEnquiryDetails?.isRefreshing = true
     }
     fun hideLoader(){
-//        mBinding?.artisanOngoEnqDetails?.visibility = View.VISIBLE
         mBinding?.swipeEnquiryDetails?.isRefreshing = false
     }
 
     private fun setTabVisibilities(){
-//        if(enquiryDetails?.isMoqSend == 1L){
-//            mBinding?.moqDetailsLayer?.visibility = View.VISIBLE
-//        }else{
-//            mBinding?.moqDetailsLayer?.visibility = View.GONE
-//        }
-
-//        if(enquiryDetails?.isPiSend == 1L){
-//            mBinding?.piDetailsLayer?.visibility = View.VISIBLE
-//        }else{
-//            mBinding?.piDetailsLayer?.visibility = View.GONE
-//        }
-        if(enquiryDetails?.productStatusID == AvailableStatus.MADE_TO_ORDER.getId() || enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
-            if(enquiryDetails?.enquiryStageID!! >= 4L){
+        if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
+            if(orderDetails?.enquiryStageId!! >= 4L){
                 mBinding?.viewPaymentLayer?.visibility = View.VISIBLE
             }else{
                 mBinding?.viewPaymentLayer?.visibility = View.GONE
@@ -557,21 +428,11 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         }
     }
 
-    fun setViewApprovePaymentButton(){
-        if(enquiryDetails?.productStatusID == AvailableStatus.MADE_TO_ORDER.getId() || enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
-            if(enquiryDetails?.isBlue==1L && enquiryDetails?.enquiryStageID == 3L){
-                mBinding?.btnViewApprovePayment?.visibility = View.VISIBLE
-            }else{
-                mBinding?.btnViewApprovePayment?.visibility = View.GONE
-            }
-        }else{
-            mBinding?.btnViewApprovePayment?.visibility = View.GONE
-        }
-    }
+
 
     override fun onResume() {
         super.onResume()
-        enqID?.let { mEnqVM?.getSingleOnEnqData(it) }
+        enqID?.let { mOrderVm?.getSingleOnOrderData(it,0) }
         setDetails()
     }
 
@@ -579,7 +440,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("Enquiry Details", "onFailure")
-                enqID?.let { mEnqVM.getSingleOnEnqData(it) }
+                enqID?.let { mOrderVm.getSingleOnOrderData(it,0) }
                 hideLoader()
             })
         } catch (e: Exception) {
@@ -591,7 +452,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("Enquiry Details", "onSuccess")
-                enqID?.let { mEnqVM.getSingleOnEnqData(it) }
+                enqID?.let { mOrderVm.getSingleOnOrderData(it,0) }
                 hideLoader()
                 setDetails()
             })
@@ -600,45 +461,11 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         }
     }
 
-    override fun onAddMoqFailure() {
-        try {
-            Handler(Looper.getMainLooper()).post(Runnable {
-                Utility.displayMessage("Unable to add MOQ, please try again after some time",requireContext())
-                hideLoader()
-                setDetails()
-            })
-        } catch (e: Exception) {
-            Log.e("Enquiry Details", "Exception onFailure " + e.message)
-        }
-    }
-
-    override fun onAddMoqSuccess() {
-        try {
-            Handler(Looper.getMainLooper()).post(Runnable {
-                Utility.displayMessage("MOQ added succesfully",requireContext())
-                hideLoader()
-                setDetails()
-            })
-        } catch (e: Exception) {
-            Log.e("Enquiry Details", "Exception onAddMoqSuccess " + e.message)
-        }
-    }
-
-    override fun onGetMoqCall() {
-        try {
-            Handler(Looper.getMainLooper()).post(Runnable {
-                hideLoader()
-                setDetails()
-            })
-        } catch (e: Exception) {
-            Log.e("Enquiry Details", "Exception onAddMoqSuccess " + e.message)
-        }
-    }
 
     companion object {
 
         fun newInstance(param1: String) =
-            ArtisanOnGoEnqDetailsFragment().apply {
+            ArtisanOngoinOrderDetailsFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                 }
@@ -655,7 +482,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
 //                viewLoader()
                 Log.e("PiActivity", "onActivityResult enqID ${enqID}")
                 enqID?.let {
-//                    mEnqVM.getSingleOngoingEnquiry(it)
+//                    mOrderVm.getSingleOngoingEnquiry(it)
                     EnquiryPredicates.updatePiStatus(it)
                     setDetails()
                 }

@@ -1,4 +1,4 @@
-package com.adrosonic.craftexchange.ui.modules.enquiry.adapter
+package com.adrosonic.craftexchange.ui.modules.order.adapter
 
 import android.content.Context
 import android.content.Intent
@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,16 +15,16 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
-import com.adrosonic.craftexchange.database.entities.realmEntities.CompletedEnquiries
-import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
+import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
 import com.adrosonic.craftexchange.ui.modules.enquiry.enquiryDetails
+import com.adrosonic.craftexchange.ui.modules.order.orderDetails
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
 import com.pixplicity.easyprefs.library.Prefs
 import io.realm.RealmResults
 
-class CompletedEnqRecyclerAdapter(var context: Context?, private var enquiries: RealmResults<CompletedEnquiries>) : RecyclerView.Adapter<CompletedEnqRecyclerAdapter.MyViewHolder>() {
+class CompletedOrderListAdapter(var context: Context?, private var enquiries: RealmResults<Orders>) : RecyclerView.Adapter<CompletedOrderListAdapter.MyViewHolder>() {
 
 
     inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -53,7 +52,7 @@ class CompletedEnqRecyclerAdapter(var context: Context?, private var enquiries: 
         return enquiries?.size?:0
     }
 
-    fun updateProductList(newList: RealmResults<CompletedEnquiries>?){
+    fun updateProductList(newList: RealmResults<Orders>?){
         if (newList != null) {
             this.enquiries=newList
         }
@@ -69,11 +68,11 @@ class CompletedEnqRecyclerAdapter(var context: Context?, private var enquiries: 
         var enquiry = enquiries?.get(position)
 
         holder.layout.setOnClickListener {
-            val intent = Intent(context?.enquiryDetails())
+            val intent = Intent(context?.orderDetails())
             var bundle = Bundle()
-            Prefs.putString(ConstantsDirectory.ENQUIRY_ID, enquiry?.enquiryID?.toString()) //TODO change later
-            bundle.putString(ConstantsDirectory.ENQUIRY_ID, enquiry?.enquiryID?.toString())
-//            bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG, enquiry?.enquiryStatusID?.toString())
+            Prefs.putString(ConstantsDirectory.ENQUIRY_ID, enquiry?.enquiryId?.toString()) //TODO change later
+            bundle.putString(ConstantsDirectory.ENQUIRY_ID, enquiry?.enquiryId?.toString())
+//            bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG, enquiry?.enquiryStatusId?.toString())
             bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG, "1")
             intent.putExtras(bundle)
             context?.startActivity(intent)
@@ -85,16 +84,16 @@ class CompletedEnqRecyclerAdapter(var context: Context?, private var enquiries: 
         var first_image = imgArrSplit?.get(0)
 
         if(enquiry?.productType == "Custom Product"){
-            holder?.brandName?.text = "Custom Design by you"
-            url = Utility.getCustomProductImagesUrl(enquiry?.productID, first_image)
+            holder?.brandName?.text = enquiry?.brandName//"Custom Design by you"
+            url = Utility.getCustomProductImagesUrl(enquiry?.productId, first_image)
         }else{
-            holder?.brandName?.text = enquiry?.ProductBrandName
-            url = Utility.getProductsImagesUrl(enquiry?.productID, first_image)
+            holder?.brandName?.text = enquiry?.brandName
+            url = Utility.getProductsImagesUrl(enquiry?.productId, first_image)
         }
         context?.let { ImageSetter.setImage(it, url!!,holder?.productImage) }
 
 
-        holder?.enquiryCode?.text = enquiry?.enquiryCode
+        holder?.enquiryCode?.text = enquiry?.orderCode
 
         if(enquiry?.productName != ""){
             holder?.productName?.text = enquiry?.productName
@@ -104,18 +103,18 @@ class CompletedEnqRecyclerAdapter(var context: Context?, private var enquiries: 
             var catList = Utility?.getProductCategory()
 
             weaveList?.forEach {
-                if(it.first == enquiry?.weftYarnID){
+                if(it.first == enquiry?.weftYarnId){
                     weft = it.second
                 }
-                if(it.first == enquiry?.warpYarnID){
+                if(it.first == enquiry?.warpYarnId){
                     warp = it.second
                 }
-                if(it.first == enquiry?.extraWeftYarnID){
+                if(it.first == enquiry?.extraWeftYarnId){
                     extraweft = it.second
                 }
             }
             catList?.forEach {
-                if(it.first == enquiry?.productCategoryID){
+                if(it.first == enquiry?.productCategoryId){
                     prodCategory = it.second
                 }
             }
@@ -131,7 +130,7 @@ class CompletedEnqRecyclerAdapter(var context: Context?, private var enquiries: 
         }
 
         var status : String ?= ""
-        when(enquiry?.productStatusID){
+        when(enquiry?.productStatusId){
             2L -> {
                 status = context?.getString(R.string.in_stock)
                 holder.productStatus.text = status
@@ -166,7 +165,7 @@ class CompletedEnqRecyclerAdapter(var context: Context?, private var enquiries: 
             holder.dateText.text = "Created on : $date"
         }
 
-        if(enquiry?.enquiryStageID == 10L){
+        if(enquiry?.enquiryStageId == 10L){
             context?.let {
                 ContextCompat.getColor(
                     it, R.color.black_text)

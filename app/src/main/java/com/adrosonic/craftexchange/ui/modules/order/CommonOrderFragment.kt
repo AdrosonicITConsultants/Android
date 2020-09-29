@@ -1,4 +1,4 @@
-package com.adrosonic.craftexchange.ui.modules.buyer.enquiry
+package com.adrosonic.craftexchange.ui.modules.order
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,6 +10,8 @@ import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.FragmentCommonEnquiryBinding
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.ArtisanEnqVPAdapter
 import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.adapter.BuyerEnqVPAdapter
+import com.adrosonic.craftexchange.ui.modules.order.adapter.ArtisanOrdersViewPagerAdapter
+import com.adrosonic.craftexchange.ui.modules.order.adapter.BuyerOrdersViewPagerAdapter
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.pixplicity.easyprefs.library.Prefs
 
@@ -17,7 +19,7 @@ import com.pixplicity.easyprefs.library.Prefs
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class CommonEnquiryFragment : Fragment() {
+class CommonOrderFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -43,19 +45,18 @@ class CommonEnquiryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-//        mBinding?.viewPagerViewEnquiries?.setOnTouchListener { v, event -> true } //disables viewpager swipe
+        mBinding?.yourEnquiriesText?.text="Your Orders"
         var profile = Prefs.getString(ConstantsDirectory.PROFILE,"")
         when(profile){
             "Artisan" -> {
                 childFragmentManager.let{
-                    mBinding?.viewPagerViewEnquiries?.adapter = ArtisanEnqVPAdapter(it)
+                    mBinding?.viewPagerViewEnquiries?.adapter = ArtisanOrdersViewPagerAdapter(it)
                     mBinding?.viewEnquiriesTab?.setupWithViewPager(mBinding?.viewPagerViewEnquiries)
                 }
             }
             "Buyer" -> {
                 childFragmentManager.let{
-                    mBinding?.viewPagerViewEnquiries?.adapter = BuyerEnqVPAdapter(it)
+                    mBinding?.viewPagerViewEnquiries?.adapter = BuyerOrdersViewPagerAdapter(it)
                     mBinding?.viewEnquiriesTab?.setupWithViewPager(mBinding?.viewPagerViewEnquiries)
                 }
             }
@@ -63,6 +64,6 @@ class CommonEnquiryFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance() = CommonEnquiryFragment()
+        fun newInstance() = CommonOrderFragment()
     }
 }

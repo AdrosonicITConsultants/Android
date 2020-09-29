@@ -1,4 +1,4 @@
-package com.adrosonic.craftexchange.ui.modules.buyer.enquiry
+package com.adrosonic.craftexchange.ui.modules.order
 
 import android.os.Bundle
 import android.os.Handler
@@ -14,29 +14,32 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.CompletedEnquiries
+import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
 import com.adrosonic.craftexchange.databinding.FragmentCompletedEnquiryBinding
 import com.adrosonic.craftexchange.ui.modules.enquiry.adapter.CompletedEnqRecyclerAdapter
+import com.adrosonic.craftexchange.ui.modules.order.adapter.CompletedOrderListAdapter
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
+import com.adrosonic.craftexchange.viewModels.OrdersViewModel
 import io.realm.RealmResults
 
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class CompletedEnquiryFragment : Fragment(),
-    EnquiryViewModel.FetchEnquiryInterface {
+class CompletedOrderFragment : Fragment(),
+    OrdersViewModel.FetchOrderInterface {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
     var mBinding : FragmentCompletedEnquiryBinding?= null
 
-    val mEnqVM : EnquiryViewModel by viewModels()
+    val mOrderVm : OrdersViewModel by viewModels()
 
-    var mEnqListAdapter : CompletedEnqRecyclerAdapter?= null
+    var mOrderListAdapter : CompletedOrderListAdapter?= null
 
-    var mEnquiryList : RealmResults<CompletedEnquiries>?= null
+    var mOrderList : RealmResults<Orders>?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +61,7 @@ class CompletedEnquiryFragment : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mEnqVM.fetchEnqListener =this
+        mOrderVm.fetchEnqListener =this
 
         setRecyclerList()
 //        setVisiblities()
@@ -66,34 +69,33 @@ class CompletedEnquiryFragment : Fragment(),
         if (!Utility.checkIfInternetConnected(requireContext())) {
             Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
         } else {
-            mEnqVM.getAllCompletedEnquiries()
+            mOrderVm.getAllCompletedOrders()
         }
 
         mBinding?.swipeCompletedEnquiries?.isRefreshing = true
-        mEnqVM.getCompEnqListMutableData()
-            .observe(viewLifecycleOwner, Observer<RealmResults<CompletedEnquiries>> {
-                mEnquiryList = it
-                mEnqListAdapter?.updateProductList(mEnquiryList)
+        mOrderVm.getCompOrderListMutableData() .observe(viewLifecycleOwner, Observer<RealmResults<Orders>> {
+                mOrderList = it
+                mOrderListAdapter?.updateProductList(mOrderList)
             })
 
         mBinding?.swipeCompletedEnquiries?.setOnRefreshListener {
             if (!Utility.checkIfInternetConnected(requireContext())) {
                 Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
             } else {
-                mEnqVM.getAllCompletedEnquiries()
+                mOrderVm.getAllCompletedOrders()
             }
         }
     }
 
     private fun setRecyclerList(){
         mBinding?.completedEnqRecyclerList?.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        mEnqListAdapter = CompletedEnqRecyclerAdapter(requireContext(), mEnqVM.getCompEnqListMutableData().value!!)
-        mBinding?.completedEnqRecyclerList?.adapter = mEnqListAdapter
+        mOrderListAdapter = CompletedOrderListAdapter(requireContext(), mOrderVm.getCompOrderListMutableData().value!!)
+        mBinding?.completedEnqRecyclerList?.adapter = mOrderListAdapter
 //        mEnqListAdapter?.enqListener = this  //important to set adapter first and then call listener
     }
 
     fun setVisiblities() {
-        if (mEnqVM.getCompEnqListMutableData().value?.size!! > 0) {
+        if (mOrderVm.getCompOrderListMutableData().value?.size!! > 0) {
             mBinding?.completedEnqRecyclerList?.visibility = View.VISIBLE
             mBinding?.emptyView?.visibility = View.GONE
         } else {
@@ -107,7 +109,7 @@ class CompletedEnquiryFragment : Fragment(),
         if (!Utility.checkIfInternetConnected(requireContext())) {
             Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
         } else {
-            mEnqVM.getAllCompletedEnquiries()
+            mOrderVm.getAllCompletedOrders()
             mBinding?.swipeCompletedEnquiries?.isRefreshing= true
         }
     }
@@ -117,8 +119,7 @@ class CompletedEnquiryFragment : Fragment(),
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("compEnqList", "OnFailure")
                 mBinding?.swipeCompletedEnquiries?.isRefreshing = false
-//                mEnqVM.getAllCompletedEnquiries()
-                mEnqVM.getCompEnqListMutableData()
+                mOrderVm.getOnOrderListMutableData()
                 setVisiblities()
                 Utility.displayMessage("Error while fetching list", requireContext())
             })
@@ -132,9 +133,7 @@ class CompletedEnquiryFragment : Fragment(),
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("compEnqList", "onSuccess")
                 mBinding?.swipeCompletedEnquiries?.isRefreshing = false
-//                mEnqVM.getAllCompletedEnquiries()
-                mEnqVM.getCompEnqListMutableData()
-//                setRecyclerList()
+                mOrderVm.getCompOrderListMutableData()
                 setVisiblities()
             })
         } catch (e: Exception) {
@@ -144,7 +143,7 @@ class CompletedEnquiryFragment : Fragment(),
 
     companion object {
         @JvmStatic
-        fun newInstance() = CompletedEnquiryFragment()
+        fun newInstance() = CompletedOrderFragment()
     }
 
 }

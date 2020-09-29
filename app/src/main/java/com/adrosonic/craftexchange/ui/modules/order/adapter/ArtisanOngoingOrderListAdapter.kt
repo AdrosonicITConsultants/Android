@@ -1,4 +1,4 @@
-package com.adrosonic.craftexchange.ui.modules.artisan.enquiry.adapter
+package com.adrosonic.craftexchange.ui.modules.order.adapter
 
 import android.content.Context
 import android.content.Intent
@@ -17,14 +17,16 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
+import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
 import com.adrosonic.craftexchange.ui.modules.enquiry.enquiryDetails
+import com.adrosonic.craftexchange.ui.modules.order.orderDetails
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
 import com.pixplicity.easyprefs.library.Prefs
 import io.realm.RealmResults
 
-class ArtisanOnGoingRecyclerAdapter(var context: Context?, private var enquiries: RealmResults<OngoingEnquiries>) : RecyclerView.Adapter<ArtisanOnGoingRecyclerAdapter.MyViewHolder>() {
+class ArtisanOngoingOrderListAdapter(var context: Context?, private var orders: RealmResults<Orders>) : RecyclerView.Adapter<ArtisanOngoingOrderListAdapter.MyViewHolder>() {
 
 
     inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -37,7 +39,6 @@ class ArtisanOnGoingRecyclerAdapter(var context: Context?, private var enquiries
         var dateText: TextView = view.findViewById(R.id.date_text)
         var enquiryColor : ImageView = view.findViewById(R.id.enq_stage_color)
         var reqDoc : TextView = view.findViewById(R.id.req_doc_text)
-
         var layout : ConstraintLayout = view.findViewById(R.id.enquiry_container_layout)
     }
 
@@ -49,12 +50,12 @@ class ArtisanOnGoingRecyclerAdapter(var context: Context?, private var enquiries
     var url : String ?= ""
 
     override fun getItemCount(): Int {
-        return enquiries?.size?:0
+        return orders?.size?:0
     }
 
-    fun updateProductList(newList: RealmResults<OngoingEnquiries>?){
+    fun updateProductList(newList: RealmResults<Orders>?){
         if (newList != null) {
-            this.enquiries=newList
+            this.orders=newList
         }
         this.notifyDataSetChanged()
     }
@@ -65,16 +66,14 @@ class ArtisanOnGoingRecyclerAdapter(var context: Context?, private var enquiries
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        var enquiry = enquiries?.get(position)
+        var enquiry = orders?.get(position)
 
         holder.layout.setOnClickListener {
-            val intent = Intent(context?.enquiryDetails())
+            val intent = Intent(context?.orderDetails())
             var bundle = Bundle()
-            Prefs.putString(ConstantsDirectory.ENQUIRY_ID, enquiry?.enquiryID?.toString()) //TODO change later
-            bundle.putString(ConstantsDirectory.ENQUIRY_ID, enquiry?.enquiryID?.toString())
+            Prefs.putString(ConstantsDirectory.ENQUIRY_ID, enquiry?.enquiryId?.toString()) //TODO change later
+            bundle.putString(ConstantsDirectory.ENQUIRY_ID, enquiry?.enquiryId?.toString())
             bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG, "2")
-
-//            bundle.putString(ConstantsDirectory.ENQUIRY_CODE,enquiry?.enquiryCode)
             intent.putExtras(bundle)
             context?.startActivity(intent)
         }
@@ -85,17 +84,17 @@ class ArtisanOnGoingRecyclerAdapter(var context: Context?, private var enquiries
         var first_image = imgArrSplit?.get(0)
 
         if(enquiry?.productType == "Custom Product"){
-//            holder?.brandName?.text = "Custom Design"
-            url = Utility.getCustomProductImagesUrl(enquiry?.productID, first_image)
+            holder?.brandName?.text =enquiry?.brandName
+            url = Utility.getCustomProductImagesUrl(enquiry?.productId, first_image)
         }else{
-//            holder?.brandName?.text = ""
-            url = Utility.getProductsImagesUrl(enquiry?.productID, first_image)
+            holder?.brandName?.text =enquiry?.brandName
+            url = Utility.getProductsImagesUrl(enquiry?.productId, first_image)
         }
         context?.let { ImageSetter.setImage(it, url!!,holder?.productImage) }
 
-        holder?.brandName?.text = enquiry?.ProductBrandName
+//        holder?.brandName?.text = enquiry?.ProductBrandName
 
-        holder?.enquiryCode?.text = enquiry?.enquiryCode
+        holder?.enquiryCode?.text = enquiry?.orderCode
 
         if(enquiry?.productName != ""){
             holder?.productName?.text = enquiry?.productName
@@ -105,18 +104,18 @@ class ArtisanOnGoingRecyclerAdapter(var context: Context?, private var enquiries
             var catList = Utility?.getProductCategory()
 
             weaveList?.forEach {
-                if(it.first == enquiry?.weftYarnID){
+                if(it.first == enquiry?.weftYarnId){
                     weft = it.second
                 }
-                if(it.first == enquiry?.warpYarnID){
+                if(it.first == enquiry?.warpYarnId){
                     warp = it.second
                 }
-                if(it.first == enquiry?.extraWeftYarnID){
+                if(it.first == enquiry?.extraWeftYarnId){
                     extraweft = it.second
                 }
             }
             catList?.forEach {
-                if(it.first == enquiry?.productCategoryID){
+                if(it.first == enquiry?.productCategoryId){
                     prodCategory = it.second
                 }
             }
@@ -131,7 +130,7 @@ class ArtisanOnGoingRecyclerAdapter(var context: Context?, private var enquiries
             holder?.productName?.append(sp)
         }
 
-        when(enquiry?.enquiryStageID){
+        when(enquiry?.enquiryStageId){
             1L -> {
                 context?.let {
                     ContextCompat.getColor(
@@ -171,7 +170,7 @@ class ArtisanOnGoingRecyclerAdapter(var context: Context?, private var enquiries
         }
 
         var status : String ?= ""
-        when(enquiry?.productStatusID){
+        when(enquiry?.productStatusId){
             2L -> {
                 status = context?.getString(R.string.in_stock)
                 holder.productStatus.text = status
@@ -210,16 +209,16 @@ class ArtisanOnGoingRecyclerAdapter(var context: Context?, private var enquiries
         var stageList = Utility.getEnquiryStagesData()
         Log.e("enqdata", "List : $stageList")
         stageList.forEach {
-            if(it.first == enquiry?.enquiryStageID){
+            if(it.first == enquiry?.enquiryStageId){
                 enquiryStage = it.second
             }
         }
         holder?.enquiryStageStatus.text = enquiryStage
 
-        if(enquiry?.isMoqSend == null && enquiry?.enquiryStageID == 1L){
+        if(enquiry?.isMoqSend == null && enquiry?.enquiryStageId == 1L){
             holder.reqDoc?.visibility = View.VISIBLE
             holder.reqDoc?.text = "Requesting MOQ"
-        }else if(enquiry?.isPiSend == null && enquiry?.enquiryStageID == 2L){
+        }else if(enquiry?.isPiSend == null && enquiry?.enquiryStageId == 2L){
             holder.reqDoc?.visibility = View.VISIBLE
             holder.reqDoc?.text = "Awaiting PI"
 
@@ -228,7 +227,7 @@ class ArtisanOnGoingRecyclerAdapter(var context: Context?, private var enquiries
 
         }
 
-//        if(enquiry?.isPiSend == 1L && enquiry?.enquiryStageID == 2L){
+//        if(enquiry?.isPiSend == 1L && enquiry?.enquiryStageId == 2L){
 //            holder.reqDoc?.visibility = View.GONE
 //        }else{
 //            holder.reqDoc?.visibility = View.VISIBLE

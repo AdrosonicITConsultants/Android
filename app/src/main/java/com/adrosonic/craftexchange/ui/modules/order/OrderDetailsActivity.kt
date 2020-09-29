@@ -1,4 +1,4 @@
-package com.adrosonic.craftexchange.ui.modules.enquiry
+package com.adrosonic.craftexchange.ui.modules.order
 
 import android.content.Context
 import android.content.Intent
@@ -9,16 +9,15 @@ import com.adrosonic.craftexchange.databinding.ActivityEnquiryDetailsBinding
 import com.adrosonic.craftexchange.enums.EnquiryStatus
 import com.adrosonic.craftexchange.enums.getId
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.ArtisanOnGoEnqDetailsFragment
-import com.adrosonic.craftexchange.ui.modules.buyer.auth.login.BuyerLoginUsernameFragment
 import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.adapter.BuyerOnGoEnqDetailsFragment
-import com.adrosonic.craftexchange.ui.modules.search.SearchSuggestionActivity
+import com.adrosonic.craftexchange.ui.modules.enquiry.CompEnqDetailsFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.pixplicity.easyprefs.library.Prefs
 
-fun Context.enquiryDetails(): Intent {
-    return Intent(this, EnquiryDetailsActivity::class.java).apply {}
+fun Context.orderDetails(): Intent {
+    return Intent(this, OrderDetailsActivity::class.java).apply {}
 }
-class EnquiryDetailsActivity : AppCompatActivity() {
+class OrderDetailsActivity : AppCompatActivity() {
 
     private var mBinding: ActivityEnquiryDetailsBinding? = null
 
@@ -31,16 +30,12 @@ class EnquiryDetailsActivity : AppCompatActivity() {
         var enqID = intent?.getStringExtra(ConstantsDirectory.ENQUIRY_ID)
         var enqStatus = intent?.getStringExtra(ConstantsDirectory.ENQUIRY_STATUS_FLAG)?.toLong()
         var profile = Prefs.getString(ConstantsDirectory.PROFILE,null)
-        val isArtsan= when(profile) {
-            ConstantsDirectory.ARTISAN -> true
-            else-> false
-        }
 
         when(enqStatus){
             //Closed
             EnquiryStatus.COMPLETED.getId() -> {
                 if (savedInstanceState == null) {
-                    enqID?.let { CompEnqDetailsFragment.newInstance(it, enqStatus.toString(),isArtsan) }?.let {
+                    enqID?.let { CompletedOrderDetailsFragment.newInstance(it, enqStatus.toString()) }?.let {
                         supportFragmentManager.beginTransaction()
                             .replace(R.id.enquiry_details_container, it)
                             .commitNow()
@@ -52,7 +47,7 @@ class EnquiryDetailsActivity : AppCompatActivity() {
                 when(profile){
                     ConstantsDirectory.ARTISAN -> {
                         if (savedInstanceState == null) {
-                            enqID?.let { ArtisanOnGoEnqDetailsFragment.newInstance(it) }?.let {
+                            enqID?.let { ArtisanOngoinOrderDetailsFragment.newInstance(it) }?.let {
                                 supportFragmentManager.beginTransaction()
                                     .replace(R.id.enquiry_details_container, it)
                                     .commitNow()
@@ -60,13 +55,14 @@ class EnquiryDetailsActivity : AppCompatActivity() {
                         }
                     }
                     ConstantsDirectory.BUYER -> {
-                        if (savedInstanceState == null) {
-                            enqID?.let { BuyerOnGoEnqDetailsFragment.newInstance(it) }?.let {
-                                supportFragmentManager.beginTransaction()
-                                    .replace(R.id.enquiry_details_container, it)
-                                    .commitNow()
-                            }
-                        }
+                        //todo next story
+//                        if (savedInstanceState == null) {
+//                            enqID?.let { BuyerOnGoEnqDetailsFragment.newInstance(it) }?.let {
+//                                supportFragmentManager.beginTransaction()
+//                                    .replace(R.id.enquiry_details_container, it)
+//                                    .commitNow()
+//                            }
+//                        }
                     }
                 }
             }
