@@ -48,7 +48,7 @@ class ResetPasswordFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_reset_password, container, false)
-        mBinding?.profileTag?.text = Prefs.getString(ConstantsDirectory.PROFILE,"")
+//        mBinding?.profileTag?.text = Prefs.getString(ConstantsDirectory.PROFILE,"")
         return mBinding?.root
     }
 

@@ -20,19 +20,6 @@
             android:background="@color/black_text"
             tools:context=".ui.modules.authentication.reset.ResetSuccessFragment">
 
-            <TextView
-                android:id="@+id/profile_tag"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_small"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.9"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.02" />
-
             <include
                 android:id="@+id/logo_part"
                 layout="@layout/logo_side"
