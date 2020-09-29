@@ -12,7 +12,7 @@ object ConstantsDirectory {
     const val BUYER_DASHBOARD_URL = "https://datastudio.google.com/embed/reporting/0ede1d26-5dbf-4564-a7c4-4f850493a89f/page/i56cB?params="
     const val ARTISAN_DASHBOARD_URL = "https://datastudio.google.com/embed/reporting/cef7a3b2-e37f-48a2-9f28-0c3f45a07585/page/RJ8dB?params="
     const val VIEW_PI_URL = "http://101.53.153.96:8090/enquiry/getPreviewPiHTML?enquiryId="
-
+    const val VERSION = "23-09-20 V-1.1"
     //////////////////////////////////////////////////////////////////////
     const val PI_PDF_PATH: String = "PiPdfs/"
     const val CHANNEL_ID: String = "Enquiry status"
@@ -106,4 +106,6 @@ object ConstantsDirectory {
     const val CUSTOM_PRODUCT = "Custom Product"
 
     const val ENQUIRY_STATUS_FLAG = "enquiry_status_flag"
+
+    const val PI_ID ="piid"
 }

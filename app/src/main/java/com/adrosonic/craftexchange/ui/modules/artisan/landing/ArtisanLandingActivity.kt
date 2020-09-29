@@ -86,15 +86,22 @@ class ArtisanLandingActivity : AppCompatActivity(),
         val view = mBinding?.root
         setContentView(view)
         mViewModel?.noficationlistener=this
-        mViewModel?.getAllNotifications()
-        mViewModel?.getMoqDeliveryTimes()
-        DeviceRegistration(object : DeviceTokenCallback {
-            override fun registeredToken(token: String) {
-                addUserDevice(true,token)
-            }
-        }).execute()
+
+        if(Utility.checkIfInternetConnected(applicationContext)){
+            mViewModel?.getAllNotifications()
+            mViewModel?.getMoqDeliveryTimes()
+            refreshProfile()
+
+            DeviceRegistration(object : DeviceTokenCallback {
+                override fun registeredToken(token: String) {
+                    addUserDevice(true,token)
+                }
+            }).execute()
+        }else{
+            Utility?.displayMessage(getString(R.string.no_internet_connection),applicationContext)
+        }
         mProVM.listener = this
-        refreshProfile()
+
         mProVM.getUserMutableData()
             .observe(this, Observer<CraftUser> {
                 craftUser = MutableLiveData(it)
@@ -111,12 +118,12 @@ class ArtisanLandingActivity : AppCompatActivity(),
         toggle.isDrawerIndicatorEnabled = true
         toggle.syncState()
 
-        var firstname = Prefs.getString(ConstantsDirectory.FIRST_NAME,"Craft")
+        var firstname = Prefs.getString(ConstantsDirectory.FIRST_NAME,"User")
 
         mBinding?.navView?.setNavigationItemSelectedListener(this)
         nav_view.getHeaderView(0).text_user.text = firstname
 
-        mBinding?.txtVerTag?.text="23-09-20 V-1.1"
+        mBinding?.txtVerTag?.text=ConstantsDirectory.VERSION
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction() .replace(R.id.artisan_home_container,ArtisanHomeFragment.newInstance())
                 .detach(ArtisanHomeFragment())

@@ -427,22 +427,7 @@ EnquiryViewModel.singlePiInterface{
                     }
                 }
 
-                if(enquiryDetails?.productStatusID == AvailableStatus.MADE_TO_ORDER.getId() || isCustom == true){
-                when (enquiryDetails?.enquiryStageID) {
-                    3L -> {
-                        mBinding?.transactionLayout?.visibility = View.VISIBLE
-                        mBinding?.piDetailsLayout?.visibility = View.VISIBLE
-                    }
-                    8L -> {
-                        mBinding?.transactionLayout?.visibility = View.VISIBLE
-                        mBinding?.piDetailsLayout?.visibility = View.VISIBLE
-                    }
-                    else -> {
-                        mBinding?.transactionLayout?.visibility = View.GONE
-                    }
-                }}else{
-                    mBinding?.transactionLayout?.visibility = View.GONE
-                }
+                setViewTransactionButton()
 
                 when (enquiryDetails?.productType) {
                     "Product" -> {
@@ -532,6 +517,25 @@ EnquiryViewModel.singlePiInterface{
             })
         }catch (e:Exception){
             Log.e("ViewEnqProd","Details : "+e.printStackTrace())
+        }
+    }
+
+    fun setViewTransactionButton(){
+        if(enquiryDetails?.productStatusID == AvailableStatus.MADE_TO_ORDER.getId() || isCustom == true){
+            when (enquiryDetails?.enquiryStageID) {
+                3L -> {
+                    mBinding?.transactionLayout?.visibility = View.VISIBLE
+                    mBinding?.piDetailsLayout?.visibility = View.VISIBLE
+                }
+                8L -> {
+                    mBinding?.transactionLayout?.visibility = View.VISIBLE
+                    mBinding?.piDetailsLayout?.visibility = View.VISIBLE
+                }
+                else -> {
+                    mBinding?.transactionLayout?.visibility = View.GONE
+                }
+            }}else{
+            mBinding?.transactionLayout?.visibility = View.GONE
         }
     }
 

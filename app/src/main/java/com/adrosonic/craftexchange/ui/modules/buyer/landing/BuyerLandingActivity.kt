@@ -105,10 +105,11 @@ class BuyerLandingActivity : AppCompatActivity(),
         mViewModel.getEnquiryStageAvailableProdsData()
         mViewModel.getwishlisteProductIds()
         mViewModel?.getMoqDeliveryTimes()
+
+        refreshProfile()
         mProVM.listener = this
         mViewModel?.noficationlistener=this
-        mViewModel?.getAllNotifications()
-        refreshProfile()
+
 
         mProVM.getUserMutableData()
             .observe(this, Observer<CraftUser> {
@@ -136,7 +137,7 @@ class BuyerLandingActivity : AppCompatActivity(),
         mBinding?.navView?.setNavigationItemSelectedListener(this)
 //        mBinding?.navView?.menu?.getItem(0)?.isChecked = false
         nav_view.getHeaderView(0).text_user.text = firstname
-        mBinding?.txtVerTag?.text="23-09-20 V-1.1"
+        mBinding?.txtVerTag?.text=ConstantsDirectory.VERSION
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .add(R.id.buyer_home_container,

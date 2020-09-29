@@ -319,5 +319,16 @@
     <string name="awaiting_artisan_confirmation">Awaiting artisan confirmation</string>
     <string name="payment_receipt_upload_confirmation">Payment Receipt Uploaded!</string>
     <string name="awaiting_payment_confirmation">Awaiting payment confirmation</string>
+    <string name="chck_adv_pay_receipt">Check advance payment receipt</string>
+    <string name="view">View</string>
+    <string name="view_approve_payment"><![CDATA[View & Approve Payment]]></string>
+    <string name="approve_advance_payment_by_buyer">Approve Advance Payment by Buyer</string>
+    <string name="reject_payment">Reject Payment</string>
+    <string name="approve_advance_payment">Approve Advance Payment</string>
+    <string name="payment_receipt">Payment Receipt</string>
+    <string name="amt_to_be_paid_as_per_pi">"Amount to be paid as per PI : "</string>
+    <string name="note_to_artisan_validate_pay">Once you approve it, the product stage cannot be reverted.\nKindly make sure to check your account balance is reflected with\nthe amount. Best practice is to check with your bank,\nor in bank statement from authorised bank sources.</string>
+    <string name="double_tap_to_zoom">*Double tap to zoom</string>
+    <string name="awaiting_confirmation">Awaiting Confirmation</string>
 
 </resources>
