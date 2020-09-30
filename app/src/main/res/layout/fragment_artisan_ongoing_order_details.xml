@@ -406,7 +406,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <LinearLayout
-                    android:id="@+id/next_step_layout"
+                    android:id="@+id/next_enq_stage_layout"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:gravity="center_vertical"
@@ -438,7 +438,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/start_stage_layout"
+                    android:id="@+id/start_enq_stage_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
@@ -446,10 +446,10 @@
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/next_step_layout">
+                    app:layout_constraintTop_toBottomOf="@+id/next_enq_stage_layout">
 
                     <Button
-                        android:id="@+id/btn_start_next_step"
+                        android:id="@+id/btn_start_enq_stage"
                         android:layout_width="wrap_content"
                         android:layout_height="48dp"
                         android:layout_marginTop="@dimen/margin_regular"
@@ -478,7 +478,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/change_stage_layout"
+                    android:id="@+id/change_enquiry_status_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
@@ -486,15 +486,15 @@
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/start_stage_layout">
+                    app:layout_constraintTop_toBottomOf="@+id/start_enq_stage_layout">
 
                     <Button
-                        android:id="@+id/btn_mark_in_progress"
+                        android:id="@+id/btn_mark_inprogress"
                         android:layout_width="wrap_content"
                         android:layout_height="48dp"
                         android:layout_marginTop="@dimen/margin_regular"
                         android:layout_marginBottom="8dp"
-                        android:background="@drawable/rect_round_blue"
+                        android:background="@drawable/rect_outline_blue"
                         android:drawableEnd="@drawable/ic_right_arrow_white"
                         android:elevation="8dp"
                         android:fontFamily="@font/lato_regular"
@@ -503,12 +503,12 @@
                         android:textAlignment="center"
                         android:textAllCaps="false"
                         android:textColor="@color/swipe_background"
-                        android:textSize="18sp" />
+                        android:textSize="16sp" />
 
                     <Button
-                        android:id="@+id/btn_mark_completed"
+                        android:id="@+id/btn_mark_move_next_stage"
                         android:layout_width="wrap_content"
-                        android:layout_height="48dp"
+                        android:layout_height="wrap_content"
                         android:layout_margin="16dp"
                         android:background="@color/black_text"
                         android:drawableEnd="@drawable/ic_right_arrow_white"
@@ -519,7 +519,7 @@
                         android:textAlignment="center"
                         android:textAllCaps="false"
                         android:textColor="@color/white_text"
-                        android:textSize="18sp" />
+                        android:textSize="16sp" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -539,7 +539,7 @@
                     android:weightSum="10"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/change_stage_layout">
+                    app:layout_constraintTop_toBottomOf="@+id/change_enquiry_status_layout">
 
 
                     <TextView
@@ -577,6 +577,7 @@
                         android:tint="@color/dark_green" />
 
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/change_request_layer"
                     android:layout_width="match_parent"
@@ -624,6 +625,7 @@
                         android:tint="#7793FF" />
 
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/tax_invoice_layer"
                     android:layout_width="match_parent"
@@ -668,6 +670,7 @@
                         android:src="@drawable/ic_right_arrow_brown" />
 
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/view_payment_layer"
                     android:layout_width="match_parent"
@@ -946,7 +949,6 @@
                         android:src="@drawable/ic_right_arrow_violet" />
 
                 </LinearLayout>
-
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

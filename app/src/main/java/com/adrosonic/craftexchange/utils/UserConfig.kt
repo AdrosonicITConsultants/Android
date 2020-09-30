@@ -80,7 +80,9 @@ const val EXTRA_WEFT_YARN_ID = "extraWeftYarnId"
 ////////////////////////Enquiry/////////////////////////////
 const val MOQ_DELIVERY_DATES = "moq_delivery_dates"
 const val ENQUIRY_STAGE_DATA = "enquiry_stage_data"
+const val INNER_ENQUIRY_STAGE_DATA = "inner_enquiry_stage_data"
 const val ENQUIRY_AVAI_PROD_STAGE_DATA = "enquiry_available_product_stage_data"
+const val PROGRESS_TIMELINE_DATA = "progress_timeline_data"
 
 
 class UserConfig {
@@ -516,6 +518,20 @@ class UserConfig {
         get() = Prefs.getString(ENQUIRY_STAGE_DATA,"")
         set(value) {
             Prefs.putString(ENQUIRY_STAGE_DATA, value)
+            field = value
+        }
+
+    var innerEnquiryStageData : String? = ""
+        get() = Prefs.getString(INNER_ENQUIRY_STAGE_DATA,"")
+        set(value) {
+            Prefs.putString(INNER_ENQUIRY_STAGE_DATA, value)
+            field = value
+        }
+
+    var progressTimeData : String? = ""
+        get() = Prefs.getString(PROGRESS_TIMELINE_DATA,"")
+        set(value) {
+            Prefs.putString(PROGRESS_TIMELINE_DATA, value)
             field = value
         }
 

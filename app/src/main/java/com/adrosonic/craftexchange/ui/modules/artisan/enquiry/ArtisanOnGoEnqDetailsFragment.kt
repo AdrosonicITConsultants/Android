@@ -1,6 +1,7 @@
 package com.adrosonic.craftexchange.ui.modules.artisan.enquiry
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -25,26 +26,20 @@ import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquir
 import com.adrosonic.craftexchange.database.predicates.EnquiryPredicates
 import com.adrosonic.craftexchange.database.predicates.MoqsPredicates
 import com.adrosonic.craftexchange.databinding.FragmentArtisanOnGoEnqDetailsBinding
-import com.adrosonic.craftexchange.enums.AvailableStatus
-import com.adrosonic.craftexchange.enums.EnquiryStatus
-import com.adrosonic.craftexchange.enums.getId
+import com.adrosonic.craftexchange.enums.*
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.repository.data.response.moq.Datum
-import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimesResponse
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.piContext
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
-import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.addProductIntent
 import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.advPay.enquiryPayment
 import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
-import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
 import com.agik.swipe_button.Controller.OnSwipeCompleteListener
 import com.agik.swipe_button.View.Swipe_Button_View
-import com.google.gson.GsonBuilder
 
 
 private const val ARG_PARAM1 = "param1"
@@ -52,7 +47,8 @@ private const val ARG_PARAM2 = "param2"
 
 class ArtisanOnGoEnqDetailsFragment : Fragment(),
     EnquiryViewModel.FetchEnquiryInterface,
-    EnquiryViewModel.MoqInterface{
+    EnquiryViewModel.MoqInterface,
+    EnquiryViewModel.changeEnquiryInterface{
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -62,6 +58,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
     private var enquiryDetails : OngoingEnquiries ?= null
     private var stageList : ArrayList<Pair<Long,String>> ?= null
     private var stageAPList : ArrayList<Triple<Long,Long,String>> ?= null
+    private var innerStageList : ArrayList<Pair<Long,String>> ?= null
     private var nextEnqStage : String?=""
     private var prevEnqStage : String?=""
     private var currEnqStage : String ?= ""
@@ -69,6 +66,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
     private var currEnqStageSerNo : Long ?= 0
     private var url : String?=""
     private var status : String?= ""
+    private var dialog : Dialog?= null
 
     val mEnqVM : EnquiryViewModel by viewModels()
 
@@ -111,6 +109,8 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         Utility.getDeliveryTimeList()?.let {moqDeliveryTimeList.addAll(it)  }
         mEnqVM?.moqListener=this
         mEnqVM?.fetchEnqListener = this
+        mEnqVM?.changeEnqListener = this
+
         mBinding?.swipeEnquiryDetails?.isEnabled = false
         if(Utility.checkIfInternetConnected(requireActivity())){
             viewLoader()
@@ -132,6 +132,8 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
                     enquiryDetails = it
                 })
         }
+
+        dialog = Utility.loadingDialog(requireActivity())
 
         mBinding?.btnBack?.setOnClickListener {
             activity?.onBackPressed()
@@ -240,13 +242,55 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
                 ?.putExtra(ConstantsDirectory.ENQUIRY_STATUS_FLAG, EnquiryStatus.ONGOING.getId())
                 ?.putExtra(ConstantsDirectory.PI_ID,0))
         }
+
+        //ChangeEnquiryStageButtons
+        mBinding?.btnStartEnqStage?.setOnClickListener {
+            if(Utility.checkIfInternetConnected(requireActivity())){
+                dialog?.show()
+                enquiryDetails?.enquiryID?.let { it1 -> mEnqVM?.setEnquiryStage(it1,EnquiryStages.PRODUCTION_COMPLETED.getId(),InnerEnquiryStages.YARN_PROCURED.getId()) }
+            }else{
+                Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
+            }
+        }
+        mBinding?.btnMarkInprogress?.setOnClickListener {
+            if(Utility.checkIfInternetConnected(requireActivity())){
+                dialog?.show()
+                enquiryDetails?.enquiryID?.let { it1 ->
+                    enquiryDetails?.innerEnquiryStageID?.let { it2 ->
+                        mEnqVM?.setEnquiryStage(it1,EnquiryStages.PRODUCTION_COMPLETED.getId(),
+                            it2
+                        )
+                    }
+                }
+            }else{
+                Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
+            }
+        }
+        mBinding?.btnMarkMoveNextStage?.setOnClickListener {
+            if(Utility.checkIfInternetConnected(requireActivity())){
+                dialog?.show()
+                when(enquiryDetails?.innerEnquiryStageID){
+                    InnerEnquiryStages.POST_LOOM_PROCESS.getId() -> {
+                        enquiryDetails?.enquiryID?.let { it1 -> mEnqVM?.setCompleteOrderStage(it1,EnquiryStages.COMPLETION_OF_ORDER.getId()) }
+                    }
+                    else -> {
+                        enquiryDetails?.enquiryID?.let { it1 -> mEnqVM?.setEnquiryStage(it1,EnquiryStages.PRODUCTION_COMPLETED.getId(),enquiryDetails?.innerEnquiryStageID?.plus(1)) }
+                    }
+                }
+            }else{
+                Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
+            }
+        }
     }
 
     fun setDetails(){
 
         setTabVisibilities()
 
-        setViewApprovePaymentButton()
+        //stage wise button visiblities
+        viewApprovePaymentButton()
+        setViewEnquiryStageChangeButton()
+        viewChangeStatusLayer()
 
         mBinding?.enquiryCode?.text = enquiryDetails?.enquiryCode
         mBinding?.enquiryStartDate?.text = "Date accepted : ${enquiryDetails?.startedOn?.split("T")?.get(0)}"
@@ -442,40 +486,116 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
     }
 
     private fun setProgressTimeline(){
-        stageList?.clear()
         stageAPList?.clear()
-        if(enquiryDetails?.productType == "Custom Product" || enquiryDetails?.productStatusID == 1L){
+        innerStageList?.clear()
+        stageList?.clear()
+        if(enquiryDetails?.productType == "Custom Product" || enquiryDetails?.productStatusID == AvailableStatus.MADE_TO_ORDER.getId()){
             stageList = Utility.getEnquiryStagesData() // custom product or made to order
             Log.e("enqdata", "List All : $stageList")
 
-            stageList?.forEach {
-                if(it.first == enquiryDetails?.enquiryStageID){
-                    currEnqStageId = it.first
-                    currEnqStage = it.second
-                    Log.e("CurrentEnqStage","Id : $currEnqStageId")
-                    Log.e("CurrentEnqStage","current : $currEnqStage")
+            innerStageList = Utility.getInnerEnquiryStagesData()
+            Log.e("enqdata", "List Inner : $innerStageList")
+
+
+            if(enquiryDetails?.innerEnquiryStageID != null && enquiryDetails?.enquiryStageID == 5L){
+                when(enquiryDetails?.innerEnquiryStageID){
+                    1L -> {
+                        innerStageList?.forEach {
+                            if(it.first == enquiryDetails?.innerEnquiryStageID){
+                                currEnqStageId = it.first
+                                currEnqStage = it.second
+                                Log.e("CurrentEnqStage","Id : $currEnqStageId")
+                                Log.e("CurrentEnqStage","current : $currEnqStage")
+                            }
+                        }
+                        innerStageList?.forEach {
+                            if(it.first == currEnqStageId?.plus(1) ?: 5){
+                                nextEnqStage = it.second
+                                Log.e("CurrentEnqStage","next : $nextEnqStage")
+                            }
+                        }
+
+                        stageList?.forEach {
+                            if(it.first == 4L){
+                                prevEnqStage = it.second
+                                Log.e("CurrentEnqStage","previous : $prevEnqStage")
+                            }
+                        }
+                    }
+                    5L -> {
+                        innerStageList?.forEach {
+                            if(it.first == enquiryDetails?.innerEnquiryStageID){
+                                currEnqStageId = it.first
+                                currEnqStage = it.second
+                                Log.e("CurrentEnqStage","Id : $currEnqStageId")
+                                Log.e("CurrentEnqStage","current : $currEnqStage")
+                            }
+                        }
+                        innerStageList?.forEach {
+                            if(it.first == currEnqStageId?.minus(1) ?: 5){
+                                prevEnqStage = it.second
+                                Log.e("CurrentEnqStage","next : $prevEnqStage")
+                            }
+                        }
+
+                        stageList?.forEach {
+                            if(it.first == 6L){
+                                nextEnqStage = it.second
+                                Log.e("CurrentEnqStage","previous : $nextEnqStage")
+                            }
+                        }
+                    }
+                    else -> {
+                        innerStageList?.forEach {
+                            if(it.first == enquiryDetails?.innerEnquiryStageID){
+                                currEnqStageId = it.first
+                                currEnqStage = it.second
+                                Log.e("CurrentEnqStage","Id : $currEnqStageId")
+                                Log.e("CurrentEnqStage","current : $currEnqStage")
+                            }
+                        }
+                        innerStageList?.forEach {
+                            if(it.first == currEnqStageId?.plus(1) ?: 5){
+                                nextEnqStage = it.second
+                                Log.e("CurrentEnqStage","next : $nextEnqStage")
+                            }
+                        }
+
+                        innerStageList?.forEach {
+                            if(it.first == currEnqStageId?.minus(1) ?: 1){
+                                prevEnqStage = it.second
+                                Log.e("CurrentEnqStage","previous : $prevEnqStage")
+                            }
+                        }
+                    }
+                }
+            }else{
+                stageList?.forEach {
+                    if(it.first == enquiryDetails?.enquiryStageID){
+                        currEnqStageId = it.first
+                        currEnqStage = it.second
+                        Log.e("CurrentEnqStage","Id : $currEnqStageId")
+                        Log.e("CurrentEnqStage","current : $currEnqStage")
+                    }
+                }
+
+                stageList?.forEach {
+                    if(it.first == currEnqStageId?.plus(1) ?: 10){
+                        nextEnqStage = it.second
+                        Log.e("CurrentEnqStage","next : $nextEnqStage")
+                    }
+                }
+
+                stageList?.forEach {
+                    if(it.first == currEnqStageId?.minus(1) ?: 0){
+                        prevEnqStage = it.second
+                        Log.e("CurrentEnqStage","previous : $prevEnqStage")
+                    }
                 }
             }
-
-            stageList?.forEach {
-                if(it.first == currEnqStageId?.plus(1) ?: 10){
-                    nextEnqStage = it.second
-                    Log.e("CurrentEnqStage","next : $nextEnqStage")
-                }
-            }
-
-            stageList?.forEach {
-                if(it.first == currEnqStageId?.minus(1) ?: 0){
-                    prevEnqStage = it.second
-                    Log.e("CurrentEnqStage","previous : $prevEnqStage")
-                }
-            }
-
-        }
-        else{
+        }else{
             stageAPList = Utility.getAvaiProdEnquiryStagesData() // available product
             Log.e("enqdata", "List AP : $stageAPList")
-
             stageAPList?.forEach {
                 if(it.second == enquiryDetails?.enquiryStageID){
                     currEnqStageSerNo = it.first
@@ -534,6 +654,19 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         mBinding?.swipeEnquiryDetails?.isRefreshing = false
     }
 
+    fun setViewEnquiryStageChangeButton(){
+        if(enquiryDetails?.productStatusID == AvailableStatus.MADE_TO_ORDER.getId() || enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
+            if(enquiryDetails?.enquiryStageID == 4L && enquiryDetails?.innerEnquiryStageID == null){
+                mBinding?.startEnqStageLayout?.visibility = View.VISIBLE
+            }else{
+                mBinding?.startEnqStageLayout?.visibility = View.GONE
+            }
+        }else{
+
+            mBinding?.startEnqStageLayout?.visibility = View.GONE
+        }
+    }
+
     private fun setTabVisibilities(){
 //        if(enquiryDetails?.isMoqSend == 1L){
 //            mBinding?.moqDetailsLayer?.visibility = View.VISIBLE
@@ -557,7 +690,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         }
     }
 
-    fun setViewApprovePaymentButton(){
+    fun viewApprovePaymentButton(){
         if(enquiryDetails?.productStatusID == AvailableStatus.MADE_TO_ORDER.getId() || enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
             if(enquiryDetails?.isBlue==1L && enquiryDetails?.enquiryStageID == 3L){
                 mBinding?.btnViewApprovePayment?.visibility = View.VISIBLE
@@ -566,6 +699,18 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
             }
         }else{
             mBinding?.btnViewApprovePayment?.visibility = View.GONE
+        }
+    }
+
+    fun viewChangeStatusLayer(){
+        if(enquiryDetails?.productStatusID == AvailableStatus.MADE_TO_ORDER.getId() || enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
+            if(enquiryDetails?.enquiryStageID == 5L){
+                mBinding?.changeEnquiryStatusLayout?.visibility = View.VISIBLE
+            }else{
+                mBinding?.changeEnquiryStatusLayout?.visibility = View.GONE
+            }
+        }else{
+            mBinding?.changeEnquiryStatusLayout?.visibility = View.GONE
         }
     }
 
@@ -632,6 +777,28 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
             })
         } catch (e: Exception) {
             Log.e("Enquiry Details", "Exception onAddMoqSuccess " + e.message)
+        }
+    }
+
+    override fun onEnqChangeSuccess() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+               dialog?.cancel()
+                Utility.displayMessage("Enquiry Stage Updated!",requireActivity())
+            })
+        } catch (e: Exception) {
+            Log.e("Enquiry Change", "Exception onChangeEnqFailure " + e.message)
+        }
+    }
+
+    override fun onEnqChangeFailure() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                dialog?.cancel()
+                Utility.displayMessage("Please Try Again",requireActivity())
+            })
+        } catch (e: Exception) {
+            Log.e("Enquiry Change", "Exception onChangeEnqFailure " + e.message)
         }
     }
 

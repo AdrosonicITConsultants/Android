@@ -28,9 +28,7 @@ import com.adrosonic.craftexchange.database.predicates.MoqsPredicates
 import com.adrosonic.craftexchange.database.predicates.OrdersPredicates
 import com.adrosonic.craftexchange.databinding.FragmentArtisanOnGoEnqDetailsBinding
 import com.adrosonic.craftexchange.databinding.FragmentArtisanOngoingOrderDetailsBinding
-import com.adrosonic.craftexchange.enums.AvailableStatus
-import com.adrosonic.craftexchange.enums.EnquiryStatus
-import com.adrosonic.craftexchange.enums.getId
+import com.adrosonic.craftexchange.enums.*
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.repository.data.response.moq.Datum
 import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimesResponse
@@ -49,13 +47,15 @@ import com.adrosonic.craftexchange.viewModels.OrdersViewModel
 import com.agik.swipe_button.Controller.OnSwipeCompleteListener
 import com.agik.swipe_button.View.Swipe_Button_View
 import com.google.gson.GsonBuilder
+import com.pixplicity.easyprefs.library.Prefs
 
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 class ArtisanOngoinOrderDetailsFragment : Fragment(),
-    OrdersViewModel.FetchOrderInterface{
+    OrdersViewModel.FetchOrderInterface,
+    OrdersViewModel.changeStatusInterface{
 
     private var param1: String? = null
     private var param2: String? = null
@@ -65,6 +65,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
     private var orderDetails : Orders ?= null
     private var stageList : ArrayList<Pair<Long,String>> ?= null
     private var stageAPList : ArrayList<Triple<Long,Long,String>> ?= null
+    private var innerStageList : ArrayList<Pair<Long,String>> ?= null
     private var nextEnqStage : String?=""
     private var prevEnqStage : String?=""
     private var currEnqStage : String ?= ""
@@ -109,6 +110,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
         Utility.getDeliveryTimeList()?.let {moqDeliveryTimeList.addAll(it)  }
         mOrderVm?.fetchEnqListener = this
+        mOrderVm?.changeStatusListener = this
         mBinding?.swipeEnquiryDetails?.isEnabled = false
         if(Utility.checkIfInternetConnected(requireActivity())){
             viewLoader()
@@ -177,12 +179,57 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         mBinding?.taxInvoiceLayer?.setOnClickListener {
             //todo call intent
         }
+
+        //ChangeEnquiryStageButtons
+        mBinding?.btnStartEnqStage?.setOnClickListener {
+            if(Utility.checkIfInternetConnected(requireActivity())){
+                viewLoader()
+                orderDetails?.enquiryId?.let { it1 ->
+                    mOrderVm?.setEnquiryStage(it1, EnquiryStages.PRODUCTION_COMPLETED.getId(), InnerEnquiryStages.YARN_PROCURED.getId())
+                }
+            }else{
+                Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
+            }
+        }
+        mBinding?.btnMarkInprogress?.setOnClickListener {
+            if(Utility.checkIfInternetConnected(requireActivity())){
+                viewLoader()
+                orderDetails?.enquiryId?.let { it1 ->
+                    orderDetails?.innerEnquiryStageId?.let { it2 ->
+                        mOrderVm?.setEnquiryStage(it1, EnquiryStages.PRODUCTION_COMPLETED.getId(),it2 )
+                    }
+                }
+            }else{
+                Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
+            }
+        }
+        mBinding?.btnMarkMoveNextStage?.setOnClickListener {
+            if(Utility.checkIfInternetConnected(requireActivity())){
+                viewLoader()
+                when(orderDetails?.innerEnquiryStageId){
+                    InnerEnquiryStages.POST_LOOM_PROCESS.getId() -> {
+                        orderDetails?.enquiryId?.let { it1 -> mOrderVm?.setCompleteOrderStage(it1,
+                            EnquiryStages.COMPLETION_OF_ORDER.getId()) }
+                    }
+                    else -> {
+                        orderDetails?.enquiryId?.let { it1 -> mOrderVm?.setEnquiryStage(it1,
+                            EnquiryStages.PRODUCTION_COMPLETED.getId(),orderDetails?.innerEnquiryStageId?.plus(1)) }
+                    }
+                }
+            }else{
+                Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
+            }
+        }
     }
 
     fun setDetails(){
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+
 
         setTabVisibilities()
-
+        setViewEnquiryStageChangeButton()
+        viewChangeStatusLayer()
         mBinding?.orderCode?.text = orderDetails?.orderCode
         mBinding?.enquiryStartDate?.text = "Date accepted : ${orderDetails?.startedOn?.split("T")?.get(0)}"
         val image = orderDetails?.productImages?.split((",").toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()?.get(0)
@@ -324,43 +371,123 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         //TODO implement to enq stage
         val moq=MoqsPredicates.getSingleMoq(enqID)
        //todo render MOQ details
+            })
+        } catch (e: Exception) {
+            Log.e("setDetails", "Exception " + e.message)
+        }
     }
 
     private fun setProgressTimeline(){
-        stageList?.clear()
         stageAPList?.clear()
-        if(orderDetails?.productType == "Custom Product" || orderDetails?.productStatusId == 1L){
+        innerStageList?.clear()
+        stageList?.clear()
+        if(orderDetails?.productType == "Custom Product" || orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId()){
             stageList = Utility.getEnquiryStagesData() // custom product or made to order
             Log.e("enqdata", "List All : $stageList")
 
-            stageList?.forEach {
-                if(it.first == orderDetails?.enquiryStageId){
-                    currEnqStageId = it.first
-                    currEnqStage = it.second
-                    Log.e("CurrentEnqStage","Id : $currEnqStageId")
-                    Log.e("CurrentEnqStage","current : $currEnqStage")
+            innerStageList = Utility.getInnerEnquiryStagesData()
+            Log.e("enqdata", "List Inner : $innerStageList")
+
+
+            if(orderDetails?.innerEnquiryStageId != null && orderDetails?.enquiryStageId == 5L){
+                when(orderDetails?.innerEnquiryStageId){
+                    1L -> {
+                        innerStageList?.forEach {
+                            if(it.first == orderDetails?.innerEnquiryStageId){
+                                currEnqStageId = it.first
+                                currEnqStage = it.second
+                                Log.e("CurrentEnqStage","Id : $currEnqStageId")
+                                Log.e("CurrentEnqStage","current : $currEnqStage")
+                            }
+                        }
+                        innerStageList?.forEach {
+                            if(it.first == currEnqStageId?.plus(1) ?: 5){
+                                nextEnqStage = it.second
+                                Log.e("CurrentEnqStage","next : $nextEnqStage")
+                            }
+                        }
+
+                        stageList?.forEach {
+                            if(it.first == 4L){
+                                prevEnqStage = it.second
+                                Log.e("CurrentEnqStage","previous : $prevEnqStage")
+                            }
+                        }
+                    }
+                    5L -> {
+                        innerStageList?.forEach {
+                            if(it.first == orderDetails?.innerEnquiryStageId){
+                                currEnqStageId = it.first
+                                currEnqStage = it.second
+                                Log.e("CurrentEnqStage","Id : $currEnqStageId")
+                                Log.e("CurrentEnqStage","current : $currEnqStage")
+                            }
+                        }
+                        innerStageList?.forEach {
+                            if(it.first == currEnqStageId?.minus(1) ?: 5){
+                                prevEnqStage = it.second
+                                Log.e("CurrentEnqStage","next : $prevEnqStage")
+                            }
+                        }
+
+                        stageList?.forEach {
+                            if(it.first == 6L){
+                                nextEnqStage = it.second
+                                Log.e("CurrentEnqStage","previous : $nextEnqStage")
+                            }
+                        }
+                    }
+                    else -> {
+                        innerStageList?.forEach {
+                            if(it.first == orderDetails?.innerEnquiryStageId){
+                                currEnqStageId = it.first
+                                currEnqStage = it.second
+                                Log.e("CurrentEnqStage","Id : $currEnqStageId")
+                                Log.e("CurrentEnqStage","current : $currEnqStage")
+                            }
+                        }
+                        innerStageList?.forEach {
+                            if(it.first == currEnqStageId?.plus(1) ?: 5){
+                                nextEnqStage = it.second
+                                Log.e("CurrentEnqStage","next : $nextEnqStage")
+                            }
+                        }
+
+                        innerStageList?.forEach {
+                            if(it.first == currEnqStageId?.minus(1) ?: 1){
+                                prevEnqStage = it.second
+                                Log.e("CurrentEnqStage","previous : $prevEnqStage")
+                            }
+                        }
+                    }
+                }
+            }else{
+                stageList?.forEach {
+                    if(it.first == orderDetails?.enquiryStageId){
+                        currEnqStageId = it.first
+                        currEnqStage = it.second
+                        Log.e("CurrentEnqStage","Id : $currEnqStageId")
+                        Log.e("CurrentEnqStage","current : $currEnqStage")
+                    }
+                }
+
+                stageList?.forEach {
+                    if(it.first == currEnqStageId?.plus(1) ?: 10){
+                        nextEnqStage = it.second
+                        Log.e("CurrentEnqStage","next : $nextEnqStage")
+                    }
+                }
+
+                stageList?.forEach {
+                    if(it.first == currEnqStageId?.minus(1) ?: 0){
+                        prevEnqStage = it.second
+                        Log.e("CurrentEnqStage","previous : $prevEnqStage")
+                    }
                 }
             }
-
-            stageList?.forEach {
-                if(it.first == currEnqStageId?.plus(1) ?: 10){
-                    nextEnqStage = it.second
-                    Log.e("CurrentEnqStage","next : $nextEnqStage")
-                }
-            }
-
-            stageList?.forEach {
-                if(it.first == currEnqStageId?.minus(1) ?: 0){
-                    prevEnqStage = it.second
-                    Log.e("CurrentEnqStage","previous : $prevEnqStage")
-                }
-            }
-
-        }
-        else{
+        }else{
             stageAPList = Utility.getAvaiProdEnquiryStagesData() // available product
             Log.e("enqdata", "List AP : $stageAPList")
-
             stageAPList?.forEach {
                 if(it.second == orderDetails?.enquiryStageId){
                     currEnqStageSerNo = it.first
@@ -398,6 +525,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
                 }
                 else ->{
                     mBinding?.awaitingPaymentReceipt?.visibility = View.GONE
+////                    mBinding?.transactionLayout?.visibility = View.GONE
                 }
             }
         }
@@ -428,7 +556,30 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         }
     }
 
+    fun setViewEnquiryStageChangeButton(){
+        if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
+            if(orderDetails?.enquiryStageId == 4L && orderDetails?.innerEnquiryStageId == null){
+                mBinding?.startEnqStageLayout?.visibility = View.VISIBLE
+            }else{
+                mBinding?.startEnqStageLayout?.visibility = View.GONE
+            }
+        }else{
+            mBinding?.startEnqStageLayout?.visibility = View.GONE
+        }
+    }
 
+    fun viewChangeStatusLayer(){
+        Log.e("OrderDetails","enquiryStageId 222: ${orderDetails?.enquiryStageId}")
+        if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
+            if(orderDetails?.enquiryStageId == 5L){
+                mBinding?.changeEnquiryStatusLayout?.visibility = View.VISIBLE
+            }else{
+                mBinding?.changeEnquiryStatusLayout?.visibility = View.GONE
+            }
+        }else{
+            mBinding?.changeEnquiryStatusLayout?.visibility = View.GONE
+        }
+    }
 
     override fun onResume() {
         super.onResume()
@@ -439,25 +590,25 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
     override fun onFailure() {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
-                Log.e("Enquiry Details", "onFailure")
+                Log.e("OrderDetails", "onFailure")
                 enqID?.let { mOrderVm.getSingleOnOrderData(it,0) }
                 hideLoader()
             })
         } catch (e: Exception) {
-            Log.e("Enquiry Details", "Exception onFailure " + e.message)
+            Log.e("OrderDetails", "Exception onFailure " + e.message)
         }
     }
 
     override fun onSuccess() {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
-                Log.e("Enquiry Details", "onSuccess")
-                enqID?.let { mOrderVm.getSingleOnOrderData(it,0) }
+                Log.e("OrderDetails", "onSuccess enqID: $enqID")
+                enqID?.let { orderDetails=mOrderVm.getSingleOnOrderData(it,0).value }
                 hideLoader()
                 setDetails()
             })
         } catch (e: Exception) {
-            Log.e("Enquiry Details", "Exception onFailure " + e.message)
+            Log.e("OrderDetails", "Exception onFailure " + e.message)
         }
     }
 
@@ -474,19 +625,50 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.e("PiActivity", "onActivityResult $requestCode")
-        Log.e("PiActivity", "onActivityResult $resultCode")
-        Log.e("PiActivity", "onActivityResult RESULT_OK ${Activity.RESULT_OK}")
-        if (requestCode == ConstantsDirectory.RESULT_PI) { // Please, use a final int instead of hardcoded int value
-            if (resultCode == Activity.RESULT_OK) {
-//                viewLoader()
-                Log.e("PiActivity", "onActivityResult enqID ${enqID}")
-                enqID?.let {
-//                    mOrderVm.getSingleOngoingEnquiry(it)
-                    EnquiryPredicates.updatePiStatus(it)
-                    setDetails()
-                }
-            }
+//        Log.e("PiActivity", "onActivityResult $requestCode")
+//        Log.e("PiActivity", "onActivityResult $resultCode")
+//        Log.e("PiActivity", "onActivityResult RESULT_OK ${Activity.RESULT_OK}")
+//        if (requestCode == ConstantsDirectory.RESULT_PI) { // Please, use a final int instead of hardcoded int value
+//            if (resultCode == Activity.RESULT_OK) {
+////                viewLoader()
+//                Log.e("PiActivity", "onActivityResult enqID ${enqID}")
+//                enqID?.let {
+////                    mOrderVm.getSingleOngoingEnquiry(it)
+//                    EnquiryPredicates.updatePiStatus(it)
+//                    setDetails()
+//                }
+//            }
+//        }
+    }
+
+    override fun onStatusChangeSuccess() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                enqID?.let { mOrderVm.getSingleOngoingOrder(it) }
+                Utility.displayMessage("Order Stage Updated!",requireActivity())
+//                activity?.onBackPressed()
+//                val intent = Intent(context?.orderDetails())
+//                var bundle = Bundle()
+//                bundle.putString(ConstantsDirectory.ENQUIRY_ID, enqID?.toString())
+//                bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG, "2")
+//                intent.putExtras(bundle)
+//                context?.startActivity(intent)
+
+            })
+        } catch (e: Exception) {
+            Log.e("OrderDetails", "Exception onStatusChangeSuccess " + e.message)
+        }
+    }
+
+    override fun onStatusChangeFailure() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                setDetails()
+                hideLoader()
+                Utility.displayMessage("Please Try Again",requireActivity())
+            })
+        } catch (e: Exception) {
+            Log.e("OrderDetails", "Exception onStatusChangeFailure " + e.message)
         }
     }
 

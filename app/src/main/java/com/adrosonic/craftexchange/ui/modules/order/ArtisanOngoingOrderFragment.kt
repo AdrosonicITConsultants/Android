@@ -76,7 +76,6 @@ class ArtisanOngoingOrderFragment : Fragment(),
                 mOrderListAdapter?.updateProductList(mOrderList)
             })
         setVisiblities()
-        Utility.setImageResource(requireContext(),mBinding?.emptyEnqList,R.drawable.empty_ongoing_orders)
 
 
         mBinding?.swipeOngoingEnquiries?.setOnRefreshListener {
@@ -97,10 +96,10 @@ class ArtisanOngoingOrderFragment : Fragment(),
     fun setVisiblities() {
         if (mOrderVm.getOnOrderListMutableData().value?.size!! > 0) {
             mBinding?.ongoingEnqRecyclerList?.visibility = View.VISIBLE
-            mBinding?.emptyView?.visibility = View.GONE
+            mBinding?.emptyViewOrders?.visibility = View.GONE
         } else {
             mBinding?.ongoingEnqRecyclerList?.visibility = View.GONE
-            mBinding?.emptyView?.visibility = View.VISIBLE
+            mBinding?.emptyViewOrders?.visibility = View.VISIBLE
         }
     }
 

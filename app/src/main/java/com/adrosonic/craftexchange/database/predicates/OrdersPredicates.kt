@@ -23,11 +23,10 @@ class OrdersPredicates {
                 try {
                     if(iterator!=null) {
                         while (iterator.hasNext()) {
+                            Log.e("OrderDetails","isCompleted: "+isCompleted)
                             var order = iterator.next()
                             var orderObj = realm.where(Orders::class.java)
-                                .equalTo(Orders.COLUMN_ENQUIRY_ID, order.openEnquiriesResponse?.enquiryId )
-                                .or()
-                                .equalTo(Orders.COLUMN_ENQUIRY_CODE,order?.openEnquiriesResponse?.enquiryCode)
+                                .equalTo(Orders.COLUMN_ORDER_CODE, order.openEnquiriesResponse?.orderCode )
                                 .limit(1)
                                 .findFirst()
                             if (orderObj == null) {
@@ -110,6 +109,7 @@ class OrdersPredicates {
                                 realm.copyToRealmOrUpdate(exEnq)
                             }else{
                                 nextID = orderObj?._id ?: 0
+                                Log.e("OrderDetails","1111111111111")
                                 orderObj?.comment = order?.openEnquiriesResponse?.comment
                                 orderObj?.orderCreatedOn = order?.openEnquiriesResponse?.orderCreatedOn
                                 orderObj?.productId = order?.openEnquiriesResponse?.productId
@@ -128,6 +128,7 @@ class OrdersPredicates {
                                 orderObj?.weftYarnId = order?.openEnquiriesResponse?.weftYarnId
                                 orderObj?.extraWeftYarnId = order?.openEnquiriesResponse?.extraWeftYarnId
                                 orderObj?.email = order?.openEnquiriesResponse?.email
+                                Log.e("OrderDetails","enquiryId "+order?.openEnquiriesResponse?.enquiryId)
                                 orderObj?.enquiryId = order?.openEnquiriesResponse?.enquiryId
                                 orderObj?.line1 = order?.openEnquiriesResponse?.line1
                                 orderObj?.line2 = order?.openEnquiriesResponse?.line2
@@ -139,6 +140,7 @@ class OrdersPredicates {
                                 orderObj?.productType = order?.openEnquiriesResponse?.productType?:""
                                 orderObj?.district = order?.openEnquiriesResponse?.district
                                 orderObj?.productName = order?.openEnquiriesResponse?.productName?:""
+                                Log.e("OrderDetails","33333333333333333")
                                 orderObj?.productCode = order?.openEnquiriesResponse?.productCode
                                 orderObj?.productImages = order?.openEnquiriesResponse?.productImages
                                 orderObj?.orderReceiveDate = order?.openEnquiriesResponse?.orderReceiveDate
@@ -152,6 +154,7 @@ class OrdersPredicates {
                                 orderObj?.productCategoryHistoryId = order?.openEnquiriesResponse?.productCategoryHistoryId
                                 orderObj?.warpYarnHistoryId = order?.openEnquiriesResponse?.warpYarnHistoryId
                                 orderObj?.weftYarnHistoryId = order?.openEnquiriesResponse?.weftYarnHistoryId
+                                Log.e("OrderDetails","444444444444444444")
                                 orderObj?.extraWeftYarnHistoryId = order?.openEnquiriesResponse?.extraWeftYarnHistoryId
                                 orderObj?.productStatusHistoryId = order?.openEnquiriesResponse?.productStatusHistoryId
                                 orderObj?.madeWittAnthranHistory = order?.openEnquiriesResponse?.madeWittAnthranHistory
@@ -178,6 +181,7 @@ class OrdersPredicates {
                                 orderObj?.changeRequestOn = order?.openEnquiriesResponse?.changeRequestOn
                                 orderObj?.isBlue = order?.isBlue?:0
                                 orderObj?.isOrderFromCompleted=isCompleted
+                                Log.e("OrderDetails","enquiryStageId: "+order?.openEnquiriesResponse?.enquiryStageId)
                                 realm.copyToRealmOrUpdate(orderObj)
                             }
                         }

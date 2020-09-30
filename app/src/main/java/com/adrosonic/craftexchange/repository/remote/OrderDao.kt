@@ -28,7 +28,7 @@ interface OrderDao {
     @Headers("Accept: application/json")
     @GET("/order/getOrder/{enquiryId}")
     fun getSingleOngoingOrder(@Header("Authorization") token:String,
-                                @Path("enquiryId") enquiryId : Long) : Call<OrderResponse>
+                              @Query("enquiryId") enquiryId : Int) : Call<OrderResponse>
 
 
     @Headers("Accept: application/json")
@@ -38,6 +38,6 @@ interface OrderDao {
     @Headers("Accept: application/json")
     @GET("/order/getClosedOrder/{enquiryId}")
     fun getSingleClosedOrder(@Header("Authorization") token:String,
-                                @Path("enquiryId") enquiryId : Long) : Call<OrderResponse>
+                                @Query("enquiryId") enquiryId : Int) : Call<OrderResponse>
 
 }

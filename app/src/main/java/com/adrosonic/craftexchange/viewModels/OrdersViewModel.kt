@@ -1,6 +1,7 @@
 package com.adrosonic.craftexchange.viewModels
 
 import android.app.Application
+import android.os.Handler
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
@@ -53,14 +54,17 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
         fun onFailure()
         fun onSuccess()
     }
-
+    interface changeStatusInterface{
+        fun onStatusChangeSuccess()
+        fun onStatusChangeFailure()
+    }
     val ongoingOrderList : MutableLiveData<RealmResults<Orders>> by lazy { MutableLiveData<RealmResults<Orders>>() }
     val onGoingOrderDetails : MutableLiveData<Orders> by lazy { MutableLiveData<Orders>() }
 
     val compOrderList : MutableLiveData<RealmResults<Orders>> by lazy { MutableLiveData<RealmResults<Orders>>() }
-    val compOrderDetails : MutableLiveData<Orders> by lazy { MutableLiveData<Orders>() }
 
     var fetchEnqListener : FetchOrderInterface ?= null
+    var changeStatusListener : changeStatusInterface?= null
 
     fun getOnOrderListMutableData(): MutableLiveData<RealmResults<Orders>> {
         ongoingOrderList.value=loadOnOrderList()
@@ -157,27 +161,32 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
 
     fun getSingleOngoingOrder(enquiryId : Long){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        Log.e("OrderDetails","getSingleOngoingOrder: "+enquiryId)
         CraftExchangeRepository
             .getOrderService()
-            .getSingleOngoingOrder(token,enquiryId)
+            .getSingleOngoingOrder(token,enquiryId.toInt())
             .enqueue(object: Callback, retrofit2.Callback<OrderResponse> {
                 override fun onFailure(call: Call<OrderResponse>, t: Throwable) {
                     t.printStackTrace()
                     fetchEnqListener?.onFailure()
-                    Log.e("Ongoing Enquiries","Failure: "+t.message)
+                    Log.e("OrderDetails","Failure: "+t.message)
                 }
                 override fun onResponse(
                     call: Call<OrderResponse>,
                     response: retrofit2.Response<OrderResponse>) {
                     if(response.body()?.valid == true){
-                        Log.e("Order Details","Success: "+response.body()?.errorMessage)
+                        Log.e("OrderDetails","Success: "+response.body()?.data?.size)
                         OrdersPredicates?.insertOngoingOrders(response?.body()!!,0)
 //                        EnquiryPredicates?.insertEnqPaymentDetails(response?.body()!!)
 //                        EnquiryPredicates?.insertEnqArtisanProductCategory(response?.body()!!)
-                        fetchEnqListener?.onSuccess()
+                        Timer().schedule(object : TimerTask() {
+                            override fun run() {
+                                fetchEnqListener?.onSuccess()
+                            }
+                        }, 100)
                     }else{
                         fetchEnqListener?.onFailure()
-                        Log.e("Order Details","Failure: "+response.body()?.errorMessage)
+                        Log.e("OrderDetails","Failure: "+response.body()?.errorMessage)
                     }
                 }
 
@@ -188,31 +197,84 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         CraftExchangeRepository
             .getOrderService()
-            .getSingleClosedOrder(token,enquiryId)
+            .getSingleClosedOrder(token,enquiryId.toInt())
             .enqueue(object: Callback, retrofit2.Callback<OrderResponse> {
                 override fun onFailure(call: Call<OrderResponse>, t: Throwable) {
                     t.printStackTrace()
                     fetchEnqListener?.onFailure()
-                    Log.e("Order Details","Failure: "+t.message)
+                    Log.e("OrderDetails","Failure: "+t.message)
                 }
                 override fun onResponse(
                     call: Call<OrderResponse>,
                     response: retrofit2.Response<OrderResponse>) {
                     if(response.body()?.valid == true){
-                        Log.e("Order Details","Success: "+response.body()?.errorMessage)
+                        Log.e("OrderDetails","Success: "+response.body()?.errorMessage)
                         OrdersPredicates?.insertOngoingOrders(response?.body()!!,1)
 //                        OrdersPredicates?.insertEnqPaymentDetails(response?.body()!!)
 //                        OrdersPredicates?.insertEnqArtisanProductCategory(response?.body()!!)
                         fetchEnqListener?.onSuccess()
                     }else{
                         fetchEnqListener?.onFailure()
-                        Log.e("Order Details","Failure: "+response.body()?.errorMessage)
+                        Log.e("OrderDetails","Failure: "+response.body()?.errorMessage)
                     }
                 }
 
             })
     }
 
+    fun setEnquiryStage(enquiryId: Long, enqStageId: Long, innerEnqStageId: Long?){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        Log.e("OrderDetails","setEnquiryStage: "+enquiryId)
+        Log.e("OrderDetails","enqStageId: "+enqStageId)
+        CraftExchangeRepository
+            .getEnquiryService()
+            .setEnquiryStages(token,enqStageId,enquiryId, innerEnqStageId!!)
+            .enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    t.printStackTrace()
+                    changeStatusListener?.onStatusChangeFailure()
+                }
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    if(response?.isSuccessful){
+                        Log.e("OrderDetails","isSuccessful true")
+                        changeStatusListener?.onStatusChangeSuccess()
+                    }else{
+                        Log.e("OrderDetails","isSuccessful false")
+                        changeStatusListener?.onStatusChangeFailure()
+                    }
+                }
+            })
+    }
+
+    fun setCompleteOrderStage(enquiryId: Long, enqStageId: Long){
+        Log.e("OrderDetails","setCompleteOrderStage: "+enquiryId)
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getEnquiryService()
+            .setCompleteOrderStage(token,enqStageId,enquiryId)
+            .enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    t.printStackTrace()
+                    Log.e("OrderDetails","isSuccessful false")
+                    changeStatusListener?.onStatusChangeFailure()
+                }
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    if(response?.isSuccessful){
+                        Log.e("OrderDetails","isSuccessful ")
+                        changeStatusListener?.onStatusChangeSuccess()
+                    }else{
+                        Log.e("OrderDetails","isSuccessful false")
+                        changeStatusListener?.onStatusChangeFailure()
+                    }
+                }
+            })
+    }
 
 }
 

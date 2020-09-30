@@ -2,16 +2,13 @@ package com.adrosonic.craftexchange.viewModels
 
 import android.app.Application
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.adrosonic.craftexchange.database.entities.realmEntities.CompletedEnquiries
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
 import com.adrosonic.craftexchange.database.predicates.EnquiryPredicates
 import com.adrosonic.craftexchange.database.predicates.MoqsPredicates
-import com.adrosonic.craftexchange.database.predicates.PiPredicates
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
-import com.adrosonic.craftexchange.repository.data.request.enquiry.BuyerPayment
 import com.adrosonic.craftexchange.repository.data.request.moq.SendMoqRequest
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.generateEnquiry.GenerateEnquiryResponse
@@ -23,27 +20,24 @@ import com.adrosonic.craftexchange.repository.data.response.moq.SendMoqResponse
 import com.adrosonic.craftexchange.repository.data.response.moq.SendSelectedMoqResponse
 import com.adrosonic.craftexchange.repository.data.response.pi.SendPiResponse
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
-import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.pixplicity.easyprefs.library.Prefs
 import io.realm.RealmResults
-import okhttp3.MediaType
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody
-import org.json.JSONException
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Response
 import java.util.*
-import java.io.File
 import javax.security.auth.callback.Callback
 
 class EnquiryViewModel(application: Application) : AndroidViewModel(application){
     companion object {
         const val TAG = "EnquiryViewModel"
+    }
+
+    interface changeEnquiryInterface{
+        fun onEnqChangeSuccess()
+        fun onEnqChangeFailure()
     }
 
     interface GenerateEnquiryInterface{
@@ -97,6 +91,7 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
     var artisanListener : ArtisanDetailsInterface ?= null
     var piLisener : piInterface ?= null
     var singlePiListener : singlePiInterface ?= null
+    var changeEnqListener : changeEnquiryInterface ?= null
 
     fun getOnEnqListMutableData(): MutableLiveData<RealmResults<OngoingEnquiries>> {
         ongoingEnqList.value=loadOnEnqList()
@@ -627,6 +622,52 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
                     response: Response<SendPiResponse>
                 ) {
                     response?.body()?.data?.id?.let { singlePiListener?.getPiSuccess(it) }
+                }
+            })
+    }
+
+    fun setEnquiryStage(enquiryId: Long, enqStageId: Long, innerEnqStageId: Long?){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getEnquiryService()
+            .setEnquiryStages(token,enqStageId,enquiryId, innerEnqStageId!!)
+            .enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    t.printStackTrace()
+                    changeEnqListener?.onEnqChangeFailure()
+                }
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    if(response?.isSuccessful){
+                        changeEnqListener?.onEnqChangeSuccess()
+                    }else{
+                        changeEnqListener?.onEnqChangeFailure()
+                    }
+                }
+            })
+    }
+
+    fun setCompleteOrderStage(enquiryId: Long, enqStageId: Long){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getEnquiryService()
+            .setCompleteOrderStage(token,enqStageId,enquiryId)
+            .enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    t.printStackTrace()
+                    changeEnqListener?.onEnqChangeFailure()
+                }
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    if(response?.isSuccessful){
+                        changeEnqListener?.onEnqChangeSuccess()
+                    }else{
+                        changeEnqListener?.onEnqChangeFailure()
+                    }
                 }
             })
     }

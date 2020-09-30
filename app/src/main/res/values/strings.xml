@@ -330,6 +330,12 @@
     <string name="note_to_artisan_validate_pay">Once you approve it, the product stage cannot be reverted.\nKindly make sure to check your account balance is reflected with\nthe amount. Best practice is to check with your bank,\nor in bank statement from authorised bank sources.</string>
     <string name="double_tap_to_zoom">*Double tap to zoom</string>
     <string name="awaiting_confirmation">Awaiting Confirmation</string>
+    <string name="start_production_stage">Start Production stage</string>
+    <string name="update_enq_stage_text1">You have to update the status every</string>
+    <string name="update_enq_stage_text2">48hrs to avoid escalation</string>
+    <string name="mark_inprogress">Mark as still in progress</string>
+    <string name="mark_move_next_stage">Mark as complete and move to next stage</string>
+    <string name="hrs_avoid_escalation">8 hrs to avoid escalation</string>
     <string name="orders">Orders</string>
     <string name="start_this_stage">Start this stage</string>
     <string name="you_have_to_update_the_status">You have to update the status every \n 48 hours to avoid escalation</string>

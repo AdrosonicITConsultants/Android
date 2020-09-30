@@ -16,9 +16,9 @@ import com.adrosonic.craftexchange.repository.data.response.artisan.productTempl
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.BrandListResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.singleProduct.SingleProductDetails
 import com.adrosonic.craftexchange.repository.data.response.buyer.wishList.WishListedIds
-import com.adrosonic.craftexchange.ui.modules.buyer.profile.BrandFragment
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryAvaProdStageData
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryStageData
+import com.adrosonic.craftexchange.repository.data.response.enquiry.InnerStageData
 import com.adrosonic.craftexchange.repository.data.response.logout.LogoutResponse
 import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimesResponse
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
@@ -143,6 +143,62 @@ class LandingViewModel(application: Application) : AndroidViewModel(application)
 
             })
     }
+
+    fun getInnerEnquiryStageData(){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getEnquiryService()
+            .getInnerEnquiryStagesData(token)
+            .enqueue(object: Callback, retrofit2.Callback<InnerStageData> {
+                override fun onFailure(call: Call<InnerStageData>, t: Throwable) {
+                    t.printStackTrace()
+                    Log.e("LandingViewModel","getAllEnquiriesStages onFailure: "+t.message)
+                }
+                override fun onResponse(
+                    call: Call<InnerStageData>,
+                    response: retrofit2.Response<InnerStageData>) {
+
+                    if(response.body()?.valid == true){
+
+                        UserConfig.shared.innerEnquiryStageData= Gson().toJson(response.body())
+                        Log.e("LandingViewModel","SPF Enquiries :"+UserConfig.shared.innerEnquiryStageData)
+
+                    }else{
+                        Log.e("LandingViewModel","getAllEnquiriesStages onFailure: "+response.body()?.errorCode)
+
+                    }
+                }
+
+            })
+    }
+
+//    fun getProgressTimeData(){
+//        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+//        CraftExchangeRepository
+//            .getEnquiryService()
+//            .getProgressTimelineData(token)
+//            .enqueue(object: Callback, retrofit2.Callback<InnerStageData> {
+//                override fun onFailure(call: Call<InnerStageData>, t: Throwable) {
+//                    t.printStackTrace()
+//                    Log.e("LandingViewModel","getAllEnquiriesStages onFailure: "+t.message)
+//                }
+//                override fun onResponse(
+//                    call: Call<InnerStageData>,
+//                    response: retrofit2.Response<InnerStageData>) {
+//
+//                    if(response.body()?.valid == true){
+//
+//                        UserConfig.shared.progressTimeData= Gson().toJson(response.body())
+//                        Log.e("LandingViewModel","SPF Enquiries :"+UserConfig.shared.progressTimeData)
+//
+//                    }else{
+//                        Log.e("LandingViewModel","getAllEnquiriesStages onFailure: "+response.body()?.errorCode)
+//
+//                    }
+//                }
+//
+//            })
+//    }
 
     fun getEnquiryStageAvailableProdsData(){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"

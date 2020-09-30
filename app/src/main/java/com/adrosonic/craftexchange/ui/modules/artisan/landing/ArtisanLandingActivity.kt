@@ -371,6 +371,8 @@ class ArtisanLandingActivity : AppCompatActivity(),
             mViewModel?.getProductsOfArtisan(this)
             mViewModel?.getProductUploadData()
             mViewModel?.getEnquiryStageData()
+//            mViewModel?.getProgressTimeData()
+            mViewModel?.getInnerEnquiryStageData()
             mViewModel?.getEnquiryStageAvailableProdsData()
             mViewModel?.getAllNotifications()
             mProVM.getArtisanProfileDetails(this)
