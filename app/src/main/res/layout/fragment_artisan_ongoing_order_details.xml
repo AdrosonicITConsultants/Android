@@ -466,15 +466,32 @@
                         android:textSize="18sp" />
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:id="@+id/update_status_text1"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/you_have_to_update_the_status"
-                        android:textAlignment="center"
-                        android:textSize="@dimen/product_availability_text"
-                        app:layout_constraintBottom_toBottomOf="@+id/text_next_steps"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/text_next_steps"
-                        app:layout_constraintTop_toTopOf="@+id/text_next_steps" />
+                        android:layout_marginTop="12dp"
+                        android:textSize="10sp"
+                        android:fontFamily="@font/lato_regular"
+                        android:textColor="@color/darker_gray"
+                        android:text="@string/update_enq_stage_text1"
+                        app:layout_constraintTop_toBottomOf="@id/btn_start_enq_stage"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+
+                    <TextView
+                        android:id="@+id/update_status_text2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="4dp"
+                        android:textSize="10sp"
+                        android:fontFamily="@font/lato_regular"
+                        android:textStyle="bold"
+                        android:text="@string/update_enq_stage_text2"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/update_status_text1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -522,12 +539,32 @@
                         android:textSize="16sp" />
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:id="@+id/update_stage_text1"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/margin_regular"
-                        android:text="@string/you_have_to_update_the_status"
-                        android:textAlignment="center"
-                        android:textSize="@dimen/product_availability_text" />
+                        android:layout_marginTop="@dimen/margin_regular"
+                        android:textSize="10sp"
+                        android:fontFamily="@font/lato_regular"
+                        android:textColor="@color/darker_gray"
+                        android:text="@string/update_enq_stage_text1"
+                        app:layout_constraintTop_toBottomOf="@id/btn_mark_move_next_stage"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+
+                    <TextView
+                        android:id="@+id/update_stage_text2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="4dp"
+                        android:textSize="10sp"
+                        android:fontFamily="@font/lato_regular"
+                        android:textStyle="bold"
+                        android:text="@string/hrs_avoid_escalation"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/update_stage_text1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
                 </LinearLayout>
 
                 <LinearLayout
