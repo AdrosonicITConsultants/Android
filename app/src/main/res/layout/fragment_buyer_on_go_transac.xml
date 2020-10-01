@@ -37,7 +37,6 @@
             android:layout_marginEnd="@dimen/margin_regular"
             app:queryBackground="@android:color/transparent"
             app:queryHint="@string/search_transac_by_enquiryId"
-            android:layoutDirection="rtl"
             app:layout_constraintBottom_toBottomOf="@+id/text_recent"
             app:layout_constraintEnd_toStartOf="@+id/btn_filter_transactions"
             app:layout_constraintHorizontal_bias="1.0"

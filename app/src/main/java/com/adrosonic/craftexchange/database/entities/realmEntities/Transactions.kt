@@ -33,6 +33,8 @@ open class Transactions : RealmObject() {
     var completedOn: String ?= ""
     var modifiedOn: String ?= ""
 
+    var isCompleted: Boolean ?= false
+
     companion object{
         const val COLUMN_TRANSACTION_ID = "transactionID"
         const val COLUMN_ENQUIRY_ID = "enquiryID"
@@ -42,6 +44,8 @@ open class Transactions : RealmObject() {
         const val COLUMN_CHALLAN_ID = "challanID"
         const val COLUMN_IS_ACTIVE = "isActive"
         const val COLUMN_MODIFIED_ON = "modifiedOn"
+        const val COLUMN_IS_COMPLETED = "isCompleted"
+
     }
 
 }

@@ -168,7 +168,7 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
                 ) {
                     if(response.body()?.valid == true){
                         transactionListener?.onGetTransactionsSuccess()
-                        TransactionPredicates.insertTransactions(response?.body()!!)
+                        TransactionPredicates.insertTransactions(response?.body()!!,false)
                     }else{
                         transactionListener?.onGetTransactionsFailure()
                     }

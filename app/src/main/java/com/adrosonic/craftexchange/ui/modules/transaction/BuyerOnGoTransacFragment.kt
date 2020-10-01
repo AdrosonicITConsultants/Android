@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -39,6 +40,7 @@ TransactionViewModel.TransactionInterface{
 
     var mTranList : RealmResults<Transactions>?= null
     var mFilteredList : RealmResults<Transactions>?= null
+    var mSearchedList : RealmResults<Transactions>?= null
 
 
     var mBinding : FragmentBuyerOnGoTransacBinding?= null
@@ -99,6 +101,19 @@ TransactionViewModel.TransactionInterface{
         mBinding?.btnFilterTransactions?.setOnClickListener {
             filterList?.let { it1 -> filterDialog(it1) }
         }
+
+        mBinding?.searchOngoTransac?.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query:String):Boolean {
+                mSearchedList = TransactionPredicates.getTransactionByEnquiryId(query.toLong())
+                mTranListAdapter?.updateTransactionList(mSearchedList)
+                return false
+            }
+            override fun onQueryTextChange(newText:String):Boolean {
+                mSearchedList = TransactionPredicates.getTransactionByEnquiryId(newText.toLong())
+                mTranListAdapter?.updateTransactionList(mSearchedList)
+                return false
+            }
+        })
     }
 
 
@@ -108,7 +123,7 @@ TransactionViewModel.TransactionInterface{
         mBuilder.setTitle(getString(R.string.filter_transac_by))
         mBuilder.setSingleChoiceItems(array, -1
         ) { dialogInterface, i ->
-            mFilteredList = TransactionPredicates.getFilteredOngoTransactions(array[i])
+            mFilteredList = TransactionPredicates.getFilteredTransactions(array[i],false)
             mTranListAdapter?.updateTransactionList(mFilteredList)
 
             if(mFilteredList?.size == 0){

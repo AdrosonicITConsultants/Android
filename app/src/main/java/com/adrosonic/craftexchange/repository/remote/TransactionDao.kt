@@ -35,4 +35,9 @@ interface TransactionDao {
                                @Query("searchString") searchString : String,
                                @Query("paymentType") paymentType : Long) : Call<TransactionResponse>
 
+    @GET("transaction/getOngoingTransaction/{searchString}/{paymentType}")
+    fun getAllClosedTransactions(@Header("Authorization") token:String,
+                               @Query("searchString") searchString : String,
+                               @Query("paymentType") paymentType : Long) : Call<TransactionResponse>
+
    }

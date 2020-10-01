@@ -17,7 +17,7 @@ class TransactionPredicates {
         private var nextID: Long? = 0
 
 
-        fun insertTransactions(transacDetails: TransactionResponse) {
+        fun insertTransactions(transacDetails: TransactionResponse, transactionStatus : Boolean) {
             val realm = CXRealmManager.getRealmInstance()
             var tranItr = transacDetails.data?.iterator()
             realm.executeTransaction {
@@ -73,6 +73,8 @@ class TransactionPredicates {
                                 exTra?.modifiedOn = transac?.transactionOngoing?.modifiedOn
                                 exTra?.completedOn = transac?.transactionOngoing?.completedOn
 
+                                exTra?.isCompleted = transactionStatus
+
                                 realm.copyToRealmOrUpdate(exTra)
                             } else {
                                 nextID = tranObj?._id ?: 0
@@ -107,6 +109,8 @@ class TransactionPredicates {
                                 tranObj?.modifiedOn = transac?.transactionOngoing?.modifiedOn
                                 tranObj?.completedOn = transac?.transactionOngoing?.completedOn
 
+                                tranObj?.isCompleted = transactionStatus
+
                                 realm.copyToRealmOrUpdate(tranObj)
                             }
                         }
@@ -120,22 +124,62 @@ class TransactionPredicates {
         fun getAllOngoingTransactions(): RealmResults<Transactions>? {
             val realm = CXRealmManager.getRealmInstance()
             return realm.where(Transactions::class.java)
-                .equalTo(Transactions.COLUMN_IS_ACTIVE,1L)
+                .equalTo(Transactions.COLUMN_IS_COMPLETED,false)
                 .sort(Transactions.COLUMN_MODIFIED_ON, Sort.DESCENDING)
                 .findAll()
         }
 
-        fun getFilteredOngoTransactions(paymentType : String): RealmResults<Transactions>? {
+        fun getAllCompletedTransactions(): RealmResults<Transactions>? {
+            val realm = CXRealmManager.getRealmInstance()
+            return realm.where(Transactions::class.java)
+                .equalTo(Transactions.COLUMN_IS_COMPLETED,false)
+                .sort(Transactions.COLUMN_MODIFIED_ON, Sort.DESCENDING)
+                .findAll()
+        }
+
+        fun getFilteredTransactions(paymentType : String, transactionStatus : Boolean): RealmResults<Transactions>? {
             val realm = CXRealmManager.getRealmInstance()
             var tranObj : RealmResults<Transactions> ?= null
             realm?.executeTransaction {
                 try {
                     when(paymentType){
-                        "All" -> { tranObj = realm?.where(Transactions::class.java).findAll() }
-                        "PI ID" -> { tranObj = realm?.where(Transactions::class.java).notEqualTo(Transactions.COLUMN_PI_ID,0L).findAll() }
-                        "Payment ID" -> { tranObj = realm?.where(Transactions::class.java).notEqualTo(Transactions.COLUMN_PAYMENT_ID,0L).findAll() }
-                        "Tax Invoice ID" -> { tranObj = realm?.where(Transactions::class.java).notEqualTo(Transactions.COLUMN_TAXINVOICE_ID,0L).findAll() }
-                        "Challan ID" -> { tranObj = realm?.where(Transactions::class.java).notEqualTo(Transactions.COLUMN_CHALLAN_ID,0L).findAll() }
+                        "All" -> {
+                            tranObj = realm?.where(Transactions::class.java)
+                            .equalTo(Transactions.COLUMN_IS_COMPLETED,transactionStatus)
+                            .findAll()
+                        }
+
+                        "PI ID" -> {
+                            tranObj = realm?.where(Transactions::class.java)
+                            .notEqualTo(Transactions.COLUMN_PI_ID,0L)
+                            .and()
+                            .equalTo(Transactions.COLUMN_IS_COMPLETED,transactionStatus)
+                            .findAll()
+                        }
+
+                        "Payment ID" -> {
+                            tranObj = realm?.where(Transactions::class.java)
+                                .notEqualTo(Transactions.COLUMN_PAYMENT_ID,0L)
+                                .and()
+                                .equalTo(Transactions.COLUMN_IS_COMPLETED,transactionStatus)
+                                .findAll()
+                        }
+
+                        "Tax Invoice ID" -> {
+                            tranObj = realm?.where(Transactions::class.java)
+                                .notEqualTo(Transactions.COLUMN_TAXINVOICE_ID,0L)
+                                .and()
+                                .equalTo(Transactions.COLUMN_IS_COMPLETED,transactionStatus)
+                                .findAll()
+                        }
+
+                        "Challan ID" -> {
+                            tranObj = realm?.where(Transactions::class.java)
+                                .notEqualTo(Transactions.COLUMN_CHALLAN_ID,0L)
+                                .and()
+                                .equalTo(Transactions.COLUMN_IS_COMPLETED,transactionStatus)
+                                .findAll()
+                        }
                     }
                 }catch (e:Exception){
                     Log.e("Transactions",e.printStackTrace().toString())
@@ -143,6 +187,20 @@ class TransactionPredicates {
             }
             return tranObj
         }
+
+        fun getTransactionByEnquiryId(searchString : Long): RealmResults<Transactions>? {
+            val realm = CXRealmManager.getRealmInstance()
+            var tranObj : RealmResults<Transactions> ?= null
+            realm?.executeTransaction {
+                try {
+               tranObj = realm?.where(Transactions::class.java).equalTo(Transactions.COLUMN_ENQUIRY_ID,searchString).findAll()
+                }catch (e:Exception){
+                    Log.e("Transactions",e.printStackTrace().toString())
+                }
+            }
+            return tranObj
+        }
+
 
     }
 }
