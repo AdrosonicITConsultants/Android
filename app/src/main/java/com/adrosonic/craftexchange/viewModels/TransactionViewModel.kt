@@ -1,14 +1,22 @@
 package com.adrosonic.craftexchange.viewModels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
+import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
+import com.adrosonic.craftexchange.database.entities.realmEntities.Transactions
+import com.adrosonic.craftexchange.database.predicates.EnquiryPredicates
+import com.adrosonic.craftexchange.database.predicates.TransactionPredicates
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.request.enquiry.BuyerPayment
 import com.adrosonic.craftexchange.repository.data.response.enquiry.payment.PaymentReceiptResponse
+import com.adrosonic.craftexchange.repository.data.response.transaction.TransactionResponse
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.google.gson.Gson
 import com.google.gson.JsonParser
 import com.pixplicity.easyprefs.library.Prefs
+import io.realm.RealmResults
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -23,6 +31,7 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
     companion object {
         const val TAG = "TransactionViewModel"
     }
+
     interface UploadPaymentInterface{
         fun onFailure()
         fun onSuccess()
@@ -38,11 +47,32 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
         fun onSuccess(imgName : String, receiptId : Long)
     }
 
+    interface TransactionInterface{
+        fun onGetTransactionsSuccess()
+        fun onGetTransactionsFailure()
+
+    }
+
     var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
 
     var uploadPaymentListener : UploadPaymentInterface ?= null
     var validatePaymentListener : ValidatePaymentInterface ?= null
     var paymentReceiptListener : PaymentReceiptInterface ?= null
+    var transactionListener : TransactionInterface ?= null
+
+
+    val ongoingTranList : MutableLiveData<RealmResults<Transactions>> by lazy { MutableLiveData<RealmResults<Transactions>>() }
+
+
+    fun getOnTranListMutableData(): MutableLiveData<RealmResults<Transactions>> {
+        ongoingTranList.value=loadOnTranList()
+        return ongoingTranList
+    }
+
+    fun loadOnTranList(): RealmResults<Transactions>?{
+        var ongoingTranList = TransactionPredicates.getAllOngoingTransactions()
+        return ongoingTranList
+    }
 
     fun uploadPaymentReceipt(payObj : BuyerPayment, filePath : String) {
 
@@ -123,6 +153,27 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
 ////                    paymentReceiptListener?.onSuccess()
 //                }
 //            })
+    }
+
+    fun getOpenTransactions(searchString : String, paymentType : Long){
+        CraftExchangeRepository
+            .getTransactionService()
+            .getAllOpenTransactions(token,searchString,paymentType).enqueue(object : Callback, retrofit2.Callback<TransactionResponse> {
+                override fun onFailure(call: Call<TransactionResponse>, t: Throwable) {
+                   transactionListener?.onGetTransactionsFailure()
+                }
+                override fun onResponse(
+                    call: Call<TransactionResponse>,
+                    response: Response<TransactionResponse>
+                ) {
+                    if(response.body()?.valid == true){
+                        transactionListener?.onGetTransactionsSuccess()
+                        TransactionPredicates.insertTransactions(response?.body()!!)
+                    }else{
+                        transactionListener?.onGetTransactionsFailure()
+                    }
+                }
+            })
     }
 
 

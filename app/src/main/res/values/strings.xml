@@ -336,5 +336,19 @@
     <string name="mark_inprogress">Mark as still in progress</string>
     <string name="mark_move_next_stage">Mark as complete and move to next stage</string>
     <string name="hrs_avoid_escalation">8 hrs to avoid escalation</string>
+    <string name="view_receipt">View Receipt</string>
+    <string name="title_activity_transaction">TransactionActivity</string>
+    <string name="search_transac_by_enquiryId">Search by Enquiry ID</string>
+    <string name="your_transactions">Your Transactions</string>
+    <string name="view_invoice">View Invoice</string>
+    <string name="filter_transac_by">Filter transactions by :</string>
+
+    <string-array name="filter_transac_items">
+        <item>All</item>
+        <item>PI ID</item>
+        <item>Payment ID</item>
+        <item>Tax Invoice ID</item>
+        <item>Challan ID</item>
+    </string-array>
 
 </resources>

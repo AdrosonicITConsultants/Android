@@ -38,6 +38,7 @@ class BuyerOnGoingRecyclerAdapter(var context: Context?, private var enquiries: 
         var enquiryStage : TextView = view.findViewById(R.id.enquiry_status_text)
         var enquiryStageDot: ImageView = view.findViewById(R.id.enquiry_status_dot)
         var layout : ConstraintLayout = view.findViewById(R.id.enquiry_container_layout)
+
     }
 
     var date : String?=""
@@ -192,7 +193,7 @@ class BuyerOnGoingRecyclerAdapter(var context: Context?, private var enquiries: 
                 }?.let { holder.enquiryStageDot.setColorFilter(it) }
             }
 
-                2L,3L,4L,5L -> {
+            2L,3L,4L,5L -> {
                 context?.let {
                     ContextCompat.getColor(
                         it, R.color.tab_details_selected_text)
