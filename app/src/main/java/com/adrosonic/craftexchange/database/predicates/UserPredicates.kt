@@ -519,7 +519,7 @@ class UserPredicates{
                     realm?.where(Moqs::class.java).findAll().deleteAllFromRealm()
                     realm?.where(EnquiryProductDetails::class.java).findAll().deleteAllFromRealm()
                     realm?.where(Transactions::class.java).findAll().deleteAllFromRealm()
-
+                    realm?.where(Orders::class.java).findAll().deleteAllFromRealm()
 
                 }catch (e:Exception){
                     Log.e("DeleteData","${e.printStackTrace()}")

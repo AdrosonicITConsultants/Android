@@ -29,6 +29,7 @@ import io.realm.annotations.RealmModule
     Notifications::class,
     Moqs::class,
     PiDetails::class,
+    Orders::class,
     EnquiryProductDetails::class,
     Transactions::class
 ])

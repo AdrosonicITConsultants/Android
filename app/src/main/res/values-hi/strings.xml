@@ -266,5 +266,11 @@
     <string name="proforma_invoice">Proforma invoice</string>
     <string name="fill_in_pi_for_this_enquiry">Fill in PI for this enquiry</string>
     <string name="preview_not_available"><![CDATA[<B>Sorry!<br> Preview not available due to internet connection unavailability.</B>]]></string>
+    <string name="orders">Orders</string>
+    <string name="start_this_stage">Start this stage</string>
+    <string name="you_have_to_update_the_status">You have to update the status every \n 48 hours to avoid escalation</string>
+    <string name="mark_as_still_in_progress">Mark as still in progress</string>
+    <string name="mark_as_completed">Mark as completed and move to next stage</string>
+    <string name="you_have_to_update_8hrs">You have to update the status every \n8 hours to avoid escalation</string>
 
 </resources>

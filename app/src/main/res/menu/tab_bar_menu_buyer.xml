@@ -16,10 +16,10 @@
         app:showAsAction="ifRoom|withText"/>
 
     <item
-        android:id="@+id/action_orders"
+        android:id="@+id/action_wishlist"
         android:enabled="true"
-        android:icon="@drawable/ic_orders"
-        android:title="@string/orders"
+        android:icon="@drawable/ic_favorite_border"
+        android:title="@string/wishlist"
         app:showAsAction="ifRoom|withText"/>
 
 

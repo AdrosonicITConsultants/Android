@@ -45,6 +45,10 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.modules.order.OrderDetailsActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.modules.search.SearchSuggestionActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"

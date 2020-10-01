@@ -83,8 +83,11 @@ object CraftExchangeRepository {
     fun getMarketingService(): MarketingDao {
         return builder(MarketingDao::class.java)
     }
-
     fun getTransactionService(): TransactionDao {
         return builder(TransactionDao::class.java)
     }
+    fun getOrderService(): OrderDao {
+        return builder(OrderDao::class.java)
+    }
+
 }

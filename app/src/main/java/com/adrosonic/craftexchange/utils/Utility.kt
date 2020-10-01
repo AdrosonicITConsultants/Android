@@ -584,6 +584,7 @@ class Utility {
 //                myIntent.putExtra(ShareCompat.EXTRA_CALLING_ACTIVITY, componentName)
                 myIntent.setDataAndType(uri, "application/pdf")
                 myIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 context.startActivity(Intent.createChooser(myIntent, "Open with"))
 
             } catch (e: Exception) {

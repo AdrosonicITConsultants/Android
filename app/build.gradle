@@ -120,9 +120,7 @@ dependencies {
 
     //swipe button
     implementation 'com.github.gratusik:AGIKSwipeButton:1.0.1'
-    implementation 'in.shadowfax:proswipebutton:1.2.2'
-
-    //pinch to zoom image
+   //pinch to zoom image
     implementation 'com.bogdwellers:pinchtozoom:0.1'
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'

@@ -9,7 +9,7 @@
     <color name="red_logo">#c00</color>
     <color name="dark_green">#009A2F</color>
     <color name="light_green">#00B939</color>
-    <color name="accept_green">#86C426</color>
+    <color name="accept_green">#D1F894</color>
     <color name="landing_toolbar_color">#F5F5F5</color>
     <color name="nav_menu_text">#0047AB</color>
     <color name="tab_details_selected_text">#cb9d06</color>
@@ -27,6 +27,7 @@
     <color name="notification_bg">#F8F0FF</color>
     <color name="filter_list_background">#FFEBEB</color>
     <color name="enquiry_swipe_background">#B90C5C</color>
+    <color name="quality_check_background">#7EDCFAAF</color>
 
     <color name="white_text">#FFF</color>
     <color name="black_text">#000</color>
