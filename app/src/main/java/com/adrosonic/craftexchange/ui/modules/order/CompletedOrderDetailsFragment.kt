@@ -53,7 +53,6 @@ class CompletedOrderDetailsFragment : Fragment(),
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    private var param3: Boolean? = false
 
     private var enqID : Long ?= 0
     private var enqStatus : Long ?= 0
@@ -123,8 +122,8 @@ class CompletedOrderDetailsFragment : Fragment(),
         }
 
         mBinding?.brandDetailsLayer?.setOnClickListener {
-//            when(profile){
-//                ConstantsDirectory.ARTISAN -> {
+            when(profile){
+                ConstantsDirectory.ARTISAN -> {
                     if (savedInstanceState == null) {
                         activity?.supportFragmentManager?.beginTransaction()
                             ?.replace(R.id.enquiry_details_container,
@@ -132,17 +131,17 @@ class CompletedOrderDetailsFragment : Fragment(),
                             ?.addToBackStack(null)
                             ?.commit()
                     }
-//                }
-//                ConstantsDirectory.BUYER -> {
-//                    if (savedInstanceState == null) {
-//                        activity?.supportFragmentManager?.beginTransaction()
-//                            ?.replace(R.id.enquiry_details_container,
-//                                ArtEnqDetailsFragment.newInstance(orderDetails?.enquiryId.toString(),orderDetails?.enquiryStatusId.toString(),0))
-//                            ?.addToBackStack(null)
-//                            ?.commit()
-//                    }
-//                }
-//            }
+                }
+                ConstantsDirectory.BUYER -> {
+                    if (savedInstanceState == null) {
+                        activity?.supportFragmentManager?.beginTransaction()
+                            ?.replace(R.id.enquiry_details_container,
+                                ArtEnqDetailsFragment.newInstance(orderDetails?.enquiryId.toString(),orderDetails?.enquiryStatusId.toString(),0))
+                            ?.addToBackStack(null)
+                            ?.commit()
+                    }
+                }
+            }
         }
 
         mBinding?.productDetailsLayer?.setOnClickListener {
@@ -178,181 +177,210 @@ class CompletedOrderDetailsFragment : Fragment(),
     }
 
     fun setDetails(){
-        setTabVisibilities()
-        //client profile
-        when(profile){
-            ConstantsDirectory.ARTISAN -> {
-                mBinding?.profileName?.text = ConstantsDirectory.BUYER
-            }
-            ConstantsDirectory.BUYER -> {
-                mBinding?.profileName?.text = ConstantsDirectory.ARTISAN
-            }
-        }
-
-        mBinding?.enquiryCode?.text = orderDetails?.orderCode
-        mBinding?.enquiryStartDate?.text = "Date started : ${orderDetails?.startedOn?.split("T")?.get(0)}"
-
-        val image = orderDetails?.productImages?.split((",").toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()?.get(0)
-
-        //brand name of product & product Image
-        if(orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
-            url = Utility.getCustomProductImagesUrl(orderDetails?.productId, image)
-            isCustom = true
-        }else{
-            url = Utility.getProductsImagesUrl(orderDetails?.productId, image)
-            isCustom = false
-        }
-        mBinding?.productImage?.let { ImageSetter.setImage(requireActivity(),
-            url!!, it,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder) }
-
-        mBinding?.company?.text = orderDetails?.brandName
-
-        //ProductAvailability
-        when(orderDetails?.productStatusId){
-            2L -> {
-                status = context?.getString(R.string.in_stock)
-                mBinding?.productAvailability?.text = status
-                context?.let {
-                    ContextCompat.getColor(
-                        it, R.color.dark_green)
-                }?.let { mBinding?.productAvailability?.setTextColor(it) }
-            }
-            1L -> {
-                status = context?.getString(R.string.made_to_order)
-                mBinding?.productAvailability?.text = status
-                context?.let {
-                    ContextCompat.getColor(
-                        it, R.color.dark_magenta)
-                }?.let { mBinding?.productAvailability?.setTextColor(it) }
-            }
-            else -> {
-                status = context?.getString(R.string.requested_custom_design)
-                mBinding?.productAvailability?.text = status
-                context?.let {
-                    ContextCompat.getColor(
-                        it, R.color.dark_magenta)
-                }?.let { mBinding?.productAvailability?.setTextColor(it) }
-            }
-        }
-
-        //Product name or Product cloth details
-        if(orderDetails?.productName != "") {
-            mBinding?.productName?.text = orderDetails?.productName
-            mBinding?.productNameDetails?.text = orderDetails?.productName
-        }else{
-            //TODO : set text as prod cat / werft / warn / extraweft
-            var weaveList = Utility?.getWeaveType()
-            var catList = Utility?.getProductCategory()
-
-            weaveList?.forEach {
-                if(it.first == orderDetails?.weftYarnId){
-                    weft = it.second
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                setTabVisibilities()
+                //client profile
+                when (profile) {
+                    ConstantsDirectory.ARTISAN -> {
+                        mBinding?.profileName?.text = ConstantsDirectory.BUYER
+                    }
+                    ConstantsDirectory.BUYER -> {
+                        mBinding?.profileName?.text = ConstantsDirectory.ARTISAN
+                    }
                 }
-                if(it.first == orderDetails?.warpYarnId){
-                    warp = it.second
+
+                mBinding?.enquiryCode?.text = orderDetails?.orderCode
+                mBinding?.enquiryStartDate?.text =
+                    "Date started : ${orderDetails?.startedOn?.split("T")?.get(0)}"
+
+                val image = orderDetails?.productImages?.split((",").toRegex())
+                    ?.dropLastWhile { it.isEmpty() }?.toTypedArray()?.get(0)
+
+                //brand name of product & product Image
+                if (orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT) {
+                    url = Utility.getCustomProductImagesUrl(orderDetails?.productId, image)
+                    isCustom = true
+                } else {
+                    url = Utility.getProductsImagesUrl(orderDetails?.productId, image)
+                    isCustom = false
                 }
-                if(it.first == orderDetails?.extraWeftYarnId){
-                    extraweft = it.second
+                mBinding?.productImage?.let {
+                  if(requireContext()!=null) ImageSetter.setImage(
+                        requireContext(),
+                        url!!,
+                        mBinding?.productImage!!,
+                        R.drawable.artisan_logo_placeholder,
+                        R.drawable.artisan_logo_placeholder,
+                        R.drawable.artisan_logo_placeholder
+                    )
                 }
-            }
-            catList?.forEach {
-                if(it.first == orderDetails?.productCategoryId){
-                    prodCategory = it.second
+
+                mBinding?.company?.text = orderDetails?.brandName
+
+                //ProductAvailability
+                when (orderDetails?.productStatusId) {
+                    2L -> {
+                        status = context?.getString(R.string.in_stock)
+                        mBinding?.productAvailability?.text = status
+                        context?.let {
+                            ContextCompat.getColor(
+                                it, R.color.dark_green
+                            )
+                        }?.let { mBinding?.productAvailability?.setTextColor(it) }
+                    }
+                    1L -> {
+                        status = context?.getString(R.string.made_to_order)
+                        mBinding?.productAvailability?.text = status
+                        context?.let {
+                            ContextCompat.getColor(
+                                it, R.color.dark_magenta
+                            )
+                        }?.let { mBinding?.productAvailability?.setTextColor(it) }
+                    }
+                    else -> {
+                        status = context?.getString(R.string.requested_custom_design)
+                        mBinding?.productAvailability?.text = status
+                        context?.let {
+                            ContextCompat.getColor(
+                                it, R.color.dark_magenta
+                            )
+                        }?.let { mBinding?.productAvailability?.setTextColor(it) }
+                    }
                 }
+
+                //Product name or Product cloth details
+                if (orderDetails?.productName != "") {
+                    mBinding?.productName?.text = orderDetails?.productName
+                    mBinding?.productNameDetails?.text = orderDetails?.productName
+                } else {
+                    //TODO : set text as prod cat / werft / warn / extraweft
+                    var weaveList = Utility?.getWeaveType()
+                    var catList = Utility?.getProductCategory()
+
+                    weaveList?.forEach {
+                        if (it.first == orderDetails?.weftYarnId) {
+                            weft = it.second
+                        }
+                        if (it.first == orderDetails?.warpYarnId) {
+                            warp = it.second
+                        }
+                        if (it.first == orderDetails?.extraWeftYarnId) {
+                            extraweft = it.second
+                        }
+                    }
+                    catList?.forEach {
+                        if (it.first == orderDetails?.productCategoryId) {
+                            prodCategory = it.second
+                        }
+                    }
+                    var fp = SpannableString("${prodCategory} / ")
+                    var sp = "${warp} X ${weft} X ${extraweft}"
+                    fp.setSpan(context?.let { ContextCompat.getColor(it, R.color.black_text) }
+                        ?.let {
+                            ForegroundColorSpan(
+                                it
+                            )
+                        }, 0, fp.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    mBinding?.productName?.text = fp
+                    mBinding?.productName?.append(sp)
+
+                    mBinding?.productNameDetails?.text = "Custom Design Product"
+                }
+
+                mBinding?.productAmount?.text = "₹ ${orderDetails?.totalAmount ?: 0}"
+
+
+                //enquiry stage with color
+                var enquiryStage: String? = ""
+                var stagList = Utility?.getEnquiryStagesData()
+                Log.e("enqDataStages", "List : $stagList")
+                stagList?.forEach {
+                    if (it.first == orderDetails?.enquiryStageId) {
+                        enquiryStage = it.second
+                    }
+                }
+                when (orderDetails?.enquiryStageId) {
+                    1L -> {
+                        context?.let {
+                            ContextCompat.getColor(
+                                it, R.color.black_text
+                            )
+                        }?.let { mBinding?.enquiryStatusText?.setTextColor(it) }
+
+                        context?.let {
+                            ContextCompat.getColor(
+                                it, R.color.black_text
+                            )
+                        }?.let { mBinding?.enquiryStatusDot?.setColorFilter(it) }
+                    }
+
+                    2L, 3L, 4L, 5L -> {
+                        context?.let {
+                            ContextCompat.getColor(
+                                it, R.color.tab_details_selected_text
+                            )
+                        }?.let { mBinding?.enquiryStatusText?.setTextColor(it) }
+
+                        context?.let {
+                            ContextCompat.getColor(
+                                it, R.color.tab_details_selected_text
+                            )
+                        }?.let { mBinding?.enquiryStatusDot?.setColorFilter(it) }
+                    }
+
+                    6L, 7L, 8L, 9L, 10L -> {
+                        context?.let {
+                            ContextCompat.getColor(
+                                it, R.color.dark_green
+                            )
+                        }?.let { mBinding?.enquiryStatusText?.setTextColor(it) }
+
+                        context?.let {
+                            ContextCompat.getColor(
+                                it, R.color.dark_green
+                            )
+                        }?.let { mBinding?.enquiryStatusDot?.setColorFilter(it) }
+
+                    }
+                }
+                mBinding?.enquiryStatusText?.text = enquiryStage
+
+                if (orderDetails?.enquiryStageId == 10L) {
+                    context?.let {
+                        ContextCompat.getColor(
+                            it, R.color.black_text
+                        )
+                    }?.let { mBinding?.closedDot?.setColorFilter(it) }
+
+                    context?.let {
+                        ContextCompat.getColor(
+                            it, R.color.black_text
+                        )
+                    }?.let { mBinding?.closedText?.setTextColor(it) }
+                    mBinding?.closedText?.text = "Order Completed"
+
+                } else {
+                 context?.let {
+                        ContextCompat.getColor(
+                            it, R.color.red_logo
+                        )
+                    }?.let { mBinding?.closedDot?.setColorFilter(it) }
+
+                    context?.let {
+                        ContextCompat.getColor(
+                            it, R.color.red_logo
+                        )
+                    }?.let { mBinding?.closedText?.setTextColor(it) }
+                    mBinding?.closedText?.text = "Order Closed"
+                }
+
+                mBinding?.enquiryUpdateDate?.text = "Last updated : ${orderDetails?.lastUpdated?.split("T")?.get(0)}"
+                mBinding?.brand?.text = orderDetails?.companyName
+            } )
+            } catch (e: Exception) {
+                Log.e("setDetails", "Exception " + e.message)
             }
-            var fp = SpannableString("${prodCategory} / ")
-            var sp = "${warp} X ${weft} X ${extraweft}"
-            fp.setSpan(context?.let { ContextCompat.getColor(it,R.color.black_text) }?.let {
-                ForegroundColorSpan(
-                    it
-                )
-            }, 0, fp.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            mBinding?.productName?.text = fp
-            mBinding?.productName?.append(sp)
-
-            mBinding?.productNameDetails?.text = "Custom Design Product"
-        }
-
-        mBinding?.productAmount?.text = "₹ ${orderDetails?.totalAmount ?: 0}"
-
-
-        //enquiry stage with color
-        var enquiryStage : String ?= ""
-        var stagList = Utility?.getEnquiryStagesData()
-        Log.e("enqDataStages", "List : $stagList")
-        stagList?.forEach {
-            if(it.first == orderDetails?.enquiryStageId){
-                enquiryStage = it.second
-            }
-        }
-        when(orderDetails?.enquiryStageId){
-            1L -> {
-                context?.let {
-                    ContextCompat.getColor(
-                        it, R.color.black_text)
-                }?.let { mBinding?.enquiryStatusText?.setTextColor(it) }
-
-                context?.let {
-                    ContextCompat.getColor(
-                        it,R.color.black_text)
-                }?.let { mBinding?.enquiryStatusDot?.setColorFilter(it) }
-            }
-
-            2L,3L,4L,5L -> {
-                context?.let {
-                    ContextCompat.getColor(
-                        it, R.color.tab_details_selected_text)
-                }?.let { mBinding?.enquiryStatusText?.setTextColor(it) }
-
-                context?.let {
-                    ContextCompat.getColor(
-                        it,R.color.tab_details_selected_text)
-                }?.let { mBinding?.enquiryStatusDot?.setColorFilter(it) }
-            }
-
-            6L,7L,8L,9L,10L -> {
-                context?.let {
-                    ContextCompat.getColor(
-                        it, R.color.dark_green)
-                }?.let { mBinding?.enquiryStatusText?.setTextColor(it) }
-
-                context?.let {
-                    ContextCompat.getColor(
-                        it,R.color.dark_green)
-                }?.let { mBinding?.enquiryStatusDot?.setColorFilter(it) }
-
-            }
-        }
-        mBinding?.enquiryStatusText?.text = enquiryStage
-
-        if(orderDetails?.enquiryStageId == 10L){
-            context?.let {
-                ContextCompat.getColor(
-                    it, R.color.black_text)
-            }?.let { mBinding?.closedDot?.setColorFilter(it) }
-
-            context?.let {
-                ContextCompat.getColor(
-                    it, R.color.black_text)
-            }?.let { mBinding?.closedText?.setTextColor(it) }
-            mBinding?.closedText?.text = "Order Completed"
-
-        }else{
-            context?.let {
-                ContextCompat.getColor(
-                    it, R.color.red_logo)
-            }?.let { mBinding?.closedDot?.setColorFilter(it) }
-
-            context?.let {
-                ContextCompat.getColor(
-                    it, R.color.red_logo)
-            }?.let { mBinding?.closedText?.setTextColor(it) }
-            mBinding?.closedText?.text = "Order Closed"
-        }
-
-        mBinding?.enquiryUpdateDate?.text = "Last updated : ${orderDetails?.lastUpdated?.split("T")?.get(0)}"
-        mBinding?.brand?.text = orderDetails?.brandName
-
     }
 
     fun viewLoader(){
@@ -383,8 +411,8 @@ class CompletedOrderDetailsFragment : Fragment(),
 
     override fun onResume() {
         super.onResume()
-//        enqID?.let { mOrdersVm?.getSingleCompletedOrder(it) }
-        setDetails()
+        enqID?.let { mOrdersVm?.getSingleCompletedOrder(it) }
+//        setDetails()
     }
 
     override fun onFailure() {
@@ -404,7 +432,7 @@ class CompletedOrderDetailsFragment : Fragment(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("Order Details", "onSuccess")
-                enqID?.let { mOrdersVm.getSingleCompletedOrder(it) }
+//                enqID?.let { mOrdersVm.getSingleCompletedOrder(it) }
                 hideLoader()
                 setDetails()
             })
@@ -423,6 +451,5 @@ class CompletedOrderDetailsFragment : Fragment(),
                 }
             }
     }
-
 
 }

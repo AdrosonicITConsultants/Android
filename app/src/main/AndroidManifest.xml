@@ -19,20 +19,12 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity android:name=".ui.modules.buyer.enquiry.advPay.EnquiryPaymentActivity"></activity>
-        <!-- <uses-library -->
-        <!-- android:name="com.google.android.wearable" -->
-        <!-- android:required="true" /> -->
-        <!-- &lt;!&ndash; -->
-        <!-- Set to true if your app is Standalone, that is, it does not require the handheld -->
-        <!-- app to run. -->
-        <!-- &ndash;&gt; -->
-        <!-- <meta-data -->
-        <!-- android:name="com.google.android.wearable.standalone" -->
-        <!-- android:value="true" /> -->
-        <activity android:name=".ui.modules.artisan.enquiry.pi.RaisePiActivity"
-            android:configChanges="orientation|screenSize"/>
-        <activity android:name=".ui.modules.artisan.enquiry.pi.PiActivity"
-            android:configChanges="orientation|screenSize"/>
+        <activity
+            android:name=".ui.modules.artisan.enquiry.pi.RaisePiActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui.modules.artisan.enquiry.pi.PiActivity"
+            android:configChanges="orientation|screenSize" />
         <activity
             android:name=".ui.modules.dashboard.DashboardActivity"
             android:configChanges="orientation|screenSize"

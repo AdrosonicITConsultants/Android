@@ -69,13 +69,13 @@ class ArtisanOngoingOrderListAdapter(var context: Context?, private var orders: 
         var enquiry = orders?.get(position)
 
         holder.layout.setOnClickListener {
-            val intent = Intent(context?.orderDetails())
-            var bundle = Bundle()
-            Prefs.putString(ConstantsDirectory.ENQUIRY_ID, enquiry?.enquiryId?.toString()) //TODO change later
-            bundle.putString(ConstantsDirectory.ENQUIRY_ID, enquiry?.enquiryId?.toString())
-            bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG, "2")
-            intent.putExtras(bundle)
-            context?.startActivity(intent)
+                val intent = Intent(context?.orderDetails())
+                var bundle = Bundle()
+                Prefs.putString(ConstantsDirectory.ENQUIRY_ID, enquiry?.enquiryId?.toString()) //TODO change later
+                bundle.putString(ConstantsDirectory.ENQUIRY_ID, enquiry?.enquiryId?.toString())
+                bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG, "2")
+                intent.putExtras(bundle)
+                context?.startActivity(intent)
         }
 
 

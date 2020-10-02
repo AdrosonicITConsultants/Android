@@ -170,6 +170,9 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
                 ?.putExtra(ConstantsDirectory.PI_ID,0))
         }
 
+        mBinding?.viewPaymentLayer?.setOnClickListener {
+
+        }
         mBinding?.qualityCheckLayer?.setOnClickListener {
             //todo call intent
         }

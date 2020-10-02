@@ -129,7 +129,7 @@ class OrdersPredicates {
                                 orderObj?.extraWeftYarnId = order?.openEnquiriesResponse?.extraWeftYarnId
                                 orderObj?.email = order?.openEnquiriesResponse?.email
                                 Log.e("OrderDetails","enquiryId "+order?.openEnquiriesResponse?.enquiryId)
-                                orderObj?.enquiryId = order?.openEnquiriesResponse?.enquiryId
+//                                orderObj?.enquiryId = order?.openEnquiriesResponse?.enquiryId
                                 orderObj?.line1 = order?.openEnquiriesResponse?.line1
                                 orderObj?.line2 = order?.openEnquiriesResponse?.line2
                                 orderObj?.street = order?.openEnquiriesResponse?.street
