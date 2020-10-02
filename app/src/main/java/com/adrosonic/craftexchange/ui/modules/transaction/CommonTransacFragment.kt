@@ -55,6 +55,10 @@ class CommonTransacFragment : Fragment() {
             }
             ConstantsDirectory.ARTISAN -> { }
         }
+
+        mBinding?.btnBack?.setOnClickListener {
+            activity?.onBackPressed()
+        }
     }
 
     companion object {

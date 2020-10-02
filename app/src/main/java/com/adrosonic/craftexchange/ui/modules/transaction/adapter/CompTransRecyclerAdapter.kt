@@ -1,6 +1,7 @@
 package com.adrosonic.craftexchange.ui.modules.transaction.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.text.Html
 import android.view.LayoutInflater
@@ -15,6 +16,9 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.Transactions
+import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
+import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
+import com.adrosonic.craftexchange.ui.modules.transaction.viewDocument
 import com.adrosonic.craftexchange.utils.Utility
 import io.realm.RealmResults
 
@@ -81,6 +85,24 @@ class CompTransRecyclerAdapter(var context: Context?, private var transactions: 
             holder?.paymentAction.text = Html.fromHtml(upcTxt)
         }
 
+        //Status Icon
+        when(transaction?.accomplishedStatus){
+            1L -> {
+                holder?.statusIcon?.setImageResource(R.drawable.ic_pfi_received)
+            }
+
+            12L -> {
+                holder?.statusIcon?.setImageResource(R.drawable.ic_txi_received)
+            }
+
+            16L,18L -> {
+                holder?.statusIcon?.setImageResource(R.drawable.ic_final_payment)
+            }
+            else -> {
+                holder?.statusIcon?.setImageResource(R.drawable.ic_home)
+            }
+        }
+
         if(transaction?.enquiryCode != null){
             holder?.enquiryCode?.text = transaction?.enquiryCode
         }else{
@@ -128,6 +150,26 @@ class CompTransRecyclerAdapter(var context: Context?, private var transactions: 
                 holder?.btnDoc?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_view_receipt, 0, 0, 0)
             }
         }
+
+        holder?.btnDoc?.setOnClickListener {
+            when(transaction?.accomplishedStatus){
+                //View PI
+                1L -> {
+                    val intent = Intent(transaction?.enquiryID?.let { it1 -> context?.raisePiContext(it1, true, SendPiRequest()) })
+                    context?.startActivity(intent)
+                }
+                //View Advance Payment
+                8L,10L -> {
+                    val intent = Intent(transaction?.enquiryID?.let { it1 ->
+                        context?.viewDocument(
+                            it1
+                        )
+                    })
+                    context?.startActivity(intent)
+                }
+            }
+        }
+
 
     }
 
