@@ -8,14 +8,14 @@ import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.Transactions
 import io.realm.RealmResults
 
 
-class BuyerOnGoTranRecyclerAdapter(var context: Context?, private var transactions: RealmResults<Transactions>) : RecyclerView.Adapter<BuyerOnGoTranRecyclerAdapter.MyViewHolder>() {
+
+class CompTransRecyclerAdapter(var context: Context?, private var transactions: RealmResults<Transactions>) : RecyclerView.Adapter<CompTransRecyclerAdapter.MyViewHolder>() {
 
 
     inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -84,20 +84,6 @@ class BuyerOnGoTranRecyclerAdapter(var context: Context?, private var transactio
                 holder?.bottomlayout?.visibility = View.GONE
                 holder?.bottomlayout?.animation = slideUp
                 holder?.dropDown?.setImageResource(R.drawable.ic_key_down_grey)
-            }
-        }
-
-        when(transaction?.accomplishedStatus){
-            1L,2L,3L,4L,5L,12L,13L -> {
-                holder.btnDoc?.text = context?.getString(R.string.view_invoice)
-                context?.let { ContextCompat.getColor(it, R.color.view_invoice) }?.let { holder.btnDoc.setTextColor(it) }
-                holder?.btnDoc?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_view_invoice, 0, 0, 0)
-            }
-            6L,7L,8L,9L,10L,11L,14L,15L,16L,17L,18L,19L,20L,21L,22L,23L -> {
-                holder.btnDoc?.text = context?.getString(R.string.view_receipt)
-                context?.let { ContextCompat.getColor(it, R.color.view_receipt) }?.let { holder.btnDoc.setTextColor(it) }
-                holder?.btnDoc?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_view_receipt, 0, 0, 0)
-
             }
         }
 

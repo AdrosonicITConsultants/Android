@@ -32,6 +32,8 @@ import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryStage
 import com.adrosonic.craftexchange.repository.data.response.enquiry.InnerStageData
 import com.adrosonic.craftexchange.repository.data.response.moq.Datum
 import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimesResponse
+import com.adrosonic.craftexchange.repository.data.response.transaction.TranStatData
+import com.adrosonic.craftexchange.repository.data.response.transaction.TransactionStatusData
 import com.bumptech.glide.Glide
 import com.google.gson.GsonBuilder
 import com.pixplicity.easyprefs.library.Prefs
@@ -494,6 +496,13 @@ class Utility {
                 }
             }
             return list
+        }
+
+        fun getTransactionStatusData() : List<TranStatData>? {
+            val gson = GsonBuilder().create()
+            var tranObj = gson.fromJson(UserConfig.shared.transactionStatusData.toString(), TransactionStatusData::class.java)
+
+            return  tranObj?.data
         }
 
         fun getWeaveType() : ArrayList<Pair<Long,String>>{

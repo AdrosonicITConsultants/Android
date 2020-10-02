@@ -1,12 +1,9 @@
 package com.adrosonic.craftexchange.viewModels
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
 import com.adrosonic.craftexchange.database.entities.realmEntities.Transactions
-import com.adrosonic.craftexchange.database.predicates.EnquiryPredicates
 import com.adrosonic.craftexchange.database.predicates.TransactionPredicates
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.request.enquiry.BuyerPayment
@@ -14,14 +11,12 @@ import com.adrosonic.craftexchange.repository.data.response.enquiry.payment.Paym
 import com.adrosonic.craftexchange.repository.data.response.transaction.TransactionResponse
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.google.gson.Gson
-import com.google.gson.JsonParser
 import com.pixplicity.easyprefs.library.Prefs
 import io.realm.RealmResults
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Response
 import java.io.File
@@ -62,6 +57,7 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
 
 
     val ongoingTranList : MutableLiveData<RealmResults<Transactions>> by lazy { MutableLiveData<RealmResults<Transactions>>() }
+    val completedTranList : MutableLiveData<RealmResults<Transactions>> by lazy { MutableLiveData<RealmResults<Transactions>>() }
 
 
     fun getOnTranListMutableData(): MutableLiveData<RealmResults<Transactions>> {
@@ -72,6 +68,16 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
     fun loadOnTranList(): RealmResults<Transactions>?{
         var ongoingTranList = TransactionPredicates.getAllOngoingTransactions()
         return ongoingTranList
+    }
+
+    fun getCompTranListMutableData(): MutableLiveData<RealmResults<Transactions>> {
+        completedTranList.value=loadCompTranList()
+        return completedTranList
+    }
+
+    fun loadCompTranList(): RealmResults<Transactions>?{
+        var completedTranList = TransactionPredicates.getAllCompletedTransactions()
+        return completedTranList
     }
 
     fun uploadPaymentReceipt(payObj : BuyerPayment, filePath : String) {
@@ -155,6 +161,8 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
 //            })
     }
 
+
+
     fun getOpenTransactions(searchString : String, paymentType : Long){
         CraftExchangeRepository
             .getTransactionService()
@@ -168,7 +176,28 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
                 ) {
                     if(response.body()?.valid == true){
                         transactionListener?.onGetTransactionsSuccess()
-                        TransactionPredicates.insertTransactions(response?.body()!!,false)
+                        TransactionPredicates.insertOngoingTransactions(response?.body()!!,false)
+                    }else{
+                        transactionListener?.onGetTransactionsFailure()
+                    }
+                }
+            })
+    }
+
+    fun getCompletedTransactions(searchString : String, paymentType : Long){
+        CraftExchangeRepository
+            .getTransactionService()
+            .getAllCompletedTransactions(token,searchString,paymentType).enqueue(object : Callback, retrofit2.Callback<TransactionResponse> {
+                override fun onFailure(call: Call<TransactionResponse>, t: Throwable) {
+                    transactionListener?.onGetTransactionsFailure()
+                }
+                override fun onResponse(
+                    call: Call<TransactionResponse>,
+                    response: Response<TransactionResponse>
+                ) {
+                    if(response.body()?.valid == true){
+                        transactionListener?.onGetTransactionsSuccess()
+                        TransactionPredicates.insertCompletedTransactions(response?.body()!!,true)
                     }else{
                         transactionListener?.onGetTransactionsFailure()
                     }

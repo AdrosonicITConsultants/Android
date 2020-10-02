@@ -61,12 +61,7 @@ TransactionViewModel.TransactionInterface{
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        mBinding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.fragment_buyer_on_go_transac,
-            container,
-            false
-        )
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_buyer_on_go_transac, container, false)
         return mBinding?.root
     }
 

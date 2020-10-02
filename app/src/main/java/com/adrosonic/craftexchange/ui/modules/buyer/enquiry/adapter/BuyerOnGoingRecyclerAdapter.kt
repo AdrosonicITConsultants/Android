@@ -136,10 +136,7 @@ class BuyerOnGoingRecyclerAdapter(var context: Context?, private var enquiries: 
             2L -> {
                 status = context?.getString(R.string.in_stock)
                 holder.productStatus.text = status
-                context?.let {
-                    ContextCompat.getColor(
-                        it, R.color.dark_green)
-                }?.let { holder.productStatus.setTextColor(it) }
+                context?.let { ContextCompat.getColor(it, R.color.dark_green) }?.let { holder.productStatus.setTextColor(it) }
             }
             1L -> {
                 status = context?.getString(R.string.made_to_order)

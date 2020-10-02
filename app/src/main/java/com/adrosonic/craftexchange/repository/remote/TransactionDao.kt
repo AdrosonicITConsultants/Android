@@ -1,10 +1,8 @@
 package com.adrosonic.craftexchange.repository.remote
 
-import com.adrosonic.craftexchange.repository.data.registerResponse.RegisterResponse
-import com.adrosonic.craftexchange.repository.data.request.enquiry.BuyerPayment
-import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryResponse
 import com.adrosonic.craftexchange.repository.data.response.enquiry.payment.PaymentReceiptResponse
 import com.adrosonic.craftexchange.repository.data.response.transaction.TransactionResponse
+import com.adrosonic.craftexchange.repository.data.response.transaction.TransactionStatusData
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -35,9 +33,11 @@ interface TransactionDao {
                                @Query("searchString") searchString : String,
                                @Query("paymentType") paymentType : Long) : Call<TransactionResponse>
 
-    @GET("transaction/getOngoingTransaction/{searchString}/{paymentType}")
-    fun getAllClosedTransactions(@Header("Authorization") token:String,
-                               @Query("searchString") searchString : String,
-                               @Query("paymentType") paymentType : Long) : Call<TransactionResponse>
+    @GET("transaction/getCompletedTransaction/{searchString}/{paymentType}")
+    fun getAllCompletedTransactions(@Header("Authorization") token:String,
+                                    @Query("searchString") searchString : String,
+                                    @Query("paymentType") paymentType : Long) : Call<TransactionResponse>
 
+    @GET("transaction/getTransactionStatus")
+    fun getTransactionStatus(@Header("Authorization") token:String) : Call<TransactionStatusData>
    }
