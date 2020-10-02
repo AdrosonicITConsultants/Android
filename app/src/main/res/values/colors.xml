@@ -28,6 +28,8 @@
     <color name="filter_list_background">#FFEBEB</color>
     <color name="enquiry_swipe_background">#B90C5C</color>
     <color name="quality_check_background">#7EDCFAAF</color>
+    <color name="view_receipt">#003884</color>
+    <color name="view_invoice">#ef8181</color>
 
     <color name="white_text">#FFF</color>
     <color name="black_text">#000</color>

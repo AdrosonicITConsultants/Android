@@ -21,6 +21,7 @@ import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryStage
 import com.adrosonic.craftexchange.repository.data.response.enquiry.InnerStageData
 import com.adrosonic.craftexchange.repository.data.response.logout.LogoutResponse
 import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimesResponse
+import com.adrosonic.craftexchange.repository.data.response.transaction.TransactionStatusData
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
@@ -369,6 +370,26 @@ class LandingViewModel(application: Application) : AndroidViewModel(application)
                         Log.e(TAG,"getMoqDeliveryTimes :${Gson().toJson(response.body())}")
                         UserConfig.shared.moqDeliveryDates=Gson().toJson(response.body())
                         Log.e(TAG,"getMoqDeliveryTimes after:${UserConfig.shared.moqDeliveryDates}")
+                    }
+                }
+            })
+    }
+
+    fun getTransactionStatus(){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+
+        CraftExchangeRepository
+            .getTransactionService()
+            .getTransactionStatus(token).enqueue(object : Callback, retrofit2.Callback<TransactionStatusData> {
+                override fun onFailure(call: Call<TransactionStatusData>, t: Throwable) {
+                    t.printStackTrace()
+                }
+                override fun onResponse(
+                    call: Call<TransactionStatusData>,
+                    data: Response<TransactionStatusData>
+                ) {
+                    if(data.body()?.valid == true){
+                        UserConfig.shared.transactionStatusData= Gson().toJson(data.body())
                     }
                 }
             })

@@ -83,6 +83,7 @@ const val ENQUIRY_STAGE_DATA = "enquiry_stage_data"
 const val INNER_ENQUIRY_STAGE_DATA = "inner_enquiry_stage_data"
 const val ENQUIRY_AVAI_PROD_STAGE_DATA = "enquiry_available_product_stage_data"
 const val PROGRESS_TIMELINE_DATA = "progress_timeline_data"
+const val TRANSACTION_STATUS_DATA ="transaction_status_data"
 
 
 class UserConfig {
@@ -539,6 +540,13 @@ class UserConfig {
         get() = Prefs.getString(ENQUIRY_AVAI_PROD_STAGE_DATA,"")
         set(value) {
             Prefs.putString(ENQUIRY_AVAI_PROD_STAGE_DATA, value)
+            field = value
+        }
+
+    var transactionStatusData : String? = ""
+        get() = Prefs.getString(TRANSACTION_STATUS_DATA,"")
+        set(value) {
+            Prefs.putString(TRANSACTION_STATUS_DATA, value)
             field = value
         }
 }

@@ -18,7 +18,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.modules.buyer.enquiry.advPay.EnquiryPaymentActivity"></activity>
+        <activity
+            android:name=".ui.modules.transaction.TransactionActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.modules.buyer.enquiry.advPay.EnquiryPaymentActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.modules.artisan.enquiry.pi.RaisePiActivity"
             android:configChanges="orientation|screenSize" />

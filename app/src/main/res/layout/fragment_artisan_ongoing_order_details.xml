@@ -423,7 +423,7 @@
                         android:layout_marginStart="@dimen/margin_regular"
                         android:layout_weight="6"
                         android:fontFamily="@font/lato_regular"
-                        android:text="Next Step  - - - - - - - - - - - - ----->"
+                        android:text="Next Step  - - - - - - - - - - - - ->"
                         android:textSize="@dimen/product_availability_text"
                         android:textStyle="bold" />
 

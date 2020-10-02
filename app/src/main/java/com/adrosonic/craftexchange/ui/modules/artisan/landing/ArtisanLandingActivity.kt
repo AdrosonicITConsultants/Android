@@ -376,6 +376,7 @@ class ArtisanLandingActivity : AppCompatActivity(),
             mViewModel?.getEnquiryStageAvailableProdsData()
             mViewModel?.getAllNotifications()
             mProVM.getArtisanProfileDetails(this)
+            mViewModel?.getTransactionStatus()
             craftUser = mProVM.getUserMutableData()
             setProfileImage()
 
