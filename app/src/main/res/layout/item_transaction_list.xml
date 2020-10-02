@@ -9,7 +9,7 @@
         android:id="@+id/transaction_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
+        android:layout_marginBottom="2dp"
         android:background="@color/colorSplash"
         android:elevation="@dimen/margin_small">
 
@@ -50,7 +50,6 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/lato_bold"
                         android:gravity="start"
-                        android:text="ER-43-WW-544"
                         android:textColor="@color/swipe_background"
                         android:textSize="10sp" />
 
@@ -60,7 +59,6 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/lato_regular"
                         android:gravity="start"
-                        android:text="13-20-2020"
                         android:textSize="8sp" />
 
                 </LinearLayout>
@@ -69,12 +67,10 @@
                     android:id="@+id/payment_type"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="3"
                     android:layout_margin="1dp"
+                    android:layout_weight="3"
                     android:fontFamily="@font/lato_regular"
-                    android:textSize="10sp"
-                    android:text="Advance Payment Received"
-                    />
+                    android:textSize="10sp" />
 
                 <TextView
                     android:id="@+id/payment_status"
@@ -83,7 +79,6 @@
                     android:layout_weight="3"
                     android:layout_margin="1dp"
                     android:fontFamily="@font/lato_regular"
-                    android:text="Awaiting Payment Acknowledgement"
                     android:textSize="10sp"/>
 
                 <ImageView
@@ -116,7 +111,6 @@
                     android:layout_weight="3.5"
                     android:fontFamily="@font/lato_regular"
                     android:gravity="start"
-                    android:text="65,0000"
                     android:paddingStart="8dp"
                     android:textColor="@color/black_text"
                     android:layout_margin="1dp"
@@ -130,7 +124,6 @@
                     android:fontFamily="@font/lato_regular"
                     android:textColor="@color/darker_gray"
                     android:gravity="start"
-                    android:text="12:45am"
                     android:layout_margin="1dp"
                     android:textSize="8sp" />
 
@@ -143,8 +136,7 @@
                     android:textColor="#EF8181"
                     android:layout_margin="1dp"
                     android:gravity="center_vertical"
-                    android:text="@string/view_invoice"
-                    android:drawableStart="@drawable/ic_receipt"
+                    android:background="?selectableItemBackgroundBorderless"
                     android:drawablePadding="4dp"
                     android:textSize="12sp" />
 
@@ -153,6 +145,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:background="?selectableItemBackgroundBorderless"
                     android:src="@drawable/ic_enquiry_red"
                     android:layout_margin="1dp" />
 

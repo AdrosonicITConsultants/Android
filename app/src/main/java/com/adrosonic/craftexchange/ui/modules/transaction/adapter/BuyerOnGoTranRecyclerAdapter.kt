@@ -1,6 +1,8 @@
 package com.adrosonic.craftexchange.ui.modules.transaction.adapter
 
 import android.content.Context
+import android.os.Build
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,10 +10,13 @@ import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.Transactions
+import com.adrosonic.craftexchange.repository.data.response.transaction.TranStatData
+import com.adrosonic.craftexchange.utils.Utility
 import io.realm.RealmResults
 
 
@@ -35,6 +40,8 @@ class BuyerOnGoTranRecyclerAdapter(var context: Context?, private var transactio
 
     var date : String?=""
     var time : String ?= ""
+    var accTxt : String?= ""
+    var upcTxt : String?= ""
 
     override fun getItemCount(): Int {
         return transactions?.size?:0
@@ -52,8 +59,28 @@ class BuyerOnGoTranRecyclerAdapter(var context: Context?, private var transactio
         return MyViewHolder(itemView)
     }
 
+
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         var transaction = transactions?.get(position)
+        var tranStatusData = Utility?.getTransactionStatusData()
+
+        tranStatusData?.forEach {
+            if(transaction?.accomplishedStatus == it.transactionId){
+                accTxt = it?.buyerText
+            }
+            if(transaction?.upcomingStatus == it.transactionId){
+                upcTxt = it?.buyerText
+            }
+        }
+
+        @RequiresApi(Build.VERSION_CODES.N)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            holder?.paymentType.text = Html.fromHtml(accTxt, Html.FROM_HTML_MODE_COMPACT)
+            holder?.paymentAction.text = Html.fromHtml(upcTxt, Html.FROM_HTML_MODE_COMPACT)
+        } else {
+            holder?.paymentType.text = Html.fromHtml(accTxt)
+            holder?.paymentAction.text = Html.fromHtml(upcTxt)
+        }
 
         if(transaction?.enquiryCode != null){
             holder?.enquiryCode?.text = transaction?.enquiryCode
@@ -61,6 +88,9 @@ class BuyerOnGoTranRecyclerAdapter(var context: Context?, private var transactio
             holder?.enquiryCode?.text = transaction?.orderCode
         }
 
+        holder?.btn_enquiry?.setOnClickListener {
+            context?.let { it1 -> Utility?.messageDialog(it1,"Fix in Progress (direct to enquiry screen)") }
+        }
 
         if(transaction?.transactionOn != ""){
             date = transaction?.transactionOn?.split("T")?.get(0)

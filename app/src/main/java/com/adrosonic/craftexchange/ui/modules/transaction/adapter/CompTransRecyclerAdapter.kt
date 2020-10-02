@@ -1,6 +1,8 @@
 package com.adrosonic.craftexchange.ui.modules.transaction.adapter
 
 import android.content.Context
+import android.os.Build
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,9 +10,12 @@ import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.Transactions
+import com.adrosonic.craftexchange.utils.Utility
 import io.realm.RealmResults
 
 
@@ -35,6 +40,8 @@ class CompTransRecyclerAdapter(var context: Context?, private var transactions: 
 
     var date : String?=""
     var time : String ?= ""
+    var accTxt : String?= ""
+    var upcTxt : String?= ""
 
     override fun getItemCount(): Int {
         return transactions?.size?:0
@@ -54,6 +61,25 @@ class CompTransRecyclerAdapter(var context: Context?, private var transactions: 
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         var transaction = transactions?.get(position)
+        var tranStatusData = Utility?.getTransactionStatusData()
+
+        tranStatusData?.forEach {
+            if(transaction?.accomplishedStatus == it.transactionId){
+                accTxt = it?.buyerText
+            }
+            if(transaction?.upcomingStatus == it.transactionId){
+                upcTxt = it?.buyerText
+            }
+        }
+
+        @RequiresApi(Build.VERSION_CODES.N)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            holder?.paymentType.text = Html.fromHtml(accTxt, Html.FROM_HTML_MODE_COMPACT)
+            holder?.paymentAction.text = Html.fromHtml(upcTxt, Html.FROM_HTML_MODE_COMPACT)
+        } else {
+            holder?.paymentType.text = Html.fromHtml(accTxt)
+            holder?.paymentAction.text = Html.fromHtml(upcTxt)
+        }
 
         if(transaction?.enquiryCode != null){
             holder?.enquiryCode?.text = transaction?.enquiryCode
@@ -61,6 +87,9 @@ class CompTransRecyclerAdapter(var context: Context?, private var transactions: 
             holder?.enquiryCode?.text = transaction?.orderCode
         }
 
+        holder?.btn_enquiry?.setOnClickListener {
+            context?.let { it1 -> Utility?.messageDialog(it1,"Fix in Progress (direct to enquiry screen)") }
+        }
 
         if(transaction?.transactionOn != ""){
             date = transaction?.transactionOn?.split("T")?.get(0)
@@ -84,6 +113,19 @@ class CompTransRecyclerAdapter(var context: Context?, private var transactions: 
                 holder?.bottomlayout?.visibility = View.GONE
                 holder?.bottomlayout?.animation = slideUp
                 holder?.dropDown?.setImageResource(R.drawable.ic_key_down_grey)
+            }
+        }
+
+        when(transaction?.accomplishedStatus){
+            1L,2L,3L,4L,5L,12L,13L -> {
+                holder.btnDoc?.text = context?.getString(R.string.view_invoice)
+                context?.let { ContextCompat.getColor(it, R.color.view_invoice) }?.let { holder.btnDoc.setTextColor(it) }
+                holder?.btnDoc?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_view_invoice, 0, 0, 0)
+            }
+            6L,7L,8L,9L,10L,11L,14L,15L,16L,17L,18L,19L,20L,21L,22L,23L -> {
+                holder.btnDoc?.text = context?.getString(R.string.view_receipt)
+                context?.let { ContextCompat.getColor(it, R.color.view_receipt) }?.let { holder.btnDoc.setTextColor(it) }
+                holder?.btnDoc?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_view_receipt, 0, 0, 0)
             }
         }
 
