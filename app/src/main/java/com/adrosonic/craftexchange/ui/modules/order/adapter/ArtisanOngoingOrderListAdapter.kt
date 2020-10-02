@@ -84,10 +84,10 @@ class ArtisanOngoingOrderListAdapter(var context: Context?, private var orders: 
         var first_image = imgArrSplit?.get(0)
 
         if(enquiry?.productType == "Custom Product"){
-            holder?.brandName?.text =enquiry?.brandName
+            holder?.brandName?.text =enquiry?.companyName
             url = Utility.getCustomProductImagesUrl(enquiry?.productId, first_image)
         }else{
-            holder?.brandName?.text =enquiry?.brandName
+            holder?.brandName?.text =enquiry?.companyName
             url = Utility.getProductsImagesUrl(enquiry?.productId, first_image)
         }
         context?.let { ImageSetter.setImage(it, url!!,holder?.productImage) }

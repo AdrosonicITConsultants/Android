@@ -8,6 +8,7 @@ import android.os.Looper
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.transition.TransitionListenerAdapter
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -20,12 +21,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
 import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
 import com.adrosonic.craftexchange.database.predicates.EnquiryPredicates
 import com.adrosonic.craftexchange.database.predicates.MoqsPredicates
 import com.adrosonic.craftexchange.database.predicates.OrdersPredicates
+import com.adrosonic.craftexchange.database.predicates.TransactionPredicates
 import com.adrosonic.craftexchange.databinding.FragmentArtisanOnGoEnqDetailsBinding
 import com.adrosonic.craftexchange.databinding.FragmentArtisanOngoingOrderDetailsBinding
 import com.adrosonic.craftexchange.enums.*
@@ -35,15 +38,19 @@ import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimes
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.piContext
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
 import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.addProductIntent
+import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.adapter.MoqAdapter
 import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.advPay.enquiryPayment
 import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
+import com.adrosonic.craftexchange.ui.modules.transaction.TransactionActivity
+import com.adrosonic.craftexchange.ui.modules.transaction.adapter.BuyerOnGoTranRecyclerAdapter
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
 import com.adrosonic.craftexchange.viewModels.OrdersViewModel
+import com.adrosonic.craftexchange.viewModels.TransactionViewModel
 import com.agik.swipe_button.Controller.OnSwipeCompleteListener
 import com.agik.swipe_button.View.Swipe_Button_View
 import com.google.gson.GsonBuilder
@@ -55,7 +62,8 @@ private const val ARG_PARAM2 = "param2"
 
 class ArtisanOngoinOrderDetailsFragment : Fragment(),
     OrdersViewModel.FetchOrderInterface,
-    OrdersViewModel.changeStatusInterface{
+    OrdersViewModel.changeStatusInterface,
+    TransactionViewModel.TransactionInterface{
 
     private var param1: String? = null
     private var param2: String? = null
@@ -75,6 +83,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
     private var status : String?= ""
 
     val mOrderVm : OrdersViewModel by viewModels()
+    val mTranVM : TransactionViewModel by viewModels()
 
     var weft : String ?= ""
     var warp : String ?= ""
@@ -111,10 +120,15 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         Utility.getDeliveryTimeList()?.let {moqDeliveryTimeList.addAll(it)  }
         mOrderVm?.fetchEnqListener = this
         mOrderVm?.changeStatusListener = this
+//        mTranVM?.transactionListener = this
         mBinding?.swipeEnquiryDetails?.isEnabled = false
         if(Utility.checkIfInternetConnected(requireActivity())){
             viewLoader()
-            enqID?.let { mOrderVm.getSingleOngoingOrder(it) }
+            enqID?.let {
+                mOrderVm.getSingleOngoingOrder(it)
+                mTranVM.getSingleTransactions(it)
+            }
+
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
         }
@@ -164,14 +178,8 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         }
 
         mBinding?.viewPaymentLayer?.setOnClickListener {
-            startActivity(context?.enquiryPayment()
-                ?.putExtra(ConstantsDirectory.ENQUIRY_ID,enqID)
-                ?.putExtra(ConstantsDirectory.ENQUIRY_STATUS_FLAG, EnquiryStatus.ONGOING.getId())
-                ?.putExtra(ConstantsDirectory.PI_ID,0))
-        }
-
-        mBinding?.viewPaymentLayer?.setOnClickListener {
-
+            if(mBinding?.transactionList!!.visibility==View.VISIBLE) mBinding?.transactionList!!.visibility=View.GONE
+            else mBinding?.transactionList!!.visibility=View.VISIBLE
         }
         mBinding?.qualityCheckLayer?.setOnClickListener {
             //todo call intent
@@ -229,7 +237,6 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
 
-
         setTabVisibilities()
         setViewEnquiryStageChangeButton()
         viewChangeStatusLayer()
@@ -248,7 +255,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         mBinding?.productImage?.let { ImageSetter.setImage(requireActivity(),
             url!!, it,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder) }
 
-        mBinding?.buyerCompany?.text = orderDetails?.brandName
+        mBinding?.buyerCompany?.text = orderDetails?.companyName
 
         //ProductAvailability
         when(orderDetails?.productStatusId){
@@ -368,13 +375,20 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         mBinding?.enquiryStatusText?.text = enquiryStage
 
         mBinding?.enquiryUpdateDate?.text = "Last updated : ${orderDetails?.lastUpdated?.split("T")?.get(0)}"
-        mBinding?.buyerBrand?.text = orderDetails?.brandName
+        mBinding?.buyerBrand?.text = orderDetails?.companyName
 
         setProgressTimeline()
-        //TODO implement to enq stage
-        val moq=MoqsPredicates.getSingleMoq(enqID)
-       //todo render MOQ details
-            })
+        var tranList = TransactionPredicates.getTransactionByEnquiryId(enqID?:0)
+                if(tranList!!.size>0){
+                    mBinding?.viewTransaction?.text="View"
+                    mBinding?.transactionList?.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false )
+                    val transactionAdapter =  BuyerOnGoTranRecyclerAdapter(requireContext(), tranList)
+                    mBinding?.transactionList?.adapter = transactionAdapter
+//                    transactionAdapter.listener = this
+                } else {
+                    mBinding?.viewTransaction?.text="No transaction present"
+                }
+        })
         } catch (e: Exception) {
             Log.e("setDetails", "Exception " + e.message)
         }
@@ -672,6 +686,29 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
             })
         } catch (e: Exception) {
             Log.e("OrderDetails", "Exception onStatusChangeFailure " + e.message)
+        }
+    }
+
+    override fun onGetTransactionsSuccess() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("Transaction","getSingleTransactions Success")
+                setDetails()
+                hideLoader()
+            })
+        } catch (e: Exception) {
+            Log.e("Transaction", "Exception onStatusChangeFailure " + e.message)
+        }
+    }
+
+    override fun onGetTransactionsFailure() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("Transaction","onGetTransactionsFailure")
+                hideLoader()
+            })
+        } catch (e: Exception) {
+            Log.e("Transaction", "Exception onStatusChangeFailure " + e.message)
         }
     }
 

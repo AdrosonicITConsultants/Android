@@ -215,7 +215,7 @@ class OrdersPredicates {
                         .limit(1)
                         .findFirst()
                 }catch (e:Exception){
-                    Log.e("EnquiryDetails","Exception : "+e.printStackTrace())
+                    Log.e("OrderDetails","Exception : "+e.printStackTrace())
                 }
             }
             return orders

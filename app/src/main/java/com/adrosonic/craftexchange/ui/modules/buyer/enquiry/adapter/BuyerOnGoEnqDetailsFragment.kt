@@ -60,7 +60,7 @@ class BuyerOnGoEnqDetailsFragment : Fragment(),
 EnquiryViewModel.FetchEnquiryInterface,
     EnquiryViewModel.BuyersMoqInterface,
     MoqAdapter.MoqListener,
-EnquiryViewModel.singlePiInterface{
+    EnquiryViewModel.singlePiInterface{
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
