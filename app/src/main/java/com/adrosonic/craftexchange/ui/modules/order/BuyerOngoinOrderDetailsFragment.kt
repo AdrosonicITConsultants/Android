@@ -526,8 +526,11 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
         }else{
             mBinding?.viewPaymentLayer?.visibility = View.GONE
         }
-        if(orderDetails?.changeRequestOn!!.equals(1L)) mBinding?.changeRequestLayer?.visibility = View.VISIBLE
-        else  mBinding?.changeRequestLayer?.visibility = View.GONE
+        orderDetails?.changeRequestOn?.let {
+            if (orderDetails?.changeRequestOn!!.equals(1L)) mBinding?.changeRequestLayer?.visibility =
+                View.VISIBLE
+            else mBinding?.changeRequestLayer?.visibility = View.GONE
+        }
     }
 
     override fun onResume() {
