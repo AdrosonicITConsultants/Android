@@ -28,7 +28,6 @@ class NotificationPredicates {
                 realm.executeTransaction {
                     var notificationsIterator = notificationsList?.iterator()
                     if (notificationsIterator != null) {
-                        Log.e("Notifications", "11111111111111")
                         while (notificationsIterator.hasNext()) {
                             var notification = notificationsIterator.next()
                             var notificationObj = realm.where(Notifications::class.java)
@@ -36,9 +35,7 @@ class NotificationPredicates {
                                 .limit(1)
                                 .findFirst()
                             val notificationid=notificationObj?.notificationId?:0
-                            Log.e("Notifications", "222222222222222 : $notificationid")
                             if(notificationid.equals(notification.notificationId)){
-                                Log.e("Notifications", "333333 Update: ${notification.notificationId}")
                                 notificationObj?.code = notification.code?:""
                                 notificationObj?.companyName = notification.companyName?:""
                                 notificationObj?.createdOn = notification.createdOn?:""
@@ -51,7 +48,6 @@ class NotificationPredicates {
                                 realm.copyToRealmOrUpdate(notificationObj)
                             }
                             else{
-                                Log.e("Notifications", "4444444 Insert: ${notification.notificationId}")
                                 var primId = it.where(Notifications::class.java).max(Notifications.COLUMN__ID)
                                 if (primId == null) {
                                     nextID = 1

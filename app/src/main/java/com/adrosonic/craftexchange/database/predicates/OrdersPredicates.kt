@@ -75,7 +75,7 @@ class OrdersPredicates {
                                 exEnq?.innerEnquiryStageId = order?.openEnquiriesResponse?.innerEnquiryStageId
                                 exEnq?.enquiryStageId = order?.openEnquiriesResponse?.enquiryStageId
                                 exEnq?.startedOn = order?.openEnquiriesResponse?.startedOn
-                                exEnq?.changeRequestStatus = order?.openEnquiriesResponse?.changeRequestStatus
+                                exEnq?.changeRequestStatus = order?.openEnquiriesResponse?.changeRequestStatus?:0L
                                 exEnq?.pocFirstName = order?.openEnquiriesResponse?.pocFirstName
                                 exEnq?.productCategoryHistoryId = order?.openEnquiriesResponse?.productCategoryHistoryId
                                 exEnq?.warpYarnHistoryId = order?.openEnquiriesResponse?.warpYarnHistoryId
@@ -129,7 +129,7 @@ class OrdersPredicates {
                                 orderObj?.extraWeftYarnId = order?.openEnquiriesResponse?.extraWeftYarnId
                                 orderObj?.email = order?.openEnquiriesResponse?.email
                                 Log.e("OrderDetails","enquiryId "+order?.openEnquiriesResponse?.enquiryId)
-                                orderObj?.enquiryId = order?.openEnquiriesResponse?.enquiryId
+//                                orderObj?.enquiryId = order?.openEnquiriesResponse?.enquiryId
                                 orderObj?.line1 = order?.openEnquiriesResponse?.line1
                                 orderObj?.line2 = order?.openEnquiriesResponse?.line2
                                 orderObj?.street = order?.openEnquiriesResponse?.street
@@ -215,7 +215,7 @@ class OrdersPredicates {
                         .limit(1)
                         .findFirst()
                 }catch (e:Exception){
-                    Log.e("EnquiryDetails","Exception : "+e.printStackTrace())
+                    Log.e("OrderDetails","Exception : "+e.printStackTrace())
                 }
             }
             return orders

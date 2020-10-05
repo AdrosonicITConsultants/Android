@@ -5,6 +5,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.CompletedEnquiryFragment
 import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.BuyerOngoingEnquiryFragment
+import com.adrosonic.craftexchange.ui.modules.order.BuyerOngoingOrderFragment
+import com.adrosonic.craftexchange.ui.modules.order.CompletedOrderFragment
 
 class BuyerOrdersViewPagerAdapter(fragmentManager: FragmentManager): FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
@@ -12,10 +14,10 @@ class BuyerOrdersViewPagerAdapter(fragmentManager: FragmentManager): FragmentPag
 
         return  when (position) {
             0 -> {
-                BuyerOngoingEnquiryFragment()
+                BuyerOngoingOrderFragment()
             }
             else -> {
-                CompletedEnquiryFragment()
+                CompletedOrderFragment()
             }
         }
     }

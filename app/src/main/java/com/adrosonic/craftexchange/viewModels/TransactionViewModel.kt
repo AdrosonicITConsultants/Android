@@ -1,6 +1,7 @@
 package com.adrosonic.craftexchange.viewModels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.adrosonic.craftexchange.database.entities.realmEntities.Transactions
@@ -8,6 +9,7 @@ import com.adrosonic.craftexchange.database.predicates.TransactionPredicates
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.request.enquiry.BuyerPayment
 import com.adrosonic.craftexchange.repository.data.response.enquiry.payment.PaymentReceiptResponse
+import com.adrosonic.craftexchange.repository.data.response.transaction.SingleTransactionResponse
 import com.adrosonic.craftexchange.repository.data.response.transaction.TransactionResponse
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.google.gson.Gson
@@ -205,5 +207,54 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
             })
     }
 
+    fun getSingleOngoingTransactions(enquiryId : Long){
+        Log.e("Transaction","getSingleTransactions :$enquiryId")
+        CraftExchangeRepository
+            .getTransactionService()
+            .getSingleTransaction(token,enquiryId.toInt()).enqueue(object : Callback, retrofit2.Callback<SingleTransactionResponse> {
+                override fun onFailure(call: Call<SingleTransactionResponse>, t: Throwable) {
+                    transactionListener?.onGetTransactionsFailure()
+                    Log.e("Transaction","getSingleTransactions :$t")
+                }
+                override fun onResponse(
+                    call: Call<SingleTransactionResponse>,
+                    response: Response<SingleTransactionResponse>
+                ) {
+                    if(response.body()?.valid == true){
+                        TransactionPredicates.insertSingleOngoingTransaction(response?.body()?.data?.ongoingTransactionResponses)//Transaction(response?.body()!!,false)
+                        Log.e("Transaction","getSingleTransactions :${response?.body()?.data?.ongoingTransactionResponses?.size}")
+                        transactionListener?.onGetTransactionsSuccess()
 
+                    }else{
+                        Log.e("Transaction","getSingleTransactions :${response?.body()?.valid}")
+                        transactionListener?.onGetTransactionsFailure()
+                    }
+                }
+            })
+    }
+    fun getSingleCompletedTransactions(enquiryId : Long){
+        Log.e("Transaction","getSingleTransactions :$enquiryId")
+        CraftExchangeRepository
+            .getTransactionService()
+            .getSingleTransaction(token,enquiryId.toInt()).enqueue(object : Callback, retrofit2.Callback<SingleTransactionResponse> {
+                override fun onFailure(call: Call<SingleTransactionResponse>, t: Throwable) {
+                    transactionListener?.onGetTransactionsFailure()
+                    Log.e("Transaction","getSingleTransactions :$t")
+                }
+                override fun onResponse(
+                    call: Call<SingleTransactionResponse>,
+                    response: Response<SingleTransactionResponse>
+                ) {
+                    if(response.body()?.valid == true){
+                        TransactionPredicates.insertSingleCompletedTransaction(response?.body()?.data?.completedTransactionResponses)//Transaction(response?.body()!!,false)
+                        Log.e("Transaction","getSingleTransactions :${response?.body()?.data?.completedTransactionResponses?.size}")
+                        transactionListener?.onGetTransactionsSuccess()
+
+                    }else{
+                        Log.e("Transaction","getSingleTransactions :${response?.body()?.valid}")
+                        transactionListener?.onGetTransactionsFailure()
+                    }
+                }
+            })
+    }
 }

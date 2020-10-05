@@ -1,6 +1,7 @@
 package com.adrosonic.craftexchange.repository.remote
 
 import com.adrosonic.craftexchange.repository.data.response.enquiry.payment.PaymentReceiptResponse
+import com.adrosonic.craftexchange.repository.data.response.transaction.SingleTransactionResponse
 import com.adrosonic.craftexchange.repository.data.response.transaction.TransactionResponse
 import com.adrosonic.craftexchange.repository.data.response.transaction.TransactionStatusData
 import okhttp3.MultipartBody
@@ -40,4 +41,9 @@ interface TransactionDao {
 
     @GET("transaction/getTransactionStatus")
     fun getTransactionStatus(@Header("Authorization") token:String) : Call<TransactionStatusData>
-   }
+
+    @GET("/transaction/getTransactions/{enquiryId}")
+    fun getSingleTransaction(@Header("Authorization") token:String,
+                               @Path("enquiryId") enquiryId : Int) : Call<SingleTransactionResponse>
+
+}

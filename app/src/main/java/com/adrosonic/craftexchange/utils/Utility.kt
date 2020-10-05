@@ -583,14 +583,14 @@ class Utility {
             }
         }
 
-        fun openFile(context: Context,enquiryId:Long){
+        fun openFile(context: Activity,enquiryId:Long){
             val cacheFile = File(context.cacheDir, ConstantsDirectory.PI_PDF_PATH + "Pi${enquiryId}.pdf")
             try {
                 val uri = FileProvider.getUriForFile(context, "com.adrosonic.craftexchange.provider", cacheFile)
                 val myIntent = Intent(Intent.ACTION_VIEW)
                 myIntent.putExtra(ShareCompat.EXTRA_CALLING_PACKAGE, context.getPackageName())
-//                val componentName = (context as Activity).componentName
-//                myIntent.putExtra(ShareCompat.EXTRA_CALLING_ACTIVITY, componentName)
+                val componentName = context.componentName
+                myIntent.putExtra(ShareCompat.EXTRA_CALLING_ACTIVITY, componentName)
                 myIntent.setDataAndType(uri, "application/pdf")
                 myIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

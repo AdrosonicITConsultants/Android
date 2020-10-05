@@ -1,5 +1,6 @@
 package com.adrosonic.craftexchange.ui.modules.order
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -7,6 +8,7 @@ import android.os.Looper
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.transition.TransitionListenerAdapter
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -29,11 +31,9 @@ import com.adrosonic.craftexchange.database.predicates.OrdersPredicates
 import com.adrosonic.craftexchange.database.predicates.TransactionPredicates
 import com.adrosonic.craftexchange.databinding.FragmentArtisanOnGoEnqDetailsBinding
 import com.adrosonic.craftexchange.databinding.FragmentArtisanOngoingOrderDetailsBinding
+import com.adrosonic.craftexchange.databinding.FragmentBuyerOngoingOrderDetailsBinding
 import com.adrosonic.craftexchange.enums.*
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
-import com.adrosonic.craftexchange.repository.data.response.moq.Datum
-import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimesResponse
-import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.piContext
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
 import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
@@ -54,7 +54,7 @@ import com.pixplicity.easyprefs.library.Prefs
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class ArtisanOngoinOrderDetailsFragment : Fragment(),
+class BuyerOngoinOrderDetailsFragment : Fragment(),
     OrdersViewModel.FetchOrderInterface,
     OrdersViewModel.changeStatusInterface,
     TransactionViewModel.TransactionInterface{
@@ -85,11 +85,8 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
     var prodCategory : String ?= ""
     private var isCustom : Boolean ?= false
 
-
-    var moqDeliveryTimeList=ArrayList<Datum>()
-    var arrayDeliveryDscrp=ArrayList<String>()
     var estId=0L
-    var mBinding : FragmentArtisanOngoingOrderDetailsBinding?= null
+    var mBinding : FragmentBuyerOngoingOrderDetailsBinding?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,14 +101,13 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_artisan_ongoing_order_details, container, false)
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_buyer_ongoing_order_details, container, false)
         enqID = param1?.toLong()
         return mBinding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Utility.getDeliveryTimeList()?.let {moqDeliveryTimeList.addAll(it)  }
         mOrderVm?.fetchEnqListener = this
         mOrderVm?.changeStatusListener = this
 //        mTranVM?.transactionListener = this
@@ -176,64 +172,21 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
             else mBinding?.transactionList!!.visibility=View.VISIBLE
         }
         mBinding?.qualityCheckLayer?.setOnClickListener {
-            //todo call intent
+            Utility.displayMessage("Coming soon",requireContext())
         }
         mBinding?.changeRequestLayer?.setOnClickListener {
-            //todo call intent
+            Utility.displayMessage("Coming soon",requireContext())
         }
         mBinding?.taxInvoiceLayer?.setOnClickListener {
-            //todo call intent
+            Utility.displayMessage("Coming soon",requireContext())
         }
 
-        //ChangeEnquiryStageButtons
-        mBinding?.btnStartEnqStage?.setOnClickListener {
-            if(Utility.checkIfInternetConnected(requireActivity())){
-                viewLoader()
-                orderDetails?.enquiryId?.let { it1 ->
-                    mOrderVm?.setEnquiryStage(it1, EnquiryStages.PRODUCTION_COMPLETED.getId(), InnerEnquiryStages.YARN_PROCURED.getId())
-                }
-            }else{
-                Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
-            }
-        }
-        mBinding?.btnMarkInprogress?.setOnClickListener {
-            if(Utility.checkIfInternetConnected(requireActivity())){
-                viewLoader()
-                orderDetails?.enquiryId?.let { it1 ->
-                    orderDetails?.innerEnquiryStageId?.let { it2 ->
-                        mOrderVm?.setEnquiryStage(it1, EnquiryStages.PRODUCTION_COMPLETED.getId(),it2 )
-                    }
-                }
-            }else{
-                Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
-            }
-        }
-        mBinding?.btnMarkMoveNextStage?.setOnClickListener {
-            if(Utility.checkIfInternetConnected(requireActivity())){
-                viewLoader()
-                when(orderDetails?.innerEnquiryStageId){
-                    InnerEnquiryStages.POST_LOOM_PROCESS.getId() -> {
-                        orderDetails?.enquiryId?.let { it1 -> mOrderVm?.setCompleteOrderStage(it1,
-                            EnquiryStages.COMPLETION_OF_ORDER.getId()) }
-                    }
-                    else -> {
-                        orderDetails?.enquiryId?.let { it1 -> mOrderVm?.setEnquiryStage(it1,
-                            EnquiryStages.PRODUCTION_COMPLETED.getId(),orderDetails?.innerEnquiryStageId?.plus(1)) }
-                    }
-                }
-            }else{
-                Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
-            }
-        }
     }
 
     fun setDetails(){
-        try {
-            Handler(Looper.getMainLooper()).post(Runnable {
-
+     try {
+        Handler(Looper.getMainLooper()).post(Runnable {
         setTabVisibilities()
-        setViewEnquiryStageChangeButton()
-        viewChangeStatusLayer()
         mBinding?.orderCode?.text = orderDetails?.orderCode
         mBinding?.enquiryStartDate?.text = "Date accepted : ${orderDetails?.startedOn?.split("T")?.get(0)}"
         val image = orderDetails?.productImages?.split((",").toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()?.get(0)
@@ -369,9 +322,17 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         mBinding?.enquiryStatusText?.text = enquiryStage
 
         mBinding?.enquiryUpdateDate?.text = "Last updated : ${orderDetails?.lastUpdated?.split("T")?.get(0)}"
-        mBinding?.buyerBrand?.text = orderDetails?.companyName
-
+        mBinding?.artisanBrand?.text = orderDetails?.companyName
         setProgressTimeline()
+        orderDetails?.changeRequestStatus?.let {
+                if (orderDetails?.changeRequestStatus!! > 0) {
+                    mBinding?.txtCr?.visibility = View.VISIBLE
+                    mBinding?.txtCrDate?.text = Utility.returnDisplayDate(orderDetails?.changeRequestModifiedOn ?: "")
+                } else {
+                    mBinding?.txtCr?.visibility = View.GONE
+                    mBinding?.txtCrDate?.text = ""
+                }
+        }
         var tranList = TransactionPredicates.getTransactionByEnquiryId(enqID?:0)
                 if(tranList!!.size>0){
                     mBinding?.viewTransaction?.text="View"
@@ -383,6 +344,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
                     mBinding?.viewTransaction?.text="No transaction present"
                 }
         })
+
         } catch (e: Exception) {
             Log.e("setDetails", "Exception " + e.message)
         }
@@ -527,7 +489,6 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         mBinding?.previousStep?.text = prevEnqStage
         mBinding?.currentStep?.text = currEnqStage
         mBinding?.nextStep?.text = nextEnqStage
-        mBinding?.nextStepArrowText?.text=nextEnqStage
         //TODO : To implement pi moq upload
         if(orderDetails?.isBlue == 1L){
             when(currEnqStageId){
@@ -565,30 +526,10 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         }else{
             mBinding?.viewPaymentLayer?.visibility = View.GONE
         }
-    }
-
-    fun setViewEnquiryStageChangeButton(){
-        if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
-            if(orderDetails?.enquiryStageId == 4L && orderDetails?.innerEnquiryStageId == null){
-                mBinding?.startEnqStageLayout?.visibility = View.VISIBLE
-            }else{
-                mBinding?.startEnqStageLayout?.visibility = View.GONE
-            }
-        }else{
-            mBinding?.startEnqStageLayout?.visibility = View.GONE
-        }
-    }
-
-    fun viewChangeStatusLayer(){
-        Log.e("OrderDetails","enquiryStageId 222: ${orderDetails?.enquiryStageId}")
-        if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
-            if(orderDetails?.enquiryStageId == 5L){
-                mBinding?.changeEnquiryStatusLayout?.visibility = View.VISIBLE
-            }else{
-                mBinding?.changeEnquiryStatusLayout?.visibility = View.GONE
-            }
-        }else{
-            mBinding?.changeEnquiryStatusLayout?.visibility = View.GONE
+        orderDetails?.changeRequestOn?.let {
+            if (orderDetails?.changeRequestOn!!.equals(1L)) mBinding?.changeRequestLayer?.visibility =
+                View.VISIBLE
+            else mBinding?.changeRequestLayer?.visibility = View.GONE
         }
     }
 
@@ -627,7 +568,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
     companion object {
 
         fun newInstance(param1: String) =
-            ArtisanOngoinOrderDetailsFragment().apply {
+            BuyerOngoinOrderDetailsFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                 }

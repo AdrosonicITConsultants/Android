@@ -195,6 +195,7 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
 
     fun getSingleCompletedOrder(enquiryId : Long){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        Log.e("OrderDetails","getCompletedOrder: $enquiryId")
         CraftExchangeRepository
             .getOrderService()
             .getSingleClosedOrder(token,enquiryId.toInt())
@@ -207,8 +208,8 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
                 override fun onResponse(
                     call: Call<OrderResponse>,
                     response: retrofit2.Response<OrderResponse>) {
-                    if(response.body()?.valid == true){
-                        Log.e("OrderDetails","Success: "+response.body()?.errorMessage)
+                    if(response.body()?.valid!!){
+                        Log.e("OrderDetails","Success: "+response.body()?.data?.size)
                         OrdersPredicates?.insertOngoingOrders(response?.body()!!,1)
 //                        OrdersPredicates?.insertEnqPaymentDetails(response?.body()!!)
 //                        OrdersPredicates?.insertEnqArtisanProductCategory(response?.body()!!)

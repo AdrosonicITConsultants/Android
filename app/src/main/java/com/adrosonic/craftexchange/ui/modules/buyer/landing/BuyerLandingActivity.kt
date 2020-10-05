@@ -37,6 +37,7 @@ import com.adrosonic.craftexchange.ui.modules.buyer.ownDesign.OwnProductListFrag
 import com.adrosonic.craftexchange.ui.modules.buyer.profile.buyerProfileIntent
 import com.adrosonic.craftexchange.ui.modules.buyer.wishList.wishlistFragment
 import com.adrosonic.craftexchange.ui.modules.dashboard.dashboardIntent
+import com.adrosonic.craftexchange.ui.modules.order.CommonOrderFragment
 import com.adrosonic.craftexchange.ui.modules.role.roleselectIntent
 import com.adrosonic.craftexchange.ui.modules.search.searchSuggestionIntent
 import com.adrosonic.craftexchange.ui.modules.transaction.transactionIntent
@@ -259,7 +260,11 @@ class BuyerLandingActivity : AppCompatActivity(),
             R.id.nav_my_transactions -> {
                 startActivity(transactionIntent())
             }
-            R.id.nav_my_orders -> {}
+            R.id.nav_my_orders -> {
+                supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container, CommonOrderFragment.newInstance())
+                    .addToBackStack(null)
+                    .commit()
+            }
             R.id.nav_custom_design -> {
             supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container,OwnProductListFragment.newInstance())
                         .addToBackStack(null)

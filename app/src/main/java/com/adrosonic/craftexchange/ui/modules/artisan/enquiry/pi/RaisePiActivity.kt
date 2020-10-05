@@ -69,7 +69,7 @@ EnquiryViewModel.piInterface{
         mBinding?.txtDownload?.setOnClickListener {
             val cacheFile = File(applicationContext.cacheDir, ConstantsDirectory.PI_PDF_PATH + "Pi${enquiryId}.pdf")
             if (cacheFile.exists()){
-             Utility.openFile(applicationContext,enquiryId)
+             Utility.openFile(this,enquiryId)
             }
             else {
                 if (Utility.checkIfInternetConnected(applicationContext)) {
@@ -153,7 +153,7 @@ EnquiryViewModel.piInterface{
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("Enquiry Details", "onSuccess")
                 hideLoader()
-                Utility.openFile(applicationContext,enquiryId)
+                Utility.openFile(this,enquiryId)
             })
         } catch (e: Exception) {
             Log.e("Enquiry Details", "Exception onFailure " + e.message)
