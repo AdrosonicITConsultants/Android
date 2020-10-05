@@ -19,7 +19,9 @@ import com.adrosonic.craftexchange.database.entities.realmEntities.Transactions
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
 import com.adrosonic.craftexchange.ui.modules.transaction.viewDocument
+import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
+import com.pixplicity.easyprefs.library.Prefs
 import io.realm.RealmResults
 
 
@@ -66,21 +68,43 @@ class OnGoingTransactionRecyclerAdapter(var context: Context?, private var trans
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         var transaction = transactions?.get(position)
         var tranStatusData = Utility?.getTransactionStatusData()
+        var profile = Prefs.getString(ConstantsDirectory.PROFILE,"")
+        var art = ConstantsDirectory.ARTISAN
+        var buy = ConstantsDirectory.BUYER
 
-        tranStatusData?.forEach {
-            if(transaction?.accomplishedStatus == it.transactionId){
-                accTxt = it?.buyerText
+        //Payment Action & Status text
+        when(profile){
+            ConstantsDirectory.ARTISAN -> {
+                tranStatusData?.forEach {
+                    if(transaction?.accomplishedStatus == it.transactionId){
+                        accTxt = it?.artisanText
+                    }
+                    if(transaction?.upcomingStatus == it.transactionId){
+                        upcTxt = it?.artisanText
+                    }
+                }
             }
-            if(transaction?.upcomingStatus == it.transactionId){
-                upcTxt = it?.buyerText
+            ConstantsDirectory.BUYER -> {
+                tranStatusData?.forEach {
+                    if(transaction?.accomplishedStatus == it.transactionId){
+                        accTxt = it?.buyerText
+                    }
+                    if(transaction?.upcomingStatus == it.transactionId){
+                        upcTxt = it?.buyerText
+                    }
+                }
             }
         }
+
 
         //Status Icon
         when(transaction?.accomplishedStatus){
             //PI
             1L,4L -> {
-                holder?.statusIcon?.setImageResource(R.drawable.ic_pfi_received)
+                when(profile){
+                    art -> { holder?.statusIcon?.setImageResource(R.drawable.ic_pfi_sent_artisan) }
+                    buy -> { holder?.statusIcon?.setImageResource(R.drawable.ic_pfi_received) }
+                }
             }
 
             //PI & Advance Payment
@@ -188,13 +212,13 @@ class OnGoingTransactionRecyclerAdapter(var context: Context?, private var trans
 
         holder?.btnDoc?.setOnClickListener {
             when(transaction?.accomplishedStatus){
-                //View PI
-                1L -> {
+                //View PI & Updated PI
+                1L,4L -> {
                     val intent = Intent(transaction?.enquiryID?.let { it1 -> context?.raisePiContext(it1, true, SendPiRequest()) })
                     context?.startActivity(intent)
                 }
                 //View Advance Payment
-                8L,10L -> {
+                6L,8L,10L -> {
                     val intent = Intent(transaction?.enquiryID?.let { it1 ->
                         context?.viewDocument(
                             it1

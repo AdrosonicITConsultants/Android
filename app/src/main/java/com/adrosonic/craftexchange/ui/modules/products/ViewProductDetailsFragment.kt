@@ -153,7 +153,11 @@ ViewProductsViewModel.ViewProductsInterface{
         getProductImages(productDetails?.productId)
 
         //Product Code
-        mBinding?.productCode?.text = "Product Code : ${productDetails?.productCode ?: ""}"
+        if(productDetails?.productCode != null){
+            mBinding?.productCode?.text = "Product Code : ${productDetails?.productCode}"
+        }else{
+            mBinding?.productCode?.text = "N.A"
+        }
 
         //ProductName &Description
         mBinding?.productTitle?.text = productDetails?.productTag ?: "N.A"
@@ -192,36 +196,43 @@ ViewProductsViewModel.ViewProductsInterface{
 
     fun getProductAvailability(){
         var status : String ?= ""
-        when(productDetails?.productStatusId){
-            2.toLong() -> {
-                status = this.getString(R.string.in_stock)
-                mBinding?.productAvailabilityText?.text = status
-                requireContext()?.let {
-                    ContextCompat.getColor(
-                        it, R.color.dark_green)
-                }.let {  mBinding?.productAvailabilityText?.setTextColor(it) }
+        if(isCustomProduct == false){
+            when(productDetails?.productStatusId){
+                2.toLong() -> {
+                    status = this.getString(R.string.in_stock)
+                    mBinding?.productAvailabilityText?.text = status
+                    requireContext()?.let {
+                        ContextCompat.getColor(
+                            it, R.color.dark_green)
+                    }.let {  mBinding?.productAvailabilityText?.setTextColor(it) }
+                }
+                1.toLong() -> {
+                    status = this.getString(R.string.exclusively)
+                    var mto = SpannableString(ConstantsDirectory.MADE_TO_ORDER)
+                    mto.setSpan(requireContext().let { ContextCompat.getColor(it, R.color.light_green) }.let {
+                        ForegroundColorSpan(
+                            it
+                        )
+                    }, 0, mto.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    mBinding?.productAvailabilityText?.text = status
+                    mBinding?.productAvailabilityText?.append(mto)
+                    requireContext()?.let {
+                        ContextCompat.getColor(
+                            it, R.color.dark_magenta)
+                    }.let { mBinding?.productAvailabilityText?.setTextColor(it) }
+                }
             }
-            1.toLong() -> {
-                status = this.getString(R.string.exclusively)
-                var mto = SpannableString(ConstantsDirectory.MADE_TO_ORDER)
-                mto.setSpan(requireContext().let { ContextCompat.getColor(it, R.color.light_green) }.let {
-                    ForegroundColorSpan(
-                        it
-                    )
-                }, 0, mto.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                mBinding?.productAvailabilityText?.text = status
-                mBinding?.productAvailabilityText?.append(mto)
-                requireContext()?.let {
-                    ContextCompat.getColor(
-                        it, R.color.dark_magenta)
-                }.let { mBinding?.productAvailabilityText?.setTextColor(it) }
-            }
+        }else{
+            mBinding?.productAvailabilityText?.text = this.getString(R.string.custom_design)
+            requireContext()?.let {
+                ContextCompat.getColor(
+                    it, R.color.swipe_background)
+            }.let { mBinding?.productAvailabilityText?.setTextColor(it) }
         }
     }
 
     fun getProductImages(productId : Long?){
         var imageList = ProductPredicates.getAllImagesOfProduct(productId)
-        var size = imageList
         imageUrlList.clear()
         if (imageList != null) {
             for (size in imageList){

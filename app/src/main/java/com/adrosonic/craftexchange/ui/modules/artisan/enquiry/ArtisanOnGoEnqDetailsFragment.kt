@@ -784,6 +784,11 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                dialog?.cancel()
+                if(Utility.checkIfInternetConnected(requireActivity())){
+                    enqID?.let { mEnqVM.getSingleOngoingEnquiry(it) }
+                }else{
+                    Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
+                }
                 Utility.displayMessage("Enquiry Stage Updated!",requireActivity())
             })
         } catch (e: Exception) {
