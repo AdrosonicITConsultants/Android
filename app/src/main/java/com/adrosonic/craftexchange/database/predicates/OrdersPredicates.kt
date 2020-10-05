@@ -75,7 +75,7 @@ class OrdersPredicates {
                                 exEnq?.innerEnquiryStageId = order?.openEnquiriesResponse?.innerEnquiryStageId
                                 exEnq?.enquiryStageId = order?.openEnquiriesResponse?.enquiryStageId
                                 exEnq?.startedOn = order?.openEnquiriesResponse?.startedOn
-                                exEnq?.changeRequestStatus = order?.openEnquiriesResponse?.changeRequestStatus
+                                exEnq?.changeRequestStatus = order?.openEnquiriesResponse?.changeRequestStatus?:0L
                                 exEnq?.pocFirstName = order?.openEnquiriesResponse?.pocFirstName
                                 exEnq?.productCategoryHistoryId = order?.openEnquiriesResponse?.productCategoryHistoryId
                                 exEnq?.warpYarnHistoryId = order?.openEnquiriesResponse?.warpYarnHistoryId

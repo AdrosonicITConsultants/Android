@@ -16,10 +16,12 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.CompletedEnquiries
 import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
 import com.adrosonic.craftexchange.database.predicates.MoqsPredicates
+import com.adrosonic.craftexchange.database.predicates.TransactionPredicates
 import com.adrosonic.craftexchange.databinding.FragmentCompEnqDetailsBinding
 import com.adrosonic.craftexchange.databinding.FragmentCompOrderDetailsBinding
 import com.adrosonic.craftexchange.enums.AvailableStatus
@@ -33,12 +35,14 @@ import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.advPay.enquiryPaymen
 import com.adrosonic.craftexchange.ui.modules.enquiry.ArtEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
+import com.adrosonic.craftexchange.ui.modules.transaction.adapter.BuyerOnGoTranRecyclerAdapter
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
 import com.adrosonic.craftexchange.viewModels.OrdersViewModel
+import com.adrosonic.craftexchange.viewModels.TransactionViewModel
 import com.google.gson.GsonBuilder
 import com.pixplicity.easyprefs.library.Prefs
 
@@ -49,7 +53,8 @@ private const val ARG_PARAM2 = "param2"
 
 
 class CompletedOrderDetailsFragment : Fragment(),
-    OrdersViewModel.FetchOrderInterface{
+    OrdersViewModel.FetchOrderInterface,
+    TransactionViewModel.TransactionInterface{
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -62,6 +67,7 @@ class CompletedOrderDetailsFragment : Fragment(),
     private var status : String?= ""
 
     val mOrdersVm : OrdersViewModel by viewModels()
+    val mTranVM : TransactionViewModel by viewModels()
 
     var weft : String ?= ""
     var warp : String ?= ""
@@ -100,7 +106,10 @@ class CompletedOrderDetailsFragment : Fragment(),
         Utility.getDeliveryTimeList()?.let {moqDeliveryTimeList.addAll(it)  }
         mOrdersVm.fetchEnqListener = this
         if(Utility.checkIfInternetConnected(requireActivity())){
-            enqID?.let { mOrdersVm.getSingleCompletedOrder(it) }
+            enqID?.let {
+                mOrdersVm.getSingleCompletedOrder(it)
+                mTranVM.getSingleCompletedTransactions(it)
+            }
             viewLoader()
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
@@ -167,11 +176,12 @@ class CompletedOrderDetailsFragment : Fragment(),
         }
 
         mBinding?.viewPaymentLayer?.setOnClickListener {
-            startActivity(context?.enquiryPayment()
-                ?.putExtra(ConstantsDirectory.ENQUIRY_ID,enqID)
-                ?.putExtra(ConstantsDirectory.ENQUIRY_STATUS_FLAG,EnquiryStatus.COMPLETED.getId())
-                ?.putExtra(ConstantsDirectory.PI_ID,0))
-
+//            startActivity(context?.enquiryPayment()
+//                ?.putExtra(ConstantsDirectory.ENQUIRY_ID,enqID)
+//                ?.putExtra(ConstantsDirectory.ENQUIRY_STATUS_FLAG,EnquiryStatus.COMPLETED.getId())
+//                ?.putExtra(ConstantsDirectory.PI_ID,0))
+            if(mBinding?.transactionList!!.visibility==View.VISIBLE) mBinding?.transactionList!!.visibility=View.GONE
+            else mBinding?.transactionList!!.visibility=View.VISIBLE
         }
 
     }
@@ -377,7 +387,19 @@ class CompletedOrderDetailsFragment : Fragment(),
 
                 mBinding?.enquiryUpdateDate?.text = "Last updated : ${orderDetails?.lastUpdated?.split("T")?.get(0)}"
                 mBinding?.brand?.text = orderDetails?.companyName
-            } )
+
+                var tranList = TransactionPredicates.getTransactionByEnquiryId(enqID?:0)
+                if(tranList!!.size>0){
+                    mBinding?.viewPaymentLayer?.visibility = View.VISIBLE
+                    mBinding?.viewTransaction?.text="View"
+                    mBinding?.transactionList?.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false )
+                    val transactionAdapter =  BuyerOnGoTranRecyclerAdapter(requireContext(), tranList)
+                    mBinding?.transactionList?.adapter = transactionAdapter
+//                    transactionAdapter.listener = this
+                } else {
+                    mBinding?.viewTransaction?.text="No transaction present"
+                }
+            })
             } catch (e: Exception) {
                 Log.e("setDetails", "Exception " + e.message)
             }
@@ -391,8 +413,8 @@ class CompletedOrderDetailsFragment : Fragment(),
     }
 
     private fun setTabVisibilities(){
-        when(profile){
-            ConstantsDirectory.ARTISAN -> {
+//        when(profile){
+//            ConstantsDirectory.ARTISAN -> {
                 if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
                     if(orderDetails?.enquiryStageId!! >= 4L){
                         mBinding?.viewPaymentLayer?.visibility = View.VISIBLE
@@ -402,11 +424,11 @@ class CompletedOrderDetailsFragment : Fragment(),
                 }else{
                     mBinding?.viewPaymentLayer?.visibility = View.GONE
                 }
-            }
-            else -> {
-                mBinding?.viewPaymentLayer?.visibility = View.GONE
-            }
-        }
+//            }
+//            else -> {
+//                mBinding?.viewPaymentLayer?.visibility = View.GONE
+//            }
+//        }
     }
 
     override fun onResume() {
@@ -450,6 +472,29 @@ class CompletedOrderDetailsFragment : Fragment(),
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    override fun onGetTransactionsSuccess() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("Transaction","getSingleTransactions Success")
+                setDetails()
+                hideLoader()
+            })
+        } catch (e: Exception) {
+            Log.e("Transaction", "Exception onStatusChangeFailure " + e.message)
+        }
+    }
+
+    override fun onGetTransactionsFailure() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("Transaction","onGetTransactionsFailure")
+                hideLoader()
+            })
+        } catch (e: Exception) {
+            Log.e("Transaction", "Exception onStatusChangeFailure " + e.message)
+        }
     }
 
 }

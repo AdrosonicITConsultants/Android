@@ -209,7 +209,7 @@
 
                     <TextView
                         android:id="@+id/order_details_text"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_regular"
                         android:layout_marginTop="@dimen/margin_regular"
@@ -219,6 +219,7 @@
                         android:textSize="@dimen/product_availability_text"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -402,170 +403,24 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
+                    <TextView
+                        android:id="@+id/txtCr"
+                        android:visibility="gone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:gravity="center_vertical"
+                        android:drawableLeft="@drawable/ic_cr"
+                        android:fontFamily="@font/lato_bold"
+                        android:text="@string/change_request_initiated"
+                        android:textColor="@color/red_logo"
+                        android:textSize="@dimen/product_availability_text"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <LinearLayout
-                    android:id="@+id/next_enq_stage_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:weightSum="10"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/middle_part">
-
-                    <TextView
-                        android:id="@+id/text_next_steps"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_regular"
-                        android:layout_weight="6"
-                        android:fontFamily="@font/lato_regular"
-                        android:text="Next Step  - - - - - - - - - - - - ->"
-                        android:textSize="@dimen/product_availability_text"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/next_step_arrow_text"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="4"
-                        android:text="Yarn Procurred"
-                        android:textSize="@dimen/product_availability_text" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/start_enq_stage_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
-                    android:visibility="gone"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/next_enq_stage_layout">
-
-                    <Button
-                        android:id="@+id/btn_start_enq_stage"
-                        android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:layout_marginTop="@dimen/margin_regular"
-                        android:layout_marginBottom="8dp"
-                        android:background="#0060D0"
-                        android:drawableEnd="@drawable/ic_right_arrow_white"
-                        android:elevation="8dp"
-                        android:fontFamily="@font/lato_regular"
-                        android:padding="8dp"
-                        android:text="@string/start_this_stage"
-                        android:textAlignment="center"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white_text"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:id="@+id/update_status_text1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:textSize="10sp"
-                        android:fontFamily="@font/lato_regular"
-                        android:textColor="@color/darker_gray"
-                        android:text="@string/update_enq_stage_text1"
-                        app:layout_constraintTop_toBottomOf="@id/btn_start_enq_stage"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"/>
-
-                    <TextView
-                        android:id="@+id/update_status_text2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:layout_marginBottom="4dp"
-                        android:textSize="10sp"
-                        android:fontFamily="@font/lato_regular"
-                        android:textStyle="bold"
-                        android:text="@string/update_enq_stage_text2"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/update_status_text1"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/change_enquiry_status_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
-                    android:visibility="gone"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/start_enq_stage_layout">
-
-                    <Button
-                        android:id="@+id/btn_mark_inprogress"
-                        android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:layout_marginTop="@dimen/margin_regular"
-                        android:layout_marginBottom="8dp"
-                        android:background="@drawable/rect_outline_blue"
-                        android:drawableEnd="@drawable/ic_right_arrow_white"
-                        android:elevation="8dp"
-                        android:fontFamily="@font/lato_regular"
-                        android:padding="8dp"
-                        android:text="@string/mark_as_still_in_progress"
-                        android:textAlignment="center"
-                        android:textAllCaps="false"
-                        android:textColor="@color/swipe_background"
-                        android:textSize="16sp" />
-
-                    <Button
-                        android:id="@+id/btn_mark_move_next_stage"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:background="@color/black_text"
-                        android:drawableEnd="@drawable/ic_right_arrow_white"
-                        android:elevation="8dp"
-                        android:fontFamily="@font/lato_regular"
-                        android:padding="8dp"
-                        android:text="@string/mark_as_completed"
-                        android:textAlignment="center"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white_text"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:id="@+id/update_stage_text1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_regular"
-                        android:textSize="10sp"
-                        android:fontFamily="@font/lato_regular"
-                        android:textColor="@color/darker_gray"
-                        android:text="@string/update_enq_stage_text1"
-                        app:layout_constraintTop_toBottomOf="@id/btn_mark_move_next_stage"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"/>
-
-                    <TextView
-                        android:id="@+id/update_stage_text2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:layout_marginBottom="4dp"
-                        android:textSize="10sp"
-                        android:fontFamily="@font/lato_regular"
-                        android:textStyle="bold"
-                        android:text="@string/hrs_avoid_escalation"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/update_stage_text1"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"/>
-                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/quality_check_layer"
@@ -576,7 +431,7 @@
                     android:weightSum="10"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/change_enquiry_status_layout">
+                    app:layout_constraintTop_toBottomOf="@+id/middle_part">
 
 
                     <TextView
@@ -640,6 +495,7 @@
                         android:textSize="12sp" />
 
                     <TextView
+                        android:id="@+id/txtCrDate"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -755,6 +611,7 @@
                         android:src="@drawable/ic_right_arrow_purple" />
 
                 </LinearLayout>
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/transaction_list"
                     android:layout_width="match_parent"
@@ -762,7 +619,8 @@
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/view_payment_layer"/>
+                    app:layout_constraintTop_toBottomOf="@+id/view_payment_layer" />
+
                 <LinearLayout
                     android:id="@+id/brand_details_layer"
                     android:layout_width="match_parent"
@@ -789,7 +647,7 @@
                         android:textSize="12sp" />
 
                     <TextView
-                        android:id="@+id/buyer_brand"
+                        android:id="@+id/artisan_brand"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -810,7 +668,7 @@
                         android:layout_weight="3"
                         android:fontFamily="@font/lato_regular"
                         android:gravity="center|end"
-                        android:text="@string/check_details"
+                        android:text="@string/check_artisan_details"
                         android:textColor="#137EA6"
                         android:textSize="12sp" />
 
@@ -876,8 +734,8 @@
                     android:layout_height="45dp"
                     android:background="#F7FFDE"
                     android:orientation="horizontal"
-                    android:weightSum="10"
                     android:visibility="gone"
+                    android:weightSum="10"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/product_details_layer">

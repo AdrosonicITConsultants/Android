@@ -56,7 +56,7 @@ class OrderDetailsActivity : AppCompatActivity() {
                     }
                     ConstantsDirectory.BUYER -> {
                         if (savedInstanceState == null) {
-                            enqID?.let { BuyerOnGoEnqDetailsFragment.newInstance(it) }?.let {
+                            enqID?.let { BuyerOngoinOrderDetailsFragment.newInstance(it) }?.let {
                                 supportFragmentManager.beginTransaction()
                                     .replace(R.id.enquiry_details_container, it)
                                     .commitNow()

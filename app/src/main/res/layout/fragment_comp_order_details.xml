@@ -457,11 +457,12 @@
                         android:layout_weight="6"
                         android:fontFamily="@font/lato_regular"
                         android:gravity="center|start"
-                        android:text="@string/chck_adv_pay_receipt"
+                        android:text="@string/your_transactions"
                         android:textColor="#D43A9E"
                         android:textSize="12sp" />
 
                     <TextView
+                        android:id="@+id/view_transaction"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -483,6 +484,14 @@
                         android:src="@drawable/ic_right_arrow_purple" />
 
                 </LinearLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/transaction_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view_payment_layer"/>
 
                 <LinearLayout
                     android:id="@+id/quality_check_layer"
@@ -493,7 +502,7 @@
                     android:weightSum="10"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/view_payment_layer">
+                    app:layout_constraintTop_toBottomOf="@+id/transaction_list">
 
 
                     <TextView
