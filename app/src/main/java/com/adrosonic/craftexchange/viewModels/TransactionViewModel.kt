@@ -166,7 +166,7 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
     fun getOpenTransactions(searchString : String, paymentType : Long){
         CraftExchangeRepository
             .getTransactionService()
-            .getAllOpenTransactions(token,searchString,paymentType).enqueue(object : Callback, retrofit2.Callback<TransactionResponse> {
+            .getAllOpenTransactions(token,paymentType).enqueue(object : Callback, retrofit2.Callback<TransactionResponse> {
                 override fun onFailure(call: Call<TransactionResponse>, t: Throwable) {
                    transactionListener?.onGetTransactionsFailure()
                 }
@@ -187,7 +187,7 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
     fun getCompletedTransactions(searchString : String, paymentType : Long){
         CraftExchangeRepository
             .getTransactionService()
-            .getAllCompletedTransactions(token,searchString,paymentType).enqueue(object : Callback, retrofit2.Callback<TransactionResponse> {
+            .getAllCompletedTransactions(token,paymentType).enqueue(object : Callback, retrofit2.Callback<TransactionResponse> {
                 override fun onFailure(call: Call<TransactionResponse>, t: Throwable) {
                     transactionListener?.onGetTransactionsFailure()
                 }

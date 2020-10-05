@@ -30,12 +30,12 @@ interface TransactionDao {
 
     @GET("transaction/getOngoingTransaction/{searchString}/{paymentType}")
     fun getAllOpenTransactions(@Header("Authorization") token:String,
-                               @Query("searchString") searchString : String,
+//                               @Query("searchString") searchString : String,
                                @Query("paymentType") paymentType : Long) : Call<TransactionResponse>
 
     @GET("transaction/getCompletedTransaction/{searchString}/{paymentType}")
     fun getAllCompletedTransactions(@Header("Authorization") token:String,
-                                    @Query("searchString") searchString : String,
+//                                    @Query("searchString") searchString : String,
                                     @Query("paymentType") paymentType : Long) : Call<TransactionResponse>
 
     @GET("transaction/getTransactionStatus")

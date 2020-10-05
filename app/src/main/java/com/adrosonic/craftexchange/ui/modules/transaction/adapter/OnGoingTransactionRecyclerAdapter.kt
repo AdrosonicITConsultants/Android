@@ -3,7 +3,6 @@ package com.adrosonic.craftexchange.ui.modules.transaction.adapter
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.os.Bundle
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
@@ -14,21 +13,17 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.Transactions
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
-import com.adrosonic.craftexchange.repository.data.response.transaction.TranStatData
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
-import com.adrosonic.craftexchange.ui.modules.buyer.productDetails.catalogueProductDetailsIntent
 import com.adrosonic.craftexchange.ui.modules.transaction.viewDocument
-import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
 import io.realm.RealmResults
 
 
-class BuyerOnGoTranRecyclerAdapter(var context: Context?, private var transactions: RealmResults<Transactions>) : RecyclerView.Adapter<BuyerOnGoTranRecyclerAdapter.MyViewHolder>() {
+class OnGoingTransactionRecyclerAdapter(var context: Context?, private var transactions: RealmResults<Transactions>) : RecyclerView.Adapter<OnGoingTransactionRecyclerAdapter.MyViewHolder>() {
 
 
     inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -63,7 +58,7 @@ class BuyerOnGoTranRecyclerAdapter(var context: Context?, private var transactio
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_transaction_list, parent, false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_buyer_transaction_list, parent, false)
         return MyViewHolder(itemView)
     }
 
@@ -81,19 +76,54 @@ class BuyerOnGoTranRecyclerAdapter(var context: Context?, private var transactio
             }
         }
 
-            //Status Icon
+        //Status Icon
         when(transaction?.accomplishedStatus){
-            1L -> {
+            //PI
+            1L,4L -> {
                 holder?.statusIcon?.setImageResource(R.drawable.ic_pfi_received)
             }
 
-            12L -> {
+            //PI & Advance Payment
+            6L -> {
+                holder?.statusIcon?.setImageResource(R.drawable.ic_adv_pfi_rec)
+            }
+
+            //PI update after change request
+//            4L -> {}  //TODO : to be changed
+
+            //Tax Invoice received & Tax Invoice receipt Upload
+            12L,14L -> {
                 holder?.statusIcon?.setImageResource(R.drawable.ic_txi_received)
             }
 
-            16L,18L -> {
-                holder?.statusIcon?.setImageResource(R.drawable.ic_final_payment)
+            //Advance Payment
+            8L,10L -> {
+                if(transaction?.upcomingStatus == 11L){
+                    holder?.statusIcon?.setImageResource(R.drawable.ic_adv_pay_reject)
+                }else{
+                    holder?.statusIcon?.setImageResource(R.drawable.ic_adv_pay_uploaded)
+                }
             }
+
+            //Final Payment
+            16L,18L -> {
+                if(transaction?.upcomingStatus == 17L){
+                    holder?.statusIcon?.setImageResource(R.drawable.ic_fin_pay_reject)
+                }else{
+                    holder?.statusIcon?.setImageResource(R.drawable.ic_final_payment)
+                }
+            }
+
+            //Delivery Challan Upload
+            20L,22L -> {
+                holder?.statusIcon?.setImageResource(R.drawable.ic_delivery_challan_upload)
+            }
+
+            //Order Delivered
+            23L -> {
+                holder?.statusIcon?.setImageResource(R.drawable.ic_order_delivered)
+            }
+
             else -> {
                 holder?.statusIcon?.setImageResource(R.drawable.ic_home)
             }
