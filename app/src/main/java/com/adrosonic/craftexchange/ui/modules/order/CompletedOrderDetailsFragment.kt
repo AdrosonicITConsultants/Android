@@ -35,7 +35,7 @@ import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.advPay.enquiryPaymen
 import com.adrosonic.craftexchange.ui.modules.enquiry.ArtEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
-import com.adrosonic.craftexchange.ui.modules.transaction.adapter.BuyerOnGoTranRecyclerAdapter
+import com.adrosonic.craftexchange.ui.modules.transaction.adapter.OnGoingTransactionRecyclerAdapter
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.UserConfig
@@ -393,7 +393,7 @@ class CompletedOrderDetailsFragment : Fragment(),
                     mBinding?.viewPaymentLayer?.visibility = View.VISIBLE
                     mBinding?.viewTransaction?.text="View"
                     mBinding?.transactionList?.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false )
-                    val transactionAdapter =  BuyerOnGoTranRecyclerAdapter(requireContext(), tranList)
+                    val transactionAdapter =  OnGoingTransactionRecyclerAdapter(requireContext(), tranList)
                     mBinding?.transactionList?.adapter = transactionAdapter
 //                    transactionAdapter.listener = this
                 } else {

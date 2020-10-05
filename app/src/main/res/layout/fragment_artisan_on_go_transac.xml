@@ -4,10 +4,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/transaction_completed"
+        android:id="@+id/artisan_transaction_ongoing"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.modules.transaction.CompTransacFragment">
+        tools:context=".ui.modules.transaction.ArtisanOnGoTransacFragment">
 
         <TextView
             android:id="@+id/text_recent"
@@ -29,7 +29,7 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <androidx.appcompat.widget.SearchView
-            android:id="@+id/search_completed_transac"
+            android:id="@+id/search_ongo_transac"
             android:layout_width="0dp"
             android:layout_height="35dp"
             android:layout_marginStart="8dp"
@@ -64,7 +64,7 @@
             app:layout_constraintEnd_toEndOf="parent"/>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_completed_transactions"
+            android:id="@+id/swipe_ongoing_transactions"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -73,7 +73,7 @@
             app:layout_constraintTop_toBottomOf="@+id/divider">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/completed_transac_recycler_list"
+                android:id="@+id/ongoing_transac_recycler_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="visible" />

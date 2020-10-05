@@ -1,6 +1,5 @@
 package com.adrosonic.craftexchange.ui.modules.order
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -8,7 +7,6 @@ import android.os.Looper
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
-import android.transition.TransitionListenerAdapter
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -37,13 +35,9 @@ import com.adrosonic.craftexchange.repository.data.response.moq.Datum
 import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimesResponse
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.piContext
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
-import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.addProductIntent
-import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.adapter.MoqAdapter
-import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.advPay.enquiryPayment
 import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
-import com.adrosonic.craftexchange.ui.modules.transaction.TransactionActivity
-import com.adrosonic.craftexchange.ui.modules.transaction.adapter.BuyerOnGoTranRecyclerAdapter
+import com.adrosonic.craftexchange.ui.modules.transaction.adapter.OnGoingTransactionRecyclerAdapter
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.UserConfig
@@ -382,7 +376,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
                 if(tranList!!.size>0){
                     mBinding?.viewTransaction?.text="View"
                     mBinding?.transactionList?.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false )
-                    val transactionAdapter =  BuyerOnGoTranRecyclerAdapter(requireContext(), tranList)
+                    val transactionAdapter =  OnGoingTransactionRecyclerAdapter(requireContext(), tranList)
                     mBinding?.transactionList?.adapter = transactionAdapter
 //                    transactionAdapter.listener = this
                 } else {

@@ -7,7 +7,6 @@
         android:id="@+id/buyer_transaction_ongoing"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorSplash"
         tools:context=".ui.modules.transaction.BuyerOnGoTransacFragment">
 
         <TextView

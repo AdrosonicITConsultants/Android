@@ -1,6 +1,7 @@
 package com.adrosonic.craftexchange.ui.modules.transaction.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.text.Html
 import android.view.LayoutInflater
@@ -15,12 +16,14 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.Transactions
+import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
+import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
+import com.adrosonic.craftexchange.ui.modules.transaction.viewDocument
 import com.adrosonic.craftexchange.utils.Utility
 import io.realm.RealmResults
 
 
-
-class CompTransRecyclerAdapter(var context: Context?, private var transactions: RealmResults<Transactions>) : RecyclerView.Adapter<CompTransRecyclerAdapter.MyViewHolder>() {
+class OnGoingTransactionRecyclerAdapter(var context: Context?, private var transactions: RealmResults<Transactions>) : RecyclerView.Adapter<OnGoingTransactionRecyclerAdapter.MyViewHolder>() {
 
 
     inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -55,9 +58,10 @@ class CompTransRecyclerAdapter(var context: Context?, private var transactions: 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_transaction_list, parent, false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_buyer_transaction_list, parent, false)
         return MyViewHolder(itemView)
     }
+
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         var transaction = transactions?.get(position)
@@ -69,6 +73,59 @@ class CompTransRecyclerAdapter(var context: Context?, private var transactions: 
             }
             if(transaction?.upcomingStatus == it.transactionId){
                 upcTxt = it?.buyerText
+            }
+        }
+
+        //Status Icon
+        when(transaction?.accomplishedStatus){
+            //PI
+            1L,4L -> {
+                holder?.statusIcon?.setImageResource(R.drawable.ic_pfi_received)
+            }
+
+            //PI & Advance Payment
+            6L -> {
+                holder?.statusIcon?.setImageResource(R.drawable.ic_adv_pfi_rec)
+            }
+
+            //PI update after change request
+//            4L -> {}  //TODO : to be changed
+
+            //Tax Invoice received & Tax Invoice receipt Upload
+            12L,14L -> {
+                holder?.statusIcon?.setImageResource(R.drawable.ic_txi_received)
+            }
+
+            //Advance Payment
+            8L,10L -> {
+                if(transaction?.upcomingStatus == 11L){
+                    holder?.statusIcon?.setImageResource(R.drawable.ic_adv_pay_reject)
+                }else{
+                    holder?.statusIcon?.setImageResource(R.drawable.ic_adv_pay_uploaded)
+                }
+            }
+
+            //Final Payment
+            16L,18L -> {
+                if(transaction?.upcomingStatus == 17L){
+                    holder?.statusIcon?.setImageResource(R.drawable.ic_fin_pay_reject)
+                }else{
+                    holder?.statusIcon?.setImageResource(R.drawable.ic_final_payment)
+                }
+            }
+
+            //Delivery Challan Upload
+            20L,22L -> {
+                holder?.statusIcon?.setImageResource(R.drawable.ic_delivery_challan_upload)
+            }
+
+            //Order Delivered
+            23L -> {
+                holder?.statusIcon?.setImageResource(R.drawable.ic_order_delivered)
+            }
+
+            else -> {
+                holder?.statusIcon?.setImageResource(R.drawable.ic_home)
             }
         }
 
@@ -126,6 +183,25 @@ class CompTransRecyclerAdapter(var context: Context?, private var transactions: 
                 holder.btnDoc?.text = context?.getString(R.string.view_receipt)
                 context?.let { ContextCompat.getColor(it, R.color.view_receipt) }?.let { holder.btnDoc.setTextColor(it) }
                 holder?.btnDoc?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_view_receipt, 0, 0, 0)
+            }
+        }
+
+        holder?.btnDoc?.setOnClickListener {
+            when(transaction?.accomplishedStatus){
+                //View PI
+                1L -> {
+                    val intent = Intent(transaction?.enquiryID?.let { it1 -> context?.raisePiContext(it1, true, SendPiRequest()) })
+                    context?.startActivity(intent)
+                }
+                //View Advance Payment
+                8L,10L -> {
+                    val intent = Intent(transaction?.enquiryID?.let { it1 ->
+                        context?.viewDocument(
+                            it1
+                        )
+                    })
+                    context?.startActivity(intent)
+                }
             }
         }
 

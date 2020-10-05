@@ -33,6 +33,7 @@ import com.adrosonic.craftexchange.ui.modules.dashboard.dashboardIntent
 import com.adrosonic.craftexchange.ui.modules.order.CommonOrderFragment
 import com.adrosonic.craftexchange.ui.modules.role.roleselectIntent
 import com.adrosonic.craftexchange.ui.modules.search.searchSuggestionIntent
+import com.adrosonic.craftexchange.ui.modules.transaction.transactionIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.UserConfig
@@ -212,7 +213,7 @@ class ArtisanLandingActivity : AppCompatActivity(),
                 }
             } else {
                 noti_badge?.text="$count"
-                if (noti_badge?.getVisibility() !== View.VISIBLE) {
+                if (noti_badge?.visibility !== View.VISIBLE) {
                     noti_badge?.visibility=View.VISIBLE
                 }
             }
@@ -233,7 +234,9 @@ class ArtisanLandingActivity : AppCompatActivity(),
             R.id.nav_my_profile -> {
                 startActivity(artisanProfileIntent())
             }
-            R.id.nav_my_transactions -> {}
+            R.id.nav_my_transactions -> {
+                startActivity(transactionIntent())
+            }
             R.id.nav_my_orders -> {}
             R.id.nav_my_dashboard -> {
                 startActivity(dashboardIntent())

@@ -25,6 +25,7 @@ import com.adrosonic.craftexchange.databinding.FragmentViewProductDetailsBinding
 import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.uploadData.ProductCare
 import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.uploadData.ProductUploadData
 import com.adrosonic.craftexchange.ui.modules.buyer.productDetails.*
+import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
@@ -97,8 +98,6 @@ ViewProductsViewModel.ViewProductsInterface{
             }
         }
 
-
-
         mBinding?.btnBack?.setOnClickListener {
             activity?.onBackPressed()
         }
@@ -153,9 +152,15 @@ ViewProductsViewModel.ViewProductsInterface{
         //ProductImage
         getProductImages(productDetails?.productId)
 
+        //Product Code
+        mBinding?.productCode?.text = "Product Code : ${productDetails?.productCode ?: ""}"
+
         //ProductName &Description
         mBinding?.productTitle?.text = productDetails?.productTag ?: "N.A"
         mBinding?.productDescription?.text = productDetails?.product_spe ?: "N.A"
+
+        //ProductAvailability
+        getProductAvailability()
 
         //Cluster & Category
         mBinding?.regionName?.text = productDetails?.clusterName ?: "N.A"
@@ -183,6 +188,35 @@ ViewProductsViewModel.ViewProductsInterface{
         mBinding?.weightValue?.text = "$productTypeName\t\t$productWeight"
 
         setDimensions(productDetails)
+    }
+
+    fun getProductAvailability(){
+        var status : String ?= ""
+        when(productDetails?.productStatusId){
+            2.toLong() -> {
+                status = this.getString(R.string.in_stock)
+                mBinding?.productAvailabilityText?.text = status
+                requireContext()?.let {
+                    ContextCompat.getColor(
+                        it, R.color.dark_green)
+                }.let {  mBinding?.productAvailabilityText?.setTextColor(it) }
+            }
+            1.toLong() -> {
+                status = this.getString(R.string.exclusively)
+                var mto = SpannableString(ConstantsDirectory.MADE_TO_ORDER)
+                mto.setSpan(requireContext().let { ContextCompat.getColor(it, R.color.light_green) }.let {
+                    ForegroundColorSpan(
+                        it
+                    )
+                }, 0, mto.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                mBinding?.productAvailabilityText?.text = status
+                mBinding?.productAvailabilityText?.append(mto)
+                requireContext()?.let {
+                    ContextCompat.getColor(
+                        it, R.color.dark_magenta)
+                }.let { mBinding?.productAvailabilityText?.setTextColor(it) }
+            }
+        }
     }
 
     fun getProductImages(productId : Long?){

@@ -1,13 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/transaction_completed"
+        android:id="@+id/transaction_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.modules.transaction.CompTransacFragment">
+        android:background="@color/colorSplash"
+        tools:context=".ui.modules.transaction.TransactionListFragment">
+
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="@dimen/margin_regular"
+            android:background="?selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_keyboard_backspace_black_24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/your_transaction_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_regular"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/lato_regular"
+            android:text="@string/your_transactions"
+            android:textColor="#000"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_back" />
 
         <TextView
             android:id="@+id/text_recent"
@@ -25,11 +55,11 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.006"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/your_transaction_text"
             app:layout_constraintVertical_bias="0.0" />
 
         <androidx.appcompat.widget.SearchView
-            android:id="@+id/search_completed_transac"
+            android:id="@+id/search_ongo_transac"
             android:layout_width="0dp"
             android:layout_height="35dp"
             android:layout_marginStart="8dp"
@@ -63,8 +93,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
+
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_completed_transactions"
+            android:id="@+id/swipe_ongoing_transactions"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -73,7 +104,7 @@
             app:layout_constraintTop_toBottomOf="@+id/divider">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/completed_transac_recycler_list"
+                android:id="@+id/ongoing_transac_recycler_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="visible" />
@@ -97,11 +128,11 @@
                 android:layout_centerInParent="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/zero_ong_enq_back"/>
+                android:src="@drawable/zero_transac_back"/>
 
         </RelativeLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
 

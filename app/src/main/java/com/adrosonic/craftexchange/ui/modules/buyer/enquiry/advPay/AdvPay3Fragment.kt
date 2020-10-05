@@ -20,6 +20,7 @@ import com.adrosonic.craftexchange.databinding.FragmentAdvPay3Binding
 import com.adrosonic.craftexchange.enums.AvailableStatus
 import com.adrosonic.craftexchange.enums.getId
 import com.adrosonic.craftexchange.ui.modules.enquiry.enquiryDetails
+import com.adrosonic.craftexchange.ui.modules.transaction.transactionIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
@@ -94,7 +95,7 @@ class AdvPay3Fragment : Fragment() {
         }
 
         mBinding?.btnViewTransac?.setOnClickListener {
-            Utility?.messageDialog(requireContext(),"To Be Implemented")
+            requireActivity()?.startActivity(requireActivity()?.transactionIntent())
         }
     }
 

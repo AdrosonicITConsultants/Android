@@ -118,6 +118,10 @@ class CatalogueProductDetailsActivity : AppCompatActivity(),
             }
         }
 
+        //Product Code
+        mBinding?.productCode?.text = "Product Code : ${productDetails?.productCode ?: ""}"
+
+
         mBinding?.regionName?.text = productDetails?.clusterName ?: "-"
         mBinding?.categoryName?.text = productDetails?.productCategoryName ?: "-"
 
