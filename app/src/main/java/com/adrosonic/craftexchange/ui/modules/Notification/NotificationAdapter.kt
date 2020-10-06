@@ -127,9 +127,9 @@ class NotificationAdapter(
             "Change Requested Initiated","Change Requested Accepted","Change Request Rejected"  -> {
                 R.drawable.ic_cr_accepted
             }
-            "Yarn procured", "Yarn Dyeing","Yarn dye is in progress","Yarn dye is completed","Weaving is completed",
-            "Weaving initiated","Weaving is in progress","Pre loom process is in progress","Pre loom process initiated",
-            "Post loom process initiated","Completion of Order" -> {
+            "Yarn procured", "Yarn Dyeing","Yarn Dye","Yarn dye is in progress","Yarn dye is completed","Weaving is completed",
+            "Weaving initiated","Weaving is in progress","Pre loom process","Pre loom process is in progress","Pre loom process initiated",
+            "Post loom process initiated","Post loom process","Completion of Order" -> {
                 R.drawable.ic_noti_yarn
             }
             "Escalation Raised","Escalation Resolved" -> {

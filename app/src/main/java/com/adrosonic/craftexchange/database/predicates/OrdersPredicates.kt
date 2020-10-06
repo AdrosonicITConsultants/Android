@@ -194,7 +194,7 @@ class OrdersPredicates {
                     Log.e("InsertOnEnquiry",e.printStackTrace().toString())
                 }
             }
-            deleteOrders(idList,isCompleted)
+//            deleteOrders(idList,isCompleted)
         }
 
         fun deleteOrders(idList : List<Long>?,isCompleted:Long){
