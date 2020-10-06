@@ -534,7 +534,7 @@ EnquiryViewModel.FetchEnquiryInterface,
                             mBinding?.transactionLayout?.visibility = View.GONE
                         }else{
                             mBinding?.transactionLayout?.visibility = View.VISIBLE
-                        } 
+                        }
                         mBinding?.piDetailsLayout?.visibility = View.VISIBLE
                     }
                     else -> {

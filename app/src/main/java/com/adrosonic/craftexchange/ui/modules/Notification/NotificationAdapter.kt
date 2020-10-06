@@ -118,38 +118,25 @@ class NotificationAdapter(
             "Moq Received","Moq accepted"  -> {
                 R.drawable.ic_moq_received
             }
-            "Pi finalized", "Tax Invoice Raised","Delivery Challan Uploaded","Order Received" -> {
+            "Pi finalized", "Tax Invoice Raised","Delivery Challan Uploaded","Order Received","Order Dispached","Faulty Order" -> {
                 R.drawable.ic_status_invoice
             }
-            "Advance Payment Received","Advanced Payment Accepted","Advanced Payment Rejected" -> {
+            "Advance Payment Received","Advanced Payment Accepted","Advanced Payment Rejected","Final Payment Received" -> {
                 R.drawable.ic_advance_payent_received
             }
             "Change Requested Initiated","Change Requested Accepted","Change Request Rejected"  -> {
                 R.drawable.ic_cr_accepted
             }
-            "Account Disable" -> {
-                R.drawable.ic_receipt
+            "Yarn procured", "Yarn Dyeing","Yarn Dye","Yarn dye is in progress","Yarn dye is completed","Weaving is completed",
+            "Weaving initiated","Weaving is in progress","Pre loom process","Pre loom process is in progress","Pre loom process initiated",
+            "Post loom process initiated","Post loom process","Completion of Order" -> {
+                R.drawable.ic_noti_yarn
             }
-            "Account Enabled" -> {
-                R.drawable.ic_receipt
+            "Escalation Raised","Escalation Resolved" -> {
+                R.drawable.ic_escalation
             }
-            "Yarn procured" -> {
-                R.drawable.ic_receipt
-            }
-            "Yarn Dyeing" -> {
-                R.drawable.ic_receipt
-            }
-            "Pre loom process initiated" -> {
-                R.drawable.ic_receipt
-            }
-            "Weaving initiated" -> {
-                R.drawable.ic_receipt
-            }
-            "Post loom process initiated" -> {
-                R.drawable.ic_receipt
-            }
-            "Completion of Order" -> {
-                R.drawable.ic_receipt
+            "Chat Message Received" -> {
+                R.drawable.ic_chat_outline
             }
             else -> {
                 R.drawable.ic_receipt
