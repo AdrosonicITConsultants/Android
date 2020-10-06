@@ -522,11 +522,19 @@ EnquiryViewModel.FetchEnquiryInterface,
 //            if(enquiryDetails?.isBlue == 1L){
                 when (enquiryDetails?.enquiryStageID) {
                     3L -> {
-                        mBinding?.transactionLayout?.visibility = View.VISIBLE
+                        if(enquiryDetails?.isBlue == 1L) {
+                            mBinding?.transactionLayout?.visibility = View.GONE
+                        }else{
+                            mBinding?.transactionLayout?.visibility = View.VISIBLE
+                        }
                         mBinding?.piDetailsLayout?.visibility = View.VISIBLE
                     }
                     8L -> {
-                        mBinding?.transactionLayout?.visibility = View.VISIBLE
+                        if(enquiryDetails?.isBlue == 1L) {
+                            mBinding?.transactionLayout?.visibility = View.GONE
+                        }else{
+                            mBinding?.transactionLayout?.visibility = View.VISIBLE
+                        } 
                         mBinding?.piDetailsLayout?.visibility = View.VISIBLE
                     }
                     else -> {
