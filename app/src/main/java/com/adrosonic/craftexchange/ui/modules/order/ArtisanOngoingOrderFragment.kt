@@ -70,8 +70,7 @@ class ArtisanOngoingOrderFragment : Fragment(),
             mOrderVm.getAllOngoingOrders()
         }
 
-        mOrderVm.getOnOrderListMutableData()
-            .observe(viewLifecycleOwner, Observer<RealmResults<Orders>> {
+        mOrderVm.getOnOrderListMutableData().observe(viewLifecycleOwner, Observer<RealmResults<Orders>> {
                 mOrderList = it
                 mOrderListAdapter?.updateProductList(mOrderList)
             })

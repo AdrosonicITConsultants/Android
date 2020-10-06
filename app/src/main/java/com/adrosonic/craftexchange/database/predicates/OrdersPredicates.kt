@@ -18,13 +18,16 @@ class OrdersPredicates {
         fun insertOngoingOrders(orderDetails : OrderResponse?,isCompleted:Long){
             val realm = CXRealmManager.getRealmInstance()
             var orderList = orderDetails?.data
+            var idList=ArrayList<Long>()
             var iterator = orderList?.iterator()
             realm.executeTransaction{
                 try {
                     if(iterator!=null) {
                         while (iterator.hasNext()) {
+
                             Log.e("OrderDetails","isCompleted: "+isCompleted)
                             var order = iterator.next()
+                            idList.add(order?.openEnquiriesResponse?.enquiryId)
                             var orderObj = realm.where(Orders::class.java)
                                 .equalTo(Orders.COLUMN_ORDER_CODE, order.openEnquiriesResponse?.orderCode )
                                 .limit(1)
@@ -191,8 +194,29 @@ class OrdersPredicates {
                     Log.e("InsertOnEnquiry",e.printStackTrace().toString())
                 }
             }
+            deleteOrders(idList,isCompleted)
         }
 
+        fun deleteOrders(idList : List<Long>?,isCompleted:Long){
+            val realm = CXRealmManager.getRealmInstance()
+            var ordersRealm: RealmResults<Orders>? = null
+            try {
+                realm?.executeTransaction {
+                    ordersRealm= realm.where(Orders::class.java).equalTo(Orders.COLUMN_IS_COMPLETED,isCompleted).findAll()
+                    ordersRealm?.forEach {
+                        if(!idList!!.contains(it.enquiryId)){
+                            //todo delete
+                            val deletOrders=realm.where(Orders::class.java).equalTo(Orders.COLUMN_ENQUIRY_ID,it.enquiryId).findAll()
+                            deletOrders.deleteAllFromRealm()
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("Orders", " Exception: ${e}")
+            } finally {
+//            realm.close()
+            }
+        }
         fun getAllOngoingOrders(): RealmResults<Orders>? {
             val realm = CXRealmManager.getRealmInstance()
             return realm.where(Orders::class.java)  .equalTo(Orders.COLUMN_IS_COMPLETED,0L).sort(Orders.COLUMN_LAST_UPDATED, Sort.DESCENDING).findAll()
