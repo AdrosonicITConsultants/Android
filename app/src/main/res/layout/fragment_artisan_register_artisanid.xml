@@ -8,7 +8,7 @@
         <import type="android.view.View" />
 
         <variable name="model"
-            type="com.adrosonic.craftexchange.viewModels.AuthenticationViewModel"/>
+            type="com.adrosonic.craftexchangemarketing.viewModels.AuthenticationViewModel"/>
 
         <variable
             name="sendOtpLoader"

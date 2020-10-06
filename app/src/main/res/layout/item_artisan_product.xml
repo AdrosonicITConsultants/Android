@@ -8,7 +8,7 @@
     <data>
         <variable
             name="itemArtisanProduct"
-            type="com.adrosonic.craftexchange.database.entities.realmEntities.ArtisanProducts"/>
+            type="com.adrosonic.craftexchangemarketing.database.entities.realmEntities.ArtisanProducts"/>
     </data>
 
 

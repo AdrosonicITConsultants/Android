@@ -10,11 +10,11 @@
 
     <variable
         name="event"
-        type="com.adrosonic.craftexchange.ui.interfaces.BrandProductClick"/>
+        type="com.adrosonic.craftexchangemarketing.ui.interfaces.BrandProductClick"/>
 
     <variable
         name="brandDetails"
-        type="com.adrosonic.craftexchange.database.entities.realmEntities.BrandList"/>
+        type="com.adrosonic.craftexchangemarketing.database.entities.realmEntities.BrandList"/>
 
 </data>
     <androidx.cardview.widget.CardView

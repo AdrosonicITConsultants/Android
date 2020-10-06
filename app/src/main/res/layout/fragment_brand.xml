@@ -171,7 +171,7 @@
             android:layout_marginBottom="@dimen/margin_semimedium"
             android:textSize="16sp"
             android:textColor="@color/black_text"
-            android:text="xyz@craftexchange.com"
+            android:text="xyz@craftexchangemarketing.com"
             android:layout_marginStart="@dimen/margin_regular"
             android:fontFamily="@font/lato_regular"
             tools:text="xxxxxxxxx"/>

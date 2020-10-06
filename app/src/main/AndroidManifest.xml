@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.adrosonic.craftexchange">
+    package="com.adrosonic.craftexchangemarketing">
 
     <uses-permission-sdk-23 android:name="android.permission.INTERNET" />
     <uses-permission-sdk-23 android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -67,7 +67,12 @@
             android:name=".ui.modules.artisan.profile.ArtisanProfileActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.modules.artisan.landing.ArtisanLandingActivity"
+        android:name=".ui.modules.artisan.landing.ArtisanLandingActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppTheme.NoActionBar"
+        android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.modules.admin.landing.AdminLandingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan" />
@@ -117,7 +122,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.adrosonic.craftexchange.provider"
+            android:authorities="com.adrosonic.craftexchangemarketing.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

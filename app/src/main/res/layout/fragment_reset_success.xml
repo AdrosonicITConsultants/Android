@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="model" type="com.adrosonic.craftexchange.ui.modules.authentication.reset.ResetPasswordViewModel"/>
+        <variable name="model" type="com.adrosonic.craftexchangemarketing.ui.modules.authentication.reset.ResetPasswordViewModel"/>
     </data>
 
     <ScrollView

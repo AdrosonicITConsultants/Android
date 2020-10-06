@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".ui.modules.artisan.landing.ArtisanLandingActivity">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/black_text"
+                android:elevation="10dp"
+                android:theme="@style/AppTheme.Toolbar"
+                app:collapseIcon="@drawable/ic_logo_main_foreground"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:popupTheme="@style/AppTheme.PopupOverlay"></androidx.appcompat.widget.Toolbar>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/artisan_home_container"
+                android:layout_width="415dp"
+                android:layout_height="738dp"
+                android:background="#000000"
+                app:layout_constraintBottom_toTopOf="@+id/tab_bar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+            <com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
+                android:id="@+id/tab_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/black_text"
+                android:elevation="10dp"
+                app:itemIconTint="@color/colorSplash"
+                app:itemTextColor="@color/colorSplash"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:menu="@menu/tab_bar_menu" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--    <com.google.android.material.navigation.NavigationView-->
+        <!--        android:id="@+id/nav_view"-->
+        <!--        android:layout_width="wrap_content"-->
+        <!--        android:layout_height="match_parent"-->
+        <!--        android:layout_gravity="start"-->
+        <!--        android:fitsSystemWindows="true"-->
+        <!--        android:background="@color/landing_toolbar_color"-->
+        <!--        app:itemTextAppearance="@style/NavMenuText"-->
+        <!--        app:headerLayout="@layout/nav_header_landing"-->
+        <!--        app:menu="@menu/activity_artisan_landing_drawer">-->
+
+        <!--        <LinearLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginBottom="@dimen/margin_regular"-->
+        <!--            android:layout_gravity="bottom"-->
+        <!--            android:gravity="center"-->
+        <!--            android:orientation="vertical">-->
+
+        <!--            <ImageView-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_gravity="center"-->
+        <!--                android:src="@drawable/logo_nav_menu" />-->
+
+        <!--            <TextView-->
+        <!--                android:id="@+id/txtVerTag"-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:text="23-09-20 V-1.1"-->
+        <!--                android:textAlignment="center"-->
+        <!--                android:textStyle="bold" />-->
+
+        <!--        </LinearLayout>-->
+
+        <!--    </com.google.android.material.navigation.NavigationView>-->
+
+</layout>

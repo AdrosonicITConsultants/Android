@@ -10,11 +10,11 @@
 
         <variable
             name="event"
-            type="com.adrosonic.craftexchange.ui.interfaces.ClusterProductClick"/>
+            type="com.adrosonic.craftexchangemarketing.ui.interfaces.ClusterProductClick"/>
 
         <variable
             name="regionProduct"
-            type="com.adrosonic.craftexchange.database.entities.realmEntities.ClusterList"/>
+            type="com.adrosonic.craftexchangemarketing.database.entities.realmEntities.ClusterList"/>
 
     </data>
 

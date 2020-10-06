@@ -6,7 +6,7 @@
 
     <data>
         <variable name="model"
-            type="com.adrosonic.craftexchange.viewModels.AuthenticationViewModel"/>
+            type="com.adrosonic.craftexchangemarketing.viewModels.AuthenticationViewModel"/>
     </data>
 
 

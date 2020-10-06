@@ -144,7 +144,7 @@
             android:layout_marginEnd="@dimen/margin_medium"
             android:background="@drawable/rectangle_round_grad">
 
-            <com.adrosonic.craftexchange.utils.MultiSelectionSpinner
+            <com.adrosonic.craftexchangemarketing.utils.MultiSelectionSpinner
                 android:id="@+id/prod_category"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

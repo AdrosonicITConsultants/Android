@@ -4,11 +4,11 @@
     <data>
         <variable
             name="image"
-            type="com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.ProductImage" />
+            type="com.adrosonic.craftexchangemarketing.repository.data.response.buyer.viewProducts.productCatalogue.ProductImage" />
 
        <variable
            name="event"
-           type="com.adrosonic.craftexchange.ui.interfaces.MoreProductClick" />
+           type="com.adrosonic.craftexchangemarketing.ui.interfaces.MoreProductClick" />
 
     </data>
 

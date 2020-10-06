@@ -1,10 +1,9 @@
 <resources>
-    <string name="app_name">Craft Xchange</string>
+    <string name="app_name">Craft Xchange Admin</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 
     //role select
-    <string name="logo">Logo</string>
     <string name="description">What describes you the best?</string>
     <string name="desc_text">Description</string>
     <string name="or">or</string>
@@ -325,5 +324,15 @@
     <string name="signIn">Sign in</string>
     <string name="resertPassword">Reset your password</string>
     <string name="password">Password</string>
+    <string name="logo">Logo</string>
+    <string name="reports">Reports</string>
+    <string name="fault_Escalations"><![CDATA[Fault & Escalations]]></string>
+    <string name="Add_a_Product">Add a product</string>
+    <string name="to_antaran_co_design">to Antaran Co Design</string>
+    <string name="redirect_custom_enquiries">Redirect Custom enquiries</string>
+    <string name="MEBS">Micro enterprise business summary</string>
+    <string name="MER">Micro enterprise revenue</string>
+    <string name="OES">Open enquiry summary</string>
+    <string name="ORO">Other reports for order</string>
 
 </resources>

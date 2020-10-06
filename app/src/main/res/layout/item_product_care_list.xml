@@ -6,7 +6,7 @@
 
 <!--        <variable-->
 <!--            name="productCare"-->
-<!--            type="com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.uploadData.ProductUploadData.productCare" />-->
+<!--            type="com.adrosonic.craftexchangemarketing.repository.data.response.artisan.productTemplate.uploadData.ProductUploadData.productCare" />-->
 <!--    </data>-->
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

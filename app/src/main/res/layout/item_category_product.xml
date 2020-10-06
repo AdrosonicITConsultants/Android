@@ -10,11 +10,11 @@
 
         <variable
             name="event"
-            type="com.adrosonic.craftexchange.ui.interfaces.CategoryProductClick"/>
+            type="com.adrosonic.craftexchangemarketing.ui.interfaces.CategoryProductClick"/>
 
         <variable
             name="categoryDetails"
-            type="com.adrosonic.craftexchange.database.entities.realmEntities.CategoryProducts"/>
+            type="com.adrosonic.craftexchangemarketing.database.entities.realmEntities.CategoryProducts"/>
 
     </data>
 

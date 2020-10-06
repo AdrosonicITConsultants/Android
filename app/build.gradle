@@ -14,7 +14,7 @@ android {
     buildToolsVersion "29.0.3"
 
     defaultConfig {
-        applicationId "com.adrosonic.craftexchange"
+        applicationId "com.adrosonic.craftexchangemarketing"
         minSdkVersion 23
         targetSdkVersion 29
         versionCode 1

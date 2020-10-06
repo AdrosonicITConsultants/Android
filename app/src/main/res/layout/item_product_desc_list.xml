@@ -7,15 +7,15 @@
 
         <variable
             name="categoryDetails"
-            type="com.adrosonic.craftexchange.database.entities.realmEntities.ProductCard"/>
+            type="com.adrosonic.craftexchangemarketing.database.entities.realmEntities.ProductCard"/>
 
         <variable
             name="brandProducts"
-            type="com.adrosonic.craftexchange.database.entities.realmEntities.ProductCard"/>
+            type="com.adrosonic.craftexchangemarketing.database.entities.realmEntities.ProductCard"/>
 
         <variable
             name="regionProducts"
-            type="com.adrosonic.craftexchange.database.entities.realmEntities.ProductCatalogue"/>
+            type="com.adrosonic.craftexchangemarketing.database.entities.realmEntities.ProductCatalogue"/>
 
     </data>
 

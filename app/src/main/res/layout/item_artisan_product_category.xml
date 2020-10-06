@@ -9,11 +9,11 @@
     <data>
         <variable
             name="artisanProduct"
-            type="com.adrosonic.craftexchange.database.entities.realmEntities.ArtisanProducts"/>
+            type="com.adrosonic.craftexchangemarketing.database.entities.realmEntities.ArtisanProducts"/>
 
         <variable
             name="event"
-            type="com.adrosonic.craftexchange.ui.interfaces.ArtisanProductClick" />
+            type="com.adrosonic.craftexchangemarketing.ui.interfaces.ArtisanProductClick" />
 
     </data>
 
