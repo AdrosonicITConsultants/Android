@@ -1,27 +1,24 @@
 package com.adrosonic.craftexchange.utils
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
-import android.graphics.PointF
 import android.net.Uri
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
-import com.adrosonic.craftexchange.R
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.ObjectKey
-//import com.synnapps.carouselview.CarouselView
 import info.abdolahi.CircularMusicProgressBar
 
 object ImageSetter {
@@ -69,6 +66,47 @@ object ImageSetter {
                 })
                 .into(imageView)
 
+        }
+        catch (ex:Exception) {
+            ex.printStackTrace()
+        }
+    }
+
+    fun setSVGIcon(activity: Activity, imagePath:String, imageView: ImageView) {
+        try
+        {
+//            SvgLoader.pluck()
+//                .with(activity)
+//                .load(imagePath, imageView)
+//            val requestBuilder = Glide.with(context)
+//                requestBuilder.apply(
+//                    RequestOptions().
+//                ).using(Glide.buildStreamModelLoader(Uri::class.java, context), InputStream::class.java)
+//                    .from(Uri::class.java)
+//                    .`as`(SVG::class.java)
+//                    .transcode(SvgDrawableTranscoder(), PictureDrawable::class.java)
+//                    .sourceEncoder(StreamEncoder())
+//                    .cacheDecoder(FileToStreamDecoder<SVG>(SvgDecoder()))
+//                    .decoder(SvgDecoder())
+//                    .listener(SvgSoftwareLayerSetter())
+//            val uri = Uri.parse(imagePath)
+//            requestBuilder
+//                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+//                .load(uri)
+//                .into(imageView)
+
+
+//            Glide.with(context)
+//                .load(imagePath) // it can be a remote URL or a local absolute file path.
+//                .apply(
+//                    RequestOptions()
+//                        .
+//                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+//                        .override(Target.SIZE_ORIGINAL))
+//                .priority(Priority.IMMEDIATE)
+//                .skipMemoryCache(false)
+//                .dontAnimate()
+//                .into(imageView)
         }
         catch (ex:Exception) {
             ex.printStackTrace()

@@ -201,11 +201,7 @@ EnquiryViewModel.FetchEnquiryInterface,
         }
 
         mBinding?.productDetailsLayer?.setOnClickListener {
-//           if(enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
-//               CustomProduct()
-//           }else{
-//               CatalogueProduct()
-//           }
+
             if (savedInstanceState == null) {
                 isCustom?.let { it1 ->
                     ViewProductDetailsFragment.newInstance(enquiryDetails?.productID!!.toLong(),

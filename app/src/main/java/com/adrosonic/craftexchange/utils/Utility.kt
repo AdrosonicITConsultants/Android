@@ -366,6 +366,9 @@ class Utility {
             return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV}AdvancedPayment/${receiptId}/${imagename}"
         }
 
+        fun getTransactionIconsUrl(accomplishedStatusId : Long?,userProfile : String?) : String{
+            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV}TransactionIcons/${userProfile}/${accomplishedStatusId}.svg"
+        }
 
         fun setImageResource(context: Context?,imageView:ImageView?,imageId:Int){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

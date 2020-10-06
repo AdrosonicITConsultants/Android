@@ -1,5 +1,6 @@
 package com.adrosonic.craftexchange.ui.modules.transaction.adapter
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -20,6 +21,7 @@ import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
 import com.adrosonic.craftexchange.ui.modules.transaction.viewDocument
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
 import com.pixplicity.easyprefs.library.Prefs
 import io.realm.RealmResults
@@ -60,7 +62,7 @@ class OnGoingTransactionRecyclerAdapter(var context: Context?, private var trans
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_buyer_transaction_list, parent, false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_transaction_list, parent, false)
         return MyViewHolder(itemView)
     }
 
@@ -71,6 +73,7 @@ class OnGoingTransactionRecyclerAdapter(var context: Context?, private var trans
         var profile = Prefs.getString(ConstantsDirectory.PROFILE,"")
         var art = ConstantsDirectory.ARTISAN
         var buy = ConstantsDirectory.BUYER
+        var iconUrl : String ?= ""
 
         //Payment Action & Status text
         when(profile){
@@ -98,59 +101,110 @@ class OnGoingTransactionRecyclerAdapter(var context: Context?, private var trans
 
 
         //Status Icon
+        //TODO to implement url for icons
+//        when(profile){
+//            art -> {
+//                iconUrl = Utility.getTransactionIconsUrl(transaction?.accomplishedStatus,art)
+//            }
+//            buy -> {
+//                iconUrl = Utility.getTransactionIconsUrl(transaction?.accomplishedStatus,buy)
+//            }
+//        }
+//
+//        iconUrl?.let { ImageSetter.setSVGIcon(Activity(), it,holder?.statusIcon) }
+
+
         when(transaction?.accomplishedStatus){
             //PI
-            1L,4L -> {
+            1L -> {
                 when(profile){
                     art -> { holder?.statusIcon?.setImageResource(R.drawable.ic_pfi_sent_artisan) }
                     buy -> { holder?.statusIcon?.setImageResource(R.drawable.ic_pfi_received) }
                 }
             }
 
-            //PI & Advance Payment
-            6L -> {
-                holder?.statusIcon?.setImageResource(R.drawable.ic_adv_pfi_rec)
+            //PI after change request
+            4L -> {
+                when(profile){
+                    art -> { holder?.statusIcon?.setImageResource(R.drawable.ic_pfi_sent_change_req) }
+                    buy -> { holder?.statusIcon?.setImageResource(R.drawable.ic_pfi_received) }
+                }
             }
 
-            //PI update after change request
-//            4L -> {}  //TODO : to be changed
+            //PI & Advance Payment
+            6L -> {
+                when(profile){
+                    art -> { holder?.statusIcon?.setImageResource(R.drawable.ic_adv_pfi_rec) }
 
-            //Tax Invoice received & Tax Invoice receipt Upload
-            12L,14L -> {
-                holder?.statusIcon?.setImageResource(R.drawable.ic_txi_received)
+                    buy -> { holder?.statusIcon?.setImageResource(R.drawable.ic_adv_pfi_rec_buyer) }
+                }
             }
 
             //Advance Payment
             8L,10L -> {
-                if(transaction?.upcomingStatus == 11L){
-                    holder?.statusIcon?.setImageResource(R.drawable.ic_adv_pay_reject)
-                }else{
-                    holder?.statusIcon?.setImageResource(R.drawable.ic_adv_pay_uploaded)
+                when(profile){
+                    art -> {
+                        if(transaction?.upcomingStatus == 11L){
+                            holder?.statusIcon?.setImageResource(R.drawable.ic_adv_pay_reject_artisan)
+                        }else{
+                            holder?.statusIcon?.setImageResource(R.drawable.ic_adv_pay_rec_artisan)
+                        }
+                    }
+
+                    buy -> {
+                        if(transaction?.upcomingStatus == 11L){
+                            holder?.statusIcon?.setImageResource(R.drawable.ic_adv_pay_reject)
+                        }else{
+                            holder?.statusIcon?.setImageResource(R.drawable.ic_adv_pay_uploaded)
+                        }
+                    }
+                }
+            }
+
+            //Tax Invoice received
+            12L -> {
+                holder?.statusIcon?.setImageResource(R.drawable.ic_txi_received)
+            }
+
+            // Tax Invoice receipt Upload
+            14L -> {
+                when(profile){
+                    art -> { holder?.statusIcon?.setImageResource(R.drawable.ic_adv_pfi_rec) }
+                    buy -> { holder?.statusIcon?.setImageResource(R.drawable.ic_txi_received) }
                 }
             }
 
             //Final Payment
             16L,18L -> {
-                if(transaction?.upcomingStatus == 17L){
-                    holder?.statusIcon?.setImageResource(R.drawable.ic_fin_pay_reject)
-                }else{
-                    holder?.statusIcon?.setImageResource(R.drawable.ic_final_payment)
+                when(profile){
+                    art -> {
+                        if(transaction?.upcomingStatus == 17L){
+                            holder?.statusIcon?.setImageResource(R.drawable.ic_adv_pay_reject_artisan)
+                        }else{
+                            holder?.statusIcon?.setImageResource(R.drawable.ic_final_payment)                        }
+                    }
+                    buy -> {
+                        if(transaction?.upcomingStatus == 17L){
+                            holder?.statusIcon?.setImageResource(R.drawable.ic_adv_pay_reject)
+                        }else{
+                            holder?.statusIcon?.setImageResource(R.drawable.ic_final_payment)                        }
+                    }
                 }
             }
 
             //Delivery Challan Upload
-            20L,22L -> {
+            20L -> {
                 holder?.statusIcon?.setImageResource(R.drawable.ic_delivery_challan_upload)
             }
 
             //Order Delivered
-            23L -> {
-                holder?.statusIcon?.setImageResource(R.drawable.ic_order_delivered)
+            22L -> {
+                when(profile){
+                    art -> { holder?.statusIcon?.setImageResource(R.drawable.ic_order_delivered) }
+                    buy -> { holder?.statusIcon?.setImageResource(R.drawable.ic_delivery_challan_upload) }
+                }
             }
 
-            else -> {
-                holder?.statusIcon?.setImageResource(R.drawable.ic_home)
-            }
         }
 
         @RequiresApi(Build.VERSION_CODES.N)
@@ -180,7 +234,15 @@ class OnGoingTransactionRecyclerAdapter(var context: Context?, private var trans
             holder?.time?.text = time
         }
 
-        holder?.amount?.text = "₹ ${transaction?.paidAmount}"
+        if(transaction?.totalAmount != 0L){
+            holder?.amount?.text = "₹ ${transaction?.totalAmount}"
+        }else if(transaction?.paidAmount != 0L){
+            holder?.amount?.text = "₹ ${transaction?.paidAmount}"
+        }else if(transaction?.eta != null){
+            holder?.amount?.text = "${transaction?.eta}"
+        }else {
+            holder?.amount?.text = "N.A"
+        }
 
         val slideDown = AnimationUtils.loadAnimation(context, R.anim.slide_down)
         val slideUp = AnimationUtils.loadAnimation(context, R.anim.slide_up)
@@ -219,11 +281,7 @@ class OnGoingTransactionRecyclerAdapter(var context: Context?, private var trans
                 }
                 //View Advance Payment
                 6L,8L,10L -> {
-                    val intent = Intent(transaction?.enquiryID?.let { it1 ->
-                        context?.viewDocument(
-                            it1
-                        )
-                    })
+                    val intent = Intent(transaction?.enquiryID?.let { it1 -> context?.viewDocument(it1) })
                     context?.startActivity(intent)
                 }
             }

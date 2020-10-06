@@ -62,8 +62,8 @@ class TransactionPredicates {
                                 exTra?.eta = transac?.eta
 
                                 exTra?.percentage = transac?.transactionOngoing?.percentage
-                                exTra?.paidAmount = transac?.transactionOngoing?.paidAmount
-                                exTra?.totalAmount = transac?.transactionOngoing?.totalAmount
+                                exTra?.paidAmount = transac?.paidAmount
+                                exTra?.totalAmount = transac?.totalAmount
 
                                 exTra?.upcomingStatus = transac?.transactionOngoing?.upcomingStatus
                                 exTra?.accomplishedStatus =
@@ -97,8 +97,8 @@ class TransactionPredicates {
                                 tranObj?.eta = transac?.eta
 
                                 tranObj?.percentage = transac?.transactionOngoing?.percentage
-                                tranObj?.paidAmount = transac?.transactionOngoing?.paidAmount
-                                tranObj?.totalAmount = transac?.transactionOngoing?.totalAmount
+                                tranObj?.paidAmount = transac?.paidAmount
+                                tranObj?.totalAmount = transac?.totalAmount
 
                                 tranObj?.upcomingStatus =
                                     transac?.transactionOngoing?.upcomingStatus
