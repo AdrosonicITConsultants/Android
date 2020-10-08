@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/bankdetails_swipe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/artisan_bank_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:context=".ui.modules.artisan.profile.BankDetailsFragment">
+
+            <TextView
+                android:id="@+id/details_bank"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_semimedium"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:text="@string/details_bank"
+                android:textColor="@color/black_text"
+                android:textSize="24sp"
+                android:fontFamily="@font/lato_regular"
+                android:textStyle=""/>
+
+            <TextView
+                android:id="@+id/field_acc_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/black_text"
+                android:layout_marginTop="@dimen/margin_semimedium"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:text="@string/account_no"
+                android:textStyle="bold"
+                android:fontFamily="@font/lato_regular"/>
+
+            <TextView
+                android:id="@+id/acc_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textSize="18sp"
+                android:textColor="@color/black_text"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:fontFamily="@font/lato_regular" />
+
+            <TextView
+                android:id="@+id/field_bank_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/black_text"
+                android:layout_marginTop="@dimen/margin_semimedium"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:text="@string/bank_name"
+                android:textStyle="bold"
+                android:fontFamily="@font/lato_regular"/>
+
+            <TextView
+                android:id="@+id/bank_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textSize="18sp"
+                android:textColor="@color/black_text"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:fontFamily="@font/lato_regular"/>
+
+            <TextView
+                android:id="@+id/field_benificiary_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/black_text"
+                android:layout_marginTop="@dimen/margin_semimedium"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:text="@string/benificiary_name"
+                android:textStyle="bold"
+                android:fontFamily="@font/lato_regular"/>
+
+            <TextView
+                android:id="@+id/benificiary_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textSize="18sp"
+                android:textColor="@color/black_text"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:fontFamily="@font/lato_regular"/>
+
+            <TextView
+                android:id="@+id/field_branch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/black_text"
+                android:layout_marginTop="@dimen/margin_semimedium"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:text="@string/branch"
+                android:textStyle="bold"
+                android:fontFamily="@font/lato_regular"/>
+
+            <TextView
+                android:id="@+id/branch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textSize="18sp"
+                android:textColor="@color/black_text"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:fontFamily="@font/lato_regular"/>
+
+            <TextView
+                android:id="@+id/field_ifsc_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/black_text"
+                android:layout_marginTop="@dimen/margin_semimedium"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:text="@string/ifsc_code"
+                android:textStyle="bold"
+                android:fontFamily="@font/lato_regular"/>
+
+            <TextView
+                android:id="@+id/ifsc_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/lato_regular"
+                android:textColor="@color/black_text"
+                android:textSize="18sp" />
+
+            <View
+                android:id="@+id/divider1"
+                android:layout_width="150dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/margin_semimedium"
+                android:layout_marginStart="@dimen/margin_regular"/>
+
+            <TextView
+                android:id="@+id/digital_pay_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_semimedium"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:text="@string/digital_payment_details"
+                android:textColor="@color/black_text"
+                android:textSize="24sp"
+                android:fontFamily="@font/lato_regular"
+                android:textStyle=""/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/gpay_layout"
+                android:layout_marginTop="@dimen/margin_semimedium"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp">
+
+                <ImageView
+                    android:id="@+id/gpay_logo"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="4dp"
+                    android:src="@drawable/ic_gpay"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <TextView
+                    android:id="@+id/field_gpay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/gpay_field"
+                    android:textColor="@color/black_text"
+                    android:fontFamily="@font/lato_regular"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/gpay_logo"
+                    app:layout_constraintTop_toTopOf="@+id/gpay_logo"/>
+
+                <TextView
+                    android:id="@+id/gpay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/black_text"
+                    android:fontFamily="@font/lato_regular"
+                    app:layout_constraintTop_toBottomOf="@+id/field_gpay"
+                    app:layout_constraintStart_toEndOf="@+id/gpay_logo"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/paytm_layout"
+                android:layout_marginTop="@dimen/margin_semimedium"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp">
+
+                <ImageView
+                    android:id="@+id/paytm_logo"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="4dp"
+                    android:src="@drawable/ic_paytm"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <TextView
+                    android:id="@+id/field_paytm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/paytm_field"
+                    android:textColor="@color/black_text"
+                    android:fontFamily="@font/lato_regular"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/paytm_logo"
+                    app:layout_constraintTop_toTopOf="@+id/paytm_logo"/>
+
+                <TextView
+                    android:id="@+id/paytm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="2dp"
+                    android:inputType="phone"
+                    android:maxLength="10"
+                    android:textColor="@color/black_text"
+                    android:fontFamily="@font/lato_regular"
+                    app:layout_constraintTop_toBottomOf="@+id/field_paytm"
+                    app:layout_constraintStart_toEndOf="@+id/paytm_logo"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/phonepe_layout"
+                android:layout_marginTop="@dimen/margin_semimedium"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp">
+
+                <ImageView
+                    android:id="@+id/phonepe_logo"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="4dp"
+                    android:src="@drawable/ic_phonepe"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <TextView
+                    android:id="@+id/field_phonepe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/phonepe_field"
+                    android:textColor="@color/black_text"
+                    android:fontFamily="@font/lato_regular"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/phonepe_logo"
+                    app:layout_constraintTop_toTopOf="@+id/phonepe_logo"/>
+
+                <TextView
+                    android:id="@+id/phonepe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/black_text"
+                    android:fontFamily="@font/lato_regular"
+                    app:layout_constraintTop_toBottomOf="@+id/field_phonepe"
+                    app:layout_constraintStart_toEndOf="@+id/phonepe_logo"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <Button
+                android:id="@+id/btn_edit_bank_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/margin_semimedium"
+                android:layout_marginBottom="@dimen/margin_regular"
+                android:background="@drawable/rectangle_round_grad_black_solid"
+                android:drawableStart="@drawable/ic_edit_white_18dp"
+                android:drawablePadding="6dp"
+                android:fontFamily="@font/lato_regular"
+                android:text="@string/edit_bank_details"
+                android:textAllCaps="false"
+                android:textColor="@color/white_text"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+    </ScrollView>
+
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</layout>

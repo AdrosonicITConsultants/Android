@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="artisanProduct"
+            type="com.adrosonic.craftexchangemarketing.database.entities.realmEntities.ArtisanProducts"/>
+
+        <variable
+            name="event"
+            type="com.adrosonic.craftexchangemarketing.ui.interfaces.ArtisanProductClick" />
+
+    </data>
+
+<androidx.cardview.widget.CardView
+    android:id="@+id/item_artisan_prod_category"
+    android:layout_marginEnd="@dimen/margin_regular"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:onClick="@{()->event.onItemClick(artisanProduct)}">
+
+
+<LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/black_text"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/prod_img"
+            android:layout_width="@dimen/card_wt"
+            android:layout_height="@dimen/card_ht"
+            android:src="@drawable/demo_img"
+            android:scaleType="centerCrop"/>
+
+        <TextView
+            android:id="@+id/prod_text"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white_text"
+            android:fontFamily="@font/playfair_regular"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_gravity="start"
+            android:textSize="16sp"/>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
+</layout>

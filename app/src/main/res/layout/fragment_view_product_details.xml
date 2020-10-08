@@ -1,0 +1,709 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/product_details"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorSplash"
+        tools:context=".ui.modules.products.ViewProductDetailsFragment">
+
+        <ScrollView
+            android:id="@+id/scroll_product_details"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <LinearLayout
+                android:id="@+id/product_type_details_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/carousel_view_products">
+
+                <ImageView
+                    android:id="@+id/btn_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginStart="@dimen/margin_regular"
+                    android:layout_marginTop="8dp"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:src="@drawable/ic_keyboard_backspace_black_24dp"/>
+
+                <com.synnapps.carouselview.CarouselView
+                    android:id="@+id/carousel_view_products"
+                    android:layout_width="210dp"
+                    android:layout_height="260dp"
+                    android:layout_marginTop="@dimen/margin_small"
+                    app:fillColor="@color/carousel_dot_color"
+                    app:pageColor="@color/colorSplash"
+                    app:radius="3dp"
+                    app:strokeWidth="1dp"
+                    app:autoPlay="false"
+                    app:disableAutoPlayOnUserInteraction="true"
+                    app:strokeColor="@color/white_text"
+                    app:animateOnBoundary="false"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:id="@+id/product_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_regular"
+                    android:layout_marginTop="@dimen/margin_regular"
+                    android:layout_marginEnd="@dimen/margin_semimedium"
+                    android:fontFamily="@font/playfair_regular"
+                    android:textColor="@color/black_text"
+                    android:textSize="@dimen/product_title_text" />
+
+                <TextView
+                    android:id="@+id/product_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_regular"
+                    android:layout_marginTop="@dimen/margin_regular"
+                    android:layout_marginEnd="@dimen/margin_semimedium"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/lato_regular"
+                    android:textColor="@color/darker_gray"
+                    android:textSize="@dimen/product_description_text" />
+
+                <View
+                    android:id="@+id/divider1"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/margin_regular"
+                    android:background="@color/lighter_gray" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/product_brand_details_layer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_regular"
+                    android:layout_marginTop="8dp">
+
+                    <TextView
+                        android:id="@+id/product_details_text"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginEnd="2dp"
+                        android:fontFamily="@font/lato_regular"
+                        android:paddingEnd="8dp"
+                        android:text="@string/product_details"
+                        android:textSize="@dimen/product_description_text"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@+id/see_all_prod_text"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/region_of_origin_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_regular"
+                        android:fontFamily="@font/lato_regular"
+                        android:text="@string/region_of_origin"
+                        android:textSize="@dimen/product_availability_text"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/product_details_text" />
+
+                    <TextView
+                        android:id="@+id/region_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_small"
+                        android:fontFamily="@font/lato_regular"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/product_availability_text"
+                        app:layout_constraintStart_toEndOf="@+id/region_of_origin_text"
+                        app:layout_constraintTop_toTopOf="@+id/region_of_origin_text" />
+
+                    <TextView
+                        android:id="@+id/product_category_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_regular"
+                        android:fontFamily="@font/lato_regular"
+                        android:text="@string/product_category_colon"
+                        android:textSize="@dimen/product_availability_text"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/region_of_origin_text" />
+
+                    <TextView
+                        android:id="@+id/category_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_small"
+                        android:fontFamily="@font/lato_regular"
+                        android:textSize="@dimen/product_availability_text"
+                        app:layout_constraintStart_toEndOf="@+id/product_category_text"
+                        app:layout_constraintTop_toTopOf="@+id/product_category_text" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <TextView
+                    android:id="@+id/weave_type_used_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_regular"
+                    android:layout_marginTop="@dimen/margin_semimedium"
+                    android:fontFamily="@font/lato_regular"
+                    android:text="@string/weave_type_used"
+                    android:textColor="@color/black_text"
+                    android:textSize="@dimen/product_description_text" />
+
+
+                <ListView
+                    android:id="@+id/weave_type_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    android:layout_marginStart="@dimen/margin_regular"
+                    android:layout_marginTop="@dimen/margin_regular"
+                    android:divider="@null"
+                    android:dividerHeight="0dp" />
+
+                <View
+                    android:id="@+id/divider2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/margin_regular"
+                    android:background="@color/lighter_gray" />
+
+                <TextView
+                    android:id="@+id/weaves_used_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_regular"
+                    android:layout_marginTop="@dimen/margin_semimedium"
+                    android:fontFamily="@font/lato_regular"
+                    android:text="@string/weaves_used"
+                    android:textColor="@color/black_text"
+                    android:textSize="@dimen/product_description_text" />
+
+                <TableLayout
+                    android:id="@+id/weaves_used_table"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_regular"
+                    android:layout_marginTop="@dimen/margin_regular"
+                    android:layout_marginEnd="@dimen/margin_regular">
+
+                    <TableRow
+                        android:id="@+id/first_row"
+                        android:layout_marginBottom="@dimen/margin_regular"
+                        android:padding="5dp"
+                        android:weightSum="4">
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/warp_text"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:drawableStart="@drawable/ic_warp_icon"
+                            android:fontFamily="@font/lato_regular"
+                            android:gravity="center"
+                            android:paddingStart="8dp"
+                            android:text="@string/warp"
+                            android:textAllCaps="true"
+
+                            android:textColor="@color/darker_gray"
+                            android:textSize="@dimen/product_note_text" />
+
+                        <TextView
+                            android:id="@+id/weft_text"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:drawableStart="@drawable/ic_weft_icon"
+                            android:fontFamily="@font/lato_regular"
+                            android:gravity="center"
+                            android:paddingStart="8dp"
+                            android:text="@string/weft"
+                            android:textAllCaps="true"
+                            android:textColor="@color/darker_gray"
+                            android:textSize="@dimen/product_note_text" />
+
+                        <TextView
+                            android:id="@+id/extraweft_text"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:drawableStart="@drawable/ic_extraweft_icon"
+                            android:fontFamily="@font/lato_regular"
+                            android:gravity="center"
+                            android:paddingStart="8dp"
+                            android:text="@string/extraweft"
+                            android:textAllCaps="true"
+                            android:textColor="@color/darker_gray"
+                            android:textSize="@dimen/product_note_text" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:id="@+id/second_row"
+                        android:layout_marginBottom="@dimen/margin_regular"
+                        android:padding="5dp"
+                        android:weightSum="4">
+
+                        <TextView
+                            android:id="@+id/yarn_text"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/lato_regular"
+                            android:text="@string/yarn"
+                            android:textAllCaps="false"
+                            android:textColor="@color/table_row_text"
+                            android:textSize="@dimen/product_availability_text" />
+
+                        <TextView
+                            android:id="@+id/warp_yarn_value"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/lato_regular"
+                            android:gravity="center"
+                            android:text="ezo silkesssssssssssssssssssss jsda"
+                            android:textAllCaps="false"
+                            android:textSize="@dimen/product_availability_text" />
+
+                        <TextView
+                            android:id="@+id/weft_yarn_value"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/lato_regular"
+                            android:gravity="center"
+                            android:text="ezo silke jsda"
+                            android:textAllCaps="false"
+                            android:textSize="@dimen/product_availability_text" />
+
+                        <TextView
+                            android:id="@+id/extraweft_yarn_value"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/lato_regular"
+                            android:gravity="center"
+                            android:text="ezo silke jsda"
+                            android:textAllCaps="false"
+                            android:textSize="@dimen/product_availability_text" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:id="@+id/third_row"
+                        android:layout_marginBottom="@dimen/margin_regular"
+                        android:padding="5dp"
+                        android:weightSum="4">
+
+                        <TextView
+                            android:id="@+id/yarn_count_text"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/lato_regular"
+                            android:text="@string/yarn_count"
+                            android:textAllCaps="false"
+                            android:textColor="@color/table_row_text"
+                            android:textSize="@dimen/product_availability_text" />
+
+                        <TextView
+                            android:id="@+id/warp_yarn_count_value"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/lato_regular"
+                            android:gravity="center"
+                            android:text="63nm"
+                            android:textAllCaps="false"
+                            android:textSize="@dimen/product_availability_text" />
+
+                        <TextView
+                            android:id="@+id/weft_yarn_count_value"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/lato_regular"
+                            android:gravity="center"
+                            android:text="432nm"
+                            android:textAllCaps="false"
+                            android:textSize="@dimen/product_availability_text" />
+
+                        <TextView
+                            android:id="@+id/extraweft_yarn_count_value"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/lato_regular"
+                            android:gravity="center"
+                            android:text="4324km"
+                            android:textAllCaps="false"
+                            android:textSize="@dimen/product_availability_text" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:id="@+id/fourth_row"
+                        android:padding="5dp"
+                        android:weightSum="4">
+
+                        <TextView
+                            android:id="@+id/dye_used_text"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/lato_regular"
+                            android:text="@string/dye_used"
+                            android:textAllCaps="false"
+                            android:textColor="@color/table_row_text"
+                            android:textSize="@dimen/product_availability_text" />
+
+                        <TextView
+                            android:id="@+id/warp_dye_value"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/lato_regular"
+                            android:gravity="center"
+                            android:text="indigoo"
+                            android:textAllCaps="false"
+                            android:textSize="@dimen/product_availability_text" />
+
+                        <TextView
+                            android:id="@+id/weft_dye_value"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/lato_regular"
+                            android:gravity="center"
+                            android:text="magentaaaaa"
+                            android:textAllCaps="false"
+                            android:textSize="@dimen/product_availability_text" />
+
+                        <TextView
+                            android:id="@+id/extraweft_dye_value"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/lato_regular"
+                            android:gravity="center"
+                            android:text="orangeeeeeeeeeeeeeeeee"
+                            android:textAllCaps="false"
+                            android:textSize="@dimen/product_availability_text" />
+
+                    </TableRow>
+
+                </TableLayout>
+
+                <View
+                    android:id="@+id/divider3"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/margin_regular"
+                    android:background="@color/lighter_gray" />
+
+                <LinearLayout
+                    android:id="@+id/reed_count_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_semimedium"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <ImageView
+                        android:id="@+id/reed_icon"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="3"
+                        android:src="@drawable/ic_reed_icon" />
+
+                    <TextView
+                        android:id="@+id/reed_count_text"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="3"
+                        android:fontFamily="@font/lato_regular"
+                        android:gravity="start"
+                        android:text="@string/reed_count"
+                        android:textAllCaps="false"
+                        android:textColor="@color/black_text"
+                        android:textSize="@dimen/product_note_text" />
+
+                    <TextView
+                        android:id="@+id/reed_count_value"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="4"
+                        android:fontFamily="@font/lato_regular"
+                        android:gravity="start"
+                        android:textAllCaps="false"
+                        android:textSize="@dimen/product_availability_text" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/weight_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_semimedium"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <ImageView
+                        android:id="@+id/weight_icon"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="3"
+                        android:src="@drawable/ic_weight_icon" />
+
+                    <TextView
+                        android:id="@+id/weight_text"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="3"
+                        android:fontFamily="@font/lato_regular"
+                        android:gravity="start"
+                        android:text="@string/weight"
+                        android:textAllCaps="false"
+                        android:textColor="@color/black_text"
+                        android:textSize="@dimen/product_note_text" />
+
+                    <TextView
+                        android:id="@+id/weight_value"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="4"
+                        android:fontFamily="@font/lato_regular"
+                        android:gravity="start"
+                        android:textAllCaps="false"
+                        android:textSize="@dimen/product_availability_text" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/dimension_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_semimedium"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <ImageView
+                        android:id="@+id/dimens_icon"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="3"
+                        android:src="@drawable/ic_dimens_icon" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="3"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/dimens_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_gravity="center_vertical|start"
+                            android:gravity="start"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/lato_regular"
+                            android:text="@string/dimensions"
+                            android:textAllCaps="false"
+                            android:textColor="@color/black_text"
+                            android:textSize="@dimen/product_note_text" />
+
+                        <TextView
+                            android:id="@+id/dimens_unit_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_gravity="start"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/lato_regular"
+                            android:text="@string/dimensions"
+                            android:textAllCaps="false"
+                            android:textSize="@dimen/product_note_text"
+                            android:layout_marginTop="4dp"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start|center_vertical"
+                        android:layout_weight="4"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/prod_dimens_value"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/lato_regular"
+                            android:gravity="start"
+                            android:textAllCaps="false"
+                            android:textSize="@dimen/product_availability_text" />
+
+                        <View
+                            android:id="@+id/divider_dimens"
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:background="@color/lighter_gray"
+                            android:layout_gravity="center"/>
+
+                        <TextView
+                            android:id="@+id/relProd_dimens_value"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/lato_regular"
+                            android:gravity="start"
+                            android:textAllCaps="false"
+                            android:textSize="@dimen/product_availability_text" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/gsm_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_semimedium"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <ImageView
+                        android:id="@+id/gsm_icon"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="3"
+                        android:src="@drawable/ic_gsm_icon" />
+
+                    <TextView
+                        android:id="@+id/gsm_text"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="3"
+                        android:fontFamily="@font/lato_regular"
+                        android:gravity="start"
+                        android:text="@string/gsm"
+                        android:textAllCaps="false"
+                        android:textColor="@color/black_text"
+                        android:textSize="@dimen/product_note_text" />
+
+
+                    <TextView
+                        android:id="@+id/gsm_value"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="4"
+                        android:fontFamily="@font/lato_regular"
+                        android:gravity="start"
+                        android:text="XYZgsm"
+                        android:textAllCaps="false"
+                        android:textSize="@dimen/product_note_text" />
+
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/divider5"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/margin_regular"
+                    android:background="@color/lighter_gray" />
+
+                <TextView
+                    android:id="@+id/wash_care_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_regular"
+                    android:layout_marginTop="@dimen/margin_semimedium"
+                    android:fontFamily="@font/lato_regular"
+                    android:text="@string/wash_care_instructions"
+                    android:textColor="@color/black_text"
+                    android:textSize="@dimen/product_description_text" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/wash_care_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_regular"
+                    android:layout_marginTop="@dimen/margin_regular" />
+
+            </LinearLayout>
+        </ScrollView>
+<!--        <FrameLayout-->
+<!--            android:id="@+id/progress_layout"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:elevation="10dp"-->
+<!--            android:contextClickable="false"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent">-->
+
+<!--            <ProgressBar-->
+<!--                android:id="@+id/progressBar"-->
+<!--                style="?android:attr/progressBarStyle"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:elevation="10dp"-->
+<!--                android:layout_gravity="center"/>-->
+<!--        </FrameLayout>-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+</layout>

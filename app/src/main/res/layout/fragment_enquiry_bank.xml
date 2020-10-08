@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/art_enq_bank_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:context=".ui.modules.enquiry.EnquiryBankFragment">
+
+            <TextView
+                android:id="@+id/field_acc_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/black_text"
+                android:layout_marginTop="@dimen/margin_semimedium"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:text="@string/account_no"
+                android:textStyle="bold"
+                android:fontFamily="@font/lato_regular"/>
+
+            <TextView
+                android:id="@+id/acc_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textSize="18sp"
+                android:textColor="@color/black_text"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:fontFamily="@font/lato_regular" />
+
+            <TextView
+                android:id="@+id/field_bank_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/black_text"
+                android:layout_marginTop="@dimen/margin_semimedium"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:text="@string/bank_name"
+                android:textStyle="bold"
+                android:fontFamily="@font/lato_regular"/>
+
+            <TextView
+                android:id="@+id/bank_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textSize="18sp"
+                android:textColor="@color/black_text"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:fontFamily="@font/lato_regular"/>
+
+            <TextView
+                android:id="@+id/field_benificiary_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/black_text"
+                android:layout_marginTop="@dimen/margin_semimedium"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:text="@string/benificiary_name"
+                android:textStyle="bold"
+                android:fontFamily="@font/lato_regular"/>
+
+            <TextView
+                android:id="@+id/benificiary_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textSize="18sp"
+                android:textColor="@color/black_text"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:fontFamily="@font/lato_regular"/>
+
+            <TextView
+                android:id="@+id/field_branch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/black_text"
+                android:layout_marginTop="@dimen/margin_semimedium"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:text="@string/branch"
+                android:textStyle="bold"
+                android:fontFamily="@font/lato_regular"/>
+
+            <TextView
+                android:id="@+id/branch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textSize="18sp"
+                android:textColor="@color/black_text"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:fontFamily="@font/lato_regular"/>
+
+            <TextView
+                android:id="@+id/field_ifsc_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/black_text"
+                android:layout_marginTop="@dimen/margin_semimedium"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:text="@string/ifsc_code"
+                android:textStyle="bold"
+                android:fontFamily="@font/lato_regular"/>
+
+            <TextView
+                android:id="@+id/ifsc_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="@dimen/margin_semimedium"
+                android:fontFamily="@font/lato_regular"
+                android:textColor="@color/black_text"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+    </ScrollView>
+</layout>

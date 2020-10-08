@@ -1,0 +1,566 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/advance_payemnt_2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorSplash"
+            tools:context=".ui.modules.buyer.enquiry.advPay.AdvPay2Fragment">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/top_part"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/btn_back"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="@dimen/margin_regular"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:src="@drawable/ic_keyboard_backspace_black_24dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/select_advance_payment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="@font/lato_regular"
+                        android:text="@string/upload_payment_receipt"
+                        android:textColor="@color/black_text"
+                        android:textSize="@dimen/product_note_text"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toEndOf="@+id/btn_back"
+                        app:layout_constraintTop_toTopOf="@+id/btn_back" />
+
+
+                    <TextView
+                        android:id="@+id/enquiry_code"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="@font/lato_regular"
+                        android:textSize="10sp"
+                        app:layout_constraintStart_toStartOf="@+id/select_advance_payment"
+                        app:layout_constraintTop_toBottomOf="@+id/select_advance_payment" />
+
+                    <FrameLayout
+                        android:id="@+id/prod_image_background"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/ic_back_drop_profile"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/enquiry_code"
+                        app:layout_constraintVertical_bias="0.0">
+
+                        <ImageView
+                            android:id="@+id/product_image"
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/brand_logo_back"
+                            android:scaleType="fitXY" />
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/amt_to_be_paid"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:fontFamily="@font/lato_regular"
+                        android:text="@string/amt_to_be_paid"
+                        android:textColor="@color/black_text"
+                        android:textSize="@dimen/product_availability_text"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/prod_image_background" />
+
+                    <RelativeLayout
+                        android:id="@+id/amount_box"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_small"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="@dimen/margin_small"
+                        android:background="@drawable/bg_textbox"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/amt_to_be_paid">
+
+                        <TextView
+                            android:id="@+id/calculated_amount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="35dp"
+                            android:layout_centerInParent="true"
+                            android:fontFamily="@font/lato_regular"
+                            android:padding="4dp"
+                            android:textColor="#5D82FF"
+                            android:textSize="@dimen/product_description_text" />
+                    </RelativeLayout>
+
+
+                    <TextView
+                        android:id="@+id/countdown_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_regular"
+                        android:layout_marginBottom="@dimen/margin_regular"
+                        android:fontFamily="@font/lato_regular"
+                        android:text="10 days to upload transaction receipt."
+                        android:textColor="@color/darker_gray"
+                        android:textSize="@dimen/product_availability_text"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/amount_box" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/payment_upload_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/lato_regular"
+                android:gravity="start"
+                android:text="@string/payment_upload_confirmation"
+                android:textColor="@color/black_text"
+                android:textSize="@dimen/product_note_text"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/top_part" />
+
+            <LinearLayout
+                android:id="@+id/brand_details_layer"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="@dimen/margin_regular"
+                android:background="#DEF7FF"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="horizontal"
+                android:weightSum="10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/payment_upload_text">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="2"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center|start"
+                    android:text="@string/artisan_brand"
+                    android:textColor="#137EA6"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/artisan_brand"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="4dp"
+                    android:layout_weight="4"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="start|center"
+                    android:maxLines="2"
+                    android:textColor="#137EA6"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="3"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center|end"
+                    android:text="@string/check_artisan_details"
+                    android:textColor="#137EA6"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="?attr/selectableItemBackground"
+                    android:src="@drawable/ic_arrow_down_blue" />
+
+            </LinearLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/payment_details_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#DEF7FF"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/brand_details_layer">
+
+                <TextView
+                    android:id="@+id/acc_details_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/lato_light"
+                    android:text="@string/account_details"
+                    android:textSize="@dimen/product_availability_text"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/artisan_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:fontFamily="@font/lato_regular"
+                    android:textSize="@dimen/product_availability_text"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/acc_details_text"
+                    app:layout_constraintTop_toTopOf="@+id/acc_details_text" />
+
+                <TextView
+                    android:id="@+id/branch_details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/lato_regular"
+                    android:textSize="@dimen/product_availability_text"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@+id/artisan_name"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@+id/acc_details_text"
+                    app:layout_constraintTop_toBottomOf="@+id/artisan_name" />
+
+                <TextView
+                    android:id="@+id/acc_no_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/lato_regular"
+                    android:text="@string/account_no"
+                    android:textSize="@dimen/product_availability_text"
+
+                    app:layout_constraintEnd_toEndOf="@+id/artisan_name"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@+id/acc_details_text"
+                    app:layout_constraintTop_toBottomOf="@+id/branch_details" />
+
+                <TextView
+                    android:id="@+id/account_number"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="8dp"
+                    android:fontFamily="@font/lato_regular"
+                    android:textSize="@dimen/product_availability_text"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/acc_no_text"
+                    app:layout_constraintTop_toTopOf="@+id/acc_no_text" />
+
+                <TextView
+                    android:id="@+id/ifsc_code_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/lato_regular"
+                    android:text="@string/ifsc_code"
+                    android:textSize="@dimen/product_availability_text"
+                    app:layout_constraintEnd_toEndOf="@+id/artisan_name"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@+id/acc_details_text"
+                    app:layout_constraintTop_toBottomOf="@+id/account_number" />
+
+                <TextView
+                    android:id="@+id/ifsc_code"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="8dp"
+                    android:fontFamily="@font/lato_regular"
+                    android:textSize="@dimen/product_availability_text"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ifsc_code_text"
+                    app:layout_constraintTop_toTopOf="@+id/ifsc_code_text" />
+
+                <LinearLayout
+                    android:id="@+id/art_dig_pay_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toBottomOf="@+id/ifsc_code">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/gpay_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="@dimen/margin_regular">
+
+                        <ImageView
+                            android:id="@+id/gpay_logo"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_margin="4dp"
+                            android:src="@drawable/ic_gpay"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/field_gpay"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:fontFamily="@font/lato_regular"
+                            android:text="@string/gpay_field"
+                            android:textSize="@dimen/product_availability_text"
+                            app:layout_constraintStart_toEndOf="@+id/gpay_logo"
+                            app:layout_constraintTop_toTopOf="@+id/gpay_logo" />
+
+                        <TextView
+                            android:id="@+id/gpay"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginTop="2dp"
+                            android:fontFamily="@font/lato_regular"
+                            android:textSize="@dimen/product_availability_text"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toEndOf="@+id/gpay_logo"
+                            app:layout_constraintTop_toBottomOf="@+id/field_gpay" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/paytm_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="@dimen/margin_regular"
+                        android:layout_marginTop="8dp">
+
+                        <ImageView
+                            android:id="@+id/paytm_logo"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_margin="4dp"
+                            android:src="@drawable/ic_paytm"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/field_paytm"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:fontFamily="@font/lato_regular"
+                            android:text="@string/paytm_field"
+                            android:textSize="@dimen/product_availability_text"
+                            app:layout_constraintStart_toEndOf="@+id/paytm_logo"
+                            app:layout_constraintTop_toTopOf="@+id/paytm_logo" />
+
+                        <TextView
+                            android:id="@+id/paytm"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginTop="2dp"
+                            android:fontFamily="@font/lato_regular"
+                            android:inputType="phone"
+                            android:maxLength="10"
+                            android:textSize="@dimen/product_availability_text"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toEndOf="@+id/paytm_logo"
+                            app:layout_constraintTop_toBottomOf="@+id/field_paytm" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/phonepe_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="@dimen/margin_regular"
+                        android:layout_marginTop="8dp">
+
+                        <ImageView
+                            android:id="@+id/phonepe_logo"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_margin="4dp"
+                            android:src="@drawable/ic_phonepe"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/field_phonepe"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:fontFamily="@font/lato_regular"
+                            android:text="@string/phonepe_field"
+                            android:textSize="@dimen/product_availability_text"
+                            app:layout_constraintStart_toEndOf="@+id/phonepe_logo"
+                            app:layout_constraintTop_toTopOf="@+id/phonepe_logo" />
+
+                        <TextView
+                            android:id="@+id/phonepe"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginTop="2dp"
+                            android:fontFamily="@font/lato_regular"
+                            android:textSize="@dimen/product_availability_text"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toEndOf="@+id/phonepe_logo"
+                            app:layout_constraintTop_toBottomOf="@+id/field_phonepe" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp" />
+
+                </LinearLayout>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <TextView
+                android:id="@+id/clear_doc_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_regular"
+                android:fontFamily="@font/lato_regular"
+                android:gravity="center"
+                android:text="Make sure to upload a clear document\nwhich is easy to read"
+                android:textColor="#FF5998"
+                android:textSize="@dimen/product_availability_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/payment_details_layout" />
+
+            <ImageView
+                android:id="@+id/upload_photo"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="@dimen/margin_semimedium"
+                android:background="@drawable/upload_icon_artist"
+                android:clickable="false"
+                android:cropToPadding="true"
+                android:focusable="true"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/clear_doc_text" />
+
+            <TextView
+                android:id="@+id/img_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:fontFamily="@font/lato_regular"
+                android:textColor="@color/swipe_background"
+                app:layout_constraintEnd_toEndOf="@+id/upload_photo"
+                app:layout_constraintStart_toStartOf="@+id/upload_photo"
+                app:layout_constraintTop_toBottomOf="@+id/upload_photo" />
+
+            <TextView
+                android:id="@+id/img_size_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/lato_regular"
+                android:text="Image file formats only. Upto 1Mb Max"
+                android:textColor="#0060D0"
+                android:textSize="9sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/img_name" />
+
+            <Button
+                android:id="@+id/btn_upload_send"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:layout_marginTop="@dimen/margin_regular"
+                android:layout_marginBottom="8dp"
+                android:background="#0060D0"
+                android:drawableStart="@drawable/ic_send"
+                android:elevation="8dp"
+                android:fontFamily="@font/lato_regular"
+                android:padding="4dp"
+                android:text="@string/upload_and_send_transac"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="@color/white_text"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.496"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/img_size_text" />
+
+            <TextView
+                android:id="@+id/comeback_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_semimedium"
+                android:layout_marginBottom="20dp"
+                android:fontFamily="@font/lato_regular"
+                android:text="You can also comeback later to upload receipt"
+                android:textSize="@dimen/product_availability_text"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_upload_send"
+                app:layout_constraintVertical_bias="0.0" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</layout>
+

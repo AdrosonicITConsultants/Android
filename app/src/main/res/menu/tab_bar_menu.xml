@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_home"
+        android:enabled="true"
+        android:icon="@drawable/ic_home"
+        android:title="@string/home"
+        app:showAsAction="always|withText"/>
+
+    <item
+        android:id="@+id/artisan_database"
+        android:enabled="true"
+        android:icon="@drawable/ic_db"
+        android:title="Artisans"
+        app:showAsAction="ifRoom|withText" />
+
+    <item
+        android:id="@+id/product_catelog"
+        android:enabled="true"
+        android:icon="@drawable/ic_prod_catalogue"
+        android:title="Products"
+        app:showAsAction="ifRoom|withText" />
+
+
+    <item
+        android:id="@+id/enquiries"
+        android:enabled="true"
+        android:icon="@drawable/ic_enq_mgmt"
+        android:title="Enquiries"
+        app:showAsAction="ifRoom|withText" />
+    <item
+        android:id="@+id/escalations"
+        android:icon="@drawable/ic_team_infomangmt"
+        android:title="Escalations"
+        android:visible="true" />
+
+</menu>

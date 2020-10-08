@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:layout_margin="8dp"
+        app:cardElevation="8dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/product_image"
+                android:layout_width="@dimen/cat_prod_image_width"
+                android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="2dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/demo_img"
+                android:elevation="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/product_title" />
+
+            <com.like.LikeButton
+                android:id="@+id/search_wishlist_button"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                app:anim_scale_factor="1"
+                android:layout_marginTop="@dimen/margin_regular"
+                android:layout_marginEnd="@dimen/margin_regular"
+                app:icon_type="heart"
+                app:layout_constraintTop_toTopOf="@+id/product_title"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <TextView
+                android:id="@+id/product_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="@dimen/margin_regular"
+                android:layout_marginStart="8dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/lato_regular"
+                android:maxLines="2"
+                android:textColor="@color/black_text"
+                android:textSize="@dimen/product_description_text"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/search_wishlist_button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/design_logo"
+                android:layout_width="16dp"
+                android:layout_height="12dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/product_available_text"
+                app:layout_constraintStart_toEndOf="@+id/product_image"
+                app:layout_constraintTop_toBottomOf="@+id/product_title" />
+
+            <TextView
+                android:id="@+id/product_available_text"
+                android:layout_width="88dp"
+                android:layout_height="11dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/lato_regular"
+                android:textSize="10sp"
+                app:layout_constraintStart_toEndOf="@+id/design_logo"
+                app:layout_constraintTop_toBottomOf="@+id/product_title" />
+
+            <TextView
+                android:id="@+id/product_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="@dimen/margin_regular"
+                android:ellipsize="end"
+                android:fontFamily="@font/lato_regular"
+                android:maxLines="2"
+                android:textSize="@dimen/product_availability_text"
+                app:layout_constraintEnd_toStartOf="@+id/search_wishlist_button"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/product_image"
+                app:layout_constraintTop_toBottomOf="@+id/design_logo" />
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/margin_regular"
+                android:background="@color/lighter_gray"
+                app:layout_constraintBottom_toTopOf="@+id/bottom_layer"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/product_image" />
+
+            <LinearLayout
+                android:id="@+id/bottom_layer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/product_image">
+
+                <Button
+                    android:id="@+id/btn_search_view_more"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="@color/colorSplash"
+                    android:fontFamily="@font/lato_regular"
+                    android:text="@string/view_more"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black_text"
+                    android:textSize="@dimen/product_availability_text"/>
+
+                <Button
+                    android:id="@+id/btn_search_generate_enquiry"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="@color/black_text"
+                    android:drawableEnd="@drawable/ic_arrow_right_alt_white_18dp"
+                    android:fontFamily="@font/lato_regular"
+                    android:padding="4dp"
+                    android:text="Enquire Now"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white_text"
+                    android:textSize="@dimen/product_availability_text" />
+
+            </LinearLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+</layout>
