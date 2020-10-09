@@ -22,6 +22,7 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
     var mQuery : String?= ""
     var buyParams = BuyerDashParam()
     var artParams = ArtDashParam()
+    var adminParams = ArtDashParam()
 
     fun getArtisanDashboard() : String? {
         dashUrl = ConstantsDirectory.ARTISAN_DASHBOARD_URL
@@ -59,6 +60,29 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
         }
         dashUrl += mQuery
         Log.e("Dashboard","Url : $dashUrl")
+        return dashUrl
+    }
+
+    fun getAdminDashboard() : String? {
+        dashUrl = ConstantsDirectory.ADMIN_DASHBOARD_URL
+
+//        artParams.token0 = token
+//        artParams.token1 = token
+//        artParams.token2 = token
+//        artParams.token3 = token
+//        artParams.token4 = token
+//        artParams.token5 = token
+//        artParams.token6 = token
+//        Log.e("Dashboard","Artisan Params  : $artParams")
+//
+//        try{
+//            mQuery = encode(artParams.toString())
+//        }catch(e:UnsupportedEncodingException){
+//            // Catch the encoding exception
+//            e.printStackTrace();
+//        }
+//        dashUrl += mQuery
+//        Log.e("Dashboard","Url : $dashUrl")
         return dashUrl
     }
 }

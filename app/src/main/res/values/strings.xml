@@ -90,7 +90,7 @@
     <string name="home">Home</string>
     <string name="enquiries">Enquiries</string>
     <string name="wishlist">Wishlist</string>
-    <string name="chat">Chat</string>
+    <string name="chat">\tChat\t\t\t</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -357,6 +357,8 @@
     <string name="mark_as_completed">Mark as completed and move to next stage</string>
     <string name="you_have_to_update_8hrs">You have to update the status every \n8 hours to avoid escalation</string>
     <string name="change_request_initiated"> Change request initiated</string>
+    <string name="disable_change_request">Disable change request</string>
+    <string name="cr_not_applicable">Change request is not applicable for in stock Products.</string>
 
 
 </resources>

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.os.Bundle
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,7 @@ import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.Transactions
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
+import com.adrosonic.craftexchange.ui.modules.enquiry.enquiryDetails
 import com.adrosonic.craftexchange.ui.modules.transaction.viewDocument
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
@@ -223,7 +225,16 @@ class OnGoingTransactionRecyclerAdapter(var context: Context?, private var trans
         }
 
         holder?.btn_enquiry?.setOnClickListener {
-            context?.let { it1 -> Utility?.messageDialog(it1,"Fix in Progress (direct to enquiry screen)") }
+//            context?.let { it1 -> Utility?.messageDialog(it1,"Fix in Progress (direct to enquiry screen)") }
+                if(transaction?.enquiryID!=null){
+                val intent = Intent(context?.enquiryDetails())
+                var bundle = Bundle()
+                Prefs.putString(ConstantsDirectory.ENQUIRY_ID, transaction?.enquiryID.toString()) //TODO change later
+                bundle.putString(ConstantsDirectory.ENQUIRY_ID, transaction?.enquiryID.toString())
+                bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG,"2")
+                intent.putExtras(bundle)
+                context?.startActivity(intent)
+                }
         }
 
         if(transaction?.transactionOn != ""){

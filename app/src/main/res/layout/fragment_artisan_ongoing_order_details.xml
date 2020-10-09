@@ -58,10 +58,72 @@
                             android:clickable="true"
                             android:elevation="10dp"
                             android:focusable="true"
+                            android:visibility="gone"
                             android:src="@drawable/ic_chat_enquiry"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
+                        <ImageView
+                            android:id="@+id/btn_menu"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_marginTop="@dimen/margin_regular"
+                            android:layout_marginEnd="10dp"
+                            android:background="?selectableItemBackgroundBorderless"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:src="@drawable/ic_enquiry_menu"
+                            android:visibility="visible"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <LinearLayout
+                            android:id="@+id/menu_list"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/colorSplash"
+                            android:elevation="15dp"
+                            android:orientation="vertical"
+                            android:visibility="gone"
+                            app:layout_constraintEnd_toStartOf="@+id/btn_menu"
+                            app:layout_constraintTop_toBottomOf="@+id/btn_menu">
+
+                            <TextView
+                                android:id="@+id/chat"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/custom_ripple"
+                                android:clickable="true"
+                                android:drawableLeft="@drawable/ic_chat_enquiry"
+                                android:focusable="true"
+                                android:fontFamily="@font/lato_regular"
+                                android:gravity="center_vertical"
+                                android:padding="6dp"
+                                android:text="  Chat                 "
+                                android:textColor="@color/popup_txt_color"
+                                android:textSize="12sp" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/lighter_gray" />
+
+                            <Switch
+                                android:id="@+id/toogle_cr"
+                                android:checked="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/lato_regular"
+                                android:gravity="center_vertical|left"
+                                android:theme="@style/SwitchTheme"
+                                android:layoutDirection="rtl"
+                                android:padding="6dp"
+                                android:layout_marginBottom="4dp"
+                                android:text="@string/disable_change_request"
+                                android:textColor="#DD5A61"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
                         <TextView
                             android:id="@+id/order_code"
                             android:layout_width="wrap_content"
@@ -640,6 +702,7 @@
                         android:textSize="12sp" />
 
                     <TextView
+                        android:id="@+id/txtCrLayerStatus"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"

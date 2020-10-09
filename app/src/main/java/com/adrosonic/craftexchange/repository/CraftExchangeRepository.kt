@@ -89,5 +89,7 @@ object CraftExchangeRepository {
     fun getOrderService(): OrderDao {
         return builder(OrderDao::class.java)
     }
-
+    fun getCrService(): ChangeRequestDao {
+        return builder(ChangeRequestDao::class.java)
+    }
 }

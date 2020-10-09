@@ -217,6 +217,7 @@ class OrdersPredicates {
 //            realm.close()
             }
         }
+
         fun getAllOngoingOrders(): RealmResults<Orders>? {
             val realm = CXRealmManager.getRealmInstance()
             return realm.where(Orders::class.java)  .equalTo(Orders.COLUMN_IS_COMPLETED,0L).sort(Orders.COLUMN_LAST_UPDATED, Sort.DESCENDING).findAll()
@@ -243,6 +244,81 @@ class OrdersPredicates {
                 }
             }
             return orders
+        }
+
+        fun updateCrStatus(enquiryId: Long?){
+            var realm = CXRealmManager.getRealmInstance()
+            var orders : Orders?= null
+            realm.executeTransaction {
+                try{
+                    orders = realm.where(Orders::class.java)
+                        .equalTo(Orders.COLUMN_ENQUIRY_ID,enquiryId)
+                        .limit(1)
+                        .findFirst()
+                    Log.e("Toggle","orders 1111: ${orders?.changeRequestOn}")
+                    orders?.let {
+                        orders?.changeRequestOn=1L
+                        orders?.actionMarkCr=0L
+                        realm.copyToRealmOrUpdate(orders)
+                    }
+                    Log.e("Toggle","orders 2222: ${orders?.changeRequestOn}")
+                }catch (e:Exception){
+                    Log.e("Toggle","Exception : "+e.printStackTrace())
+                }
+            }
+        }
+        fun updateCrStatusForOffline(enquiryId: Long?){
+            var realm = CXRealmManager.getRealmInstance()
+            var orders : Orders?= null
+            realm.executeTransaction {
+                try{
+                    orders = realm.where(Orders::class.java)
+                        .equalTo(Orders.COLUMN_ENQUIRY_ID,enquiryId)
+                        .limit(1)
+                        .findFirst()
+                    Log.e("Toggle","update 1111: ${orders?.changeRequestOn}")
+                    orders?.let {
+                        orders?.changeRequestOn=1L
+                        orders?.actionMarkCr=1L
+                        realm.copyToRealmOrUpdate(orders)
+                    }
+                    Log.e("Toggle","update 2222: ${orders?.changeRequestOn}")
+                }catch (e:Exception){
+                    Log.e("Toggle","Exception : "+e.printStackTrace())
+                }
+            }
+        }
+
+        fun getOrderMarkedForActions(actionsMarked:String): ArrayList<Long>? {
+            var realm = CXRealmManager.getRealmInstance()
+            var itemId=ArrayList<Long>()
+            try {
+                realm.executeTransaction {
+                    var message1 =realm.where(Orders::class.java)
+                        .equalTo(Orders.COLUMN_ACTION_MARK_CR,1L)
+                        .findAll()
+                    Log.e(TAG,"message1 :${message1?.count()}")
+                    if(message1!=null){
+                        val iterator=message1.iterator()
+                        while (iterator.hasNext()) {
+                            val id=iterator.next()._id?:0L
+                            Log.e(TAG,"itemId :${id}")
+                            itemId.add(id)
+                        }
+                    }
+
+                }
+            } catch (e: Exception) {
+                Log.e(TAG,"while fetching actions : "+e.message)
+            } finally {
+//                realm.close()
+            }
+            return itemId
+        }
+
+        fun getEnquiryId(_id:Long): Long {
+            val realm = CXRealmManager.getRealmInstance()
+            return realm.where(Orders::class.java).equalTo(Orders.COLUMN__ID,_id).limit(1).findFirst()?.enquiryId?:0
         }
     }
 }

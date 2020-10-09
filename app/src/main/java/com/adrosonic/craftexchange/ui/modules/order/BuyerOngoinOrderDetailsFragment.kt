@@ -175,7 +175,6 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
             Utility.displayMessage("Coming soon",requireContext())
         }
         mBinding?.changeRequestLayer?.setOnClickListener {
-            Utility.displayMessage("Coming soon",requireContext())
         }
         mBinding?.taxInvoiceLayer?.setOnClickListener {
             Utility.displayMessage("Coming soon",requireContext())
@@ -324,15 +323,23 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
         mBinding?.enquiryUpdateDate?.text = "Last updated : ${orderDetails?.lastUpdated?.split("T")?.get(0)}"
         mBinding?.artisanBrand?.text = orderDetails?.companyName
         setProgressTimeline()
-        orderDetails?.changeRequestStatus?.let {
-                if (orderDetails?.changeRequestStatus!! > 0) {
-                    mBinding?.txtCr?.visibility = View.VISIBLE
-                    mBinding?.txtCrDate?.text = Utility.returnDisplayDate(orderDetails?.changeRequestModifiedOn ?: "")
-                } else {
-                    mBinding?.txtCr?.visibility = View.GONE
-                    mBinding?.txtCrDate?.text = ""
-                }
+
+        if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
+           orderDetails?.changeRequestStatus?.let {
+                    if (orderDetails?.changeRequestStatus!! > 0) {
+                        mBinding?.txtCr?.visibility = View.VISIBLE
+                        mBinding?.txtCrDate?.text = Utility.returnDisplayDate(orderDetails?.changeRequestModifiedOn ?: "")
+                    } else {
+                        mBinding?.txtCr?.visibility = View.GONE
+                        mBinding?.txtCrDate?.text = "Change request disabled by artisan"
+                    } }
+        } else {
+                mBinding?.txtCr?.visibility = View.VISIBLE
+                mBinding?.txtCrDate?.text = getString(R.string.cr_not_applicable)
+
         }
+
+
         var tranList = TransactionPredicates.getTransactionByEnquiryId(enqID?:0)
                 if(tranList!!.size>0){
                     mBinding?.viewTransaction?.text="View"
@@ -526,11 +533,7 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
         }else{
             mBinding?.viewPaymentLayer?.visibility = View.GONE
         }
-        orderDetails?.changeRequestOn?.let {
-            if (orderDetails?.changeRequestOn!!.equals(1L)) mBinding?.changeRequestLayer?.visibility =
-                View.VISIBLE
-            else mBinding?.changeRequestLayer?.visibility = View.GONE
-        }
+
     }
 
     override fun onResume() {
@@ -563,7 +566,6 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
             Log.e("OrderDetails", "Exception onFailure " + e.message)
         }
     }
-
 
     companion object {
 

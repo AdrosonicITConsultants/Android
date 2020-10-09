@@ -282,14 +282,14 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
                     call: Call<EnquiryResponse>,
                     response: retrofit2.Response<EnquiryResponse>) {
                     if(response.body()?.valid == true){
-                        Log.e("Enquiry Details","Success: "+response.body()?.errorMessage)
+                        Log.e("EnquiryDetails","Success: "+response.body()?.errorMessage)
                         EnquiryPredicates?.insertOngoingEnquiries(response?.body()!!)
                         EnquiryPredicates?.insertEnqPaymentDetails(response?.body()!!)
                         EnquiryPredicates?.insertEnqArtisanProductCategory(response?.body()!!)
                         fetchEnqListener?.onSuccess()
                     }else{
                         fetchEnqListener?.onFailure()
-                        Log.e("Enquiry Details","Failure: "+response.body()?.errorMessage)
+                        Log.e("EnquiryDetails","Failure: "+response.body()?.errorMessage)
                     }
                 }
 
