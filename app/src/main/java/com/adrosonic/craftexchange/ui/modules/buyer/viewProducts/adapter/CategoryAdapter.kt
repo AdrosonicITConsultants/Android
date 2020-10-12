@@ -2,6 +2,7 @@ package com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.adapter
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -19,8 +20,12 @@ import com.adrosonic.craftexchange.ui.interfaces.CategoryProductClick
 import com.adrosonic.craftexchange.ui.modules.buyer.landing.BuyerLandingActivity
 import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.productlists.CategoryProdListFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.adrosonic.craftexchange.utils.ImageSetter
+import com.adrosonic.craftexchange.utils.UserConfig
+import com.adrosonic.craftexchange.utils.Utility
 import com.pixplicity.easyprefs.library.Prefs
 import io.realm.RealmResults
+import org.json.JSONArray
 import retrofit2.Call
 import retrofit2.Response
 import javax.security.auth.callback.Callback
@@ -47,14 +52,36 @@ class CategoryAdapter(var context: Context?, private var categoryDetails: RealmR
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         var product = categoryDetails?.get(position)
-//        val rnd = Random()
-//        val currentColor = Color.argb(200, rnd.nextInt(202), rnd.nextInt(256), rnd.nextInt(256))
         product?.let { holder.bind(it) }
-
-//        holder.binding.prodImg.setBackgroundColor(currentColor) // TODO : to be commented later
         holder.binding.prodText.text= product?.product
-        //TODO : Img to be Implemented using CMS
-//        product.productImageId?.let { holder.binding.prodImg.setImageResource(it) }
+
+        //product image from cms
+        if(Utility.checkIfInternetConnected(context!!)) {
+            if (UserConfig.shared.categoryCMS != null) {
+                val dataJson = JSONArray(UserConfig.shared.categoryCMS)
+                Log.i("CMS", "DataJson : $dataJson")
+                for (i in 0 until dataJson.length()) {
+                    val dataObj = dataJson.getJSONObject(i)
+                    Log.i("CMS", "DataObj : $dataObj")
+                    var acfObj = dataObj?.getJSONObject("acf")
+                    var prodCatId = acfObj?.getString("category_id")?.toLong()
+
+                    if (product?.productCategoryid == prodCatId) {
+                        var imgUrl = acfObj?.getString("image")
+                        context?.let {
+                            imgUrl?.let { it1 ->
+                                ImageSetter.setCMSImage(
+                                    it,
+                                    it1, holder.binding.prodImg
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }else{
+            holder.binding.prodImg.setImageResource(R.drawable.demo_img)
+        }
     }
 
     fun updateCategoryList(newList: RealmResults<CategoryProducts>?){

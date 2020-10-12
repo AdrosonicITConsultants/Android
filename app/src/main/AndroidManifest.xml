@@ -19,22 +19,28 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity android:name=".ui.modules.transaction.ViewDocumentActivity"></activity>
+
         <activity
             android:name=".ui.modules.transaction.TransactionActivity"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.modules.buyer.enquiry.advPay.EnquiryPaymentActivity"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.modules.artisan.enquiry.pi.RaisePiActivity"
             android:configChanges="orientation|screenSize" />
+
         <activity
             android:name=".ui.modules.artisan.enquiry.pi.PiActivity"
             android:configChanges="orientation|screenSize" />
+
         <activity
             android:name=".ui.modules.dashboard.DashboardActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_dashboard" />
+
         <activity
             android:name=".ui.modules.enquiry.EnquiryDetailsActivity"
             android:launchMode="singleTop"
@@ -167,10 +173,12 @@
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
         <service android:name=".services.InstanceIdService">
+
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+
         <service android:name=".services.notification.MessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

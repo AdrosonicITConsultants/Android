@@ -36,7 +36,6 @@
 
             <ImageView
                 android:id="@+id/prod_img"
-                android:src="@drawable/demo_img"
                 android:layout_width="match_parent"
                 android:layout_height="130dp"
                 android:scaleType="centerCrop"/>

@@ -35,7 +35,6 @@
             android:id="@+id/prod_img"
             android:layout_width="@dimen/card_wt"
             android:layout_height="@dimen/card_ht"
-            android:src="@drawable/demo_img"
             android:scaleType="centerCrop"/>
 
         <TextView

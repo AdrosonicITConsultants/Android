@@ -716,6 +716,12 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
 
     override fun onResume() {
         super.onResume()
+//        if(Utility.checkIfInternetConnected(requireActivity())){
+//            enqID?.let { mEnqVM.getSingleOngoingEnquiry(it) }
+////            viewLoader()
+//        }else{
+//            Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
+//        }
         enqID?.let { mEnqVM?.getSingleOnEnqData(it) }
         setDetails()
     }

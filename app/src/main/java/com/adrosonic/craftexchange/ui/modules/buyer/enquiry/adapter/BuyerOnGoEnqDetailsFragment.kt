@@ -140,8 +140,7 @@ EnquiryViewModel.FetchEnquiryInterface,
             Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
         }
 
-        enqID?.let {
-            mEnqVM.getSingleOnEnqData(it)
+        enqID?.let { mEnqVM.getSingleOnEnqData(it)
                 .observe(viewLifecycleOwner, Observer<OngoingEnquiries> {
                     enquiryDetails = it
                 })
@@ -827,6 +826,12 @@ EnquiryViewModel.FetchEnquiryInterface,
 
     override fun onResume() {
         super.onResume()
+//        if(Utility.checkIfInternetConnected(requireActivity())){
+//            enqID?.let { mEnqVM.getSingleOngoingEnquiry(it) }
+//            viewLoader()
+//        }else{
+//            Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
+//        }
         enqID?.let { mEnqVM?.getSingleOnEnqData(it) }
         setDetails()
     }

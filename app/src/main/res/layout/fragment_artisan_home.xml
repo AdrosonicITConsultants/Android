@@ -137,9 +137,10 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/product_recycler_list"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="250dp"
                 android:layout_marginStart="@dimen/margin_regular"
+                android:layout_marginEnd="@dimen/margin_regular"
                 android:layout_marginTop="@dimen/margin_regular"
                 android:layout_marginBottom="@dimen/margin_regular"
                 app:layout_constraintEnd_toEndOf="parent"

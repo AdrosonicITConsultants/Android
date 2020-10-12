@@ -27,6 +27,7 @@ import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.P
 import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.adapter.CategoryAdapter
 import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.adapter.RegionAdapter
 import com.adrosonic.craftexchange.utils.Utility
+import com.adrosonic.craftexchange.viewModels.CMSViewModel
 import com.adrosonic.craftexchange.viewModels.CategoryViewModel
 import com.adrosonic.craftexchange.viewModels.ClusterViewModel
 import io.realm.RealmResults
@@ -48,7 +49,7 @@ class CategoryProductsFragment : Fragment(),
     private var categoryAdapter: CategoryAdapter?= null
     private var mCategoryList : RealmResults<CategoryProducts>?= null
     val mViewModel: CategoryViewModel by viewModels()
-
+    val mCMSViewModel: CMSViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -70,6 +71,7 @@ class CategoryProductsFragment : Fragment(),
         if (!Utility.checkIfInternetConnected(requireContext())) {
             Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
         } else {
+            mCMSViewModel.getCategoriesData()
             mViewModel.getAllCategories()
         }
 
