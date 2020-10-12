@@ -172,6 +172,10 @@
             android:name=".services.pi.PiService"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name=".services.cr.CrToggleService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
         <service android:name=".services.InstanceIdService">
 
             <intent-filter>

@@ -14,6 +14,7 @@ import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Build
+import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -34,6 +35,7 @@ import com.adrosonic.craftexchange.repository.data.response.moq.Datum
 import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimesResponse
 import com.adrosonic.craftexchange.repository.data.response.transaction.TranStatData
 import com.adrosonic.craftexchange.repository.data.response.transaction.TransactionStatusData
+import com.adrosonic.craftexchange.ui.modules.enquiry.enquiryDetails
 import com.bumptech.glide.Glide
 import com.google.gson.GsonBuilder
 import com.pixplicity.easyprefs.library.Prefs
@@ -266,15 +268,12 @@ class Utility {
 //                val intent = Intent(context?.enquiryDetails())
 //                var bundle = Bundle()
 //                Prefs.putString(ConstantsDirectory.ENQUIRY_ID, enquiryId) //TODO change later
-////                Prefs.putLong(ConstantsDirectory.ENQUIRY_STATUS_FLAG,2L)
 //                bundle.putString(ConstantsDirectory.ENQUIRY_ID, enquiryId)
 //                bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG,"2")
-////                bundle.putString(ConstantsDirectory.ENQUIRY_CODE,enquiry?.enquiryCode)
 //                intent.putExtras(bundle)
 //                context?.startActivity(intent)
             }
             dialog.setCanceledOnTouchOutside(false)
-
             return dialog
         }
 
@@ -297,18 +296,12 @@ class Utility {
 //                val intent = Intent(context?.enquiryDetails())
 //                var bundle = Bundle()
 //                Prefs.putString(ConstantsDirectory.ENQUIRY_ID, enquiryId) //TODO change later
-////                Prefs.putLong(ConstantsDirectory.ENQUIRY_STATUS_FLAG,2L)
 //                bundle.putString(ConstantsDirectory.ENQUIRY_ID, enquiryId)
 //                bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG,"2")
-//
-////                bundle.putString(ConstantsDirectory.ENQUIRY_CODE,enquiry?.enquiryCode)
 //                intent.putExtras(bundle)
 //                context?.startActivity(intent)
             }
-
             dialog.setCanceledOnTouchOutside(false)
-
-
             return dialog
         }
 

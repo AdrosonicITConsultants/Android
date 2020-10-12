@@ -1,5 +1,6 @@
 package com.adrosonic.craftexchange.ui.modules.order
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -11,9 +12,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -21,19 +19,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrosonic.craftexchange.R
-import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
 import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
-import com.adrosonic.craftexchange.database.predicates.EnquiryPredicates
-import com.adrosonic.craftexchange.database.predicates.MoqsPredicates
 import com.adrosonic.craftexchange.database.predicates.OrdersPredicates
 import com.adrosonic.craftexchange.database.predicates.TransactionPredicates
-import com.adrosonic.craftexchange.databinding.FragmentArtisanOnGoEnqDetailsBinding
 import com.adrosonic.craftexchange.databinding.FragmentArtisanOngoingOrderDetailsBinding
 import com.adrosonic.craftexchange.enums.*
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.repository.data.response.moq.Datum
-import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimesResponse
-import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.piContext
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
 import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
@@ -45,10 +37,8 @@ import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
 import com.adrosonic.craftexchange.viewModels.OrdersViewModel
 import com.adrosonic.craftexchange.viewModels.TransactionViewModel
-import com.agik.swipe_button.Controller.OnSwipeCompleteListener
-import com.agik.swipe_button.View.Swipe_Button_View
-import com.google.gson.GsonBuilder
-import com.pixplicity.easyprefs.library.Prefs
+import kotlinx.android.synthetic.main.dialog_are_you_sure.*
+import kotlinx.android.synthetic.main.dialog_cr_toggle_confirm.*
 
 
 private const val ARG_PARAM1 = "param1"
@@ -57,6 +47,7 @@ private const val ARG_PARAM2 = "param2"
 class ArtisanOngoinOrderDetailsFragment : Fragment(),
     OrdersViewModel.FetchOrderInterface,
     OrdersViewModel.changeStatusInterface,
+    OrdersViewModel.ToggleChangeInterface,
     TransactionViewModel.TransactionInterface{
 
     private var param1: String? = null
@@ -114,6 +105,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         Utility.getDeliveryTimeList()?.let {moqDeliveryTimeList.addAll(it)  }
         mOrderVm?.fetchEnqListener = this
         mOrderVm?.changeStatusListener = this
+        mOrderVm?.toggleListener = this
 //        mTranVM?.transactionListener = this
         mBinding?.swipeEnquiryDetails?.isEnabled = false
         if(Utility.checkIfInternetConnected(requireActivity())){
@@ -175,6 +167,38 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
             if(mBinding?.transactionList!!.visibility==View.VISIBLE) mBinding?.transactionList!!.visibility=View.GONE
             else mBinding?.transactionList!!.visibility=View.VISIBLE
         }
+        mBinding?.btnMenu?.setOnClickListener {
+            if(mBinding?.menuList!!.visibility==View.VISIBLE) mBinding?.menuList!!.visibility=View.GONE
+            else mBinding?.menuList!!.visibility=View.VISIBLE
+        }
+        mBinding?.toogleCr?.setOnClickListener {
+//            if(!b){
+                var dialog = Dialog(requireActivity())
+                dialog.setContentView(R.layout.dialog_cr_toggle_confirm)
+                dialog.create()
+                dialog.show()
+                dialog.btn_cancel?.setOnClickListener {
+                    dialog.cancel()
+                    mBinding?.toogleCr?.isChecked=true
+                    mBinding?.menuList!!.visibility=View.GONE
+                }
+                dialog.btn_ok?.setOnClickListener {
+                    enqID?.let {
+                        if(Utility.checkIfInternetConnected(requireContext())) {
+                            viewLoader()
+                            mOrderVm.setCrToggle(enqID ?: 0)
+                        }else{
+                            OrdersPredicates.updateCrStatusForOffline(enqID)
+                            mBinding?.toogleCr?.isEnabled=false
+                            mBinding?.toogleCr?.isChecked=false
+                            mBinding?.toogleCr?.text="Change request disabled"
+                            mBinding?.menuList?.visibility=View.GONE
+                        }
+                        dialog.cancel()
+                    }
+                }
+//            }
+        }
         mBinding?.qualityCheckLayer?.setOnClickListener {
             //todo call intent
         }
@@ -228,12 +252,12 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
     }
 
     fun setDetails(){
-        try {
-            Handler(Looper.getMainLooper()).post(Runnable {
-
+    try {
+        Handler(Looper.getMainLooper()).post(Runnable {
         setTabVisibilities()
         setViewEnquiryStageChangeButton()
         viewChangeStatusLayer()
+        setToggleVisiblity()
         mBinding?.orderCode?.text = orderDetails?.orderCode
         mBinding?.enquiryStartDate?.text = "Date accepted : ${orderDetails?.startedOn?.split("T")?.get(0)}"
         val image = orderDetails?.productImages?.split((",").toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()?.get(0)
@@ -383,6 +407,10 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
                     mBinding?.viewTransaction?.text="No transaction present"
                 }
         })
+        //cr
+        if(orderDetails?.productStatusId == AvailableStatus.IN_STOCK.getId()) {
+            mBinding?.txtCrLayerStatus?.text="Change request is not applicable for in stock Products."
+        }
         } catch (e: Exception) {
             Log.e("setDetails", "Exception " + e.message)
         }
@@ -555,6 +583,23 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         mBinding?.swipeEnquiryDetails?.isRefreshing = false
     }
 
+    private  fun setToggleVisiblity(){
+        if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
+            mBinding?.toogleCr?.visibility=View.VISIBLE
+            if(orderDetails?.changeRequestOn!!>0 && orderDetails?.actionMarkCr!!<1L){
+                mBinding?.toogleCr?.isEnabled=true
+                mBinding?.toogleCr?.isChecked=true
+                mBinding?.toogleCr?.text="Change request enabled"
+            }
+            else{
+                mBinding?.toogleCr?.isEnabled=false
+                mBinding?.toogleCr?.isChecked=false
+                mBinding?.toogleCr?.text="Change request disabled"
+            }
+        }
+        else  mBinding?.toogleCr?.visibility=View.GONE
+    }
+
     private fun setTabVisibilities(){
         if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
             if(orderDetails?.enquiryStageId!! >= 4L){
@@ -634,23 +679,6 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
             }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-//        Log.e("PiActivity", "onActivityResult $requestCode")
-//        Log.e("PiActivity", "onActivityResult $resultCode")
-//        Log.e("PiActivity", "onActivityResult RESULT_OK ${Activity.RESULT_OK}")
-//        if (requestCode == ConstantsDirectory.RESULT_PI) { // Please, use a final int instead of hardcoded int value
-//            if (resultCode == Activity.RESULT_OK) {
-////                viewLoader()
-//                Log.e("PiActivity", "onActivityResult enqID ${enqID}")
-//                enqID?.let {
-////                    mOrderVm.getSingleOngoingEnquiry(it)
-//                    EnquiryPredicates.updatePiStatus(it)
-//                    setDetails()
-//                }
-//            }
-//        }
-    }
 
     override fun onStatusChangeSuccess() {
         try {
@@ -703,6 +731,36 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
             })
         } catch (e: Exception) {
             Log.e("Transaction", "Exception onStatusChangeFailure " + e.message)
+        }
+    }
+
+    override fun onToggleSuccess() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("Toggle","onToggleSuccess")
+                Utility.displayMessage("Change request disabled succesfully",requireContext())
+                hideLoader()
+                mBinding?.toogleCr?.isEnabled=false
+                mBinding?.toogleCr?.isChecked=false
+                mBinding?.toogleCr?.text="Change request disabled"
+                mBinding?.menuList?.visibility=View.GONE
+            })
+        } catch (e: Exception) {
+            Log.e("Toggle", "Exception onStatusChangeFailure " + e.message)
+        }
+    }
+
+    override fun onToggleFailure() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("Toggle","onToggleFailure")
+                mBinding?.menuList?.visibility=View.GONE
+                hideLoader()
+                Utility.displayMessage("Error while changing request status",requireContext())
+
+            })
+        } catch (e: Exception) {
+            Log.e("Toggle", "Exception onToggleFailure " + e.message)
         }
     }
 

@@ -19,6 +19,7 @@ import com.adrosonic.craftexchange.repository.data.request.moq.SendMoqRequest
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.generateEnquiry.GenerateEnquiryResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.IfExistEnquiryResponse
+import com.adrosonic.craftexchange.repository.data.response.buyer.ownDesign.DeleteOwnProductRespons
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryResponse
 import com.adrosonic.craftexchange.repository.data.response.marketing.ArtisanDetailsResponse
 import com.adrosonic.craftexchange.repository.data.response.moq.GetMoqsResponse
@@ -58,6 +59,10 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
         fun onStatusChangeSuccess()
         fun onStatusChangeFailure()
     }
+    interface ToggleChangeInterface{
+        fun onToggleSuccess()
+        fun onToggleFailure()
+    }
     val ongoingOrderList : MutableLiveData<RealmResults<Orders>> by lazy { MutableLiveData<RealmResults<Orders>>() }
     val onGoingOrderDetails : MutableLiveData<Orders> by lazy { MutableLiveData<Orders>() }
 
@@ -65,6 +70,7 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
 
     var fetchEnqListener : FetchOrderInterface ?= null
     var changeStatusListener : changeStatusInterface?= null
+    var toggleListener : ToggleChangeInterface?= null
 
     fun getOnOrderListMutableData(): MutableLiveData<RealmResults<Orders>> {
         ongoingOrderList.value=loadOnOrderList()
@@ -277,6 +283,34 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
             })
     }
 
+    fun setCrToggle(enquiryId: Long){
+        Log.e("Toggle","enquiryId: "+enquiryId)
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getCrService()
+            .toggleChangeRequestFromArtisan(token,enquiryId.toInt(),0)
+            .enqueue(object : Callback, retrofit2.Callback<DeleteOwnProductRespons> {
+                override fun onFailure(call: Call<DeleteOwnProductRespons>, t: Throwable) {
+                    t.printStackTrace()
+                    Log.e("Toggle","isSuccessful false")
+                    toggleListener?.onToggleFailure()
+                }
+                override fun onResponse(
+                    call: Call<DeleteOwnProductRespons>,
+                    response: Response<DeleteOwnProductRespons>
+                ) {
+                    Log.e("Toggle","onResponse : ${response?.body()?.data}")
+                    if(response?.body()?.valid!!){
+                        Log.e("Toggle","isSuccessful ")
+                        OrdersPredicates.updateCrStatus(enquiryId)
+                        toggleListener?.onToggleSuccess()
+                    }else{
+                        Log.e("Toggle","isSuccessful false")
+                        toggleListener?.onToggleFailure()
+                    }
+                }
+            })
+    }
 }
 
 

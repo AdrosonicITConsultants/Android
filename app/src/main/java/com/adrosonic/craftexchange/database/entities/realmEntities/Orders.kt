@@ -40,7 +40,7 @@ open class Orders:RealmObject() {
     var productImages:  String? = ""
     var orderReceiveDate:  String? = ""
     var excpectedDate:  String? = ""
-    var changeRequestModifiedOn:  String? = ""
+    var changeRequestModifiedOn:  String? = ""//date
     var innerEnquiryStageId: Long? = 0
     var enquiryStageId: Long?=0
     var startedOn: String?=""
@@ -77,13 +77,16 @@ open class Orders:RealmObject() {
     var isBlue: Long?  = 0
 
     var isOrderFromCompleted:Long?=0
+    var actionMarkCr:Long?=0
 
     companion object{
+        const val COLUMN__ID = "_id"
         const val COLUMN_ENQUIRY_ID = "enquiryId"
         const val COLUMN_PRODUCT_ID = "productId"
         const val COLUMN_ENQUIRY_CODE = "enquiryCode"
         const val COLUMN_ORDER_CODE = "orderCode"
         const val COLUMN_LAST_UPDATED = "lastUpdated"
         const val COLUMN_IS_COMPLETED = "isOrderFromCompleted"
+        const val COLUMN_ACTION_MARK_CR = "actionMarkCr"
     }
 }
