@@ -16,6 +16,7 @@ import com.adrosonic.craftexchange.repository.data.response.artisan.productTempl
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.BrandListResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.singleProduct.SingleProductDetails
 import com.adrosonic.craftexchange.repository.data.response.buyer.wishList.WishListedIds
+import com.adrosonic.craftexchange.repository.data.response.changeReequest.CrOptionsResponse
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryAvaProdStageData
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryStageData
 import com.adrosonic.craftexchange.repository.data.response.enquiry.InnerStageData
@@ -390,6 +391,26 @@ class LandingViewModel(application: Application) : AndroidViewModel(application)
                 ) {
                     if(data.body()?.valid == true){
                         UserConfig.shared.transactionStatusData= Gson().toJson(data.body())
+                    }
+                }
+            })
+    }
+
+    fun getChangeRequestStatuses(){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+
+        CraftExchangeRepository
+            .getCrService()
+            .getChangeRequestItemTable(token).enqueue(object : Callback, retrofit2.Callback<CrOptionsResponse> {
+                override fun onFailure(call: Call<CrOptionsResponse>, t: Throwable) {
+                    t.printStackTrace()
+                }
+                override fun onResponse(
+                    call: Call<CrOptionsResponse>,
+                    data: Response<CrOptionsResponse>
+                ) {
+                    if(data.body()?.valid == true){
+                        UserConfig.shared.crStatusData= Gson().toJson(data.body())
                     }
                 }
             })

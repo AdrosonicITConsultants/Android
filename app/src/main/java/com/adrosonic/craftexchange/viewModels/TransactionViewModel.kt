@@ -232,6 +232,7 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
                 }
             })
     }
+
     fun getSingleCompletedTransactions(enquiryId : Long){
         Log.e("Transaction","getSingleTransactions :$enquiryId")
         CraftExchangeRepository
@@ -257,4 +258,6 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
                 }
             })
     }
+
+
 }

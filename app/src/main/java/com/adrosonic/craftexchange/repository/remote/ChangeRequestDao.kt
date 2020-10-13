@@ -1,8 +1,12 @@
 package com.adrosonic.craftexchange.repository.remote
 
+import com.adrosonic.craftexchange.repository.data.request.changeRequest.RaiseCrInput
+import com.adrosonic.craftexchange.repository.data.response.Notification.NotificationReadResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.generateEnquiry.GenerateEnquiryResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.IfExistEnquiryResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.ownDesign.DeleteOwnProductRespons
+import com.adrosonic.craftexchange.repository.data.response.changeReequest.CrDetailsResponse
+import com.adrosonic.craftexchange.repository.data.response.changeReequest.CrOptionsResponse
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryAvaProdStageData
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryStageData
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryResponse
@@ -20,18 +24,19 @@ interface ChangeRequestDao {
                                        @Query("status") status : Int) : Call<DeleteOwnProductRespons>
 
     @Headers("Accept: application/json")
-    @GET("/order/getOrder/{enquiryId}")
-    fun getSingleOngoingOrder(@Header("Authorization") token:String,
-                              @Query("enquiryId") enquiryId : Int) : Call<OrderResponse>
+    @GET("/enquiry/getChangeRequestItemTable")
+    fun getChangeRequestItemTable(@Header("Authorization") token:String) : Call<CrOptionsResponse>
 
 
     @Headers("Accept: application/json")
-    @GET("/order/getClosedOrders")
-    fun getAllClosedOrders(@Header("Authorization") token:String) : Call<OrderResponse>
+    @GET("/enquiry/getChangeRequestForArtisan")
+    fun getChangeRequestDetails(@Header("Authorization") token:String, @Query("enquiryId") enquiryId : Int) : Call<CrDetailsResponse>
 
     @Headers("Accept: application/json")
-    @GET("/order/getClosedOrder/{enquiryId}")
-    fun getSingleClosedOrder(@Header("Authorization") token:String,
-                                @Query("enquiryId") enquiryId : Int) : Call<OrderResponse>
+    @POST("/enquiry/changeRequest")
+    fun raiseChangeRequest(@Header("Authorization") token:String,
+                                       @Query("enquiryId") enquiryId : Int,
+                                       @Body changeRequestParameters : RaiseCrInput
+    ) : Call<NotificationReadResponse>//data field should be Change Request Updated
 
 }

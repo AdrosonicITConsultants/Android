@@ -1095,7 +1095,6 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                 pairList.clear()
                 Log.e("DownLoadProdImages", "5555555 : " + imageList.joinToString())
                 imageList.forEach {
-
                     val myDir = File(this.cacheDir, "/"+ Utility.BROWSING_IMGS+"/$it")
                     Log.e("DownLoadProdImages", "66666 : ${myDir.absolutePath}")
                     pairList.add(Triple(false, 0, myDir.absolutePath))

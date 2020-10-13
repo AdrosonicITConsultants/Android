@@ -405,6 +405,7 @@ class BuyerLandingActivity : AppCompatActivity(),
             mProVM.getBuyerProfileDetails(this)
             mProVM.getUserMutableData()
             mViewModel?.getTransactionStatus()
+            mViewModel?.getChangeRequestStatuses()
         }
     }
 

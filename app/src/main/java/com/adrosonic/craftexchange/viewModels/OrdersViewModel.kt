@@ -9,17 +9,17 @@ import androidx.lifecycle.MutableLiveData
 import com.adrosonic.craftexchange.database.entities.realmEntities.CompletedEnquiries
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
 import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
-import com.adrosonic.craftexchange.database.predicates.EnquiryPredicates
-import com.adrosonic.craftexchange.database.predicates.MoqsPredicates
-import com.adrosonic.craftexchange.database.predicates.OrdersPredicates
-import com.adrosonic.craftexchange.database.predicates.PiPredicates
+import com.adrosonic.craftexchange.database.predicates.*
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
+import com.adrosonic.craftexchange.repository.data.request.changeRequest.RaiseCrInput
 import com.adrosonic.craftexchange.repository.data.request.enquiry.BuyerPayment
 import com.adrosonic.craftexchange.repository.data.request.moq.SendMoqRequest
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
+import com.adrosonic.craftexchange.repository.data.response.Notification.NotificationReadResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.generateEnquiry.GenerateEnquiryResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.IfExistEnquiryResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.ownDesign.DeleteOwnProductRespons
+import com.adrosonic.craftexchange.repository.data.response.changeReequest.CrDetailsResponse
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryResponse
 import com.adrosonic.craftexchange.repository.data.response.marketing.ArtisanDetailsResponse
 import com.adrosonic.craftexchange.repository.data.response.moq.GetMoqsResponse
@@ -63,6 +63,10 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
         fun onToggleSuccess()
         fun onToggleFailure()
     }
+    interface FetchCrInterface{
+        fun onFetchCrSuccess()
+        fun onFetchCrFailure()
+    }
     val ongoingOrderList : MutableLiveData<RealmResults<Orders>> by lazy { MutableLiveData<RealmResults<Orders>>() }
     val onGoingOrderDetails : MutableLiveData<Orders> by lazy { MutableLiveData<Orders>() }
 
@@ -71,6 +75,7 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
     var fetchEnqListener : FetchOrderInterface ?= null
     var changeStatusListener : changeStatusInterface?= null
     var toggleListener : ToggleChangeInterface?= null
+    var fetcCrListener : FetchCrInterface?= null
 
     fun getOnOrderListMutableData(): MutableLiveData<RealmResults<Orders>> {
         ongoingOrderList.value=loadOnOrderList()
@@ -307,6 +312,66 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
                     }else{
                         Log.e("Toggle","isSuccessful false")
                         toggleListener?.onToggleFailure()
+                    }
+                }
+            })
+    }
+
+    fun getChangeRequestDetails(enquiryId: Long){
+        Log.e("CrDetails","enquiryId: "+enquiryId)
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getCrService()
+            .getChangeRequestDetails(token,enquiryId.toInt())
+            .enqueue(object : Callback, retrofit2.Callback<CrDetailsResponse> {
+                override fun onFailure(call: Call<CrDetailsResponse>, t: Throwable) {
+                    t.printStackTrace()
+                    Log.e("CrDetails","isSuccessful false")
+                    fetcCrListener?.onFetchCrFailure()
+                }
+                override fun onResponse(
+                    call: Call<CrDetailsResponse>,
+                    response: Response<CrDetailsResponse>
+                ) {
+                    Log.e("CrDetails","onResponse : ${response?.body()?.data}")
+                    if(response?.body()?.valid!!){
+                        Log.e("CrDetails","isSuccessful ")
+                        if(response?.body()!!.data!!.changeRequestItemList!!.size>0){
+                            CrPredicates.insertChangeReq(response?.body())
+                            fetcCrListener?.onFetchCrSuccess()
+                        }else  fetcCrListener?.onFetchCrFailure()
+                    }else{
+                        Log.e("Toggle","isSuccessful false")
+                        fetcCrListener?.onFetchCrFailure()
+                    }
+                }
+            })
+    }
+
+    fun raiseChangeRequest(enquiryId: Long,changeRequestParameters : RaiseCrInput){
+        Log.e("RaiseCr","enquiryId: "+enquiryId)
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getCrService()
+            .raiseChangeRequest(token,enquiryId.toInt(),changeRequestParameters)
+            .enqueue(object : Callback, retrofit2.Callback<NotificationReadResponse> {
+                override fun onFailure(call: Call<NotificationReadResponse>, t: Throwable) {
+                    t.printStackTrace()
+                    Log.e("RaiseCr","isSuccessful false")
+                    fetcCrListener?.onFetchCrFailure()
+                }
+                override fun onResponse(
+                    call: Call<NotificationReadResponse>,
+                    response: Response<NotificationReadResponse>
+                ) {
+                    Log.e("RaiseCr","onResponse : ${response?.body()?.data}")
+                    if(response?.body()?.valid!!){
+                        Log.e("RaiseCr","isSuccessful ")
+                        OrdersPredicates.updateChangerequestStatus(enquiryId)
+                        fetcCrListener?.onFetchCrSuccess()
+                    }else{
+                        Log.e("RaiseCr","isSuccessful false")
+                        fetcCrListener?.onFetchCrFailure()
                     }
                 }
             })

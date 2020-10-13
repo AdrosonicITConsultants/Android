@@ -272,7 +272,10 @@
     <string name="mark_as_still_in_progress">Mark as still in progress</string>
     <string name="mark_as_completed">Mark as completed and move to next stage</string>
     <string name="you_have_to_update_8hrs">You have to update the status every \n8 hours to avoid escalation</string>
-    <string name="change_request_initiated"> Change request initiated</string>
+    <string name="change_request_initiated">\tChange request initiated</string>
     <string name="disable_change_request">Disable change request</string>
     <string name="cr_not_applicable">Change request is not applicable for in stock Products.</string>
+    <string name="cr_pleas_note">Please Note:\nChange request may be accepted or rejected subjective to the feasibility of the change by artisan.If accepted, there may be a change in final amount and hence the pro forma invoice.</string>
+    <string name="cr_note">You can only submit this change request once.Be sure about the change requested before submitting.\n\n</string>
+    <string name="cr_confirm_note">This change request may or may not be accepted. You can raise change request if rejected by first discussing with artisan in advance to avoid any rejection.</string>
 </resources>

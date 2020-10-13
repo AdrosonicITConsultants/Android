@@ -380,6 +380,7 @@ class ArtisanLandingActivity : AppCompatActivity(),
             mViewModel?.getAllNotifications()
             mProVM.getArtisanProfileDetails(this)
             mViewModel?.getTransactionStatus()
+            mViewModel?.getChangeRequestStatuses()
             craftUser = mProVM.getUserMutableData()
             setProfileImage()
 

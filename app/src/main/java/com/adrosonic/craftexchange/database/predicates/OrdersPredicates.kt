@@ -267,6 +267,26 @@ class OrdersPredicates {
                 }
             }
         }
+        fun updateChangerequestStatus(enquiryId: Long?){
+            var realm = CXRealmManager.getRealmInstance()
+            var orders : Orders?= null
+            realm.executeTransaction {
+                try{
+                    orders = realm.where(Orders::class.java)
+                        .equalTo(Orders.COLUMN_ENQUIRY_ID,enquiryId)
+                        .limit(1)
+                        .findFirst()
+                    Log.e("RaiseCr","changeRequestStatus 1111: ${orders?.changeRequestStatus}")
+                    orders?.let {
+                        orders?.changeRequestStatus=0L
+                        realm.copyToRealmOrUpdate(orders)
+                    }
+                    Log.e("RaiseCr","changeRequestStatus 2222: ${orders?.changeRequestStatus}")
+                }catch (e:Exception){
+                    Log.e("RaiseCr","Exception : "+e.printStackTrace())
+                }
+            }
+        }
         fun updateCrStatusForOffline(enquiryId: Long?){
             var realm = CXRealmManager.getRealmInstance()
             var orders : Orders?= null
