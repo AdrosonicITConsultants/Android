@@ -11,7 +11,7 @@ open class ChangeRequests : RealmObject() {
     var status: Long?=0
     var createdOn: String?=""
     var modifiedOn: String?=""
-    var crItemId: Long?=0
+//    var crItemId: Long?=0
     var changeRequestId: Long?=0
     var requestItemsId: Long?=0
     var requestText: String?=""

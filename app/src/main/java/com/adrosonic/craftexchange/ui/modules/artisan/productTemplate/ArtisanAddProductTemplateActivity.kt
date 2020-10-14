@@ -326,8 +326,6 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                 }
             })
 
-
-
             /////////////////reed count/////////////////////
             arrReedCountStr.add("Select reed count")
             arrReedCount?.forEach { arrReedCountStr.add(it.count) }

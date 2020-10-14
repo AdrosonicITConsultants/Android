@@ -35,6 +35,7 @@ import com.adrosonic.craftexchange.databinding.ActivityPiBinding
 import com.adrosonic.craftexchange.repository.data.request.changeRequest.ItemList
 import com.adrosonic.craftexchange.repository.data.request.changeRequest.RaiseCrInput
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
+import com.adrosonic.craftexchange.repository.data.response.changeReequest.CrOption
 import com.adrosonic.craftexchange.repository.data.response.changeReequest.CrOptionsResponse
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryAvaProdStageData
 import com.adrosonic.craftexchange.repository.data.response.moq.Datum
@@ -74,11 +75,16 @@ class CrActivity : AppCompatActivity(),
     var qty = ""
     var motifSize = ""
     var motif = ""
+    var stageList =ArrayList<CrOption>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_cr)
         val view = mBinding?.root
         setContentView(view)
+        val gson = GsonBuilder().create()
+        var crStages = gson.fromJson(UserConfig.shared.crStatusData.toString(), CrOptionsResponse::class.java)
+        stageList.clear()
+        stageList.addAll(crStages.data)
         if (intent.extras != null) {
             enquiryId = intent.getLongExtra("enquiryId",0)
             changeRequestStatus = intent.getLongExtra("changeRequestStatus",4)
@@ -112,16 +118,43 @@ class CrActivity : AppCompatActivity(),
     fun setDetails(){
         mBinding?.enquiryCode?.text="CR for ${orderDetails?.orderCode}"
         mBinding?.enquiryStartDate?.text = "Date accepted : ${orderDetails?.startedOn?.split("T")?.get(0)}"
-        when(changeRequestStatus){
-            0L->{
-                mBinding?.etWeftYarn?.isEnabled=false
-                mBinding?.etColor?.isEnabled=false
-                mBinding?.etQty?.isEnabled=false
-                mBinding?.etMotifSize?.isEnabled=false
-                mBinding?.etMotif?.isEnabled=false
+        when(changeRequestStatus) {
+            0L -> {
+                mBinding?.txtCrSwipe?.visibility=View.GONE
+                mBinding?.etWeftYarn?.isEnabled = false
+                mBinding?.etColor?.isEnabled = false
+                mBinding?.etQty?.isEnabled = false
+                mBinding?.etMotifSize?.isEnabled = false
+                mBinding?.etMotif?.isEnabled = false
                 var changeReq = CrPredicates.getCrs(enquiryId)
-//                when
-                    //todo UI
+                if(changeReq!=null) {
+                    val crIterator=changeReq.iterator()
+                    while (crIterator.hasNext()) {
+                        val cr = crIterator.next()
+                        stageList.forEach {
+                            if (cr.requestItemsId!!.equals(it.id)) {
+                                when (it.item) {
+                                    "Change in weft Yarn" -> {
+                                        mBinding?.etWeftYarn?.setText(cr?.requestText ?: "", TextView.BufferType.NORMAL)
+                                    }
+                                    "Change in color" -> {
+                                        mBinding?.etColor?.setText( cr?.requestText ?: "",TextView.BufferType.NORMAL)
+                                    }
+                                    "Change in Quantity" -> {
+                                        mBinding?.etQty?.setText(cr?.requestText ?: "", TextView.BufferType.NORMAL )
+                                    }
+                                    "Change in motif size" -> {
+                                        mBinding?.etMotifSize?.setText(cr?.requestText ?: "",TextView.BufferType.NORMAL)
+                                    }
+                                    "Change in motif placement" -> {
+                                        mBinding?.etMotif?.setText(cr?.requestText ?: "",TextView.BufferType.NORMAL)
+                                    }
+                                }
+                            }
+                        }
+                        setStatusResource()
+                    }
+                }
             }
         }
     }
@@ -139,9 +172,7 @@ class CrActivity : AppCompatActivity(),
         dialog.create()
         dialog.show()
 
-        val gson = GsonBuilder().create()
-        var crStages = gson.fromJson(UserConfig.shared.crStatusData.toString(), CrOptionsResponse::class.java)
-        var stageList = crStages.data
+
 
         val itemList= ArrayList<ItemList>()
         if(weftYarn.isNotEmpty()){

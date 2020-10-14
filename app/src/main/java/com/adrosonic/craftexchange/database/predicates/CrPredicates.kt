@@ -22,13 +22,13 @@ class CrPredicates {
                     while (crIterator!!.hasNext()) {
                         val crItemsOb=crIterator.next()
                         var crObj = realm.where(ChangeRequests::class.java)
-                            .equalTo(ChangeRequests.COLUMN_ENQUIRY_ID, crDetailst.data.changeRequest.enquiryID)
+                            .equalTo(ChangeRequests.COLUMN_CR_ID,crItemsOb?.id)
                             .limit(1)
                             .findFirst()
-                        val enqId = crObj?.enquiryId ?: 0
-                        Log.e(TAG, "222222222222222 : ${crDetailst.data.changeRequest.enquiryID}")
-                        if (!enqId.equals(crDetailst.data.changeRequest.enquiryID)) {
-                            Log.e(TAG, "Insert: ${enqId}")
+                        val crId = crObj?.crId ?: 0
+                        Log.e("CrDetails", "11111111: ${crItemsOb.id}")
+                        if (!crId.equals(crItemsOb.id)) {
+                            Log.e("CrDetails", "Insert: ${crItemsOb.id}")
                             var primId = it.where(ChangeRequests::class.java).max(ChangeRequests.COLUMN__ID)
                             if (primId == null) {
                                 nextID = 1
@@ -36,30 +36,29 @@ class CrPredicates {
                                 nextID = primId.toLong() + 1
                             }
                             var crDetails = it.createObject(ChangeRequests::class.java, nextID)
-                            crDetails?.enquiryId = crDetailst.data.changeRequest.enquiryID
-                            crDetails?.crId = crDetailst.data.changeRequest.id
+                            crDetails?.enquiryId = crDetailst.data.changeRequest.enquiryId
+                            crDetails?.crId = crItemsOb.id
                             crDetails?.status = crDetailst.data.changeRequest.status
                             crDetails?.createdOn = crDetailst.data.changeRequest.createdOn
                             crDetails?.modifiedOn =crDetailst.data.changeRequest.modifiedOn
-                            crDetails?.crItemId = crItemsOb?.id
-                            crDetails?.changeRequestId = crItemsOb?.changeRequestID
-                            crDetails?.requestItemsId = crItemsOb?.requestItemsID
+                            crDetails?.changeRequestId = crItemsOb?.changeRequestId
+                            crDetails?.requestItemsId = crItemsOb?.requestItemsId
                             crDetails?.requestText = crItemsOb?.requestText
                             crDetails?.requestStatus = crItemsOb?.requestStatus
-                            Log.e(TAG, "Insert nextID: ${nextID}")
+                            Log.e("CrDetails", "Insert nextID: ${nextID}")
                             realm.copyToRealmOrUpdate(crDetails)
                         } else {
-                            crObj?.enquiryId = crDetailst.data.changeRequest.enquiryID
-                            crObj?.crId = crDetailst.data.changeRequest.id
+                            Log.e("CrDetails", "Update: ${crItemsOb.id}")
+                            crObj?.enquiryId = crDetailst.data.changeRequest.enquiryId
+                            crObj?.crId = crItemsOb.id
                             crObj?.status = crDetailst.data.changeRequest.status
                             crObj?.createdOn = crDetailst.data.changeRequest.createdOn
                             crObj?.modifiedOn =crDetailst.data.changeRequest.modifiedOn
-                            crObj?.crItemId = crItemsOb?.id
-                            crObj?.changeRequestId = crItemsOb?.changeRequestID
-                            crObj?.requestItemsId = crItemsOb?.requestItemsID
+                            crObj?.changeRequestId = crItemsOb?.changeRequestId
+                            crObj?.requestItemsId = crItemsOb?.requestItemsId
                             crObj?.requestText = crItemsOb?.requestText
                             crObj?.requestStatus = crItemsOb?.requestStatus
-                            Log.e(TAG, "Update enquiryId: ${ crDetailst.data.changeRequest.enquiryID}")
+                            Log.e("CrDetails", "Update enquiryId: ${ crDetailst.data.changeRequest.enquiryId}")
                             realm.copyToRealmOrUpdate(crObj)
                         }
                     }

@@ -177,6 +177,7 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
             if(orderDetails?.changeRequestOn==1L) {
                 when (orderDetails?.changeRequestStatus) {
                     0L -> {
+                        //waiting for ack
                         enqID?.let { startActivity(requireActivity().crContext(it, 0L)) }
                     }
                     1L -> {
@@ -186,7 +187,9 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
                     3L -> {
                     }
                     else -> {
-                        enqID?.let { startActivity(requireActivity().crContext(it, 4L)) }
+                       val days =Utility.getDateDiffInDays(Utility.returnDisplayDate(orderDetails?.orderCreatedOn?:""))
+                       if(days>=10) Utility.displayMessage("Last date to raise Change Request passed.",requireContext())
+                       else enqID?.let { startActivity(requireActivity().crContext(it, 4L)) }
                     }
                 }
             } else Utility.displayMessage("Change request disabled by artisan.",requireContext())
@@ -393,16 +396,11 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
                              mBinding?.txtCrDate?.text = Utility.returnDisplayDate(orderDetails?.changeRequestModifiedOn ?: "")
                          }
                          else -> {
-//                             val currentDateTime=System.currentTimeMillis()
-//                             val orderCreatedOn=Utility.returnDisplayDate(orderDetails?.orderCreatedOn?:"")
-//                             val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
-//                             val dateString =dateFormat.parse(orderCreatedOn)
-//                             val orderDateMillis=dateString.time
-//                             Log.e("RaiseCr","orderDateMillis $orderDateMillis")
-//                             Log.e("RaiseCr","orderDateMillis ${orderDateMillis-orderDateMillis}")
-////                             if()
                              mBinding?.txtCr?.visibility = View.GONE
-                             mBinding?.txtCrDate?.text = ""
+                             val days =Utility.getDateDiffInDays(Utility.returnDisplayDate(orderDetails?.orderCreatedOn?:""))
+                             Log.e("RaiseCr","days ${days}")
+                             if(days>=10)mBinding?.txtCrDate?.text = "Last date to raise Change Request passed."
+                             else mBinding?.txtCrDate?.text = ""
                          }
                      }
                  }

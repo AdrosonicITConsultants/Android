@@ -14,7 +14,7 @@ data class Data (
 
 data class ChangeRequest (
     val id: Long,
-    val enquiryID: Long,
+    val enquiryId: Long,
     val status: Long,
     val createdOn: String,
     val modifiedOn: String
@@ -22,8 +22,8 @@ data class ChangeRequest (
 
 data class ChangeRequestItemList (
     val id: Long,
-    val changeRequestID: Long,
-    val requestItemsID: Long,
+    val changeRequestId: Long,
+    val requestItemsId: Long,
     val requestText: String,
     val requestStatus: Long
 )

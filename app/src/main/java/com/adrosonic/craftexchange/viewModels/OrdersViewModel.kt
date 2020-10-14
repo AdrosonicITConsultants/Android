@@ -341,7 +341,7 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
                             fetcCrListener?.onFetchCrSuccess()
                         }else  fetcCrListener?.onFetchCrFailure()
                     }else{
-                        Log.e("Toggle","isSuccessful false")
+                        Log.e("CrDetails","isSuccessful false")
                         fetcCrListener?.onFetchCrFailure()
                     }
                 }
