@@ -23,8 +23,7 @@ interface UserDao {
     fun editBuyerDetailsPhoto(@Header("Content-Type") headerValue:String,
                               @Header("Authorization") token:String,
                               @Query("profileDetails") profileDetails : String,
-                              @Body logo : MultipartBody
-    ): Call<EditProfileResponse>
+                              @Body logo : MultipartBody): Call<EditProfileResponse>
 
     @Headers("Accept: application/json")
     @PUT("user/edit/buyerProfile")
@@ -36,8 +35,7 @@ interface UserDao {
     fun editArtisanProfileDetailsPhoto(@Header("Content-Type") headerValue:String,
                                        @Header("Authorization") token:String,
                                        @Query("address") address : String,
-                                       @Body profilePic : MultipartBody?
-    ): Call<EditDetailsResponse>
+                                       @Body profilePic : MultipartBody?): Call<EditDetailsResponse>
 
     @Headers("Accept: application/json")
     @PUT("user/edit/artistProfile")

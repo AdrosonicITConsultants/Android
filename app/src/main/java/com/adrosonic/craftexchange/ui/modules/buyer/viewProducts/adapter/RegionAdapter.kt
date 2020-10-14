@@ -2,28 +2,23 @@ package com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.adapter
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
-import com.adrosonic.craftexchange.database.entities.realmEntities.ArtisanProducts
 import com.adrosonic.craftexchange.database.entities.realmEntities.ClusterList
-import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.databinding.ItemRegionProductBinding
-import com.adrosonic.craftexchange.repository.CraftExchangeRepository
-import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.CatalogueProductsResponse
-import com.adrosonic.craftexchange.repository.data.response.clusterResponse.Cluster
 import com.adrosonic.craftexchange.ui.interfaces.ClusterProductClick
 import com.adrosonic.craftexchange.ui.modules.buyer.landing.BuyerLandingActivity
 import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.productlists.RegionProdListFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
-import com.pixplicity.easyprefs.library.Prefs
+import com.adrosonic.craftexchange.utils.ImageSetter
+import com.adrosonic.craftexchange.utils.UserConfig
+import com.adrosonic.craftexchange.utils.Utility
 import io.realm.RealmResults
-import retrofit2.Call
-import retrofit2.Response
-import javax.security.auth.callback.Callback
+import org.json.JSONArray
 
 class RegionAdapter(var context: Context?, private var regionProducts: RealmResults<ClusterList>?) : RecyclerView.Adapter<RegionAdapter.ViewHolder>(),
     ClusterProductClick {
@@ -35,6 +30,7 @@ class RegionAdapter(var context: Context?, private var regionProducts: RealmResu
             binding.executePendingBindings()
         }
     }
+
 
     fun updateClusterList(newList: RealmResults<ClusterList>?){
         if (newList != null) {
@@ -56,10 +52,37 @@ class RegionAdapter(var context: Context?, private var regionProducts: RealmResu
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         var product = regionProducts?.get(position)
         product?.let { holder.bind(it) }
+
         holder.binding.clusterProdName.text= product?.cluster
-        holder.binding.clusterProdAdjective.text = product?.adjective
-        //TODO : Img to be Implemented using CMS
-//        product.productImageId?.let { holder.binding.prodImg.setImageResource(it) }
+
+        if(Utility.checkIfInternetConnected(context!!)) {
+            if (UserConfig.shared.regionCMS != null) {
+                val dataJson = JSONArray(UserConfig.shared.regionCMS)
+                Log.i("CMS", "DataJson : $dataJson")
+                for (i in 0 until dataJson.length()) {
+                    val dataObj = dataJson.getJSONObject(i)
+                    Log.i("CMS", "DataObj : $dataObj")
+                    var acfObj = dataObj?.getJSONObject("acf")
+                    var clusterId = acfObj?.getString("cluster_id")?.toLong()
+
+                    if (product?.clusterid == clusterId) {
+                        holder.binding.clusterProdAdjective.text = acfObj?.getString("header")
+                        var imgUrl = acfObj?.getString("image")
+                        context?.let {
+                            imgUrl?.let { it1 ->
+                                ImageSetter.setCMSImage(
+                                    it,
+                                    it1, holder.binding.clusterProdImg
+                                )
+                            }
+                        }
+                    }
+
+                }
+            }
+        }else{
+            holder.binding.clusterProdImg.setImageResource(R.drawable.demo2_img)
+        }
     }
 
     override fun onItemClick(list: ClusterList) {

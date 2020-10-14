@@ -113,6 +113,27 @@ object ImageSetter {
         }
     }
 
+    fun setCMSImage(context: Context, imagePath:String, imageView: ImageView ) {
+        try
+        {
+            Glide.with(context)
+                .load(imagePath)
+                .signature(ObjectKey((System.currentTimeMillis()).div(7*24*60*60*1000).toString())) //periodically refreshes the image for new
+                .apply(
+                    RequestOptions()
+                        .skipMemoryCache(false)
+                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                        .override(Target.SIZE_ORIGINAL))
+                .priority(Priority.IMMEDIATE)
+                .dontAnimate()
+                .into(imageView)
+
+        }
+        catch (ex:Exception) {
+            ex.printStackTrace()
+        }
+    }
+
     fun setImage(context: Context, imagePath:String, imageView: ImageView) {
         try
         {
@@ -176,30 +197,6 @@ object ImageSetter {
                 .error(errImage)
                 .fallback(fallbck)
                 .dontAnimate()
-//                .listener(object:RequestListener<Drawable> {
-//
-//                    override fun onResourceReady(
-//                        resource: Drawable?,
-//                        model: Any?,
-//                        target: Target<Drawable>?,
-//                        dataSource: DataSource?,
-//                        isFirstResource: Boolean
-//                    ): Boolean {
-//                        mProgress?.visibility = View.GONE
-//                        return false
-//                    }
-//
-//                    override fun onLoadFailed(
-//                        e: GlideException?,
-//                        model: Any?,
-//                        target: Target<Drawable>?,
-//                        isFirstResource: Boolean
-//                    ): Boolean {
-//                        mProgress?.visibility = View.GONE
-//                        Log.e("Image loading exception",e?.printStackTrace().toString())
-//                        return false
-//                    }
-//                })
                 .into(imageView)
 
         }

@@ -2,6 +2,7 @@ package com.adrosonic.craftexchange.ui.modules.artisan.products
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -16,9 +17,12 @@ import com.adrosonic.craftexchange.ui.modules.artisan.landing.ArtisanLandingActi
 import com.adrosonic.craftexchange.ui.modules.buyer.landing.BuyerLandingActivity
 import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.productlists.RegionProdListFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.adrosonic.craftexchange.utils.ImageSetter
+import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
 import com.google.gson.Gson
 import io.realm.RealmResults
+import org.json.JSONArray
 
 class ArtisanProductAdapter(var context: Context?, private var artisanProducts: RealmResults<ArtisanProducts>?) : RecyclerView.Adapter<ArtisanProductAdapter.ViewHolder>(),
     ArtisanProductClick {
@@ -50,7 +54,32 @@ class ArtisanProductAdapter(var context: Context?, private var artisanProducts: 
         var product = artisanProducts?.get(position)
         product?.let { holder.bind(it) }
         holder.binding.prodText.text = product?.productCategoryDesc
-//        product.productImageId?.let { holder.binding.prodImg.setImageResource(it) }
+
+        if(Utility.checkIfInternetConnected(context!!)){
+            if(UserConfig.shared.categoryCMS != null){
+                val dataJson = JSONArray(UserConfig.shared.categoryCMS)
+                Log.i("CMS", "DataJson : $dataJson")
+                for (i in 0 until dataJson.length())
+                {
+                    val dataObj = dataJson.getJSONObject(i)
+                    Log.i("CMS", "DataObj : $dataObj")
+                    var acfObj = dataObj?.getJSONObject("acf")
+                    var prodCatId = acfObj?.getString("category_id")?.toLong()
+
+                    if(product?.productCategoryId == prodCatId){
+                        var imgUrl = acfObj?.getString("image")
+                        context?.let { imgUrl?.let { it1 ->
+                            ImageSetter.setCMSImage(it,
+                                it1,holder.binding.prodImg)
+                        } }
+                    }
+                }
+            }
+        }else{
+            holder.binding.prodImg.setImageResource(R.drawable.demo_img)
+        }
+
+
     }
 
 

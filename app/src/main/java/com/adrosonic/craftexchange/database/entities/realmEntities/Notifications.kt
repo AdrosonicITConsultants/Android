@@ -22,6 +22,5 @@ open class Notifications : RealmObject() {
         const val COLUMN_NOTIFICATION_ID = "notificationId"
         const val COLUMN_CREATED_ON = "createdOn"
         const val COLUMN_ACTION_MARK_READ = "actionMarkRead"
-
     }
 }

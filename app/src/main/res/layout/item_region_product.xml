@@ -35,7 +35,6 @@
         <ImageView
             android:id="@+id/cluster_prod_img"
             android:layout_width="match_parent"
-            android:background="@drawable/demo2_img"
             android:layout_height="@dimen/product_card_height"
             android:scaleType="centerCrop"/>
 

@@ -76,8 +76,7 @@ class TransactionListFragment : Fragment(),
         filterList = resources.getStringArray(R.array.filter_transac_items)
 
         mTranVM.getOnTranListMutableData()
-            .observe(viewLifecycleOwner, Observer<RealmResults<Transactions>> {
-                mTranList = it
+            .observe(viewLifecycleOwner, Observer<RealmResults<Transactions>> { mTranList = it
                 mTranListAdapter?.updateTransactionList(mTranList)
             })
 

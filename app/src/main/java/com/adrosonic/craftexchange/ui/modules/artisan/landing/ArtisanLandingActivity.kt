@@ -38,6 +38,7 @@ import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
+import com.adrosonic.craftexchange.viewModels.CMSViewModel
 import com.adrosonic.craftexchange.viewModels.LandingViewModel
 import com.adrosonic.craftexchange.viewModels.ProfileViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -76,6 +77,7 @@ class ArtisanLandingActivity : AppCompatActivity(),
 
     private var mBinding : ActivityArtisanLandingBinding ?= null
     val mViewModel:LandingViewModel by viewModels()
+//    val mCMSViewModel : CMSViewModel by viewModels()
     var craftUser : MutableLiveData<CraftUser>?= null
     val mProVM : ProfileViewModel by viewModels()
     var profileImage : String ?= ""
@@ -383,6 +385,8 @@ class ArtisanLandingActivity : AppCompatActivity(),
             mViewModel?.getChangeRequestStatuses()
             craftUser = mProVM.getUserMutableData()
             setProfileImage()
+
+//            mCMSViewModel?.getCategoriesData()
 
         }
     }
