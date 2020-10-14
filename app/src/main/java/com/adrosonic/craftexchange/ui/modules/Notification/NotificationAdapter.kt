@@ -121,14 +121,14 @@ class NotificationAdapter(
             "Pi finalized", "Tax Invoice Raised","Delivery Challan Uploaded","Order Received","Order Dispached","Faulty Order" -> {
                 R.drawable.ic_status_invoice
             }
-            "Advance Payment Received","Advanced Payment Accepted","Advanced Payment Rejected","Final Payment Received" -> {
+            "Advance Payment Received","Advanced Payment Accepted","Advanced Payment Rejected","Final Payment Received","Final Payment Accepted" -> {
                 R.drawable.ic_advance_payent_received
             }
             "Change Requested Initiated","Change Requested Accepted","Change Request Rejected"  -> {
                 R.drawable.ic_cr_accepted
             }
-            "Yarn procured", "Yarn Dyeing","Yarn Dye","Yarn dye is in progress","Yarn dye is completed","Weaving is completed",
-            "Weaving initiated","Weaving is in progress","Pre loom process","Pre loom process is in progress","Pre loom process initiated",
+            "Yarn procured", "Yarn Dyeing","Yarn dye","Yarn dye is in progress","Yarn dye is completed","Weaving is completed",
+            "Weaving initiated","Weaving","Weaving is in progress","Pre loom process","Pre loom process is in progress","Pre loom process initiated",
             "Post loom process initiated","Post loom process","Completion of Order" -> {
                 R.drawable.ic_noti_yarn
             }
