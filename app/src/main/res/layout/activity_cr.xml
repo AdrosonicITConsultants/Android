@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
 
-    <RelativeLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_enquiry_details"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -112,7 +112,7 @@
 
 
                         <TextView
-                            android:id="@+id/product_name"
+                            android:id="@+id/disclaimer_text_1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
@@ -126,7 +126,7 @@
                             app:layout_constraintTop_toBottomOf="@id/prod_image_background" />
 
                         <TextView
-                            android:id="@+id/product_availability"
+                            android:id="@+id/disclaimer_text_2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
@@ -137,7 +137,7 @@
                             android:textSize="@dimen/product_availability_text"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/product_name" />
+                            app:layout_constraintTop_toBottomOf="@id/disclaimer_text_1" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -160,7 +160,7 @@
                         android:layout_marginStart="@dimen/margin_regular"
                         android:layout_marginTop="@dimen/margin_regular"
                         android:fontFamily="@font/lato_bold"
-                        android:text="CR details"
+                        android:text="Change Request Details"
                         android:textColor="@color/black_text"
                         android:textSize="@dimen/product_availability_text"
                         android:textStyle="bold"
@@ -185,7 +185,7 @@
                     <LinearLayout
                         android:id="@+id/ll1"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:background="@drawable/bd_underline"
                         android:orientation="horizontal">
@@ -214,7 +214,9 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical|end"
-                            android:layout_weight="2.5" />
+                            android:layout_weight="2.5"
+                            android:ellipsize="end"
+                            android:maxLines="1" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -249,7 +251,9 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical|end"
-                            android:layout_weight="2.5" />
+                            android:layout_weight="2.5"
+                            android:ellipsize="end"
+                            android:maxLines="1" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -284,7 +288,9 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical|end"
-                            android:layout_weight="2.5" />
+                            android:layout_weight="2.5"
+                            android:ellipsize="end"
+                            android:maxLines="1" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -319,7 +325,9 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical|end"
-                            android:layout_weight="2.5"/>
+                            android:layout_weight="2.5"
+                            android:ellipsize="end"
+                            android:maxLines="1" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -354,7 +362,9 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical|end"
-                            android:layout_weight="2.5" />
+                            android:layout_weight="2.5"
+                            android:ellipsize="end"
+                            android:maxLines="1" />
                     </LinearLayout>
 
                     <Button
@@ -371,10 +381,38 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/accept_reject_cr"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edit_cr_details">
 
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/accept_reject_recycler_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/margin_regular"
+                        android:visibility="visible" />
+
+                    <Button
+                        android:id="@+id/txt_submit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_margin="8dp"
+                        android:background="@drawable/rect_round_grad_blue_solid_swipe"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:text="Submit"
+                        android:textColor="@color/white_text" />
+
+                </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
-    </RelativeLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </layout>
 

@@ -12,4 +12,3 @@ data class ItemList (
     val requestStatus: Long,
     val requestText: String
 )
-

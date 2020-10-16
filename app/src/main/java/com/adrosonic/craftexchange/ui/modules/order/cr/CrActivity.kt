@@ -1,56 +1,43 @@
 package com.adrosonic.craftexchange.ui.modules.order.cr
 
-import android.app.Activity
-import android.app.DatePickerDialog
-import android.app.DatePickerDialog.OnDateSetListener
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.text.Editable
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.TextWatcher
-import android.text.style.ForegroundColorSpan
+import android.text.*
 import android.util.Log
 import android.view.View
-import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrosonic.craftexchange.R
-import com.adrosonic.craftexchange.database.entities.realmEntities.Moqs
-import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
+import com.adrosonic.craftexchange.database.entities.realmEntities.ChangeRequests
 import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
 import com.adrosonic.craftexchange.database.predicates.CrPredicates
-import com.adrosonic.craftexchange.database.predicates.MoqsPredicates
 import com.adrosonic.craftexchange.database.predicates.OrdersPredicates
-import com.adrosonic.craftexchange.database.predicates.PiPredicates
 import com.adrosonic.craftexchange.databinding.ActivityCrBinding
-import com.adrosonic.craftexchange.databinding.ActivityPiBinding
 import com.adrosonic.craftexchange.repository.data.request.changeRequest.ItemList
 import com.adrosonic.craftexchange.repository.data.request.changeRequest.RaiseCrInput
-import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.repository.data.response.changeReequest.CrOption
 import com.adrosonic.craftexchange.repository.data.response.changeReequest.CrOptionsResponse
-import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryAvaProdStageData
-import com.adrosonic.craftexchange.repository.data.response.moq.Datum
+import com.adrosonic.craftexchange.ui.modules.order.cr.adapter.CrAcceptRejectAdapter
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
-import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
-import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
 import com.adrosonic.craftexchange.viewModels.OrdersViewModel
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.pixplicity.easyprefs.library.Prefs
 import com.wajahatkarim3.easyvalidation.core.view_ktx.contains
-import kotlinx.android.synthetic.main.activity_artisan_add_product_template.*
-import kotlinx.android.synthetic.main.dialog_are_you_sure.*
+import kotlinx.android.synthetic.main.dialog_cr_accept_reject.*
 import kotlinx.android.synthetic.main.dialog_raise_cr_confirm.*
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -62,8 +49,9 @@ fun Context.crContext(enquiryId:Long,changeRequestStatus:Long): Intent {
 }
 
 class CrActivity : AppCompatActivity(),
-    OrdersViewModel.FetchCrInterface
-    {
+    OrdersViewModel.FetchCrInterface,
+    OrdersViewModel.UpdateCrStatusInterface,
+    CrAcceptRejectAdapter.selectionListener {
     var enquiryId=0L
     var changeRequestStatus=0L
     val mOrderVM : OrdersViewModel by viewModels()
@@ -76,6 +64,9 @@ class CrActivity : AppCompatActivity(),
     var motifSize = ""
     var motif = ""
     var stageList =ArrayList<CrOption>()
+    var profile=""
+    private lateinit var crSelectionAdapter: CrAcceptRejectAdapter
+    var crSelctionList = ArrayList<Pair<ChangeRequests,Boolean>>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_cr)
@@ -88,14 +79,13 @@ class CrActivity : AppCompatActivity(),
         if (intent.extras != null) {
             enquiryId = intent.getLongExtra("enquiryId",0)
             changeRequestStatus = intent.getLongExtra("changeRequestStatus",4)
-            orderDetails=OrdersPredicates.getSingleOnGoOrderDetails(enquiryId,0)
+//            orderDetails=OrdersPredicates.getSingleOnGoOrderDetails(enquiryId,0)
             setDetails()
         }
-        Log.e("RaisePi", "pi enquiryId : ${enquiryId}")
+        Log.e("RaiseCr", "changeRequestStatus : ${changeRequestStatus}")
         mBinding?.btnBack?.setOnClickListener {
             finish()
         }
-
         mBinding?.txtCrSwipe?.setOnClickListener {
              weftYarn = mBinding?.etWeftYarn?.text.toString()
              color = mBinding?.etColor?.text.toString()
@@ -113,57 +103,114 @@ class CrActivity : AppCompatActivity(),
         mBinding?.etQty?.addTextChangedListener(generalTextWatcher)
         mBinding?.etMotifSize?.addTextChangedListener(generalTextWatcher)
         mBinding?.etMotif?.addTextChangedListener(generalTextWatcher)
-    }
-
-    fun setDetails(){
-        mBinding?.enquiryCode?.text="CR for ${orderDetails?.orderCode}"
-        mBinding?.enquiryStartDate?.text = "Date accepted : ${orderDetails?.startedOn?.split("T")?.get(0)}"
-        when(changeRequestStatus) {
-            0L -> {
-                mBinding?.txtCrSwipe?.visibility=View.GONE
-                mBinding?.etWeftYarn?.isEnabled = false
-                mBinding?.etColor?.isEnabled = false
-                mBinding?.etQty?.isEnabled = false
-                mBinding?.etMotifSize?.isEnabled = false
-                mBinding?.etMotif?.isEnabled = false
-                var changeReq = CrPredicates.getCrs(enquiryId)
-                if(changeReq!=null) {
-                    val crIterator=changeReq.iterator()
-                    while (crIterator.hasNext()) {
-                        val cr = crIterator.next()
-                        stageList.forEach {
-                            if (cr.requestItemsId!!.equals(it.id)) {
-                                when (it.item) {
-                                    "Change in weft Yarn" -> {
-                                        mBinding?.etWeftYarn?.setText(cr?.requestText ?: "", TextView.BufferType.NORMAL)
-                                    }
-                                    "Change in color" -> {
-                                        mBinding?.etColor?.setText( cr?.requestText ?: "",TextView.BufferType.NORMAL)
-                                    }
-                                    "Change in Quantity" -> {
-                                        mBinding?.etQty?.setText(cr?.requestText ?: "", TextView.BufferType.NORMAL )
-                                    }
-                                    "Change in motif size" -> {
-                                        mBinding?.etMotifSize?.setText(cr?.requestText ?: "",TextView.BufferType.NORMAL)
-                                    }
-                                    "Change in motif placement" -> {
-                                        mBinding?.etMotif?.setText(cr?.requestText ?: "",TextView.BufferType.NORMAL)
-                                    }
-                                }
-                            }
-                        }
-                        setStatusResource()
-                    }
-                }
-            }
+        mBinding?.txtSubmit?.setOnClickListener {
+            var crFlagList = ArrayList<Boolean>()
+            crSelctionList.forEach { if (it.second) crFlagList?.add(it.second) }
+            if(!crFlagList.contains(true)){showAcceptRejectDialog(false)}
+            else showAcceptRejectDialog(true)
         }
     }
 
+    fun setDetails(){
+            crSelctionList.clear()
+            enquiryId?.let{ orderDetails=OrdersPredicates.getSingleOnGoOrderDetails(it,0)}
+            profile = Prefs.getString(ConstantsDirectory.PROFILE,"")
+            mBinding?.enquiryCode?.text="CR for ${orderDetails?.orderCode}"
+            mBinding?.enquiryStartDate?.text = "Date accepted : ${orderDetails?.startedOn?.split("T")?.get(0)}"
+            when(profile) {
+                ConstantsDirectory.ARTISAN -> {
+                    mBinding?.disclaimerText1?.text=getString(R.string.cr_pleas_note_artisan)
+                    mBinding?.disclaimerText2?.text=getString(R.string.cr_note_artisan)
+                }
+                ConstantsDirectory.BUYER -> {
+                    mBinding?.disclaimerText1?.text=getString(R.string.cr_pleas_note)
+                    mBinding?.disclaimerText2?.text=getString(R.string.cr_note)
+                }
+            }
+            when(changeRequestStatus) {
+                0L -> {
+                    when(profile){
+                        ConstantsDirectory.ARTISAN -> {
+                            mBinding?.txtSubmit?.visibility=View.VISIBLE
+                            mBinding?.acceptRejectCr?.visibility=View.VISIBLE
+                            mBinding?.editCrDetails?.visibility=View.GONE
+                            var changeReq = CrPredicates.getCrs(enquiryId)
+                            changeReq?.forEach {
+                                if(it.requestStatus!!.equals(0L)||it.requestStatus!!.equals(2L)) crSelctionList.add(Pair(it,false))
+                                else crSelctionList.add(Pair(it,true))
+                            }
+                            mBinding?.acceptRejectRecyclerList?.layoutManager = LinearLayoutManager(this)
+                            crSelectionAdapter = CrAcceptRejectAdapter(this, crSelctionList,stageList,true)
+                            crSelectionAdapter.listener = this
+                            mBinding?.acceptRejectRecyclerList?.adapter = crSelectionAdapter
+                        }
+                        ConstantsDirectory.BUYER -> {
+                            mBinding?.acceptRejectCr?.visibility=View.GONE
+                            mBinding?.editCrDetails?.visibility=View.VISIBLE
+                            mBinding?.txtCrSwipe?.visibility=View.GONE
+                            mBinding?.etWeftYarn?.isEnabled = false
+                            mBinding?.etColor?.isEnabled = false
+                            mBinding?.etQty?.isEnabled = false
+                            mBinding?.etMotifSize?.isEnabled = false
+                            mBinding?.etMotif?.isEnabled = false
+                            var changeReq = CrPredicates.getCrs(enquiryId)
+                            if(changeReq!=null) {
+                                val crIterator=changeReq.iterator()
+                                while (crIterator.hasNext()) {
+                                    val cr = crIterator.next()
+                                    stageList.forEach {
+                                        if (cr.requestItemsId!!.equals(it.id)) {
+                                            when (it.item) {
+                                                "Change in weft Yarn" -> {
+                                                    mBinding?.etWeftYarn?.setText(cr?.requestText ?: "", TextView.BufferType.NORMAL)
+                                                }
+                                                "Change in color" -> {
+                                                    mBinding?.etColor?.setText( cr?.requestText ?: "",TextView.BufferType.NORMAL)
+                                                }
+                                                "Change in Quantity" -> {
+                                                    mBinding?.etQty?.setText(cr?.requestText ?: "", TextView.BufferType.NORMAL )
+                                                }
+                                                "Change in motif size" -> {
+                                                    mBinding?.etMotifSize?.setText(cr?.requestText ?: "",TextView.BufferType.NORMAL)
+                                                }
+                                                "Change in motif placement" -> {
+                                                    mBinding?.etMotif?.setText(cr?.requestText ?: "",TextView.BufferType.NORMAL)
+                                                }
+                                            }
+                                        }
+                                    }
+                                    setStatusResource()
+                                }
+                            }
+                        }
+                    }
+                }
+                1L,3L,2L->{
+                    mBinding?.acceptRejectCr?.visibility=View.VISIBLE
+                    mBinding?.editCrDetails?.visibility=View.GONE
+                    mBinding?.txtSubmit?.visibility=View.GONE
+                    var changeReq = CrPredicates.getCrs(enquiryId)
+                    changeReq?.forEach {
+                        if(it.requestStatus!!.equals(0L)||it.requestStatus!!.equals(2L)) crSelctionList.add(Pair(it,false))
+                        else crSelctionList.add(Pair(it,true))
+                    }
+                    mBinding?.acceptRejectRecyclerList?.layoutManager = LinearLayoutManager(this)
+                    crSelectionAdapter = CrAcceptRejectAdapter(this, crSelctionList,stageList,false)
+                    crSelectionAdapter.listener = this
+                    mBinding?.acceptRejectRecyclerList?.adapter = crSelectionAdapter
+                }
+                4L->{
+                    mBinding?.acceptRejectCr?.visibility=View.GONE
+                    mBinding?.editCrDetails?.visibility=View.VISIBLE
+                }
+            }
+    }
+
     fun viewLoader(){
-        mBinding?.swipeEnquiryDetails?.visibility= View.VISIBLE
+        mBinding?.swipeEnquiryDetails?.isRefreshing= true
     }
     fun hideLoader(){
-        mBinding?.swipeEnquiryDetails?.visibility= View.GONE
+        mBinding?.swipeEnquiryDetails?.isRefreshing= false
     }
 
     fun showDialog(){
@@ -171,9 +218,8 @@ class CrActivity : AppCompatActivity(),
         dialog.setContentView(R.layout.dialog_raise_cr_confirm)
         dialog.create()
         dialog.show()
-
-
-
+        val btn_cancel = dialog?.findViewById(R.id.btn_cancel) as TextView
+        val btn_ok = dialog?.findViewById(R.id.btn_ok) as TextView
         val itemList= ArrayList<ItemList>()
         if(weftYarn.isNotEmpty()){
             dialog.ll1.visibility=View.VISIBLE
@@ -211,11 +257,11 @@ class CrActivity : AppCompatActivity(),
             itemList.add(ItemList(0,0,requestItemId,0,motif))
         } else   dialog.ll5.visibility=View.GONE
 
-        dialog.btn_cancel?.setOnClickListener {
+        btn_cancel?.setOnClickListener {
             dialog.cancel()
         }
         Log.e("RaiseCr","itemList 11111: ${itemList.size}")
-        dialog.btn_ok?.setOnClickListener {
+        btn_ok?.setOnClickListener {
             if (Utility.checkIfInternetConnected(applicationContext)) {
                 viewLoader()
                 Log.e("RaiseCr","itemList 2222: ${itemList.size}")
@@ -228,16 +274,75 @@ class CrActivity : AppCompatActivity(),
             dialog.cancel()
         }
     }
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-//        Log.e("RaiseCr", "onActivityResult RESULT_OK ${Activity.RESULT_OK}")
-//        if (requestCode == ConstantsDirectory.RESULT_PI) { // Please, use a final int instead of hardcoded int value
-//            if (resultCode == Activity.RESULT_OK) {
-//                setResult(Activity.RESULT_OK)
-//                finish()
-//
-//            }
-//        }
+
+    fun showAcceptRejectDialog(isAccept:Boolean){
+        var dialog = Dialog(this)
+        dialog.setContentView(R.layout.dialog_cr_accept_reject)
+        dialog.create()
+        dialog.show()
+
+        val btn_cancel = dialog?.findViewById(R.id.btn_cancel) as TextView
+        val btn_ok = dialog?.findViewById(R.id.btn_ok) as TextView
+        val txt_goto_chat = dialog?.findViewById(R.id.txt_goto_chat) as TextView
+        val txt_changes_dscrp = dialog?.findViewById(R.id.txt_changes_dscrp) as TextView
+        val itemList= ArrayList<ItemList>()
+        var acceptedChanges=""
+        crSelctionList.forEach {
+            if(it.second){
+                itemList.add(ItemList(it.first.changeRequestId?:0,it.first.crId?:0,it.first.requestItemsId?:0,1,it.first.requestText?:""))
+                stageList.forEach {it1->
+                    if (it.first.requestItemsId!!.equals(it1.id)) {
+                       when(it1.item){
+                           "Change in weft Yarn"->acceptedChanges=acceptedChanges+" Yarn "
+                           "Change in color"-> acceptedChanges=acceptedChanges+" Color "
+                           "Change in Quantity"-> acceptedChanges=acceptedChanges+" Quantity "
+                           "Change in motif size"->acceptedChanges=acceptedChanges+" Size "
+                           "Change in motif placement"->acceptedChanges=acceptedChanges+" Placement"
+                       }
+                    }
+                }
+            }
+            else itemList.add(ItemList(it.first.changeRequestId?:0,it.first.crId?:0,it.first.requestItemsId?:0,2,it.first.requestText?:""))
+        }
+
+        if(isAccept){
+            @RequiresApi(Build.VERSION_CODES.N)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                txt_changes_dscrp?.text = Html.fromHtml("You are about to accept the changes on <b>$acceptedChanges</b>", Html.FROM_HTML_MODE_COMPACT)
+            } else {
+                txt_changes_dscrp?.text = Html.fromHtml("You are about to accept the changes on  <b>$acceptedChanges</b>")
+            }
+        }
+        else txt_changes_dscrp.text="You are about to reject the complete request"
+        Log.e("RaiseCr","itemList ${itemList.count()} ")
+
+        btn_ok.setOnClickListener {
+            var req= RaiseCrInput(enquiryId,itemList)
+            Log.e("RaiseCr","itemList ${itemList.size} ")
+                var longList=ArrayList<Long>()
+                itemList.forEach {
+                    longList.add(it.requestStatus)
+                }
+                var changeRequestStatus=1L
+                if(longList.contains(2) && longList.contains(1)) changeRequestStatus=3L
+                else if(!longList.contains(1))changeRequestStatus=2L
+                else if(!longList.contains(2))  changeRequestStatus=1L
+            Log.e("RaiseCr","changeRequestStatus ${changeRequestStatus} ")
+            if (Utility.checkIfInternetConnected(applicationContext)) {
+                viewLoader()
+                mOrderVM?.updateCrListener=this
+                mOrderVM?.acceptRejectChangeRequest(req,changeRequestStatus)
+            } else {
+                Log.e("RaiseCr","Req Json ${Gson().toJson(req)} ")
+                CrPredicates.updatePostCrStatus(req,changeRequestStatus)
+                this.changeRequestStatus=changeRequestStatus
+                OrdersPredicates.updateChangeRequestStatusOffline(enquiryId, Gson().toJson(req),1L,changeRequestStatus)
+                Utility.displayMessage(getString(R.string.no_internet_connection),application)
+                setDetails()
+            }
+            dialog.cancel()
+        }
+        btn_cancel.setOnClickListener {  dialog.cancel() }
     }
 
         override fun onFetchCrSuccess() {
@@ -270,7 +375,7 @@ class CrActivity : AppCompatActivity(),
             }
         }
 
-        fun setStatusResource() {
+    fun setStatusResource() {
 
             if(mBinding?.etWeftYarn?.text!!.isNotBlank() )Utility.setImageResource(applicationContext, mBinding?.img1, R.drawable.ic_cr_checked)
             else Utility.setImageResource(applicationContext, mBinding?.img1, R.drawable.ic_cr_unchecked)
@@ -287,4 +392,49 @@ class CrActivity : AppCompatActivity(),
             if(mBinding?.etMotif?.text!!.isNotBlank())Utility.setImageResource(applicationContext,  mBinding?.img5, R.drawable.ic_cr_checked)
             else Utility.setImageResource(applicationContext,  mBinding?.img5, R.drawable.ic_cr_unchecked)
         }
+
+    override fun onCrItemSelected(pairList: ArrayList<Pair<ChangeRequests, Boolean>>) {
+        this.crSelctionList = pairList
     }
+
+    override fun onCrStatusSuccess(crStatus:Long) {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("RaiseCr","onFetchCrSuccess Success")
+                hideLoader()
+                changeRequestStatus=crStatus
+                setDetails()
+                showPiDialog()
+            })
+        } catch (e: Exception) {
+            Log.e("RaiseCr", "Exception onFetchCrSuccess " + e.message)
+        }
+    }
+
+    override fun onCrStatusFailure() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("RaiseCr","onFetchCrSuccess Success")
+                hideLoader()
+                setDetails()
+            })
+        } catch (e: Exception) {
+            Log.e("RaiseCr", "Exception onFetchCrSuccess " + e.message)
+        }
+    }
+
+    fun showPiDialog(){
+        var dialog = Dialog(this)
+        dialog.setContentView(R.layout.dialog_post_cr_process)
+        dialog.create()
+        dialog.show()
+
+        val btn_skip = dialog?.findViewById(R.id.btn_skip) as Button
+        val btn_raise_pi = dialog?.findViewById(R.id.btn_raise_pi) as Button
+        btn_raise_pi.setOnClickListener {
+
+//            dialog.cancel()
+        }
+        btn_skip.setOnClickListener {  dialog.cancel() }
+    }
+}

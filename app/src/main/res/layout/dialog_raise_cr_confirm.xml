@@ -30,7 +30,7 @@
     <LinearLayout
         android:id="@+id/ll1"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:background="@drawable/bd_underline"
         android:orientation="horizontal"
@@ -40,7 +40,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="3"
+            android:layout_weight="2"
             android:fontFamily="@font/playfair_regular"
             android:gravity="center_vertical"
             android:text="Change in weft yarn:"
@@ -51,11 +51,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_weight="1"
+            android:layout_weight="2"
+            android:maxLines="2"
+            android:ellipsize="end"
             android:fontFamily="@font/playfair_regular"
             android:text=""
-            android:textColor="@color/light_orange"
-            android:textSize="@dimen/title_text" />
+            android:textColor="@color/light_orange" />
 
     </LinearLayout>
 
@@ -72,9 +73,9 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:layout_weight="3"
+            android:layout_weight="2"
             android:fontFamily="@font/playfair_regular"
+            android:gravity="center_vertical"
             android:text="Change in color:"
             android:textColor="@color/black_text" />
 
@@ -83,11 +84,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_weight="1"
+            android:layout_weight="2"
+            android:maxLines="2"
+            android:ellipsize="end"
             android:fontFamily="@font/playfair_regular"
             android:text=""
-            android:textColor="@color/light_orange"
-            android:textSize="@dimen/title_text" />
+            android:textColor="@color/light_orange" />
 
     </LinearLayout>
 
@@ -104,9 +106,9 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:layout_weight="3"
+            android:layout_weight="2"
             android:fontFamily="@font/playfair_regular"
+            android:gravity="center_vertical"
             android:text="Change in quantity:"
             android:textColor="@color/black_text" />
 
@@ -115,11 +117,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_weight="1"
+            android:layout_weight="2"
+            android:maxLines="2"
+            android:ellipsize="end"
             android:fontFamily="@font/playfair_regular"
             android:text=""
-            android:textColor="@color/light_orange"
-            android:textSize="@dimen/title_text" />
+            android:textColor="@color/light_orange" />
 
     </LinearLayout>
 
@@ -136,9 +139,9 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:layout_weight="3"
+            android:layout_weight="2"
             android:fontFamily="@font/playfair_regular"
+            android:gravity="center_vertical"
             android:text="Change in motif size:"
             android:textColor="@color/black_text" />
 
@@ -147,11 +150,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_weight="1"
+            android:layout_weight="2"
+            android:maxLines="2"
+            android:ellipsize="end"
             android:fontFamily="@font/playfair_regular"
             android:text=""
-            android:textColor="@color/light_orange"
-            android:textSize="@dimen/title_text" />
+            android:textColor="@color/light_orange"/>
 
     </LinearLayout>
 
@@ -168,9 +172,9 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:layout_weight="3"
+            android:layout_weight="2"
             android:fontFamily="@font/playfair_regular"
+            android:gravity="center_vertical"
             android:text="Change in motif placement:"
             android:textColor="@color/black_text" />
 
@@ -179,11 +183,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_weight="1"
+            android:layout_weight="2"
+            android:maxLines="2"
+            android:ellipsize="end"
             android:fontFamily="@font/playfair_regular"
             android:text="123"
-            android:textColor="@color/light_orange"
-            android:textSize="@dimen/title_text" />
+            android:textColor="@color/light_orange" />
 
     </LinearLayout>
 

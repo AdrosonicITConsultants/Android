@@ -8,6 +8,7 @@ import com.adrosonic.craftexchange.syncManager.processor.objects.ItemType
 import com.adrosonic.craftexchange.syncManager.processor.ProductAdd
 import com.adrosonic.craftexchange.syncManager.processor.ProductUpdate
 import com.adrosonic.craftexchange.syncManager.processor.cr.CrToggleAction
+import com.adrosonic.craftexchange.syncManager.processor.cr.CrUpdateStatusAction
 import com.adrosonic.craftexchange.syncManager.processor.customDesign.OwnDesignAdd
 import com.adrosonic.craftexchange.syncManager.processor.customDesign.OwnDesignDelete
 import com.adrosonic.craftexchange.syncManager.processor.customDesign.OwnDesignUpdate
@@ -31,7 +32,8 @@ class SyncCoordinator(val context: Context) {
         NotificationAction(),
         SendMoqAction(),
         PiActions(),
-        CrToggleAction()
+        CrToggleAction(),
+        CrUpdateStatusAction()
     )
 
     fun performLocallyAvailableActions() {
@@ -81,7 +83,7 @@ class SyncCoordinator(val context: Context) {
                     }
                 }
                 val queue7=  OrdersPredicates.getOrderMarkedForActions(it.predicateForLocallyTrackedElements)
-                Log.e("Toggle","offline itemId :${queue7?.joinToString()}")
+                Log.e("RaiseCr","offline itemId :${queue7?.joinToString()}")
                 val iterator7 = queue7?.iterator()
                 if (iterator7 != null) {
                     while (iterator7.hasNext()) {

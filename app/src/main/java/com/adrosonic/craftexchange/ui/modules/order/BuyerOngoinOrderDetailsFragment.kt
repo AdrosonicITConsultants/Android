@@ -174,25 +174,32 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
             Utility.displayMessage("Coming soon",requireContext())
         }
         mBinding?.changeRequestLayer?.setOnClickListener {
-            if(orderDetails?.changeRequestOn==1L) {
-                when (orderDetails?.changeRequestStatus) {
-                    0L -> {
-                        //waiting for ack
-                        enqID?.let { startActivity(requireActivity().crContext(it, 0L)) }
-                    }
-                    1L -> {
-                    }
-                    2L -> {
-                    }
-                    3L -> {
-                    }
-                    else -> {
-                       val days =Utility.getDateDiffInDays(Utility.returnDisplayDate(orderDetails?.orderCreatedOn?:""))
-                       if(days>=10) Utility.displayMessage("Last date to raise Change Request passed.",requireContext())
-                       else enqID?.let { startActivity(requireActivity().crContext(it, 4L)) }
+            if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType.equals(ConstantsDirectory.CUSTOM_PRODUCT)) {
+                if (orderDetails?.changeRequestOn == 1L) {
+                    when (orderDetails?.changeRequestStatus) {
+                        0L -> {
+                            //waiting for ack
+                            enqID?.let { startActivity(requireActivity().crContext(it, 0L)) }
+                        }
+                        1L -> enqID?.let { startActivity(requireActivity().crContext(it, 1L)) }
+                        2L -> enqID?.let { startActivity(requireActivity().crContext(it, 2L)) }
+                        3L -> enqID?.let { startActivity(requireActivity().crContext(it, 3L)) }
+                        else -> {
+                            val days = Utility.getDateDiffInDays(
+                                Utility.returnDisplayDate(
+                                    orderDetails?.orderCreatedOn ?: ""
+                                )
+                            )
+                            if (days >10) Utility.displayMessage(
+                                "Last date to raise Change Request passed.",
+                                requireContext()
+                            )
+                            else enqID?.let { startActivity(requireActivity().crContext(it, 4L)) }
+                        }
                     }
                 }
-            } else Utility.displayMessage("Change request disabled by artisan.",requireContext())
+                else Utility.displayMessage("Change request disabled by artisan.", requireContext())
+            } else Utility.displayMessage(getString(R.string.cr_not_applicable), requireContext())
         }
         mBinding?.taxInvoiceLayer?.setOnClickListener {
             Utility.displayMessage("Coming soon",requireContext())
@@ -383,15 +390,7 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
                              mBinding?.txtCr?.visibility = View.GONE
                              mBinding?.txtCrDate?.text = "Waiting for acknwoledgement"
                          }
-                         1L -> {
-                             mBinding?.txtCr?.visibility = View.VISIBLE
-                             mBinding?.txtCrDate?.text = Utility.returnDisplayDate(orderDetails?.changeRequestModifiedOn ?: "")
-                         }
-                         2L -> {
-                             mBinding?.txtCr?.visibility = View.GONE
-                             mBinding?.txtCrDate?.text = ""
-                         }
-                         3L -> {
+                         1L,2L,3L -> {
                              mBinding?.txtCr?.visibility = View.VISIBLE
                              mBinding?.txtCrDate?.text = Utility.returnDisplayDate(orderDetails?.changeRequestModifiedOn ?: "")
                          }
@@ -399,7 +398,7 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
                              mBinding?.txtCr?.visibility = View.GONE
                              val days =Utility.getDateDiffInDays(Utility.returnDisplayDate(orderDetails?.orderCreatedOn?:""))
                              Log.e("RaiseCr","days ${days}")
-                             if(days>=10)mBinding?.txtCrDate?.text = "Last date to raise Change Request passed."
+                             if(days>10)mBinding?.txtCrDate?.text = "Last date to raise Change Request passed."
                              else mBinding?.txtCrDate?.text = ""
                          }
                      }
@@ -596,7 +595,10 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
 
     override fun onResume() {
         super.onResume()
-        enqID?.let { mOrderVm?.getSingleOnOrderData(it,0) }
+        enqID?.let {
+            mOrderVm?.getChangeRequestDetails(it)
+            orderDetails= mOrderVm?.getSingleOnOrderData(it,0).value
+        }
         setDetails()
     }
 

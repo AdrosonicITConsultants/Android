@@ -45,6 +45,7 @@ import retrofit2.Response
 import java.util.*
 import java.io.File
 import javax.security.auth.callback.Callback
+import kotlin.collections.ArrayList
 
 class OrdersViewModel(application: Application) : AndroidViewModel(application){
     companion object {
@@ -67,6 +68,10 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
         fun onFetchCrSuccess()
         fun onFetchCrFailure()
     }
+    interface UpdateCrStatusInterface{
+        fun onCrStatusSuccess(changeRequestStatus:Long)
+        fun onCrStatusFailure()
+    }
     val ongoingOrderList : MutableLiveData<RealmResults<Orders>> by lazy { MutableLiveData<RealmResults<Orders>>() }
     val onGoingOrderDetails : MutableLiveData<Orders> by lazy { MutableLiveData<Orders>() }
 
@@ -76,6 +81,7 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
     var changeStatusListener : changeStatusInterface?= null
     var toggleListener : ToggleChangeInterface?= null
     var fetcCrListener : FetchCrInterface?= null
+    var updateCrListener : UpdateCrStatusInterface?= null
 
     fun getOnOrderListMutableData(): MutableLiveData<RealmResults<Orders>> {
         ongoingOrderList.value=loadOnOrderList()
@@ -367,11 +373,46 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
                     Log.e("RaiseCr","onResponse : ${response?.body()?.data}")
                     if(response?.body()?.valid!!){
                         Log.e("RaiseCr","isSuccessful ")
-                        OrdersPredicates.updateChangerequestStatus(enquiryId)
+                        OrdersPredicates.updateChangeRequestStatus(enquiryId,0L)
                         fetcCrListener?.onFetchCrSuccess()
                     }else{
                         Log.e("RaiseCr","isSuccessful false")
                         fetcCrListener?.onFetchCrFailure()
+                    }
+                }
+            })
+    }
+
+    fun acceptRejectChangeRequest(changeRequestParameters : RaiseCrInput,changeRequestStatus:Long){
+        Log.e("RaiseCr","changeRequestStatus : $changeRequestStatus ")
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getCrService()
+            .changeRequestStatusUpdate(token,changeRequestParameters,changeRequestStatus.toInt())
+            .enqueue(object : Callback, retrofit2.Callback<NotificationReadResponse> {
+                override fun onFailure(call: Call<NotificationReadResponse>, t: Throwable) {
+                    t.printStackTrace()
+                    Log.e("RaiseCr","isSuccessful false")
+                    updateCrListener?.onCrStatusFailure()
+                }
+                override fun onResponse(
+                    call: Call<NotificationReadResponse>,
+                    response: Response<NotificationReadResponse>
+                ) {
+                    Log.e("RaiseCr","onResponse : ${response?.body()?.data}")
+                    if(response?.body()?.valid!!){
+                        Log.e("RaiseCr","isSuccessful ")
+                        CrPredicates.updatePostCrStatus(changeRequestParameters,changeRequestStatus)
+                        OrdersPredicates.updateChangeRequestStatus(changeRequestParameters.enquiryId,changeRequestStatus)
+
+                        Timer().schedule(object : TimerTask() {
+                            override fun run() {
+                                updateCrListener?.onCrStatusSuccess(changeRequestStatus)
+                            }
+                        }, 1100)
+                    }else{
+                        Log.e("RaiseCr","isSuccessful false")
+                        updateCrListener?.onCrStatusFailure()
                     }
                 }
             })

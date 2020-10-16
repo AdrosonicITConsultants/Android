@@ -3,6 +3,8 @@ package com.adrosonic.craftexchange.database.predicates
 import android.util.Log
 import com.adrosonic.craftexchange.database.CXRealmManager
 import com.adrosonic.craftexchange.database.entities.realmEntities.*
+import com.adrosonic.craftexchange.repository.data.request.changeRequest.ItemList
+import com.adrosonic.craftexchange.repository.data.request.changeRequest.RaiseCrInput
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.repository.data.response.changeReequest.CrDetailsResponse
 import io.realm.RealmResults
@@ -79,6 +81,7 @@ class CrPredicates {
             }
             return crDetails
         }
+
         fun getSinglePi(enquiryId: Long?): PiDetails? {
             var realm = CXRealmManager.getRealmInstance()
             var piDetails: PiDetails? =null
@@ -97,32 +100,31 @@ class CrPredicates {
             return piDetails
         }
 
-        fun getPiMarkedForActions(actionsMarked:String): ArrayList<Long>? {
+
+        fun updatePostCrStatus(changeRequestParameters : RaiseCrInput,changeRequestStatus:Long){
             var realm = CXRealmManager.getRealmInstance()
-            var itemId=ArrayList<Long>()
-            try {
-                realm.executeTransaction {
-                    var message1 =realm.where(PiDetails::class.java)
-                        .equalTo(PiDetails.COLUMN_MARK_PI_FOR_SAVE,1L).or()
-                        .equalTo(PiDetails.COLUMN_MARK_PI_FOR_SENDING,1L)
-                        .findAll()
-                    Log.e(TAG,"message1 :${message1?.count()}")
-                    if(message1!=null){
-                        val iterator=message1.iterator()
-                        while (iterator.hasNext()) {
-                            val id=iterator.next()._id?:0L
-                            Log.e(TAG,"itemId :${id}")
-                            itemId.add(id)
+            var crs : RealmResults<ChangeRequests>?= null
+            realm.executeTransaction {
+                try{
+                    var iterator=changeRequestParameters.itemList.iterator()
+                    while (iterator.hasNext()){
+                        val crItemsOb=iterator.next()
+                        var cr = realm.where(ChangeRequests::class.java)
+                            .equalTo(ChangeRequests.COLUMN_CR_ID,crItemsOb.id)
+                            .limit(1)
+                            .findFirst()
+                        val crId = cr?.crId ?: 0
+                        if (crId.equals(crItemsOb.id)){
+                            cr?.status = changeRequestStatus
+                            cr?.requestStatus=crItemsOb?.requestStatus
+                            Log.e("RaiseCr","updatePostCrStatus : ${cr?.requestStatus}")
+                            realm.copyToRealmOrUpdate(cr)
                         }
                     }
-
+                }catch (e:Exception){
+                    Log.e("RaiseCr","Exception : "+e.printStackTrace())
                 }
-            } catch (e: Exception) {
-                Log.e("$TAG offline","while fetching actions : "+e.message)
-            } finally {
-//                realm.close()
             }
-            return itemId
         }
 
     }

@@ -39,4 +39,11 @@ interface ChangeRequestDao {
                                        @Body changeRequestParameters : RaiseCrInput
     ) : Call<NotificationReadResponse>//data field should be Change Request Updated
 
+    @Headers("Accept: application/json")
+    @POST("/enquiry/changeRequestStatusUpdate")
+    fun changeRequestStatusUpdate(@Header("Authorization") token:String,
+                                  @Body parameters : RaiseCrInput,
+                                  @Query("status") status : Int
+    ) : Call<NotificationReadResponse>//data field should be Change Request Updated
+
 }
