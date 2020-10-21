@@ -8,9 +8,12 @@ import com.adrosonic.craftexchange.database.entities.realmEntities.CompletedEnqu
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
 import com.adrosonic.craftexchange.database.predicates.EnquiryPredicates
 import com.adrosonic.craftexchange.database.predicates.MoqsPredicates
+import com.adrosonic.craftexchange.database.predicates.OrdersPredicates
+import com.adrosonic.craftexchange.database.predicates.PiPredicates
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.request.moq.SendMoqRequest
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
+import com.adrosonic.craftexchange.repository.data.response.Notification.NotificationReadResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.generateEnquiry.GenerateEnquiryResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.IfExistEnquiryResponse
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryResponse
@@ -77,6 +80,10 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
         fun getPiSuccess(id : Long)
     }
 
+    interface RevisePiInterface {
+        fun onRevisePiFailure()
+        fun onRevisePiSuccess()
+    }
     val ongoingEnqList : MutableLiveData<RealmResults<OngoingEnquiries>> by lazy { MutableLiveData<RealmResults<OngoingEnquiries>>() }
     val onGoEnqDetails : MutableLiveData<OngoingEnquiries> by lazy { MutableLiveData<OngoingEnquiries>() }
 
@@ -92,6 +99,7 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
     var piLisener : piInterface ?= null
     var singlePiListener : singlePiInterface ?= null
     var changeEnqListener : changeEnquiryInterface ?= null
+    var revisePiInterface : RevisePiInterface ?= null
 
     fun getOnEnqListMutableData(): MutableLiveData<RealmResults<OngoingEnquiries>> {
         ongoingEnqList.value=loadOnEnqList()
@@ -621,7 +629,10 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
                     call: Call<SendPiResponse>,
                     response: Response<SendPiResponse>
                 ) {
-                    response?.body()?.data?.id?.let { singlePiListener?.getPiSuccess(it) }
+                    response?.body()?.data?.id?.let {
+                        PiPredicates.insertPi(response?.body()!!)
+                        singlePiListener?.getPiSuccess(it)
+                    }
                 }
             })
     }
@@ -668,6 +679,56 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
                     }else{
                         changeEnqListener?.onEnqChangeFailure()
                     }
+                }
+            })
+    }
+
+    fun revisePi(enquiryId:Long,pi: SendPiRequest){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        Log.e(TAG,"revisePi :${enquiryId}")
+        Log.e(TAG,"revisePi pi :${Gson().toJson(pi)}")
+        CraftExchangeRepository
+            .getPiService()
+            .revisedPI(token,enquiryId.toInt(),pi).enqueue(object : Callback, retrofit2.Callback<NotificationReadResponse> {
+                override fun onFailure(call: Call<NotificationReadResponse>, t: Throwable) {
+                    Log.e(TAG,"onFailure revisePi :${t.message}")
+                    t.printStackTrace()
+                    revisePiInterface?.onRevisePiFailure()
+                }
+                override fun onResponse(
+                    call: Call<NotificationReadResponse>,
+                    response: Response<NotificationReadResponse>
+                ) {
+                    val valid=response.body()?.valid?:false
+                    Log.e(TAG,"onResponse revisePi :$valid")
+                    if(valid){
+                        Log.e(TAG,"onResponse true")
+                        OrdersPredicates.updatIsPiSend(enquiryId,1L)
+                            revisePiInterface?.onRevisePiSuccess()
+                    } else revisePiInterface?.onRevisePiFailure()
+                }
+            })
+    }
+
+    fun getOldPiData(enquiryId:Long){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        Log.e(TAG,"getOldPiData :${enquiryId}")
+        CraftExchangeRepository
+            .getPiService()
+            .getOldPiData(token,enquiryId.toInt()).enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Log.e(TAG,"getOldPiData :${t.message}")
+                    t.printStackTrace()
+                    piLisener?.onPiHTMLFailure()
+                }
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    Log.e(TAG,"onResponse getOldPiData :${response.code()}")
+                    piLisener?.onPiHTMLFailure()
+                  if(response.code()==200) OrdersPredicates.updatIsPiSend(enquiryId,1L)
+                   else  OrdersPredicates.updatIsPiSend(enquiryId,0L)
                 }
             })
     }

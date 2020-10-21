@@ -34,6 +34,7 @@ import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
 import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.advPay.enquiryPayment
 import com.adrosonic.craftexchange.ui.modules.enquiry.ArtEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
+import com.adrosonic.craftexchange.ui.modules.order.cr.crContext
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.transaction.adapter.OnGoingTransactionRecyclerAdapter
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
@@ -109,6 +110,7 @@ class CompletedOrderDetailsFragment : Fragment(),
             enqID?.let {
                 mOrdersVm.getSingleCompletedOrder(it)
                 mTranVM.getSingleCompletedTransactions(it)
+                mOrdersVm?.getChangeRequestDetails(it)
             }
             viewLoader()
         }else{
@@ -174,12 +176,30 @@ class CompletedOrderDetailsFragment : Fragment(),
         mBinding?.piDetailsLayer?.setOnClickListener {
             enqID?.let {  startActivity(requireContext().raisePiContext(it,true, SendPiRequest())) }
         }
-
+        mBinding?.changeRequestLayer?.setOnClickListener {
+            if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType.equals(ConstantsDirectory.CUSTOM_PRODUCT)) {
+                if (orderDetails?.changeRequestOn == 1L) {
+                    when (orderDetails?.changeRequestStatus) {
+                        0L -> {
+                            enqID?.let { startActivity(requireActivity().crContext(it, 0L)) }
+                        }
+                        1L -> enqID?.let { startActivity(requireActivity().crContext(it, 1L)) }
+                        2L -> enqID?.let { startActivity(requireActivity().crContext(it, 2L)) }
+                        3L -> enqID?.let { startActivity(requireActivity().crContext(it, 3L)) }
+                        else -> {
+                            when (profile) {
+                                ConstantsDirectory.BUYER -> {
+                                    val days = Utility.getDateDiffInDays(Utility.returnDisplayDate( orderDetails?.orderCreatedOn ?: "" ))
+                                    if (days >10) Utility.displayMessage("Last date to raise Change Request passed.", requireContext())
+                                }
+                            }
+                        }
+                    }
+                }
+                else Utility.displayMessage("Change request disabled by artisan.", requireContext())
+            } else Utility.displayMessage(getString(R.string.cr_not_applicable), requireContext())
+        }
         mBinding?.viewPaymentLayer?.setOnClickListener {
-//            startActivity(context?.enquiryPayment()
-//                ?.putExtra(ConstantsDirectory.ENQUIRY_ID,enqID)
-//                ?.putExtra(ConstantsDirectory.ENQUIRY_STATUS_FLAG,EnquiryStatus.COMPLETED.getId())
-//                ?.putExtra(ConstantsDirectory.PI_ID,0))
             if(mBinding?.transactionList!!.visibility==View.VISIBLE) mBinding?.transactionList!!.visibility=View.GONE
             else mBinding?.transactionList!!.visibility=View.VISIBLE
         }
@@ -400,6 +420,57 @@ class CompletedOrderDetailsFragment : Fragment(),
                     mBinding?.viewTransaction?.text="No transaction present"
                 }
             })
+
+            if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType.equals(ConstantsDirectory.CUSTOM_PRODUCT)){
+                if(orderDetails?.changeRequestOn==1L) {
+                    when (profile) {
+                        ConstantsDirectory.ARTISAN -> {
+                            when (orderDetails?.changeRequestStatus) {
+                                0L -> {
+                                    mBinding?.txtCrLayerStatus?.text =
+                                        "Buyer Waiting for acknwoledgement"
+                                }
+                                1L, 2L, 3L -> {
+                                    mBinding?.txtCrLayerStatus?.text = Utility.getCountStatement(
+                                        enqID ?: 0
+                                    )//Utility.returnDisplayDate(orderDetails?.changeRequestModifiedOn ?: "")
+                                }
+                                else -> {
+                                    mBinding?.txtCrLayerStatus?.text =
+                                        "Change request not available"
+                                }
+                            }
+                        }
+                        ConstantsDirectory.BUYER -> {
+                            when (orderDetails?.changeRequestStatus) {
+                                0L -> {
+                                    mBinding?.txtCrLayerStatus?.text = "Waiting for acknwoledgement"
+                                }
+                                1L, 2L, 3L -> {
+                                    mBinding?.txtCrLayerStatus?.text = Utility.getCountStatement(
+                                        enqID ?: 0
+                                    ) //Utility.returnDisplayDate(orderDetails?.changeRequestModifiedOn ?: "")
+                                }
+                                else -> {
+                                    val days = Utility.getDateDiffInDays(
+                                        Utility.returnDisplayDate(
+                                            orderDetails?.orderCreatedOn ?: ""
+                                        )
+                                    )
+                                    Log.e("RaiseCr", "days ${days}")
+                                    if (days > 10) mBinding?.txtCrLayerStatus?.text =
+                                        "Last date to raise Change Request passed."
+                                    else mBinding?.txtCrLayerStatus?.text = ""
+                                }
+                            }
+                        }
+                    }
+                }
+                else  mBinding?.txtCrLayerStatus?.text=getString(R.string.cr_disabled)
+            }
+            else {
+                mBinding?.txtCrLayerStatus?.text=getString(R.string.cr_not_applicable)
+            }
             } catch (e: Exception) {
                 Log.e("setDetails", "Exception " + e.message)
             }

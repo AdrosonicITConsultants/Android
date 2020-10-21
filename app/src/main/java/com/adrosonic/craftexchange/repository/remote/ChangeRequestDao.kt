@@ -5,6 +5,7 @@ import com.adrosonic.craftexchange.repository.data.response.Notification.Notific
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.generateEnquiry.GenerateEnquiryResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.IfExistEnquiryResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.ownDesign.DeleteOwnProductRespons
+import com.adrosonic.craftexchange.repository.data.response.changeReequest.ChatListResponse
 import com.adrosonic.craftexchange.repository.data.response.changeReequest.CrDetailsResponse
 import com.adrosonic.craftexchange.repository.data.response.changeReequest.CrOptionsResponse
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryAvaProdStageData
@@ -45,5 +46,11 @@ interface ChangeRequestDao {
                                   @Body parameters : RaiseCrInput,
                                   @Query("status") status : Int
     ) : Call<NotificationReadResponse>//data field should be Change Request Updated
+
+
+    @Headers("Accept: application/json")
+    @GET("/enquiry/getEnquiryMessageChatList")
+    fun getEnquiryMessageChatList(@Header("Authorization") token:String,
+                                   @Query("searchedString") searchedString:String?) : Call<ChatListResponse>
 
 }

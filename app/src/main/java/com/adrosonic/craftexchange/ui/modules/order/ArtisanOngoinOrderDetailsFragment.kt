@@ -1,5 +1,6 @@
 package com.adrosonic.craftexchange.ui.modules.order
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
@@ -20,15 +21,16 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
+import com.adrosonic.craftexchange.database.predicates.CrPredicates
 import com.adrosonic.craftexchange.database.predicates.OrdersPredicates
 import com.adrosonic.craftexchange.database.predicates.TransactionPredicates
 import com.adrosonic.craftexchange.databinding.FragmentArtisanOngoingOrderDetailsBinding
 import com.adrosonic.craftexchange.enums.*
-import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.repository.data.response.moq.Datum
-import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
+import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.piContext
 import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.order.cr.crContext
+import com.adrosonic.craftexchange.ui.modules.order.revisePi.viewPiContextPostCr
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.transaction.adapter.OnGoingTransactionRecyclerAdapter
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
@@ -159,8 +161,8 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         }
 
         mBinding?.piDetailsLayer?.setOnClickListener {
-            enqID?.let {  startActivity(requireContext().raisePiContext(it,true, SendPiRequest()))
-            }
+//            enqID?.let{startActivity(requireContext().viewPiContextPostCr(it))}
+            enqID?.let {startActivityForResult(requireContext().viewPiContextPostCr(it),ConstantsDirectory.RESULT_PI)}
         }
 
         mBinding?.viewPaymentLayer?.setOnClickListener {
@@ -206,13 +208,10 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
             if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType.equals(ConstantsDirectory.CUSTOM_PRODUCT)) {
                 if (orderDetails?.changeRequestOn == 1L) {
                     when (orderDetails?.changeRequestStatus) {
-                        0L -> {
-                            //waiting for ack
-                            enqID?.let { startActivity(requireActivity().crContext(it, 0L)) }
-                        }
-                        1L ->  enqID?.let { startActivity(requireActivity().crContext(it, 1L)) }
-                        2L ->  enqID?.let { startActivity(requireActivity().crContext(it, 2L)) }
-                        3L ->  enqID?.let { startActivity(requireActivity().crContext(it, 3L)) }
+                        0L ->  enqID?.let {startActivityForResult(requireContext().crContext(it,0L),ConstantsDirectory.RESULT_PI)  }
+                        1L ->  enqID?.let { startActivityForResult(requireContext().crContext(it,1L),ConstantsDirectory.RESULT_PI) }
+                        2L ->  enqID?.let { startActivityForResult(requireContext().crContext(it,2L),ConstantsDirectory.RESULT_PI) }
+                        3L ->  enqID?.let { startActivityForResult(requireContext().crContext(it,3L),ConstantsDirectory.RESULT_PI) }
                         else -> {
 //                            else enqID?.let { startActivity(requireActivity().crContext(it, 4L)) }
                         }
@@ -225,7 +224,6 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         mBinding?.taxInvoiceLayer?.setOnClickListener {
             //todo call intent
         }
-
         //ChangeEnquiryStageButtons
         mBinding?.btnStartEnqStage?.setOnClickListener {
             if(Utility.checkIfInternetConnected(requireActivity())){
@@ -432,17 +430,11 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
                     0L -> {
                         mBinding?.txtCrLayerStatus?.text = "Buyer Waiting for acknwoledgement"
                     }
-                    1L -> {
-                        mBinding?.txtCrLayerStatus?.text = Utility.returnDisplayDate(orderDetails?.changeRequestModifiedOn ?: "")
-                    }
-                    2L -> {
-                        mBinding?.txtCrLayerStatus?.text = ""
-                    }
-                    3L -> {
-                        mBinding?.txtCrLayerStatus?.text = Utility.returnDisplayDate(orderDetails?.changeRequestModifiedOn ?: "")
+                    1L,2L,3L -> {
+                        mBinding?.txtCrLayerStatus?.text = Utility.getCountStatement(enqID?:0)//Utility.returnDisplayDate(orderDetails?.changeRequestModifiedOn ?: "")
                     }
                     else -> {
-                         mBinding?.txtCrLayerStatus?.text = ""
+                         mBinding?.txtCrLayerStatus?.text = "Change request not available"
                     }
                 }
             }
@@ -680,8 +672,6 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
 
     override fun onResume() {
         super.onResume()
-        enqID?.let { mOrderVm?.getSingleOnOrderData(it,0) }
-        setDetails()
     }
 
     override fun onFailure() {
@@ -803,6 +793,24 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         } catch (e: Exception) {
             Log.e("Toggle", "Exception onToggleFailure " + e.message)
         }
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.e("ArtOngonDetails", "RESULT_OK ${Activity.RESULT_OK}")
+        Log.e("ArtOngonDetails", "resultCode ${resultCode}")
+        Log.e("ArtOngonDetails", "requestCode ${requestCode}")
+        if (requestCode == ConstantsDirectory.RESULT_PI) { // Please, use a final int instead of hardcoded int value
+            Log.e("ArtOngonDetails", "if ${enqID}")
+            if (resultCode == Activity.RESULT_OK) {
+                enqID?.let {
+                    viewLoader()
+                    mOrderVm?.getSingleOngoingOrder(it)
+                }
+            }
+        }
+        orderDetails= mOrderVm?.getSingleOnOrderData(enqID?:0,0).value
+        orderDetails?.let{setDetails()}
+
     }
 
 }

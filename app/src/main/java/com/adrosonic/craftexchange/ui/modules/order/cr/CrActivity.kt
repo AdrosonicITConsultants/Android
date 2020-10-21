@@ -1,5 +1,6 @@
 package com.adrosonic.craftexchange.ui.modules.order.cr
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -28,6 +29,7 @@ import com.adrosonic.craftexchange.repository.data.request.changeRequest.RaiseCr
 import com.adrosonic.craftexchange.repository.data.response.changeReequest.CrOption
 import com.adrosonic.craftexchange.repository.data.response.changeReequest.CrOptionsResponse
 import com.adrosonic.craftexchange.ui.modules.order.cr.adapter.CrAcceptRejectAdapter
+import com.adrosonic.craftexchange.ui.modules.order.revisePi.revisePiContext
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
@@ -143,6 +145,7 @@ class CrActivity : AppCompatActivity(),
                             crSelectionAdapter = CrAcceptRejectAdapter(this, crSelctionList,stageList,true)
                             crSelectionAdapter.listener = this
                             mBinding?.acceptRejectRecyclerList?.adapter = crSelectionAdapter
+                            mBinding?.txtCountAcceptReject?.text="You have accepted 0 out of ${crSelctionList.size} requests"
                         }
                         ConstantsDirectory.BUYER -> {
                             mBinding?.acceptRejectCr?.visibility=View.GONE
@@ -190,14 +193,22 @@ class CrActivity : AppCompatActivity(),
                     mBinding?.editCrDetails?.visibility=View.GONE
                     mBinding?.txtSubmit?.visibility=View.GONE
                     var changeReq = CrPredicates.getCrs(enquiryId)
+                    var count=0
                     changeReq?.forEach {
                         if(it.requestStatus!!.equals(0L)||it.requestStatus!!.equals(2L)) crSelctionList.add(Pair(it,false))
-                        else crSelctionList.add(Pair(it,true))
+                        else {
+                            count++
+                            crSelctionList.add(Pair(it,true))
+                        }
                     }
                     mBinding?.acceptRejectRecyclerList?.layoutManager = LinearLayoutManager(this)
                     crSelectionAdapter = CrAcceptRejectAdapter(this, crSelctionList,stageList,false)
                     crSelectionAdapter.listener = this
                     mBinding?.acceptRejectRecyclerList?.adapter = crSelectionAdapter
+                    when(profile) {
+                        ConstantsDirectory.ARTISAN -> mBinding?.txtCountAcceptReject?.text = "You have accepted $count out of ${crSelctionList.size} requests"
+                        ConstantsDirectory.BUYER -> mBinding?.txtCountAcceptReject?.text = "Artisan has accepted $count out of ${crSelctionList.size} requests"
+                    }
                 }
                 4L->{
                     mBinding?.acceptRejectCr?.visibility=View.GONE
@@ -293,24 +304,26 @@ class CrActivity : AppCompatActivity(),
                 stageList.forEach {it1->
                     if (it.first.requestItemsId!!.equals(it1.id)) {
                        when(it1.item){
-                           "Change in weft Yarn"->acceptedChanges=acceptedChanges+" Yarn "
-                           "Change in color"-> acceptedChanges=acceptedChanges+" Color "
-                           "Change in Quantity"-> acceptedChanges=acceptedChanges+" Quantity "
-                           "Change in motif size"->acceptedChanges=acceptedChanges+" Size "
-                           "Change in motif placement"->acceptedChanges=acceptedChanges+" Placement"
+                           "Change in weft Yarn"->acceptedChanges=acceptedChanges+" Yarn, "
+                           "Change in color"-> acceptedChanges=acceptedChanges+" Color, "
+                           "Change in Quantity"-> acceptedChanges=acceptedChanges+" Quantity, "
+                           "Change in motif size"->acceptedChanges=acceptedChanges+" Size, "
+                           "Change in motif placement"->acceptedChanges=acceptedChanges+" Placement, "
                        }
                     }
                 }
             }
             else itemList.add(ItemList(it.first.changeRequestId?:0,it.first.crId?:0,it.first.requestItemsId?:0,2,it.first.requestText?:""))
         }
-
+        if (acceptedChanges.endsWith(", ")) {
+            acceptedChanges = acceptedChanges.substring(0, acceptedChanges.length - 2);
+        }
         if(isAccept){
             @RequiresApi(Build.VERSION_CODES.N)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                txt_changes_dscrp?.text = Html.fromHtml("You are about to accept the changes on <b>$acceptedChanges</b>", Html.FROM_HTML_MODE_COMPACT)
+                txt_changes_dscrp?.text = Html.fromHtml("You are about to accept the changes on <b>$acceptedChanges</b>.", Html.FROM_HTML_MODE_COMPACT)
             } else {
-                txt_changes_dscrp?.text = Html.fromHtml("You are about to accept the changes on  <b>$acceptedChanges</b>")
+                txt_changes_dscrp?.text = Html.fromHtml("You are about to accept the changes on  <b>$acceptedChanges</b>.")
             }
         }
         else txt_changes_dscrp.text="You are about to reject the complete request"
@@ -367,7 +380,7 @@ class CrActivity : AppCompatActivity(),
             }
         }
 
-        private val generalTextWatcher: TextWatcher = object : TextWatcher {
+    private val generalTextWatcher: TextWatcher = object : TextWatcher {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) { }
             override fun beforeTextChanged( s: CharSequence, start: Int, count: Int, after: Int ) { }
             override fun afterTextChanged(s: Editable) {
@@ -376,7 +389,6 @@ class CrActivity : AppCompatActivity(),
         }
 
     fun setStatusResource() {
-
             if(mBinding?.etWeftYarn?.text!!.isNotBlank() )Utility.setImageResource(applicationContext, mBinding?.img1, R.drawable.ic_cr_checked)
             else Utility.setImageResource(applicationContext, mBinding?.img1, R.drawable.ic_cr_unchecked)
 
@@ -395,6 +407,13 @@ class CrActivity : AppCompatActivity(),
 
     override fun onCrItemSelected(pairList: ArrayList<Pair<ChangeRequests, Boolean>>) {
         this.crSelctionList = pairList
+        var selectedArr=ArrayList<Long>()
+        selectedArr.clear()
+        var count=0
+        pairList.forEach {
+            if(it.second)count++
+        }
+        mBinding?.txtCountAcceptReject?.text="You have accepted ${count} out of ${crSelctionList.size} requests"
     }
 
     override fun onCrStatusSuccess(crStatus:Long) {
@@ -405,6 +424,7 @@ class CrActivity : AppCompatActivity(),
                 changeRequestStatus=crStatus
                 setDetails()
                 showPiDialog()
+                Utility.displayMessage("CR status updated successfully",this)
             })
         } catch (e: Exception) {
             Log.e("RaiseCr", "Exception onFetchCrSuccess " + e.message)
@@ -417,6 +437,7 @@ class CrActivity : AppCompatActivity(),
                 Log.e("RaiseCr","onFetchCrSuccess Success")
                 hideLoader()
                 setDetails()
+                Utility.displayMessage("Unable to update CR status, please try again later",this)
             })
         } catch (e: Exception) {
             Log.e("RaiseCr", "Exception onFetchCrSuccess " + e.message)
@@ -432,9 +453,20 @@ class CrActivity : AppCompatActivity(),
         val btn_skip = dialog?.findViewById(R.id.btn_skip) as Button
         val btn_raise_pi = dialog?.findViewById(R.id.btn_raise_pi) as Button
         btn_raise_pi.setOnClickListener {
-
-//            dialog.cancel()
+        enquiryId?.let {
+            dialog.cancel()
+            startActivityForResult(this.revisePiContext(it),ConstantsDirectory.RESULT_PI)}
         }
         btn_skip.setOnClickListener {  dialog.cancel() }
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.e("CrActivity", "onActivityResult RESULT_OK ${Activity.RESULT_OK}")
+        if (requestCode == ConstantsDirectory.RESULT_PI) { // Please, use a final int instead of hardcoded int value
+            if (resultCode == Activity.RESULT_OK) {
+                setResult(Activity.RESULT_OK)
+                finish()
+            }
+        }
     }
 }

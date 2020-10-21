@@ -64,9 +64,20 @@ class PiService: JobIntentService() {
                 pi.ppu=  piObj?.ppu?:0
                 pi.quantity=piObj?.quantity?:0
                 pi.sgst=piObj?.sgst?:0
-                savePi(piObj?.enquiryId?:0,pi)
-                isSend=piObj?.actionMarkPiForSend?:0
-                isSave=piObj?.actionMarkPiForSave?:0
+                if(piObj?.actionMarkPiForRevise!=null) {
+                    if (piObj?.actionMarkPiForRevise!!.equals(1L)) {
+                        Log.e(TAG,"revisePi :$_idLong")
+                        revisePi(piObj?.enquiryId?:0,pi)
+                    }else {
+                        savePi(piObj?.enquiryId ?: 0, pi)
+                        isSend = piObj?.actionMarkPiForSend ?: 0
+                        isSave = piObj?.actionMarkPiForSave ?: 0
+                    }
+                }else {
+                    savePi(piObj?.enquiryId ?: 0, pi)
+                    isSend = piObj?.actionMarkPiForSend ?: 0
+                    isSave = piObj?.actionMarkPiForSave ?: 0
+                }
                 }
         }catch (e: Exception){
             Log.e(TAG,"Exception: ${e.message}")
@@ -126,6 +137,32 @@ class PiService: JobIntentService() {
 //                            PiPredicates.updatePiPostSelection(enquiryId,null,0)
                             PiPredicates.deletePi(_id)
                         }
+                    }
+                }
+            })
+    }
+
+    fun revisePi(enquiryId:Long,pi: SendPiRequest){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        Log.e(TAG,"revisePi :${enquiryId}")
+        Log.e(TAG,"revisePi pi :${Gson().toJson(pi)}")
+        CraftExchangeRepository
+            .getPiService()
+            .revisedPI(token,enquiryId.toInt(),pi).enqueue(object : Callback, retrofit2.Callback<NotificationReadResponse> {
+                override fun onFailure(call: Call<NotificationReadResponse>, t: Throwable) {
+                    Log.e(TAG,"onFailure revisePi :${t.message}")
+                    t.printStackTrace()
+                }
+                override fun onResponse(
+                    call: Call<NotificationReadResponse>,
+                    response: Response<NotificationReadResponse>
+                ) {
+                    val valid=response.body()?.valid?:false
+                    Log.e(TAG,"onResponse revisePi :$valid")
+                    if(valid){
+                        Log.e(TAG,"onResponse true")
+                        PiPredicates.deletePi(_id)
+                        OrdersPredicates.updatIsPiSend(enquiryId,1L)
                     }
                 }
             })

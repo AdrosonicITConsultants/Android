@@ -56,22 +56,30 @@ class ArtisanProductAdapter(var context: Context?, private var artisanProducts: 
         holder.binding.prodText.text = product?.productCategoryDesc
 
         if(Utility.checkIfInternetConnected(context!!)){
-            if(UserConfig.shared.categoryCMS != null){
-                val dataJson = JSONArray(UserConfig.shared.categoryCMS)
-                Log.i("CMS", "DataJson : $dataJson")
-                for (i in 0 until dataJson.length())
-                {
-                    val dataObj = dataJson.getJSONObject(i)
-                    Log.i("CMS", "DataObj : $dataObj")
-                    var acfObj = dataObj?.getJSONObject("acf")
-                    var prodCatId = acfObj?.getString("category_id")?.toLong()
+            Log.i("CMS", "DataJson : ${UserConfig.shared.categoryCMS}")
+            if(UserConfig.shared.categoryCMS != null) {
+                if(UserConfig.shared.categoryCMS!!.length>0) {
+                    val dataJson = JSONArray(UserConfig.shared.categoryCMS)
+                    Log.i("CMS", "DataJson : ${dataJson.length()}")
+                    if (dataJson.length() > 0) {
+                        for (i in 0 until dataJson.length()) {
+                            val dataObj = dataJson.getJSONObject(i)
+                            Log.i("CMS", "DataObj : $dataObj")
+                            var acfObj = dataObj?.getJSONObject("acf")
+                            var prodCatId = acfObj?.getString("category_id")?.toLong()
 
-                    if(product?.productCategoryId == prodCatId){
-                        var imgUrl = acfObj?.getString("image")
-                        context?.let { imgUrl?.let { it1 ->
-                            ImageSetter.setCMSImage(it,
-                                it1,holder.binding.prodImg)
-                        } }
+                            if (product?.productCategoryId == prodCatId) {
+                                var imgUrl = acfObj?.getString("image")
+                                context?.let {
+                                    imgUrl?.let { it1 ->
+                                        ImageSetter.setCMSImage(
+                                            it,
+                                            it1, holder.binding.prodImg
+                                        )
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

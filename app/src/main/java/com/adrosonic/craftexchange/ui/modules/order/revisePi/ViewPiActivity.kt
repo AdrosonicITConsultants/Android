@@ -1,4 +1,4 @@
-package com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi
+package com.adrosonic.craftexchange.ui.modules.order.revisePi
 
 import android.app.Activity
 import android.content.Context
@@ -19,52 +19,58 @@ import androidx.core.content.FileProvider
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.Moqs
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
+import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
 import com.adrosonic.craftexchange.database.entities.realmEntities.PiDetails
 import com.adrosonic.craftexchange.database.predicates.MoqsPredicates
+import com.adrosonic.craftexchange.database.predicates.OrdersPredicates
 import com.adrosonic.craftexchange.database.predicates.PiPredicates
 import com.adrosonic.craftexchange.databinding.ActivityRaisePiBinding
+import com.adrosonic.craftexchange.databinding.ActivityViewPiBinding
+import com.adrosonic.craftexchange.enums.AvailableStatus
+import com.adrosonic.craftexchange.enums.getId
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
+import com.adrosonic.craftexchange.viewModels.OrdersViewModel
 import java.io.File
 
-fun Context.raisePiContext(enquiryId:Long,isView:Boolean,piRequest: SendPiRequest?): Intent {
-    val intent = Intent(this, RaisePiActivity::class.java)
+
+fun Context.viewPiContextPostCr(enquiryId:Long): Intent {
+    val intent = Intent(this, ViewPiActivity::class.java)
     intent.putExtra("enquiryId", enquiryId)
-    intent.putExtra("isView", isView)
-    intent.putExtra("piRequest", piRequest)
     return intent
 }
-
-class RaisePiActivity : AppCompatActivity(),
+class ViewPiActivity : AppCompatActivity(),
+OrdersViewModel.FetchOrderInterface,
+EnquiryViewModel.FetchEnquiryInterface,
 EnquiryViewModel.piInterface{
     var enquiryId=0L
-    var isView=false
-    var piDetails: PiDetails? = null
+    var isRevisedPi=false
     val mEnqVM : EnquiryViewModel by viewModels()
+    val mOrderVm : OrdersViewModel by viewModels()
     var enquiryDetails: OngoingEnquiries? = null
-    private var mBinding: ActivityRaisePiBinding? = null
-    var pi=SendPiRequest()
-
+    private var mBinding: ActivityViewPiBinding? = null
+    private var orderDetails : Orders?= null
+    var isPiSend=false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityRaisePiBinding.inflate(layoutInflater)
+        mBinding = ActivityViewPiBinding.inflate(layoutInflater)
         val view = mBinding?.root
         setContentView(view)
         mEnqVM?.piLisener=this
         if (intent.extras != null) {
             enquiryId = intent.getLongExtra("enquiryId",0)
-            isView=intent.getBooleanExtra("isView",false)
-            enquiryDetails=mEnqVM?.loadSingleEnqDetails(enquiryId)
-            pi=intent.getSerializableExtra("piRequest") as SendPiRequest
-            enquiryId?.let{
+            enquiryId?.let {
                 viewLoader()
+                enquiryDetails=mEnqVM?.loadSingleEnqDetails(enquiryId)
+                if(enquiryDetails==null)mEnqVM?.getSingleOngoingEnquiry(enquiryId)
+                orderDetails= OrdersPredicates.getSingleOnGoOrderDetails(it,0)
+                mEnqVM?.getOldPiData(it)
                 mEnqVM?.previewPi(enquiryId)
             }
         }
 
-        Log.e("PiPostCr","enquiryId: $enquiryId")
         mBinding?.btnBack?.setOnClickListener {
             finish()
         }
@@ -83,30 +89,26 @@ EnquiryViewModel.piInterface{
                 )
             }
         }
-        mBinding?.btnRaisePi?.setOnClickListener {
-                if (Utility.checkIfInternetConnected(applicationContext)) {
-                    viewLoader()
-                    mBinding?.btnRaisePi?.setText("Pi request being raise")
-                    mBinding?.btnRaisePi?.isEnabled = true
-                    mEnqVM?.sendPi(enquiryId, pi)
-                } else {
-                    PiPredicates.insertPiForOffline(enquiryId, 1, 1, pi)
-                    Utility.displayMessage( "Pi will be send once internet connectivity regained.", applicationContext)
-                    setResult(Activity.RESULT_OK)
-                    finish()
-                }
+        mBinding?.btnRevisePi?.setOnClickListener {
+         Log.e("PiPostCr","btnRaisePi isRevisedPi: $isRevisedPi")
+         enquiryId?.let {startActivityForResult(this.revisePiContext(it),ConstantsDirectory.RESULT_PI)}
+        }
+        mBinding?.viewOldPi?.setOnClickListener {
+            //todo raisePi can be called here
+            Utility.displayMessage("Coming soon",this)
         }
         setViews()
     }
 
     fun setViews(){
-        if(isView){
-            mBinding?.btnRaisePi?.visibility=View.GONE
-        }
-        else{
-            mBinding?.btnRaisePi?.visibility=View.VISIBLE
-        }
-        mBinding?.enquiryCode?.text="Proforma invoice for ${enquiryDetails?.enquiryCode}"
+        Log.e("PiPostCr","enquiryId: ${orderDetails?.enquiryId}")
+        if(isRevised())mBinding?.btnRevisePi?.visibility=View.VISIBLE
+        else mBinding?.btnRevisePi?.visibility=View.GONE
+
+        if(orderDetails?.isPiSend!!.equals(1L))mBinding?.viewOldPi?.visibility=View.VISIBLE
+        else mBinding?.viewOldPi?.visibility=View.GONE
+
+        mBinding?.enquiryCode?.text="Proforma invoice for ${orderDetails?.orderCode}"
         val webSettings = mBinding?.webviewPiPreview?.settings
         webSettings?.javaScriptEnabled = true
         webSettings?.builtInZoomControls = true
@@ -115,6 +117,7 @@ EnquiryViewModel.piInterface{
         }else{
             mBinding?.webviewPiPreview?.loadDataWithBaseURL(null, getString(R.string.preview_not_available), "text/html", "utf-8", null)
         }
+
     }
     fun viewLoader(){
         mBinding?.pbLoader?.visibility=View.VISIBLE
@@ -127,8 +130,6 @@ EnquiryViewModel.piInterface{
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 hideLoader()
-                mBinding?.btnRaisePi?.setText("Swipe to raise PI")
-                mBinding?.btnRaisePi?.isEnabled=true
                 Utility.displayMessage("Unable to raise PI, please try after some time",applicationContext)
             })
         } catch (e: Exception) {
@@ -189,6 +190,8 @@ EnquiryViewModel.piInterface{
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("Enquiry Details", "onSuccess")
                 hideLoader()
+                orderDetails=OrdersPredicates.getSingleOnGoOrderDetails(enquiryId,0)
+                setViews()
                 mBinding?.webviewPiPreview?.loadDataWithBaseURL(null, getString(R.string.preview_not_available), "text/html", "utf-8", null)
             })
         } catch (e: Exception) {
@@ -196,15 +199,67 @@ EnquiryViewModel.piInterface{
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+//        Log.e("revisePi","onResume :${enquiryId}")
+//        mEnqVM?.previewPi(enquiryId)
+//        mOrderVm?.getSingleOngoingOrder(enquiryId)
+//        orderDetails= OrdersPredicates.getSingleOnGoOrderDetails(enquiryId,0)
+//        setViews()
+    }
+    fun isRevised():Boolean{
+        Log.e("PiPostCr","isRevisedPi isPiSend: ${orderDetails?.isPiSend}")
+        try {
+            if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
+                if(orderDetails?.changeRequestOn!!>0){
+                if(orderDetails?.enquiryStageId!!>=4L && (orderDetails?.changeRequestStatus!!.equals(1L)||orderDetails?.changeRequestStatus!!.equals(3L))) {
+                    if(orderDetails?.isPiSend!!.equals(0L)) {
+                        Log.e("PiPostCr","isRevisedPi : true")
+    //                    var days = Utility.getDateDiffInDays(Utility.returnDisplayDate( orderDetails?.changeRequestModifiedOn ?: ""))
+    //                    Log.e("PiPostCr", "isRevisedPi days: $days")
+    //                    if (days <= 4) {
+                        return true
+    //                    } else return false
+                    } else return false
+                } else return false
+                } else return false
+            }else return false
+        } catch (e: Exception) {
+            return false
+        }
+    }
+
+    override fun onFailure() {
+
+    }
+
+    override fun onSuccess() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("EnquiryDetails", "onSuccess")
+                enquiryDetails=mEnqVM.loadSingleEnqDetails(enquiryId)
+                orderDetails= OrdersPredicates.getSingleOnGoOrderDetails(enquiryId,0)
+                setViews()
+                hideLoader()
+            })
+        } catch (e: Exception) {
+            Log.e("EnquiryDetails", "Exception onFailure " + e.message)
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.e("RaisePiActivity", "onActivityResult RESULT_OK ${Activity.RESULT_OK}")
+        Log.e("ViewPiActivity", "RESULT_OK ${Activity.RESULT_OK}")
+        Log.e("ViewPiActivity", "resultCode ${resultCode}")
+        Log.e("ViewPiActivity", "requestCode ${requestCode}")
         if (requestCode == ConstantsDirectory.RESULT_PI) { // Please, use a final int instead of hardcoded int value
             if (resultCode == Activity.RESULT_OK) {
-                setResult(Activity.RESULT_OK)
-                finish()
-
+                viewLoader()
+                mEnqVM?.previewPi(enquiryId)
+                mOrderVm?.getSingleOngoingOrder(enquiryId)
             }
         }
+        orderDetails= OrdersPredicates.getSingleOnGoOrderDetails(enquiryId,0)
+        orderDetails?.let{setViews()}
     }
 }

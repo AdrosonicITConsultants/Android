@@ -1,4 +1,4 @@
-package com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi
+package com.adrosonic.craftexchange.ui.modules.order.revisePi
 
 import android.app.Activity
 import android.app.DatePickerDialog
@@ -23,6 +23,7 @@ import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.Moqs
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
 import com.adrosonic.craftexchange.database.predicates.MoqsPredicates
+import com.adrosonic.craftexchange.database.predicates.OrdersPredicates
 import com.adrosonic.craftexchange.database.predicates.PiPredicates
 import com.adrosonic.craftexchange.databinding.ActivityPiBinding
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
@@ -36,17 +37,17 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-fun Context.piContext(enquiryId:Long): Intent {
-    val intent = Intent(this, PiActivity::class.java)
+
+fun Context.revisePiContext(enquiryId:Long): Intent {
+    val intent = Intent(this, RevisePiActivity::class.java)
     intent.putExtra("enquiryId", enquiryId)
     return intent
 }
-class PiActivity : AppCompatActivity(),
-    EnquiryViewModel.piInterface,
+class RevisePiActivity : AppCompatActivity(),
+    EnquiryViewModel.RevisePiInterface,
     EnquiryViewModel.singlePiInterface {
     var enquiryId=0L
     val mEnqVM : EnquiryViewModel by viewModels()
-    var moqs: Moqs? = null
     var enquiryDetails: OngoingEnquiries? = null
     var moqDeliveryTimeList=ArrayList<Datum>()
     private var url : String?=""
@@ -65,14 +66,17 @@ class PiActivity : AppCompatActivity(),
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_pi)
         val view = mBinding?.root
         setContentView(view)
-        mEnqVM?.piLisener=this
+        mEnqVM?.singlePiListener=this
+        mEnqVM?.revisePiInterface=this
         if (intent.extras != null) {
             enquiryId = intent.getLongExtra("enquiryId",0)
             enquiryDetails = mEnqVM?.loadSingleEnqDetails(enquiryId)
-            moqs = MoqsPredicates.getSingleMoq(enquiryId)
             Utility.getDeliveryTimeList()?.let {moqDeliveryTimeList.addAll(it)  }
+            mEnqVM?.getSinglePi(enquiryId)
             setDetails()
         }
+
+        Log.e("RaisePi", "pi enquiryId : ${enquiryId}")
         mBinding?.btnBack?.setOnClickListener {
             finish()
         }
@@ -88,16 +92,7 @@ class PiActivity : AppCompatActivity(),
                 }, mYear, mMonth, mDay)
             datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000)
             datePickerDialog.show()
-
-//            view?.onTouchEvent(motionEvent) ?: true
         }
-        mBinding?.chbTnc?.setOnClickListener {
-            Utility?.displayMessage("Coming soon",this)
-        }
-        mBinding?.txtTnc?.setOnClickListener {
-            Utility?.displayMessage("Coming soon",this)
-        }
-        
         mBinding?.txtPiSwipe?.setOnClickListener {
             val qty = mBinding?.etQty?.text.toString()
             val date = mBinding?.etDeliveryDate?.text.toString()
@@ -113,6 +108,7 @@ class PiActivity : AppCompatActivity(),
             else if (sgst.isEmpty()) Utility.displayMessage("Please add SGST", applicationContext)
             else if (cgst.isEmpty()) Utility.displayMessage("Please add CGST", applicationContext)
             else if (currency!!.isEmpty()) Utility.displayMessage("Please select Currency", applicationContext)
+            else if(!mBinding?.chbTnc!!.isChecked)Utility.displayMessage("Please accept terms and conditions", applicationContext)
             else {
                 pi.cgst=cgst.toLong()
                 pi.expectedDateOfDelivery=date
@@ -121,16 +117,25 @@ class PiActivity : AppCompatActivity(),
                 pi.quantity=qty.toLong()
                 pi.sgst=sgst.toLong()
                 if (Utility.checkIfInternetConnected(applicationContext)) {
-                    mBinding?.txtPiSwipe?.setText("Pi preview being genrated")
+//                    mBinding?.txtPiSwipe?.setText("Pi preview being genrated")
                     mBinding?.txtPiSwipe?.isEnabled=false
                     viewLoader()
-                    mEnqVM?.savePi(enquiryId, 0, pi)
+                    mEnqVM?.revisePi(enquiryId,  pi)
                 } else {
 //                    todo add dat to pi table
-                    PiPredicates.insertPiForOffline(enquiryId,0,1,pi)
-                    startActivityForResult(applicationContext.raisePiContext(enquiryId,false,pi),ConstantsDirectory.RESULT_PI)
+                    PiPredicates.insertPiForOfflineForRevise(enquiryId,pi)
+                    OrdersPredicates.updatIsPiSend(enquiryId,1L)
+                    Utility.displayMessage("PI will be raised once internet connectivity regained",applicationContext)
+                    setResult(Activity.RESULT_OK)
+                    finish()
                 }
             }
+        }
+        mBinding?.chbTnc?.setOnClickListener {
+            Utility?.displayMessage("Coming soon",this)
+        }
+        mBinding?.txtTnc?.setOnClickListener {
+            Utility?.displayMessage("Coming soon",this)
         }
     }
 
@@ -145,6 +150,7 @@ class PiActivity : AppCompatActivity(),
             url = Utility.getProductsImagesUrl(enquiryDetails?.productID, image)
             isCustom = false
         }
+        mBinding?.moqDetailsLayer?.visibility=View.GONE
         mBinding?.productImage?.let { ImageSetter.setImage(applicationContext, url!!, it, R.drawable.artisan_logo_placeholder, R.drawable.artisan_logo_placeholder, R.drawable.artisan_logo_placeholder) }
         mBinding?.buyerCompany?.text = enquiryDetails?.ProductBrandName
         mBinding?.productAmount?.text = "₹ ${enquiryDetails?.totalAmount ?: 0}"
@@ -208,13 +214,6 @@ class PiActivity : AppCompatActivity(),
             mBinding?.productName?.append(sp)
         }
 
-        if(moqs!=null){
-            mBinding?.orderQuantity?.text="${moqs?.moq?:0}"
-            mBinding?.orderAmount?.text="${moqs?.ppu?:0}"
-            moqDeliveryTimeList?.forEach {
-                if (it.id.equals(moqs?.deliveryTimeId))mBinding?.orderTime?.text = if (it?.days.equals(0L)) {"Immediate"} else "${it?.days} Days"// "${it?.days} Days"
-            }
-        }
         currencyList.clear()
         currencyList.add(" ₹")
         currencyList.add("$")
@@ -223,11 +222,23 @@ class PiActivity : AppCompatActivity(),
         val spEstDaysAdapter = ArrayAdapter<String>(applicationContext, android.R.layout.simple_spinner_item,currencyList)
         spEstDaysAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         mBinding?.spCurrency?.adapter = spEstDaysAdapter
+
+        val piObj=PiPredicates.getSinglePi(enquiryId)
+           piObj?.let{
+               mBinding?.etQty?.setText(it?.quantity.toString(), TextView.BufferType.EDITABLE)
+               mBinding?.etDeliveryDate?.setText(it?.date, TextView.BufferType.EDITABLE)
+               mBinding?.etPpu?.setText(it?.ppu.toString(), TextView.BufferType.EDITABLE)
+               mBinding?.etHsnCode?.setText(it?.hsn.toString(), TextView.BufferType.EDITABLE)
+               mBinding?.etSgst?.setText(it.sgst.toString(), TextView.BufferType.EDITABLE)
+               mBinding?.etCgst?.setText(it.cgst.toString(), TextView.BufferType.EDITABLE)
+           }
+
     }
 
     fun viewLoader(){
         mBinding?.swipeEnquiryDetails?.visibility= View.VISIBLE
     }
+
     fun hideLoader(){
         mBinding?.swipeEnquiryDetails?.visibility= View.VISIBLE
     }
@@ -236,9 +247,7 @@ class PiActivity : AppCompatActivity(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 hideLoader()
-                Utility.displayMessage("Unable to raise PI, please try after some time",applicationContext)
-                mBinding?.txtPiSwipe?.setText("Swipe to generate PI preview")
-                mBinding?.txtPiSwipe?.isEnabled = true
+                Utility.displayMessage("Sorry,Unable to fetch PI details",applicationContext)
             })
         } catch (e: Exception) {
             Log.e("Enquiry Details", "Exception onFailure " + e.message)
@@ -249,46 +258,47 @@ class PiActivity : AppCompatActivity(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("PiPostCr", "getPiSuccess")
-                setDetails()
+                 setDetails()
             })
         } catch (e: Exception) {
-            Log.e("PiActivity", "Exception onFailure " + e.message)
+            Log.e("RevisePiActivity", "Exception onFailure " + e.message)
         }
-    }
-
-    override fun onPiSuccess() {
-        try {
-            Handler(Looper.getMainLooper()).post(Runnable {
-                Log.e("PiActivity", "onSuccess")
-                hideLoader()
-                startActivityForResult(applicationContext.raisePiContext(enquiryId,false,pi),ConstantsDirectory.RESULT_PI)
-            })
-        } catch (e: Exception) {
-            Log.e("PiActivity", "Exception onFailure " + e.message)
-        }
-    }
-
-    override fun onPiDownloadSuccess() {
-    }
-
-    override fun onPiDownloadFailure() {
-    }
-
-    override fun onPiHTMLSuccess(data:String) {
-    }
-
-    override fun onPiHTMLFailure() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.e("PiActivity", "onActivityResult RESULT_OK ${Activity.RESULT_OK}")
+        Log.e("RevisePiActivity", "onActivityResult RESULT_OK ${Activity.RESULT_OK}")
         if (requestCode == ConstantsDirectory.RESULT_PI) { // Please, use a final int instead of hardcoded int value
             if (resultCode == Activity.RESULT_OK) {
                 setResult(Activity.RESULT_OK)
                 finish()
+
             }
         }
     }
 
+    override fun onRevisePiFailure() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                hideLoader()
+                Utility.displayMessage("Unable to raise PI, please try again later",applicationContext)
+            })
+        } catch (e: Exception) {
+            Log.e("revisePi", "Exception onFailure " + e.message)
+        }
+    }
+
+    override fun onRevisePiSuccess() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                hideLoader()
+                Utility.displayMessage("PI raised succesfully",applicationContext)
+                setResult(Activity.RESULT_OK)
+                finish()
+                //todo setresult
+            })
+        } catch (e: Exception) {
+            Log.e("revisePi", "Exception onFailure " + e.message)
+        }
+    }
 }

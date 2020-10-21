@@ -26,6 +26,7 @@ open class PiDetails : RealmObject() {
     var parentId: Long? = 0
     var actionMarkPiForSave: Long? = 0
     var actionMarkPiForSend: Long? = 0
+    var actionMarkPiForRevise: Long? = 0
 
     companion object {
         const val COLUMN_TABLE = "PiDetails"
@@ -38,5 +39,6 @@ open class PiDetails : RealmObject() {
         const val COLUMN_SGST = "sgst"
         const val COLUMN_MARK_PI_FOR_SAVE = "actionMarkPiForSave"
         const val COLUMN_MARK_PI_FOR_SENDING = "actionMarkPiForSend"
+        const val COLUMN_MARK_PI_FOR_REVISE = "actionMarkPiForRevise"
     }
 }

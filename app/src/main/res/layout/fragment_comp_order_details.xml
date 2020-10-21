@@ -566,6 +566,7 @@
                         android:textSize="12sp" />
 
                     <TextView
+                        android:id="@+id/txtCrLayerStatus"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"

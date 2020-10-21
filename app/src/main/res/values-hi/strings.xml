@@ -283,5 +283,5 @@
     <string name="cr_note_artisan">If you accept this change request, the buyer shall not be able to raise another change request.\n\n</string>
     <string name="want_to_discuss_more">Want to discuss more?</string>
     <string name="post_cr">Post change request process</string>
-
+    <string name="new_pi_post_cr">Generate new PI post CR</string>
 </resources>
