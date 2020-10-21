@@ -72,7 +72,6 @@ class CompletedOrderListAdapter(var context: Context?, private var enquiries: Re
             var bundle = Bundle()
             Prefs.putString(ConstantsDirectory.ENQUIRY_ID, enquiry?.enquiryId?.toString()) //TODO change later
             bundle.putString(ConstantsDirectory.ENQUIRY_ID, enquiry?.enquiryId?.toString())
-//            bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG, enquiry?.enquiryStatusId?.toString())
             bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG, "1")
             intent.putExtras(bundle)
             context?.startActivity(intent)
@@ -84,15 +83,15 @@ class CompletedOrderListAdapter(var context: Context?, private var enquiries: Re
         var first_image = imgArrSplit?.get(0)
 
         if(enquiry?.productType == "Custom Product"){
-            holder?.brandName?.text = enquiry?.brandName//"Custom Design by you"
+//            holder?.brandName?.text = enquiry?.brandName//"Custom Design by you"
             url = Utility.getCustomProductImagesUrl(enquiry?.productId, first_image)
         }else{
-            holder?.brandName?.text = enquiry?.brandName
+//            holder?.brandName?.text = enquiry?.brandName
             url = Utility.getProductsImagesUrl(enquiry?.productId, first_image)
         }
         context?.let { ImageSetter.setImage(it, url!!,holder?.productImage) }
 
-
+        holder?.brandName?.text = enquiry?.brandName
         holder?.enquiryCode?.text = enquiry?.orderCode
 
         if(enquiry?.productName != ""){

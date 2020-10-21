@@ -32,7 +32,7 @@
         android:layout_marginStart="@dimen/margin_semimedium"
         android:layout_marginTop="6dp"
         android:layout_marginEnd="@dimen/margin_semimedium"
-        android:textColor="@color/darker_gray"
+        android:textColor="#FFA500"
         android:background="@drawable/rect_outline_grey"
         android:fontFamily="@font/lato_bold"
         android:gravity="start"

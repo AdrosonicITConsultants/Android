@@ -18,10 +18,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".ui.modules.order.cr.CrActivity"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".ui.modules.artisan.qcForm.QCActivity"></activity>
+        <activity android:name=".ui.modules.artisan.qcForm.QCActivity"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name=".ui.modules.transaction.ViewDocumentActivity" />
+        <activity android:name=".ui.modules.transaction.ViewDocumentActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.modules.transaction.TransactionActivity"
             android:screenOrientation="portrait" />
@@ -175,6 +179,10 @@
             android:permission="android.permission.BIND_JOB_SERVICE" />
         <service
             android:name=".services.cr.CrToggleService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name=".services.cr.CrAcceptRejectService"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
         <service android:name=".services.InstanceIdService">

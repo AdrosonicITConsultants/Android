@@ -49,7 +49,10 @@ import kotlinx.android.synthetic.main.dialog_multi_loading.*
 import kotlinx.android.synthetic.main.dialog_qc_form.*
 import okhttp3.ResponseBody
 import java.io.*
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.regex.Pattern
+import kotlin.collections.ArrayList
 
 class Utility {
     companion object{
@@ -629,6 +632,22 @@ class Utility {
             } catch (e: Exception) {
                 displayMessage("  Application not installed " + e, context)
             }
+        }
+
+        fun getDateDiffInDays(orderCreatedOn:String):Long{
+            val currentDateTime=System.currentTimeMillis()
+//            val orderCreatedOn=Utility.returnDisplayDate(orderDetails?.orderCreatedOn?:"")
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+            val dateString =dateFormat.parse(orderCreatedOn)
+            Log.e("RaiseCr","orderDateMillis $dateString")
+
+            val diff: Long = currentDateTime - dateString.getTime()
+            val seconds = diff / 1000
+            val minutes = seconds / 60
+            val hours = minutes / 60
+            val days = hours / 24
+
+            return days
         }
     }
 }

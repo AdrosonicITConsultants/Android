@@ -32,6 +32,8 @@ import io.realm.annotations.RealmModule
     Orders::class,
     EnquiryProductDetails::class,
     Transactions::class,
-    QcDetails::class
+    QcDetails::class,
+    ChangeRequests::class,
+    Transactions::class
 ])
 class CXRealmModule

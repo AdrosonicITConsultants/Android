@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/expandable_layout_std_padding">
+
+    <TextView
+        android:id="@+id/txt_dscrp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/margin_regular"
+        android:fontFamily="@font/playfair_regular"
+        android:text="@string/post_cr"
+        android:textAlignment="center"
+        android:textColor="@color/black_text"
+        android:textSize="@dimen/product_title_text" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/margin_regular"
+        android:fontFamily="@font/playfair_regular"
+        android:text="Update the pro forma invoice?"
+        android:textAlignment="center"
+        android:textColor="@color/black_text"
+        android:textSize="@dimen/title_text" />
+
+    <TextView
+        android:id="@+id/txt_changes_dscrp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/margin_regular"
+        android:fontFamily="@font/playfair_regular"
+        android:text="You have 2 days remaining to update your invoice after change request"
+        android:textAlignment="center"
+        android:textColor="@color/dark_green" />
+
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <Button
+            android:id="@+id/btn_skip"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:background="@drawable/rectangle_round_grad"
+            android:text="Skip"
+            android:textAllCaps="false"
+            android:textColor="@color/darker_gray"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="20dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />.
+
+        <Button
+            android:id="@+id/btn_raise_pi"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:background="@drawable/rectangle_round_green_solid"
+            android:text="Make change now"
+            android:textAllCaps="false"
+            android:textColor="#FFF"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -521,6 +521,7 @@ class UserPredicates{
                     realm?.where(Transactions::class.java).findAll().deleteAllFromRealm()
                     realm?.where(Orders::class.java).findAll().deleteAllFromRealm()
                     realm?.where(QcDetails::class.java).findAll().deleteAllFromRealm()
+                    realm?.where(ChangeRequests::class.java).findAll().deleteAllFromRealm()
                 }catch (e:Exception){
                     Log.e("DeleteData","${e.printStackTrace()}")
                 }

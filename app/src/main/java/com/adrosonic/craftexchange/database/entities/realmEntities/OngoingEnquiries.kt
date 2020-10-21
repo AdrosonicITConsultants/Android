@@ -27,7 +27,7 @@ open class OngoingEnquiries : RealmObject() {
     var isMoqSend: Long?  = 0
     var isPiSend: Long?  = 0
     var isMoqRejected: Long?  = 0
-    var changeRequestOn: Long?  = 0
+    var changeRequestOn: Long?  = null
     var isBlue: Long?  = 0
 
     var productType: String? = ""

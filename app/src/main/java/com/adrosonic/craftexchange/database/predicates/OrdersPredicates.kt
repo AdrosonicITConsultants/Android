@@ -177,7 +177,7 @@ class OrdersPredicates {
                                 orderObj?.lastUpdated = order?.openEnquiriesResponse?.lastUpdated
                                 orderObj?.state = order?.openEnquiriesResponse?.state
                                 orderObj?.country = order?.openEnquiriesResponse?.country
-                                orderObj?.brandName = order?.brandName //todo : to be changed
+//                                orderObj?.brandName = order?.brandName //todo : to be changed
                                 orderObj?.isMoqSend = order?.openEnquiriesResponse?.isMoqSend?:0
                                 orderObj?.isPiSend = order?.openEnquiriesResponse?.isPiSend?:0
                                 orderObj?.isMoqRejected = order?.isMoqRejected?:0
@@ -267,6 +267,28 @@ class OrdersPredicates {
                 }
             }
         }
+
+        fun updateChangeRequestStatus(enquiryId: Long?,status:Long){
+            var realm = CXRealmManager.getRealmInstance()
+            var orders : Orders?= null
+            realm.executeTransaction {
+                try{
+                    orders = realm.where(Orders::class.java)
+                        .equalTo(Orders.COLUMN_ENQUIRY_ID,enquiryId)
+                        .limit(1)
+                        .findFirst()
+                    Log.e("RaiseCr","updateChangerequestStatus 1111: ${orders?.changeRequestStatus}")
+                    orders?.let {
+                        orders?.changeRequestStatus=status
+                        realm.copyToRealmOrUpdate(orders)
+                    }
+                    Log.e("RaiseCr","updateChangerequestStatus 2222: ${orders?.changeRequestStatus}")
+                }catch (e:Exception){
+                    Log.e("RaiseCr","Exception : "+e.printStackTrace())
+                }
+            }
+        }
+
         fun updateCrStatusForOffline(enquiryId: Long?){
             var realm = CXRealmManager.getRealmInstance()
             var orders : Orders?= null
@@ -294,19 +316,26 @@ class OrdersPredicates {
             var itemId=ArrayList<Long>()
             try {
                 realm.executeTransaction {
-                    var message1 =realm.where(Orders::class.java)
-                        .equalTo(Orders.COLUMN_ACTION_MARK_CR,1L)
-                        .findAll()
-                    Log.e(TAG,"message1 :${message1?.count()}")
-                    if(message1!=null){
-                        val iterator=message1.iterator()
+
+                    var message = when (actionsMarked) {
+                        "actionMarkCr=1" -> {
+                            realm.where(Orders::class.java)
+                                .equalTo(Orders.COLUMN_ACTION_MARK_CR,1L)
+                                .findAll()
+                        }
+                        "actionMarkCrStatusUpdate=1" -> {
+                            realm.where(Orders::class.java)
+                                .equalTo(Orders.COLUMN_ACTION_MARK_CR_STATUS_UPDATE,1L)
+                                .findAll()
+                        }
+                        else -> null
+                    }
+                    if (message != null) {
+                        val iterator = message.iterator()
                         while (iterator.hasNext()) {
-                            val id=iterator.next()._id?:0L
-                            Log.e(TAG,"itemId :${id}")
-                            itemId.add(id)
+                            itemId?.add(iterator.next()._id ?: 0L)
                         }
                     }
-
                 }
             } catch (e: Exception) {
                 Log.e(TAG,"while fetching actions : "+e.message)
@@ -320,5 +349,29 @@ class OrdersPredicates {
             val realm = CXRealmManager.getRealmInstance()
             return realm.where(Orders::class.java).equalTo(Orders.COLUMN__ID,_id).limit(1).findFirst()?.enquiryId?:0
         }
+
+        fun updateChangeRequestStatusOffline(enquiryId: Long?,jsonString:String,actionMarkCrStatusUpdate:Long,changeRequestStatus:Long){
+            var realm = CXRealmManager.getRealmInstance()
+            var orders : Orders?= null
+            realm.executeTransaction {
+                try{
+                    orders = realm.where(Orders::class.java)
+                        .equalTo(Orders.COLUMN_ENQUIRY_ID,enquiryId)
+                        .limit(1)
+                        .findFirst()
+                    Log.e("RaiseCr","orders 1111: ${orders?.changeRequestOn}")
+                    orders?.let {
+                        orders?.actionMarkCrStatusUpdate=actionMarkCrStatusUpdate
+                        orders?.crStatusUpdateInput=jsonString
+                        orders?.changeRequestStatus=changeRequestStatus
+                        realm.copyToRealmOrUpdate(orders)
+                    }
+                    Log.e("RaiseCr","orders 2222: ${orders?.changeRequestOn}")
+                }catch (e:Exception){
+                    Log.e("RaiseCr","Exception : "+e.printStackTrace())
+                }
+            }
+        }
+
     }
 }

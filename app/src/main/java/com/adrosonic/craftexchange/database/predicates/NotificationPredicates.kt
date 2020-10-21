@@ -112,6 +112,8 @@ class NotificationPredicates {
                         .notEqualTo(Notifications.COLUMN_ACTION_MARK_READ,1L)
                         .sort(Notifications.COLUMN_CREATED_ON,Sort.DESCENDING)
                         .findAll()
+//                    notifications = realm.where(Notifications::class.java).notEqualTo(Notifications.COLUMN_ACTION_MARK_READ,1L)
+//                        .sort(Notifications.COLUMN_CREATED_ON, Sort.DESCENDING).findAll()
                 }
             } catch (e: Exception) {
                 Log.e("Notifications", " Exception: ${e}")

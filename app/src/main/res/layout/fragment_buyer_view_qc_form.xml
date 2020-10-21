@@ -107,14 +107,14 @@
                             app:layout_constraintTop_toBottomOf="@id/prod_image_background" />
 
                         <TextView
-                            android:id="@+id/buyer_company"
+                            android:id="@+id/company_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
                             android:fontFamily="@font/lato_regular"
                             android:textColor="@color/swipe_background"
                             android:textSize="8sp"
-                            android:visibility="gone"
+                            android:paddingBottom="8dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/product_name" />

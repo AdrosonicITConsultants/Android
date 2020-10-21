@@ -29,6 +29,7 @@ import com.adrosonic.craftexchange.repository.data.response.moq.Datum
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
 import com.adrosonic.craftexchange.ui.modules.artisan.qcForm.qcFormIntent
 import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
+import com.adrosonic.craftexchange.ui.modules.order.cr.crContext
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.transaction.adapter.OnGoingTransactionRecyclerAdapter
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
@@ -81,8 +82,6 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
 
 
     var moqDeliveryTimeList=ArrayList<Datum>()
-    var arrayDeliveryDscrp=ArrayList<String>()
-    var estId=0L
     var mBinding : FragmentArtisanOngoingOrderDetailsBinding?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -116,6 +115,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
             enqID?.let {
                 mOrderVm.getSingleOngoingOrder(it)
                 mTranVM.getSingleOngoingTransactions(it)
+                mOrderVm?.getChangeRequestDetails(it)
                 mQcVM.getArtisanQCResponse(it)
             }
 
@@ -196,7 +196,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
                             OrdersPredicates.updateCrStatusForOffline(enqID)
                             mBinding?.toogleCr?.isEnabled=false
                             mBinding?.toogleCr?.isChecked=false
-                            mBinding?.toogleCr?.text="Change request disabled"
+                            mBinding?.toogleCr?.text=getString(R.string.cr_disabled)
                             mBinding?.menuList?.visibility=View.GONE
                         }
                         dialog.cancel()
@@ -210,7 +210,24 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
                 ?.putExtra(ConstantsDirectory.ORDER_STATUS_FLAG, 0L))
         }
         mBinding?.changeRequestLayer?.setOnClickListener {
-            //todo call intent
+            if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType.equals(ConstantsDirectory.CUSTOM_PRODUCT)) {
+                if (orderDetails?.changeRequestOn == 1L) {
+                    when (orderDetails?.changeRequestStatus) {
+                        0L -> {
+                            //waiting for ack
+                            enqID?.let { startActivity(requireActivity().crContext(it, 0L)) }
+                        }
+                        1L ->  enqID?.let { startActivity(requireActivity().crContext(it, 1L)) }
+                        2L ->  enqID?.let { startActivity(requireActivity().crContext(it, 2L)) }
+                        3L ->  enqID?.let { startActivity(requireActivity().crContext(it, 3L)) }
+                        else -> {
+//                            else enqID?.let { startActivity(requireActivity().crContext(it, 4L)) }
+                        }
+                    }
+                }
+                else Utility.displayMessage("Change request disabled.", requireContext())
+            } else Utility.displayMessage(getString(R.string.cr_not_applicable), requireContext())
+
         }
         mBinding?.taxInvoiceLayer?.setOnClickListener {
             //todo call intent
@@ -417,13 +434,37 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
                 }
         })
         //cr
-        if(orderDetails?.productStatusId == AvailableStatus.IN_STOCK.getId()) {
-            mBinding?.txtCrLayerStatus?.text="Change request is not applicable for in stock Products."
+        if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType.equals(ConstantsDirectory.CUSTOM_PRODUCT)){
+            if(orderDetails?.changeRequestOn==1L)
+            {
+                when(orderDetails?.changeRequestStatus) {
+                    0L -> {
+                        mBinding?.txtCrLayerStatus?.text = "Buyer Waiting for acknwoledgement"
+                    }
+                    1L -> {
+                        mBinding?.txtCrLayerStatus?.text = Utility.returnDisplayDate(orderDetails?.changeRequestModifiedOn ?: "")
+                    }
+                    2L -> {
+                        mBinding?.txtCrLayerStatus?.text = ""
+                    }
+                    3L -> {
+                        mBinding?.txtCrLayerStatus?.text = Utility.returnDisplayDate(orderDetails?.changeRequestModifiedOn ?: "")
+                    }
+                    else -> {
+                         mBinding?.txtCrLayerStatus?.text = ""
+                    }
+                }
+            }
+            else  mBinding?.txtCrLayerStatus?.text=getString(R.string.cr_disabled)
+        }
+        else {
+            mBinding?.txtCrLayerStatus?.text=getString(R.string.cr_not_applicable)
         }
         } catch (e: Exception) {
             Log.e("setDetails", "Exception " + e.message)
         }
     }
+
 
     private fun setProgressTimeline(){
         stageAPList?.clear()
@@ -603,7 +644,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
             else{
                 mBinding?.toogleCr?.isEnabled=false
                 mBinding?.toogleCr?.isChecked=false
-                mBinding?.toogleCr?.text="Change request disabled"
+                mBinding?.toogleCr?.text=getString(R.string.cr_disabled)
             }
         }
         else  mBinding?.toogleCr?.visibility=View.GONE
@@ -771,11 +812,11 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("Toggle","onToggleSuccess")
-                Utility.displayMessage("Change request disabled succesfully",requireContext())
+                Utility.displayMessage(getString(R.string.cr_disabled),requireContext())
                 hideLoader()
                 mBinding?.toogleCr?.isEnabled=false
                 mBinding?.toogleCr?.isChecked=false
-                mBinding?.toogleCr?.text="Change request disabled"
+                mBinding?.toogleCr?.text=getString(R.string.cr_disabled)
                 mBinding?.menuList?.visibility=View.GONE
             })
         } catch (e: Exception) {

@@ -88,6 +88,7 @@ const val INNER_ENQUIRY_STAGE_DATA = "inner_enquiry_stage_data"
 const val ENQUIRY_AVAI_PROD_STAGE_DATA = "enquiry_available_product_stage_data"
 const val PROGRESS_TIMELINE_DATA = "progress_timeline_data"
 const val TRANSACTION_STATUS_DATA ="transaction_status_data"
+const val CR_STATUS_DATA ="cr_status_data"
 
 ////
 const val REGION_CMS_DATA = "region_cms_data"
@@ -607,6 +608,13 @@ class UserConfig {
         get() = Prefs.getString(TRANSACTION_STATUS_DATA,"")
         set(value) {
             Prefs.putString(TRANSACTION_STATUS_DATA, value)
+            field = value
+        }
+
+    var crStatusData : String? = ""
+        get() = Prefs.getString(CR_STATUS_DATA,"")
+        set(value) {
+            Prefs.putString(CR_STATUS_DATA, value)
             field = value
         }
 }

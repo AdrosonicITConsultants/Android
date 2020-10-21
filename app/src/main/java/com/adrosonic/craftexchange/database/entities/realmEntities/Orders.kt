@@ -78,6 +78,8 @@ open class Orders:RealmObject() {
 
     var isOrderFromCompleted:Long?=0
     var actionMarkCr:Long?=0
+    var actionMarkCrStatusUpdate:Long?=0
+    var crStatusUpdateInput:String?=""
 
     companion object{
         const val COLUMN__ID = "_id"
@@ -88,5 +90,7 @@ open class Orders:RealmObject() {
         const val COLUMN_LAST_UPDATED = "lastUpdated"
         const val COLUMN_IS_COMPLETED = "isOrderFromCompleted"
         const val COLUMN_ACTION_MARK_CR = "actionMarkCr"
+        const val COLUMN_ACTION_MARK_CR_STATUS_UPDATE = "actionMarkCrStatusUpdate"
+        const val COLUMN_CR_STATUS_UPDATE_INPUT = "crStatusUpdateInput"
     }
 }

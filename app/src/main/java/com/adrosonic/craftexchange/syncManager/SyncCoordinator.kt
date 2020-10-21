@@ -8,6 +8,7 @@ import com.adrosonic.craftexchange.syncManager.processor.objects.ItemType
 import com.adrosonic.craftexchange.syncManager.processor.ProductAdd
 import com.adrosonic.craftexchange.syncManager.processor.ProductUpdate
 import com.adrosonic.craftexchange.syncManager.processor.cr.CrToggleAction
+import com.adrosonic.craftexchange.syncManager.processor.cr.CrUpdateStatusAction
 import com.adrosonic.craftexchange.syncManager.processor.customDesign.OwnDesignAdd
 import com.adrosonic.craftexchange.syncManager.processor.customDesign.OwnDesignDelete
 import com.adrosonic.craftexchange.syncManager.processor.customDesign.OwnDesignUpdate
@@ -33,7 +34,8 @@ class SyncCoordinator(val context: Context) {
         SendMoqAction(),
         PiActions(),
         QcActions(),
-        CrToggleAction()
+        CrToggleAction(),
+        CrUpdateStatusAction()
     )
 
     fun performLocallyAvailableActions() {
@@ -83,7 +85,7 @@ class SyncCoordinator(val context: Context) {
                     }
                 }
                 val queue7=  OrdersPredicates.getOrderMarkedForActions(it.predicateForLocallyTrackedElements)
-                Log.e("Toggle","offline itemId :${queue7?.joinToString()}")
+                Log.e("RaiseCr","offline itemId :${queue7?.joinToString()}")
                 val iterator7 = queue7?.iterator()
                 if (iterator7 != null) {
                     while (iterator7.hasNext()) {
@@ -92,7 +94,7 @@ class SyncCoordinator(val context: Context) {
                 }
 
                 val queue8=  QcPredicates.getQcMarkedForActions(it.predicateForLocallyTrackedElements)
-                Log.e("Toggle","offline itemId :${queue8?.joinToString()}")
+                Log.e("QC","offline itemId :${queue8?.joinToString()}")
                 val iterator8 = queue8?.iterator()
                 if (iterator8 != null) {
                     while (iterator8.hasNext()) {

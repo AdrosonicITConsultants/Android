@@ -265,8 +265,7 @@ class ArtFillViewQcFormFragment : Fragment(),
 
     fun setDetails() {
         mBinding?.orderCode?.text = orderDetails?.orderCode
-        mBinding?.buyerCompany?.text = orderDetails?.brandName
-
+        mBinding?.companyName?.text = orderDetails?.brandName
         setProductImage()
         setProductName()
     }
