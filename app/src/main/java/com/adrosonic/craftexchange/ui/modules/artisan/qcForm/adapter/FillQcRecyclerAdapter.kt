@@ -134,7 +134,7 @@ class FillQcRecyclerAdapter(
         if(qcObj!=null){
             var data = qcObj?.qcResponseString?.let { Utility.getArtisanQcResponse(it) }
             if(data?.isSend == ActionForm.SAVE.getId() && data?.stageId == maxQCStageID){
-                var itr1 = data?.artBuyQcRespons?.iterator()
+                var itr1 = data?.artisanQcResponses?.iterator()
                 if(itr1!=null){
                     while (itr1.hasNext()){
                         var itr2 = itr1.next().iterator()

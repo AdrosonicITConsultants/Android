@@ -8,7 +8,7 @@ data class QcResponse (
 )
 
 data class QCData (
-    val artBuyQcRespons: List<List<ArtBuyQcResponse>>,
+    val artisanQcResponses: List<List<ArtBuyQcResponse>>,
     val category: String,
     val artisanCompanyName: String,
     val buyerCompanyName: String,

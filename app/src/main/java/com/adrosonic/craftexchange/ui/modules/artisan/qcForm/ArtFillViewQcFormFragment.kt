@@ -403,9 +403,7 @@ class ArtFillViewQcFormFragment : Fragment(),
             else -> {
                 mBinding?.qcStageFormLayout?.visibility = View.GONE
             }
-
         }
-
 
     }
 
@@ -430,7 +428,7 @@ class ArtFillViewQcFormFragment : Fragment(),
         if (qcObj != null) {
             mBinding?.viewQcFormLayout?.removeAllViews()
             var formData = qcObj?.qcResponseString?.let { Utility.getArtisanQcResponse(it) }
-            var itr1 = formData?.artBuyQcRespons?.iterator()
+            var itr1 = formData?.artisanQcResponses?.iterator()
             if (itr1 != null) {
                 while (itr1.hasNext()) {
                     var data1 = itr1.next()
