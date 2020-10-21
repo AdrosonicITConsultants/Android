@@ -359,6 +359,13 @@
     <string name="change_request_initiated"> Change request initiated</string>
     <string name="disable_change_request">Disable change request</string>
     <string name="cr_not_applicable">Change request is not applicable for in stock Products.</string>
+    <string name="update_qc_form_text"><![CDATA[Please update the\nQuality Check\nform & send to\nproceed before moving\nto next stage]]></string>
+    <string name="fill_in_qc_form">Fill in QC form</string>
+    <string name="send">Send</string>
+    <string name="quality_check_for">Quality check for\t</string>
+    <string name="select_an_option">Select an option</string>
+    <string name="quality_check">Quality Check</string>
+    <string name="no_qc_available">No Quality Check Available.</string>
 
 
 </resources>

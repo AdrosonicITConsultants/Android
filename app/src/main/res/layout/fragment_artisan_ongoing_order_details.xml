@@ -569,20 +569,20 @@
 
                     <Button
                         android:id="@+id/btn_mark_inprogress"
-                        android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:layout_marginTop="@dimen/margin_regular"
-                        android:layout_marginBottom="8dp"
+                        android:layout_width="200dp"
+                        android:layout_height="45dp"
                         android:background="@drawable/rect_outline_blue"
-                        android:drawableEnd="@drawable/ic_right_arrow_white"
                         android:elevation="8dp"
                         android:fontFamily="@font/lato_regular"
-                        android:padding="8dp"
-                        android:text="@string/mark_as_still_in_progress"
+                        android:text="@string/mark_inprogress"
                         android:textAlignment="center"
                         android:textAllCaps="false"
-                        android:textColor="@color/swipe_background"
-                        android:textSize="16sp" />
+                        android:textColor="@color/nav_menu_text"
+                        android:textSize="16sp"
+                        android:layout_marginTop="@dimen/margin_regular"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
 
                     <Button
                         android:id="@+id/btn_mark_move_next_stage"

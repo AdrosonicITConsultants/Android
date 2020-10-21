@@ -226,7 +226,7 @@ class OnGoingTransactionRecyclerAdapter(var context: Context?, private var trans
 
         holder?.btn_enquiry?.setOnClickListener {
 //            context?.let { it1 -> Utility?.messageDialog(it1,"Fix in Progress (direct to enquiry screen)") }
-                if(transaction?.enquiryID!=null){
+            if(transaction?.enquiryID!=null){
                 val intent = Intent(context?.enquiryDetails())
                 var bundle = Bundle()
                 Prefs.putString(ConstantsDirectory.ENQUIRY_ID, transaction?.enquiryID.toString()) //TODO change later
@@ -234,7 +234,7 @@ class OnGoingTransactionRecyclerAdapter(var context: Context?, private var trans
                 bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG,"2")
                 intent.putExtras(bundle)
                 context?.startActivity(intent)
-                }
+            }
         }
 
         if(transaction?.transactionOn != ""){

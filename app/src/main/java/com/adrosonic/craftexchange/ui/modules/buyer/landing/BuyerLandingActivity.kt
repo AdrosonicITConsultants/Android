@@ -405,6 +405,9 @@ class BuyerLandingActivity : AppCompatActivity(),
             mProVM.getBuyerProfileDetails(this)
             mProVM.getUserMutableData()
             mViewModel?.getTransactionStatus()
+            mViewModel?.getQCQuestionData()
+            mViewModel?.getQCStageData()
+
 
             mCMSViewModel?.getRegionData()
             mCMSViewModel?.getCategoriesData()

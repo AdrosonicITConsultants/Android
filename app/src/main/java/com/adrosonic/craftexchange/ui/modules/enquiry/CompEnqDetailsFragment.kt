@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
@@ -25,16 +24,13 @@ import com.adrosonic.craftexchange.enums.EnquiryStatus
 import com.adrosonic.craftexchange.enums.getId
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.repository.data.response.moq.Datum
-import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimesResponse
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
 import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.advPay.enquiryPayment
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
-import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
-import com.google.gson.GsonBuilder
 import com.pixplicity.easyprefs.library.Prefs
 
 // TODO: Rename parameter arguments, choose names that match

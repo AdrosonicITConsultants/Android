@@ -35,6 +35,7 @@ import com.adrosonic.craftexchange.databinding.FragmentBuyerOngoingOrderDetailsB
 import com.adrosonic.craftexchange.enums.*
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
+import com.adrosonic.craftexchange.ui.modules.artisan.qcForm.qcFormIntent
 import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.transaction.adapter.OnGoingTransactionRecyclerAdapter
@@ -44,6 +45,7 @@ import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
 import com.adrosonic.craftexchange.viewModels.OrdersViewModel
+import com.adrosonic.craftexchange.viewModels.QCViewModel
 import com.adrosonic.craftexchange.viewModels.TransactionViewModel
 import com.agik.swipe_button.Controller.OnSwipeCompleteListener
 import com.agik.swipe_button.View.Swipe_Button_View
@@ -78,6 +80,7 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
 
     val mOrderVm : OrdersViewModel by viewModels()
     val mTranVM : TransactionViewModel by viewModels()
+    val mQcVM : QCViewModel by viewModels()
 
     var weft : String ?= ""
     var warp : String ?= ""
@@ -117,6 +120,7 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
             enqID?.let {
                 mOrderVm.getSingleOngoingOrder(it)
                 mTranVM.getSingleOngoingTransactions(it)
+                mQcVM.getBuyerQCResponse(it)
             }
 
         }else{
@@ -172,8 +176,11 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
             else mBinding?.transactionList!!.visibility=View.VISIBLE
         }
         mBinding?.qualityCheckLayer?.setOnClickListener {
-            Utility.displayMessage("Coming soon",requireContext())
+            startActivity(context?.qcFormIntent()
+                ?.putExtra(ConstantsDirectory.ENQUIRY_ID,enqID)
+                ?.putExtra(ConstantsDirectory.ORDER_STATUS_FLAG, 0L))
         }
+
         mBinding?.changeRequestLayer?.setOnClickListener {
         }
         mBinding?.taxInvoiceLayer?.setOnClickListener {

@@ -14,6 +14,7 @@ import com.adrosonic.craftexchange.syncManager.processor.customDesign.OwnDesignU
 import com.adrosonic.craftexchange.syncManager.processor.moq.SendMoqAction
 import com.adrosonic.craftexchange.syncManager.processor.notification.NotificationAction
 import com.adrosonic.craftexchange.syncManager.processor.pi.PiActions
+import com.adrosonic.craftexchange.syncManager.processor.qc.QcActions
 import com.adrosonic.craftexchange.syncManager.processor.wishlist.WishlistAction
 
 /**
@@ -31,6 +32,7 @@ class SyncCoordinator(val context: Context) {
         NotificationAction(),
         SendMoqAction(),
         PiActions(),
+        QcActions(),
         CrToggleAction()
     )
 
@@ -86,6 +88,15 @@ class SyncCoordinator(val context: Context) {
                 if (iterator7 != null) {
                     while (iterator7.hasNext()) {
                         list.add(ItemType(iterator7.next().toString()))
+                    }
+                }
+
+                val queue8=  QcPredicates.getQcMarkedForActions(it.predicateForLocallyTrackedElements)
+                Log.e("Toggle","offline itemId :${queue8?.joinToString()}")
+                val iterator8 = queue8?.iterator()
+                if (iterator8 != null) {
+                    while (iterator8.hasNext()) {
+                            list.add(ItemType(iterator8.next().toString()))
                     }
                 }
             } catch (e: Exception) {
