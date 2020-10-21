@@ -27,6 +27,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
 import com.adrosonic.craftexchange.database.predicates.QcPredicates
+import com.adrosonic.craftexchange.database.predicates.CrPredicates
 import com.adrosonic.craftexchange.database.predicates.UserPredicates
 import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.uploadData.ProductUploadData
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryAvaProdStageData
@@ -648,6 +649,24 @@ class Utility {
             val days = hours / 24
 
             return days
+        }
+        fun getCountStatement(enqID:Long):String{
+            try {
+                var profile = Prefs.getString(ConstantsDirectory.PROFILE,"")
+                var changeReq = CrPredicates.getCrs(enqID)
+                var count=0
+                changeReq?.forEach {
+                    if(it.requestStatus!!.equals(1L)) count++
+                }
+                return when(profile) {
+                    ConstantsDirectory.ARTISAN ->"You have accepted $count out of ${changeReq?.size} requests"
+                    ConstantsDirectory.BUYER->"Artisan has accepted $count out of ${changeReq?.size} requests"
+                    else ->"$count out of ${changeReq?.size} requests have been accepted"
+                }
+
+            } catch (e: Exception) {
+                return ""
+            }
         }
     }
 }

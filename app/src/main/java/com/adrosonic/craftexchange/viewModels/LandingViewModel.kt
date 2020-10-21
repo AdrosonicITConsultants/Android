@@ -16,6 +16,7 @@ import com.adrosonic.craftexchange.repository.data.response.artisan.productTempl
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.BrandListResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.singleProduct.SingleProductDetails
 import com.adrosonic.craftexchange.repository.data.response.buyer.wishList.WishListedIds
+import com.adrosonic.craftexchange.repository.data.response.changeReequest.ChatListResponse
 import com.adrosonic.craftexchange.repository.data.response.changeReequest.CrOptionsResponse
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryAvaProdStageData
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryStageData
@@ -461,6 +462,26 @@ class LandingViewModel(application: Application) : AndroidViewModel(application)
                     if(data.body()?.valid == true){
                         UserConfig.shared.crStatusData= Gson().toJson(data.body())
                     }
+                }
+            })
+    }
+    fun getChatList(){
+        Log.e("Chat","Start")
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getCrService()
+            .getEnquiryMessageChatList(token,null).enqueue(object : Callback, retrofit2.Callback<ChatListResponse> {
+                override fun onFailure(call: Call<ChatListResponse>, t: Throwable) {
+                    t.printStackTrace()
+                    Log.e("Chat","onFailure")
+                }
+                override fun onResponse(
+                    call: Call<ChatListResponse>,
+                    data: Response<ChatListResponse>
+                ) {
+                    if(data.body()?.valid == true){
+                      Log.e("Chat","Size: ${data?.body()?.data?.size}")
+                    }else  Log.e("Chat","${data.body()?.valid}")
                 }
             })
     }

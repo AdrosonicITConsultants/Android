@@ -385,6 +385,7 @@ class ArtisanLandingActivity : AppCompatActivity(),
             mProVM.getArtisanProfileDetails(this)
             mViewModel?.getTransactionStatus()
             mViewModel?.getChangeRequestStatuses()
+            mViewModel?.getChatList()
             craftUser = mProVM.getUserMutableData()
             setProfileImage()
 

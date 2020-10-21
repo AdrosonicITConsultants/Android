@@ -192,15 +192,8 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
                         2L -> enqID?.let { startActivity(requireActivity().crContext(it, 2L)) }
                         3L -> enqID?.let { startActivity(requireActivity().crContext(it, 3L)) }
                         else -> {
-                            val days = Utility.getDateDiffInDays(
-                                Utility.returnDisplayDate(
-                                    orderDetails?.orderCreatedOn ?: ""
-                                )
-                            )
-                            if (days >10) Utility.displayMessage(
-                                "Last date to raise Change Request passed.",
-                                requireContext()
-                            )
+                            val days = Utility.getDateDiffInDays(Utility.returnDisplayDate( orderDetails?.orderCreatedOn ?: "" ))
+                            if (days >10) Utility.displayMessage("Last date to raise Change Request passed.", requireContext())
                             else enqID?.let { startActivity(requireActivity().crContext(it, 4L)) }
                         }
                     }
@@ -399,7 +392,7 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
                          }
                          1L,2L,3L -> {
                              mBinding?.txtCr?.visibility = View.VISIBLE
-                             mBinding?.txtCrDate?.text = Utility.returnDisplayDate(orderDetails?.changeRequestModifiedOn ?: "")
+                             mBinding?.txtCrDate?.text =Utility.getCountStatement(enqID?:0) //Utility.returnDisplayDate(orderDetails?.changeRequestModifiedOn ?: "")
                          }
                          else -> {
                              mBinding?.txtCr?.visibility = View.GONE

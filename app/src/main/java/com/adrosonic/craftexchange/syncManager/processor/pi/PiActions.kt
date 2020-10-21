@@ -18,7 +18,7 @@ class PiActions : ChangeProcessor<ItemType> {
     }
 
     override val predicateForLocallyTrackedElements: String
-        get() = "${PiDetails.COLUMN_MARK_PI_FOR_SAVE}=1"
+        get() = "${PiDetails.COLUMN_MARK_PI_FOR_SAVE}=1 OR ${PiDetails.COLUMN_MARK_PI_FOR_REVISE}=1"
 
     fun actionPi(itemType: ItemType, context: Context){
         var work = Intent().apply { putExtra(PiService.KEY_ID,itemType.id) }
