@@ -9,10 +9,10 @@
         app:showAsAction="always|withText"/>
 
     <item
-        android:id="@+id/artisan_database"
+        android:id="@+id/user_database"
         android:enabled="true"
         android:icon="@drawable/ic_db"
-        android:title="Artisans"
+        android:title="Database"
         app:showAsAction="ifRoom|withText" />
 
     <item

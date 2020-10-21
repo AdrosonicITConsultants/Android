@@ -155,19 +155,36 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/top_part">
 
+<!--                        <Button-->
+<!--                            android:id="@+id/logoutbtn"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:layout_margin="@dimen/margin_regular"-->
+<!--                            android:background="@drawable/rectangle_round_grad"-->
+<!--                            android:backgroundTint="@color/black_text"-->
+<!--                            android:clickable="true"-->
+<!--                            android:contextClickable="true"-->
+<!--                            android:drawablePadding="@dimen/margin_regular"-->
+<!--                            android:elevation="20dp"-->
+<!--                            android:focusableInTouchMode="true"-->
+<!--                            android:fontFamily="@font/lato_regular"-->
+<!--                            android:paddingStart="16dp"-->
+<!--                            android:paddingEnd="16dp"-->
+<!--                            android:text="@string/logout"-->
+<!--                            android:textAllCaps="false"-->
+<!--                            android:textColor="@color/colorBackground"-->
+<!--                            android:textSize="@dimen/edit_text" />-->
                         <Button
                             android:id="@+id/logoutbtn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_margin="@dimen/margin_regular"
-                            android:background="@drawable/rectangle_round_grad"
-                            android:backgroundTint="@color/black_text"
-                            android:clickable="true"
-                            android:contextClickable="true"
+                            android:background="@color/black_text"
                             android:drawablePadding="@dimen/margin_regular"
                             android:elevation="20dp"
-                            android:focusableInTouchMode="true"
+                            android:focusable="true"
                             android:fontFamily="@font/lato_regular"
                             android:paddingStart="16dp"
                             android:paddingEnd="16dp"
@@ -175,7 +192,6 @@
                             android:textAllCaps="false"
                             android:textColor="@color/colorBackground"
                             android:textSize="@dimen/edit_text" />
-
                     </LinearLayout>
 
                     <LinearLayout
@@ -198,7 +214,7 @@
                         <ImageView
                             android:layout_width="33dp"
                             android:layout_height="match_parent"
-                            app:srcCompat="@drawable/ic_add_prod_icon" />
+                            app:srcCompat="@drawable/ic_route" />
 
                         <TextView
                             android:layout_width="10dp"
@@ -271,7 +287,7 @@
                             <ImageView
                                 android:layout_width="33dp"
                                 android:layout_height="match_parent"
-                                app:srcCompat="@drawable/artisan_logo_placeholder" />
+                                app:srcCompat="@drawable/ic_alert" />
 
                             <TextView
                                 android:layout_width="10dp"
@@ -333,7 +349,7 @@
                             <ImageView
                                 android:layout_width="33dp"
                                 android:layout_height="match_parent"
-                                app:srcCompat="@drawable/buyer_logo_placeholder" />
+                                app:srcCompat="@drawable/ic_add_prod_icon" />
 
                             <TextView
                                 android:layout_width="10dp"
@@ -419,24 +435,25 @@
                                     android:orientation="horizontal">
 
                                     <ImageView
-                                        android:layout_width="30dp"
+                                        android:layout_width="36dp"
                                         android:layout_height="match_parent"
-                                        app:srcCompat="@drawable/ic_filter_list" />
+                                        app:srcCompat="@drawable/ic_icon_open_graph" />
 
                                     <TextView
-                                        android:layout_width="78dp"
+                                        android:layout_width="70dp"
                                         android:layout_height="match_parent" />
 
                                     <ImageView
+                                        android:id="@+id/micro_enterprise_business_summary_btn"
                                         android:layout_width="31dp"
                                         android:layout_height="match_parent"
                                         android:layout_gravity="right"
-                                        app:srcCompat="@drawable/ic_arrow_right_alt_white_18dp" />
+                                        app:srcCompat="@drawable/ic_arrow_long" />
                                 </LinearLayout>
                             </LinearLayout>
 
                             <LinearLayout
-                                android:id="@+id/linearLayout5"
+                                android:id="@+id/enquiry_sumary"
                                 android:layout_width="160dp"
                                 android:layout_height="160dp"
                                 android:layout_marginStart="15dp"
@@ -463,17 +480,18 @@
                                     <ImageView
                                         android:layout_width="30dp"
                                         android:layout_height="match_parent"
-                                        app:srcCompat="@drawable/ic_filter_list" />
+                                        app:srcCompat="@drawable/ic_icon_open_graph" />
 
                                     <TextView
-                                        android:layout_width="78dp"
+                                        android:layout_width="76dp"
                                         android:layout_height="match_parent" />
 
                                     <ImageView
+                                        android:id="@+id/enquiry_summary_btn"
                                         android:layout_width="31dp"
                                         android:layout_height="match_parent"
                                         android:layout_gravity="right"
-                                        app:srcCompat="@drawable/ic_arrow_right_alt_white_18dp" />
+                                        app:srcCompat="@drawable/ic_arrow_long" />
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -486,7 +504,7 @@
                                 android:orientation="vertical"
                                 android:padding="10sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toStartOf="@+id/linearLayout5"
+                                app:layout_constraintEnd_toStartOf="@+id/enquiry_sumary"
                                 app:layout_constraintHorizontal_bias="0.5"
                                 app:layout_constraintStart_toEndOf="@+id/micro_enterprise_summary"
                                 app:layout_constraintTop_toTopOf="parent">
@@ -507,17 +525,18 @@
                                     <ImageView
                                         android:layout_width="30dp"
                                         android:layout_height="match_parent"
-                                        app:srcCompat="@drawable/ic_filter_list" />
+                                        app:srcCompat="@drawable/ic_icon_open_graph" />
 
                                     <TextView
-                                        android:layout_width="78dp"
+                                        android:layout_width="75dp"
                                         android:layout_height="match_parent" />
 
                                     <ImageView
+                                        android:id="@+id/micro_enterprise_revenue_btn"
                                         android:layout_width="31dp"
                                         android:layout_height="match_parent"
                                         android:layout_gravity="right"
-                                        app:srcCompat="@drawable/ic_arrow_right_alt_white_18dp" />
+                                        app:srcCompat="@drawable/ic_arrow_long" />
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -533,7 +552,7 @@
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintHorizontal_bias="0.0"
-                                app:layout_constraintStart_toEndOf="@+id/linearLayout5"
+                                app:layout_constraintStart_toEndOf="@+id/enquiry_sumary"
                                 app:layout_constraintTop_toTopOf="parent">
 
                                 <TextView
@@ -552,17 +571,17 @@
                                     <ImageView
                                         android:layout_width="30dp"
                                         android:layout_height="match_parent"
-                                        app:srcCompat="@drawable/ic_explore" />
+                                        app:srcCompat="@drawable/ic_icon_open_graph" />
 
                                     <TextView
-                                        android:layout_width="78dp"
+                                        android:layout_width="77dp"
                                         android:layout_height="match_parent" />
 
                                     <ImageView
                                         android:layout_width="31dp"
                                         android:layout_height="match_parent"
                                         android:layout_gravity="right"
-                                        app:srcCompat="@drawable/ic_arrow_right_alt_grey_18dp" />
+                                        app:srcCompat="@drawable/ic_arrow_long" />
                                 </LinearLayout>
                             </LinearLayout>
                         </androidx.constraintlayout.widget.ConstraintLayout>

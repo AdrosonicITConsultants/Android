@@ -173,6 +173,7 @@
                     android:layout_height="wrap_content"
                     app:tabIndicatorColor="@color/tab_details_selected_text"
                     app:tabSelectedTextColor="@color/tab_details_selected_text"
+
                     android:textAllCaps="false"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

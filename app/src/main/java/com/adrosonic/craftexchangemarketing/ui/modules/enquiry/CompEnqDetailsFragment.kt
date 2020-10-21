@@ -23,7 +23,7 @@ import com.adrosonic.craftexchangemarketing.databinding.FragmentCompEnqDetailsBi
 import com.adrosonic.craftexchangemarketing.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchangemarketing.repository.data.response.moq.Datum
 import com.adrosonic.craftexchangemarketing.repository.data.response.moq.MoqDeliveryTimesResponse
-import com.adrosonic.craftexchangemarketing.ui.modules.artisan.enquiry.pi.raisePiContext
+//import com.adrosonic.craftexchangemarketing.ui.modules.artisan.enquiry.p
 import com.adrosonic.craftexchangemarketing.ui.modules.products.ViewProductDetailsFragment
 import com.adrosonic.craftexchangemarketing.utils.ConstantsDirectory
 import com.adrosonic.craftexchangemarketing.utils.ImageSetter
@@ -178,10 +178,10 @@ class CompEnqDetailsFragment : Fragment(),
             }
 
         }
-        mBinding?.viewPiLayout?.setOnClickListener {
-            enqID?.let {  startActivity(requireContext().raisePiContext(it,true, null))
-            }
-        }
+//        mBinding?.viewPiLayout?.setOnClickListener {
+//            enqID?.let {  startActivity(requireContext().raisePiContext(it,true, null))
+//            }
+//        }
 
     }
 

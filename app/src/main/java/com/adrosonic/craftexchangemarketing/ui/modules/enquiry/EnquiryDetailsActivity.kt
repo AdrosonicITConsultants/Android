@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.adrosonic.craftexchangemarketing.R
 import com.adrosonic.craftexchangemarketing.databinding.ActivityEnquiryDetailsBinding
-import com.adrosonic.craftexchangemarketing.ui.modules.artisan.enquiry.ArtisanOnGoEnqDetailsFragment
+//import com.adrosonic.craftexchangemarketing.ui.modules.artisan.enquiry.ArtisanOnGoEnqDetailsFragment
 import com.adrosonic.craftexchangemarketing.ui.modules.buyer.auth.login.BuyerLoginUsernameFragment
 import com.adrosonic.craftexchangemarketing.ui.modules.buyer.enquiry.adapter.BuyerOnGoEnqDetailsFragment
 import com.adrosonic.craftexchangemarketing.ui.modules.search.SearchSuggestionActivity
@@ -50,11 +50,12 @@ class EnquiryDetailsActivity : AppCompatActivity() {
                 when(profile){
                     ConstantsDirectory.ARTISAN -> {
                         if (savedInstanceState == null) {
-                            enqID?.let { ArtisanOnGoEnqDetailsFragment.newInstance(it) }?.let {
-                                supportFragmentManager.beginTransaction()
-                                    .replace(R.id.enquiry_details_container, it)
-                                    .commitNow()
-                            }
+//                            enqID?.let {
+//                                ArtisanOnGoEnqDetailsFragment.newInstance(it) }?.let {
+//                                supportFragmentManager.beginTransaction()
+//                                    .replace(R.id.enquiry_details_container, it)
+//                                    .commitNow()
+//                            }
                         }
                     }
                     ConstantsDirectory.BUYER -> {

@@ -10,20 +10,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.adrosonic.craftexchangemarketing.R
 import com.adrosonic.craftexchangemarketing.database.predicates.AdminPredicates
-import com.adrosonic.craftexchangemarketing.database.predicates.UserPredicates
 import com.adrosonic.craftexchangemarketing.databinding.FragmentAdminLoginBinding
-import com.adrosonic.craftexchangemarketing.databinding.FragmentArtisanLoginPasswordBinding
 import com.adrosonic.craftexchangemarketing.repository.craftexchangemarketingRepository
+//import com.adrosonic.craftexchangemarketing.repository.craftexchangemarketingRepository
 import com.adrosonic.craftexchangemarketing.repository.data.request.authModel.AdminAuthModel
 import com.adrosonic.craftexchangemarketing.repository.data.response.admin.login.AdminResponse
-import com.adrosonic.craftexchangemarketing.ui.modules.admin.landing.AdminLandingActivity
-import com.adrosonic.craftexchangemarketing.ui.modules.artisan.auth.login.ArtisanLoginPasswordFragment
-import com.adrosonic.craftexchangemarketing.ui.modules.artisan.landing.ArtisanLandingActivity
-import com.adrosonic.craftexchangemarketing.ui.modules.artisan.landing.artisanLandingIntent
-import com.adrosonic.craftexchangemarketing.ui.modules.authentication.login.LoginActivity
-import com.adrosonic.craftexchangemarketing.ui.modules.authentication.login.loginIntent
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.landing.adminLandingIntent
 import com.adrosonic.craftexchangemarketing.ui.modules.authentication.reset.ResetPasswordActivity
-import com.adrosonic.craftexchangemarketing.ui.modules.cx_demovideo.CXVideoActivity
 import com.adrosonic.craftexchangemarketing.utils.ConstantsDirectory
 import com.adrosonic.craftexchangemarketing.utils.UserConfig
 import com.adrosonic.craftexchangemarketing.utils.Utility
@@ -44,7 +37,7 @@ class AdminLoginFragment :Fragment(){
                     putString(com.adrosonic.craftexchangemarketing.ui.modules.admin.auth.login.ARG_PARAM1, param1)
                 }
             }
-        const val TAG = "ArtisanLoginPwd"
+        const val TAG = "AdminLogin"
     }
     private var mBinding: FragmentAdminLoginBinding ?= null
 
@@ -100,12 +93,7 @@ class AdminLoginFragment :Fragment(){
                                     )
                                     Prefs.putBoolean(ConstantsDirectory.IS_LOGGED_IN, true)
                                     AdminPredicates.insertAdmin(response.body()!!)
-//                                    AddressPredicates.insertArtisanAddress(response.body()!!)
-
-
-                                    com.adrosonic.craftexchangemarketing.ui.modules.admin.auth.login.mUserConfig.deviceName = "Android"
-
-
+                                    mUserConfig.deviceName = "Android"
 //                                    Prefs.putString(
 //                                        ConstantsDirectory.USER_PWD,
 //                                        mBinding?.textBoxPassword?.text.toString()
@@ -119,7 +107,8 @@ class AdminLoginFragment :Fragment(){
                                         response.body()?.data?.acctoken
                                     )
 //
-                                      startActivity(Intent(activity, AdminLandingActivity::class.java))
+                                      startActivity(context?.adminLandingIntent())
+//                                      startActivity(Intent(activity, AdminLandingActivity::class.java))
                                 } else {
                                     Toast.makeText(
                                         activity,

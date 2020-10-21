@@ -14,18 +14,19 @@ import com.adrosonic.craftexchangemarketing.viewModels.DashboardViewModel
 import com.adrosonic.craftexchangemarketing.viewModels.ProfileViewModel
 import com.pixplicity.easyprefs.library.Prefs
 
-fun Context.dashboardIntent(): Intent {
-    return Intent(this, DashboardActivity::class.java).apply {
+fun Context.OpenEnquirySummaryIntent(): Intent {
+    return Intent(this, OpenEnquirySummaryActivity::class.java).apply {
         flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
 //        Intent.FLAG_ACTIVITY_NEW_TASK or
     }
 }
 
-class DashboardActivity : AppCompatActivity() {
+class OpenEnquirySummaryActivity : AppCompatActivity() {
 
     private var mBinding : ActivityDashboardBinding?= null
 
     var url : String ?= ""
+    var dashoardNo : String ?= ""
     val mViewModel : DashboardViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,16 +38,25 @@ class DashboardActivity : AppCompatActivity() {
         val webSettings = mBinding?.dashboardView?.settings
         webSettings?.javaScriptEnabled = true
         webSettings?.builtInZoomControls = true
+        dashoardNo = Prefs.getString(ConstantsDirectory.DASHBOARD,"")
+        when(dashoardNo){
 
-        var profile = Prefs.getString(ConstantsDirectory.PROFILE,"")
-        when(profile){
-            ConstantsDirectory.ARTISAN -> {
-                mBinding?.dashboardView?.loadUrl(mViewModel?.getArtisanDashboard())
+            "ES" -> {
+                mBinding?.dashboardView?.loadUrl(mViewModel?.getOpenEnquirySummaryDashboard())
+
+            }"MER" -> {
+                mBinding?.dashboardView?.loadUrl(mViewModel?.getMicroEnterpriseRevenueDashboard())
+
+             }
+            "MEBS" -> {
+                mBinding?.dashboardView?.loadUrl(mViewModel?.getMicroEnterpriseBusinessSummaryDashboard())
+
             }
-            ConstantsDirectory.BUYER -> {
-                mBinding?.dashboardView?.loadUrl(mViewModel?.getBuyerDashboard())
-            }
+
         }
+
+
+
 
         mBinding?.btnBack?.setOnClickListener {
             onBackPressed()

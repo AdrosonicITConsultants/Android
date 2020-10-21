@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.adrosonic.craftexchangemarketing.databinding.ActivityCXVideoBinding
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.landing.adminLandingIntent
-import com.adrosonic.craftexchangemarketing.ui.modules.artisan.landing.artisanLandingIntent
+//import com.adrosonic.craftexchangemarketing.ui.modules.artisan.landing.artisanLandingIntent
 import com.adrosonic.craftexchangemarketing.ui.modules.buyer.landing.buyerLandingIntent
 import com.adrosonic.craftexchangemarketing.utils.ConstantsDirectory
 import com.pixplicity.easyprefs.library.Prefs

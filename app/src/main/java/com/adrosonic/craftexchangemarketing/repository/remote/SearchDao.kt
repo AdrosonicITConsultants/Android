@@ -11,7 +11,7 @@ interface SearchDao {
 
     @Headers("Accept: application/json")
     @GET("search/getArtisanSuggestions")
-    fun getArtisanSuggestions(@Header("Authorization") token:String,
+       fun getArtisanSuggestions(@Header("Authorization") token:String,
                               @Query("str") str : String) : Call<SuggestionResponse>
 
     @Headers("Accept: application/json")

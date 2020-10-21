@@ -35,6 +35,10 @@ object craftexchangemarketingRepository {
         return builder(RegisterDao::class.java)
     }
 
+    fun getUserDatabaseService(): UserDatabaseDao{
+        return builder(UserDatabaseDao::class.java)
+    }
+
     fun getLoginService(): LoginDao {
         return builder(LoginDao::class.java)
     }

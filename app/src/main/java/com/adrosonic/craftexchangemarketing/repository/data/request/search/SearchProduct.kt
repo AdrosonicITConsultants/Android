@@ -4,4 +4,4 @@ data class SearchProduct (
     val pageNo: Long,
     val searchString: String,
     val searchType: Long
-    )
+)

@@ -8,7 +8,7 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.core.app.NotificationCompat
 import com.adrosonic.craftexchangemarketing.R
-import com.adrosonic.craftexchangemarketing.ui.modules.artisan.landing.ArtisanLandingActivity
+//import com.adrosonic.craftexchangemarketing.ui.modules.artisan.landing.ArtisanLandingActivity
 import com.adrosonic.craftexchangemarketing.ui.modules.buyer.landing.BuyerLandingActivity
 import com.adrosonic.craftexchangemarketing.ui.modules.role.RoleSelectActivity
 import com.adrosonic.craftexchangemarketing.utils.ConstantsDirectory
@@ -26,7 +26,7 @@ class NotificationHelper private constructor(context: Context) {
                 .setAutoCancel(true)
         resultIntent= if (Prefs.getBoolean(ConstantsDirectory.IS_LOGGED_IN, false)) {
             var profile = Prefs.getString(ConstantsDirectory.PROFILE,null)
-            if(profile.equals(ConstantsDirectory.ARTISAN)) Intent(mcontext, ArtisanLandingActivity::class.java)
+            if(profile.equals(ConstantsDirectory.ARTISAN)) Intent(mcontext, BuyerLandingActivity::class.java)
             else Intent(mcontext, BuyerLandingActivity::class.java)
         }
         else {

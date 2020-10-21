@@ -14,7 +14,6 @@ import androidx.fragment.app.viewModels
 import com.adrosonic.craftexchangemarketing.R
 import com.adrosonic.craftexchangemarketing.database.entities.realmEntities.OngoingEnquiries
 import com.adrosonic.craftexchangemarketing.databinding.FragmentAdvPay1Binding
-import com.adrosonic.craftexchangemarketing.databinding.FragmentArtisanHomeBinding
 import com.adrosonic.craftexchangemarketing.enums.AvailableStatus
 import com.adrosonic.craftexchangemarketing.enums.getId
 import com.adrosonic.craftexchangemarketing.ui.modules.buyer.enquiry.CommonEnquiryFragment

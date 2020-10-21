@@ -29,14 +29,19 @@
         <!-- <meta-data -->
         <!-- android:name="com.google.android.wearable.standalone" -->
         <!-- android:value="true" /> -->
-        <activity android:name=".ui.modules.artisan.enquiry.pi.RaisePiActivity"
-            android:configChanges="orientation|screenSize"/>
-        <activity android:name=".ui.modules.artisan.enquiry.pi.PiActivity"
-            android:configChanges="orientation|screenSize"/>
+<!--        <activity android:name=".ui.modules.artisan.enquiry.pi.RaisePiActivity"-->
+<!--            android:configChanges="orientation|screenSize"/>-->
+<!--        <activity android:name=".ui.modules.artisan.enquiry.pi.PiActivity"-->
+<!--            android:configChanges="orientation|screenSize"/>-->
+<!--        <activity-->
+<!--            android:name=".ui.modules.dashboard.DashboardActivity"-->
+<!--            android:configChanges="orientation|screenSize"-->
+<!--            android:label="@string/title_activity_dashboard" />-->
         <activity
-            android:name=".ui.modules.dashboard.DashboardActivity"
+            android:name=".ui.modules.dashboard.OpenEnquirySummaryActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_dashboard" />
+
         <activity
             android:name=".ui.modules.enquiry.EnquiryDetailsActivity"
             android:launchMode="singleTop"
@@ -66,11 +71,11 @@
         <activity
             android:name=".ui.modules.artisan.profile.ArtisanProfileActivity"
             android:screenOrientation="portrait" />
-        <activity
-        android:name=".ui.modules.artisan.landing.ArtisanLandingActivity"
-        android:screenOrientation="portrait"
-        android:theme="@style/AppTheme.NoActionBar"
-        android:windowSoftInputMode="adjustPan" />
+<!--        <activity-->
+<!--        android:name=".ui.modules.artisan.landing.ArtisanLandingActivity"-->
+<!--        android:screenOrientation="portrait"-->
+<!--        android:theme="@style/AppTheme.NoActionBar"-->
+<!--        android:windowSoftInputMode="adjustPan" />-->
         <activity
             android:name=".ui.modules.admin.landing.AdminLandingActivity"
             android:screenOrientation="portrait"

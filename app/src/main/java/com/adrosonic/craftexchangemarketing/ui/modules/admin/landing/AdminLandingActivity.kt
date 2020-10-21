@@ -9,37 +9,22 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
-import androidx.activity.viewModels
 import androidx.annotation.NonNull
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.GravityCompat
-import androidx.lifecycle.MutableLiveData
 import com.adrosonic.craftexchangemarketing.R
-import com.adrosonic.craftexchangemarketing.database.entities.realmEntities.CraftAdmin
-import com.adrosonic.craftexchangemarketing.database.entities.realmEntities.CraftUser
 import com.adrosonic.craftexchangemarketing.databinding.ActivityAdminLandingBinding
-import com.adrosonic.craftexchangemarketing.databinding.ActivityArtisanLandingBinding
-import com.adrosonic.craftexchangemarketing.databinding.AdminLandingBinding
 import com.adrosonic.craftexchangemarketing.repository.craftexchangemarketingRepository
 import com.adrosonic.craftexchangemarketing.repository.data.response.Notification.SaveUserTokenResponse
 import com.adrosonic.craftexchangemarketing.ui.modules.Notification.NotifcationFragment
-import com.adrosonic.craftexchangemarketing.ui.modules.artisan.landing.ArtisanHomeFragment
-import com.adrosonic.craftexchangemarketing.ui.modules.artisan.landing.ArtisanLandingActivity
-import com.adrosonic.craftexchangemarketing.ui.modules.authentication.login.LoginActivity
-import com.adrosonic.craftexchangemarketing.ui.modules.buyer.enquiry.CommonEnquiryFragment
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.CommonUserFragment
 import com.adrosonic.craftexchangemarketing.utils.ConstantsDirectory
 import com.adrosonic.craftexchangemarketing.utils.UserConfig
 import com.adrosonic.craftexchangemarketing.utils.Utility
-import com.adrosonic.craftexchangemarketing.viewModels.LandingViewModel
-import com.adrosonic.craftexchangemarketing.viewModels.ProfileViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.navigation.NavigationView
 import com.google.firebase.iid.FirebaseInstanceId
 import com.pixplicity.easyprefs.library.Prefs
-import kotlinx.android.synthetic.main.activity_artisan_landing.*
-import kotlinx.android.synthetic.main.nav_header_landing.view.*
+import kotlinx.android.synthetic.main.activity_admin_landing.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -65,7 +50,7 @@ class AdminLandingActivity : AppCompatActivity(){
         const val TAG = "ArtisanLanding"
     }
 
-    private var mBinding : ActivityArtisanLandingBinding?= null
+    private var mBinding : ActivityAdminLandingBinding?= null
 //    val mViewModel:LandingViewModel by viewModels()
 //    var adminUser : MutableLiveData<CraftAdmin>?= null
 //    val mProVM : ProfileViewModel by viewModels()
@@ -75,7 +60,7 @@ class AdminLandingActivity : AppCompatActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mBinding = ActivityArtisanLandingBinding.inflate(layoutInflater)
+        mBinding = ActivityAdminLandingBinding.inflate(layoutInflater)
         val view = mBinding?.root
         setContentView(view)
 //        mViewModel?.noficationlistener=this
@@ -115,10 +100,10 @@ class AdminLandingActivity : AppCompatActivity(){
 //        mBinding?.txtVerTag?.text="23-09-20 V-1.1"
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction() .replace(
-                R.id.artisan_home_container,
-                ArtisanHomeFragment.newInstance())
-                .detach(ArtisanHomeFragment())
-                .attach(ArtisanHomeFragment())
+                R.id.admin_home_container,
+                AdminHomeFragment.newInstance())
+                .detach(AdminHomeFragment())
+                .attach(AdminHomeFragment())
                 .commitNow()
 
         }
@@ -142,46 +127,51 @@ class AdminLandingActivity : AppCompatActivity(){
 //                    .commit()
 //            }
 //        }
-//        tab_bar.onNavigationItemSelectedListener = object: BottomNavigationView.OnNavigationItemSelectedListener{
-//            override fun onNavigationItemSelected(@NonNull item: MenuItem):Boolean {
-//                when (item.itemId) {
-//                    R.id.action_home -> {
-//                        if (savedInstanceState == null) {
-//                            supportFragmentManager.beginTransaction()
-//                                .replace(
-//                                    R.id.artisan_home_container,
-//                                    ArtisanHomeFragment.newInstance()
-//                                )
-//                                .detach(ArtisanHomeFragment())
-//                                .attach(ArtisanHomeFragment())
-//                                .commitNow()
-//                        }
-//                        return true
-//                    }
-//
-//                    R.id.action_enquiries -> {
-////                        if (savedInstanceState == null) {
-////                            supportFragmentManager.beginTransaction() .add(R.id.artisan_home_container, CommonEnquiryFragment.newInstance())
-////                                .addToBackStack(null)
-////                                .commit()
-////                        }
-//                        return true
-//                    }
-//
-//                    R.id.action_wishlist -> {
-//                        //                        initTab(HistoryFragment.newInstance(), HistoryFragment.TAG)
-//                        // showBFXProductsMenu();
-//                        return true
-//                    }
-//                    R.id.action_chat -> {
-//                        //                        initTab(BranchesFragment.newInstance(), BranchesFragment.TAG)
-//                        return true
-//                    }
-//
-//                    else -> return false
-//                }
-//            }
-//        }
+        tab_bar.onNavigationItemSelectedListener = object: BottomNavigationView.OnNavigationItemSelectedListener{
+            override fun onNavigationItemSelected(@NonNull item: MenuItem):Boolean {
+                when (item.itemId) {
+                    R.id.action_home -> {
+                        if (savedInstanceState == null) {
+                            supportFragmentManager.beginTransaction()
+                                .replace(
+                                    R.id.admin_home_container,
+                                    AdminHomeFragment.newInstance()
+                                )
+                                .detach(AdminHomeFragment())
+                                .attach(AdminHomeFragment())
+                                .commitNow()
+                        }
+                        return true
+                    }
+
+                    R.id.user_database -> {
+                        if (savedInstanceState == null) {
+                            supportFragmentManager.beginTransaction() .add(R.id.admin_home_container, CommonUserFragment.newInstance())
+                                .addToBackStack(null)
+                                .commit()
+                        }
+                        return true
+                    }
+
+                    R.id.product_catelog -> {
+                        //                        initTab(HistoryFragment.newInstance(), HistoryFragment.TAG)
+                        // showBFXProductsMenu();
+                        return true
+                    }
+
+                    R.id.enquiries -> {
+                        //                        initTab(BranchesFragment.newInstance(), BranchesFragment.TAG)
+                        return true
+                    }
+                    R.id.escalations -> {
+                        //                        initTab(BranchesFragment.newInstance(), BranchesFragment.TAG)
+                        return true
+                    }
+
+                    else -> return false
+                }
+            }
+        }
 ////        NotifcationFragment.badgeCountListener=this
     }
     private fun addUserDevice(login: Boolean,authtoken:String) {
@@ -243,7 +233,7 @@ class AdminLandingActivity : AppCompatActivity(){
 ////                startActivity(searchSuggestionIntent())
 //            }
             R.id.action_notification->{
-                supportFragmentManager.beginTransaction() .add(R.id.artisan_home_container, NotifcationFragment.newInstance())
+                supportFragmentManager.beginTransaction() .add(R.id.admin_home_container, NotifcationFragment.newInstance())
                     .addToBackStack(null)
                     .commit()
             }
@@ -276,6 +266,17 @@ class AdminLandingActivity : AppCompatActivity(){
         setupBadge()
         actionView.setOnClickListener { onOptionsItemSelected(menuItem) }
         return true
+    }
+
+    override fun onBackPressed() {
+
+            if(fragmentManager.backStackEntryCount == 0) {
+                super.onBackPressed()
+            }
+            else {
+                fragmentManager.popBackStack()
+            }
+
     }
 
 
