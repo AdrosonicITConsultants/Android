@@ -5,7 +5,7 @@ data class UserDataRequest (
     val pageNo : Int,
     val rating : Int,
     val roleId : Int,
-    val searchStr : String,
+    val searchStr : String?,
     val sortBy : String,
     val sortType : String
 )

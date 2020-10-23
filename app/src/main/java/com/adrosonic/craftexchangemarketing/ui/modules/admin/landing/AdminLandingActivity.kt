@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -21,6 +22,7 @@ import com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.Commo
 import com.adrosonic.craftexchangemarketing.utils.ConstantsDirectory
 import com.adrosonic.craftexchangemarketing.utils.UserConfig
 import com.adrosonic.craftexchangemarketing.utils.Utility
+import com.adrosonic.craftexchangemarketing.viewModels.ClusterViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.iid.FirebaseInstanceId
 import com.pixplicity.easyprefs.library.Prefs
@@ -51,7 +53,7 @@ class AdminLandingActivity : AppCompatActivity(){
     }
 
     private var mBinding : ActivityAdminLandingBinding?= null
-//    val mViewModel:LandingViewModel by viewModels()
+    val mViewModel:ClusterViewModel by viewModels()
 //    var adminUser : MutableLiveData<CraftAdmin>?= null
 //    val mProVM : ProfileViewModel by viewModels()
 //    var profileImage : String ?= ""
@@ -63,6 +65,7 @@ class AdminLandingActivity : AppCompatActivity(){
         mBinding = ActivityAdminLandingBinding.inflate(layoutInflater)
         val view = mBinding?.root
         setContentView(view)
+        mViewModel.getAllClusters()
 //        mViewModel?.noficationlistener=this
 //        mViewModel?.getAllNotifications()
 //        mViewModel?.getMoqDeliveryTimes()

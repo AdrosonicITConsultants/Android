@@ -25,4 +25,7 @@
 	<dimen name="img_editable_hieght">240dp</dimen>
 	<dimen name="img_editable_options_hieght">40dp</dimen>
 
+	<dimen name="table_view_cell_height">40dp</dimen>
+	<dimen name="table_view_row_header_width">80dp</dimen>
+	<dimen name="table_view_default_text_size">11sp</dimen>
 </resources>
