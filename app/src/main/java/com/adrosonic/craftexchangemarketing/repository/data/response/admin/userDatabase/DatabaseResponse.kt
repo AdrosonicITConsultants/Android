@@ -1,5 +1,7 @@
 package com.adrosonic.craftexchangemarketing.repository.data.response.admin.userDatabase
 
+
+
 data class DatabaseResponse (
     var data: List<User>,
     var valid: Boolean,

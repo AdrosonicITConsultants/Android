@@ -37,11 +37,19 @@
 <!--            android:name=".ui.modules.dashboard.DashboardActivity"-->
 <!--            android:configChanges="orientation|screenSize"-->
 <!--            android:label="@string/title_activity_dashboard" />-->
+
         <activity
             android:name=".ui.modules.dashboard.OpenEnquirySummaryActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_dashboard" />
-
+        <activity
+            android:name=".ui.modules.admin.individualProfile.BuyerProfileActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_individual_buyer_profile" />
+        <activity
+            android:name=".ui.modules.admin.individualProfile.ArtisanProfileActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_individual_buyer_profile" />
         <activity
             android:name=".ui.modules.enquiry.EnquiryDetailsActivity"
             android:launchMode="singleTop"

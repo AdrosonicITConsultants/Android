@@ -67,6 +67,7 @@ const val KEY_DEVICE_REGISTRATION_TOKEN = "device_registration_token"
 const val NOTI_BADGE_COUNT = "noti_badge_count"
 ///////////////////ProductTemplateParams///////////////////////
 const val PRODUCT_UPLOAD_JSON = "product_upload_json"
+const val IND_USER_DATA = "ind_user_data"
 const val WARP_DYE_ID = "warpDyeId"
 const val WARP_YARN_COUNT = "warpYarnCount"
 const val WARP_YARN_ID = "warpYarnId"
@@ -443,7 +444,14 @@ class UserConfig {
             Prefs.putString(PRODUCT_UPLOAD_JSON, value)
             field = value
         }
-
+    //Admim start
+    var indUserDataJson: String? = ""
+        get() = Prefs.getString(IND_USER_DATA,"")
+        set(value) {
+            Prefs.putString(IND_USER_DATA, value)
+            field = value
+        }
+    //Admin end
     var imageUrlList : String? = ""
         get() = Prefs.getString(IMAGE_URL,"")
         set(value) {

@@ -15,6 +15,8 @@ import com.adrosonic.craftexchangemarketing.R
 import com.adrosonic.craftexchangemarketing.database.entities.realmEntities.ProductCard
 import com.adrosonic.craftexchangemarketing.database.predicates.AdminPredicates
 import com.adrosonic.craftexchangemarketing.databinding.FragmentAdminHomeBinding
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.individualProfile.ArtisanProfileActivity
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.individualProfile.BuyerProfileActivity
 import com.adrosonic.craftexchangemarketing.ui.modules.dashboard.OpenEnquirySummaryActivity
 import com.adrosonic.craftexchangemarketing.ui.modules.main.MainActivity
 import com.adrosonic.craftexchangemarketing.utils.ConstantsDirectory

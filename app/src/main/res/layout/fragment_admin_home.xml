@@ -155,26 +155,26 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/top_part">
 
-<!--                        <Button-->
-<!--                            android:id="@+id/logoutbtn"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_gravity="center"-->
-<!--                            android:layout_margin="@dimen/margin_regular"-->
-<!--                            android:background="@drawable/rectangle_round_grad"-->
-<!--                            android:backgroundTint="@color/black_text"-->
-<!--                            android:clickable="true"-->
-<!--                            android:contextClickable="true"-->
-<!--                            android:drawablePadding="@dimen/margin_regular"-->
-<!--                            android:elevation="20dp"-->
-<!--                            android:focusableInTouchMode="true"-->
-<!--                            android:fontFamily="@font/lato_regular"-->
-<!--                            android:paddingStart="16dp"-->
-<!--                            android:paddingEnd="16dp"-->
-<!--                            android:text="@string/logout"-->
-<!--                            android:textAllCaps="false"-->
-<!--                            android:textColor="@color/colorBackground"-->
-<!--                            android:textSize="@dimen/edit_text" />-->
+                        <!--                        <Button-->
+                        <!--                            android:id="@+id/logoutbtn"-->
+                        <!--                            android:layout_width="wrap_content"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:layout_gravity="center"-->
+                        <!--                            android:layout_margin="@dimen/margin_regular"-->
+                        <!--                            android:background="@drawable/rectangle_round_grad"-->
+                        <!--                            android:backgroundTint="@color/black_text"-->
+                        <!--                            android:clickable="true"-->
+                        <!--                            android:contextClickable="true"-->
+                        <!--                            android:drawablePadding="@dimen/margin_regular"-->
+                        <!--                            android:elevation="20dp"-->
+                        <!--                            android:focusableInTouchMode="true"-->
+                        <!--                            android:fontFamily="@font/lato_regular"-->
+                        <!--                            android:paddingStart="16dp"-->
+                        <!--                            android:paddingEnd="16dp"-->
+                        <!--                            android:text="@string/logout"-->
+                        <!--                            android:textAllCaps="false"-->
+                        <!--                            android:textColor="@color/colorBackground"-->
+                        <!--                            android:textSize="@dimen/edit_text" />-->
                         <Button
                             android:id="@+id/logoutbtn"
                             android:layout_width="wrap_content"
