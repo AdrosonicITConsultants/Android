@@ -56,6 +56,7 @@ const val VIEW_PROD_OF = "viewproductof"
 const val CATEGORY_PRODUCTS = "CategoryProducts"
 const val CLUSTER_PRODUCTS = "ClusterProducts"
 const val BRAND_PRODUCTS = "BrandProducts"
+
 const val AVAILABLE_IN_STOCK = "Available In Stock"
 const val MADE_TO_ORDER = "Made To Order"
 const val IMAGE_URL = "imageurl"
@@ -82,6 +83,10 @@ const val EXTRA_WEFT_YARN_ID = "extraWeftYarnId"
 const val MOQ_DELIVERY_DATES = "moq_delivery_dates"
 const val ENQUIRY_STAGE_DATA = "enquiry_stage_data"
 const val ENQUIRY_AVAI_PROD_STAGE_DATA = "enquiry_available_product_stage_data"
+
+const val ARTISAN_DB_PAGE_COUNT = "artisan_db_page_count"
+
+
 
 
 class UserConfig {
@@ -531,6 +536,13 @@ class UserConfig {
         get() = Prefs.getString(ENQUIRY_AVAI_PROD_STAGE_DATA,"")
         set(value) {
             Prefs.putString(ENQUIRY_AVAI_PROD_STAGE_DATA, value)
+            field = value
+        }
+
+    var artisanDbPageCount : Int = 1
+        get() = Prefs.getInt(ARTISAN_DB_PAGE_COUNT,1)
+        set(value) {
+            Prefs.putInt(ARTISAN_DB_PAGE_COUNT, value)
             field = value
         }
 }

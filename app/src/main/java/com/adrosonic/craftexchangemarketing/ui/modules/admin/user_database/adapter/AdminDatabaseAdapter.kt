@@ -11,11 +11,12 @@ class AdminDatabaseAdapter (fragmentManager: FragmentManager) : FragmentPagerAda
     override fun getItem(position: Int): Fragment {
 
         return  when (position) {
-            0 -> {
-                ArtisanDatabaseFragment()
+            0 ->
+            {
+                ArtisanDatabaseFragment(1)
             }
             else -> {
-                BuyerDatabaseFragment()
+                ArtisanDatabaseFragment(2)
             }
         }
     }
