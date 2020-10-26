@@ -15,10 +15,12 @@ import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder;
 
 public class RowHeaderViewHolder extends AbstractViewHolder {
     public final TextView row_header_textview;
+    public final TextView txt_status;
 
     public RowHeaderViewHolder(View p_jItemView) {
         super(p_jItemView);
         row_header_textview = p_jItemView.findViewById(R.id.row_header_textview);
+        txt_status = p_jItemView.findViewById(R.id.txt_status);
     }
 
     @Override
@@ -48,9 +50,7 @@ public class RowHeaderViewHolder extends AbstractViewHolder {
 //            nForegroundColorId = R.color.unselected_text_color;
 //        }
 
-        itemView.setBackgroundColor(ContextCompat.getColor(itemView.getContext(),
-                nBackgroundColorId));
-        row_header_textview.setTextColor(ContextCompat.getColor(row_header_textview.getContext(),
-                nForegroundColorId));
+        itemView.setBackgroundColor(ContextCompat.getColor(itemView.getContext(), nBackgroundColorId));
+        row_header_textview.setTextColor(ContextCompat.getColor(row_header_textview.getContext(), nForegroundColorId));
     }
 }

@@ -30,7 +30,6 @@ class DatabaseViewModel(application: Application) : AndroidViewModel(application
                              searchStr:String?, sortBy : String,sortType : String){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         page=pageNo
-
         craftexchangemarketingRepository
             .getUserDatabaseService()
             .getUserData(token, UserDataRequest(clusterId , pageNo, rating , roleId , searchStr , sortBy ,sortType ))
@@ -48,7 +47,8 @@ class DatabaseViewModel(application: Application) : AndroidViewModel(application
                         if(isFilter) {
                             Log.e("DatabaseResults", "Success : " + response?.body()?.data?.size+": $page")
                             listener?.onSuccess(response?.body()?.data!!)
-                        } else{
+                        }
+                        else{
                             page++
                             if(page.equals(UserConfig.shared.artisanDbPageCount)){
                                 listener?.onSuccess(userList)
@@ -58,7 +58,6 @@ class DatabaseViewModel(application: Application) : AndroidViewModel(application
                                 getDatabaseForAdmin(isFilter,clusterId, page, rating, roleId,searchStr, sortBy,sortType)
                             }
                         }
-
                     }else{
                         Log.e("DatabaseResults","Failure")
                         listener?.onFailure()

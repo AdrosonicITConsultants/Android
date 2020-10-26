@@ -42,7 +42,6 @@
                 android:background="@android:color/transparent"
                 android:paddingRight="-5dp"
                 android:scaleType="fitXY"
-                android:visibility="gone"
                 app:srcCompat="@drawable/ic_arrow_down"/>
         </LinearLayout>
 

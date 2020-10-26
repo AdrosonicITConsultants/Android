@@ -8,6 +8,7 @@ import com.adrosonic.craftexchangemarketing.repository.data.response.admin.userD
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.tableview.model.CellModel;
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.tableview.model.ColumnHeaderModel;
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.tableview.model.RowHeaderModel;
+import com.adrosonic.craftexchangemarketing.utils.Utility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,18 +116,13 @@ public class MyTableViewModel {
         List<ColumnHeaderModel> list = new ArrayList<>();
 
         // Create Column Headers
-        list.add(new ColumnHeaderModel("Id"));
-        list.add(new ColumnHeaderModel("Weaver Id"));
-        list.add(new ColumnHeaderModel("Rating"));
-        list.add(new ColumnHeaderModel("Status"));
+        list.add(new ColumnHeaderModel("Artisan Id"));
+        list.add(new ColumnHeaderModel("Name"));
         list.add(new ColumnHeaderModel("Email"));
         list.add(new ColumnHeaderModel("Cluster"));
-        list.add(new ColumnHeaderModel("Brand Name"));
-        list.add(new ColumnHeaderModel("First Name"));
-        list.add(new ColumnHeaderModel("Last Name"));
-        list.add(new ColumnHeaderModel("Mobile"));
-        list.add(new ColumnHeaderModel("Date added"));
-
+        list.add(new ColumnHeaderModel("Rating"));
+        list.add(new ColumnHeaderModel("Date"));
+//        list.add(new ColumnHeaderModel("Status"));
         return list;
     }
 
@@ -141,19 +137,14 @@ public class MyTableViewModel {
             List<CellModel> list = new ArrayList<>();
 
             // The order should be same with column header list;
-            list.add(new CellModel("1-" + i, user.getId()));          // "Id"
-            list.add(new CellModel("2-" + i, user.getWeaverId()));        // "Name"
-            list.add(new CellModel("3-" + i, user.getRating()));    // "Nickname"
-            list.add(new CellModel("4-" + i, user.getStatus()));       // "Email"
-            list.add(new CellModel("5-" + i, user.getEmail()));   // "BirthDay"
-            list.add(new CellModel("6-" + i, user.getCluster()));      // "Gender"
-            list.add(new CellModel("7-" + i, user.getBrandName()));         // "Age"
-            list.add(new CellModel("8-" + i, user.getFirstName()));         // "Job"
-            list.add(new CellModel("9-" + i, user.getLastName()));      // "Salary"
-            list.add(new CellModel("10-" + i, user.getMobile())); // "CreatedAt"
-            list.add(new CellModel("11-" + i, user.getDateAdded())); // "UpdatedAt"
 
-            // Add
+            list.add(new CellModel("1-" + i, user.getId()));          // "Id"
+            list.add(new CellModel("2-" + i, user.getFirstName()+" "+ user.getLastName()));        // "Name"
+            list.add(new CellModel("3-" + i, user.getEmail()));    // "Nickname"
+            list.add(new CellModel("4-" + i, user.getCluster()));       // "Email"
+            list.add(new CellModel("5-" + i, user.getRating()));   // "BirthDay"
+            list.add(new CellModel("6-" + i, Utility.Companion.returnDisplayDate(user.getDateAdded())));      // "Gender"
+//            list.add(new CellModel("7-" + i, user.getStatus()));         // "Age"
             lists.add(list);
         }
 
@@ -166,8 +157,8 @@ public class MyTableViewModel {
             // In this example, Row headers just shows the index of the TableView List.
             User user=userList.get(i);
             Log.e("RowHeaderModel",""+user.getBrandName());
-            if(user.getBrandName()==null)list.add(new RowHeaderModel("NA"));
-            else list.add(new RowHeaderModel(""+user.getBrandName()));
+            if(user.getBrandName()==null)list.add(new RowHeaderModel("NA",user.getStatus()));
+            else list.add(new RowHeaderModel(""+user.getBrandName(),user.getStatus()));
         }
         return list;
     }

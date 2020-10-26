@@ -22,9 +22,12 @@ import java.util.List;
 
 public class MyTableViewListener implements ITableViewListener {
     private static final String LOG_TAG = MyTableViewListener.class.getSimpleName();
-
+    public interface TableListenrs{
+        void onColumnClick(int columnIndes);
+    }
     private ITableView mTableView;
     private List<User> mUserList;
+    public static TableListenrs tableListenrs;
     public MyTableViewListener(ITableView pTableView, List<User> userList) {
         this.mTableView = pTableView;
         this.mUserList=userList;
@@ -47,6 +50,8 @@ public class MyTableViewListener implements ITableViewListener {
 
     @Override
     public void onColumnHeaderClicked(@NonNull RecyclerView.ViewHolder columnHeaderView, int column) {
+        Log.e(LOG_TAG, "column has been clicked for " + column);
+        if(tableListenrs!=null)tableListenrs.onColumnClick(column);
     }
 
     @Override

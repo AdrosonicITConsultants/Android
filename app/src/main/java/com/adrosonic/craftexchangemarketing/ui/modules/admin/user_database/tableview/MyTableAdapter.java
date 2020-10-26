@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import com.adrosonic.craftexchangemarketing.R;
 import com.adrosonic.craftexchangemarketing.repository.data.response.admin.userDatabase.User;
@@ -31,12 +32,10 @@ import java.util.List;
 public class MyTableAdapter extends AbstractTableAdapter<ColumnHeaderModel, RowHeaderModel, CellModel> {
 
     private MyTableViewModel myTableViewModel;
-//    private Context mContext;
 
     public MyTableAdapter(Context p_jContext) {
         super();
         this.myTableViewModel = new MyTableViewModel();
-//        this.mContext=p_jContext;
     }
 
 
@@ -79,8 +78,7 @@ public class MyTableAdapter extends AbstractTableAdapter<ColumnHeaderModel, RowH
 
     @Override
     public AbstractSorterViewHolder onCreateColumnHeaderViewHolder(ViewGroup parent, int viewType) {
-        View layout = LayoutInflater.from(parent.getContext()).inflate(R.layout
-                .tableview_column_header_layout, parent, false);
+        View layout = LayoutInflater.from(parent.getContext()).inflate(R.layout.tableview_column_header_layout, parent, false);
 
         return new ColumnHeaderViewHolder(layout, getTableView());
     }
@@ -93,7 +91,6 @@ public class MyTableAdapter extends AbstractTableAdapter<ColumnHeaderModel, RowH
 
         columnHeaderViewHolder.setColumnHeaderModel(columnHeader, columnPosition);
     }
-
 
     @Override
     public AbstractViewHolder onCreateRowHeaderViewHolder(ViewGroup parent, int viewType) {
@@ -111,6 +108,9 @@ public class MyTableAdapter extends AbstractTableAdapter<ColumnHeaderModel, RowH
 
         RowHeaderViewHolder rowHeaderViewHolder = (RowHeaderViewHolder) holder;
         rowHeaderViewHolder.row_header_textview.setText(rowHeaderModel.getData());
+        if(rowHeaderModel.getStatus().equals(2)) rowHeaderViewHolder.txt_status.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(),R.color.red_logo));
+        else if(rowHeaderModel.getStatus().equals(1)) rowHeaderViewHolder.txt_status.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(),R.color.dark_green));
+
     }
 
     @NonNull

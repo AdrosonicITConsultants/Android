@@ -19,6 +19,7 @@ import com.adrosonic.craftexchangemarketing.databinding.FragmentUserdbArtisanBin
 import com.adrosonic.craftexchangemarketing.repository.data.response.admin.userDatabase.User
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.tableview.MyTableAdapter
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.tableview.MyTableViewListener
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.tableview.MyTableViewListener.TableListenrs
 import com.adrosonic.craftexchangemarketing.utils.Utility
 import com.adrosonic.craftexchangemarketing.viewModels.DatabaseViewModel
 import io.realm.RealmResults
@@ -27,8 +28,9 @@ import io.realm.RealmResults
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class ArtisanDatabaseFragment :Fragment(),
-    DatabaseViewModel.DbInterface{
+class ArtisanDatabaseFragment(roleId: Int) :Fragment(),
+    DatabaseViewModel.DbInterface,
+    TableListenrs{
 
     private var param1: String? = null
     private var param2: String? = null
@@ -40,6 +42,11 @@ class ArtisanDatabaseFragment :Fragment(),
     var clusterList=ArrayList<String>()
     var clusterDetailsList:RealmResults<ClusterList>? = null
     var ratingList=ArrayList<String>()
+    var nameOrder="asc"
+    var clusterOrder="asc"
+    var ratingOrder="asc"
+    var dategOrder="asc"
+    var brandOrder="asc"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -92,7 +99,7 @@ class ArtisanDatabaseFragment :Fragment(),
             else->  -1
          }
          if(clusterId.equals(-1) && rating.equals(-1) && searchStr.isNullOrEmpty()) apiCall(false,-1,1,-1,1,null,"desc","date")
-         else apiCall(true,clusterId,1,rating,1,searchStr,"desc","date")
+         else apiCall(true,clusterId,1,rating,1,searchStr,"asc","date")
         }
     }
     private fun initializeTableView() {
@@ -102,6 +109,7 @@ class ArtisanDatabaseFragment :Fragment(),
         if (userList != null && userList.size > 0) {
             mTableAdapter?.setUserList(userList)
         }
+        MyTableViewListener.tableListenrs=this
         // Create listener
         mBinding?.tableview?.tableViewListener = MyTableViewListener(mBinding?.tableview,userList)
     }
@@ -117,18 +125,18 @@ class ArtisanDatabaseFragment :Fragment(),
             }
             )
         } catch (e: Exception) {
-            Log.e(CommonUserFragment.TAG, "Exception " + e.message)
+            Log.e("ArtisanDatabaseFragment", "Exception " + e.message)
         }
     }
     override fun onFailure() {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
-                Log.e(CommonUserFragment.TAG, "onFailure")
+                Log.e("ArtisanDatabaseFragment", "onFailure")
                 mBinding?.pbLoader?.visibility=View.GONE
             }
             )
         } catch (e: Exception) {
-            Log.e(CommonUserFragment.TAG, "onFailure " + e.message)
+            Log.e("ArtisanDatabaseFragment", "onFailure " + e.message)
         }
     }
     override fun onCountSuccess(count: Int) {
@@ -160,5 +168,29 @@ class ArtisanDatabaseFragment :Fragment(),
             clusterList.add(it?.cluster?:"")
         }
 
+    }
+
+    override fun onColumnClick(columnIndex: Int) {
+        when(columnIndex){
+            1->{
+                apiCall(true,-1,1,-1,1,null,"name",nameOrder)
+                if(nameOrder.equals("asc"))nameOrder="desc"
+                else nameOrder="asc"
+            }
+            3->{
+                apiCall(true,-1,1,-1,1,null,"cluster",clusterOrder)
+                if(clusterOrder.equals("asc"))clusterOrder="desc"
+                else clusterOrder="asc"}
+            4->{
+                apiCall(true,-1,1,-1,1,null,"rating",ratingOrder)
+                if(ratingOrder.equals("asc"))ratingOrder="desc"
+                else ratingOrder="asc"}
+            5->{
+                apiCall(true,-1,1,-1,1,null,"date",dategOrder)
+                if(dategOrder.equals("asc"))dategOrder="desc"
+                else dategOrder="asc"}
+//            0->{
+//                apiCall(false,-1,1,-1,1,null,"brand","date")}
+        }
     }
 }
