@@ -389,8 +389,12 @@ class Utility {
             return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV}AdvancedPayment/${receiptId}/${imagename}"
         }
 
-        fun getTransactionIconsUrl(accomplishedStatusId : Long?,userProfile : String?) : String{
-            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV}TransactionIcons/${userProfile}/${accomplishedStatusId}.svg"
+        fun getFinalPaymentImageUrl(receiptId : Long?,imagename : String?) : String{
+            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV}FinalPayment/${receiptId}/${imagename}"
+        }
+
+        fun getDeliveryChallanReceiptUrl(enquiryId : Long?,imagename : String?) : String{
+            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV}deliveryChallanReceipt/${enquiryId}/${imagename}"
         }
 
         fun setImageResource(context: Context?,imageView:ImageView?,imageId:Int){
@@ -634,6 +638,25 @@ class Utility {
                 displayMessage("  Application not installed " + e, context)
             }
         }
+
+        fun openTaxInvFile(context: Activity,enquiryId:Long){
+            val cacheFile = File(context.cacheDir, ConstantsDirectory.TI_PDF_PATH + "Ti${enquiryId}.pdf")
+            try {
+                val uri = FileProvider.getUriForFile(context, "com.adrosonic.craftexchange.provider", cacheFile)
+                val myIntent = Intent(Intent.ACTION_VIEW)
+                myIntent.putExtra(ShareCompat.EXTRA_CALLING_PACKAGE, context.packageName)
+                val componentName = context.componentName
+                myIntent.putExtra(ShareCompat.EXTRA_CALLING_ACTIVITY, componentName)
+                myIntent.setDataAndType(uri, "application/pdf")
+                myIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(Intent.createChooser(myIntent, "Open with"))
+
+            } catch (e: Exception) {
+                displayMessage(" Application not installed $e", context)
+            }
+        }
+
 
         fun getDateDiffInDays(orderCreatedOn:String):Long{
             val currentDateTime=System.currentTimeMillis()

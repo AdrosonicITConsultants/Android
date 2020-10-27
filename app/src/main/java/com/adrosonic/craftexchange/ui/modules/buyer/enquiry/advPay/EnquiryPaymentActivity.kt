@@ -56,7 +56,6 @@ class EnquiryPaymentActivity : AppCompatActivity() {
                         }
                     }
                 }
-
             }
 
             ConstantsDirectory.BUYER -> {

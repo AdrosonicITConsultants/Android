@@ -35,6 +35,8 @@ import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
 import com.adrosonic.craftexchange.ui.modules.artisan.qcForm.qcFormIntent
 import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.order.cr.crContext
+import com.adrosonic.craftexchange.ui.modules.order.finalPay.orderPaymentIntent
+import com.adrosonic.craftexchange.ui.modules.order.taxInv.raiseTaxInvIntent
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.transaction.adapter.OnGoingTransactionRecyclerAdapter
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
@@ -139,6 +141,13 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
             activity?.onBackPressed()
         }
 
+        mBinding?.btnUplFinPayReceipt?.setOnClickListener {
+            startActivity(requireContext().orderPaymentIntent()
+                ?.putExtra(ConstantsDirectory.ENQUIRY_ID,enqID)
+                ?.putExtra(ConstantsDirectory.ENQUIRY_STATUS_FLAG,EnquiryStatus.ONGOING.getId()))
+//                ?.putExtra(ConstantsDirectory.PI_ID,0))
+        }
+
         mBinding?.brandDetailsLayer?.setOnClickListener {
             if (savedInstanceState == null) {
                 activity?.supportFragmentManager?.beginTransaction()
@@ -166,8 +175,7 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
         }
 
         mBinding?.piDetailsLayer?.setOnClickListener {
-            enqID?.let {  startActivity(requireContext().raisePiContext(it,true, SendPiRequest()))
-            }
+            enqID?.let {  startActivity(requireContext().raisePiContext(it,true, SendPiRequest())) }
         }
 
         mBinding?.viewPaymentLayer?.setOnClickListener {
@@ -202,7 +210,9 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
             } else Utility.displayMessage(getString(R.string.cr_not_applicable), requireContext())
         }
         mBinding?.taxInvoiceLayer?.setOnClickListener {
-            Utility.displayMessage("Coming soon",requireContext())
+            mBinding?.taxInvoiceLayer?.setOnClickListener {
+                enqID?.let {  startActivity(requireContext().raiseTaxInvIntent(it,true)) }
+            }
         }
 
     }
@@ -211,6 +221,7 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
      try {
          Handler(Looper.getMainLooper()).post(Runnable {
              setTabVisibilities()
+             setActionButtonVisibilites()
              mBinding?.orderCode?.text = orderDetails?.orderCode
              mBinding?.enquiryStartDate?.text =
                  "Date accepted : ${orderDetails?.startedOn?.split("T")?.get(0)}"
@@ -414,6 +425,15 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
         }
     }
 
+    fun setActionButtonVisibilites(){
+        //upload final Payment
+        if(orderDetails?.enquiryStageId == EnquiryStages.FINAL_INVOICE_RAISED.getId() && orderDetails?.isBlue == 0L){
+            mBinding?.finalTransactionLayout?.visibility = View.VISIBLE
+        }else{
+            mBinding?.finalTransactionLayout?.visibility = View.GONE
+        }
+    }
+
     private fun setProgressTimeline(){
         stageAPList?.clear()
         innerStageList?.clear()
@@ -581,6 +601,7 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
     }
 
     private fun setTabVisibilities(){
+        //AdvancePayment
         if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
             if(orderDetails?.enquiryStageId!! >= 4L){
                 mBinding?.viewPaymentLayer?.visibility = View.VISIBLE
@@ -591,10 +612,18 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
             mBinding?.viewPaymentLayer?.visibility = View.GONE
         }
 
+        //QcForm
         if(orderDetails?.enquiryStageId!! >= 5L){
             mBinding?.qualityCheckLayer?.visibility = View.VISIBLE
         }else{
-            mBinding?.qualityCheckLayer?.visibility = View.VISIBLE
+            mBinding?.qualityCheckLayer?.visibility = View.GONE
+        }
+
+        //TaxInvoice
+        if(orderDetails?.enquiryStageId!! >= EnquiryStages.FINAL_INVOICE_RAISED.getId()){
+            mBinding?.taxInvoiceLayer?.visibility = View.VISIBLE
+        }else{
+            mBinding?.taxInvoiceLayer?.visibility = View.GONE
         }
 
     }

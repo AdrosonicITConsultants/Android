@@ -41,6 +41,7 @@ class OrdersPredicates {
                                 }
 
                                 var exEnq = it.createObject(Orders::class.java, nextID)
+                                exEnq?.userId = order?.userId
                                 exEnq?.comment = order?.openEnquiriesResponse?.comment
                                 exEnq?.orderCreatedOn = order?.openEnquiriesResponse?.orderCreatedOn
                                 exEnq?.productId = order?.openEnquiriesResponse?.productId
@@ -107,12 +108,13 @@ class OrdersPredicates {
                                 exEnq?.isPiSend = order?.openEnquiriesResponse?.isPiSend?:0
                                 exEnq?.isMoqRejected = order?.isMoqRejected?:0
                                 exEnq?.changeRequestOn = order?.openEnquiriesResponse?.changeRequestOn
-                                exEnq?.isBlue = order?.isBlue?:0
+                                exEnq?.isBlue = order?.isBlue ?: 0
                                 exEnq?.isOrderFromCompleted=isCompleted
                                 realm.copyToRealmOrUpdate(exEnq)
                             }else{
                                 nextID = orderObj?._id ?: 0
                                 Log.e("OrderDetails","1111111111111")
+                                orderObj?.userId = order?.userId
                                 orderObj?.comment = order?.openEnquiriesResponse?.comment
                                 orderObj?.orderCreatedOn = order?.openEnquiriesResponse?.orderCreatedOn
                                 orderObj?.productId = order?.openEnquiriesResponse?.productId
@@ -182,7 +184,7 @@ class OrdersPredicates {
                                 orderObj?.isPiSend = order?.openEnquiriesResponse?.isPiSend?:0
                                 orderObj?.isMoqRejected = order?.isMoqRejected?:0
                                 orderObj?.changeRequestOn = order?.openEnquiriesResponse?.changeRequestOn
-                                orderObj?.isBlue = order?.isBlue?:0
+                                orderObj?.isBlue = order?.isBlue?: 0
                                 orderObj?.isOrderFromCompleted=isCompleted
                                 Log.e("OrderDetails","enquiryStageId: "+order?.openEnquiriesResponse?.enquiryStageId)
                                 realm.copyToRealmOrUpdate(orderObj)
@@ -196,6 +198,74 @@ class OrdersPredicates {
             }
 //            deleteOrders(idList,isCompleted)
         }
+
+        fun insertOrdPaymentDetails(details : OrderResponse?){
+            val realm = CXRealmManager.getRealmInstance()
+            var detailsItr = details?.data?.iterator()
+            realm.executeTransaction {
+                try {
+                    if (detailsItr != null) {
+                        while (detailsItr?.hasNext()) {
+                            var details = detailsItr.next()
+                            var payItr = details?.paymentAccountDetails?.iterator()
+                            if(payItr!=null){
+                                while(payItr.hasNext()){
+                                    var pay = payItr.next()
+                                    var payObj = realm.where(EnquiryPaymentDetails::class.java)
+                                        .equalTo(EnquiryPaymentDetails.COLUMN_ID, pay.id)
+                                        .limit(1)
+                                        .findFirst()
+
+                                    if (payObj == null) {
+                                        var primId = it.where(EnquiryPaymentDetails::class.java).max(EnquiryPaymentDetails.COLUMN__ID)
+                                        if (primId == null) {
+                                            nextID = 1
+                                        } else {
+                                            nextID = primId.toLong() + 1
+                                        }
+                                        var expay = it.createObject(
+                                            EnquiryPaymentDetails::class.java,
+                                            nextID
+                                        )
+
+                                        expay.id = pay.id
+                                        expay.userid = pay.userId
+                                        expay.accNoUPIMobile = pay.accNo_UPI_Mobile
+                                        expay.name = pay.name
+                                        expay.bankName = pay.bankName
+                                        expay.ifsc = pay.ifsc
+                                        expay.branch = pay.branch
+                                        expay.accountid = pay.accountType.id
+                                        expay.accountDesc = pay.accountType.accountDesc
+
+                                        realm.copyToRealmOrUpdate(expay)
+                                    }else{
+                                        nextID = payObj._id ?: 0
+
+                                        payObj.id = pay.id
+                                        payObj.userid = pay.userId
+                                        payObj.accNoUPIMobile = pay.accNo_UPI_Mobile
+                                        payObj.name = pay.name
+                                        payObj.bankName = pay.bankName
+                                        payObj.ifsc = pay.ifsc
+                                        payObj.branch = pay.branch
+                                        payObj.accountid = pay.accountType.id
+                                        payObj.accountDesc = pay.accountType.accountDesc
+
+                                        realm.copyToRealmOrUpdate(payObj)
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }catch (e: Exception) {
+                    Log.e("PaymentEnq","${e.printStackTrace()}")
+                }
+
+            }
+        }
+
 
         fun deleteOrders(idList : List<Long>?,isCompleted:Long){
             val realm = CXRealmManager.getRealmInstance()

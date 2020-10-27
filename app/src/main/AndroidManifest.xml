@@ -18,18 +18,26 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.modules.order.revisePi.ViewPiActivity"
+        <activity android:name=".ui.modules.order.taxInv.TaxInvoiceActivity"></activity>
+        <activity android:name=".ui.modules.order.taxInv.RaiseTaxInvActivity" />
+        <activity android:name=".ui.modules.order.finalPay.OrderPaymentActivity" />
+        <activity android:name=".ui.modules.artisan.deliveryReceipt.UploadDeliveryReceiptActivity" />
+        <activity android:name=".ui.modules.order.taxInv.TaxInvActivity" />
+        <activity
+            android:name=".ui.modules.order.revisePi.ViewPiActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.modules.order.revisePi.RevisePiActivity"
+        <activity
+            android:name=".ui.modules.order.revisePi.RevisePiActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.modules.order.cr.CrActivity"
+        <activity
+            android:name=".ui.modules.order.cr.CrActivity"
             android:screenOrientation="portrait" />
-
-        <activity android:name=".ui.modules.artisan.qcForm.QCActivity"
-            android:screenOrientation="portrait"/>
-
-        <activity android:name=".ui.modules.transaction.ViewDocumentActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.modules.artisan.qcForm.QCActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.modules.transaction.ViewDocumentActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.modules.transaction.TransactionActivity"
             android:screenOrientation="portrait" />

@@ -18,6 +18,7 @@
         android:fontFamily="@font/lato_bold"
         android:textStyle="bold"
         android:textSize="@dimen/product_availability_text"
+        android:maxLength="25"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

@@ -64,16 +64,16 @@ class QCViewModel(application: Application) : AndroidViewModel(application) {
     fun getBuyerQCResponse(enquiryId : Long){
         CraftExchangeRepository
             .getQCService()
-            .getBuyerQcResponses(token,enquiryId).enqueue(object : Callback, retrofit2.Callback<BuyerQcResponse> {
-                override fun onFailure(call: Call<BuyerQcResponse>, t: Throwable) {
+            .getBuyerQcResponses(token,enquiryId).enqueue(object : Callback, retrofit2.Callback<QcResponse> {
+                override fun onFailure(call: Call<QcResponse>, t: Throwable) {
                     getQcListener?.onGetQcFailure()
                 }
                 override fun onResponse(
-                    call: Call<BuyerQcResponse>,
-                    response: Response<BuyerQcResponse>
+                    call: Call<QcResponse>,
+                    response: Response<QcResponse>
                 ) {
                     if(response.body()?.valid == true){
-                        QcPredicates.insertBuyerQcResponses(response?.body()!!,enquiryId)
+                        QcPredicates.insertArtisanQcResponses(response?.body()?.data!!,enquiryId)
                         getQcListener?.onGetQcSuccess()
                     }else{
                         getQcListener?.onGetQcFailure()

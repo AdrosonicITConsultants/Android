@@ -7,8 +7,11 @@ import androidx.lifecycle.MutableLiveData
 import com.adrosonic.craftexchange.database.entities.realmEntities.Transactions
 import com.adrosonic.craftexchange.database.predicates.TransactionPredicates
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
+import com.adrosonic.craftexchange.repository.data.registerResponse.RegisterResponse
 import com.adrosonic.craftexchange.repository.data.request.enquiry.BuyerPayment
 import com.adrosonic.craftexchange.repository.data.response.enquiry.payment.PaymentReceiptResponse
+import com.adrosonic.craftexchange.repository.data.response.taxInv.FinPayData
+import com.adrosonic.craftexchange.repository.data.response.taxInv.FinalPayDetailsResponse
 import com.adrosonic.craftexchange.repository.data.response.transaction.SingleTransactionResponse
 import com.adrosonic.craftexchange.repository.data.response.transaction.TransactionResponse
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
@@ -44,10 +47,14 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
         fun onSuccess(imgName : String, receiptId : Long)
     }
 
+    interface FinalPayDetailsInterface{
+        fun onFPDFailure()
+        fun onFPDSuccess(details : FinPayData)
+    }
+
     interface TransactionInterface{
         fun onGetTransactionsSuccess()
         fun onGetTransactionsFailure()
-
     }
 
     var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
@@ -56,6 +63,7 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
     var validatePaymentListener : ValidatePaymentInterface ?= null
     var paymentReceiptListener : PaymentReceiptInterface ?= null
     var transactionListener : TransactionInterface ?= null
+    var finalPayDetailsListener : FinalPayDetailsInterface?=null
 
 
     val ongoingTranList : MutableLiveData<RealmResults<Transactions>> by lazy { MutableLiveData<RealmResults<Transactions>>() }
@@ -101,19 +109,71 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
                     uploadPaymentListener?.onFailure()
                 }
                 override fun onResponse(
-                    call: Call<ResponseBody>,
-                    response: Response<ResponseBody>
-                ) {
-                    uploadPaymentListener?.onSuccess()
-
+                    call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                    if(response?.isSuccessful){
+                        uploadPaymentListener?.onSuccess()
+                    }else{
+                        uploadPaymentListener?.onFailure()
+                    }
                 }
             })
     }
+
+    fun uploadDeliveryReceipt(enquiryId : Long, orderDispatchDate : String,eta : String ,filePath : String) {
+        var repoCall : Call<ResponseBody> ?= null
+
+        var file = File(filePath)
+        var fileReqBody = file!!.toRequestBody(MediaType.parse("image/*"))
+        var fileBody = MultipartBody.Builder()
+            .addFormDataPart("file", file?.name, fileReqBody!!)
+            .build()
+        var headerBoundary="multipart/form-data;boundary="+ fileBody?.boundary
+
+        if(eta!=""){
+            repoCall = CraftExchangeRepository
+                .getTransactionService()
+                .uploadDeliveryChallan(token,headerBoundary,enquiryId,orderDispatchDate,eta,fileBody!!)
+        }else{
+            repoCall = CraftExchangeRepository
+                .getTransactionService()
+                .uploadDeliveryChallanNoEta(token,headerBoundary,enquiryId,orderDispatchDate,fileBody!!)
+        }
+            repoCall?.enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    uploadPaymentListener?.onFailure()
+                }
+                override fun onResponse(
+                    call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                    if(response?.isSuccessful){
+                        uploadPaymentListener?.onSuccess()
+                    }else{
+                        uploadPaymentListener?.onFailure()
+                    }
+                }
+            })
+    }
+
 
     fun validateAdvancePayment(enquiryId:Long,paymentStatus:String){
         CraftExchangeRepository
             .getTransactionService()
             .validateAdvancePayment(token,enquiryId,paymentStatus).enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    validatePaymentListener?.onPaymentFailure()
+                }
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    validatePaymentListener?.onPaymentSuccess()
+                }
+            })
+    }
+
+    fun validateFinalPayment(enquiryId:Long,paymentStatus:String){
+        CraftExchangeRepository
+            .getTransactionService()
+            .validateFinalPayment(token,enquiryId,paymentStatus).enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     validatePaymentListener?.onPaymentFailure()
                 }
@@ -146,6 +206,48 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
                 }
             })
     }
+
+    fun getFinalPaymentReceipt(enquiryId:Long){
+        CraftExchangeRepository
+            .getTransactionService()
+            .getFinalPaymentReceipt(token,enquiryId).enqueue(object : Callback, retrofit2.Callback<PaymentReceiptResponse> {
+                override fun onFailure(call: Call<PaymentReceiptResponse>, t: Throwable) {
+                    paymentReceiptListener?.onFailure()
+                }
+                override fun onResponse(
+                    call: Call<PaymentReceiptResponse>,
+                    response: Response<PaymentReceiptResponse>
+                ) {
+                    if(response.body()?.valid == true){
+                        response?.body()?.data?.label?.let { response.body()?.data?.paymentId?.let { it1 ->
+                            paymentReceiptListener?.onSuccess(it, it1) } }
+                    }else{
+                        paymentReceiptListener?.onFailure()
+                    }
+                }
+            })
+    }
+
+    fun getFinalPaymentDetails(enquiryId:Long){
+        CraftExchangeRepository
+            .getTransactionService()
+            .getFinalPaymentDetails(token,enquiryId).enqueue(object : Callback, retrofit2.Callback<FinalPayDetailsResponse> {
+                override fun onFailure(call: Call<FinalPayDetailsResponse>, t: Throwable) {
+                    finalPayDetailsListener?.onFPDFailure()
+                }
+                override fun onResponse(
+                    call: Call<FinalPayDetailsResponse>,
+                    response: Response<FinalPayDetailsResponse>
+                ) {
+                    if(response.body()?.valid == true){
+                        finalPayDetailsListener?.onFPDSuccess(response?.body()?.data!!)
+                    }else{
+                        finalPayDetailsListener?.onFPDFailure()
+                    }
+                }
+            })
+    }
+
 
     fun getAdvancePaymentStatus(enquiryId:Long){
 //        CraftExchangeRepository

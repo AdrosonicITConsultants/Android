@@ -16,6 +16,7 @@ import com.adrosonic.craftexchange.syncManager.processor.moq.SendMoqAction
 import com.adrosonic.craftexchange.syncManager.processor.notification.NotificationAction
 import com.adrosonic.craftexchange.syncManager.processor.pi.PiActions
 import com.adrosonic.craftexchange.syncManager.processor.qc.QcActions
+import com.adrosonic.craftexchange.syncManager.processor.taxInv.TaxInvoiceActions
 import com.adrosonic.craftexchange.syncManager.processor.wishlist.WishlistAction
 
 /**
@@ -35,7 +36,8 @@ class SyncCoordinator(val context: Context) {
         PiActions(),
         QcActions(),
         CrToggleAction(),
-        CrUpdateStatusAction()
+        CrUpdateStatusAction(),
+        TaxInvoiceActions()
     )
 
     fun performLocallyAvailableActions() {
@@ -99,6 +101,15 @@ class SyncCoordinator(val context: Context) {
                 if (iterator8 != null) {
                     while (iterator8.hasNext()) {
                             list.add(ItemType(iterator8.next().toString()))
+                    }
+                }
+
+                val queue9=  TaxInvPredicates.getTiMarkedForActions(it.predicateForLocallyTrackedElements)
+                Log.e("TaxInvoice","offline itemId :${queue9?.joinToString()}")
+                val iterator9 = queue9?.iterator()
+                if (iterator9 != null) {
+                    while (iterator9.hasNext()) {
+                        list.add(ItemType(iterator9.next().toString()))
                     }
                 }
             } catch (e: Exception) {

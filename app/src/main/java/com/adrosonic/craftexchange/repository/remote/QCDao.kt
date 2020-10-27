@@ -30,7 +30,12 @@ interface QCDao {
                          @Query("enquiryId")enquiryId:Long) : Call<QcResponse>
 
     @Headers("Accept: application/json")
-    @GET("qc/getBuyerQcResponse")
+    @GET("qc/getArtisanQcResponse")
     fun getBuyerQcResponses(@Header("Authorization") token:String,
-                              @Query("enquiryId")enquiryId:Long) : Call<BuyerQcResponse>
+                            @Query("enquiryId")enquiryId:Long) : Call<QcResponse>
+
+//    @Headers("Accept: application/json")
+//    @GET("qc/getBuyerQcResponse")
+//    fun getBuyerQcResponses(@Header("Authorization") token:String,
+//                              @Query("enquiryId")enquiryId:Long) : Call<BuyerQcResponse>
 }

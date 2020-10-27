@@ -2,6 +2,7 @@ package com.adrosonic.craftexchange.ui.modules.order
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -21,18 +22,22 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
-import com.adrosonic.craftexchange.database.predicates.CrPredicates
 import com.adrosonic.craftexchange.database.predicates.OrdersPredicates
 import com.adrosonic.craftexchange.database.predicates.TransactionPredicates
 import com.adrosonic.craftexchange.databinding.FragmentArtisanOngoingOrderDetailsBinding
 import com.adrosonic.craftexchange.enums.*
+import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.repository.data.response.moq.Datum
+import com.adrosonic.craftexchange.ui.modules.artisan.deliveryReceipt.uploadDeliveryReceiptIntent
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.piContext
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
 import com.adrosonic.craftexchange.ui.modules.artisan.qcForm.qcFormIntent
 import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.order.cr.crContext
+import com.adrosonic.craftexchange.ui.modules.order.finalPay.orderPaymentIntent
 import com.adrosonic.craftexchange.ui.modules.order.revisePi.viewPiContextPostCr
+import com.adrosonic.craftexchange.ui.modules.order.taxInv.raiseTaxInvIntent
+import com.adrosonic.craftexchange.ui.modules.order.taxInv.taxInvoiceIntent
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.transaction.adapter.OnGoingTransactionRecyclerAdapter
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
@@ -139,6 +144,26 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
             activity?.onBackPressed()
         }
 
+        mBinding?.btnUploadDeliveryReceipt?.setOnClickListener{
+            startActivity(enqID?.let { it1 ->
+                requireContext().uploadDeliveryReceiptIntent(it1,OrderStatus.ONGOING.getId())
+            })
+        }
+
+        mBinding?.btnViewApprovePayment?.setOnClickListener {
+            startActivity(requireContext().orderPaymentIntent()
+                ?.putExtra(ConstantsDirectory.ENQUIRY_ID,enqID)
+                ?.putExtra(ConstantsDirectory.ENQUIRY_STATUS_FLAG,OrderStatus.ONGOING.getId()))
+        }
+
+        mBinding?.btnUploadTaxInv?.setOnClickListener {
+            Log.e("RaiseTi", "upload : $enqID")
+            Log.e("RaiseTi", "upload : ${orderDetails?.enquiryId}")
+//            startActivity(enqID?.let { it1 -> requireContext().taxInvoiceIntent(it1) })
+            enqID?.let {startActivityForResult(requireContext().taxInvoiceIntent(it),ConstantsDirectory.RESULT_TI)}
+
+        }
+
         mBinding?.brandDetailsLayer?.setOnClickListener {
             if (savedInstanceState == null) {
                 activity?.supportFragmentManager?.beginTransaction()
@@ -231,7 +256,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
 
         }
         mBinding?.taxInvoiceLayer?.setOnClickListener {
-            //todo call intent
+            enqID?.let {  startActivity(requireContext().raiseTaxInvIntent(it,true)) }
         }
         //ChangeEnquiryStageButtons
         mBinding?.btnStartEnqStage?.setOnClickListener {
@@ -281,6 +306,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
     try {
         Handler(Looper.getMainLooper()).post(Runnable {
         setTabVisibilities()
+            setActionButtonVisibilites()
         setViewEnquiryStageChangeButton()
         viewChangeStatusLayer()
         setToggleVisiblity()
@@ -645,6 +671,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
     }
 
     private fun setTabVisibilities(){
+        //advance payment
         if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
             if(orderDetails?.enquiryStageId!! >= 4L){
                 mBinding?.viewPaymentLayer?.visibility = View.VISIBLE
@@ -655,10 +682,44 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
             mBinding?.viewPaymentLayer?.visibility = View.GONE
         }
 
+        //quality check
         if(orderDetails?.enquiryStageId!! >= 5L){
             mBinding?.qualityCheckLayer?.visibility = View.VISIBLE
         }else{
-            mBinding?.qualityCheckLayer?.visibility = View.VISIBLE
+            mBinding?.qualityCheckLayer?.visibility = View.GONE
+        }
+        //TaxInvoice
+        if(orderDetails?.enquiryStageId!! >= EnquiryStages.FINAL_INVOICE_RAISED.getId()){
+            mBinding?.taxInvoiceLayer?.visibility = View.VISIBLE
+        }else{
+            mBinding?.taxInvoiceLayer?.visibility = View.GONE
+        }
+    }
+
+    fun setActionButtonVisibilites(){
+        //upload tax invoice
+        when(orderDetails?.enquiryStageId){
+            EnquiryStages.QUALITY_CHECK_BEFORE_DELIVERY.getId(),
+            EnquiryStages.COMPLETION_OF_ORDER.getId() -> {
+                mBinding?.uploadTaxInvLayout?.visibility = View.VISIBLE
+            }
+            else -> {
+                mBinding?.uploadTaxInvLayout?.visibility = View.GONE
+            }
+        }
+
+        //Approve Final Payment
+        if(orderDetails?.enquiryStageId == EnquiryStages.FINAL_INVOICE_RAISED.getId() && orderDetails?.isBlue == 1L){
+            mBinding?.btnViewApprovePayment?.visibility = View.VISIBLE
+        }else{
+            mBinding?.btnViewApprovePayment?.visibility = View.GONE
+        }
+
+        //Upload Delivery Receipt
+        if(orderDetails?.enquiryStageId == EnquiryStages.FINAL_PAYMENT_RECEIVED.getId() && orderDetails?.isBlue == 0L && orderDetails?.deliveryChallanUploaded == 0L){
+            mBinding?.uploadDeliveryReceiptLayout?.visibility = View.VISIBLE
+        }else{
+            mBinding?.uploadDeliveryReceiptLayout?.visibility = View.GONE
         }
     }
 
@@ -726,18 +787,6 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
             Log.e("OrderDetails", "Exception onFailure " + e.message)
         }
     }
-
-
-    companion object {
-
-        fun newInstance(param1: String) =
-            ArtisanOngoinOrderDetailsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                }
-            }
-    }
-
 
     override fun onStatusChangeSuccess() {
         try {
@@ -829,6 +878,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
             Log.e("Toggle", "Exception onToggleFailure " + e.message)
         }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         Log.e("ArtOngonDetails", "RESULT_OK ${Activity.RESULT_OK}")
@@ -847,5 +897,18 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         orderDetails?.let{setDetails()}
 
     }
+
+    companion object {
+
+        fun newInstance(param1: String) =
+            ArtisanOngoinOrderDetailsFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                }
+            }
+    }
+
+
+
 
 }

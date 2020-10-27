@@ -224,82 +224,135 @@ class BuyerViewQcFormFragment : Fragment(),
 //        mViewQcAdapter?.notifyDataSetChanged()
     }
 
+//    fun setSaveForms() {
+//        var qcObj = enqID?.toLong()?.let { QcPredicates.getQcResponsesByEnq(it) }
+//        if (qcObj != null) {
+//            mBinding?.viewQcFormLayout?.removeAllViews()
+//            var oldStageID:Long?=1L
+//            var newStageID:Long?=0L
+//            var respList = ArrayList<ArtBuyQcResponse>()
+//            var arrRespList = ArrayList<List<ArtBuyQcResponse>>()
+//
+//            var formData = qcObj?.qcResponseString?.let { Utility.getBuyerQcResponse(it) }
+//                var itr1 = formData?.data?.iterator()
+//                if (itr1 != null) {
+//                    while (itr1.hasNext()) {
+//                        var data1 = itr1.next()
+//                        newStageID = data1?.stageId
+//
+//                        if(newStageID == oldStageID){
+//                            respList.add(data1)
+//                        }else{
+//                            //set Linear Layout
+//                            oldStageID = newStageID
+//                            var addList = respList.toList()
+//                            arrRespList.add(addList)
+//                            respList?.clear()
+//                            Log.e("FormList","list : $respList")
+//                        }
+//                    }
+//
+//                    Log.e("FormList","list : $arrRespList")
+//                }
+//
+//            var itr2 = arrRespList.iterator()
+//            if(itr2!=null){
+//                while (itr2.hasNext()){
+//                    var data2 = itr2.next()
+//                    var itr3 = data2.iterator()
+//                    var stageTitle: String? = ""
+//
+//                    //set Linear Layout
+//                    var newView = activity?.layoutInflater?.inflate(
+//                        R.layout.item_qc_form_view_header,
+//                        null
+//                    ) as LinearLayout
+//                    var title = newView.findViewById(R.id.qc_stage) as TextView
+//                    var itemLayout = newView.findViewById(R.id.saved_form_top_part) as LinearLayout
+//
+//                    var itemRecyclerView =
+//                        newView?.findViewById(R.id.saved_recyler_list) as RecyclerView
+//
+//
+//                    if (data2 != null) {
+//                        setViewFormRecycler(itemRecyclerView, data2)
+//                    }
+//
+//                    itemLayout?.setOnClickListener {
+//                        if (itemRecyclerView.visibility == View.GONE) {
+//                            itemRecyclerView.visibility = View.VISIBLE
+//                        } else {
+//                            itemRecyclerView.visibility = View.GONE
+//                        }
+//                    }
+//
+//                    mBinding?.viewQcFormLayout?.addView(newView)
+//
+//                    if (itr3 != null) {
+//                        while (itr3.hasNext()) {
+//                            var form = itr3.next()
+//                            stageTitle = getFormTitle(form.stageId)
+//                        }
+//                    }
+//                    mViewQcAdapter?.updateQcForm(data2)
+//                    title.text = stageTitle
+//                }
+//            }
+//        }
+//    }
     fun setSaveForms() {
-        var qcObj = enqID?.toLong()?.let { QcPredicates.getQcResponsesByEnq(it) }
-        if (qcObj != null) {
-            mBinding?.viewQcFormLayout?.removeAllViews()
-            var oldStageID:Long?=1L
-            var newStageID:Long?=0L
-            var respList = ArrayList<ArtBuyQcResponse>()
-            var arrRespList = ArrayList<List<ArtBuyQcResponse>>()
+    var qcObj = enqID?.toLong()?.let { QcPredicates.getQcResponsesByEnq(it) }
+    if (qcObj != null) {
+        mBinding?.viewQcFormLayout?.removeAllViews()
+        var formData = qcObj?.qcResponseString?.let { Utility.getArtisanQcResponse(it) }
+        var itr1 = formData?.artisanQcResponses?.iterator()
+        if (itr1 != null) {
+            while (itr1.hasNext()) {
+                var data1 = itr1.next()
+                var itr2 = data1.iterator()
+                var stageTitle: String? = ""
 
-            var formData = qcObj?.qcResponseString?.let { Utility.getBuyerQcResponse(it) }
-                var itr1 = formData?.data?.iterator()
-                if (itr1 != null) {
-                    while (itr1.hasNext()) {
-                        var data1 = itr1.next()
-                        newStageID = data1?.stageId
+                //set Linear Layout
+                var newView = activity?.layoutInflater?.inflate(
+                    R.layout.item_qc_form_view_header,
+                    null
+                ) as LinearLayout
+                var title = newView.findViewById(R.id.qc_stage) as TextView
+                var itemLayout = newView.findViewById(R.id.saved_form_top_part) as LinearLayout
 
-                        if(newStageID == oldStageID){
-                            respList.add(data1)
-                        }else{
-                            //set Linear Layout
-                            oldStageID = newStageID
-                            var addList = respList.toList()
-                            arrRespList.add(addList)
-                            respList?.clear()
-                            Log.e("FormList","list : $respList")
-                        }
-                    }
+                var itemRecyclerView =
+                    newView?.findViewById(R.id.saved_recyler_list) as RecyclerView
 
-                    Log.e("FormList","list : $arrRespList")
+
+                if (data1 != null) {
+                    setViewFormRecycler(itemRecyclerView, data1)
                 }
 
-            var itr2 = arrRespList.iterator()
-            if(itr2!=null){
-                while (itr2.hasNext()){
-                    var data2 = itr2.next()
-                    var itr3 = data2.iterator()
-                    var stageTitle: String? = ""
-
-                    //set Linear Layout
-                    var newView = activity?.layoutInflater?.inflate(
-                        R.layout.item_qc_form_view_header,
-                        null
-                    ) as LinearLayout
-                    var title = newView.findViewById(R.id.qc_stage) as TextView
-                    var itemLayout = newView.findViewById(R.id.saved_form_top_part) as LinearLayout
-
-                    var itemRecyclerView =
-                        newView?.findViewById(R.id.saved_recyler_list) as RecyclerView
-
-
-                    if (data2 != null) {
-                        setViewFormRecycler(itemRecyclerView, data2)
+                itemLayout?.setOnClickListener {
+                    if (itemRecyclerView.visibility == View.GONE) {
+                        itemRecyclerView.visibility = View.VISIBLE
+                    } else {
+                        itemRecyclerView.visibility = View.GONE
                     }
-
-                    itemLayout?.setOnClickListener {
-                        if (itemRecyclerView.visibility == View.GONE) {
-                            itemRecyclerView.visibility = View.VISIBLE
-                        } else {
-                            itemRecyclerView.visibility = View.GONE
-                        }
-                    }
-
-                    mBinding?.viewQcFormLayout?.addView(newView)
-
-                    if (itr3 != null) {
-                        while (itr3.hasNext()) {
-                            var form = itr3.next()
-                            stageTitle = getFormTitle(form.stageId)
-                        }
-                    }
-                    mViewQcAdapter?.updateQcForm(data2)
-                    title.text = stageTitle
                 }
+
+//                    newView.layoutParams = ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                mBinding?.viewQcFormLayout?.addView(newView)
+
+                if (itr2 != null) {
+                    while (itr2.hasNext()) {
+                        var form = itr2.next()
+                        stageTitle = getFormTitle(form.stageId)
+                    }
+                }
+                mViewQcAdapter?.updateQcForm(data1)
+                title.text = stageTitle
             }
         }
     }
+}
+
+
 
     fun viewLoader() {
         mBinding?.swipeForm?.isRefreshing = true

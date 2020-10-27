@@ -78,7 +78,7 @@ class PiService: JobIntentService() {
                     isSend = piObj?.actionMarkPiForSend ?: 0
                     isSave = piObj?.actionMarkPiForSave ?: 0
                 }
-                }
+            }
         }catch (e: Exception){
             Log.e(TAG,"Exception: ${e.message}")
         }

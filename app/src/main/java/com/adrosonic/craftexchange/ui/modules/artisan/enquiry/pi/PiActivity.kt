@@ -65,6 +65,7 @@ class PiActivity : AppCompatActivity(),
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_pi)
         val view = mBinding?.root
         setContentView(view)
+
         mEnqVM?.piLisener=this
         if (intent.extras != null) {
             enquiryId = intent.getLongExtra("enquiryId",0)

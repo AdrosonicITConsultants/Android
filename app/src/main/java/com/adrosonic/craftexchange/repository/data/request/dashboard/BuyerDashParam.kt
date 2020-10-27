@@ -2,13 +2,17 @@ package com.adrosonic.craftexchange.repository.data.request.dashboard
 
 open class BuyerDashParam {
     var email : String?=""
-    var token0 : String?=""
-    var token1 : String?=""
+    var token : String?=""
+//    var token1 : String?=""
 
     override fun toString(): String {
-        return "{" + "\"ds0.email\":" + '\"'.toString() + "$email" + '\"'.toString() +
-                ",\"ds0.Token\":" + '\"'.toString() + "$token0" + '\"'.toString() +
-                ",\"ds44.Token\":" + '\"'.toString() + "$token1" + '\"'.toString() + "}"
+        return "{" + "\"ds47.email\":" + '\"'.toString() + "$email" + '\"'.toString() +
+                ",\"ds47.Token\":" + '\"'.toString() + "$token" + '\"'.toString() +
+                ",\"ds46.email\":" + '\"'.toString() + "$email" + '\"'.toString() +
+                ",\"ds46.Token\":" + '\"'.toString() + "$token" + '\"'.toString() +
+                ",\"ds48.email\":" + '\"'.toString() + "$email" + '\"'.toString() +
+                ",\"ds48.Token\":" + '\"'.toString() + "$token" + '\"'.toString() +
+                ",\"ds44.Token\":" + '\"'.toString() + "$token" + '\"'.toString() + "}"
     }
 
 }

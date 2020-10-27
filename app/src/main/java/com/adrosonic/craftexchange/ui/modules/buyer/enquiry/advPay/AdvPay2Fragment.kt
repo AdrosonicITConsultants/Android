@@ -166,6 +166,7 @@ TransactionViewModel.UploadPaymentInterface{
                                     amount?.let { it5 ->
                                         BuyerPayment(
                                             it1,
+                                            null,
                                             it2,
                                             it3,
                                             it4,
