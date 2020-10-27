@@ -367,5 +367,40 @@
     <string name="cr_note_artisan">If you accept this change request, the buyer shall not be able to raise another change request.\n\n</string>
     <string name="want_to_discuss_more">Want to discuss more?</string>
     <string name="post_cr">Post change request process</string>
+    <string name="update_qc_form_text"><![CDATA[Please update the\nQuality Check\nform & send to\nproceed before moving\nto next stage]]></string>
+    <string name="fill_in_qc_form">Fill in QC form</string>
+    <string name="send">Send</string>
+    <string name="quality_check_for">Quality check for\t</string>
+    <string name="select_an_option">Select an option</string>
+    <string name="quality_check">Quality Check</string>
+    <string name="no_qc_available">No Quality Check Available.</string>
+
+
     <string name="new_pi_post_cr">Generate new PI post CR</string>
+    <string name="create_and_send_ti"><![CDATA[Create & Send Tax Invoice]]></string>
+    <string name="tax_invoice">Tax invoice</string>
+    <string name="fill_tax_inv_for_order">Fill in Tax invoice for this order</string>
+    <string name="rate_per_unit">Rate per unit(or metre)</string>
+    <string name="prev_total_amt">Previous Total amount\n(as per PI)</string>
+    <string name="adv_pay_rec_as_pi">Advance payment received\n(Previously as per PI)</string>
+    <string name="delivery_charges">Delivery charges\n(Freight charges)</string>
+    <string name="upload_delivery_receipt_non_mandatory">Upload delivery receipt\n(non-mandatory)</string>
+    <string name="final_amt">Final Amount</string>
+    <string name="amt_to_pay">Amount to be paid\n(Final Amount - Advance Payment)</string>
+    <string name="date_dispatch">Date of dispatch</string>
+    <string name="revised_eta">Revised ETA\n(if required)</string>
+    <string name="swipe_generate_ti_preview">Swipe to generate Tax invoice preview</string>
+    <string name="upld_your_delivery_receipt">Upload your delivery receipt</string>
+    <string name="upld_delivery_receipt">Upload delivery receipt</string>
+
+    <string name="del_rec_upload_note">Make sure you send the correct delivery receipt.\nAlso make sure the attached document is clear and readable\nwith the <b>LR</b> number and amount.</string>
+    <string name="upload_del_receipt">Upload receipt</string>
+    <string name="upload_final_payment_receipt">Upload Final Payment Receipt</string>
+    <string name="delivery_challan">Delivery Challan</string>
+    <string name="this_is_a_preview">This is a preview</string>
+    <string name="download_pdf">Download this invoice pdf</string>
+    <string name="quantity">Quantity</string>
+    <string name="currency">Currency</string>
+    <string name="net_amt_to_be_paid">Net amount to be paid</string>
+    <string name="approve_final_payment">Approve Final Payment</string>
 </resources>

@@ -22,7 +22,6 @@
         android:title="@string/orders"
         app:showAsAction="ifRoom|withText"/>
 
-
     <item
         android:id="@+id/action_chat"
         android:enabled="true"

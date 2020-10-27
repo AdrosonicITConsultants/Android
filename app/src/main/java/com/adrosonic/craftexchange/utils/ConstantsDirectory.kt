@@ -14,7 +14,7 @@ object ConstantsDirectory {
     const val CMS_URL_DEV = "http://101.53.158.227/wordpress/index.php/wp-json/wp/v2/"
     const val CMS_URL_UAT = "http://101.53.158.227/wordpress/index.php/wp-json/wp/v2/"
 
-    const val BUYER_DASHBOARD_URL = "https://datastudio.google.com/embed/reporting/0ede1d26-5dbf-4564-a7c4-4f850493a89f/page/i56cB?params="
+    const val BUYER_DASHBOARD_URL = "https://datastudio.google.com/embed/reporting/22dd8e4d-ca54-4a5a-8084-571f9b776457/page/iJ7cB?params="
     const val ARTISAN_DASHBOARD_URL_old = "https://datastudio.google.com/embed/reporting/cef7a3b2-e37f-48a2-9f28-0c3f45a07585/page/RJ8dB?params="
     const val ARTISAN_DASHBOARD_URL = "https://datastudio.google.com/embed/reporting/0c128fc7-917e-4030-b7b4-370628de1996/page/CEweB="
 
@@ -23,6 +23,7 @@ object ConstantsDirectory {
     const val VERSION = "23-09-20 V-1.1"
     //////////////////////////////////////////////////////////////////////
     const val PI_PDF_PATH: String = "PiPdfs/"
+    const val TI_PDF_PATH: String = "TiPdfs/"
     const val CHANNEL_ID: String = "Enquiry status"
     const val CHANNEL_NAME: String = "TTCE Notification"
     const val PERMISSION_REQUEST_CODE = 20
@@ -32,6 +33,7 @@ object ConstantsDirectory {
     const val PICK_IMAGE = 1
     const val RESULT_PI = 123
     const val RESULT_CONFIRM_ORDER = 125
+    const val RESULT_TI = 1333
     const val PREFS_NAME = "craft_exchange"
     const val ARTISAN = "Artisan"
     const val BUYER = "Buyer"
@@ -115,6 +117,8 @@ object ConstantsDirectory {
     const val CUSTOM_PRODUCT = "Custom Product"
 
     const val ENQUIRY_STATUS_FLAG = "enquiry_status_flag"
+    const val ORDER_STATUS_FLAG = "order_status_flag"
+
 
     const val PI_ID ="piid"
 }

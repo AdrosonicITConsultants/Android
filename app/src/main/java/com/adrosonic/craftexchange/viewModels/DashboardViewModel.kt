@@ -49,8 +49,8 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
     fun getBuyerDashboard() : String? {
         dashUrl = ConstantsDirectory.BUYER_DASHBOARD_URL
         buyParams.email = email
-        buyParams.token0 = token
-        buyParams.token1 = token
+        buyParams.token = token
+//        buyParams.token1 = token
         Log.e("Dashboard","Buy Params  : $buyParams")
         try{
             mQuery = encode(buyParams.toString())

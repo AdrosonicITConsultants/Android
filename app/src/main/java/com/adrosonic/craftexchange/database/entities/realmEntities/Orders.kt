@@ -75,6 +75,7 @@ open class Orders:RealmObject() {
     var isMoqRejected: Long?  = 0
     var changeRequestOn: Long?  = 0
     var isBlue: Long?  = 0
+    var userId: Long?= 0
 
     var isOrderFromCompleted:Long?=0
     var actionMarkCr:Long?=0

@@ -4,18 +4,12 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.replace
 import com.adrosonic.craftexchange.R
-import com.adrosonic.craftexchange.databinding.ActivityEnquiryDetailsBinding
 import com.adrosonic.craftexchange.databinding.ActivityEnquiryPaymentBinding
 import com.adrosonic.craftexchange.enums.EnquiryStatus
 import com.adrosonic.craftexchange.enums.getId
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.advPay.CompPaymentReceiptFragment
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.advPay.PaymentReceiptFragment
-import com.adrosonic.craftexchange.ui.modules.authentication.login.LoginActivity
-import com.adrosonic.craftexchange.ui.modules.enquiry.EnquiryDetailsActivity
-import com.adrosonic.craftexchange.ui.modules.enquiry.enquiryDetails
-import com.adrosonic.craftexchange.ui.modules.role.RoleSelectFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.pixplicity.easyprefs.library.Prefs
 
@@ -62,7 +56,6 @@ class EnquiryPaymentActivity : AppCompatActivity() {
                         }
                     }
                 }
-
             }
 
             ConstantsDirectory.BUYER -> {

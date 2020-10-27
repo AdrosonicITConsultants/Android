@@ -11,40 +11,34 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrosonic.craftexchange.R
-import com.adrosonic.craftexchange.database.entities.realmEntities.CompletedEnquiries
 import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
-import com.adrosonic.craftexchange.database.predicates.MoqsPredicates
 import com.adrosonic.craftexchange.database.predicates.TransactionPredicates
-import com.adrosonic.craftexchange.databinding.FragmentCompEnqDetailsBinding
 import com.adrosonic.craftexchange.databinding.FragmentCompOrderDetailsBinding
 import com.adrosonic.craftexchange.enums.AvailableStatus
-import com.adrosonic.craftexchange.enums.EnquiryStatus
+import com.adrosonic.craftexchange.enums.EnquiryStages
 import com.adrosonic.craftexchange.enums.getId
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.repository.data.response.moq.Datum
-import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimesResponse
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
-import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.advPay.enquiryPayment
+import com.adrosonic.craftexchange.ui.modules.artisan.qcForm.qcFormIntent
 import com.adrosonic.craftexchange.ui.modules.enquiry.ArtEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.order.cr.crContext
+import com.adrosonic.craftexchange.ui.modules.order.taxInv.raiseTaxInvIntent
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.transaction.adapter.OnGoingTransactionRecyclerAdapter
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
-import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
-import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
 import com.adrosonic.craftexchange.viewModels.OrdersViewModel
+import com.adrosonic.craftexchange.viewModels.QCViewModel
 import com.adrosonic.craftexchange.viewModels.TransactionViewModel
-import com.google.gson.GsonBuilder
 import com.pixplicity.easyprefs.library.Prefs
 
 // TODO: Rename parameter arguments, choose names that match
@@ -69,6 +63,7 @@ class CompletedOrderDetailsFragment : Fragment(),
 
     val mOrdersVm : OrdersViewModel by viewModels()
     val mTranVM : TransactionViewModel by viewModels()
+    val mQcVM : QCViewModel by viewModels()
 
     var weft : String ?= ""
     var warp : String ?= ""
@@ -110,6 +105,14 @@ class CompletedOrderDetailsFragment : Fragment(),
             enqID?.let {
                 mOrdersVm.getSingleCompletedOrder(it)
                 mTranVM.getSingleCompletedTransactions(it)
+                when(Prefs.getString(ConstantsDirectory.PROFILE,"")){
+                    ConstantsDirectory.ARTISAN -> {
+                        mQcVM?.getArtisanQCResponse(it)
+                    }
+                    ConstantsDirectory.BUYER -> {
+                        mQcVM?.getBuyerQCResponse(it)
+                    }
+                }
                 mOrdersVm?.getChangeRequestDetails(it)
             }
             viewLoader()
@@ -153,6 +156,10 @@ class CompletedOrderDetailsFragment : Fragment(),
                     }
                 }
             }
+        }
+
+        mBinding?.taxInvoiceLayer?.setOnClickListener {
+            enqID?.let {  startActivity(requireContext().raiseTaxInvIntent(it,true)) }
         }
 
         mBinding?.productDetailsLayer?.setOnClickListener {
@@ -199,6 +206,13 @@ class CompletedOrderDetailsFragment : Fragment(),
                 else Utility.displayMessage("Change request disabled by artisan.", requireContext())
             } else Utility.displayMessage(getString(R.string.cr_not_applicable), requireContext())
         }
+
+        mBinding?.qualityCheckLayer?.setOnClickListener {
+            startActivity(context?.qcFormIntent()
+                ?.putExtra(ConstantsDirectory.ENQUIRY_ID,enqID)
+                ?.putExtra(ConstantsDirectory.ORDER_STATUS_FLAG, 1L))
+        }
+
         mBinding?.viewPaymentLayer?.setOnClickListener {
             if(mBinding?.transactionList!!.visibility==View.VISIBLE) mBinding?.transactionList!!.visibility=View.GONE
             else mBinding?.transactionList!!.visibility=View.VISIBLE
@@ -495,6 +509,19 @@ class CompletedOrderDetailsFragment : Fragment(),
                 }else{
                     mBinding?.viewPaymentLayer?.visibility = View.GONE
                 }
+        //quality check
+        if(orderDetails?.enquiryStageId!! >= 5L){
+            mBinding?.qualityCheckLayer?.visibility = View.VISIBLE
+        }else{
+            mBinding?.qualityCheckLayer?.visibility = View.GONE
+        }
+
+        //TaxInvoice
+        if(orderDetails?.enquiryStageId!! >= EnquiryStages.FINAL_INVOICE_RAISED.getId()){
+            mBinding?.taxInvoiceLayer?.visibility = View.VISIBLE
+        }else{
+            mBinding?.taxInvoiceLayer?.visibility = View.GONE
+        }
 //            }
 //            else -> {
 //                mBinding?.viewPaymentLayer?.visibility = View.GONE

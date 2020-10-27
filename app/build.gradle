@@ -17,7 +17,7 @@ android {
         applicationId "com.adrosonic.craftexchange"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 42
+        versionCode 45
         versionName "1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -122,6 +122,7 @@ dependencies {
 
     //swipe button
     implementation 'com.github.gratusik:AGIKSwipeButton:1.0.1'
+//    implementation 'com.ebanx:swipe-button:0.8.3'
 
    //pinch to zoom image
     implementation 'com.bogdwellers:pinchtozoom:0.1'

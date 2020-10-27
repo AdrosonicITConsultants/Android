@@ -1,51 +1,28 @@
 package com.adrosonic.craftexchange.viewModels
 
 import android.app.Application
-import android.os.Handler
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.adrosonic.craftexchange.database.entities.realmEntities.CompletedEnquiries
-import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
 import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
 import com.adrosonic.craftexchange.database.predicates.*
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.request.changeRequest.RaiseCrInput
-import com.adrosonic.craftexchange.repository.data.request.enquiry.BuyerPayment
-import com.adrosonic.craftexchange.repository.data.request.moq.SendMoqRequest
-import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
+import com.adrosonic.craftexchange.repository.data.request.taxInv.SendTiRequest
 import com.adrosonic.craftexchange.repository.data.response.Notification.NotificationReadResponse
-import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.generateEnquiry.GenerateEnquiryResponse
-import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.IfExistEnquiryResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.ownDesign.DeleteOwnProductRespons
 import com.adrosonic.craftexchange.repository.data.response.changeReequest.CrDetailsResponse
-import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryResponse
-import com.adrosonic.craftexchange.repository.data.response.marketing.ArtisanDetailsResponse
-import com.adrosonic.craftexchange.repository.data.response.moq.GetMoqsResponse
-import com.adrosonic.craftexchange.repository.data.response.moq.SendMoqResponse
-import com.adrosonic.craftexchange.repository.data.response.moq.SendSelectedMoqResponse
 import com.adrosonic.craftexchange.repository.data.response.orders.OrderResponse
-import com.adrosonic.craftexchange.repository.data.response.pi.SendPiResponse
+import com.adrosonic.craftexchange.repository.data.response.taxInv.TaxInvoiceResponse
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
-import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.pixplicity.easyprefs.library.Prefs
 import io.realm.RealmResults
-import okhttp3.MediaType
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody
-import org.json.JSONException
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Response
 import java.util.*
-import java.io.File
 import javax.security.auth.callback.Callback
-import kotlin.collections.ArrayList
 
 class OrdersViewModel(application: Application) : AndroidViewModel(application){
     companion object {
@@ -76,6 +53,19 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
         fun onSuccess()
         fun onFailure()
     }
+    interface GenTaxInvInterface{
+        fun onGenTaxInvSuccess()
+        fun onGenTaxInvFailure()
+    }
+
+    interface tiInterface{
+        //        fun onTiFailure()
+//        fun onTiSuccess()
+        fun onTiDownloadSuccess()
+        fun onTiDownloadFailure()
+        fun onTiHTMLSuccess(data:String)
+        fun onTiHTMLFailure()
+    }
     val ongoingOrderList : MutableLiveData<RealmResults<Orders>> by lazy { MutableLiveData<RealmResults<Orders>>() }
     val onGoingOrderDetails : MutableLiveData<Orders> by lazy { MutableLiveData<Orders>() }
 
@@ -87,6 +77,8 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
     var fetcCrListener : FetchCrInterface?= null
     var updateCrListener : UpdateCrStatusInterface?= null
     var orderConfirmListener : OrderCinfirmedInterface?= null
+    var taxInvGenListener : GenTaxInvInterface?=null
+    var tiListener : tiInterface?=null
 
     fun getOnOrderListMutableData(): MutableLiveData<RealmResults<Orders>> {
         ongoingOrderList.value=loadOnOrderList()
@@ -199,7 +191,7 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
                     if(response.body()?.valid == true){
                         Log.e("OrderDetails","Success: "+response.body()?.data?.size)
                         OrdersPredicates?.insertOngoingOrders(response?.body()!!,0)
-//                        EnquiryPredicates?.insertEnqPaymentDetails(response?.body()!!)
+                        OrdersPredicates?.insertOrdPaymentDetails(response?.body()!!)
 //                        EnquiryPredicates?.insertEnqArtisanProductCategory(response?.body()!!)
                         Timer().schedule(object : TimerTask() {
                             override fun run() {
@@ -476,6 +468,99 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
                     }
                 }
 
+            })
+    }
+
+    fun generateTaxInvoice(invoiceRequest : SendTiRequest){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+//        var reqString = Gson().toJson(invoiceRequest)
+        CraftExchangeRepository
+            .getTiService()
+            .generateTaxInvoice(token,invoiceRequest)
+            .enqueue(object : Callback, retrofit2.Callback<TaxInvoiceResponse> {
+                override fun onFailure(call: Call<TaxInvoiceResponse>, t: Throwable) {
+                    t.printStackTrace()
+                    taxInvGenListener?.onGenTaxInvFailure()
+                }
+                override fun onResponse(
+                    call: Call<TaxInvoiceResponse>,
+                    response: Response<TaxInvoiceResponse>
+                ) {
+//                    if(response.isSuccessful){
+//                        taxInvGenListener?.onGenTaxInvSuccess()
+////                        TaxInvPredicates.insertTi(response.body()!!) TODO :implement after api is fixed from backend
+//                    }
+                    if(response?.body()?.valid!!){
+                        taxInvGenListener?.onGenTaxInvSuccess()
+                        TaxInvPredicates.insertTi(response.body()!!)
+                    }else{
+                        taxInvGenListener?.onGenTaxInvFailure()
+                    }
+                }
+            })
+    }
+
+    fun downloadTi(enquiryId:Long){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        Log.e(EnquiryViewModel.TAG,"downloadPi :${enquiryId}")
+        CraftExchangeRepository
+            .getTiService()
+            .getPreviewTaxInvPDF(token,enquiryId.toInt()).enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Log.e(EnquiryViewModel.TAG,"downloadTi :${t.message}")
+                    t.printStackTrace()
+                    tiListener?.onTiDownloadFailure()
+                }
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    val body=response.body()
+                    if(body!=null) {
+                        body?.let {
+                            Utility.writeResponseBodyToDisk(
+                                it,
+                                enquiryId.toString(),
+                                getApplication()
+                            )
+                            Timer().schedule(object : TimerTask() {
+                                override fun run() {
+                                    tiListener?.onTiDownloadSuccess()
+                                }
+                            }, 500)
+
+                        }
+                    }else  tiListener?.onTiDownloadFailure()
+                }
+            })
+    }
+
+    fun previewTi(enquiryId:Long){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        Log.e(EnquiryViewModel.TAG,"previewTi :${enquiryId}")
+        CraftExchangeRepository
+            .getTiService()
+            .getPreviewTaxInvHTML(token,enquiryId.toInt()).enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Log.e(EnquiryViewModel.TAG,"previewTi :${t.message}")
+                    t.printStackTrace()
+                    tiListener?.onTiHTMLFailure()
+                }
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    val body=response.body()
+                    if(body!=null) {
+                        Log.e(EnquiryViewModel.TAG,"previewTi :${body}")
+                        body?.let {
+                            tiListener?.onTiHTMLSuccess(it.string())
+                        }
+                    }else  {
+                        Log.e(EnquiryViewModel.TAG,"previewTi :${body}")
+                        tiListener?.onTiHTMLFailure()
+                    }
+                }
             })
     }
 }

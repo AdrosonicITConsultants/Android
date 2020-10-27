@@ -26,6 +26,7 @@ import androidx.core.app.ShareCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
+import com.adrosonic.craftexchange.database.predicates.QcPredicates
 import com.adrosonic.craftexchange.database.predicates.CrPredicates
 import com.adrosonic.craftexchange.database.predicates.UserPredicates
 import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.uploadData.ProductUploadData
@@ -34,6 +35,9 @@ import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryStage
 import com.adrosonic.craftexchange.repository.data.response.enquiry.InnerStageData
 import com.adrosonic.craftexchange.repository.data.response.moq.Datum
 import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimesResponse
+import com.adrosonic.craftexchange.repository.data.response.qc.BuyerQcResponse
+import com.adrosonic.craftexchange.repository.data.response.qc.QCData
+import com.adrosonic.craftexchange.repository.data.response.qc.QCQuestionData
 import com.adrosonic.craftexchange.repository.data.response.transaction.TranStatData
 import com.adrosonic.craftexchange.repository.data.response.transaction.TransactionStatusData
 import com.adrosonic.craftexchange.ui.modules.enquiry.enquiryDetails
@@ -42,6 +46,8 @@ import com.google.gson.GsonBuilder
 import com.pixplicity.easyprefs.library.Prefs
 import kotlinx.android.synthetic.main.dialog_gen_enquiry_success.*
 import kotlinx.android.synthetic.main.dialog_gen_enquiry_update_or_new.*
+import kotlinx.android.synthetic.main.dialog_multi_loading.*
+import kotlinx.android.synthetic.main.dialog_qc_form.*
 import okhttp3.ResponseBody
 import java.io.*
 import java.text.SimpleDateFormat
@@ -244,6 +250,16 @@ class Utility {
             builder.create().show()
         }
 
+        fun fillQcFormDialog(context : Context): Dialog {
+            var dialog = Dialog(context)
+            dialog.setContentView(com.adrosonic.craftexchange.R.layout.dialog_qc_form)
+            dialog.btn_fill_qc?.setOnClickListener {
+                dialog.cancel()
+            }
+            dialog.setCanceledOnTouchOutside(false) // disables outside the box touch
+            return dialog
+        }
+
         fun enquiryGenProgressDialog(context : Context): Dialog {
             var dialog = Dialog(context)
             dialog.setContentView(com.adrosonic.craftexchange.R.layout.dialog_gen_enquiry_holdon)
@@ -318,6 +334,16 @@ class Utility {
             return dialog
         }
 
+        fun multiLoadingDialog(context: Context,message: String) : Dialog {
+            var dialog = Dialog(context)
+            dialog.setContentView(com.adrosonic.craftexchange.R.layout.dialog_multi_loading)
+            dialog.multi_message.text = message
+            dialog.setCanceledOnTouchOutside(false) // disables outside the box touch
+            dialog.setCancelable(false) // disables backbtn click when popup visible//
+            dialog.create()
+            return dialog
+        }
+
 
         fun clearPrefs(){
             val editor = Prefs.edit()
@@ -363,8 +389,12 @@ class Utility {
             return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV}AdvancedPayment/${receiptId}/${imagename}"
         }
 
-        fun getTransactionIconsUrl(accomplishedStatusId : Long?,userProfile : String?) : String{
-            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV}TransactionIcons/${userProfile}/${accomplishedStatusId}.svg"
+        fun getFinalPaymentImageUrl(receiptId : Long?,imagename : String?) : String{
+            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV}FinalPayment/${receiptId}/${imagename}"
+        }
+
+        fun getDeliveryChallanReceiptUrl(enquiryId : Long?,imagename : String?) : String{
+            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV}deliveryChallanReceipt/${enquiryId}/${imagename}"
         }
 
         fun setImageResource(context: Context?,imageView:ImageView?,imageId:Int){
@@ -466,23 +496,6 @@ class Utility {
             return list
         }
 
-//        fun getProgressTimelineData(): ArrayList<Triple<Long,Long,String>>{
-//            var i = 0L
-//            val gson = GsonBuilder().create()
-//            var enqobj = gson.fromJson(UserConfig.shared.progressTimeData.toString(), InnerStageData::class.java)
-//            var itr = enqobj?.data?.iterator()
-//            var list = ArrayList<Triple<Long,Long,String>>()
-//            list.clear()
-//            if(itr!=null){
-//                while(itr.hasNext()){
-//                    var enq = itr.next()
-//                    list.add(Triple(i,enq.id,enq.stageDesc))
-//                    i++
-//                }
-//            }
-//            return list
-//        }
-
         fun getAvaiProdEnquiryStagesData(): ArrayList<Triple<Long,Long,String>>{
             val gson = GsonBuilder().create()
             var enqobj = gson.fromJson(UserConfig.shared.enquiryAvaProdStageData.toString(), EnquiryAvaProdStageData::class.java)
@@ -504,6 +517,31 @@ class Utility {
 
             return  tranObj?.data
         }
+
+        fun getQcStageData() : InnerStageData? {
+            val gson = GsonBuilder().create()
+            var qcObj = gson.fromJson(UserConfig.shared.qcStageData.toString(), InnerStageData::class.java)
+            return  qcObj
+        }
+
+        fun getQcQuesData() : QCQuestionData? {
+            val gson = GsonBuilder().create()
+            var qcObj = gson.fromJson(UserConfig.shared.qcQuestionData.toString(), QCQuestionData::class.java)
+            return  qcObj
+        }
+
+        fun getArtisanQcResponse(respString : String) : QCData? {
+            val gson = GsonBuilder().create()
+            var qcResp = gson.fromJson(respString,QCData::class.java)
+            return qcResp
+        }
+
+        fun getBuyerQcResponse(respString : String) : BuyerQcResponse? {
+            val gson = GsonBuilder().create()
+            var qcResp = gson.fromJson(respString,BuyerQcResponse::class.java)
+            return qcResp
+        }
+
 
         fun getWeaveType() : ArrayList<Pair<Long,String>>{
             val gson = GsonBuilder().create()
@@ -600,6 +638,25 @@ class Utility {
                 displayMessage("  Application not installed " + e, context)
             }
         }
+
+        fun openTaxInvFile(context: Activity,enquiryId:Long){
+            val cacheFile = File(context.cacheDir, ConstantsDirectory.TI_PDF_PATH + "Ti${enquiryId}.pdf")
+            try {
+                val uri = FileProvider.getUriForFile(context, "com.adrosonic.craftexchange.provider", cacheFile)
+                val myIntent = Intent(Intent.ACTION_VIEW)
+                myIntent.putExtra(ShareCompat.EXTRA_CALLING_PACKAGE, context.packageName)
+                val componentName = context.componentName
+                myIntent.putExtra(ShareCompat.EXTRA_CALLING_ACTIVITY, componentName)
+                myIntent.setDataAndType(uri, "application/pdf")
+                myIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(Intent.createChooser(myIntent, "Open with"))
+
+            } catch (e: Exception) {
+                displayMessage(" Application not installed $e", context)
+            }
+        }
+
 
         fun getDateDiffInDays(orderCreatedOn:String):Long{
             val currentDateTime=System.currentTimeMillis()

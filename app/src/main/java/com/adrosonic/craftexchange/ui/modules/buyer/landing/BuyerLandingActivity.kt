@@ -104,12 +104,7 @@ class BuyerLandingActivity : AppCompatActivity(),
             }
         }).execute()
 
-//        mViewModel.getProductUploadData()
-//        mViewModel.getEnquiryStageData()
-//        mViewModel?.getInnerEnquiryStageData()
-//        mViewModel.getEnquiryStageAvailableProdsData()
-//        mViewModel.getwishlisteProductIds()
-//        mViewModel?.getMoqDeliveryTimes()
+
 
         refreshProfile()
         mProVM.listener = this
@@ -411,6 +406,10 @@ class BuyerLandingActivity : AppCompatActivity(),
             mProVM.getUserMutableData()
             mViewModel?.getTransactionStatus()
             mViewModel?.getChangeRequestStatuses()
+            mViewModel?.getQCQuestionData()
+            mViewModel?.getQCStageData()
+
+
             mCMSViewModel?.getRegionData()
             mCMSViewModel?.getCategoriesData()
         }

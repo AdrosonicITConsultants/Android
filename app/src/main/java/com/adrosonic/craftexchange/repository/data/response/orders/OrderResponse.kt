@@ -1,5 +1,7 @@
 package com.adrosonic.craftexchange.repository.data.response.orders
 
+import com.adrosonic.craftexchange.repository.data.response.enquiry.PaymentAccountDetail
+
 data class OrderResponse (
     val data: List<Datum>,
     val valid: Boolean,
@@ -11,7 +13,9 @@ data class Datum (
     val openEnquiriesResponse: OpenEnquiriesResponse,
     val brandName: String?="",
     val isMoqRejected: Long? = null,
-    val isBlue: Long? = null
+    val isBlue: Long? = null,
+    val userId: Long? = 0,
+    val paymentAccountDetails: List<PaymentAccountDetail>
 )
 
 

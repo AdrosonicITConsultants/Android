@@ -420,6 +420,65 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/final_transaction_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="@dimen/expandable_layout_std_padding"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/timeline_layout">
+
+                        <TextView
+                            android:id="@+id/text_next_steps"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_regular"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/lato_regular"
+                            android:text="Next Step  - - - - - - - - - - - - ->"
+                            android:textSize="@dimen/product_availability_text"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/next_step_arrow_text"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="Upload Final Payment Receipt"
+                            android:textSize="@dimen/product_availability_text"
+                            app:layout_constraintBottom_toBottomOf="@+id/text_next_steps"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/text_next_steps"
+                            app:layout_constraintTop_toTopOf="@+id/text_next_steps" />
+
+                        <Button
+                            android:id="@+id/btn_upl_fin_pay_receipt"
+                            android:layout_width="300dp"
+                            android:layout_height="50dp"
+                            android:layout_marginTop="@dimen/margin_regular"
+                            android:layout_marginBottom="@dimen/margin_semimedium"
+                            android:background="#0060D0"
+                            android:drawableEnd="@drawable/ic_right_arrow_white"
+                            android:elevation="8dp"
+                            android:fontFamily="@font/lato_regular"
+                            android:paddingEnd="8dp"
+                            android:text="@string/upload_final_payment_receipt"
+                            android:textAlignment="center"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white_text"
+                            android:textSize="18sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/text_next_steps" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <LinearLayout
@@ -454,7 +513,6 @@
                     <TextView
                         android:layout_marginTop="16dp"
                         android:gravity="center"
-                        android:id="@+id/next_step_arrow_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="If you found any defects,don't worry!\nYou can proceed to raise a concern within 10 days\nafter making it as delivered."
@@ -567,6 +625,7 @@
                     android:background="#FFF5ED"
                     android:orientation="horizontal"
                     android:weightSum="10"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/quality_check_layer">

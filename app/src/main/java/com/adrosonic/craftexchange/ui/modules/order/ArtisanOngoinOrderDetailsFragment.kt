@@ -13,6 +13,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -21,26 +22,30 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
-import com.adrosonic.craftexchange.database.predicates.CrPredicates
 import com.adrosonic.craftexchange.database.predicates.OrdersPredicates
 import com.adrosonic.craftexchange.database.predicates.TransactionPredicates
 import com.adrosonic.craftexchange.databinding.FragmentArtisanOngoingOrderDetailsBinding
 import com.adrosonic.craftexchange.enums.*
+import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.repository.data.response.moq.Datum
+import com.adrosonic.craftexchange.ui.modules.artisan.deliveryReceipt.uploadDeliveryReceiptIntent
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.piContext
+import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
+import com.adrosonic.craftexchange.ui.modules.artisan.qcForm.qcFormIntent
 import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.order.cr.crContext
+import com.adrosonic.craftexchange.ui.modules.order.finalPay.orderPaymentIntent
 import com.adrosonic.craftexchange.ui.modules.order.revisePi.viewPiContextPostCr
+import com.adrosonic.craftexchange.ui.modules.order.taxInv.raiseTaxInvIntent
+import com.adrosonic.craftexchange.ui.modules.order.taxInv.taxInvoiceIntent
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.transaction.adapter.OnGoingTransactionRecyclerAdapter
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
-import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
-import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
 import com.adrosonic.craftexchange.viewModels.OrdersViewModel
+import com.adrosonic.craftexchange.viewModels.QCViewModel
 import com.adrosonic.craftexchange.viewModels.TransactionViewModel
-import kotlinx.android.synthetic.main.dialog_are_you_sure.*
 import kotlinx.android.synthetic.main.dialog_cr_toggle_confirm.*
 
 
@@ -72,12 +77,16 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
 
     val mOrderVm : OrdersViewModel by viewModels()
     val mTranVM : TransactionViewModel by viewModels()
+    val mQcVM : QCViewModel by viewModels()
 
     var weft : String ?= ""
     var warp : String ?= ""
     var extraweft : String ?= ""
     var prodCategory : String ?= ""
     private var isCustom : Boolean ?= false
+    private var isStageCompleted : Boolean ?= false
+
+    private var loadDialog : Dialog?= null
 
 
     var moqDeliveryTimeList=ArrayList<Datum>()
@@ -115,11 +124,14 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
                 mOrderVm.getSingleOngoingOrder(it)
                 mTranVM.getSingleOngoingTransactions(it)
                 mOrderVm?.getChangeRequestDetails(it)
+                mQcVM.getArtisanQCResponse(it)
             }
 
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
         }
+
+        loadDialog = Utility.loadingDialog(requireActivity())
 
         enqID?.let {
             mOrderVm.getSingleOnOrderData(it,0)
@@ -130,6 +142,26 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
 
         mBinding?.btnBack?.setOnClickListener {
             activity?.onBackPressed()
+        }
+
+        mBinding?.btnUploadDeliveryReceipt?.setOnClickListener{
+            startActivity(enqID?.let { it1 ->
+                requireContext().uploadDeliveryReceiptIntent(it1,OrderStatus.ONGOING.getId())
+            })
+        }
+
+        mBinding?.btnViewApprovePayment?.setOnClickListener {
+            startActivity(requireContext().orderPaymentIntent()
+                ?.putExtra(ConstantsDirectory.ENQUIRY_ID,enqID)
+                ?.putExtra(ConstantsDirectory.ENQUIRY_STATUS_FLAG,OrderStatus.ONGOING.getId()))
+        }
+
+        mBinding?.btnUploadTaxInv?.setOnClickListener {
+            Log.e("RaiseTi", "upload : $enqID")
+            Log.e("RaiseTi", "upload : ${orderDetails?.enquiryId}")
+//            startActivity(enqID?.let { it1 -> requireContext().taxInvoiceIntent(it1) })
+            enqID?.let {startActivityForResult(requireContext().taxInvoiceIntent(it),ConstantsDirectory.RESULT_TI)}
+
         }
 
         mBinding?.brandDetailsLayer?.setOnClickListener {
@@ -202,8 +234,11 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
 //            }
         }
         mBinding?.qualityCheckLayer?.setOnClickListener {
-            //todo call intent
+            startActivity(context?.qcFormIntent()
+                ?.putExtra(ConstantsDirectory.ENQUIRY_ID,enqID)
+                ?.putExtra(ConstantsDirectory.ORDER_STATUS_FLAG, 0L))
         }
+
         mBinding?.changeRequestLayer?.setOnClickListener {
             if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType.equals(ConstantsDirectory.CUSTOM_PRODUCT)) {
                 if (orderDetails?.changeRequestOn == 1L) {
@@ -222,12 +257,12 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
 
         }
         mBinding?.taxInvoiceLayer?.setOnClickListener {
-            //todo call intent
+            enqID?.let {  startActivity(requireContext().raiseTaxInvIntent(it,true)) }
         }
         //ChangeEnquiryStageButtons
         mBinding?.btnStartEnqStage?.setOnClickListener {
             if(Utility.checkIfInternetConnected(requireActivity())){
-                viewLoader()
+                loadDialog?.show()
                 orderDetails?.enquiryId?.let { it1 ->
                     mOrderVm?.setEnquiryStage(it1, EnquiryStages.PRODUCTION_COMPLETED.getId(), InnerEnquiryStages.YARN_PROCURED.getId())
                 }
@@ -237,19 +272,20 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         }
         mBinding?.btnMarkInprogress?.setOnClickListener {
             if(Utility.checkIfInternetConnected(requireActivity())){
-                viewLoader()
+                loadDialog?.show()
                 orderDetails?.enquiryId?.let { it1 ->
                     orderDetails?.innerEnquiryStageId?.let { it2 ->
                         mOrderVm?.setEnquiryStage(it1, EnquiryStages.PRODUCTION_COMPLETED.getId(),it2 )
                     }
                 }
+                isStageCompleted = false
             }else{
                 Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
             }
         }
         mBinding?.btnMarkMoveNextStage?.setOnClickListener {
             if(Utility.checkIfInternetConnected(requireActivity())){
-                viewLoader()
+                loadDialog?.show()
                 when(orderDetails?.innerEnquiryStageId){
                     InnerEnquiryStages.POST_LOOM_PROCESS.getId() -> {
                         orderDetails?.enquiryId?.let { it1 -> mOrderVm?.setCompleteOrderStage(it1,
@@ -260,6 +296,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
                             EnquiryStages.PRODUCTION_COMPLETED.getId(),orderDetails?.innerEnquiryStageId?.plus(1)) }
                     }
                 }
+                isStageCompleted = true
             }else{
                 Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
             }
@@ -270,6 +307,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
     try {
         Handler(Looper.getMainLooper()).post(Runnable {
         setTabVisibilities()
+            setActionButtonVisibilites()
         setViewEnquiryStageChangeButton()
         viewChangeStatusLayer()
         setToggleVisiblity()
@@ -634,6 +672,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
     }
 
     private fun setTabVisibilities(){
+        //advance payment
         if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
             if(orderDetails?.enquiryStageId!! >= 4L){
                 mBinding?.viewPaymentLayer?.visibility = View.VISIBLE
@@ -642,6 +681,55 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
             }
         }else{
             mBinding?.viewPaymentLayer?.visibility = View.GONE
+        }
+
+        //QcForm
+        if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
+            if(orderDetails?.enquiryStageId!! >= EnquiryStages.PRODUCTION_COMPLETED.getId()){
+                mBinding?.qualityCheckLayer?.visibility = View.VISIBLE
+            }else{
+                mBinding?.qualityCheckLayer?.visibility = View.GONE
+            }
+        }else{
+            if(orderDetails?.enquiryStageId!! >= EnquiryStages.PI_FINALIZED.getId()){
+                mBinding?.qualityCheckLayer?.visibility = View.VISIBLE
+            }else{
+                mBinding?.qualityCheckLayer?.visibility = View.GONE
+            }
+        }
+
+        //TaxInvoice
+        if(orderDetails?.enquiryStageId!! >= EnquiryStages.FINAL_INVOICE_RAISED.getId()){
+            mBinding?.taxInvoiceLayer?.visibility = View.VISIBLE
+        }else{
+            mBinding?.taxInvoiceLayer?.visibility = View.GONE
+        }
+    }
+
+    fun setActionButtonVisibilites(){
+        //upload tax invoice
+        when(orderDetails?.enquiryStageId){
+            EnquiryStages.QUALITY_CHECK_BEFORE_DELIVERY.getId(),
+            EnquiryStages.COMPLETION_OF_ORDER.getId() -> {
+                mBinding?.uploadTaxInvLayout?.visibility = View.VISIBLE
+            }
+            else -> {
+                mBinding?.uploadTaxInvLayout?.visibility = View.GONE
+            }
+        }
+
+        //Approve Final Payment //TODO isBlue param check after API fix
+        if(orderDetails?.enquiryStageId == EnquiryStages.FINAL_INVOICE_RAISED.getId() /*&& orderDetails?.isBlue == 1L*/){
+            mBinding?.btnViewApprovePayment?.visibility = View.VISIBLE
+        }else{
+            mBinding?.btnViewApprovePayment?.visibility = View.GONE
+        }
+
+        //Upload Delivery Receipt //TODO isBlue param check after API fix
+        if(orderDetails?.enquiryStageId == EnquiryStages.FINAL_PAYMENT_RECEIVED.getId() /*&& orderDetails?.isBlue == 0L*/ && orderDetails?.deliveryChallanUploaded == 0L){
+            mBinding?.uploadDeliveryReceiptLayout?.visibility = View.VISIBLE
+        }else{
+            mBinding?.uploadDeliveryReceiptLayout?.visibility = View.GONE
         }
     }
 
@@ -667,6 +755,17 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
             }
         }else{
             mBinding?.changeEnquiryStatusLayout?.visibility = View.GONE
+        }
+    }
+
+    fun qcDialog() {
+        var dialog = Dialog(requireContext())
+        dialog.setContentView(R.layout.dialog_qc_form)
+        dialog.show()
+        val btn = dialog.findViewById(R.id.btn_fill_qc) as Button
+        btn.setOnClickListener {
+            dialog.cancel()
+            startActivity(context?.qcFormIntent()?.putExtra(ConstantsDirectory.ENQUIRY_ID,enqID))
         }
     }
 
@@ -699,23 +798,18 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         }
     }
 
-
-    companion object {
-
-        fun newInstance(param1: String) =
-            ArtisanOngoinOrderDetailsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                }
-            }
-    }
-
-
     override fun onStatusChangeSuccess() {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 enqID?.let { mOrderVm.getSingleOngoingOrder(it) }
-                Utility.displayMessage("Order Stage Updated!",requireActivity())
+                loadDialog?.cancel()
+                if(isStageCompleted == true){
+                    qcDialog()
+                    Utility.displayMessage("Order Stage Updated!",requireActivity())
+                }else{
+                    Utility.displayMessage("Order Stage In Progress!",requireActivity())
+                }
+
 //                activity?.onBackPressed()
 //                val intent = Intent(context?.orderDetails())
 //                var bundle = Bundle()
@@ -734,7 +828,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 setDetails()
-                hideLoader()
+                loadDialog?.cancel()
                 Utility.displayMessage("Please Try Again",requireActivity())
             })
         } catch (e: Exception) {
@@ -794,6 +888,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
             Log.e("Toggle", "Exception onToggleFailure " + e.message)
         }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         Log.e("ArtOngonDetails", "RESULT_OK ${Activity.RESULT_OK}")
@@ -812,5 +907,18 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         orderDetails?.let{setDetails()}
 
     }
+
+    companion object {
+
+        fun newInstance(param1: String) =
+            ArtisanOngoinOrderDetailsFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                }
+            }
+    }
+
+
+
 
 }

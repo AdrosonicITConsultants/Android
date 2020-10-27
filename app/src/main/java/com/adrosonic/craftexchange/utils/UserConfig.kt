@@ -95,6 +95,9 @@ const val REGION_CMS_DATA = "region_cms_data"
 const val CATEGORY_CMS_DATA = "category_cms_data"
 const val PAGE_CMS_DATA = "page_cms_data"
 
+///QC
+const val QC_STAGE_DATA ="qc_stage_data"
+const val QC_QUESTION_DATA ="qc_question_data"
 
 class UserConfig {
 
@@ -567,9 +570,23 @@ class UserConfig {
         }
 
     var innerEnquiryStageData : String? = ""
-        get() = Prefs.getString(INNER_ENQUIRY_STAGE_DATA,"")
+    get() = Prefs.getString(INNER_ENQUIRY_STAGE_DATA,"")
+    set(value) {
+        Prefs.putString(INNER_ENQUIRY_STAGE_DATA, value)
+        field = value
+    }
+
+    var qcStageData : String? = ""
+        get() = Prefs.getString(QC_STAGE_DATA,"")
         set(value) {
-            Prefs.putString(INNER_ENQUIRY_STAGE_DATA, value)
+            Prefs.putString(QC_STAGE_DATA, value)
+            field = value
+        }
+
+    var qcQuestionData : String? = ""
+        get() = Prefs.getString(QC_QUESTION_DATA,"")
+        set(value) {
+            Prefs.putString(QC_QUESTION_DATA, value)
             field = value
         }
 

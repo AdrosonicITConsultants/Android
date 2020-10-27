@@ -157,7 +157,6 @@ class TransactionListFragment : Fragment(),
         }
     }
 
-
     override fun onGetTransactionsSuccess() {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {

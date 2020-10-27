@@ -32,9 +32,12 @@ import com.adrosonic.craftexchange.databinding.FragmentBuyerOngoingOrderDetailsB
 import com.adrosonic.craftexchange.enums.*
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
+import com.adrosonic.craftexchange.ui.modules.artisan.qcForm.qcFormIntent
 import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.order.confirmDelivery.confirmDeliveryContext
 import com.adrosonic.craftexchange.ui.modules.order.cr.crContext
+import com.adrosonic.craftexchange.ui.modules.order.finalPay.orderPaymentIntent
+import com.adrosonic.craftexchange.ui.modules.order.taxInv.raiseTaxInvIntent
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.transaction.adapter.OnGoingTransactionRecyclerAdapter
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
@@ -43,6 +46,7 @@ import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
 import com.adrosonic.craftexchange.viewModels.OrdersViewModel
+import com.adrosonic.craftexchange.viewModels.QCViewModel
 import com.adrosonic.craftexchange.viewModels.TransactionViewModel
 import com.agik.swipe_button.Controller.OnSwipeCompleteListener
 import com.agik.swipe_button.View.Swipe_Button_View
@@ -81,6 +85,7 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
 
     val mOrderVm : OrdersViewModel by viewModels()
     val mTranVM : TransactionViewModel by viewModels()
+    val mQcVM : QCViewModel by viewModels()
 
     var weft : String ?= ""
     var warp : String ?= ""
@@ -121,19 +126,27 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
                 mOrderVm.getSingleOngoingOrder(it)
                 mTranVM.getSingleOngoingTransactions(it)
                 mOrderVm?.getChangeRequestDetails(it)
+                mQcVM.getBuyerQCResponse(it)
             }
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
         }
 
-        orderDetails?.let {
-            if(Utility.checkIfInternetConnected(requireActivity())) {
-                viewLoader()
-
-            }
+        enqID?.let {
+            mOrderVm.getSingleOnOrderData(it,0)
+                .observe(viewLifecycleOwner, Observer<Orders> {
+                    orderDetails = it
+                })
         }
         mBinding?.btnBack?.setOnClickListener {
             activity?.onBackPressed()
+        }
+
+        mBinding?.btnUplFinPayReceipt?.setOnClickListener {
+            startActivity(requireContext().orderPaymentIntent()
+                ?.putExtra(ConstantsDirectory.ENQUIRY_ID,enqID)
+                ?.putExtra(ConstantsDirectory.ENQUIRY_STATUS_FLAG,EnquiryStatus.ONGOING.getId()))
+//                ?.putExtra(ConstantsDirectory.PI_ID,0))
         }
 
         mBinding?.brandDetailsLayer?.setOnClickListener {
@@ -163,8 +176,7 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
         }
 
         mBinding?.piDetailsLayer?.setOnClickListener {
-            enqID?.let {  startActivity(requireContext().raisePiContext(it,true, SendPiRequest()))
-            }
+            enqID?.let {  startActivity(requireContext().raisePiContext(it,true, SendPiRequest())) }
         }
 
         mBinding?.viewPaymentLayer?.setOnClickListener {
@@ -172,8 +184,11 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
             else mBinding?.transactionList!!.visibility=View.VISIBLE
         }
         mBinding?.qualityCheckLayer?.setOnClickListener {
-            Utility.displayMessage("Coming soon",requireContext())
+            startActivity(context?.qcFormIntent()
+                ?.putExtra(ConstantsDirectory.ENQUIRY_ID,enqID)
+                ?.putExtra(ConstantsDirectory.ORDER_STATUS_FLAG, 0L))
         }
+
         mBinding?.changeRequestLayer?.setOnClickListener {
             if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType.equals(ConstantsDirectory.CUSTOM_PRODUCT)) {
                 if (orderDetails?.changeRequestOn == 1L) {
@@ -197,7 +212,9 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
         }
 
         mBinding?.taxInvoiceLayer?.setOnClickListener {
-            Utility.displayMessage("Coming soon",requireContext())
+            mBinding?.taxInvoiceLayer?.setOnClickListener {
+                enqID?.let {  startActivity(requireContext().raiseTaxInvIntent(it,true)) }
+            }
         }
 
         mBinding?.btnConfirmDelivery?.setOnClickListener {
@@ -209,6 +226,7 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
      try {
          Handler(Looper.getMainLooper()).post(Runnable {
              setTabVisibilities()
+             setActionButtonVisibilites()
              mBinding?.orderCode?.text = orderDetails?.orderCode
              mBinding?.enquiryStartDate?.text =
                  "Date accepted : ${orderDetails?.startedOn?.split("T")?.get(0)}"
@@ -415,6 +433,15 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
         }
     }
 
+    fun setActionButtonVisibilites(){
+        //upload final Payment //TODO isBlue param check after API fix
+        if(orderDetails?.enquiryStageId == EnquiryStages.FINAL_INVOICE_RAISED.getId() /*&& orderDetails?.isBlue == 0L*/){
+            mBinding?.finalTransactionLayout?.visibility = View.VISIBLE
+        }else{
+            mBinding?.finalTransactionLayout?.visibility = View.GONE
+        }
+    }
+
     private fun setProgressTimeline(){
         stageAPList?.clear()
         innerStageList?.clear()
@@ -582,6 +609,7 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
     }
 
     private fun setTabVisibilities(){
+        //AdvancePayment
         if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
             if(orderDetails?.enquiryStageId!! >= 4L){
                 mBinding?.viewPaymentLayer?.visibility = View.VISIBLE
@@ -590,6 +618,29 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
             }
         }else{
             mBinding?.viewPaymentLayer?.visibility = View.GONE
+        }
+
+        //QcForm
+        if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
+            if(orderDetails?.enquiryStageId!! >= EnquiryStages.PRODUCTION_COMPLETED.getId()){
+                mBinding?.qualityCheckLayer?.visibility = View.VISIBLE
+            }else{
+                mBinding?.qualityCheckLayer?.visibility = View.GONE
+            }
+        }else{
+            if(orderDetails?.enquiryStageId!! >= EnquiryStages.PI_FINALIZED.getId()){
+                mBinding?.qualityCheckLayer?.visibility = View.VISIBLE
+            }else{
+                mBinding?.qualityCheckLayer?.visibility = View.GONE
+            }
+        }
+
+
+        //TaxInvoice
+        if(orderDetails?.enquiryStageId!! >= EnquiryStages.FINAL_INVOICE_RAISED.getId()){
+            mBinding?.taxInvoiceLayer?.visibility = View.VISIBLE
+        }else{
+            mBinding?.taxInvoiceLayer?.visibility = View.GONE
         }
 
     }

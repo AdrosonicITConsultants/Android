@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:id="@+id/qc_form_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:background="@color/colorSplash"
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/qc_card"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_margin="8dp"
+            android:elevation="8dp">
+
+            <LinearLayout
+                android:id="@+id/saved_form_top_part"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@color/colorSplash"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                android:weightSum="10">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_margin="1dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_check_circle" />
+
+                <TextView
+                    android:id="@+id/qc_stage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
+                    android:layout_marginEnd="2dp"
+                    android:layout_weight="8"
+                    android:fontFamily="@font/lato_bold"
+                    android:gravity="start|center_vertical"
+                    android:textColor="#D9B45E"
+                    android:textSize="@dimen/product_note_text" />
+
+                <ImageView
+                    android:id="@+id/dropdown_icon"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
+                    android:layout_weight="1"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_key_drop_down_brown" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/saved_recyler_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"/>
+
+
+    </LinearLayout>
+</layout>
+

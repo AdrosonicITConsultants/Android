@@ -185,7 +185,6 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
                     moqDeliveryTimeList.forEach{
                         if(it.deliveryDesc.equals(selection, true)){
                             estId=it.id
-
                         }
                     }
                 } else estId=0
@@ -225,8 +224,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         }
 
         mBinding?.viewPiLayout?.setOnClickListener {
-            enqID?.let {  startActivity(requireContext().raisePiContext(it,true, SendPiRequest()))
-            }
+            enqID?.let {  startActivity(requireContext().raisePiContext(it,true, SendPiRequest())) }
         }
 
         mBinding?.btnViewApprovePayment?.setOnClickListener {
@@ -252,6 +250,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
                 Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
             }
         }
+
         mBinding?.btnMarkInprogress?.setOnClickListener {
             if(Utility.checkIfInternetConnected(requireActivity())){
                 dialog?.show()
@@ -266,6 +265,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
                 Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
             }
         }
+
         mBinding?.btnMarkMoveNextStage?.setOnClickListener {
             if(Utility.checkIfInternetConnected(requireActivity())){
                 dialog?.show()
@@ -433,7 +433,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
 
         //TODO implement to enq stage
 
-        if(enquiryDetails?.isMoqRejected!!.equals(1L)){
+        if(enquiryDetails?.isMoqRejected!! == 1L){
             mBinding?.uploadDocLayout?.visibility = View.GONE
             mBinding?.viewPiLayout?.visibility = View.GONE
         }else{
