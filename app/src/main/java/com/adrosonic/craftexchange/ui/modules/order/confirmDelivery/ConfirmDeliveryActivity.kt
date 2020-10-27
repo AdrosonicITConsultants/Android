@@ -156,7 +156,7 @@ class ConfirmDeliveryActivity : AppCompatActivity(),
         val txt_dscrp = dialog?.findViewById(R.id.txt_dscrp) as TextView
         val txt_changes_dscrp = dialog?.findViewById(R.id.txt_changes_dscrp) as TextView
         val txt_header_dscro = dialog?.findViewById(R.id.txt_header_dscro) as TextView
-        txt_dscrp.text = "Completed"
+        txt_dscrp.text = "Completed!"
         txt_changes_dscrp.text = "Would you like to review and rate this order?"
         txt_header_dscro.text = "You can find this order under completed tab"
         btn_raise_pi.text = "Review and rating"
