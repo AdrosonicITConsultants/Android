@@ -31,13 +31,18 @@ class UserProfileViewModal(application: Application) : AndroidViewModel(applicat
         fun onDeactivateFailure()
         fun onDeactivateSuccess()
     }
+    interface setRatinginterface{
+        fun onRatingSuccess()
+        fun onRatingFailure()
+    }
 
     var profileListener : ProfileDataInterface?= null
     var activateListener : ActivateInterface?= null
     var deactivateListener : DeactivateInterface?= null
+    var setratingListener : setRatinginterface? =null
 
 
-    fun getUserData(id:Int){
+    fun getUserData(id:Long){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
 //        Utility.displayMessage(token,Context)
 
@@ -45,7 +50,7 @@ class UserProfileViewModal(application: Application) : AndroidViewModel(applicat
             .getIndividualUserService()
             .getUserData(
                 token ,
-                10
+                id
             ).enqueue(object : Callback, retrofit2.Callback<UserProfileResponse> {
                 override fun onFailure(call: Call<UserProfileResponse>, t: Throwable) {
                     t.printStackTrace()
@@ -72,7 +77,7 @@ class UserProfileViewModal(application: Application) : AndroidViewModel(applicat
             })
     }
 
-    fun activateUser(id:Int){
+    fun activateUser(id:Long){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
 //        Utility.displayMessage(token,Context)
         Log.d("Profile", "activateCalled")
@@ -81,7 +86,7 @@ class UserProfileViewModal(application: Application) : AndroidViewModel(applicat
             .getIndividualUserService()
             .activateUser(
                 token ,
-                10
+                id
             ).enqueue(object : Callback, retrofit2.Callback<UserStatusResponse> {
                 override fun onFailure(call: Call<UserStatusResponse>, t: Throwable) {
                     t.printStackTrace()
@@ -95,7 +100,7 @@ class UserProfileViewModal(application: Application) : AndroidViewModel(applicat
             })
     }
 
-    fun deactivateUser(id:Int){
+    fun deactivateUser(id:Long){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
 //        Utility.displayMessage(token,Context)
 
@@ -103,7 +108,7 @@ class UserProfileViewModal(application: Application) : AndroidViewModel(applicat
             .getIndividualUserService()
             .deactivateUser(
                 token ,
-                10
+                id
             ).enqueue(object : Callback, retrofit2.Callback<UserStatusResponse> {
                 override fun onFailure(call: Call<UserStatusResponse>, t: Throwable) {
                     t.printStackTrace()
@@ -114,6 +119,31 @@ class UserProfileViewModal(application: Application) : AndroidViewModel(applicat
                         deactivateListener?.onDeactivateSuccess()
                     }
 
+                }
+            })
+    }
+    fun setRating(id:Long, rating:Float?){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+//        Utility.displayMessage(rating.toString(),)
+        Log.d("Profile33", "activateCalled" + rating)
+
+        craftexchangemarketingRepository
+            .getIndividualUserService()
+            .setRating(
+                token ,
+                id,
+                rating
+            ).enqueue(object : Callback, retrofit2.Callback<UserStatusResponse> {
+                override fun onFailure(call: Call<UserStatusResponse>, t: Throwable) {
+                    t.printStackTrace()
+//                    activateListener?.onActivateFailure()
+                    setratingListener?.onRatingFailure()
+                }
+                override fun onResponse(call: Call<UserStatusResponse>, response: Response<UserStatusResponse>) {
+                    if (response?.isSuccessful) {
+//                        activateListener?.onActivateSuccess()
+                        setratingListener?.onRatingSuccess()
+                    }
                 }
             })
     }

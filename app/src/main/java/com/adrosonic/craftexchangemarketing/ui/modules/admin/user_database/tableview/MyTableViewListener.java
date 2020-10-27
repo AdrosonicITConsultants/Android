@@ -1,11 +1,14 @@
 package com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.tableview;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.adrosonic.craftexchangemarketing.repository.data.response.admin.userDatabase.User;
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.individualProfile.BuyerProfileActivity;
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.tableview.holder.ColumnHeaderViewHolder;
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.tableview.popup.ColumnHeaderLongPressPopup;
 import com.adrosonic.craftexchangemarketing.utils.Utility;
@@ -13,6 +16,8 @@ import com.evrencoskun.tableview.ITableView;
 import com.evrencoskun.tableview.listener.ITableViewListener;
 
 import java.util.List;
+
+import static androidx.core.content.ContextCompat.startActivity;
 //import com.evrencoskun.tableviewsample2.ui.tableview.holder.ColumnHeaderViewHolder;
 //import com.evrencoskun.tableviewsample2.ui.tableview.popup.ColumnHeaderLongPressPopup;
 
@@ -77,6 +82,8 @@ public class MyTableViewListener implements ITableViewListener {
         Utility.Companion.displayMessage("onRowHeaderClicked ",mTableView.getContext());
         User user=mUserList.get(row);
         //todo call intent here
+//        startActivity(context?.adminLandingIntent())
+//        startActivity(mTableView.getContext().ArtisanProfileIntent(user.getId()));
     }
 
     @Override

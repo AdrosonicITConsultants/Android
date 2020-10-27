@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/black_text"
-    tools:context="">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
 
     <!-- TODO: Update blank fragment layout -->
+
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/black_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -47,7 +48,7 @@
                 android:layout_marginEnd="20dp"
                 android:background="#991E1D1D"
                 android:padding="10dp"
-                android:text="pkkuniid@gmail.com"
+                android:text="niid@gmail.com"
                 android:textColor="@color/colorBackground"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -149,4 +150,4 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

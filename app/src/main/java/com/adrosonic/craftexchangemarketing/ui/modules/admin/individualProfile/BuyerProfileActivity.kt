@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.adrosonic.craftexchangemarketing.R
 import com.adrosonic.craftexchangemarketing.databinding.ActivityIndBuyerProfileBinding
 import com.adrosonic.craftexchangemarketing.repository.data.response.admin.userDatabase.UserProfileResponse
+//import com.adrosonic.craftexchangemarketing.ui.modules.buyer.profile.BuyerProfileActivity
 import com.adrosonic.craftexchangemarketing.ui.modules.dashboard.OpenEnquirySummaryActivity
 import com.adrosonic.craftexchangemarketing.utils.ImageSetter
 import com.adrosonic.craftexchangemarketing.utils.UserConfig
@@ -21,13 +22,13 @@ import com.adrosonic.craftexchangemarketing.viewModels.UserProfileViewModal
 import com.google.gson.GsonBuilder
 import com.pixplicity.easyprefs.library.Prefs
 
-
-fun Context.BuyerProfileIntent(): Intent {
-    return Intent(this, OpenEnquirySummaryActivity::class.java).apply {
-        flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
-//        Intent.FLAG_ACTIVITY_NEW_TASK or
-    }
+fun Context.BuyerProfileIntent(buyerId:Long): Intent {
+    val intent = Intent(this, BuyerProfileActivity::class.java)
+    intent.putExtra("buyerId", buyerId)
+    return intent.apply { flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+        Intent.FLAG_ACTIVITY_NEW_TASK  }
 }
+
 class BuyerProfileActivity : AppCompatActivity(),
 UserProfileViewModal.ProfileDataInterface,
 UserProfileViewModal.DeactivateInterface,
@@ -40,7 +41,7 @@ UserProfileViewModal.ActivateInterface{
     var indUserData : String ?=""
     var userProfileResponse : UserProfileResponse?= null
     var initialData = false
-    var userId : Int? = 0
+    var userId : Long? = 0
 
 
 
@@ -49,7 +50,10 @@ UserProfileViewModal.ActivateInterface{
         mUPVM.profileListener = this
         mUPVM.activateListener = this
         mUPVM.deactivateListener = this
-        userId = 10
+        if(intent.extras!=null){
+            userId = intent.getLongExtra("artisanId", 10)
+        }
+//        userId = 10
         if(Utility.checkIfInternetConnected(applicationContext)){
 //            Utility.displayMessage("calling function", applicationContext)
             mUPVM?.getUserData(userId!!)
@@ -124,7 +128,6 @@ UserProfileViewModal.ActivateInterface{
 
         }
     }
-
     override fun onProfileSuccess() {
         try {
 
