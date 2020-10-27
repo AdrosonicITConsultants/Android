@@ -27,10 +27,12 @@ public class MyTableViewListener implements ITableViewListener {
     }
     private ITableView mTableView;
     private List<User> mUserList;
-    public static TableListenrs tableListenrs;
-    public MyTableViewListener(ITableView pTableView, List<User> userList) {
+    public  TableListenrs tableListenrs;
+    private int roleId;
+    public MyTableViewListener(ITableView pTableView, List<User> userList, int roleId) {
         this.mTableView = pTableView;
         this.mUserList=userList;
+        this.roleId=roleId;
     }
 
     @Override
@@ -76,6 +78,12 @@ public class MyTableViewListener implements ITableViewListener {
         Log.e(LOG_TAG, "onRowHeaderClicked has been clicked for " + row);
         Utility.Companion.displayMessage("onRowHeaderClicked ",mTableView.getContext());
         User user=mUserList.get(row);
+        if(roleId==1){
+
+        }
+        if(roleId==2){
+
+        }
         //todo call intent here
     }
 

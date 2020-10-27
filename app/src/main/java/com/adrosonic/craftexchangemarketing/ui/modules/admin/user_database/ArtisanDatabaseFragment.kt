@@ -11,7 +11,6 @@ import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.adrosonic.craftexchangemarketing.R
 import com.adrosonic.craftexchangemarketing.database.entities.realmEntities.ClusterList
 import com.adrosonic.craftexchangemarketing.database.predicates.ClusterPredicates
@@ -20,21 +19,19 @@ import com.adrosonic.craftexchangemarketing.repository.data.response.admin.userD
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.tableview.MyTableAdapter
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.tableview.MyTableViewListener
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.tableview.MyTableViewListener.TableListenrs
+import com.adrosonic.craftexchangemarketing.ui.modules.artisan.productTemplate.yarnFrgamnets.WarpFragment
 import com.adrosonic.craftexchangemarketing.utils.Utility
 import com.adrosonic.craftexchangemarketing.viewModels.DatabaseViewModel
 import io.realm.RealmResults
 
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val ARG_PARAM1 = "roleId"
 
-class ArtisanDatabaseFragment(roleId: Int) :Fragment(),
+class ArtisanDatabaseFragment() :Fragment(),
     DatabaseViewModel.DbInterface,
     TableListenrs{
 
-    private var param1: String? = null
-    private var param2: String? = null
-
+    private var roleId: Int = 1
     var mBinding : FragmentUserdbArtisanBinding?= null
     val mViewModel: DatabaseViewModel by viewModels()
     var userList= ArrayList<User>()
@@ -50,8 +47,7 @@ class ArtisanDatabaseFragment(roleId: Int) :Fragment(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            roleId = it.getInt(ARG_PARAM1)
         }
     }
 
@@ -67,10 +63,11 @@ class ArtisanDatabaseFragment(roleId: Int) :Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mViewModel?.listener=this
+        setCount("NA")
         getClusters()
         mBinding?.pbLoader?.visibility=View.VISIBLE
 
-        mViewModel.getDatabaseCountForAdmin(-1,1,-1,1,null,"desc","date")
+        mViewModel.getDatabaseCountForAdmin(-1,1,-1,roleId,null,"desc","date")
 
         val spClusterAdapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item,clusterList)
         spClusterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -87,7 +84,8 @@ class ArtisanDatabaseFragment(roleId: Int) :Fragment(),
         mBinding?.btnApply?.setOnClickListener {
         val searchStr= if(mBinding?.searchArtisan?.text.toString().isNullOrEmpty()) null else  mBinding?.searchArtisan?.text.toString()
         var clusterId=-1
-            clusterDetailsList?.forEach {
+            clusterDetailsList?.
+            forEach {
                 if(it?.cluster.equals(mBinding?.spCluster?.selectedItem.toString())){
                     clusterId=it.clusterid!!.toInt()
                 }
@@ -98,20 +96,22 @@ class ArtisanDatabaseFragment(roleId: Int) :Fragment(),
              3->  8
             else->  -1
          }
-         if(clusterId.equals(-1) && rating.equals(-1) && searchStr.isNullOrEmpty()) apiCall(false,-1,1,-1,1,null,"desc","date")
-         else apiCall(true,clusterId,1,rating,1,searchStr,"asc","date")
+         if(clusterId.equals(-1) && rating.equals(-1) && searchStr.isNullOrEmpty()) apiCall(false,-1,1,-1,roleId,null,"desc","date")
+         else apiCall(true,clusterId,1,rating,roleId,searchStr,"asc","date")
         }
     }
     private fun initializeTableView() {
         // Create TableView Adapter
-        mTableAdapter = MyTableAdapter(context)
+        mTableAdapter = MyTableAdapter(roleId)
         mBinding?.tableview?.setAdapter(mTableAdapter)
         if (userList != null && userList.size > 0) {
             mTableAdapter?.setUserList(userList)
         }
-        MyTableViewListener.tableListenrs=this
-        // Create listener
-        mBinding?.tableview?.tableViewListener = MyTableViewListener(mBinding?.tableview,userList)
+//        MyTableViewListener.tableListenrs=this
+//        mBinding?.tableview?.tableViewListener = MyTableViewListener(mBinding?.tableview,userList)
+        val tableLister=MyTableViewListener(mBinding?.tableview,userList,roleId)
+        tableLister.tableListenrs=this
+        mBinding?.tableview?.tableViewListener = tableLister
     }
     override fun onSuccess(userList: List<User>) {
         try {
@@ -142,18 +142,17 @@ class ArtisanDatabaseFragment(roleId: Int) :Fragment(),
     override fun onCountSuccess(count: Int) {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
-                Log.e(CommonUserFragment.TAG, "onCountSuccess")
-                mBinding?.totalUserCount?.text="Total artisans: $count"
-                apiCall(false,-1,1,-1,1,null,"desc","date")
+                Log.e("ArtisanDatabaseFragment", "onCountSuccess")
+                setCount(count.toString())
+                apiCall(false,-1,1,-1,roleId,null,"desc","date")
             }
             )
         } catch (e: Exception) {
-            Log.e(CommonUserFragment.TAG, "Exception onFailure " + e.message)
+            Log.e("ArtisanDatabaseFragment", "Exception onFailure " + e.message)
         }
 
     }
-    override fun onCountFailure() {
-    }
+    override fun onCountFailure() { }
     private fun apiCall(isFilter:Boolean,clusterId : Int, pageNo:Int, rating:Int, roleId:Int,searchStr:String?, sortBy : String,sortType : String){
         if(Utility.checkIfInternetConnected(requireContext())){
             mBinding?.pbLoader?.visibility=View.VISIBLE
@@ -169,28 +168,79 @@ class ArtisanDatabaseFragment(roleId: Int) :Fragment(),
         }
 
     }
-
     override fun onColumnClick(columnIndex: Int) {
-        when(columnIndex){
-            1->{
-                apiCall(true,-1,1,-1,1,null,"name",nameOrder)
-                if(nameOrder.equals("asc"))nameOrder="desc"
-                else nameOrder="asc"
-            }
-            3->{
-                apiCall(true,-1,1,-1,1,null,"cluster",clusterOrder)
-                if(clusterOrder.equals("asc"))clusterOrder="desc"
-                else clusterOrder="asc"}
-            4->{
-                apiCall(true,-1,1,-1,1,null,"rating",ratingOrder)
-                if(ratingOrder.equals("asc"))ratingOrder="desc"
-                else ratingOrder="asc"}
-            5->{
-                apiCall(true,-1,1,-1,1,null,"date",dategOrder)
-                if(dategOrder.equals("asc"))dategOrder="desc"
-                else dategOrder="asc"}
+        Log.e("ArtisanDatabaseFragment","onColumnClick : $columnIndex RoleId: $roleId")
+        if(roleId.equals(1)) {
+            when (columnIndex) {
+                1 -> {
+                    apiCall(false, -1, 1, -1, roleId, null, "name", nameOrder)
+                    if (nameOrder.equals("asc")) nameOrder = "desc"
+                    else nameOrder = "asc"
+                }
+                3 -> {
+                    apiCall(false, -1, 1, -1, roleId, null, "cluster", clusterOrder)
+                    if (clusterOrder.equals("asc")) clusterOrder = "desc"
+                    else clusterOrder = "asc"
+                }
+                4 -> {
+                    apiCall(false, -1, 1, -1, roleId, null, "rating", ratingOrder)
+                    if (ratingOrder.equals("asc")) ratingOrder = "desc"
+                    else ratingOrder = "asc"
+                }
+                5 -> {
+                    apiCall(false, -1, 1, -1, roleId, null, "date", dategOrder)
+                    if (dategOrder.equals("asc")) dategOrder = "desc"
+                    else dategOrder = "asc"
+                }
 //            0->{
 //                apiCall(false,-1,1,-1,1,null,"brand","date")}
+            }
         }
+        if(roleId.equals(2)){
+            when (columnIndex) {
+                1 -> {
+                    apiCall(true, -1, 1, -1, roleId, null, "name", nameOrder)
+                    if (nameOrder.equals("asc")) nameOrder = "desc"
+                    else nameOrder = "asc"
+                }
+                3 -> {
+                    apiCall(true, -1, 1, -1, roleId, null, "mobile", clusterOrder)
+                    if (clusterOrder.equals("asc")) clusterOrder = "desc"
+                    else clusterOrder = "asc"
+                }
+                4 -> {
+                    apiCall(true, -1, 1, -1, roleId, null, "rating", ratingOrder)
+                    if (ratingOrder.equals("asc")) ratingOrder = "desc"
+                    else ratingOrder = "asc"
+                }
+                5 -> {
+                    apiCall(true, -1, 1, -1, roleId, null, "date", dategOrder)
+                    if (dategOrder.equals("asc")) dategOrder = "desc"
+                    else dategOrder = "asc"
+                }
+//            0->{
+//                apiCall(false,-1,1,-1,1,null,"brand","date")}
+            }
+        }
+    }
+    fun setCount(count:String){
+        when(roleId){
+            1->{
+                mBinding?.totalUserCount?.text="Total artisans: $count"
+            }
+            2->{
+                mBinding?.totalUserCount?.text="Total buyers: $count"
+            }
+        }
+    }
+    companion object {
+
+        @JvmStatic
+        fun newInstance(roleId: Int) =
+            ArtisanDatabaseFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(ARG_PARAM1, roleId)
+                }
+            }
     }
 }

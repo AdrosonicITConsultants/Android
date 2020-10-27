@@ -36,7 +36,7 @@ class DatabaseViewModel(application: Application) : AndroidViewModel(application
             .enqueue(object : Callback, retrofit2.Callback<DatabaseResponse> {
                 override fun onFailure(call: Call<DatabaseResponse>, t: Throwable) {
                     t.printStackTrace()
-                    Log.e("DatabaseResults","Failure :"+t.printStackTrace().toString())
+                    Log.e("DatabaseResults","Failure :"+t.message)
                     listener?.onFailure()
                 }
                 override fun onResponse(
@@ -44,13 +44,15 @@ class DatabaseViewModel(application: Application) : AndroidViewModel(application
                     response: Response<DatabaseResponse>
                 ) {
                     if(response.body()?.data != null) {
+                        Log.e("DatabaseResults", "Success : $isFilter")
                         if(isFilter) {
                             Log.e("DatabaseResults", "Success : " + response?.body()?.data?.size+": $page")
                             listener?.onSuccess(response?.body()?.data!!)
                         }
                         else{
+                            Log.e("DatabaseResults", "page : $page :: ${UserConfig.shared.artisanDbPageCount}")
                             page++
-                            if(page.equals(UserConfig.shared.artisanDbPageCount)){
+                            if(page>UserConfig.shared.artisanDbPageCount){
                                 listener?.onSuccess(userList)
                             }
                             else {

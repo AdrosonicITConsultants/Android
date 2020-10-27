@@ -33,9 +33,9 @@ public class MyTableAdapter extends AbstractTableAdapter<ColumnHeaderModel, RowH
 
     private MyTableViewModel myTableViewModel;
 
-    public MyTableAdapter(Context p_jContext) {
+    public MyTableAdapter(Integer rolId) {
         super();
-        this.myTableViewModel = new MyTableViewModel();
+        this.myTableViewModel = new MyTableViewModel(rolId);
     }
 
 

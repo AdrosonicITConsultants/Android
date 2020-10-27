@@ -21,6 +21,12 @@ public class MyTableViewModel {
     // View Types
     public static final int GENDER_TYPE = 1;
     public static final int MONEY_TYPE = 2;
+    public  int rolId=1;
+
+    public MyTableViewModel(Integer rolId) {
+        super();
+       this.rolId=rolId;
+    }
 
     private List<ColumnHeaderModel> mColumnHeaderModelList;
     private List<RowHeaderModel> mRowHeaderModelList;
@@ -116,10 +122,12 @@ public class MyTableViewModel {
         List<ColumnHeaderModel> list = new ArrayList<>();
 
         // Create Column Headers
-        list.add(new ColumnHeaderModel("Artisan Id"));
+        if(rolId==1)list.add(new ColumnHeaderModel("Artisan Id"));
+        else list.add(new ColumnHeaderModel("Buyer Id"));
         list.add(new ColumnHeaderModel("Name"));
         list.add(new ColumnHeaderModel("Email"));
-        list.add(new ColumnHeaderModel("Cluster"));
+        if(rolId==1) list.add(new ColumnHeaderModel("Cluster"));
+        else list.add(new ColumnHeaderModel("Phone Number"));
         list.add(new ColumnHeaderModel("Rating"));
         list.add(new ColumnHeaderModel("Date"));
 //        list.add(new ColumnHeaderModel("Status"));
@@ -141,7 +149,8 @@ public class MyTableViewModel {
             list.add(new CellModel("1-" + i, user.getId()));          // "Id"
             list.add(new CellModel("2-" + i, user.getFirstName()+" "+ user.getLastName()));        // "Name"
             list.add(new CellModel("3-" + i, user.getEmail()));    // "Nickname"
-            list.add(new CellModel("4-" + i, user.getCluster()));       // "Email"
+            if(rolId==1) list.add(new CellModel("4-" + i, user.getCluster()));       // "Email"
+            else list.add(new CellModel("4-" + i, user.getMobile()));       // "Email"
             list.add(new CellModel("5-" + i, user.getRating()));   // "BirthDay"
             list.add(new CellModel("6-" + i, Utility.Companion.returnDisplayDate(user.getDateAdded())));      // "Gender"
 //            list.add(new CellModel("7-" + i, user.getStatus()));         // "Age"

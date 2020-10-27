@@ -13,11 +13,9 @@ class AdminDatabaseAdapter (fragmentManager: FragmentManager) : FragmentPagerAda
         return  when (position) {
             0 ->
             {
-                ArtisanDatabaseFragment(1)
+                ArtisanDatabaseFragment()
             }
-            else -> {
-                ArtisanDatabaseFragment(2)
-            }
+            else-> BuyerDatabaseFragment()
         }
     }
 
