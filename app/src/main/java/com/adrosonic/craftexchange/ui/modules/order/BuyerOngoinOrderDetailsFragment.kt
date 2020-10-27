@@ -33,6 +33,7 @@ import com.adrosonic.craftexchange.enums.*
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
 import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
+import com.adrosonic.craftexchange.ui.modules.order.confirmDelivery.confirmDeliveryContext
 import com.adrosonic.craftexchange.ui.modules.order.cr.crContext
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.transaction.adapter.OnGoingTransactionRecyclerAdapter
@@ -194,10 +195,14 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
                 else Utility.displayMessage("Change request disabled by artisan.", requireContext())
             } else Utility.displayMessage(getString(R.string.cr_not_applicable), requireContext())
         }
+
         mBinding?.taxInvoiceLayer?.setOnClickListener {
             Utility.displayMessage("Coming soon",requireContext())
         }
 
+        mBinding?.btnConfirmDelivery?.setOnClickListener {
+            startActivityForResult(requireActivity().confirmDeliveryContext(enqID?:0),ConstantsDirectory.RESULT_CONFIRM_ORDER)
+        }
     }
 
     fun setDetails(){
@@ -401,6 +406,9 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
                  mBinding?.txtCr?.visibility = View.GONE
                  mBinding?.txtCrDate?.text=getString(R.string.cr_not_applicable)
              }
+
+             if(orderDetails?.enquiryStageId==10L)mBinding?.layerConfirmDelivery?.visibility=View.VISIBLE
+             else mBinding?.layerConfirmDelivery?.visibility=View.GONE
          })
         } catch (e: Exception) {
             Log.e("setDetails", "Exception " + e.message)
@@ -632,20 +640,12 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-//        Log.e("PiActivity", "onActivityResult $requestCode")
-//        Log.e("PiActivity", "onActivityResult $resultCode")
-//        Log.e("PiActivity", "onActivityResult RESULT_OK ${Activity.RESULT_OK}")
-//        if (requestCode == ConstantsDirectory.RESULT_PI) { // Please, use a final int instead of hardcoded int value
-//            if (resultCode == Activity.RESULT_OK) {
-////                viewLoader()
-//                Log.e("PiActivity", "onActivityResult enqID ${enqID}")
-//                enqID?.let {
-////                    mOrderVm.getSingleOngoingEnquiry(it)
-//                    EnquiryPredicates.updatePiStatus(it)
-//                    setDetails()
-//                }
-//            }
-//        }
+        Log.e("ConfirmDeliveryActivity", "onActivityResult $requestCode")
+        if (requestCode == ConstantsDirectory.RESULT_CONFIRM_ORDER) { // Please, use a final int instead of hardcoded int value
+            if (resultCode == Activity.RESULT_OK) {
+                activity?.onBackPressed()
+            }
+        }
     }
 
     override fun onStatusChangeSuccess() {

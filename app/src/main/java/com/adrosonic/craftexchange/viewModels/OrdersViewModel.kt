@@ -72,6 +72,10 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
         fun onCrStatusSuccess(changeRequestStatus:Long)
         fun onCrStatusFailure()
     }
+    interface OrderCinfirmedInterface{
+        fun onSuccess()
+        fun onFailure()
+    }
     val ongoingOrderList : MutableLiveData<RealmResults<Orders>> by lazy { MutableLiveData<RealmResults<Orders>>() }
     val onGoingOrderDetails : MutableLiveData<Orders> by lazy { MutableLiveData<Orders>() }
 
@@ -82,6 +86,7 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
     var toggleListener : ToggleChangeInterface?= null
     var fetcCrListener : FetchCrInterface?= null
     var updateCrListener : UpdateCrStatusInterface?= null
+    var orderConfirmListener : OrderCinfirmedInterface?= null
 
     fun getOnOrderListMutableData(): MutableLiveData<RealmResults<Orders>> {
         ongoingOrderList.value=loadOnOrderList()
@@ -415,6 +420,62 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
                         updateCrListener?.onCrStatusFailure()
                     }
                 }
+            })
+    }
+
+    fun markOrderAsReceived(orderId:Long,orderReceivedDate:String){
+        Log.e("markOrderAsReceived","orderId : $orderId ")
+        Log.e("markOrderAsReceived","orderReceivedDate : $orderReceivedDate ")
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getOrderService()
+            .markOrderAsReceived(token,orderId.toInt(),orderReceivedDate,1)
+            .enqueue(object : Callback, retrofit2.Callback<NotificationReadResponse> {
+                override fun onFailure(call: Call<NotificationReadResponse>, t: Throwable) {
+                    t.printStackTrace()
+                    Log.e("markOrderAsReceived","isSuccessful false")
+                    orderConfirmListener?.onFailure()
+                }
+                override fun onResponse(
+                    call: Call<NotificationReadResponse>,
+                    response: Response<NotificationReadResponse>
+                ) {
+                    Log.e("markOrderAsReceived","onResponse : ${response?.body()?.data}")
+                    if(response?.body()?.valid!!){
+                        markEnquiryCompleted(orderId)
+                    }else{
+                        Log.e("markOrderAsReceived","isSuccessful false")
+                        orderConfirmListener?.onFailure()
+                    }
+                }
+            })
+    }
+    fun markEnquiryCompleted(enquiryId : Long){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getOrderService()
+            .markEnquiryCompleted(token,enquiryId)
+            .enqueue(object: Callback, retrofit2.Callback<NotificationReadResponse> {
+                override fun onFailure(call: Call<NotificationReadResponse>, t: Throwable) {
+                    t.printStackTrace()
+                    Log.e("Mark Complete Enquiry","Failure: "+t.message)
+                    orderConfirmListener?.onFailure()
+                }
+                override fun onResponse(
+                    call: Call<NotificationReadResponse>,
+                    response: retrofit2.Response<NotificationReadResponse>) {
+                    Log.e("Mark Complete Enquiry","Success")
+
+                    if(response?.body()?.valid!!){
+                        OrdersPredicates.updatPostDeliveryConfirmed(enquiryId)
+                        EnquiryPredicates.deleteEnquiry(enquiryId)
+                        orderConfirmListener?.onSuccess()
+                    }else{
+                        Log.e("markOrderAsReceived","isSuccessful false")
+                        orderConfirmListener?.onFailure()
+                    }
+                }
+
             })
     }
 }

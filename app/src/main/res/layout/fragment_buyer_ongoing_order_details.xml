@@ -405,22 +405,63 @@
 
                     <TextView
                         android:id="@+id/txtCr"
-                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
-                        android:gravity="center_vertical"
                         android:drawableLeft="@drawable/ic_cr"
                         android:fontFamily="@font/lato_bold"
+                        android:gravity="center_vertical"
                         android:text="@string/change_request_initiated"
                         android:textColor="@color/red_logo"
                         android:textSize="@dimen/product_availability_text"
                         android:textStyle="bold"
+                        android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                    android:id="@+id/layer_confirm_delivery"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/expandable_layout_std_padding"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/middle_part">
+                    <Button
+                        android:id="@+id/btn_confirm_delivery"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:layout_margin="4dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="4dp"
+                        android:background="@color/dark_green"
+                        android:drawableEnd="@drawable/ic_right_arrow_white"
+                        android:fontFamily="@font/lato_light"
+                        android:padding="4dp"
+                        android:textAllCaps="false"
+                        android:text="Confirm Delivery  "
+                        android:textAlignment="center"
+                        android:textColor="@color/white_text"
+                        android:textSize="16sp"
+                        android:visibility="visible"/>
+
+                    <TextView
+                        android:layout_marginTop="16dp"
+                        android:gravity="center"
+                        android:id="@+id/next_step_arrow_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="If you found any defects,don't worry!\nYou can proceed to raise a concern within 10 days\nafter making it as delivered."
+                        android:textSize="@dimen/product_availability_text" />
+
+                </LinearLayout>
+
 
                 <LinearLayout
                     android:id="@+id/change_request_layer"
@@ -431,7 +472,7 @@
                     android:weightSum="10"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/middle_part">
+                    app:layout_constraintTop_toBottomOf="@id/layer_confirm_delivery">
 
 
                     <TextView

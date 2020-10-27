@@ -17,6 +17,7 @@
         android:textColor="@color/black_text"
         android:textSize="@dimen/product_title_text" />
     <TextView
+        android:id="@+id/txt_header_dscro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"

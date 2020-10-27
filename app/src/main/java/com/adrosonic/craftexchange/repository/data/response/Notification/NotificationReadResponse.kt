@@ -6,10 +6,17 @@ data class NotificationReadResponse (
     val errorMessage: String? = null,
     val errorCode: Long
 )
-
+//{"data":"Enquiry closed","valid":true,"errorMessage":null,"errorCode":0}
 //{"data":"Status Updated!","valid":true,"errorMessage":null,"errorCode":0}
 //{
 //    "data": "PI Revised!",
+//    "valid": true,
+//    "errorMessage": null,
+//    "errorCode": 0
+//}
+
+//{
+//    "data": "Order Recieved",
 //    "valid": true,
 //    "errorMessage": null,
 //    "errorCode": 0

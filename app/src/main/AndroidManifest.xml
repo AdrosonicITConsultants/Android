@@ -18,6 +18,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".ui.modules.order.confirmDelivery.ConfirmDeliveryActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".ui.modules.order.revisePi.ViewPiActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".ui.modules.order.revisePi.RevisePiActivity"
