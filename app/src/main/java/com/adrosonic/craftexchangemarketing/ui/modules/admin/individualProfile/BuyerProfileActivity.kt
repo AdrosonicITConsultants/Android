@@ -43,16 +43,15 @@ UserProfileViewModal.ActivateInterface{
     var initialData = false
     var userId : Long? = 0
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mUPVM.profileListener = this
         mUPVM.activateListener = this
         mUPVM.deactivateListener = this
         if(intent.extras!=null){
-            userId = intent.getLongExtra("artisanId", 10)
+            userId = intent.getLongExtra("buyerId", 0)
         }
+        Log.e("BuyerProfileActivity","userId: $userId")
 //        userId = 10
         if(Utility.checkIfInternetConnected(applicationContext)){
 //            Utility.displayMessage("calling function", applicationContext)

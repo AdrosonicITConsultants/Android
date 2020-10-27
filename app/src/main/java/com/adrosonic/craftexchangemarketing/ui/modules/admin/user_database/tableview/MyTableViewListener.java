@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.adrosonic.craftexchangemarketing.repository.data.response.admin.userDatabase.User;
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.individualProfile.ArtisanProfileActivity;
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.individualProfile.BuyerProfileActivity;
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.tableview.holder.ColumnHeaderViewHolder;
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.tableview.popup.ColumnHeaderLongPressPopup;
@@ -18,6 +19,7 @@ import com.evrencoskun.tableview.listener.ITableViewListener;
 import java.util.List;
 
 import static androidx.core.content.ContextCompat.startActivity;
+import static com.adrosonic.craftexchangemarketing.ui.modules.admin.individualProfile.ArtisanProfileActivityKt.ArtisanProfileIntent;
 //import com.evrencoskun.tableviewsample2.ui.tableview.holder.ColumnHeaderViewHolder;
 //import com.evrencoskun.tableviewsample2.ui.tableview.popup.ColumnHeaderLongPressPopup;
 
@@ -81,17 +83,17 @@ public class MyTableViewListener implements ITableViewListener {
     @Override
     public void onRowHeaderClicked(@NonNull RecyclerView.ViewHolder rowHeaderView, int row) {
         Log.e(LOG_TAG, "onRowHeaderClicked has been clicked for " + row);
-        Utility.Companion.displayMessage("onRowHeaderClicked ",mTableView.getContext());
         User user=mUserList.get(row);
         if(roleId==1){
-
+            Intent myIntent = new Intent(mTableView.getContext(), ArtisanProfileActivity.class);
+            myIntent.putExtra("artisanId", user.getId());
+            mTableView.getContext().startActivity(myIntent);
         }
         if(roleId==2){
-
+            Intent myIntent = new Intent(mTableView.getContext(), BuyerProfileActivity.class);
+            myIntent.putExtra("buyerId", user.getId());
+            mTableView.getContext().startActivity(myIntent);
         }
-        //todo call intent here
-//        startActivity(context?.adminLandingIntent())
-//        startActivity(mTableView.getContext().ArtisanProfileIntent(user.getId()));
     }
 
     @Override

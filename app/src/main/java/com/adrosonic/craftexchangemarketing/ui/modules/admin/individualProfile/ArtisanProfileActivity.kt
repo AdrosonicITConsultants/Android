@@ -29,9 +29,7 @@ fun Context.ArtisanProfileIntent(artisanId : Long): Intent {
     val intent = Intent(this , ArtisanProfileActivity::class.java)
     intent.putExtra("artisanId", artisanId)
     return intent.apply {
-        flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
-//        Intent.FLAG_ACTIVITY_NEW_TASK or
-    }
+        flags = Intent.FLAG_ACTIVITY_CLEAR_TASK}
 }
 class ArtisanProfileActivity  : AppCompatActivity() ,
     UserProfileViewModal.ProfileDataInterface,
@@ -207,8 +205,6 @@ UserProfileViewModal.setRatinginterface{
                     R.drawable.buyer_logo_placeholder
                 )
                 mBinding?.ratingBar?.setProgress(userProfileResponse?.data?.rating!!.toFloat())
-
-
 
             }
             )
