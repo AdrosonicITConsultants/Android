@@ -1,5 +1,7 @@
 package com.adrosonic.craftexchangemarketing.repository.data.response.admin.userDatabase
 
+
+
 data class DatabaseResponse (
     var data: List<User>,
     var valid: Boolean,
@@ -20,3 +22,7 @@ data class User(
     var dateAdded :String
 )
 
+//<<<<<<< HEAD
+//)
+//=======
+//>>>>>>> 6c352714d8fa8d0c77ee91ba4c37098eaac31e69

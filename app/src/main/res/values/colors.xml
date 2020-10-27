@@ -27,9 +27,8 @@
     <color name="notification_bg">#F8F0FF</color>
     <color name="filter_list_background">#FFEBEB</color>
     <color name="enquiry_swipe_background">#B90C5C</color>
+    <color name="darkviolet">#260F2B</color>
     <color name="db_view_bg">#020202</color>
-
-
     <color name="white_text">#FFF</color>
     <color name="black_text">#000</color>
     <color name="grey">#777</color>

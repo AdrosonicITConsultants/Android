@@ -134,6 +134,9 @@ dependencies {
     //
     implementation 'com.evrencoskun.library:tableview:0.8.9.2'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
+
+    //seekbar
+    implementation 'com.github.warkiz.widget:indicatorseekbar:2.1.2'
 }
 
 apply plugin: 'com.google.gms.google-services'

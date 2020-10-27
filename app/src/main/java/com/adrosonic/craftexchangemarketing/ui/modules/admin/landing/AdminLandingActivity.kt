@@ -157,9 +157,9 @@ class AdminLandingActivity : AppCompatActivity(){
                     }
 
                     R.id.product_catelog -> {
-                        //                        initTab(HistoryFragment.newInstance(), HistoryFragment.TAG)
-                        // showBFXProductsMenu();
+
                         return true
+
                     }
 
                     R.id.enquiries -> {
