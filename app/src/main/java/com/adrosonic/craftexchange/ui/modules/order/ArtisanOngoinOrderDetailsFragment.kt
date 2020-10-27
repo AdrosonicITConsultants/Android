@@ -238,6 +238,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
                 ?.putExtra(ConstantsDirectory.ENQUIRY_ID,enqID)
                 ?.putExtra(ConstantsDirectory.ORDER_STATUS_FLAG, 0L))
         }
+
         mBinding?.changeRequestLayer?.setOnClickListener {
             if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType.equals(ConstantsDirectory.CUSTOM_PRODUCT)) {
                 if (orderDetails?.changeRequestOn == 1L) {
@@ -682,12 +683,21 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
             mBinding?.viewPaymentLayer?.visibility = View.GONE
         }
 
-        //quality check
-        if(orderDetails?.enquiryStageId!! >= 5L){
-            mBinding?.qualityCheckLayer?.visibility = View.VISIBLE
+        //QcForm
+        if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
+            if(orderDetails?.enquiryStageId!! >= EnquiryStages.PRODUCTION_COMPLETED.getId()){
+                mBinding?.qualityCheckLayer?.visibility = View.VISIBLE
+            }else{
+                mBinding?.qualityCheckLayer?.visibility = View.GONE
+            }
         }else{
-            mBinding?.qualityCheckLayer?.visibility = View.GONE
+            if(orderDetails?.enquiryStageId!! >= EnquiryStages.PI_FINALIZED.getId()){
+                mBinding?.qualityCheckLayer?.visibility = View.VISIBLE
+            }else{
+                mBinding?.qualityCheckLayer?.visibility = View.GONE
+            }
         }
+
         //TaxInvoice
         if(orderDetails?.enquiryStageId!! >= EnquiryStages.FINAL_INVOICE_RAISED.getId()){
             mBinding?.taxInvoiceLayer?.visibility = View.VISIBLE
@@ -708,15 +718,15 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
             }
         }
 
-        //Approve Final Payment
-        if(orderDetails?.enquiryStageId == EnquiryStages.FINAL_INVOICE_RAISED.getId() && orderDetails?.isBlue == 1L){
+        //Approve Final Payment //TODO isBlue param check after API fix
+        if(orderDetails?.enquiryStageId == EnquiryStages.FINAL_INVOICE_RAISED.getId() /*&& orderDetails?.isBlue == 1L*/){
             mBinding?.btnViewApprovePayment?.visibility = View.VISIBLE
         }else{
             mBinding?.btnViewApprovePayment?.visibility = View.GONE
         }
 
-        //Upload Delivery Receipt
-        if(orderDetails?.enquiryStageId == EnquiryStages.FINAL_PAYMENT_RECEIVED.getId() && orderDetails?.isBlue == 0L && orderDetails?.deliveryChallanUploaded == 0L){
+        //Upload Delivery Receipt //TODO isBlue param check after API fix
+        if(orderDetails?.enquiryStageId == EnquiryStages.FINAL_PAYMENT_RECEIVED.getId() /*&& orderDetails?.isBlue == 0L*/ && orderDetails?.deliveryChallanUploaded == 0L){
             mBinding?.uploadDeliveryReceiptLayout?.visibility = View.VISIBLE
         }else{
             mBinding?.uploadDeliveryReceiptLayout?.visibility = View.GONE

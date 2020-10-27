@@ -18,9 +18,12 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.Transactions
+import com.adrosonic.craftexchange.enums.DocumentType
+import com.adrosonic.craftexchange.enums.getId
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
 import com.adrosonic.craftexchange.ui.modules.enquiry.enquiryDetails
+import com.adrosonic.craftexchange.ui.modules.order.taxInv.raiseTaxInvIntent
 import com.adrosonic.craftexchange.ui.modules.transaction.viewDocument
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
@@ -292,7 +295,22 @@ class OnGoingTransactionRecyclerAdapter(var context: Context?, private var trans
                 }
                 //View Advance Payment
                 6L,8L,10L -> {
-                    val intent = Intent(transaction?.enquiryID?.let { it1 -> context?.viewDocument(it1) })
+                    val intent = Intent(transaction?.enquiryID?.let { it1 -> context?.viewDocument(it1,DocumentType.ADVANCEPAY.getId()) })
+                    context?.startActivity(intent)
+                }
+                //Tax Invoice
+                12L -> {
+                    val intent = Intent(transaction?.enquiryID?.let { it1 -> context?.raiseTaxInvIntent(it1,true) })
+                    context?.startActivity(intent)
+                }
+                //View Final Payment
+                14L,16L,18L -> {
+                    val intent = Intent(transaction?.enquiryID?.let { it1 -> context?.viewDocument(it1,DocumentType.FINALPAY.getId()) })
+                    context?.startActivity(intent)
+                }
+                //Delivery Challan
+                20L,22L -> {
+                    val intent = Intent(transaction?.enquiryID?.let { it1 -> context?.viewDocument(it1,DocumentType.FINALPAY.getId()) })
                     context?.startActivity(intent)
                 }
             }

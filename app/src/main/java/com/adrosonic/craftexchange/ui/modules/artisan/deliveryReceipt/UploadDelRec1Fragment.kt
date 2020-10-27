@@ -166,7 +166,7 @@ class UploadDelRec1Fragment : Fragment(),TransactionViewModel.UploadPaymentInter
         mBinding?.btnUploadReceipt?.setOnClickListener {
 
             var dispatchDate = "${mBinding?.dispatchDate?.text.toString()} 00:00:00"
-            var eta = mBinding?.revisedEta?.text.toString()
+            var eta = "${mBinding?.revisedEta?.text.toString()} 00:00:00"
             var receiptFilePath = absolutePath.toString()
 
 //            var formatter = SimpleDateFormat("yyyy-mm-dd hh:mm:ss")

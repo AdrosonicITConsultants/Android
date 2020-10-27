@@ -426,8 +426,8 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
     }
 
     fun setActionButtonVisibilites(){
-        //upload final Payment
-        if(orderDetails?.enquiryStageId == EnquiryStages.FINAL_INVOICE_RAISED.getId() && orderDetails?.isBlue == 0L){
+        //upload final Payment //TODO isBlue param check after API fix
+        if(orderDetails?.enquiryStageId == EnquiryStages.FINAL_INVOICE_RAISED.getId() /*&& orderDetails?.isBlue == 0L*/){
             mBinding?.finalTransactionLayout?.visibility = View.VISIBLE
         }else{
             mBinding?.finalTransactionLayout?.visibility = View.GONE
@@ -613,11 +613,20 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
         }
 
         //QcForm
-        if(orderDetails?.enquiryStageId!! >= 5L){
-            mBinding?.qualityCheckLayer?.visibility = View.VISIBLE
+        if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
+            if(orderDetails?.enquiryStageId!! >= EnquiryStages.PRODUCTION_COMPLETED.getId()){
+                mBinding?.qualityCheckLayer?.visibility = View.VISIBLE
+            }else{
+                mBinding?.qualityCheckLayer?.visibility = View.GONE
+            }
         }else{
-            mBinding?.qualityCheckLayer?.visibility = View.GONE
+            if(orderDetails?.enquiryStageId!! >= EnquiryStages.PI_FINALIZED.getId()){
+                mBinding?.qualityCheckLayer?.visibility = View.VISIBLE
+            }else{
+                mBinding?.qualityCheckLayer?.visibility = View.GONE
+            }
         }
+
 
         //TaxInvoice
         if(orderDetails?.enquiryStageId!! >= EnquiryStages.FINAL_INVOICE_RAISED.getId()){
