@@ -614,7 +614,7 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
 
         //QcForm
         if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
-            if(orderDetails?.enquiryStageId!! >= EnquiryStages.PRODUCTION_COMPLETED.getId()){
+            if(orderDetails?.enquiryStageId!! >= EnquiryStages.ADVANCE_PAYMENT_RECEIVED.getId()){
                 mBinding?.qualityCheckLayer?.visibility = View.VISIBLE
             }else{
                 mBinding?.qualityCheckLayer?.visibility = View.GONE

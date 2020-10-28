@@ -39,10 +39,27 @@
         android:textAllCaps="false"
         android:textColor="#D9B45E"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/update_qc_text"/>
+
+    <TextView
+        android:id="@+id/text_skip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_regular"
+        android:fontFamily="@font/lato_bold"
+        android:text="@string/skip"
+        android:textAlignment="center"
+        android:textColor="@color/white_text"
+        android:textSize="@dimen/product_title_text"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_fill_qc"
+        app:layout_constraintStart_toStartOf="@+id/btn_fill_qc"
+        app:layout_constraintEnd_toEndOf="@+id/btn_fill_qc"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

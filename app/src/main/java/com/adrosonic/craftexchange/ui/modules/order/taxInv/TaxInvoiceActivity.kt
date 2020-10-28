@@ -19,10 +19,12 @@ import androidx.core.content.ContextCompat
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
 import com.adrosonic.craftexchange.database.entities.realmEntities.PiDetails
-import com.adrosonic.craftexchange.database.predicates.PiPredicates
 import com.adrosonic.craftexchange.database.predicates.TaxInvPredicates
 import com.adrosonic.craftexchange.databinding.ActivityTaxInvoiceBinding
+import com.adrosonic.craftexchange.enums.AvailableStatus
+import com.adrosonic.craftexchange.enums.getId
 import com.adrosonic.craftexchange.repository.data.request.taxInv.SendTiRequest
+import com.adrosonic.craftexchange.repository.data.response.enquiry.DetailsData
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
@@ -37,7 +39,7 @@ fun Context.taxInvoiceIntent(enquiryId:Long): Intent {
 
 
 class TaxInvoiceActivity : AppCompatActivity(),
-    EnquiryViewModel.singlePiInterface,
+    EnquiryViewModel.PayEnqInvInterface,
     OrdersViewModel.GenTaxInvInterface {
 
     private var mBinding: ActivityTaxInvoiceBinding? = null
@@ -65,7 +67,7 @@ class TaxInvoiceActivity : AppCompatActivity(),
         mBinding = ActivityTaxInvoiceBinding.inflate(layoutInflater)
         val view = mBinding?.root
         setContentView(view)
-        mEnqVM?.singlePiListener = this
+        mEnqVM?.payDetailsListener = this
         mOrdVM?.taxInvGenListener = this
 
         mBinding?.swipeTaxInvoice?.isEnabled = false
@@ -76,13 +78,14 @@ class TaxInvoiceActivity : AppCompatActivity(),
             setDetails()
 
             if(Utility.checkIfInternetConnected(applicationContext)){
-                mEnqVM?.getSinglePi(enquiryId)
+                mEnqVM?.fetchPayEnqInvDetails(enquiryId)
+                viewFormLoader()
             }else{
                 Utility.displayMessage(getString(R.string.no_internet_connection),this)
-                piDetails = PiPredicates.getSinglePi(enquiryId)
-                if(piDetails!=null){
-                    setPiDetails()
-                }
+//                piDetails = PiPredicates.getSinglePi(enquiryId)
+//                if(piDetails!=null){
+//                    setPiDetails()
+//                }
             }
         }
         mBinding?.btnBack?.setOnClickListener {
@@ -139,11 +142,20 @@ class TaxInvoiceActivity : AppCompatActivity(),
     }
 
     fun viewLoader(){
-        mBinding?.taxForm?.visibility= View.GONE
+        mBinding?.taxInvoiceScreen?.visibility= View.GONE
         mBinding?.swipeTaxInvoice?.isRefreshing = true
     }
     fun hideLoader(){
-        mBinding?.taxForm?.visibility= View.VISIBLE
+        mBinding?.taxInvoiceScreen?.visibility= View.VISIBLE
+        mBinding?.swipeTaxInvoice?.isRefreshing = false
+    }
+
+    fun viewFormLoader(){
+        mBinding?.middlePart?.visibility= View.GONE
+        mBinding?.swipeTaxInvoice?.isRefreshing = true
+    }
+    fun hideFormLoader(){
+        mBinding?.middlePart?.visibility= View.VISIBLE
         mBinding?.swipeTaxInvoice?.isRefreshing = false
     }
 
@@ -269,13 +281,52 @@ class TaxInvoiceActivity : AppCompatActivity(),
         mBinding?.orderStatusText?.text = enquiryStage
     }
 
-    fun setPiDetails(){
-        piDetails = PiPredicates.getSinglePi(enquiryId)
-        mBinding?.orderQuantity?.setText(piDetails?.quantity?.toString() ?: "", TextView.BufferType.EDITABLE)
-        mBinding?.etPrevTotalAmt?.setText(piDetails?.totalAmount?.toString() ?: "", TextView.BufferType.EDITABLE)
-        mBinding?.etRate?.setText(piDetails?.ppu?.toString() ?: "", TextView.BufferType.EDITABLE)
-        mBinding?.etCgst?.setText(piDetails?.cgst?.toString() ?: "", TextView.BufferType.EDITABLE)
-        mBinding?.etSgst?.setText(piDetails?.sgst?.toString() ?: "", TextView.BufferType.EDITABLE)
+    fun setFormFieldsVisibility(){
+        if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
+            mBinding?.prevTotAmntLayout?.visibility = View.VISIBLE
+            mBinding?.advPaidAmtLayout?.visibility = View.VISIBLE
+            mBinding?.amtToPayLayout?.visibility = View.VISIBLE
+        }else{
+            mBinding?.prevTotAmntLayout?.visibility = View.GONE
+            mBinding?.advPaidAmtLayout?.visibility = View.GONE
+            mBinding?.amtToPayLayout?.visibility = View.GONE
+        }
+     }
+
+    fun setPiDetails(details : DetailsData){
+
+        setFormFieldsVisibility()
+
+        var quantity = details?.pi?.quantity
+        var prevTotAmt = details?.pi?.totalAmount
+        var ppu = details?.pi?.ppu
+        var cgst = details?.pi?.cgst
+        var sgst = details?.pi?.sgst
+        var finAmt = details?.pi?.totalAmount
+
+        if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
+            var advPayRec = details?.payment?.paidAmount
+            mBinding?.etAdvPay?.setText(advPayRec.toString(), TextView.BufferType.EDITABLE)
+            var amtToPay = finAmt.minus(advPayRec)
+            mBinding?.etAmtToPay?.setText(amtToPay.toString(), TextView.BufferType.EDITABLE)
+        }
+
+        mBinding?.orderQuantity?.setText(quantity.toString(), TextView.BufferType.EDITABLE)
+        mBinding?.etPrevTotalAmt?.setText(prevTotAmt.toString(), TextView.BufferType.EDITABLE)
+
+        mBinding?.etRate?.setText(ppu.toString(), TextView.BufferType.EDITABLE)
+        mBinding?.etCgst?.setText(cgst.toString(), TextView.BufferType.EDITABLE)
+        mBinding?.etSgst?.setText(sgst.toString(), TextView.BufferType.EDITABLE)
+        mBinding?.etFinalAmt?.setText(finAmt.toString(), TextView.BufferType.EDITABLE)
+
+//        mBinding?.orderQuantity?.setText(piDetails?.quantity?.toString() ?: "", TextView.BufferType.EDITABLE)
+//
+//        mBinding?.etPrevTotalAmt?.setText(prevTotalAmt , TextView.BufferType.EDITABLE)
+//        mBinding?.etFinalAmt?.setText(totalAmt, TextView.BufferType.EDITABLE)
+//
+//        mBinding?.etRate?.setText(piDetails?.ppu?.toString() ?: "", TextView.BufferType.EDITABLE)
+//        mBinding?.etCgst?.setText(piDetails?.cgst?.toString() ?: "", TextView.BufferType.EDITABLE)
+//        mBinding?.etSgst?.setText(piDetails?.sgst?.toString() ?: "", TextView.BufferType.EDITABLE)
     }
 
 
@@ -290,31 +341,31 @@ class TaxInvoiceActivity : AppCompatActivity(),
         }
     }
 
-    override fun onPiFailure() {
-        try {
-            Handler(Looper.getMainLooper()).post(Runnable {
-                hideLoader()
-                piDetails = PiPredicates.getSinglePi(enquiryId)
-                if(piDetails!=null){
-                    setPiDetails()
-                }
-                Utility.displayMessage("Sorry,Unable to fetch PI details",applicationContext)
-            })
-        } catch (e: Exception) {
-            Log.e("Enquiry Details", "Exception onFailure " + e.message)
-        }
-    }
-
-    override fun getPiSuccess(id: Long) {
-        try {
-            Handler(Looper.getMainLooper()).post(Runnable {
-                hideLoader()
-                setPiDetails()
-            })
-        } catch (e: Exception) {
-            Log.e("Enquiry Details", "Exception onFailure " + e.message)
-        }
-    }
+//    override fun onPiFailure() {
+//        try {
+//            Handler(Looper.getMainLooper()).post(Runnable {
+//                hideLoader()
+//                piDetails = PiPredicates.getSinglePi(enquiryId)
+//                if(piDetails!=null){
+//                    setPiDetails()
+//                }
+//                Utility.displayMessage("Sorry,Unable to fetch PI details",applicationContext)
+//            })
+//        } catch (e: Exception) {
+//            Log.e("Enquiry Details", "Exception onFailure " + e.message)
+//        }
+//    }
+//
+//    override fun getPiSuccess(id: Long) {
+//        try {
+//            Handler(Looper.getMainLooper()).post(Runnable {
+//                hideLoader()
+//                setPiDetails()
+//            })
+//        } catch (e: Exception) {
+//            Log.e("Enquiry Details", "Exception onFailure " + e.message)
+//        }
+//    }
 
     override fun onGenTaxInvSuccess() {
         try {
@@ -336,6 +387,28 @@ class TaxInvoiceActivity : AppCompatActivity(),
             })
         } catch (e: Exception) {
             Log.e("Enquiry Details", "Exception onFailure " + e.message)
+        }
+    }
+
+    override fun onFetchDetailsFailure() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                hideFormLoader()
+                Utility.displayMessage("Sorry,Unable to fetch PI details",applicationContext)
+            })
+        } catch (e: Exception) {
+            Log.e("Enquiry Details", "Exception onFailure " + e.message)
+        }
+    }
+
+    override fun onFetchDetailsSuccess(details: DetailsData) {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                hideFormLoader()
+                setPiDetails(details)
+            })
+        } catch (e: Exception) {
+            Log.e("Enquiry Details", "Exception onSuccess " + e.message)
         }
     }
 }

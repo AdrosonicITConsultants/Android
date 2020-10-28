@@ -11,7 +11,7 @@
         android:layout_height="wrap_content">
 
         <androidx.core.widget.NestedScrollView
-            android:id="@+id/tax_form"
+            android:id="@+id/tax_invoice_screen"
             android:fillViewport="true"
             android:layout_height="match_parent"
             android:layout_width="match_parent">
@@ -200,176 +200,30 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <LinearLayout
-                    android:id="@+id/tax_inv_details"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="8dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/middle_part">
-
-                    <TextView
-                        android:id="@+id/txt_fill_details"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/tax_inv_details"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/lato_regular"
-                        android:text="@string/fill_tax_inv_for_order"
-                        android:textColor="@color/black_text"
-                        android:textSize="@dimen/product_note_text" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_marginTop="4dp"
-                        android:background="@drawable/bd_underline"
-                        android:orientation="horizontal">
+                        android:orientation="vertical"
+                        android:padding="8dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/ti_text">
 
                         <TextView
-                            android:layout_width="0dp"
+                            android:id="@+id/txt_fill_details"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginStart="8dp"
-                            android:layout_weight="2"
                             android:fontFamily="@font/lato_regular"
-                            android:text="@string/quantity"
-                            android:textColor="@color/darker_gray"
-                            android:textSize="12sp" />
-
-                        <EditText
-                            android:id="@+id/order_quantity"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical|end"
-                            android:layout_weight="3"
-                            android:inputType="number"
-                            android:maxLength="2" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_marginTop="4dp"
-                        android:background="@drawable/bd_underline"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginStart="8dp"
-                            android:layout_weight="2"
-                            android:fontFamily="@font/lato_regular"
-                            android:text="@string/currency"
-                            android:textColor="@color/darker_gray"
-                            android:textSize="12sp" />
-
-                        <Spinner
-                            android:id="@+id/sp_currency"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center_vertical|end"
-                            android:layout_weight="3" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/prev_tot_amnt_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_marginTop="4dp"
-                        android:background="@drawable/bd_underline"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginStart="8dp"
-                            android:layout_weight="2"
-                            android:fontFamily="@font/lato_regular"
-                            android:text="@string/prev_total_amt"
-                            android:textColor="@color/darker_gray"
-                            android:textSize="12sp" />
-
-                        <EditText
-                            android:id="@+id/et_prev_total_amt"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical|end"
-                            android:layout_weight="3"
-                            android:inputType="number" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_marginTop="4dp"
-                        android:background="@drawable/bd_underline"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginStart="8dp"
-                            android:layout_weight="2"
-                            android:fontFamily="@font/lato_regular"
-                            android:text="@string/adv_pay_rec_as_pi"
-                            android:textColor="@color/darker_gray"
-                            android:textSize="12sp" />
-
-                        <EditText
-                            android:id="@+id/et_adv_pay"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical|end"
-                            android:layout_weight="3"
-                            android:inputType="number"/>
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_marginTop="4dp"
-                        android:background="@drawable/bd_underline"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginStart="8dp"
-                            android:layout_weight="2"
-                            android:fontFamily="@font/lato_regular"
-                            android:text="@string/rate_per_unit"
-                            android:textColor="@color/darker_gray"
-                            android:textSize="12sp" />
-
-                        <EditText
-                            android:id="@+id/et_rate"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical|end"
-                            android:layout_weight="3"
-                            android:inputType="number"
-                            android:maxLength="6" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_marginTop="4dp"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
+                            android:text="@string/fill_tax_inv_for_order"
+                            android:textColor="@color/black_text"
+                            android:textSize="@dimen/product_note_text" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
-                            android:layout_weight="1"
+                            android:layout_marginTop="4dp"
                             android:background="@drawable/bd_underline"
                             android:orientation="horizontal">
 
@@ -378,34 +232,26 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginStart="8dp"
-                                android:layout_weight="1"
+                                android:layout_weight="2"
                                 android:fontFamily="@font/lato_regular"
-                                android:text="SGST @"
+                                android:text="@string/quantity"
                                 android:textColor="@color/darker_gray"
                                 android:textSize="12sp" />
 
                             <EditText
-                                android:id="@+id/et_sgst"
+                                android:id="@+id/order_quantity"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical|end"
-                                android:layout_weight="1"
+                                android:layout_weight="3"
                                 android:inputType="number"
                                 android:maxLength="2" />
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical|end"
-                                android:layout_weight="0.25"
-                                android:text="%" />
                         </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
-                            android:layout_marginLeft="4dp"
-                            android:layout_weight="1"
+                            android:layout_marginTop="4dp"
                             android:background="@drawable/bd_underline"
                             android:orientation="horizontal">
 
@@ -414,149 +260,309 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginStart="8dp"
-                                android:layout_weight="1"
+                                android:layout_weight="2"
                                 android:fontFamily="@font/lato_regular"
-                                android:text="CGST @"
+                                android:text="@string/currency"
                                 android:textColor="@color/darker_gray"
                                 android:textSize="12sp" />
 
-                            <EditText
-                                android:id="@+id/et_cgst"
+                            <Spinner
+                                android:id="@+id/sp_currency"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:layout_gravity="center_vertical|end"
-                                android:layout_weight="1"
-                                android:inputType="number"
-                                android:maxLength="2"/>
+                                android:layout_weight="3" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/prev_tot_amnt_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="4dp"
+                            android:visibility="gone"
+                            android:background="@drawable/bd_underline"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginStart="8dp"
+                                android:layout_weight="2"
+                                android:fontFamily="@font/lato_regular"
+                                android:text="@string/prev_total_amt"
+                                android:textColor="@color/darker_gray"
+                                android:textSize="12sp" />
+
+                            <EditText
+                                android:id="@+id/et_prev_total_amt"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical|end"
-                                android:layout_weight="0.25"
-                                android:text="%" />
+                                android:layout_weight="3"
+                                android:inputType="number" />
                         </LinearLayout>
 
+                        <LinearLayout
+                            android:id="@+id/adv_paid_amt_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="4dp"
+                            android:visibility="gone"
+                            android:background="@drawable/bd_underline"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginStart="8dp"
+                                android:layout_weight="2"
+                                android:fontFamily="@font/lato_regular"
+                                android:text="@string/adv_pay_rec_as_pi"
+                                android:textColor="@color/darker_gray"
+                                android:textSize="12sp" />
+
+                            <EditText
+                                android:id="@+id/et_adv_pay"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical|end"
+                                android:layout_weight="3"
+                                android:inputType="number"/>
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="4dp"
+                            android:background="@drawable/bd_underline"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginStart="8dp"
+                                android:layout_weight="2"
+                                android:fontFamily="@font/lato_regular"
+                                android:text="@string/rate_per_unit"
+                                android:textColor="@color/darker_gray"
+                                android:textSize="12sp" />
+
+                            <EditText
+                                android:id="@+id/et_rate"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical|end"
+                                android:layout_weight="3"
+                                android:inputType="number"
+                                android:maxLength="6" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="4dp"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/bd_underline"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/lato_regular"
+                                    android:text="SGST @"
+                                    android:textColor="@color/darker_gray"
+                                    android:textSize="12sp" />
+
+                                <EditText
+                                    android:id="@+id/et_sgst"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical|end"
+                                    android:layout_weight="1"
+                                    android:inputType="number"
+                                    android:maxLength="2" />
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical|end"
+                                    android:layout_weight="0.25"
+                                    android:text="%" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_marginLeft="4dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/bd_underline"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/lato_regular"
+                                    android:text="CGST @"
+                                    android:textColor="@color/darker_gray"
+                                    android:textSize="12sp" />
+
+                                <EditText
+                                    android:id="@+id/et_cgst"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical|end"
+                                    android:layout_weight="1"
+                                    android:inputType="number"
+                                    android:maxLength="2"/>
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical|end"
+                                    android:layout_weight="0.25"
+                                    android:text="%" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/final_amt_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="4dp"
+                            android:background="@drawable/bd_underline"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginStart="8dp"
+                                android:layout_weight="2"
+                                android:fontFamily="@font/lato_regular"
+                                android:text="@string/final_amt"
+                                android:textColor="@color/darker_gray"
+                                android:textSize="12sp" />
+
+                            <EditText
+                                android:id="@+id/et_final_amt"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical|end"
+                                android:layout_weight="3"
+                                android:inputType="number"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/amt_to_pay_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_marginTop="4dp"
+                            android:visibility="gone"
+                            android:background="@drawable/bd_underline"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginStart="8dp"
+                                android:layout_weight="2"
+                                android:fontFamily="@font/lato_regular"
+                                android:text="@string/amt_to_pay"
+                                android:textColor="@color/darker_gray"
+                                android:textSize="12sp" />
+
+                            <EditText
+                                android:id="@+id/et_amt_to_pay"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical|end"
+                                android:layout_weight="3"
+                                android:inputType="number"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="4dp"
+                            android:background="@drawable/bd_underline"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginStart="8dp"
+                                android:layout_weight="2"
+                                android:fontFamily="@font/lato_regular"
+                                android:text="@string/delivery_charges"
+                                android:textColor="@color/darker_gray"
+                                android:textSize="12sp" />
+
+                            <EditText
+                                android:id="@+id/et_delivery_charge"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical|end"
+                                android:layout_weight="3"
+                                android:inputType="number" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="32dp"
+                            android:layout_marginTop="4dp"
+                            android:background="@drawable/bd_underline"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <androidx.appcompat.widget.AppCompatCheckBox
+                                android:id="@+id/chb_tnc"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Agree to " />
+
+                            <TextView
+                                android:id="@+id/txt_tnc"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/lato_regular"
+                                android:text="terms and conditions"
+                                android:textColor="@color/clickable_text_color"
+                                android:textSize="@dimen/product_note_text" />
+                        </LinearLayout>
+
+                        <Button
+                            android:id="@+id/btn_swipe_ti"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:layout_margin="8dp"
+                            android:background="@drawable/rect_round_grad_blue_solid_swipe"
+                            android:drawableStart="@drawable/ic_swipe_arrow"
+                            android:paddingLeft="4dp"
+                            android:paddingRight="4dp"
+                            android:text="Click to generate Tax Invoice preview"
+                            android:textColor="@color/white_text" />
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:id="@+id/final_amt_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_marginTop="4dp"
-                        android:background="@drawable/bd_underline"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginStart="8dp"
-                            android:layout_weight="2"
-                            android:fontFamily="@font/lato_regular"
-                            android:text="@string/final_amt"
-                            android:textColor="@color/darker_gray"
-                            android:textSize="12sp" />
-
-                        <EditText
-                            android:id="@+id/et_final_amt"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical|end"
-                            android:layout_weight="3"
-                            android:inputType="number"/>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginTop="4dp"
-                        android:background="@drawable/bd_underline"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginStart="8dp"
-                            android:layout_weight="2"
-                            android:fontFamily="@font/lato_regular"
-                            android:text="@string/amt_to_pay"
-                            android:textColor="@color/darker_gray"
-                            android:textSize="12sp" />
-
-                        <EditText
-                            android:id="@+id/et_amt_to_pay"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical|end"
-                            android:layout_weight="3"
-                            android:inputType="number"/>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_marginTop="4dp"
-                        android:background="@drawable/bd_underline"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginStart="8dp"
-                            android:layout_weight="2"
-                            android:fontFamily="@font/lato_regular"
-                            android:text="@string/delivery_charges"
-                            android:textColor="@color/darker_gray"
-                            android:textSize="12sp" />
-
-                        <EditText
-                            android:id="@+id/et_delivery_charge"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical|end"
-                            android:layout_weight="3"
-                            android:inputType="number" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="32dp"
-                        android:layout_marginTop="4dp"
-                        android:background="@drawable/bd_underline"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <androidx.appcompat.widget.AppCompatCheckBox
-                            android:id="@+id/chb_tnc"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Agree to " />
-
-                        <TextView
-                            android:id="@+id/txt_tnc"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/lato_regular"
-                            android:text="terms and conditions"
-                            android:textColor="@color/clickable_text_color"
-                            android:textSize="@dimen/product_note_text" />
-                    </LinearLayout>
-
-                    <Button
-                        android:id="@+id/btn_swipe_ti"
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:layout_margin="8dp"
-                        android:background="@drawable/rect_round_grad_blue_solid_swipe"
-                        android:drawableStart="@drawable/ic_swipe_arrow"
-                        android:paddingLeft="4dp"
-                        android:paddingRight="4dp"
-                        android:text="Click to generate Tax Invoice preview"
-                        android:textColor="@color/white_text" />
-                </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
 

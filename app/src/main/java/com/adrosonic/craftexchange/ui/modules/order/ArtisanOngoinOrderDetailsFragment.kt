@@ -14,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -685,7 +686,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
 
         //QcForm
         if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
-            if(orderDetails?.enquiryStageId!! >= EnquiryStages.PRODUCTION_COMPLETED.getId()){
+            if(orderDetails?.enquiryStageId!! >= EnquiryStages.ADVANCE_PAYMENT_RECEIVED.getId()){
                 mBinding?.qualityCheckLayer?.visibility = View.VISIBLE
             }else{
                 mBinding?.qualityCheckLayer?.visibility = View.GONE
@@ -709,6 +710,9 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
     fun setActionButtonVisibilites(){
         //upload tax invoice
         when(orderDetails?.enquiryStageId){
+            EnquiryStages.PI_FINALIZED.getId(),
+            EnquiryStages.ADVANCE_PAYMENT_RECEIVED.getId(),
+            EnquiryStages.PRODUCTION_COMPLETED.getId(),
             EnquiryStages.QUALITY_CHECK_BEFORE_DELIVERY.getId(),
             EnquiryStages.COMPLETION_OF_ORDER.getId() -> {
                 mBinding?.uploadTaxInvLayout?.visibility = View.VISIBLE
@@ -763,10 +767,14 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         dialog.setContentView(R.layout.dialog_qc_form)
         dialog.show()
         val btn = dialog.findViewById(R.id.btn_fill_qc) as Button
+        var btn_skip = dialog.findViewById(R.id.text_skip) as TextView
         btn.setOnClickListener {
             dialog.cancel()
             startActivity(context?.qcFormIntent()?.putExtra(ConstantsDirectory.ENQUIRY_ID,enqID))
         }
+        btn_skip.setOnClickListener {
+            dialog.cancel()
+         }
     }
 
     override fun onResume() {
