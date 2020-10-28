@@ -1,5 +1,6 @@
 package com.adrosonic.craftexchange.repository.remote
 
+import com.adrosonic.craftexchange.repository.data.response.Notification.NotificationReadResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.generateEnquiry.GenerateEnquiryResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.IfExistEnquiryResponse
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryAvaProdStageData
@@ -40,5 +41,17 @@ interface OrderDao {
     fun getSingleClosedOrder(@Header("Authorization") token:String,
                                 @Query("enquiryId") enquiryId : Int) : Call<OrderResponse>
 
+    @Headers("Accept: application/json")
+    @POST("/enquiry/markOrderAsRecieved/{orderId}/{orderRecieveDate}/{isAutoCompleted}")
+    fun markOrderAsReceived(@Header("Authorization") token:String,
+                             @Path("orderId") orderId : Int,
+                             @Path("orderRecieveDate") orderRecieveDate : String,
+                             @Path("isAutoCompleted") isAutoCompleted : Int
+    ) : Call<NotificationReadResponse>
 
+    @Headers("Accept: application/json")
+    @POST("enquiry/markEnquiryCompleted/{enquiryId}")
+    fun markEnquiryCompleted(@Header("Authorization") token:String,
+                             @Path("enquiryId") enquiryId : Long
+    ) : Call<NotificationReadResponse>
 }

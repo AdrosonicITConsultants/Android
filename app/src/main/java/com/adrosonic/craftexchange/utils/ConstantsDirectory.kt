@@ -32,6 +32,7 @@ object ConstantsDirectory {
     const val EDIT_IMAGE = 2
     const val PICK_IMAGE = 1
     const val RESULT_PI = 123
+    const val RESULT_CONFIRM_ORDER = 125
     const val RESULT_TI = 1333
     const val PREFS_NAME = "craft_exchange"
     const val ARTISAN = "Artisan"

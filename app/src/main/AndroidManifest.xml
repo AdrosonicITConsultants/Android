@@ -18,11 +18,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".ui.modules.order.confirmDelivery.ConfirmDeliveryActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".ui.modules.order.taxInv.TaxInvoiceActivity"></activity>
         <activity android:name=".ui.modules.order.taxInv.RaiseTaxInvActivity" />
         <activity android:name=".ui.modules.order.finalPay.OrderPaymentActivity" />
         <activity android:name=".ui.modules.artisan.deliveryReceipt.UploadDeliveryReceiptActivity" />
-        <activity android:name=".ui.modules.order.taxInv.TaxInvActivity" />
         <activity
             android:name=".ui.modules.order.revisePi.ViewPiActivity"
             android:screenOrientation="portrait" />
@@ -189,6 +190,7 @@
             android:name=".services.qc.QcService"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+
         <service
             android:name=".services.cr.CrToggleService"
             android:exported="false"

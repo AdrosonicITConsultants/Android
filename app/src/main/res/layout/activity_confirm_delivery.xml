@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_enquiry_details"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/artisan_ongo_enq_details"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context=".ui.modules.artisan.enquiry.pi.CreatePiFragment">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/top_part"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:elevation="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/btn_back"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="@dimen/margin_regular"
+                            android:background="?selectableItemBackgroundBorderless"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:src="@drawable/ic_keyboard_backspace_black_24dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/btn_chat"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_marginTop="@dimen/margin_regular"
+                            android:layout_marginEnd="@dimen/margin_regular"
+                            android:background="?selectableItemBackgroundBorderless"
+                            android:clickable="true"
+                            android:elevation="10dp"
+                            android:focusable="true"
+                            android:src="@drawable/ic_chat_enquiry"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/enquiry_code"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="4dp"
+                            android:fontFamily="@font/lato_regular"
+                            android:textColor="@color/black_text"
+                            android:textSize="@dimen/product_note_text"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toEndOf="@+id/btn_back"
+                            app:layout_constraintTop_toTopOf="@+id/btn_back" />
+
+
+                        <TextView
+                            android:id="@+id/enquiry_start_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:fontFamily="@font/lato_regular"
+                            android:textSize="12sp"
+                            app:layout_constraintStart_toStartOf="@+id/enquiry_code"
+                            app:layout_constraintTop_toBottomOf="@+id/enquiry_code" />
+
+                        <FrameLayout
+                            android:id="@+id/prod_image_background"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:background="@drawable/ic_back_enq_view_artisan"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/enquiry_start_date"
+                            app:layout_constraintVertical_bias="0.0">
+
+                            <ImageView
+                                android:id="@+id/product_image"
+                                android:layout_width="70dp"
+                                android:layout_height="70dp"
+                                android:layout_gravity="center"
+                                android:layout_margin="8dp"
+                                android:background="@drawable/brand_logo_back"
+                                android:scaleType="fitXY"
+                                android:visibility="invisible"
+                                app:srcCompat="@drawable/ic_cr" />
+
+                        </FrameLayout>
+
+
+                        <TextView
+                            android:id="@+id/product_type"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:fontFamily="@font/lato_regular"
+                            android:gravity="center_horizontal"
+                            android:text="Made to order"
+                            android:textColor="@color/dark_magenta"
+                            android:textSize="@dimen/product_availability_text"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/prod_image_background" />
+
+                        <TextView
+                            android:id="@+id/disclaimer_text_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:fontFamily="@font/lato_regular"
+                            android:gravity="center_horizontal"
+                            android:text="Completing Order"
+                            android:textColor="@color/dark_green"
+                            android:textSize="@dimen/product_availability_text"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/product_type" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/middle_part"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorSplash"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/top_part">
+
+                    <TextView
+                        android:visibility="gone"
+                        android:id="@+id/cr_text"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_regular"
+                        android:layout_marginTop="@dimen/margin_regular"
+                        android:fontFamily="@font/lato_bold"
+                        android:text="Change Request Details"
+                        android:textColor="@color/black_text"
+                        android:textSize="@dimen/product_availability_text"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                    android:id="@+id/edit_cr_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/expandable_layout_std_padding"
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/middle_part">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="Congrats! You are about to mark this order Complete."
+                        android:textColor="@color/dark_green"
+                        android:textSize="18sp" />
+
+                    <LinearLayout
+                        android:id="@+id/select_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="56dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="32dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/txtDateReceived"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:background="@drawable/search_background"
+                            android:gravity="center"
+                            android:hint="Enter date of receiving" />
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="8dp"
+                            android:src="@drawable/ic_calendar" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_marginTop="32dp"
+                        android:gravity="center"
+                        android:layout_gravity="center_horizontal"
+                        android:id="@+id/next_step_arrow_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Please check the order, before marking order as complete.\nOnce marked the order will be considered as completed\nAnd no concern can be raised against it."
+                        android:textSize="@dimen/product_availability_text" />
+
+                    <Button
+                        android:id="@+id/btn_confirm_received"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="56dp"
+                        android:background="@color/dark_green"
+                        android:drawableLeft="@drawable/ic_swipe_arrow"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:textAllCaps="false"
+                        android:text="Order received as required"
+                        android:textColor="@color/white_text" />
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</layout>
+

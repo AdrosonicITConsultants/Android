@@ -443,7 +443,6 @@ class OrdersPredicates {
             }
         }
 
-
         fun updatIsPiSend(enquiryId: Long?,status:Long){
             var realm = CXRealmManager.getRealmInstance()
             var orders : Orders?= null
@@ -456,6 +455,27 @@ class OrdersPredicates {
                     Log.e("RaiseCr","updateChangerequestStatus 1111: ${orders?.changeRequestStatus}")
                     orders?.let {
                         orders?.isPiSend=status
+                        realm.copyToRealmOrUpdate(orders)
+                    }
+                    Log.e("RaiseCr","updateChangerequestStatus 2222: ${orders?.changeRequestStatus}")
+                }catch (e:Exception){
+                    Log.e("RaiseCr","Exception : "+e.printStackTrace())
+                }
+            }
+        }
+
+        fun updatPostDeliveryConfirmed(enquiryId: Long?){
+            var realm = CXRealmManager.getRealmInstance()
+            var orders : Orders?= null
+            realm.executeTransaction {
+                try{
+                    orders = realm.where(Orders::class.java)
+                        .equalTo(Orders.COLUMN_ENQUIRY_ID,enquiryId)
+                        .limit(1)
+                        .findFirst()
+                    Log.e("RaiseCr","updateChangerequestStatus 1111: ${orders?.changeRequestStatus}")
+                    orders?.let {
+                        orders?.isOrderFromCompleted=1
                         realm.copyToRealmOrUpdate(orders)
                     }
                     Log.e("RaiseCr","updateChangerequestStatus 2222: ${orders?.changeRequestStatus}")
