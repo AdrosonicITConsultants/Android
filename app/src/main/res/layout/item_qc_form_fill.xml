@@ -16,9 +16,8 @@
         android:layout_marginTop="@dimen/margin_regular"
         android:layout_marginEnd="@dimen/margin_semimedium"
         android:fontFamily="@font/lato_bold"
-        android:textStyle="bold"
         android:textSize="@dimen/product_availability_text"
-        android:maxLength="25"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,6 +33,7 @@
         android:background="@drawable/rect_outline_grey"
         android:fontFamily="@font/lato_bold"
         android:gravity="start"
+        android:maxLength="25"
         android:padding="@dimen/margin_regular"
         android:textColor="#696969"
         android:textSize="@dimen/product_availability_text"
@@ -53,8 +53,8 @@
         android:gravity="start"
         android:orientation="vertical"
         android:padding="4dp"
-        android:visibility="gone"
         android:textSize="@dimen/product_availability_text"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -70,8 +70,8 @@
         android:gravity="start"
         android:orientation="vertical"
         android:padding="4dp"
-        android:visibility="gone"
         android:textSize="@dimen/product_availability_text"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -88,11 +88,52 @@
         android:layout_marginEnd="@dimen/margin_semimedium"
         android:gravity="start"
         android:padding="@dimen/margin_regular"
+        android:textSize="@dimen/product_availability_text"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ques_text" />
+
+    <LinearLayout
+        android:id="@+id/address_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_semimedium"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="@dimen/margin_semimedium"
+        android:gravity="start"
+        android:orientation="vertical"
+        android:padding="4dp"
         android:visibility="gone"
         android:textSize="@dimen/product_availability_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ques_text" />
+        app:layout_constraintTop_toBottomOf="@+id/ques_text">
+
+        <EditText
+            android:id="@+id/address_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rect_outline_grey"
+            android:fontFamily="@font/lato_bold"
+            android:gravity="start"
+            android:maxLength="100"
+            android:padding="@dimen/margin_regular"
+            android:textColor="#696969"
+            android:textSize="@dimen/product_availability_text" />
+
+        <TextView
+            android:id="@+id/addr_disclaimer_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/qc_disclaimer_text"
+            android:layout_marginTop="@dimen/margin_regular"
+            android:fontFamily="@font/lato_regular"
+            android:textSize="@dimen/product_availability_text" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
