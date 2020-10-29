@@ -1,0 +1,63 @@
+package com.adrosonic.craftexchange.ui.modules.buyer.profile
+
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+
+import com.adrosonic.craftexchange.R
+import com.adrosonic.craftexchange.databinding.FragmentGeneralBinding
+import com.adrosonic.craftexchange.ui.modules.buyer.profile.BuyerProfileActivity.Companion.craftUser
+import com.adrosonic.craftexchange.ui.modules.buyer.profile.BuyerProfileActivity.Companion.regAddr
+
+private const val ARG_PARAM1 = "param1"
+private const val ARG_PARAM2 = "param2"
+
+class GeneralFragment : Fragment() {
+    // TODO: Rename and change types of parameters
+    private var param1: String? = null
+    private var param2: String? = null
+
+    companion object {
+        fun newInstance() = GeneralFragment()
+        const val TAG = "GeneralFrag"
+    }
+
+    private var mBinding: FragmentGeneralBinding ?= null
+    private var altmobile:String?=""
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            param1 = it.getString(ARG_PARAM1)
+            param2 = it.getString(ARG_PARAM2)
+        }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_general, container, false)
+
+        mBinding?.designation?.text = craftUser?.designation ?: " - "
+        mBinding?.regAddr?.text = regAddr?.line1 ?: " - "
+        mBinding?.country?.text = regAddr?.country ?: " - "
+//        if(craftUser?.email != "") {
+            mBinding?.email?.text = craftUser?.email ?: " - "
+//        }
+        var mobile = "${craftUser?.mobile}  (primary)"
+        if(craftUser?.alternateMobile != ""){
+            altmobile = "${craftUser?.alternateMobile}  (alternate)"
+        }
+
+        mBinding?.mobile?.text = mobile
+        mBinding?.altMobile?.text = altmobile ?: " - "
+
+        return mBinding?.root
+    }
+}

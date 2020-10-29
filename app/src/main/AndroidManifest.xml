@@ -1,21 +1,194 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.adrosonic.craftexchange">
 
+    <uses-permission-sdk-23 android:name="android.permission.INTERNET" />
+    <uses-permission-sdk-23 android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission-sdk-23 android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission-sdk-23 android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission-sdk-23 android:name="android.permission.READ_EXTERNAL_STORAGE " />
+    <uses-permission-sdk-23 android:name="android.permission.CAMERA" />
+
     <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:name=".App"
+        android:icon="@mipmap/ic_logo_main_round"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_logo_main_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".ui.modules.transaction.ViewDocumentActivity"></activity>
+        <activity
+            android:name=".ui.modules.transaction.TransactionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.modules.buyer.enquiry.advPay.EnquiryPaymentActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.modules.artisan.enquiry.pi.RaisePiActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui.modules.artisan.enquiry.pi.PiActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".ui.modules.dashboard.DashboardActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_dashboard" />
+        <activity
+            android:name=".ui.modules.enquiry.EnquiryDetailsActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.modules.order.OrderDetailsActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.modules.search.SearchSuggestionActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.modules.editPhoto.EditPhotoActivity"
+            android:label="@string/title_activity_edit_photo" />
+        <activity
+            android:name=".ui.modules.buyer.ownDesign.BuyerAddOwnProductDesignActivity"
+            android:label="@string/title_activity_buyer_add_own_product_design"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.modules.buyer.productDetails.FullScreenImageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.modules.buyer.productDetails.CatalogueProductDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.modules.artisan.profile.editProfile.ArtisanEditProfileActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.modules.artisan.profile.ArtisanProfileActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.modules.artisan.landing.ArtisanLandingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.modules.buyer.profile.editProfile.BuyerEditProfileActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.modules.buyer.profile.BuyerProfileActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.modules.cx_demovideo.CXVideoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.modules.buyer.landing.BuyerLandingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.modules.authentication.register.RegisterActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.modules.role.RoleSelectActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.modules.authentication.reset.ResetPasswordActivity"
+            android:noHistory="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.modules.authentication.login.LoginActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.modules.main.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/splashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.modules.artisan.productTemplate.ArtisanAddProductTemplateActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.modules.chat.ChatLogDetailsActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.modules.artisan.landing.PDFViewerActivity"
+            android:screenOrientation="portrait" />
+
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.adrosonic.craftexchange.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <service
+            android:name=".services.moq.MoqSendService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name=".services.notification.NotificationReadService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name=".services.customDesign.UpdateOwnProductService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name=".services.ProductUpdateService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name=".services.ProductDeletingService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name=".services.customDesign.AddOwnProductService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name=".services.customDesign.DeleteOwnProductService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name=".services.ProductCreateService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name=".services.wishlist.WishlistService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name=".services.pi.PiService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service android:name=".services.InstanceIdService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".services.notification.MessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
     </application>
 
 </manifest>

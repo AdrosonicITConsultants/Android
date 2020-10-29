@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+    <LinearLayout
+        android:id="@+id/buyer_delivery_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context=".ui.modules.buyer.profile.BrandFragment">
+
+        <TextView
+            android:id="@+id/field_gst"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginTop="@dimen/margin_regular"
+            android:layout_marginStart="@dimen/margin_regular"
+            android:text="@string/enter_gst"
+            android:textColor="@color/black_text"
+            android:textStyle="bold"
+            android:fontFamily="@font/lato_regular"/>
+
+        <TextView
+            android:id="@+id/gst"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="16sp"
+            android:textColor="@color/black_text"
+            android:layout_marginStart="@dimen/margin_regular"
+            android:fontFamily="@font/lato_regular"
+            android:text="xxxxxxxxx"/>
+
+        <TextView
+            android:id="@+id/field_cin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginTop="@dimen/margin_semimedium"
+            android:layout_marginStart="@dimen/margin_regular"
+            android:text="@string/enter_cin"
+            android:textColor="@color/black_text"
+            android:textStyle="bold"
+            android:fontFamily="@font/lato_regular"/>
+
+        <TextView
+            android:id="@+id/cin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="16sp"
+            android:textColor="@color/black_text"
+            android:layout_marginStart="@dimen/margin_regular"
+            android:fontFamily="@font/lato_regular"
+            android:text="xxxxxxxxx"/>
+
+        <TextView
+            android:id="@+id/field_pan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginTop="@dimen/margin_semimedium"
+            android:layout_marginStart="@dimen/margin_regular"
+            android:text="@string/pan"
+            android:textColor="@color/black_text"
+            android:textStyle="bold"
+            android:fontFamily="@font/lato_regular"/>
+
+        <TextView
+            android:id="@+id/pan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="16sp"
+            android:textColor="@color/black_text"
+            android:layout_marginStart="@dimen/margin_regular"
+            android:fontFamily="@font/lato_regular"
+            android:text="xxxxxxxxx"/>
+
+        <View
+            android:id="@+id/divider"
+            style="@style/HorizontalDivider3"
+            android:layout_marginTop="@dimen/margin_semimedium"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"/>
+
+        <TextView
+            android:id="@+id/details_poc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_semimedium"
+            android:layout_marginStart="@dimen/margin_regular"
+            android:text="@string/detials_of_poc"
+            android:textColor="@color/black_text"
+            android:textSize="20sp"
+            android:fontFamily="@font/playfair_regular"
+            android:textStyle=""/>
+
+        <TextView
+            android:id="@+id/field_poc_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginTop="@dimen/margin_semimedium"
+            android:layout_marginStart="@dimen/margin_regular"
+            android:text="@string/name"
+            android:textColor="@color/black_text"
+            android:textStyle="bold"
+            android:fontFamily="@font/lato_regular"/>
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="16sp"
+            android:textColor="@color/black_text"
+            android:layout_marginStart="@dimen/margin_regular"
+            android:fontFamily="@font/lato_regular"
+            android:text="xxxxxxxxx"/>
+
+        <TextView
+            android:id="@+id/field_poc_mobile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginTop="@dimen/margin_semimedium"
+            android:layout_marginStart="@dimen/margin_regular"
+            android:text="@string/mobile"
+            android:textColor="@color/black_text"
+            android:textStyle="bold"
+            android:fontFamily="@font/lato_regular"/>
+
+        <TextView
+            android:id="@+id/mobile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="16sp"
+            android:textColor="@color/black_text"
+            android:layout_marginStart="@dimen/margin_regular"
+            android:fontFamily="@font/lato_regular"
+            android:text="xxxxxxxxx"/>
+
+        <TextView
+            android:id="@+id/field_poc_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginTop="@dimen/margin_semimedium"
+            android:layout_marginStart="@dimen/margin_regular"
+            android:text="@string/email"
+            android:textColor="@color/black_text"
+            android:textStyle="bold"
+            android:fontFamily="@font/lato_regular"/>
+
+        <TextView
+            android:id="@+id/email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="@dimen/margin_semimedium"
+            android:textSize="16sp"
+            android:textColor="@color/black_text"
+            android:text="xyz@craftexchange.com"
+            android:layout_marginStart="@dimen/margin_regular"
+            android:fontFamily="@font/lato_regular"
+            tools:text="xxxxxxxxx"/>
+    </LinearLayout>
+    </ScrollView>
+
+</layout>

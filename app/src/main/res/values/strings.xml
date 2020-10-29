@@ -1,3 +1,364 @@
 <resources>
-    <string name="app_name">CraftExchange</string>
+    <string name="app_name">Craft Xchange</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+
+    //role select
+    <string name="logo">Logo</string>
+    <string name="description">What describes you the best?</string>
+    <string name="desc_text">Description</string>
+    <string name="or">or</string>
+    <string name="artisan">Artisan</string>
+    <string name="artisan_logo">Artisan Logo</string>
+    <string name="buyer">Buyer</string>
+    <string name="change_language">Change Language</string>
+    <string name="need_help">Need help Deciding?</string>
+    <string name="need_help2">Need help?</string>
+    <string name="change_lang_desc">Change language icon</string>
+    <string name="privacy_policy">Privacy Policy</string>
+
+    //buyer login
+    <string name="enter_username">Enter your registered mobile\nnumber or email id</string>
+    <string name="next">Next</string>
+    <string name="need">Need help ?</string>
+    <string name="new_user">New User? Click here to register.</string>
+    <string name="enter_password">Enter your password\nto login</string>
+    <string name="forgot_password">Forgot Password?</string>
+
+    //buyer register
+    <string name="enter_email">Enter your email id</string>
+    <string name="send_otp">Send OTP</string>
+    <string name="enter_otp">Enter OTP received in your email id</string>
+    <string name="verify_proceed"><![CDATA[Verify & Proceed]]></string>
+    <string name="reach_out_text">In case of any help</string>
+    <string name="reach_out_button">Reach out to us</string>
+    <string name="enter_new_password">Enter your new password</string>
+    <string name="retype_pwd">Retype Password</string>
+    <string name="about_yourself">Tell us about yourself</string>
+    <string name="firstname">First Name</string>
+    <string name="lastname">Last Name</string>
+    <string name="mobile">Mobile Number</string>
+    <string name="alt_mobile">Alternate Contact Number</string>
+    <string name="designation">Designation</string>
+    <string name="comp_field">Fields are mandatory</string>
+    <string name="text_nextup">Next up :</string>
+    <string name="text_comp_details"> Company Details</string>
+    <string name="about_company">Tell us about your company</string>
+    <string name="compname">Brand/ Company Name</string>
+    <string name="enter_gst">GST Number</string>
+    <string name="enter_cin">CIN Number</string>
+    <string name="pan">PAN Number</string>
+    <string name="upload_logo_text">Upload your brand logo</string>
+    <string name="specs_image_upload">"Image - PNG, JPEG - (1Mb Max) "</string>
+    <string name="text_addr_details">Address Details</string>
+    <string name="about_web">Provide your link for web presence?</string>
+    <string name="text_skip_details">You can skip this step and add your links later in the profile section</string>
+    <string name="weblink">Website link</string>
+    <string name="sociallink">Social media link</string>
+    <string name="complete">Complete</string>
+    <string name="text_to_tnc"><![CDATA[By completing this form and signup\nprocess, you hereby agree to our \n]]></string>
+    <string name="enter_address">What\'s your registered address?</string>
+    <string name="text_web_details">Web details</string>
+    <string name="addr1">Address Line 1</string>
+    <string name="addr2">Address Line 2</string>
+    <string name="street">Street</string>
+    <string name="city">City</string>
+    <string name="state">State</string>
+    <string name="country">Country</string>
+    <string name="country_text">Country</string>
+    <string name="text_pincode">Pincode</string>
+
+    //buyer reset
+    <string name="success_tick">Success Tick</string>
+    <string name="success_pwd_reset_msg">Your password was successfully reset</string>
+    <string name="loginnow">Login now</string>
+    <string name="confirmation_text">An email confirmation has been sent\nto your registered email id</string>
+    <string name="poc">Buyer\'s Point of Contact : </string>
+    <string name="contact">Contact Number</string>
+    <string name="email">Email id</string>
+    <string name="landmark">Landmark</string>
+    <string name="district">District</string>
+    <string name="buyer_logo">BuyerIcon</string>
+    <string name="enter_artisan_id">Enter your artisan id</string>
+    <string name="no_artisanId_text">if you don\'t have an\nartisan id get in touch with us</string>
+    <string name="artisanId">"Artisan id : "</string>
+    <string name="cluster">Cluster</string>
+    <string name="address">Address</string>
+    <string name="text_select_cat">Select category of artisanProducts you make</string>
+    <string name="skip_text_artisan"><![CDATA[You can always do this step later, SKIP >]]></string>
+    <string name="contactname">Contact Name</string>
+    <string name="home">Home</string>
+    <string name="enquiries">Enquiries</string>
+    <string name="wishlist">Wishlist</string>
+    <string name="chat">Chat</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="hi">Hi,</string>
+    <string name="hi_without_comma">Hi</string>
+    <string name="my_profile">My Profile</string>
+    <string name="my_transactions">My Transactions</string>
+    <string name="my_orders">My Orders</string>
+    <string name="custom_design">Custom Designs</string>
+    <string name="my_dashboard">My Dashboard</string>
+    <string name="support">Support</string>
+    <string name="logout">Logout</string>
+    <string name="action_notifications">Notifications</string>
+    <string name="search">Search</string>
+    <string name="browse_text">Browse the latest collection of</string>
+    <string name="choose_from">Choose from</string>
+    <string name="unique_in_mind">Have something unique in mind?</string>
+    <string name="customize_your_design">Customise your own design</string>
+    <string name="skip">Skip</string>
+
+    <string name="message_operation_not_supported_offline">Operation not supported in offline</string>
+    <string name="no_internet_connection">No Internet Connection</string>
+    <string name="enter_email_mobile">Enter your email/mobile numner</string>
+    <string name="logout_text">Are your sure you want to logout?</string>
+    <string name="profile_update_success">Profile updated successfully!</string>
+    <string name="artisan_self_design">Artisan self\ndesign</string>
+    <string name="explore">Explore</string>
+    <string name="antaran_design_collec">Antaran co-design\ncollection</string>
+    <string name="user">User</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="artisan_rating_text">Avg. rating by artisans</string>
+    <string name="general">General</string>
+    <string name="brand">Brand</string>
+    <string name="delivery">Delivery</string>
+    <string name="reg_addr">Registered address</string>
+    <string name="delivery_addr">Delivery address</string>
+    <string name="detials_of_poc">Details for point of contact</string>
+    <string name="name">Name</string>
+    <string name="pwd_validation_text">Please Enter Valid Password with 8 characters.It should contain atleast Capital alphabet,number and special character</string>
+    <string name="otp_send_success">OTP sent successfully!</string>
+    <string name="pincode_invalid_text">"Invalid pincode"</string>
+    <string name="pan_invalid_text">"Invalid Pan number"</string>
+    <string name="gst_invalid_text">"Invalid GST number"</string>
+    <string name="cin_invalid_text">"Invalid CIN number"</string>
+    <string name="link_invalid_text">"Invalid link"</string>
+    <string name="mobile_no_invalid_text">Invalid mobile number</string>
+    <string name="enter_valid_details">Enter Valid Details</string>
+    <string name="file_size_exceeded">File size exceeded 1Mb</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="alphaNumeric">ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789</string>
+    <string name="alphaNumeric2">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789</string>
+    <string name="hello">Hello</string>
+    <string name="your_product">Your Products</string>
+    <string name="list_prod_text">List of your very own products sorted by categories</string>
+    <string name="registration_success_msg">Registration Successful!</string>
+    <string name="my_details">My Details</string>
+    <string name="brand_details">Brand Details</string>
+    <string name="bank_details">Bank Details</string>
+    <string name="edit_details">Edit Details</string>
+    <string name="add_new_prod">Add a new product</string>
+    <string name="avg_rating">Avg rating</string>
+    <string name="product_category">Product Category</string>
+    <string name="edit_brand_details">Edit Brand Details</string>
+    <string name="details_bank">Bank Details</string>
+    <string name="account_no">Account Number</string>
+    <string name="bank_name">Bank Name</string>
+    <string name="benificiary_name">Beneficiary Name</string>
+    <string name="branch">Branch</string>
+    <string name="ifsc_code">IFSC Code</string>
+    <string name="digital_payment_details">Digital Payment Details</string>
+    <string name="edit_bank_details">Edit Bank Details</string>
+    <string name="change_brand_logo">Change Brand\nProfile Image</string>
+
+    <string name="gpay_field">Google Pay UPI Id</string>
+    <string name="paytm_field">Paytm Registered Mobile Number</string>
+    <string name="phonepe_field">PhonePe UPI Id</string>
+    <string name="remove_photo">Remove Photo</string>
+    <string name="change_profile_text">Change Profile Photo</string>
+    <string name="artisan_self_design_collection">Artisan Self Design Collection</string>
+    <string name="regions">Regions</string>
+    <string name="categories">Categories</string>
+    <string name="artisan_brands">Artisan Brands</string>
+    <string name="antaran_co_design_collection">Antaran Co Design Collection</string>
+    <string name="view_more">View More</string>
+    <string name="generate_enquiry">Generate Enquiry</string>
+    <string name="available_in_stock">Avalaible in stock</string>
+
+    <string name="in_stock">In Stock</string>
+    <string name="exclusively_enter">Exclusively\n</string>
+    <string name="exclusively">Exclusively\t</string>
+    <string name="you_can_check_again_by_clicking_on_cancel">You can check again by clicking on \'Cancel\'</string>
+    <string name="save_n_upload">Save &amp; upload it?</string>
+    <string name="ok">Ok</string>
+    <string name="are_you_sure_you_want_to_go_back">Are you sure you want to go back?</string>
+    <string name="go_back">Go back</string>
+    <string name="you_shal_lose">You shall lose all your progress as it is not saved yet. If you don\'t want to lose, you can save it before going back!</string>
+    <string name="describe_your_product">Describe your product</string>
+    <string name="weight_10_characters">Weight (10 Characters)  </string>
+    <string name="enter_gsm_value">Enter GSM value</string>
+    <string name="click_here_to_add_upto_3_photos">Click here to add upto 3 images</string>
+    <string name="product_add_limit">You can add upto 3 images only</string>
+    <string name="made_to_order">Made to order</string>
+
+
+    //Cluster description
+    <string name="Man_text"> Maniabandha in Cuttack is known for single weft ikat weaving - particularly the “khandua patta” woven for Lord Jagnath. </string>
+    <string name="Gop_text">A coastal village of Odisha, on banks of Brahmani river, Gopalpur is a Tussar weave cluster. </string>
+    <string name="Ven_text"> Part of Nellore district of Andhra, Venktagiri  is famous for fine handloom cotton and silk saris, dupattas. </string>
+    <string name="Kam_text"> A district in Assam, on the banks of Brahmaputra river, Kamrup is the leading eri silk cluster of India. </string>
+    <string name="Nal_text"> Situated on north bank of Brahmaputra in Assam, Nalbari specialises in weave of mulberry silk; while cotton, eri and zari yarns are also used. </string>
+    <string name="Dil_text">  Dimapur, Phek region weavers now weave contemporary textiles in thick cotton for home textiles, jackets, bags.. </string>
+    <string name="product_details">Product Details</string>
+    <string name="see_all_prod_details">See all product details</string>
+    <string name="region_of_origin">Region of origin:</string>
+    <string name="product_category_colon">Product Category:</string>
+    <string name="weave_type_used">Weave types used</string>
+    <string name="artisan_brand">Artisan Brand</string>
+    <string name="weaves_used">Weaves used</string>
+    <string name="warp">Warp</string>
+    <string name="weft">Weft</string>
+    <string name="extraweft">Extra Weft</string>
+    <string name="yarn">Yarn</string>
+    <string name="yarn_count">Yarn Count</string>
+    <string name="dye_used">Dye Used</string>
+    <string name="reed_count">Reed Count</string>
+    <string name="weight">Weight</string>
+    <string name="dimensions">Dimensions</string>
+    <string name="gsm">GSM\n(Gram per Square Metre)</string>
+    <string name="wash_care_instructions">Wash Care Instructions</string>
+    <string name="like_it">Like it ?</string>
+    <string name="are_you_sure_you_want_to_remove">Are you sure you want to remove?</string>
+    <string name="remove">Remove</string>
+    <string name="heart_it_amp_take_it"><![CDATA[Heart it & take it!]]></string>
+    <string name="no_results_found">No Results Found :-(</string>
+
+    <string name="compressing">Image compression in progress…</string>
+    <string name="enquiry_is_being_generated">Enquiry is being generated</string>
+    <string name="hold_on">Hold on!</string>
+    <string name="enquiry_is_already_generated">Enquiry for this product\nhas been already generated!</string>
+    <string name="view_existing_enquiry">View Existing Enquiry</string>
+    <string name="want_to_generate_new_enquiry">Want to generate a\nnew enquiry?</string>
+    <string name="generate_new_enquiry">Generate new enquiry</string>
+    <string name="with_enquiry_id">With Enquiry Id\t</string>
+    <string name="enquiry_generated_success">Enquiry generated\nsucessfully!</string>
+    <string name="enquiry_id">Enquiry Id\t</string>
+    <string name="refer_to_ongoing_enquiries">Please refer \"Ongoing Enquiry\" tab\nto track your enquiry.</string>
+    <string name="view_enquiry">View Enquiry</string>
+
+    <string name="title_activity_buyer_add_own_product_design">BuyerAddOwnProductDesign</string>
+    <!-- Strings used for fragments for navigation -->
+
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="make_it_amp_take_it"><![CDATA[Make it & take it!]]></string>
+    <string name="search_hint">Search products, codes, product types, weaves</string>
+    <string name="empty_suggestion_text">No suggestions for this keyword. Try searching\n\"saree\",\"fabric\",\"ikat\".</string>
+    <string name="filter_items_collection">Filter items\nby collection</string>
+    <string name="show_both">Show both</string>
+    <string name="collapse">Collapse</string>
+    <string name="title_activity_edit_photo">EditPhotoActivity</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="your_enquiries">Your Enquiries</string>
+    <string name="ongoing">Ongoing</string>
+    <string name="completed">Completed</string>
+    <string name="recent">Recent</string>
+    <string name="enquiry_details">Enquiry Details</string>
+    <string name="check_artisan_details">Check artisan\'s details</string>
+    <string name="check_moq">Check MOQ</string>
+    <string name="check_pi">Check PI</string>
+    <string name="check_product_details">Check Product Details</string>
+    <string name="moq">MOQ</string>
+    <string name="price_per_unit">Price/unit(or m)</string>
+    <string name="eta_delivery">ETA Delivery</string>
+    <string name="close_enquiry">Close Enquiry</string>
+    <string name="status">Status</string>
+    <string name="specialist_in">Specialist in</string>
+    <string name="view_pi">View\npro forma\ninvoice</string>
+    <string name="upload_trans_receipt">Select amount &amp; upload receipt</string>
+    <string name="previous">Previous</string>
+    <string name="current">Current</string>
+    <string name="requested_custom_design">Requested Custom Design</string>
+    <string name="awaiting_payment_receipt">Awaiting Payment Receipt</string>
+    <string name="check_details">Check Details</string>
+    <string name="create_and_send_pi"><![CDATA[Create & Send Pro forma Invoice]]></string>
+    <string name="enq_note_to_artisan">Please leverage the use of chat to discuss and finalise on the\nterms before hand to avoid any escalation,dispute or discrepancy</string>
+    <string name="pi_note_to_artisan">The PI can be changed later only if change request is raised by buyer</string>
+    <string name="company_details">Company Details</string>
+    <string name="company">Company</string>
+    <string name="mark_all_as_read">Mark all as read</string>
+    <string name="no_new_notifications">No new notifications</string>
+    <string name="fill_in_moq_to_bid">Fill in MOQ to bid for this enquiry</string>
+    <string name="type_your_note_here">Type your note here</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="accept_moq_from_this_list">Accept MOQ from this list which suits your needs the best</string>
+    <string name="you_can_find_this_moq">You can find this MOQ in ongoing enquiry, under enquirues tab to track your enquiry</string>
+    <string name="title_activity_dashboard">DashboardActivity</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">Hello Square World!</string>
+    <string name="select_advance_amount_note">Select the % of the total amount (as per PI) you wish\nto pay below :</string>
+    <string name="proceed_with_pay">Proceed with advance payment</string>
+    <string name="notify_tt_team"><![CDATA[The following will be notified to Artisan &\nthe Administration team at Tata Trusts]]></string>
+    <string name="payment_upload_confirmation">Upload the payment receipt to confirm</string>
+    <string name="upload_and_send_transac">Upload and send for confirmation</string>
+    <string name="account_details">Account Details : </string>
+    <string name="amount_paid">Amount paid</string>
+    <string name="thankyou_upload_transac_receipt_text">Thankyou! Your receipt has been uploaded\nsuccessfully and Artisan is notified.\nThe acceptance will be notified within 3 days\nmaximum from now.</string>
+    <string name="ps_updated_pi">Please Note: The Pro forma invoice will be updated</string>
+    <string name="enq_to_order_text">The enquiry will be converted to order\nonce payment is approved. Check Orders tab.</string>
+    <string name="view_transaction">View transaction</string>
+    <string name="amt_to_be_paid">Amount to be paid</string>
+    <string name="select_advance_payment">Select Advanced Payment</string>
+    <string name="upload_payment_receipt">Upload Advance Payment Receipt</string>
+    <string name="proforma_invoice">Proforma invoice</string>
+    <string name="fill_in_pi_for_this_enquiry">Fill in PI for this enquiry</string>
+    <string name="preview_not_available"><![CDATA[<B>Sorry!<br> Preview not available due to internet connection unavailability.</B>]]></string>
+    <string name="awaiting_artisan_confirmation">Awaiting artisan confirmation</string>
+    <string name="payment_receipt_upload_confirmation">Payment Receipt Uploaded!</string>
+    <string name="awaiting_payment_confirmation">Awaiting payment confirmation</string>
+    <string name="chck_adv_pay_receipt">Check advance payment receipt</string>
+    <string name="view">View</string>
+    <string name="view_approve_payment"><![CDATA[View & Approve Payment]]></string>
+    <string name="approve_advance_payment_by_buyer">Approve Advance Payment by Buyer</string>
+    <string name="reject_payment">Reject Payment</string>
+    <string name="approve_advance_payment">Approve Advance Payment</string>
+    <string name="payment_receipt">Payment Receipt</string>
+    <string name="amt_to_be_paid_as_per_pi">"Amount to be paid as per PI : "</string>
+    <string name="note_to_artisan_validate_pay">Once you approve it, the product stage cannot be reverted.\nKindly make sure to check your account balance is reflected with\nthe amount. Best practice is to check with your bank,\nor in bank statement from authorised bank sources.</string>
+    <string name="double_tap_to_zoom">*Double tap to zoom</string>
+    <string name="awaiting_confirmation">Awaiting Confirmation</string>
+    <string name="start_production_stage">Start Production stage</string>
+    <string name="update_enq_stage_text1">You have to update the status every</string>
+    <string name="update_enq_stage_text2">48hrs to avoid escalation</string>
+    <string name="mark_inprogress">Mark as still in progress</string>
+    <string name="mark_move_next_stage">Mark as complete and move to next stage</string>
+    <string name="hrs_avoid_escalation">8 hrs to avoid escalation</string>
+    <string name="view_receipt">View Receipt</string>
+    <string name="title_activity_transaction">TransactionActivity</string>
+    <string name="search_transac_by_enquiryId">Search by Enquiry ID</string>
+    <string name="your_transactions">Your Transactions</string>
+    <string name="view_invoice">View Invoice</string>
+    <string name="filter_transac_by">Filter transactions by :</string>
+
+    <string-array name="filter_transac_items">
+        <item>All</item>
+        <item>PI ID</item>
+        <item>Payment ID</item>
+        <item>Tax Invoice ID</item>
+        <item>Challan ID</item>
+    </string-array>
+    <string name="orders">Orders</string>
+    <string name="start_this_stage">Start this stage</string>
+    <string name="you_have_to_update_the_status">You have to update the status every \n 48 hours to avoid escalation</string>
+    <string name="mark_as_still_in_progress">Mark as still in progress</string>
+    <string name="mark_as_completed">Mark as completed and move to next stage</string>
+    <string name="you_have_to_update_8hrs">You have to update the status every \n8 hours to avoid escalation</string>
+    <string name="change_request_initiated"> Change request initiated</string>
+    <string name="chats">Chats</string>
+    <string name="search_chat_by_enquiryId">Search chat by enquiryId</string>
+
+
 </resources>

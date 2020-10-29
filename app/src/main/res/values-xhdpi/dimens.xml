@@ -1,0 +1,27 @@
+<resources>
+    <dimen name="margin_semimedium">25.6dp</dimen>
+	<dimen name="margin_small">3.2dp</dimen>
+    <dimen name="margin_regular">12.8dp</dimen>
+    <dimen name="margin_medium">32dp</dimen>
+	<dimen name="Ques_text">18.4sp</dimen>
+    <dimen name="edit_text">16sp</dimen>
+	<dimen name="button_text">16sp</dimen>
+    <dimen name="fab_margin">25.6dp</dimen>
+	<dimen name="activity_vertical_margin">25.6dp</dimen>
+    <dimen name="activity_horizontal_margin">25.6dp</dimen>
+    <dimen name="title_text">20sp</dimen>
+	<dimen name="card_wt">120dp</dimen>
+	<dimen name="card_ht">144dp</dimen>
+	<dimen name="imageview_dim">96dp</dimen>
+	<dimen name="profile_img">80dp</dimen>
+	<dimen name="product_card_height">88dp</dimen>
+	<dimen name="product_title_text">17.6sp</dimen>
+	<dimen name="product_description_text">14.4sp</dimen>
+	<dimen name="product_note_text">12sp</dimen>
+	<dimen name="product_availability_text">9.6sp</dimen>
+	<dimen name="cat_prod_image_width">88dp</dimen>
+	<dimen name="expandable_layout_std_padding">16dp</dimen>
+	<dimen name="edit_image_padding">36dp</dimen>
+	<dimen name="img_editable_hieght">320dp</dimen>
+	<dimen name="img_editable_options_hieght">40dp</dimen>
+</resources>

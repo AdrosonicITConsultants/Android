@@ -1,11 +1,83 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/red_logo</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="HorizontalDivider">
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">?android:attr/listDivider</item>
+    </style>
+
+    <style name="HorizontalDivider2">
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">?android:attr/listDivider</item>
+    </style>
+
+    <style name="HorizontalDivider3">
+        <item name="android:layout_width">150dp</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">?android:attr/listDivider</item>
+    </style>
+
+    <style name="HorizontalDivider4">
+        <item name="android:layout_width">300dp</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">?android:attr/listDivider</item>
+    </style>
+
+    <style name="splashScreenTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_screen</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="AppTheme.Toolbar" parent="ThemeOverlay.AppCompat.Light">
+        <!--This line changes the color of text in Toolbar-->
+        <item name="android:textColorPrimary">#000</item>
+        <!--This line changes the color of icons in toolbar (back, overflow menu icons)-->
+        <item name="android:textColorSecondary">#000</item>
+    </style>
+
+    <style name="NavMenuText" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/lato_regular</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/nav_menu_text</item>
+    </style>
+
+    <style name="artisan_tab_text" parent="TextAppearance.Design.Tab">
+        <item name="android:fontFamily">@font/playfair_regular</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="artisan_viewprod_tab_text" parent="TextAppearance.Design.Tab">
+        <item name="android:fontFamily">@font/lato_regular</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="dark_spinner_item" parent="@android:style/Widget.TextView">
+        <item name="android:textColor">@color/lighter_gray</item>
+        <item name="android:background">@color/black_text</item>
+        <item name="fontFamily">@font/lato_regular</item>
+        <item name="paddingStart">@dimen/margin_regular</item>
+        <item name="android:gravity">center_vertical|end</item>
+    </style>
+
+    <style name="seekbarStyle" parent="Widget.AppCompat.SeekBar">
+        <item name="android:progressBackgroundTint">@color/darker_gray</item>
+    </style>
 </resources>

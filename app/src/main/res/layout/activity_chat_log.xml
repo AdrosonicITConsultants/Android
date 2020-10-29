@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/chat_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="start"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_keyboard_backspace_black_24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/chat_profile_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_back"
+            app:layout_constraintStart_toEndOf="@+id/btn_back"
+            app:layout_constraintTop_toTopOf="@+id/btn_back" />
+        <TextView
+            android:id="@+id/brand_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="10dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/lato_bold"
+
+            android:textColor="@color/red_logo"
+            android:textSize="@dimen/product_description_text"
+            app:layout_constraintEnd_toStartOf="@+id/icon_change_request"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/chat_profile_image"
+            app:layout_constraintTop_toTopOf="@+id/chat_profile_image" />
+        <TextView
+            android:id="@+id/txt_enquiry_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato_regular"
+            android:layout_marginTop="4dp"
+
+            android:textSize="@dimen/product_availability_text"
+            app:layout_constraintTop_toBottomOf="@+id/brand_name"
+            app:layout_constraintStart_toStartOf="@+id/brand_name"/>
+        <ImageView
+            android:id="@+id/icon_change_request"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/ic_change_language"
+            android:layout_marginEnd="@dimen/margin_regular"
+            app:layout_constraintEnd_toStartOf="@+id/icon_escalation"
+            app:layout_constraintTop_toTopOf="@+id/icon_escalation"
+            app:layout_constraintBottom_toBottomOf="@+id/icon_escalation"/>
+        <ImageView
+            android:id="@+id/icon_escalation"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginEnd="@dimen/margin_regular"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/ic_home"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <com.github.bassaer.chatmessageview.view.ChatView
+            android:id="@+id/chat_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            app:message_font_size="20sp"
+            app:date_separator_font_size="16sp"
+            app:time_label_font_size="16sp"
+            app:username_font_size="16sp"
+            app:message_max_width="200dp"
+            app:option_button_enable="true"
+            app:text_selectable="true"
+            app:layout_constraintTop_toBottomOf="@+id/chat_profile_image"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <!--    <EditText-->
+        <!--        android:id="@+id/edit_text_chat_log"-->
+        <!--        android:layout_width="272dp"-->
+        <!--        android:layout_height="41dp"-->
+        <!--        android:layout_marginStart="16dp"-->
+        <!--        android:layout_marginBottom="16dp"-->
+        <!--        android:background="@android:color/white"-->
+        <!--        android:ems="10"-->
+        <!--        android:hint="Type your message here"-->
+        <!--        android:inputType="textPersonName"-->
+        <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--        app:layout_constraintStart_toStartOf="parent" />-->
+        <!--    <ImageView-->
+        <!--        android:id="@+id/send_chat_message_button"-->
+        <!--        android:layout_width="106dp"-->
+        <!--        android:layout_height="41dp"-->
+        <!--        android:layout_marginEnd="16dp"-->
+        <!--        android:layout_marginBottom="16dp"-->
+        <!--        android:background="@color/lighter_gray"-->
+        <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--        app:layout_constraintEnd_toEndOf="parent"-->
+        <!--        app:srcCompat="@android:drawable/ic_menu_send" />-->
+        <!--    <androidx.recyclerview.widget.RecyclerView-->
+        <!--        android:layout_width="403dp"-->
+        <!--        android:layout_height="604dp"-->
+        <!--        app:layout_constraintEnd_toEndOf="parent"-->
+        <!--        app:layout_constraintHorizontal_bias="0.593"-->
+        <!--        app:layout_constraintStart_toStartOf="parent"-->
+        <!--        tools:ignore="MissingConstraints"-->
+        <!--        tools:layout_editor_absoluteY="64dp" />-->
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

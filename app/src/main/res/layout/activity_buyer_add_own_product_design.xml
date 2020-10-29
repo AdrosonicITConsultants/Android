@@ -1,0 +1,834 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorSplash"
+        android:orientation="vertical"
+        tools:context=".ui.modules.buyer.ownDesign.BuyerAddOwnProductDesign">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/add_product_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorSplash"
+            android:theme="@style/AppTheme.Toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <ImageView
+                android:id="@+id/btn_back"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_gravity="start"
+                android:background="?selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_keyboard_backspace_black_24dp" />
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="40dp"
+                android:src="@drawable/ic_custom_button_icon" />
+
+            <TextView
+                android:id="@+id/txt_save_upload_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:background="@drawable/rect_round_grad_blue_solid"
+                android:drawableRight="@drawable/ic_save_upload"
+                android:fontFamily="@font/lato_regular"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:text=" Save "
+                android:textColor="@color/white_text" />
+        </androidx.appcompat.widget.Toolbar>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/linearLayout2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:divider="@color/darker_gray"
+                    android:orientation="vertical"
+                    android:showDividers="middle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="parent">
+
+                    <LinearLayout
+                        android:id="@+id/parent_step1"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:id="@+id/img_status_step1"
+                            android:layout_width="0dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:src="@drawable/ic_add_prod_status" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="8"
+                            android:fontFamily="@font/lato_regular"
+                            android:text="Step 1 : Add Photo"
+                            android:textColor="@color/black_text" />
+
+                        <ImageView
+                            android:id="@+id/ic_step1_arr"
+                            android:layout_width="0dp"
+                            android:layout_height="32dp"
+                            android:layout_weight="1"
+                            android:src="@drawable/ic_arrow_down"
+                            android:tint="@color/darker_gray" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/child_step1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/black_text"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:padding="@dimen/expandable_layout_std_padding"
+                        android:visibility="gone"
+                        tools:ignore="UnusedAttribute">
+
+                        <TextView
+                            android:id="@+id/txt_add_product_image"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_baseline_photo_camera_24"
+                            android:fontFamily="@font/lato_regular"
+                            android:text="@string/click_here_to_add_upto_3_photos"
+                            android:textColor="@color/lighter_gray"
+                            android:textSize="@dimen/edit_text" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/add_photo_recycler"
+                            android:layout_width="wrap_content"
+                            android:layout_height="200dp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:layout_margin="@dimen/margin_regular"
+                            android:orientation="horizontal"
+                            android:padding="8dp"
+                            android:scrollbars="horizontal" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/rectangle_round_green_solid"
+                            android:fontFamily="@font/lato_regular"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:text="   Next  >   "
+                            android:textAlignment="center"
+                            android:textColor="@color/white_text"
+                            android:textSize="@dimen/edit_text"
+                            android:textStyle="bold"
+                            android:visibility="gone" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/parent_step2"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:id="@+id/img_status_step2"
+                            android:layout_width="0dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:src="@drawable/ic_add_prod_status" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="8"
+                            android:fontFamily="@font/lato_regular"
+                            android:text="Step 2 : Add general details"
+                            android:textColor="@color/black_text" />
+
+                        <ImageView
+                            android:id="@+id/ic_step2_arr"
+                            android:layout_width="0dp"
+                            android:layout_height="24dp"
+                            android:layout_weight="1"
+                            android:src="@drawable/ic_arrow_down"
+                            android:tint="@color/darker_gray" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/child_step2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="@dimen/expandable_layout_std_padding"
+                        android:visibility="gone">
+
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/expandable_layout_std_padding"
+                            android:background="@drawable/rectangle_spinner_bg">
+
+                            <Spinner
+                                android:id="@+id/sp_prod_category"
+                                style="@style/Widget.AppCompat.DropDownItem.Spinner"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:autofillHints="Select product category" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/expandable_layout_std_padding"
+                            android:background="@drawable/rectangle_spinner_bg">
+
+                            <Spinner
+                                android:id="@+id/sp_prod_type"
+                                style="@style/Widget.AppCompat.DropDownItem.Spinner"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:autofillHints="Product type" />
+                        </RelativeLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/rectangle_round_green_solid"
+                            android:fontFamily="@font/lato_regular"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:text="   Next  >   "
+                            android:textAlignment="center"
+                            android:textColor="@color/white_text"
+                            android:textSize="@dimen/edit_text"
+                            android:textStyle="bold"
+                            android:visibility="gone" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/parent_step3"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:id="@+id/img_status_step3"
+                            android:layout_width="0dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:src="@drawable/ic_add_prod_status" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="8"
+                            android:fontFamily="@font/lato_regular"
+                            android:text="Step 3 : Select weave type"
+                            android:textColor="@color/black_text" />
+
+                        <ImageView
+                            android:id="@+id/ic_step3_arr"
+                            android:layout_width="0dp"
+                            android:layout_height="24dp"
+                            android:layout_weight="1"
+                            android:src="@drawable/ic_arrow_down"
+                            android:tint="@color/darker_gray" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/child_step3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/expandable_layout_std_padding"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/lato_regular"
+                            android:text="You can select multiple options"
+                            android:textColor="@color/black_text"
+                            android:textSize="@dimen/edit_text" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/weave_recycler_list"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:scrollbars="vertical" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_margin="16dp"
+                            android:background="@drawable/rectangle_round_green_solid"
+                            android:fontFamily="@font/lato_regular"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:text="   Next  >   "
+                            android:textAlignment="center"
+                            android:textColor="@color/white_text"
+                            android:textSize="@dimen/edit_text"
+                            android:textStyle="bold"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/parent_step4"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:id="@+id/img_status_step4"
+                            android:layout_width="0dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:src="@drawable/ic_add_prod_status" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="8"
+                            android:fontFamily="@font/lato_regular"
+                            android:text="Step 4 : Select warp, weft and yarn"
+                            android:textColor="@color/black_text" />
+
+                        <ImageView
+                            android:id="@+id/ic_step4_arr"
+                            android:layout_width="0dp"
+                            android:layout_height="24dp"
+                            android:layout_weight="1"
+                            android:src="@drawable/ic_arrow_down"
+                            android:tint="@color/darker_gray" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/child_step4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/expandable_layout_std_padding"
+                        android:visibility="gone">
+
+                        <androidx.viewpager.widget.ViewPager
+                            android:id="@+id/yarn_pager"
+                            android:layout_width="match_parent"
+                            android:layout_height="220dp" />
+
+                        <LinearLayout
+                            android:id="@+id/slider_dots"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/viewPager"
+                            android:gravity="center_vertical|center_horizontal"
+                            android:orientation="horizontal" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="16dp"
+                            android:background="@drawable/rectangle_round_green_solid"
+                            android:fontFamily="@font/lato_regular"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:text="   Next  >   "
+                            android:textAlignment="center"
+                            android:textColor="@color/white_text"
+                            android:textSize="@dimen/edit_text"
+                            android:textStyle="bold"
+                            android:visibility="gone"
+                            app:layout_constraintEnd_toEndOf="@+id/SliderDots"
+                            app:layout_constraintStart_toStartOf="@+id/SliderDots"
+                            app:layout_constraintTop_toBottomOf="@+id/SliderDots" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/parent_step5"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:id="@+id/img_status_step5"
+                            android:layout_width="0dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:src="@drawable/ic_add_prod_status" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="8"
+                            android:fontFamily="@font/lato_regular"
+                            android:text="Step 5 : Enter the reed count"
+                            android:textColor="@color/black_text" />
+
+                        <ImageView
+                            android:id="@+id/ic_step5_arr"
+                            android:layout_width="0dp"
+                            android:layout_height="24dp"
+                            android:layout_weight="1"
+                            android:src="@drawable/ic_arrow_down"
+                            android:tint="@color/darker_gray" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/child_step5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:padding="@dimen/expandable_layout_std_padding"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:layout_width="88dp"
+                            android:layout_height="88dp"
+                            android:layout_marginBottom="16dp"
+                            android:src="@drawable/ic_reed_icon" />
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/expandable_layout_std_padding"
+                            android:background="@drawable/rectangle_spinner_bg">
+
+                            <Spinner
+                                android:id="@+id/sp_reed_count"
+                                style="@style/Widget.AppCompat.DropDownItem.Spinner"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:autofillHints="Enter reed count" />
+                        </RelativeLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/rectangle_round_green_solid"
+                            android:fontFamily="@font/lato_regular"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:text="   Next  >   "
+                            android:textAlignment="center"
+                            android:textColor="@color/white_text"
+                            android:textSize="@dimen/edit_text"
+                            android:textStyle="bold"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/parent_step6"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:id="@+id/img_status_step6"
+                            android:layout_width="0dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:src="@drawable/ic_add_prod_status" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="8"
+                            android:fontFamily="@font/lato_regular"
+                            android:text="Step 6 : Enter the dimensions"
+                            android:textColor="@color/black_text" />
+
+                        <ImageView
+                            android:id="@+id/ic_step6_arr"
+                            android:layout_width="0dp"
+                            android:layout_height="24dp"
+                            android:layout_weight="1"
+                            android:src="@drawable/ic_arrow_down"
+                            android:tint="@color/darker_gray" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/child_step6"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/expandable_layout_std_padding"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/imageView"
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="8dp"
+                            android:src="@drawable/ic_dimensions" />
+
+                        <TextView
+                            android:id="@+id/txt_prod_type"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/lato_regular"
+                            android:text="Dimensions" />
+
+                        <LinearLayout
+                            android:id="@+id/linearLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/margin_regular"
+                            android:weightSum="9"
+                            app:layout_constraintStart_toStartOf="@+id/txt_prod_type"
+                            app:layout_constraintTop_toBottomOf="@+id/txt_prod_type">
+
+                            <Spinner
+                                android:id="@+id/sp_prod_length"
+                                android:layout_width="0dp"
+                                android:layout_height="40dp"
+                                android:layout_weight="4"
+                                android:background="@drawable/rectangle_edittext_bg"
+                                tools:layout_editor_absoluteX="8dp"
+                                tools:layout_editor_absoluteY="162dp" />
+
+                            <EditText
+                                android:id="@+id/et_prod_length"
+                                android:layout_width="0dp"
+                                android:layout_height="40dp"
+                                android:layout_weight="4"
+                                android:background="@drawable/rectangle_edittext_bg"
+                                android:fontFamily="@font/lato_regular"
+                                android:hint="Length"
+                                android:visibility="gone"
+                                tools:layout_editor_absoluteX="8dp"
+                                tools:layout_editor_absoluteY="162dp" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/lato_regular"
+                                android:text=" X "
+                                android:textAlignment="center"
+                                android:textSize="16sp" />
+
+                            <Spinner
+                                android:id="@+id/sp_prod_width"
+                                android:layout_width="0dp"
+                                android:layout_height="40dp"
+                                android:layout_weight="4"
+                                android:background="@drawable/rectangle_edittext_bg"
+                                tools:layout_editor_absoluteX="8dp"
+                                tools:layout_editor_absoluteY="162dp" />
+
+                            <EditText
+                                android:id="@+id/et_prod_width"
+                                android:layout_width="0dp"
+                                android:layout_height="40dp"
+                                android:layout_weight="4"
+                                android:background="@drawable/rectangle_edittext_bg"
+                                android:fontFamily="@font/lato_regular"
+                                android:hint="Width"
+                                android:visibility="gone"
+                                tools:layout_editor_absoluteX="8dp"
+                                tools:layout_editor_absoluteY="162dp" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/txt_related_prod_type"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/lato_regular"
+                            android:text="Blouse"
+                            android:visibility="gone"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+                        <LinearLayout
+                            android:id="@+id/ll_sub_prod"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/margin_regular"
+                            android:visibility="gone"
+                            android:weightSum="9"
+                            app:layout_constraintTop_toBottomOf="@+id/txt_related_prod_type"
+                            tools:layout_editor_absoluteX="24dp">
+
+                            <Spinner
+                                android:id="@+id/sp_sub_prod_length"
+                                android:layout_width="0dp"
+                                android:layout_height="40dp"
+                                android:layout_weight="4"
+                                android:background="@drawable/rectangle_edittext_bg"
+                                tools:layout_editor_absoluteX="8dp"
+                                tools:layout_editor_absoluteY="162dp" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/lato_regular"
+                                android:text=" X "
+                                android:textAlignment="center"
+                                android:textSize="16sp" />
+
+                            <Spinner
+                                android:id="@+id/sp_sub_prod_width"
+                                android:layout_width="0dp"
+                                android:layout_height="40dp"
+                                android:layout_weight="4"
+                                android:background="@drawable/rectangle_edittext_bg"
+                                tools:layout_editor_absoluteX="8dp"
+                                tools:layout_editor_absoluteY="162dp" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:background="@drawable/rectangle_round_green_solid"
+                            android:fontFamily="@font/lato_regular"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:text="   Next  >   "
+                            android:textAlignment="center"
+                            android:textColor="@color/white_text"
+                            android:textSize="@dimen/edit_text"
+                            android:textStyle="bold"
+                            android:visibility="gone"
+                            app:layout_constraintEnd_toEndOf="@+id/ll_sub_prod"
+                            app:layout_constraintStart_toStartOf="@+id/ll_sub_prod"
+                            app:layout_constraintTop_toBottomOf="@+id/ll_sub_prod" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/parent_step7"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:gravity="center_vertical"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/img_status_step10"
+                            android:layout_width="0dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:src="@drawable/ic_add_prod_status" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="8"
+                            android:fontFamily="@font/lato_regular"
+                            android:text="Step 7 : Enter GSM value of fabric"
+                            android:textColor="@color/black_text" />
+
+                        <ImageView
+                            android:id="@+id/ic_step10_arr"
+                            android:layout_width="0dp"
+                            android:layout_height="24dp"
+                            android:layout_weight="1"
+                            android:src="@drawable/ic_arrow_down"
+                            android:tint="@color/darker_gray" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/child_step7"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:padding="@dimen/expandable_layout_std_padding"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:layout_width="88dp"
+                            android:layout_height="88dp"
+                            android:layout_marginBottom="16dp"
+                            android:src="@drawable/ic_gsm_icon" />
+
+                        <EditText
+                            android:id="@+id/et_gsm"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/fab_margin"
+                            android:layout_marginEnd="@dimen/fab_margin"
+                            android:layout_marginBottom="16dp"
+                            android:background="@drawable/rectangle_edittext_bg"
+                            android:fontFamily="@font/lato_regular"
+                            android:hint="@string/enter_gsm_value"
+                            android:maxLength="10" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/rectangle_round_green_solid"
+                            android:fontFamily="@font/lato_regular"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:text="   Next  >   "
+                            android:textAlignment="center"
+                            android:textColor="@color/white_text"
+                            android:textSize="@dimen/edit_text"
+                            android:textStyle="bold"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/parent_step8"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:id="@+id/img_status_step8"
+                            android:layout_width="0dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:src="@drawable/ic_add_prod_status" />
+
+                        <TextView
+                            android:id="@+id/txt_step_8"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="8"
+                            android:fontFamily="@font/lato_regular"
+                            android:text="Step 7 : Enter description"
+                            android:textColor="@color/black_text" />
+
+                        <ImageView
+                            android:id="@+id/ic_step8_arr"
+                            android:layout_width="0dp"
+                            android:layout_height="24dp"
+                            android:layout_weight="1"
+                            android:src="@drawable/ic_arrow_down"
+                            android:tint="@color/darker_gray" />
+                    </LinearLayout>
+
+                    <FrameLayout
+                        android:id="@+id/child_step8"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/expandable_layout_std_padding"
+                        android:visibility="gone">
+
+                        <EditText
+                            android:id="@+id/et_dscrp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/rectangle_edittext_bg"
+                            android:fontFamily="@font/lato_regular"
+                            android:gravity="top|left"
+                            android:hint="@string/describe_your_product"
+                            android:inputType="textMultiLine"
+                            android:lines="4"
+                            android:maxLength="500"
+                            android:maxLines="4"
+                            android:minLines="4"
+                            android:padding="8dp"
+                            android:scrollbars="vertical"
+                            android:textSize="@dimen/edit_text" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_margin="@dimen/margin_regular"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/txt_save_upload"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginRight="32dp"
+                            android:background="@drawable/rect_round_grad_blue_solid"
+                            android:drawableRight="@drawable/ic_save_upload"
+                            android:fontFamily="@font/lato_regular"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:text="  Save  "
+                            android:textAlignment="center"
+                            android:textColor="@color/white_text" />
+
+                        <TextView
+                            android:id="@+id/txt_reset"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:background="@drawable/rectangle_round_grad"
+                            android:fontFamily="@font/lato_regular"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:text=" Reset All "
+                            android:textAlignment="center"
+                            android:textColor="@color/clickable_text_color" />
+                    </LinearLayout>
+                </LinearLayout>
+            </ScrollView>
+
+            <ProgressBar
+                android:id="@+id/pbLoader"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerInParent="true"
+                android:foregroundGravity="center"
+                android:visibility="gone" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</layout>

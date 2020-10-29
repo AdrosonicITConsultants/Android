@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/expandable_layout_std_padding">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin_regular"
+            android:fontFamily="@font/lato_regular"
+            android:gravity="center"
+            android:text="MOQ Accepted!"
+            android:textColor="@color/accept_green"
+            android:textSize="@dimen/title_text"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/brand_cluster"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin_regular"
+            android:fontFamily="@font/lato_regular"
+            android:gravity="center"
+            android:text="Chidiya from Manibandhana"
+            android:textColor="@color/clickable_text_color"
+            android:textSize="@dimen/title_text" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin_regular"
+            android:fontFamily="@font/lato_regular"
+            android:gravity="center"
+            android:text="@string/you_can_find_this_moq"
+            android:textSize="@dimen/product_note_text" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin_regular"
+            android:fontFamily="@font/lato_regular"
+            android:gravity="center"
+            android:text="@string/moq"
+            android:textSize="@dimen/product_note_text" />
+
+        <TextView
+            android:id="@+id/moq_order_qty"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/lato_regular"
+            android:gravity="center"
+            android:textColor="@color/swipe_background"
+            android:textSize="@dimen/title_text"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin_regular"
+            android:fontFamily="@font/lato_regular"
+            android:gravity="center"
+            android:text="@string/eta_delivery"
+            android:textSize="@dimen/product_note_text" />
+
+        <TextView
+            android:id="@+id/moq_order_eta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/lato_regular"
+            android:gravity="center"
+            android:textColor="@color/swipe_background"
+            android:textSize="@dimen/title_text"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/expandable_layout_std_padding"
+            android:fontFamily="@font/lato_regular"
+            android:gravity="center"
+            android:text="@string/price_per_unit"
+            android:textSize="@dimen/product_note_text" />
+
+        <TextView
+            android:id="@+id/moq_order_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/lato_regular"
+            android:gravity="center"
+            android:text="Rs 1000"
+            android:textColor="@color/swipe_background"
+            android:textSize="@dimen/title_text"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txt_goto_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_regular"
+            android:background="@drawable/rect_round_grad_magenta_solid"
+            android:drawableLeft="@drawable/ic_chat_outline"
+            android:fontFamily="@font/lato_regular"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text=" Go to this enquiry chat "
+            android:textAlignment="center"
+            android:textColor="@color/white_text" />
+
+        <TextView
+            android:id="@+id/txt_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_regular"
+            android:background="@drawable/rect_round_grad_blue_solid"
+            android:fontFamily="@font/lato_regular"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="  Ok  "
+            android:textAlignment="center"
+            android:textColor="@color/white_text" />
+    </LinearLayout>
+</ScrollView></LinearLayout>

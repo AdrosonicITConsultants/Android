@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/branddetails_swipe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/artisan_brand_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:context=".ui.modules.artisan.profile.BrandDetailsFragment">
+
+            <ImageView
+                android:id="@+id/artisan_brand_logo"
+                android:layout_width="@dimen/imageview_dim"
+                android:layout_height="@dimen/imageview_dim"
+                android:background="@drawable/brand_logo_back"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/margin_regular"
+                android:src="@drawable/artisan_logo_placeholder"/>
+
+            <View
+                android:id="@+id/divider1"
+                android:layout_width="150dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center"
+                style="@style/HorizontalDivider2"
+                android:layout_marginTop="@dimen/margin_semimedium"/>
+
+            <TextView
+                android:id="@+id/field_brand_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/black_text"
+                android:layout_marginTop="@dimen/margin_semimedium"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:text="@string/name"
+                android:textStyle="bold"
+                android:fontFamily="@font/lato_regular"/>
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textSize="18sp"
+                android:textColor="@color/black_text"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:fontFamily="@font/lato_regular"/>
+
+            <TextView
+                android:id="@+id/field_cluster"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/black_text"
+                android:layout_marginTop="@dimen/margin_semimedium"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:text="@string/cluster"
+                android:textStyle="bold"
+                android:fontFamily="@font/lato_regular"/>
+
+            <TextView
+                android:id="@+id/cluster"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textSize="18sp"
+                android:textColor="@color/black_text"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:fontFamily="@font/lato_regular"/>
+
+            <TextView
+                android:id="@+id/field_prod_cat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/black_text"
+                android:layout_marginTop="@dimen/margin_semimedium"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:text="@string/product_category"
+                android:textStyle="bold"
+                android:fontFamily="@font/lato_regular"/>
+
+            <TextView
+                android:id="@+id/prod_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textSize="18sp"
+                android:textColor="@color/black_text"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:fontFamily="@font/lato_regular"/>
+
+            <TextView
+                android:id="@+id/field_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/black_text"
+                android:layout_marginTop="@dimen/margin_semimedium"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:text="@string/desc_text"
+                android:textStyle="bold"
+                android:fontFamily="@font/lato_regular"/>
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textSize="18sp"
+                android:textColor="@color/black_text"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:fontFamily="@font/lato_regular"/>
+
+            <Button
+                android:id="@+id/btn_edit_brand_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/lato_regular"
+                android:text="@string/edit_brand_details"
+                android:textAllCaps="false"
+                android:textColor="@color/white_text"
+                android:textSize="16sp"
+                android:drawableStart="@drawable/ic_edit_white_18dp"
+                android:drawablePadding="6dp"
+                android:layout_marginTop="@dimen/margin_semimedium"
+                android:layout_marginBottom="@dimen/margin_regular"
+                android:background="@drawable/rectangle_round_grad_black_solid" />
+
+        </LinearLayout>
+    </ScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+</layout>

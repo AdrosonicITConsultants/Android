@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_small">2dp</dimen>
+    <dimen name="margin_regular">8dp</dimen>
+    <dimen name="margin_semimedium">16dp</dimen>
+    <dimen name="margin_medium">20dp</dimen>
+    <dimen name="Ques_text">11.5sp</dimen>
+    <dimen name="title_text">12.5sp</dimen>
+    <dimen name="button_text">10sp</dimen>
+    <dimen name="edit_text">10sp</dimen>
+    <dimen name="card_ht">90dp</dimen>
+    <dimen name="card_wt">75dp</dimen>
+    <dimen name="imageview_dim">60dp</dimen>
+    <dimen name="profile_img">50dp</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="product_card_height">55dp</dimen>
+    <dimen name="product_title_text">11sp</dimen>
+    <dimen name="product_description_text">9sp</dimen>
+    <dimen name="product_note_text">7.5sp</dimen>
+    <dimen name="product_availability_text">6sp</dimen>
+    <dimen name="cat_prod_image_width">55dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+    <!--
+    Because the window insets on round devices are larger than 15dp, this padding only applies
+    to square screens.
+    -->
+    <dimen name="box_inset_layout_padding">0dp</dimen>
+
+    <!--
+    This padding applies to both square and round screens. The total padding between the buttons
+    and the window insets is box_inset_layout_padding (above variable) on square screens and
+    inner_frame_layout_padding (below variable) on round screens.
+    -->
+    <dimen name="inner_frame_layout_padding">5dp</dimen>
+    <!--
+    Because the window insets on round devices are larger than 15dp, this padding only applies
+    to square screens.
+    -->
+
+    <!--
+    This padding applies to both square and round screens. The total padding between the buttons
+    and the window insets is box_inset_layout_padding (above variable) on square screens and
+    inner_frame_layout_padding (below variable) on round screens.
+    -->
+</resources>
