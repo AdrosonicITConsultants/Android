@@ -57,7 +57,10 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
         fun onGenTaxInvSuccess()
         fun onGenTaxInvFailure()
     }
-
+    interface OrderCloseInterface{
+        fun onOrderCloseSuccess()
+        fun onOrderCloseFailure()
+    }
     interface tiInterface{
         //        fun onTiFailure()
 //        fun onTiSuccess()
@@ -79,6 +82,7 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
     var orderConfirmListener : OrderCinfirmedInterface?= null
     var taxInvGenListener : GenTaxInvInterface?=null
     var tiListener : tiInterface?=null
+    var orderCloseListener : OrderCloseInterface?=null
 
     fun getOnOrderListMutableData(): MutableLiveData<RealmResults<Orders>> {
         ongoingOrderList.value=loadOnOrderList()
@@ -465,6 +469,35 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
                     }else{
                         Log.e("markOrderAsReceived","isSuccessful false")
                         orderConfirmListener?.onFailure()
+                    }
+                }
+
+            })
+    }
+
+    fun initializePartialRefund(enquiryId : Long){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getOrderService()
+            .initializePartialRefund(token,enquiryId)
+            .enqueue(object: Callback, retrofit2.Callback<NotificationReadResponse> {
+                override fun onFailure(call: Call<NotificationReadResponse>, t: Throwable) {
+                    t.printStackTrace()
+                    Log.e("initializePartialRefund","Failure: "+t.message)
+                    orderCloseListener?.onOrderCloseFailure()
+                }
+                override fun onResponse(
+                    call: Call<NotificationReadResponse>,
+                    response: retrofit2.Response<NotificationReadResponse>) {
+                    Log.e("initializePartialRefund","Success")
+
+                    if(response?.body()?.valid!!){
+                        Log.e("initializePartialRefund","Success: ${response?.body()?.valid}")
+                        OrdersPredicates.updatPostInitializePartialRefund(enquiryId)
+                        orderCloseListener?.onOrderCloseSuccess()
+                    }else{
+                        Log.e("initializePartialRefund","isSuccessful false")
+                        orderCloseListener?.onOrderCloseFailure()
                     }
                 }
 

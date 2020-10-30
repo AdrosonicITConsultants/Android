@@ -110,6 +110,10 @@ class OrdersPredicates {
                                 exEnq?.changeRequestOn = order?.openEnquiriesResponse?.changeRequestOn
                                 exEnq?.isBlue = order?.isBlue ?: 0
                                 exEnq?.isOrderFromCompleted=isCompleted
+                                exEnq?.isPartialRefundReceived=order?.openEnquiriesResponse?.isPartialRefundReceived
+                                exEnq?.isRefundReceived=order?.openEnquiriesResponse?.isRefundReceived
+                                exEnq?.isProductReturned=order?.openEnquiriesResponse?.isProductReturned
+
                                 realm.copyToRealmOrUpdate(exEnq)
                             }else{
                                 nextID = orderObj?._id ?: 0
@@ -186,6 +190,9 @@ class OrdersPredicates {
                                 orderObj?.changeRequestOn = order?.openEnquiriesResponse?.changeRequestOn
                                 orderObj?.isBlue = order?.isBlue?: 0
                                 orderObj?.isOrderFromCompleted=isCompleted
+                                orderObj?.isPartialRefundReceived=order?.openEnquiriesResponse?.isPartialRefundReceived
+                                orderObj?.isRefundReceived=order?.openEnquiriesResponse?.isRefundReceived
+                                orderObj?.isProductReturned=order?.openEnquiriesResponse?.isProductReturned
                                 Log.e("OrderDetails","enquiryStageId: "+order?.openEnquiriesResponse?.enquiryStageId)
                                 realm.copyToRealmOrUpdate(orderObj)
                             }
@@ -481,6 +488,26 @@ class OrdersPredicates {
                     Log.e("RaiseCr","updateChangerequestStatus 2222: ${orders?.changeRequestStatus}")
                 }catch (e:Exception){
                     Log.e("RaiseCr","Exception : "+e.printStackTrace())
+                }
+            }
+        }
+        fun updatPostInitializePartialRefund(enquiryId: Long?){
+            var realm = CXRealmManager.getRealmInstance()
+            var orders : Orders?= null
+            realm.executeTransaction {
+                try{
+                    orders = realm.where(Orders::class.java)
+                        .equalTo(Orders.COLUMN_ENQUIRY_ID,enquiryId)
+                        .limit(1)
+                        .findFirst()
+                    Log.e("initializePartialRefund","1111: ${orders?.isPartialRefundReceived}")
+                    orders?.let {
+                        orders?.isPartialRefundReceived=0L
+                        realm.copyToRealmOrUpdate(orders)
+                    }
+                    Log.e("initializePartialRefund","updateChangerequestStatus 2222: ${orders?.isPartialRefundReceived}")
+                }catch (e:Exception){
+                    Log.e("initializePartialRefund","Exception : "+e.printStackTrace())
                 }
             }
         }

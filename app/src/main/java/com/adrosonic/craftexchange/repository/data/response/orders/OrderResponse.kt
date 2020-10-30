@@ -47,6 +47,9 @@ data class OpenEnquiriesResponse (
     val enquiryCode: String,
     val productStatusId: Long? = null,
     val productType: String?="",
+    val isPartialRefundReceived: Long? = null,
+    val isRefundReceived: Long? = null,
+    val isProductReturned: Long? = null,
     val district: String? = null,
     val productName: String,
     val productCode: String,
@@ -84,6 +87,7 @@ data class OpenEnquiriesResponse (
     val lastUpdated: String,
     val state: String? = null,
     val country: String? = null
+
 )
 
 enum class ProductType {

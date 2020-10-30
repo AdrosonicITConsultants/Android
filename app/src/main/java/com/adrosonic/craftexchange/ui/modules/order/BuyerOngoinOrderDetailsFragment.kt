@@ -1,6 +1,7 @@
 package com.adrosonic.craftexchange.ui.modules.order
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -15,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -37,6 +39,7 @@ import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.order.confirmDelivery.confirmDeliveryContext
 import com.adrosonic.craftexchange.ui.modules.order.cr.crContext
 import com.adrosonic.craftexchange.ui.modules.order.finalPay.orderPaymentIntent
+import com.adrosonic.craftexchange.ui.modules.order.revisePi.revisePiContext
 import com.adrosonic.craftexchange.ui.modules.order.taxInv.raiseTaxInvIntent
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.transaction.adapter.OnGoingTransactionRecyclerAdapter
@@ -64,7 +67,9 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
     OrdersViewModel.FetchOrderInterface,
     OrdersViewModel.changeStatusInterface,
     OrdersViewModel.FetchCrInterface,
-    TransactionViewModel.TransactionInterface{
+    TransactionViewModel.TransactionInterface,
+    OrdersViewModel.OrderCloseInterface,
+    OrdersViewModel.OrderCinfirmedInterface{
 
     private var param1: String? = null
     private var param2: String? = null
@@ -95,7 +100,7 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
 
     var estId=0L
     var mBinding : FragmentBuyerOngoingOrderDetailsBinding?= null
-
+    var isCloseOrderInitiated=false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -219,6 +224,12 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
 
         mBinding?.btnConfirmDelivery?.setOnClickListener {
             startActivityForResult(requireActivity().confirmDeliveryContext(enqID?:0),ConstantsDirectory.RESULT_CONFIRM_ORDER)
+        }
+        mBinding?.btnIsPartialRefundRcvd?.setOnClickListener {
+            showPartialRefundDialog()
+        }
+        mBinding?.btnCloseOrder?.setOnClickListener {
+            showCloseOrderDialog()
         }
     }
 
@@ -427,6 +438,20 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
 
              if(orderDetails?.enquiryStageId==10L)mBinding?.layerConfirmDelivery?.visibility=View.VISIBLE
              else mBinding?.layerConfirmDelivery?.visibility=View.GONE
+
+             if(orderDetails?.enquiryStageId!!<9L) {
+                 if (orderDetails?.isPartialRefundReceived == 0L) {
+                     mBinding?.btnIsPartialRefundRcvd?.visibility = View.VISIBLE
+                     mBinding?.btnCloseOrder?.visibility = View.GONE
+                 } else {
+                     mBinding?.btnIsPartialRefundRcvd?.visibility = View.GONE
+                     mBinding?.btnCloseOrder?.visibility = View.VISIBLE
+                 }
+             }else{
+                 mBinding?.btnIsPartialRefundRcvd?.visibility = View.GONE
+                 mBinding?.btnCloseOrder?.visibility = View.GONE
+             }
+
          })
         } catch (e: Exception) {
             Log.e("setDetails", "Exception " + e.message)
@@ -594,10 +619,6 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
             }
         }
 
-//        when(currEnqStageId){
-//            2L,7L -> mBinding?.uploadDocLayout?.visibility = View.VISIBLE
-//            else -> mBinding?.uploadDocLayout?.visibility = View.GONE
-//        }
 
     }
 
@@ -660,6 +681,10 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
                 Log.e("OrderDetails", "onFailure")
                 enqID?.let { mOrderVm.getSingleOnOrderData(it,0) }
                 hideLoader()
+                if(isCloseOrderInitiated){
+                    isCloseOrderInitiated=false
+                    Utility.displayMessage("Unable to initiate partial payment",requireContext())
+                }
             })
         } catch (e: Exception) {
             Log.e("OrderDetails", "Exception onFailure " + e.message)
@@ -670,9 +695,12 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("OrderDetails", "onSuccess enqID: $enqID")
-                enqID?.let { orderDetails=mOrderVm.getSingleOnOrderData(it,0).value }
-                hideLoader()
-                setDetails()
+                if(isCloseOrderInitiated) activity?.onBackPressed()
+                else {
+                    enqID?.let { orderDetails = mOrderVm.getSingleOnOrderData(it, 0).value }
+                    hideLoader()
+                    setDetails()
+                }
             })
         } catch (e: Exception) {
             Log.e("OrderDetails", "Exception onFailure " + e.message)
@@ -768,4 +796,76 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
     override fun onFetchCrFailure() {
     }
 
+    fun showCloseOrderDialog(){
+        var dialog = Dialog(requireContext())
+        dialog.setContentView(R.layout.dialog_confirm_close_order)
+        dialog.create()
+        dialog.show()
+
+        val txt_order_code = dialog?.findViewById(R.id.txt_order_code) as TextView
+        val btn_no = dialog?.findViewById(R.id.btn_no) as Button
+        val btn_yes = dialog?.findViewById(R.id.btn_yes) as Button
+        txt_order_code.text="Order Code: ${orderDetails?.orderCode}"
+        btn_yes.setOnClickListener {
+            if(Utility?.checkIfInternetConnected(requireContext())) {
+                enqID?.let {
+                    dialog.cancel()
+                    viewLoader()
+                    mOrderVm?.orderCloseListener = this
+                    mOrderVm.initializePartialRefund(it)
+                }
+            }else Utility.displayMessage(getString(R.string.no_internet_connection),requireContext())
+        }
+        btn_no.setOnClickListener {  dialog.cancel() }
+    }
+
+    fun showPartialRefundDialog(){
+        var dialog = Dialog(requireContext())
+        dialog.setContentView(R.layout.dialog_confirm_partial_refund)
+        dialog.create()
+        dialog.show()
+        dialog.setCanceledOnTouchOutside(true)
+        val txt_order_code = dialog?.findViewById(R.id.txt_order_code) as TextView
+        val btn_yes = dialog?.findViewById(R.id.btn_yes) as Button
+        txt_order_code.text="Order Code: ${orderDetails?.orderCode}"
+        btn_yes.setOnClickListener {
+            if(Utility?.checkIfInternetConnected(requireContext())) {
+                enqID?.let {
+                    dialog.cancel()
+                    viewLoader()
+                    isCloseOrderInitiated=true
+                    mOrderVm?.orderConfirmListener = this
+                    mOrderVm.markEnquiryCompleted(it)
+                }
+            }else Utility.displayMessage(getString(R.string.no_internet_connection),requireContext())
+        }
+    }
+
+    override fun onOrderCloseSuccess() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+
+                enqID?.let { orderDetails=mOrderVm.getSingleOnOrderData(it,0).value }
+                Log.e("initializePartialRefund","getSingleTransactions Success: ${orderDetails?.isPartialRefundReceived}")
+                setDetails()
+                showPartialRefundDialog()
+                hideLoader()
+            })
+        } catch (e: Exception) {
+            Log.e("initializePartialRefund", "Exception onStatusChangeFailure " + e.message)
+        }
+    }
+
+    override fun onOrderCloseFailure() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("Transaction","getSingleTransactions Success")
+                setDetails()
+                hideLoader()
+                Utility.displayMessage("Unable to close order!",requireContext())
+            })
+        } catch (e: Exception) {
+            Log.e("Transaction", "Exception onStatusChangeFailure " + e.message)
+        }
+    }
 }

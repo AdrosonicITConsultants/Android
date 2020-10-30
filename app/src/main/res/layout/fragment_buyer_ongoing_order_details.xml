@@ -520,6 +520,47 @@
 
                 </LinearLayout>
 
+                <Button
+                    android:id="@+id/btn_is_partial_refund_rcvd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_margin="16dp"
+                    android:background="@color/dark_green"
+                    android:drawableEnd="@drawable/ic_right_arrow_white"
+                    android:fontFamily="@font/lato_light"
+                    android:padding="4dp"
+                    android:textAllCaps="false"
+                    android:text=" Is partial refund received? "
+                    android:textAlignment="center"
+                    android:textColor="@color/white_text"
+                    android:textSize="16sp"
+                    android:visibility="gone"
+                    android:foregroundGravity="center"
+                    android:gravity="center"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/layer_confirm_delivery"/>
+
+                <Button
+                    android:id="@+id/btn_close_order"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_margin="16dp"
+                    android:background="@color/red_logo"
+                    android:drawableEnd="@drawable/ic_right_arrow_white"
+                    android:fontFamily="@font/lato_light"
+                    android:padding="4dp"
+                    android:textAllCaps="false"
+                    android:text=" Close Order "
+                    android:textAlignment="center"
+                    android:textColor="@color/white_text"
+                    android:textSize="16sp"
+                    android:visibility="visible"
+                    android:foregroundGravity="center"
+                    android:gravity="center"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btn_is_partial_refund_rcvd"/>
 
                 <LinearLayout
                     android:id="@+id/change_request_layer"
@@ -528,9 +569,10 @@
                     android:background="#EDF0FF"
                     android:orientation="horizontal"
                     android:weightSum="10"
+                    android:layout_marginTop="@dimen/expandable_layout_std_padding"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/layer_confirm_delivery">
+                    app:layout_constraintTop_toBottomOf="@id/btn_close_order">
 
 
                     <TextView
