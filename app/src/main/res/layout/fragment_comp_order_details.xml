@@ -231,7 +231,7 @@
                         android:layout_marginBottom="@dimen/margin_regular"
                         android:fontFamily="@font/lato_regular"
                         android:gravity="center"
-                        android:text="Enquiry Closed"
+                        android:text="Order Closed"
                         android:textColor="@color/red_logo"
                         android:textSize="@dimen/product_description_text"
                         android:textStyle="bold"

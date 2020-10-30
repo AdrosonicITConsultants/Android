@@ -40,6 +40,7 @@ import com.adrosonic.craftexchange.ui.modules.order.confirmDelivery.confirmDeliv
 import com.adrosonic.craftexchange.ui.modules.order.cr.crContext
 import com.adrosonic.craftexchange.ui.modules.order.finalPay.orderPaymentIntent
 import com.adrosonic.craftexchange.ui.modules.order.revisePi.revisePiContext
+import com.adrosonic.craftexchange.ui.modules.order.revisePi.viewPiContextPostCr
 import com.adrosonic.craftexchange.ui.modules.order.taxInv.raiseTaxInvIntent
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.transaction.adapter.OnGoingTransactionRecyclerAdapter
@@ -181,7 +182,8 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
         }
 
         mBinding?.piDetailsLayer?.setOnClickListener {
-            enqID?.let {  startActivity(requireContext().raisePiContext(it,true, SendPiRequest())) }
+//            enqID?.let {  startActivity(requireContext().raisePiContext(it,true, SendPiRequest())) }
+            enqID?.let {startActivityForResult(requireContext().viewPiContextPostCr(it),ConstantsDirectory.RESULT_PI)}
         }
 
         mBinding?.viewPaymentLayer?.setOnClickListener {

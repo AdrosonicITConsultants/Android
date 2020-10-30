@@ -559,12 +559,12 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
             })
     }
 
-    fun downloadPi(enquiryId:Long){
+    fun downloadPi(enquiryId:Long,isOld:String){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         Log.e(TAG,"downloadPi :${enquiryId}")
         CraftExchangeRepository
             .getPiService()
-            .getPreviewPiPDF(token,enquiryId.toInt()).enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
+            .getPreviewPiPDF(token,enquiryId.toInt(),isOld).enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     Log.e(TAG,"downloadPi :${t.message}")
                     t.printStackTrace()
@@ -580,6 +580,7 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
                             Utility.writeResponseBodyToDisk(
                                 it,
                                 enquiryId.toString(),
+                                if(isOld.equals("true")) "Old"  else "",
                                 getApplication()
                             )
                             Timer().schedule(object : TimerTask() {
@@ -594,12 +595,12 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
             })
     }
 
-    fun previewPi(enquiryId:Long){
+    fun previewPi(enquiryId:Long,isOld:String){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         Log.e(TAG,"previewPi :${enquiryId}")
         CraftExchangeRepository
             .getPiService()
-            .getPreviewPiHTML(token,enquiryId.toInt()).enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
+            .getPreviewPiHTML(token,enquiryId.toInt(),isOld).enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     Log.e(TAG,"previewPi :${t.message}")
                     t.printStackTrace()
@@ -736,8 +737,14 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
                 ) {
                     Log.e(TAG,"onResponse getOldPiData :${response.code()}")
                     piLisener?.onPiHTMLFailure()
-                  if(response.code()==200) OrdersPredicates.updatIsPiSend(enquiryId,1L)
-                   else  OrdersPredicates.updatIsPiSend(enquiryId,0L)
+                  if(response.code()==200) {
+                      OrdersPredicates.updatIsPiSend(enquiryId,1L)
+                      EnquiryPredicates.updatePiStatus(enquiryId,1L)
+                  }
+                   else {
+                      OrdersPredicates.updatIsPiSend(enquiryId,0L)
+                      EnquiryPredicates.updatePiStatus(enquiryId,0L)
+                  }
                 }
             })
     }

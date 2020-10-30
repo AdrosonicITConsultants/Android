@@ -38,11 +38,11 @@ interface PIDao {
 
     @Headers("Accept: application/pdf")
     @GET("/enquiry/getPreviewPiPDF")
-    fun getPreviewPiPDF(@Header("Authorization") token:String, @Query("enquiryId") enquiryId : Int) : Call<ResponseBody>
+    fun getPreviewPiPDF(@Header("Authorization") token:String, @Query("enquiryId") enquiryId : Int, @Query("isOld") isOld : String) : Call<ResponseBody>
 
     @Headers("Accept: text/html")
     @GET("/enquiry/getPreviewPiHTML")
-    fun getPreviewPiHTML(@Header("Authorization") token:String, @Query("enquiryId") enquiryId : Int) : Call<ResponseBody>
+    fun getPreviewPiHTML(@Header("Authorization") token:String, @Query("enquiryId") enquiryId : Int, @Query("isOld") isOld : String) : Call<ResponseBody>
 
     @Headers("Accept: application/json")
     @GET("enquiry/getPi/{enquiryId}")

@@ -342,6 +342,7 @@ class CompletedOrderDetailsFragment : Fragment(),
                 stagList?.forEach {
                     if (it.first == orderDetails?.enquiryStageId) {
                         enquiryStage = it.second
+                        if(it.first==10L) enquiryStage="Order delivered"
                     }
                 }
                 when (orderDetails?.enquiryStageId) {

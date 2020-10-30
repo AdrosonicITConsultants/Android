@@ -126,6 +126,7 @@ class BuyerLoginUsernameFragment : Fragment() {
                                             ?.commit()
                                     }
                                 } else {
+                                    mBinding?.textBoxUsername?.error="${response.body()?.errorMessage}"
                                     Toast.makeText(
                                         activity,
                                         response.body()?.errorMessage,

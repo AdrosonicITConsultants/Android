@@ -582,12 +582,13 @@ class Utility {
         fun writeResponseBodyToDisk(
             body: ResponseBody,
             enquiryId: String,
+            isOld:String,
             context: Context
         ): Boolean {
             try {
                 if (!File(context.cacheDir, ConstantsDirectory.PI_PDF_PATH).exists()) File(context.cacheDir,ConstantsDirectory.PI_PDF_PATH).mkdir()
 //                if (!File(context.cacheDir, Utility.PI_PDF_PATH+ enquiryId).exists()) File(context.cacheDir,Utility.MANAGED_DOC_PATH+ enquiryId).mkdir()
-                val myDir = File(context.cacheDir, "/"+ConstantsDirectory.PI_PDF_PATH + "Pi${enquiryId}.pdf")
+                val myDir = File(context.cacheDir, "/"+ConstantsDirectory.PI_PDF_PATH + isOld+"Pi${enquiryId}.pdf")
                 var inputStream: InputStream = body.byteStream()
                 var outputStream: OutputStream = FileOutputStream(myDir)
                 try {
@@ -621,8 +622,8 @@ class Utility {
             }
         }
 
-        fun openFile(context: Activity,enquiryId:Long){
-            val cacheFile = File(context.cacheDir, ConstantsDirectory.PI_PDF_PATH + "Pi${enquiryId}.pdf")
+        fun openFile(context: Activity,enquiryId:Long,old:String){
+            val cacheFile = File(context.cacheDir, ConstantsDirectory.PI_PDF_PATH +old+"Pi${enquiryId}.pdf")
             try {
                 val uri = FileProvider.getUriForFile(context, "com.adrosonic.craftexchange.provider", cacheFile)
                 val myIntent = Intent(Intent.ACTION_VIEW)

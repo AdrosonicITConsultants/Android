@@ -119,6 +119,12 @@ class ArtisanLoginUsernameFragment : Fragment() {
                                         ?.commit()
                                 }
                             } else {
+                                mBinding?.textBoxUsername?.error="${response.body()?.errorMessage}"
+                                Toast.makeText(
+                                    activity,
+                                    response.body()?.errorMessage,
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
 

@@ -554,6 +554,7 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
                             Utility.writeResponseBodyToDisk(
                                 it,
                                 enquiryId.toString(),
+                                "",
                                 getApplication()
                             )
                             Timer().schedule(object : TimerTask() {

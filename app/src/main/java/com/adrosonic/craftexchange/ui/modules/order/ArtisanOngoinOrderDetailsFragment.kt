@@ -190,11 +190,9 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
                         ?.commit()
                 }
             }
-
         }
 
         mBinding?.piDetailsLayer?.setOnClickListener {
-//            enqID?.let{startActivity(requireContext().viewPiContextPostCr(it))}
             enqID?.let {startActivityForResult(requireContext().viewPiContextPostCr(it),ConstantsDirectory.RESULT_PI)}
         }
 
@@ -467,9 +465,11 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
             {
                 when(orderDetails?.changeRequestStatus) {
                     0L -> {
+                        mBinding?.toogleCr?.isEnabled=false
                         mBinding?.txtCrLayerStatus?.text = "Buyer Waiting for acknwoledgement"
                     }
                     1L,2L,3L -> {
+                        mBinding?.toogleCr?.isEnabled=false
                         mBinding?.txtCrLayerStatus?.text = Utility.getCountStatement(enqID?:0)//Utility.returnDisplayDate(orderDetails?.changeRequestModifiedOn ?: "")
                     }
                     else -> {
@@ -482,6 +482,10 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         else {
             mBinding?.txtCrLayerStatus?.text=getString(R.string.cr_not_applicable)
         }
+
+        if(orderDetails?.enquiryStageId!!>5L)  mBinding?.toogleCr?.isClickable=false
+        else mBinding?.toogleCr?.isEnabled=true
+
         } catch (e: Exception) {
             Log.e("setDetails", "Exception " + e.message)
         }
