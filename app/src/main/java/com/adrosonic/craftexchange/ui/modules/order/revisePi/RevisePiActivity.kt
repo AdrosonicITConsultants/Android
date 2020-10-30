@@ -93,6 +93,19 @@ class RevisePiActivity : AppCompatActivity(),
             datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000)
             datePickerDialog.show()
         }
+        mBinding?.imgDate?.setOnClickListener {
+            val c: Calendar = Calendar.getInstance()
+            val mYear = c.get(Calendar.YEAR)
+            val mMonth = c.get(Calendar.MONTH)
+            val mDay = c.get(Calendar.DAY_OF_MONTH)
+            val datePickerDialog = DatePickerDialog(
+                this,
+                OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+                    mBinding?.etDeliveryDate?.setText( year.toString() + "-" + (monthOfYear + 1) + "-" +dayOfMonth.toString() , TextView.BufferType.EDITABLE )
+                }, mYear, mMonth, mDay)
+            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000)
+            datePickerDialog.show()
+        }
         mBinding?.txtPiSwipe?.setOnClickListener {
             val qty = mBinding?.etQty?.text.toString()
             val date = mBinding?.etDeliveryDate?.text.toString()
