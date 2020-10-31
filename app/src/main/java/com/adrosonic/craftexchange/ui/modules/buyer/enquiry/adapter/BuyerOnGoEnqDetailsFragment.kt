@@ -829,7 +829,17 @@ EnquiryViewModel.FetchEnquiryInterface,
 
     override fun onResume() {
         super.onResume()
-        enqID?.let { mEnqVM?.getSingleOnEnqData(it) }
+        if(Utility.checkIfInternetConnected(requireActivity())){
+            enqID?.let { mEnqVM.getSingleOngoingEnquiry(it) }
+            viewLoader()
+            mEnqVM.getMoqs(enqID!!)
+            mEnqVM?.getSinglePi(enqID!!)
+        }else{
+            Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
+            setDetails()
+        }
+
+//        enqID?.let { mEnqVM.getSingleOngoingEnquiry(it) }
         setDetails()
     }
 

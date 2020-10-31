@@ -104,38 +104,71 @@ class TaxInvoiceActivity : AppCompatActivity(),
             val cgst = mBinding?.etCgst?.text.toString()
             currency = mBinding?.spCurrency?.selectedItem.toString()
 
-            if (qty.isEmpty()) Utility.displayMessage("Please add Quantity", applicationContext)
-            else if (ppu.isEmpty()) Utility.displayMessage("Please add price per unit", applicationContext)
-            else if (sgst.isEmpty()) Utility.displayMessage("Please add SGST", applicationContext)
-            else if (cgst.isEmpty()) Utility.displayMessage("Please add CGST", applicationContext)
-            else if (prevTotAmt.isEmpty()) Utility.displayMessage("Please add previous total amount", applicationContext)
-            else if (advPay.isEmpty()) Utility.displayMessage("Please add paid advance amount", applicationContext)
-            else if (finAmt.isEmpty()) Utility.displayMessage("Please add Final amount", applicationContext)
-            else if (amtToPay.isEmpty()) Utility.displayMessage("Please add amount to be paid", applicationContext)
-            else if (delCharge.isEmpty()) Utility.displayMessage("Please add Delivery Charges", applicationContext)
-            else if (currency!!.isEmpty()) Utility.displayMessage("Please select Currency", applicationContext)
-            else if (!mBinding?.chbTnc?.isChecked!!) Utility.displayMessage("Please read the terms & conditions", applicationContext)
+            if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
+                if (qty.isEmpty()) Utility.displayMessage("Please add Quantity", applicationContext)
+                else if (ppu.isEmpty()) Utility.displayMessage("Please add price per unit", applicationContext)
+                else if (sgst.isEmpty()) Utility.displayMessage("Please add SGST", applicationContext)
+                else if (cgst.isEmpty()) Utility.displayMessage("Please add CGST", applicationContext)
+                else if (prevTotAmt.isEmpty()) Utility.displayMessage("Please add previous total amount", applicationContext)
+                else if (advPay.isEmpty()) Utility.displayMessage("Please add paid advance amount", applicationContext)
+                else if (finAmt.isEmpty()) Utility.displayMessage("Please add Final amount", applicationContext)
+                else if (amtToPay.isEmpty()) Utility.displayMessage("Please add amount to be paid", applicationContext)
+                else if (delCharge.isEmpty()) Utility.displayMessage("Please add Delivery Charges", applicationContext)
+                else if (currency!!.isEmpty()) Utility.displayMessage("Please select Currency", applicationContext)
+                else if (!mBinding?.chbTnc?.isChecked!!) Utility.displayMessage("Please read the terms & conditions", applicationContext)
+                else {
+                    taxInv.cgst=cgst
+                    taxInv.ppu=ppu.toLong()
+                    taxInv.quantity=qty.toLong()
+                    taxInv.sgst=sgst
+                    taxInv.enquiryId = enquiryId?.toString()
+                    taxInv.advancePaidAmt = advPay
+                    taxInv.deliveryCharges = delCharge
+                    taxInv.finalTotalAmt = finAmt?.toLong()
 
-            else {
-                taxInv.cgst=cgst
-                taxInv.ppu=ppu.toLong()
-                taxInv.quantity=qty.toLong()
-                taxInv.sgst=sgst
-                taxInv.enquiryId = enquiryId?.toString()
-                taxInv.advancePaidAmt = advPay
-                taxInv.deliveryCharges = delCharge
-                taxInv.finalTotalAmt = finAmt?.toLong()
+                    if (Utility.checkIfInternetConnected(applicationContext)) {
+                        mBinding?.btnSwipeTi?.text = "Tax Invoice preview being generated"
+                        mBinding?.btnSwipeTi?.isEnabled=false
+                        viewLoader()
 
-                if (Utility.checkIfInternetConnected(applicationContext)) {
-                    mBinding?.btnSwipeTi?.text = "Tax Invoice preview being generated"
-                    mBinding?.btnSwipeTi?.isEnabled=false
-                    viewLoader()
-
-                    mOrdVM?.generateTaxInvoice(taxInv)
-                } else {
+                        mOrdVM?.generateTaxInvoice(taxInv)
+                    } else {
 //                    todo add dat to pi table
-                    TaxInvPredicates.insertTiForOffline(enquiryId,1,taxInv)
-                    startActivityForResult(applicationContext.raiseTaxInvIntent(enquiryId,true),ConstantsDirectory.RESULT_TI)
+                        TaxInvPredicates.insertTiForOffline(enquiryId,1,taxInv)
+                        startActivityForResult(applicationContext.raiseTaxInvIntent(enquiryId,true),ConstantsDirectory.RESULT_TI)
+                    }
+                }
+            }else{
+                if (qty.isEmpty()) Utility.displayMessage("Please add Quantity", applicationContext)
+                else if (ppu.isEmpty()) Utility.displayMessage("Please add price per unit", applicationContext)
+                else if (sgst.isEmpty()) Utility.displayMessage("Please add SGST", applicationContext)
+                else if (cgst.isEmpty()) Utility.displayMessage("Please add CGST", applicationContext)
+                else if (prevTotAmt.isEmpty()) Utility.displayMessage("Please add previous total amount", applicationContext)
+                else if (finAmt.isEmpty()) Utility.displayMessage("Please add Final amount", applicationContext)
+                else if (delCharge.isEmpty()) Utility.displayMessage("Please add Delivery Charges", applicationContext)
+                else if (currency!!.isEmpty()) Utility.displayMessage("Please select Currency", applicationContext)
+                else if (!mBinding?.chbTnc?.isChecked!!) Utility.displayMessage("Please read the terms & conditions", applicationContext)
+                else {
+                    taxInv.cgst=cgst
+                    taxInv.ppu=ppu.toLong()
+                    taxInv.quantity=qty.toLong()
+                    taxInv.sgst=sgst
+                    taxInv.enquiryId = enquiryId?.toString()
+//                    taxInv.advancePaidAmt = advPay
+                    taxInv.deliveryCharges = delCharge
+                    taxInv.finalTotalAmt = finAmt?.toLong()
+
+                    if (Utility.checkIfInternetConnected(applicationContext)) {
+                        mBinding?.btnSwipeTi?.text = "Tax Invoice preview being generated"
+                        mBinding?.btnSwipeTi?.isEnabled=false
+                        viewLoader()
+
+                        mOrdVM?.generateTaxInvoice(taxInv)
+                    } else {
+//                    todo add dat to pi table
+                        TaxInvPredicates.insertTiForOffline(enquiryId,1,taxInv)
+                        startActivityForResult(applicationContext.raiseTaxInvIntent(enquiryId,true),ConstantsDirectory.RESULT_TI)
+                    }
                 }
             }
         }

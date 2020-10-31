@@ -98,4 +98,7 @@ object CraftExchangeRepository {
     fun getTiService(): TIDao {
         return builder(TIDao::class.java)
     }
+    fun getFaultyOrderService(): FaultyOrdersDao {
+        return builder(FaultyOrdersDao::class.java)
+    }
 }

@@ -40,6 +40,7 @@ import com.adrosonic.craftexchange.ui.modules.order.finalPay.orderPaymentIntent
 import com.adrosonic.craftexchange.ui.modules.order.taxInv.raiseTaxInvIntent
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.transaction.adapter.OnGoingTransactionRecyclerAdapter
+import com.adrosonic.craftexchange.ui.modules.transaction.viewDocument
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.UserConfig
@@ -157,6 +158,11 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
                     ?.commit()
             }
         }
+        //delivery receipt
+        mBinding?.deliveryReceiptLayer?.setOnClickListener {
+            startActivity(enqID?.let { it1 -> requireContext()?.viewDocument(it1,DocumentType.DELIVERY_CHALLAN.getId()) })
+        }
+
         mBinding?.productDetailsLayer?.setOnClickListener {
             if (savedInstanceState == null) {
                 isCustom?.let { it1 ->
@@ -435,7 +441,7 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
 
     fun setActionButtonVisibilites(){
         //upload final Payment //TODO isBlue param check after API fix
-        if(orderDetails?.enquiryStageId == EnquiryStages.FINAL_INVOICE_RAISED.getId() /*&& orderDetails?.isBlue == 0L*/){
+        if(orderDetails?.enquiryStageId == EnquiryStages.FINAL_INVOICE_RAISED.getId() && orderDetails?.isBlue == 0L){
             mBinding?.finalTransactionLayout?.visibility = View.VISIBLE
         }else{
             mBinding?.finalTransactionLayout?.visibility = View.GONE
@@ -634,8 +640,6 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
                 mBinding?.qualityCheckLayer?.visibility = View.GONE
             }
         }
-
-
         //TaxInvoice
         if(orderDetails?.enquiryStageId!! >= EnquiryStages.FINAL_INVOICE_RAISED.getId()){
             mBinding?.taxInvoiceLayer?.visibility = View.VISIBLE
@@ -643,15 +647,30 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
             mBinding?.taxInvoiceLayer?.visibility = View.GONE
         }
 
+        //DeliveryReceipt
+        if(orderDetails?.enquiryStageId!! >= EnquiryStages.ORDER_DISPATCHED.getId() && orderDetails?.deliveryChallanUploaded == 1L){
+            mBinding?.deliveryReceiptLayer?.visibility = View.VISIBLE
+        }else{
+            mBinding?.deliveryReceiptLayer?.visibility = View.GONE
+        }
+
     }
 
     override fun onResume() {
         super.onResume()
-        enqID?.let {
-            mOrderVm?.getChangeRequestDetails(it)
-            orderDetails= mOrderVm?.getSingleOnOrderData(it,0).value
+
+        if(Utility.checkIfInternetConnected(requireActivity())){
+            enqID?.let {
+                viewLoader()
+                mOrderVm.getSingleOngoingOrder(it)
+                mTranVM.getSingleOngoingTransactions(it)
+                mOrderVm?.getChangeRequestDetails(it)
+                mQcVM.getBuyerQCResponse(it)
+            }
+        }else{
+            Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
+            setDetails()
         }
-        setDetails()
     }
 
     override fun onFailure() {
