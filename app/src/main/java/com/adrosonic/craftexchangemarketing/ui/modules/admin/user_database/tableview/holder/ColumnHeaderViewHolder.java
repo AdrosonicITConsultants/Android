@@ -112,14 +112,14 @@ public class ColumnHeaderViewHolder extends AbstractSorterViewHolder {
     private View.OnClickListener mSortButtonClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (getSortState() == SortState.ASCENDING) {
-                tableView.sortColumn(getAdapterPosition(), SortState.DESCENDING);
-            } else if (getSortState() == SortState.DESCENDING) {
-                tableView.sortColumn(getAdapterPosition(), SortState.ASCENDING);
-            } else {
-                // Default one
-                tableView.sortColumn(getAdapterPosition(), SortState.DESCENDING);
-            }
+//            if (getSortState() == SortState.ASCENDING) {
+//                tableView.sortColumn(getAdapterPosition(), SortState.DESCENDING);
+//            } else if (getSortState() == SortState.DESCENDING) {
+//                tableView.sortColumn(getAdapterPosition(), SortState.ASCENDING);
+//            } else {
+//                // Default one
+//             /   tableView.sortColumn(getAdapterPosition(), SortState.DESCENDING);
+//            }
         }
     };
 

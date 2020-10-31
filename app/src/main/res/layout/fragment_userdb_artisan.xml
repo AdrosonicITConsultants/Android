@@ -29,9 +29,16 @@
         android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="4dp"
+        android:paddingLeft="8dp"
         android:background="@drawable/search_background"
         android:focusable="true"
         android:inputType="text"
+        android:textSize="@dimen/product_availability_text"
+        android:textColor="@color/white_text"
+        android:drawablePadding="8dp"
+        android:drawableTint="@color/white_text"
+        android:textColorHint="@color/white_text"
+        android:hint="Search by brand email Id, mobile, name"
         android:drawableLeft="@drawable/ic_search_black_36dp"
         app:iconifiedByDefault="false"
         app:layout_constraintEnd_toEndOf="parent"
@@ -65,8 +72,10 @@
             <Spinner
                 android:id="@+id/sp_cluster"
                 style="@style/Widget.AppCompat.DropDownItem.Spinner"
+                android:popupBackground="@color/table_corner_layout_color"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
+                android:backgroundTint="@color/white_text"
                 android:layout_centerInParent="true"
                 android:autofillHints="Select product category" />
         </RelativeLayout>
@@ -81,8 +90,10 @@
             <Spinner
                 android:id="@+id/sp_rating"
                 style="@style/Widget.AppCompat.DropDownItem.Spinner"
+                android:popupBackground="@color/table_corner_layout_color"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
+                android:backgroundTint="@color/white_text"
                 android:layout_centerInParent="true"
                 android:autofillHints="Select product category" />
         </RelativeLayout>
@@ -96,6 +107,7 @@
             android:layout_weight="2"
             android:background="@color/apply_bg_color"
             android:text="Apply"
+            android:textAllCaps="false"
             android:textColor="@color/black_text" />
     </LinearLayout>
 
