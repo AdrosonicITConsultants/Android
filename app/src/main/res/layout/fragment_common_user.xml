@@ -20,7 +20,7 @@
             android:fontFamily="@font/lato_regular"
             android:text="@string/user_database"
             android:textColor="@color/colorBackground"
-            android:textSize="30sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
