@@ -39,6 +39,8 @@ class SearchPredicates {
             return products
         }
 
+
+
         fun artisanSearch(searchFilter : String,isMadeWithAntaran : Long) : RealmResults<ArtisanProducts>? {
             var realm = CXRealmManager.getRealmInstance()
             var products : RealmResults<ArtisanProducts> ?= null

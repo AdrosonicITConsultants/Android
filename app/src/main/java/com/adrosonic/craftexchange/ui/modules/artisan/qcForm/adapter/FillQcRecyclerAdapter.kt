@@ -26,10 +26,11 @@ class FillQcRecyclerAdapter(
     inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var quesText: TextView = view.findViewById(R.id.ques_text)
         var ansText: EditText = view.findViewById(R.id.ans_text)
-
+        var addrText: EditText = view.findViewById(R.id.address_text)
         var chckBoxGrp: LinearLayout = view.findViewById(R.id.ans_chckBox)
         var radiogrp: RadioGroup = view.findViewById(R.id.ans_radio)
         var ansList: Spinner = view.findViewById(R.id.ans_list)
+        var addressLayout: LinearLayout = view.findViewById(R.id.address_layout)
     }
 
     interface UpdateQuesAnsInterface{
@@ -89,16 +90,26 @@ class FillQcRecyclerAdapter(
 
                         when (it.answerType) {
                             "0" -> {
-                                holder.ansText?.visibility = View.VISIBLE
-                                holder.radiogrp?.visibility = View.GONE
-                                holder.ansList.visibility = View.GONE
-                                holder.chckBoxGrp.visibility = View.GONE
+                                if(maxQCStageID == 7L && it.questionNo == 12L){
+                                    holder.ansText?.visibility = View.GONE
+                                    holder.radiogrp?.visibility = View.GONE
+                                    holder.ansList.visibility = View.GONE
+                                    holder.chckBoxGrp.visibility = View.GONE
+                                    holder.addressLayout.visibility = View.VISIBLE
+                                }else{
+                                    holder.ansText?.visibility = View.VISIBLE
+                                    holder.radiogrp?.visibility = View.GONE
+                                    holder.ansList.visibility = View.GONE
+                                    holder.chckBoxGrp.visibility = View.GONE
+                                    holder.addressLayout.visibility = View.GONE
+                                }
                             }
                             "1" -> {
                                 holder.ansText?.visibility = View.GONE
                                 holder.radiogrp?.visibility = View.GONE
                                 holder.ansList.visibility = View.GONE
                                 holder.chckBoxGrp.visibility = View.VISIBLE
+                                holder.addressLayout.visibility = View.GONE
 
                                 setCheckBox(holder, it.optionValue,"")
                             }
@@ -107,6 +118,7 @@ class FillQcRecyclerAdapter(
                                 holder.radiogrp?.visibility = View.VISIBLE
                                 holder.ansList.visibility = View.GONE
                                 holder.chckBoxGrp.visibility = View.GONE
+                                holder.addressLayout.visibility = View.GONE
 
                                 setRadioButtons(holder, it.optionValue,"")
                             }
@@ -115,6 +127,7 @@ class FillQcRecyclerAdapter(
                                 holder.radiogrp?.visibility = View.GONE
                                 holder.ansList.visibility = View.VISIBLE
                                 holder.chckBoxGrp.visibility = View.GONE
+                                holder.addressLayout.visibility = View.GONE
 
                                 setSpinnerList(holder, it.optionValue,"")
                             }
@@ -123,6 +136,8 @@ class FillQcRecyclerAdapter(
                                 holder.radiogrp?.visibility = View.GONE
                                 holder.ansList.visibility = View.GONE
                                 holder.chckBoxGrp.visibility = View.GONE
+                                holder.addressLayout.visibility = View.GONE
+
                             }
                         }
                     }
@@ -173,6 +188,19 @@ class FillQcRecyclerAdapter(
 
         //Edit Text Listener
         holder.ansText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {
+                Log.e("QCFA", "EditText : Position == $position , Text == $s")
+                var quesNo = position.plus(1)?.toLong()
+                qcAdapterListener?.addQuesAns(QuestionAnswer(quesNo, s.toString()))
+                Log.e("QCFA", "EditText Pair : QuestionAnswer(quesNo,s.toString()")
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+        })
+
+        //Edit Text Listener for Address of Buyer
+        holder.addrText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
                 Log.e("QCFA", "EditText : Position == $position , Text == $s")
                 var quesNo = position.plus(1)?.toLong()

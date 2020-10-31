@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -28,8 +29,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
+import com.adrosonic.craftexchange.database.predicates.WishlistPredicates
 import com.adrosonic.craftexchange.databinding.FragmentFinPay2Binding
 import com.adrosonic.craftexchange.databinding.FragmentUploadDelRec1Binding
+import com.adrosonic.craftexchange.enums.EnquiryStages
+import com.adrosonic.craftexchange.enums.getId
+import com.adrosonic.craftexchange.syncManager.SyncCoordinator
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
@@ -41,7 +46,9 @@ import java.util.*
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class UploadDelRec1Fragment : Fragment(),TransactionViewModel.UploadPaymentInterface {
+class UploadDelRec1Fragment : Fragment(),
+    TransactionViewModel.UploadPaymentInterface,
+    OrdersViewModel.changeStatusInterface {
 
     private var param1: String? = null
     private var param2: String? = null
@@ -61,6 +68,7 @@ class UploadDelRec1Fragment : Fragment(),TransactionViewModel.UploadPaymentInter
     var absolutePath : String?= ""
 
     var loadingDialog : Dialog ?= null
+    var plsWaitDialog : Dialog ?= null
 
     var disDate : String?=""
     var etaDate : String?=""
@@ -98,12 +106,14 @@ class UploadDelRec1Fragment : Fragment(),TransactionViewModel.UploadPaymentInter
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mTranVM.uploadPaymentListener = this
+        mOrdVM.changeStatusListener = this
         orderDetails = enqID?.toLong()?.let { mOrdVM?.loadSingleOrderDetails(it,0) }
         if(orderDetails != null){
             setDetails()
         }
 
         loadingDialog = Utility.multiLoadingDialog(requireContext(),"Uploading...")
+        plsWaitDialog = Utility.loadingDialog(requireContext())
 
         mBinding?.btnBack?.setOnClickListener {
             activity?.onBackPressed()
@@ -142,13 +152,12 @@ class UploadDelRec1Fragment : Fragment(),TransactionViewModel.UploadPaymentInter
 
         mBinding?.etaDateImg?.setOnClickListener {
             val c: Calendar = Calendar.getInstance()
-            var disDate : String?=""
             val mYear = c.get(Calendar.YEAR)
             val mMonth = c.get(Calendar.MONTH)
             val mDay = c.get(Calendar.DAY_OF_MONTH)
-            val mHour = c.get(Calendar.HOUR_OF_DAY)
-            val mMin = c.get(Calendar.MINUTE)
-            val mSec = c.get(Calendar.SECOND)
+//            val mHour = c.get(Calendar.HOUR_OF_DAY)
+//            val mMin = c.get(Calendar.MINUTE)
+//            val mSec = c.get(Calendar.SECOND)
             val datePickerDialog = DatePickerDialog(requireContext(),
                 DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                     mBinding?.revisedEta?.setText(
@@ -159,8 +168,6 @@ class UploadDelRec1Fragment : Fragment(),TransactionViewModel.UploadPaymentInter
 
             datePickerDialog.datePicker.minDate = System.currentTimeMillis() - 1000
             datePickerDialog.show()
-
-//            view?.onTouchEvent(motionEvent) ?: true
         }
 
         mBinding?.btnUploadReceipt?.setOnClickListener {
@@ -168,10 +175,6 @@ class UploadDelRec1Fragment : Fragment(),TransactionViewModel.UploadPaymentInter
             var dispatchDate = "${mBinding?.dispatchDate?.text.toString()} 00:00:00"
             var eta = "${mBinding?.revisedEta?.text.toString()} 00:00:00"
             var receiptFilePath = absolutePath.toString()
-
-//            var formatter = SimpleDateFormat("yyyy-mm-dd hh:mm:ss")
-//            var conDispatchDate = formatter.format(Date.parse(dispatchDate))
-//            var conETADate = formatter.format(Date.parse(eta))
 
             if (receiptFilePath.isEmpty()) Utility.displayMessage("Please upload delivery receipt", requireContext())
             else if (dispatchDate.isEmpty()) Utility.displayMessage("Please select order dispatch date", requireContext())
@@ -328,16 +331,26 @@ class UploadDelRec1Fragment : Fragment(),TransactionViewModel.UploadPaymentInter
             .show()
     }
 
+    fun showDispatchOrderDialog(){
+        var dialog = Dialog(requireContext())
+        dialog.setContentView(R.layout.dialog_delivery_receipt)
+        dialog.show()
+        val btnMrkDispatch = dialog.findViewById(R.id.btn_mark_order_dispatched) as Button
+        var eta = dialog.findViewById(R.id.eta) as TextView
+        var dispatchDate = dialog.findViewById(R.id.dispatch_date) as TextView
 
-    companion object {
+        eta.text = mBinding?.revisedEta?.text
+        dispatchDate.text = mBinding?.dispatchDate?.text
 
-        fun newInstance(param1: String, param2: String) =
-            UploadDelRec1Fragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+        btnMrkDispatch.setOnClickListener {
+            dialog?.cancel()
+            if(Utility.checkIfInternetConnected(requireActivity())){
+                plsWaitDialog?.show()
+                enqID?.toLong()?.let { it1 -> mOrdVM.setCompleteOrderStage(it1,EnquiryStages.ORDER_DISPATCHED.getId()) }
+            }else{
+                Utility.displayMessage(getString(R.string.no_internet_connection),requireContext())
             }
+        }
     }
 
     override fun onFailure() {
@@ -358,10 +371,44 @@ class UploadDelRec1Fragment : Fragment(),TransactionViewModel.UploadPaymentInter
                 Log.e("UploadDeliveryChallan", "OnSuccess")
                 loadingDialog?.cancel()
                 Utility.displayMessage("Delivery Challan uploaded!",requireContext())
-                activity?.onBackPressed()
+                showDispatchOrderDialog()
+//                activity?.onBackPressed()
             })
         } catch (e: Exception) {
             Log.e("UploadDeliveryChallan", "Exception OnSuccess " + e.message)
+        }
+    }
+
+    companion object {
+
+        fun newInstance(param1: String, param2: String) =
+            UploadDelRec1Fragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
+                }
+            }
+    }
+
+    override fun onStatusChangeSuccess() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                plsWaitDialog?.cancel()
+                activity?.onBackPressed()
+            })
+        } catch (e: Exception) {
+            Log.e("OrderDetails", "Exception onStatusChangeSuccess " + e.message)
+        }
+    }
+
+    override fun onStatusChangeFailure() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                plsWaitDialog?.cancel()
+                Utility.displayMessage("Failed to Dispatch Order, Try Again Later",requireContext())
+            })
+        } catch (e: Exception) {
+            Log.e("OrderDetails", "Exception onStatusChangeFailure " + e.message)
         }
     }
 }
