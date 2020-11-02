@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="260dp"
+    android:layout_height="wrap_content"
+    android:background="@color/black_text"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/dispatch_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_regular"
+        android:fontFamily="@font/lato_regular"
+        android:text="@string/dispatch"
+        android:textAlignment="center"
+        android:textColor="@color/white_text"
+        android:textStyle="italic"
+        android:textSize="@dimen/product_title_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/dispatch_icon"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="4dp"
+        android:src="@drawable/ic_dispatch_truck"
+        app:layout_constraintTop_toBottomOf="@+id/dispatch_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/txt_eta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato_light"
+        android:textSize="14sp"
+        android:text="@string/eta"
+        android:textColor="@color/white_text"
+        android:layout_marginTop="@dimen/margin_regular"
+        app:layout_constraintTop_toBottomOf="@+id/dispatch_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/eta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textSize="16sp"
+        android:textColor="@color/white_text"
+        android:fontFamily="@font/lato_regular"
+        app:layout_constraintTop_toBottomOf="@+id/txt_eta"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/txt_dispatch_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato_thin"
+        android:layout_marginTop="8dp"
+        android:textSize="14sp"
+        android:text="@string/dispatch_date"
+        android:textColor="@color/white_text"
+        app:layout_constraintTop_toBottomOf="@+id/eta"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/dispatch_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/lato_regular"
+        android:textSize="16sp"
+        android:textColor="@color/white_text"
+        app:layout_constraintTop_toBottomOf="@+id/txt_dispatch_date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+    <Button
+        android:id="@+id/btn_mark_order_dispatched"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginTop="@dimen/margin_regular"
+        android:layout_marginBottom="@dimen/margin_regular"
+        android:background="@color/clickable_text_color"
+        android:elevation="8dp"
+        android:fontFamily="@font/lato_regular"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:text="@string/mark_as_dispatched"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/white_text"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dispatch_date" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

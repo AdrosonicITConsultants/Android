@@ -34,7 +34,6 @@
                     android:src="@drawable/ic_keyboard_backspace_black_24dp"
                     android:background="?selectableItemBackgroundBorderless"/>
 
-
                 <TextView
                     android:id="@+id/artisan_name"
                     android:layout_width="wrap_content"

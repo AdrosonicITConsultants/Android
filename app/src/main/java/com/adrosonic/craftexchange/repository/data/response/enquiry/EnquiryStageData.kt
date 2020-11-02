@@ -9,6 +9,5 @@ data class EnquiryStageData (
 
 data class StageData (
     val id: Long,
-//    val stageDesc: String
-val desc : String
+    val desc : String
 )

@@ -89,10 +89,20 @@ object CraftExchangeRepository {
     fun getOrderService(): OrderDao {
         return builder(OrderDao::class.java)
     }
+    fun getCrService(): ChangeRequestDao {
+        return builder(ChangeRequestDao::class.java)
+    }
+    fun getQCService(): QCDao {
+        return builder(QCDao::class.java)
+    }
+    fun getTiService(): TIDao {
+        return builder(TIDao::class.java)
+    }
+    fun getFaultyOrderService(): FaultyOrdersDao {
+        return builder(FaultyOrdersDao::class.java)
+    }
 
     fun getChatService(): ChatListDao {
         return builder(ChatListDao::class.java)
     }
-
-
 }

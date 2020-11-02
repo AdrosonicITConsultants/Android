@@ -11,39 +11,36 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrosonic.craftexchange.R
-import com.adrosonic.craftexchange.database.entities.realmEntities.CompletedEnquiries
 import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
-import com.adrosonic.craftexchange.database.predicates.MoqsPredicates
 import com.adrosonic.craftexchange.database.predicates.TransactionPredicates
-import com.adrosonic.craftexchange.databinding.FragmentCompEnqDetailsBinding
 import com.adrosonic.craftexchange.databinding.FragmentCompOrderDetailsBinding
 import com.adrosonic.craftexchange.enums.AvailableStatus
-import com.adrosonic.craftexchange.enums.EnquiryStatus
+import com.adrosonic.craftexchange.enums.DocumentType
+import com.adrosonic.craftexchange.enums.EnquiryStages
 import com.adrosonic.craftexchange.enums.getId
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.repository.data.response.moq.Datum
-import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimesResponse
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
-import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.advPay.enquiryPayment
+import com.adrosonic.craftexchange.ui.modules.artisan.qcForm.qcFormIntent
 import com.adrosonic.craftexchange.ui.modules.enquiry.ArtEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
+import com.adrosonic.craftexchange.ui.modules.order.cr.crContext
+import com.adrosonic.craftexchange.ui.modules.order.taxInv.raiseTaxInvIntent
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.transaction.adapter.OnGoingTransactionRecyclerAdapter
+import com.adrosonic.craftexchange.ui.modules.transaction.viewDocument
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
-import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
-import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
 import com.adrosonic.craftexchange.viewModels.OrdersViewModel
+import com.adrosonic.craftexchange.viewModels.QCViewModel
 import com.adrosonic.craftexchange.viewModels.TransactionViewModel
-import com.google.gson.GsonBuilder
 import com.pixplicity.easyprefs.library.Prefs
 
 // TODO: Rename parameter arguments, choose names that match
@@ -68,6 +65,7 @@ class CompletedOrderDetailsFragment : Fragment(),
 
     val mOrdersVm : OrdersViewModel by viewModels()
     val mTranVM : TransactionViewModel by viewModels()
+    val mQcVM : QCViewModel by viewModels()
 
     var weft : String ?= ""
     var warp : String ?= ""
@@ -109,6 +107,15 @@ class CompletedOrderDetailsFragment : Fragment(),
             enqID?.let {
                 mOrdersVm.getSingleCompletedOrder(it)
                 mTranVM.getSingleCompletedTransactions(it)
+                when(Prefs.getString(ConstantsDirectory.PROFILE,"")){
+                    ConstantsDirectory.ARTISAN -> {
+                        mQcVM?.getArtisanQCResponse(it)
+                    }
+                    ConstantsDirectory.BUYER -> {
+                        mQcVM?.getBuyerQCResponse(it)
+                    }
+                }
+                mOrdersVm?.getChangeRequestDetails(it)
             }
             viewLoader()
         }else{
@@ -153,6 +160,10 @@ class CompletedOrderDetailsFragment : Fragment(),
             }
         }
 
+        mBinding?.taxInvoiceLayer?.setOnClickListener {
+            enqID?.let {  startActivity(requireContext().raiseTaxInvIntent(it,true)) }
+        }
+
         mBinding?.productDetailsLayer?.setOnClickListener {
             if (savedInstanceState == null) {
                 isCustom?.let { it1 ->
@@ -174,12 +185,42 @@ class CompletedOrderDetailsFragment : Fragment(),
         mBinding?.piDetailsLayer?.setOnClickListener {
             enqID?.let {  startActivity(requireContext().raisePiContext(it,true, SendPiRequest())) }
         }
+        mBinding?.changeRequestLayer?.setOnClickListener {
+            if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType.equals(ConstantsDirectory.CUSTOM_PRODUCT)) {
+                if (orderDetails?.changeRequestOn == 1L) {
+                    when (orderDetails?.changeRequestStatus) {
+                        0L -> {
+                            enqID?.let { startActivity(requireActivity().crContext(it, 0L)) }
+                        }
+                        1L -> enqID?.let { startActivity(requireActivity().crContext(it, 1L)) }
+                        2L -> enqID?.let { startActivity(requireActivity().crContext(it, 2L)) }
+                        3L -> enqID?.let { startActivity(requireActivity().crContext(it, 3L)) }
+                        else -> {
+                            when (profile) {
+                                ConstantsDirectory.BUYER -> {
+                                    val days = Utility.getDateDiffInDays(Utility.returnDisplayDate( orderDetails?.orderCreatedOn ?: "" ))
+                                    if (days >10) Utility.displayMessage("Last date to raise Change Request passed.", requireContext())
+                                }
+                            }
+                        }
+                    }
+                }
+                else Utility.displayMessage("Change request disabled by artisan.", requireContext())
+            } else Utility.displayMessage(getString(R.string.cr_not_applicable), requireContext())
+        }
+
+        mBinding?.qualityCheckLayer?.setOnClickListener {
+            startActivity(context?.qcFormIntent()
+                ?.putExtra(ConstantsDirectory.ENQUIRY_ID,enqID)
+                ?.putExtra(ConstantsDirectory.ORDER_STATUS_FLAG, 1L))
+        }
+
+        //delivery receipt
+        mBinding?.deliveryReceiptLayer?.setOnClickListener {
+            startActivity(enqID?.let { it1 -> requireContext()?.viewDocument(it1, DocumentType.DELIVERY_CHALLAN.getId()) })
+        }
 
         mBinding?.viewPaymentLayer?.setOnClickListener {
-//            startActivity(context?.enquiryPayment()
-//                ?.putExtra(ConstantsDirectory.ENQUIRY_ID,enqID)
-//                ?.putExtra(ConstantsDirectory.ENQUIRY_STATUS_FLAG,EnquiryStatus.COMPLETED.getId())
-//                ?.putExtra(ConstantsDirectory.PI_ID,0))
             if(mBinding?.transactionList!!.visibility==View.VISIBLE) mBinding?.transactionList!!.visibility=View.GONE
             else mBinding?.transactionList!!.visibility=View.VISIBLE
         }
@@ -308,6 +349,7 @@ class CompletedOrderDetailsFragment : Fragment(),
                 stagList?.forEach {
                     if (it.first == orderDetails?.enquiryStageId) {
                         enquiryStage = it.second
+                        if(it.first==10L) enquiryStage="Order delivered"
                     }
                 }
                 when (orderDetails?.enquiryStageId) {
@@ -400,6 +442,57 @@ class CompletedOrderDetailsFragment : Fragment(),
                     mBinding?.viewTransaction?.text="No transaction present"
                 }
             })
+
+            if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType.equals(ConstantsDirectory.CUSTOM_PRODUCT)){
+                if(orderDetails?.changeRequestOn==1L) {
+                    when (profile) {
+                        ConstantsDirectory.ARTISAN -> {
+                            when (orderDetails?.changeRequestStatus) {
+                                0L -> {
+                                    mBinding?.txtCrLayerStatus?.text =
+                                        "Buyer Waiting for acknwoledgement"
+                                }
+                                1L, 2L, 3L -> {
+                                    mBinding?.txtCrLayerStatus?.text = Utility.getCountStatement(
+                                        enqID ?: 0
+                                    )//Utility.returnDisplayDate(orderDetails?.changeRequestModifiedOn ?: "")
+                                }
+                                else -> {
+                                    mBinding?.txtCrLayerStatus?.text =
+                                        "Change request not available"
+                                }
+                            }
+                        }
+                        ConstantsDirectory.BUYER -> {
+                            when (orderDetails?.changeRequestStatus) {
+                                0L -> {
+                                    mBinding?.txtCrLayerStatus?.text = "Waiting for acknwoledgement"
+                                }
+                                1L, 2L, 3L -> {
+                                    mBinding?.txtCrLayerStatus?.text = Utility.getCountStatement(
+                                        enqID ?: 0
+                                    ) //Utility.returnDisplayDate(orderDetails?.changeRequestModifiedOn ?: "")
+                                }
+                                else -> {
+                                    val days = Utility.getDateDiffInDays(
+                                        Utility.returnDisplayDate(
+                                            orderDetails?.orderCreatedOn ?: ""
+                                        )
+                                    )
+                                    Log.e("RaiseCr", "days ${days}")
+                                    if (days > 10) mBinding?.txtCrLayerStatus?.text =
+                                        "Last date to raise Change Request passed."
+                                    else mBinding?.txtCrLayerStatus?.text = ""
+                                }
+                            }
+                        }
+                    }
+                }
+                else  mBinding?.txtCrLayerStatus?.text=getString(R.string.cr_disabled)
+            }
+            else {
+                mBinding?.txtCrLayerStatus?.text=getString(R.string.cr_not_applicable)
+            }
             } catch (e: Exception) {
                 Log.e("setDetails", "Exception " + e.message)
             }
@@ -424,6 +517,26 @@ class CompletedOrderDetailsFragment : Fragment(),
                 }else{
                     mBinding?.viewPaymentLayer?.visibility = View.GONE
                 }
+        //quality check
+        if(orderDetails?.enquiryStageId!! >= 5L){
+            mBinding?.qualityCheckLayer?.visibility = View.VISIBLE
+        }else{
+            mBinding?.qualityCheckLayer?.visibility = View.GONE
+        }
+
+        //TaxInvoice
+        if(orderDetails?.enquiryStageId!! >= EnquiryStages.FINAL_INVOICE_RAISED.getId()){
+            mBinding?.taxInvoiceLayer?.visibility = View.VISIBLE
+        }else{
+            mBinding?.taxInvoiceLayer?.visibility = View.GONE
+        }
+
+        //DeliveryReceipt
+        if(orderDetails?.deliveryChallanUploaded == 1L){
+            mBinding?.deliveryReceiptLayer?.visibility = View.VISIBLE
+        }else{
+            mBinding?.deliveryReceiptLayer?.visibility = View.GONE
+        }
 //            }
 //            else -> {
 //                mBinding?.viewPaymentLayer?.visibility = View.GONE

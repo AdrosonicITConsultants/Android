@@ -7,12 +7,16 @@ import com.adrosonic.craftexchange.syncManager.processor.ProductDeleter
 import com.adrosonic.craftexchange.syncManager.processor.objects.ItemType
 import com.adrosonic.craftexchange.syncManager.processor.ProductAdd
 import com.adrosonic.craftexchange.syncManager.processor.ProductUpdate
+import com.adrosonic.craftexchange.syncManager.processor.cr.CrToggleAction
+import com.adrosonic.craftexchange.syncManager.processor.cr.CrUpdateStatusAction
 import com.adrosonic.craftexchange.syncManager.processor.customDesign.OwnDesignAdd
 import com.adrosonic.craftexchange.syncManager.processor.customDesign.OwnDesignDelete
 import com.adrosonic.craftexchange.syncManager.processor.customDesign.OwnDesignUpdate
 import com.adrosonic.craftexchange.syncManager.processor.moq.SendMoqAction
 import com.adrosonic.craftexchange.syncManager.processor.notification.NotificationAction
 import com.adrosonic.craftexchange.syncManager.processor.pi.PiActions
+import com.adrosonic.craftexchange.syncManager.processor.qc.QcActions
+import com.adrosonic.craftexchange.syncManager.processor.taxInv.TaxInvoiceActions
 import com.adrosonic.craftexchange.syncManager.processor.wishlist.WishlistAction
 
 /**
@@ -29,7 +33,11 @@ class SyncCoordinator(val context: Context) {
         OwnDesignDelete(),
         NotificationAction(),
         SendMoqAction(),
-        PiActions()
+        PiActions(),
+        QcActions(),
+        CrToggleAction(),
+        CrUpdateStatusAction(),
+        TaxInvoiceActions()
     )
 
     fun performLocallyAvailableActions() {
@@ -72,11 +80,36 @@ class SyncCoordinator(val context: Context) {
                     }
                 }
                 val queue6=  PiPredicates.getPiMarkedForActions(it.predicateForLocallyTrackedElements)
-                Log.e("Offline","itemId :${queue6?.joinToString()}")
                 val iterator6 = queue6?.iterator()
                 if (iterator6 != null) {
                     while (iterator6.hasNext()) {
                         list.add(ItemType(iterator6.next().toString()))
+                    }
+                }
+                val queue7=  OrdersPredicates.getOrderMarkedForActions(it.predicateForLocallyTrackedElements)
+                Log.e("RaiseCr","offline itemId :${queue7?.joinToString()}")
+                val iterator7 = queue7?.iterator()
+                if (iterator7 != null) {
+                    while (iterator7.hasNext()) {
+                        list.add(ItemType(iterator7.next().toString()))
+                    }
+                }
+
+                val queue8=  QcPredicates.getQcMarkedForActions(it.predicateForLocallyTrackedElements)
+                Log.e("QC","offline itemId :${queue8?.joinToString()}")
+                val iterator8 = queue8?.iterator()
+                if (iterator8 != null) {
+                    while (iterator8.hasNext()) {
+                            list.add(ItemType(iterator8.next().toString()))
+                    }
+                }
+
+                val queue9=  TaxInvPredicates.getTiMarkedForActions(it.predicateForLocallyTrackedElements)
+                Log.e("TaxInvoice","offline itemId :${queue9?.joinToString()}")
+                val iterator9 = queue9?.iterator()
+                if (iterator9 != null) {
+                    while (iterator9.hasNext()) {
+                        list.add(ItemType(iterator9.next().toString()))
                     }
                 }
             } catch (e: Exception) {

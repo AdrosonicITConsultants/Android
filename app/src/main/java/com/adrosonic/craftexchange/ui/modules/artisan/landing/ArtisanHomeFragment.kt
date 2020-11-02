@@ -23,8 +23,10 @@ import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.addProduct
 import com.adrosonic.craftexchange.ui.modules.artisan.products.ArtisanProductAdapter
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
+import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.ArtisanProductsViewModel
+import com.adrosonic.craftexchange.viewModels.CMSViewModel
 import com.adrosonic.craftexchange.viewModels.ProfileViewModel
 import com.pixplicity.easyprefs.library.Prefs
 import io.realm.RealmResults
@@ -34,7 +36,8 @@ private const val ARG_PARAM2 = "param2"
 
 class ArtisanHomeFragment : Fragment(),
     ArtisanProductsViewModel.productsFetchInterface,
-    ProfileViewModel.FetchUserDetailsInterface {
+    ProfileViewModel.FetchUserDetailsInterface,
+    CMSViewModel.CMSDataInterface{
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -45,6 +48,7 @@ class ArtisanHomeFragment : Fragment(),
     var artisanId : Long ?= 0
     val mViewModel: ArtisanProductsViewModel by viewModels()
     val mProVM : ProfileViewModel by viewModels()
+    val mCMSVM : CMSViewModel by viewModels()
     var craftUser : MutableLiveData<CraftUser> ?= null
     var brandLogo : String ?= ""
     var urlBrand : String ?=""
@@ -63,8 +67,19 @@ class ArtisanHomeFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
         mViewModel.listener = this
         mProVM.listener = this
+        mCMSVM.cmsListener = this
+
+        if (!Utility.checkIfInternetConnected(requireContext())) {
+            mBinding?.swipeRefreshLayout?.isRefreshing = false
+            Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
+        } else {
+            mCMSVM.getCategoriesData()
+        }
+
         refreshProfile()
         setupRecyclerView()
+
+
 
         mViewModel.getProductCategoryListMutableData(artisanId)
             .observe(viewLifecycleOwner, Observer<RealmResults<ArtisanProducts>>{
@@ -168,5 +183,29 @@ class ArtisanHomeFragment : Fragment(),
     companion object {
         fun newInstance() = ArtisanHomeFragment()
         const val TAG = "ArtHomeFrag"
+    }
+
+    override fun onCMSFailure() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("CMS", "OnFailure")
+
+            }
+            )
+        } catch (e: Exception) {
+            Log.e("CMS", "Exception onFailure " + e.message)
+        }
+    }
+
+    override fun onCMSSuccess() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("CMS", "onSuccess")
+                artisanProductAdapter?.notifyDataSetChanged()
+            }
+            )
+        } catch (e: Exception) {
+            Log.e("CMS", "Exception onFailure " + e.message)
+        }
     }
 }

@@ -40,7 +40,7 @@ open class Orders:RealmObject() {
     var productImages:  String? = ""
     var orderReceiveDate:  String? = ""
     var excpectedDate:  String? = ""
-    var changeRequestModifiedOn:  String? = ""
+    var changeRequestModifiedOn:  String? = ""//date
     var innerEnquiryStageId: Long? = 0
     var enquiryStageId: Long?=0
     var startedOn: String?=""
@@ -73,17 +73,28 @@ open class Orders:RealmObject() {
     var isMoqSend: Long?  = 0
     var isPiSend: Long?  = 0
     var isMoqRejected: Long?  = 0
+    var isPartialRefundReceived: Long?  = 0
+    var isRefundReceived: Long?  = 0
+    var isProductReturned: Long?  = 0
     var changeRequestOn: Long?  = 0
     var isBlue: Long?  = 0
+    var userId: Long?= 0
 
     var isOrderFromCompleted:Long?=0
+    var actionMarkCr:Long?=0
+    var actionMarkCrStatusUpdate:Long?=0
+    var crStatusUpdateInput:String?=""
 
     companion object{
+        const val COLUMN__ID = "_id"
         const val COLUMN_ENQUIRY_ID = "enquiryId"
         const val COLUMN_PRODUCT_ID = "productId"
         const val COLUMN_ENQUIRY_CODE = "enquiryCode"
         const val COLUMN_ORDER_CODE = "orderCode"
         const val COLUMN_LAST_UPDATED = "lastUpdated"
         const val COLUMN_IS_COMPLETED = "isOrderFromCompleted"
+        const val COLUMN_ACTION_MARK_CR = "actionMarkCr"
+        const val COLUMN_ACTION_MARK_CR_STATUS_UPDATE = "actionMarkCrStatusUpdate"
+        const val COLUMN_CR_STATUS_UPDATE_INPUT = "crStatusUpdateInput"
     }
 }

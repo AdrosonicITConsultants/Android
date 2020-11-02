@@ -9,6 +9,10 @@ import com.pixplicity.easyprefs.library.Prefs
 const val PREFS_NAME = "craft_exchange"
 const val ARTISAN = "Artisan"
 const val BUYER = "Buyer"
+
+const val VIDEO_ARTISAN = "videoartisan"
+const val VIDEO_BUYER = "videobuyer"
+
 //const val ADMIN = "Administrator"
 const val PROFILE = "profile"
 const val REF_ROLE_ID = "roleId"
@@ -84,7 +88,16 @@ const val INNER_ENQUIRY_STAGE_DATA = "inner_enquiry_stage_data"
 const val ENQUIRY_AVAI_PROD_STAGE_DATA = "enquiry_available_product_stage_data"
 const val PROGRESS_TIMELINE_DATA = "progress_timeline_data"
 const val TRANSACTION_STATUS_DATA ="transaction_status_data"
+const val CR_STATUS_DATA ="cr_status_data"
 
+////
+const val REGION_CMS_DATA = "region_cms_data"
+const val CATEGORY_CMS_DATA = "category_cms_data"
+const val PAGE_CMS_DATA = "page_cms_data"
+
+///QC
+const val QC_STAGE_DATA ="qc_stage_data"
+const val QC_QUESTION_DATA ="qc_question_data"
 
 class UserConfig {
 
@@ -131,6 +144,19 @@ class UserConfig {
             Prefs.putString(BUYER, value)
             field = value
         }
+
+    var videoBuyer: String? = ""
+        get() = Prefs.getString(VIDEO_BUYER,"")
+        set(value) {
+            Prefs.putString(VIDEO_BUYER, value)
+            field = value
+        }
+    var videoArtisan: String? = ""
+    get() = Prefs.getString(VIDEO_ARTISAN,"")
+    set(value) {
+        Prefs.putString(VIDEO_ARTISAN, value)
+        field = value
+    }
 
     var refRoleId: String? = ""
         get() = Prefs.getString(REF_ROLE_ID,"")
@@ -447,6 +473,27 @@ class UserConfig {
             field = value
         }
 
+    var regionCMS: String? = ""
+        get() = Prefs.getString(REGION_CMS_DATA,"")
+        set(value) {
+            Prefs.putString(REGION_CMS_DATA, value)
+            field = value
+        }
+
+    var categoryCMS: String? = ""
+        get() = Prefs.getString(CATEGORY_CMS_DATA,"")
+        set(value) {
+            Prefs.putString(CATEGORY_CMS_DATA, value)
+            field = value
+        }
+
+    var pageCMS: String? = ""
+        get() = Prefs.getString(PAGE_CMS_DATA,"")
+        set(value) {
+            Prefs.putString(PAGE_CMS_DATA, value)
+            field = value
+        }
+
     var imageUrlList : String? = ""
         get() = Prefs.getString(IMAGE_URL,"")
         set(value) {
@@ -523,9 +570,23 @@ class UserConfig {
         }
 
     var innerEnquiryStageData : String? = ""
-        get() = Prefs.getString(INNER_ENQUIRY_STAGE_DATA,"")
+    get() = Prefs.getString(INNER_ENQUIRY_STAGE_DATA,"")
+    set(value) {
+        Prefs.putString(INNER_ENQUIRY_STAGE_DATA, value)
+        field = value
+    }
+
+    var qcStageData : String? = ""
+        get() = Prefs.getString(QC_STAGE_DATA,"")
         set(value) {
-            Prefs.putString(INNER_ENQUIRY_STAGE_DATA, value)
+            Prefs.putString(QC_STAGE_DATA, value)
+            field = value
+        }
+
+    var qcQuestionData : String? = ""
+        get() = Prefs.getString(QC_QUESTION_DATA,"")
+        set(value) {
+            Prefs.putString(QC_QUESTION_DATA, value)
             field = value
         }
 
@@ -547,6 +608,13 @@ class UserConfig {
         get() = Prefs.getString(TRANSACTION_STATUS_DATA,"")
         set(value) {
             Prefs.putString(TRANSACTION_STATUS_DATA, value)
+            field = value
+        }
+
+    var crStatusData : String? = ""
+        get() = Prefs.getString(CR_STATUS_DATA,"")
+        set(value) {
+            Prefs.putString(CR_STATUS_DATA, value)
             field = value
         }
 }

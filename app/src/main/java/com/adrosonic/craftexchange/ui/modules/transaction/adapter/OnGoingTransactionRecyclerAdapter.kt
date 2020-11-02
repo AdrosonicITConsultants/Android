@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.os.Bundle
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
@@ -17,8 +18,12 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.Transactions
+import com.adrosonic.craftexchange.enums.DocumentType
+import com.adrosonic.craftexchange.enums.getId
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
+import com.adrosonic.craftexchange.ui.modules.enquiry.enquiryDetails
+import com.adrosonic.craftexchange.ui.modules.order.taxInv.raiseTaxInvIntent
 import com.adrosonic.craftexchange.ui.modules.transaction.viewDocument
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
@@ -223,7 +228,16 @@ class OnGoingTransactionRecyclerAdapter(var context: Context?, private var trans
         }
 
         holder?.btn_enquiry?.setOnClickListener {
-            context?.let { it1 -> Utility?.messageDialog(it1,"Fix in Progress (direct to enquiry screen)") }
+//            context?.let { it1 -> Utility?.messageDialog(it1,"Fix in Progress (direct to enquiry screen)") }
+            if(transaction?.enquiryID!=null){
+                val intent = Intent(context?.enquiryDetails())
+                var bundle = Bundle()
+                Prefs.putString(ConstantsDirectory.ENQUIRY_ID, transaction?.enquiryID.toString()) //TODO change later
+                bundle.putString(ConstantsDirectory.ENQUIRY_ID, transaction?.enquiryID.toString())
+                bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG,"2")
+                intent.putExtras(bundle)
+                context?.startActivity(intent)
+            }
         }
 
         if(transaction?.transactionOn != ""){
@@ -281,7 +295,22 @@ class OnGoingTransactionRecyclerAdapter(var context: Context?, private var trans
                 }
                 //View Advance Payment
                 6L,8L,10L -> {
-                    val intent = Intent(transaction?.enquiryID?.let { it1 -> context?.viewDocument(it1) })
+                    val intent = Intent(transaction?.enquiryID?.let { it1 -> context?.viewDocument(it1,DocumentType.ADVANCEPAY.getId()) })
+                    context?.startActivity(intent)
+                }
+                //Tax Invoice
+                12L -> {
+                    val intent = Intent(transaction?.enquiryID?.let { it1 -> context?.raiseTaxInvIntent(it1,true) })
+                    context?.startActivity(intent)
+                }
+                //View Final Payment
+                14L,16L,18L -> {
+                    val intent = Intent(transaction?.enquiryID?.let { it1 -> context?.viewDocument(it1,DocumentType.FINALPAY.getId()) })
+                    context?.startActivity(intent)
+                }
+                //Delivery Challan
+                20L,22L -> {
+                    val intent = Intent(transaction?.enquiryID?.let { it1 -> context?.viewDocument(it1,DocumentType.FINALPAY.getId()) })
                     context?.startActivity(intent)
                 }
             }

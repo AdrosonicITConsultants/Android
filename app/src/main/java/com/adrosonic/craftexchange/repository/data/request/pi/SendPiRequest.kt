@@ -20,3 +20,4 @@ open class SendPiRequest:Serializable {
     var quantity: Long?=0
     var sgst: Long?=0
 }
+

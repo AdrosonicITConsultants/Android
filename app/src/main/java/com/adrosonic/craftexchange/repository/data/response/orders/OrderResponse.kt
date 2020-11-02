@@ -1,5 +1,7 @@
 package com.adrosonic.craftexchange.repository.data.response.orders
 
+import com.adrosonic.craftexchange.repository.data.response.enquiry.PaymentAccountDetail
+
 data class OrderResponse (
     val data: List<Datum>,
     val valid: Boolean,
@@ -11,7 +13,9 @@ data class Datum (
     val openEnquiriesResponse: OpenEnquiriesResponse,
     val brandName: String?="",
     val isMoqRejected: Long? = null,
-    val isBlue: Long? = null
+    val isBlue: Long? = null,
+    val userId: Long? = 0,
+    val paymentAccountDetails: List<PaymentAccountDetail>
 )
 
 
@@ -43,6 +47,9 @@ data class OpenEnquiriesResponse (
     val enquiryCode: String,
     val productStatusId: Long? = null,
     val productType: String?="",
+    val isPartialRefundReceived: Long? = null,
+    val isRefundReceived: Long? = null,
+    val isProductReturned: Long? = null,
     val district: String? = null,
     val productName: String,
     val productCode: String,
@@ -80,6 +87,7 @@ data class OpenEnquiriesResponse (
     val lastUpdated: String,
     val state: String? = null,
     val country: String? = null
+
 )
 
 enum class ProductType {

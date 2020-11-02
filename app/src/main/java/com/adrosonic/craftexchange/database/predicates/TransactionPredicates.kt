@@ -43,10 +43,7 @@ class TransactionPredicates {
                                 } else {
                                     nextID = primId.toLong() + 1
                                 }
-                                var exTra = it.createObject(
-                                    Transactions::class.java,
-                                    nextID
-                                )
+                                var exTra = it.createObject(Transactions::class.java, nextID)
                                 exTra?.transactionID = transac?.transactionOngoing?.id
                                 exTra?.enquiryID = transac?.transactionOngoing?.enquiryId
                                 exTra?.enquiryCode = transac?.enquiryCode

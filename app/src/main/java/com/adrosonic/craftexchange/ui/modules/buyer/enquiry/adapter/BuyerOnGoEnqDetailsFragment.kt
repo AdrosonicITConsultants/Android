@@ -123,14 +123,12 @@ EnquiryViewModel.FetchEnquiryInterface,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        moqDeliveryJson = UserConfig.shared.moqDeliveryDates
-//        val gson = GsonBuilder().create()
-//        val moqDeliveryTime = gson.fromJson(moqDeliveryJson, MoqDeliveryTimesResponse::class.java)
         Utility.getDeliveryTimeList()?.let {moqDeliveryTimeList.addAll(it)  }
-//        mEnqVM.fetchEnqListener = this
+        mEnqVM.fetchEnqListener = this
         mEnqVM.buyerMoqListener = this
         mEnqVM.singlePiListener = this
         mBinding?.swipeEnquiryDetails?.isEnabled = false
+        Log.e("EnquiryDetails", "enqID : $enqID")
         if(Utility.checkIfInternetConnected(requireActivity())){
             enqID?.let { mEnqVM.getSingleOngoingEnquiry(it) }
             viewLoader()
@@ -138,8 +136,9 @@ EnquiryViewModel.FetchEnquiryInterface,
             mEnqVM?.getSinglePi(enqID!!)
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
-        }
 
+        }
+        setDetails()
         enqID?.let {
             mEnqVM.getSingleOnEnqData(it)
                 .observe(viewLifecycleOwner, Observer<OngoingEnquiries> {
@@ -348,7 +347,7 @@ EnquiryViewModel.FetchEnquiryInterface,
                 //enquiry stage with color
                 var enquiryStage: String? = ""
                 var stagList = Utility?.getEnquiryStagesData()
-                Log.e("enqDataStages", "List : $stagList")
+                Log.e("EnquiryDetails", "List : $stagList")
                 stagList?.forEach {
                     if (it.first == enquiryDetails?.enquiryStageID) {
                         enquiryStage = it.second
@@ -407,23 +406,26 @@ EnquiryViewModel.FetchEnquiryInterface,
                 mBinding?.artisanBrand?.text = enquiryDetails?.ProductBrandName
 
                 setProgressTimeline()
-                if(enquiryDetails?.isMoqRejected!!.equals(1L)){
-                    mBinding?.piDetailsLayout?.visibility = View.GONE
-                }else{
-                    Log.e("PITag","enquiryStageID: ${enquiryDetails?.enquiryStageID}")
-                    Log.e("PITag","enquiryStageID: ${enquiryDetails?.enquiryStatusID}")
-                    if(enquiryDetails?.enquiryStageID!!.equals(3L)){
-                        mBinding?.piDetailsLayout?.visibility = View.VISIBLE
-                    }
-                    else if(enquiryDetails?.isPiSend!!.equals(1L)){
-                        mBinding?.piDetailsLayout?.visibility = View.VISIBLE
-                    }else if(enquiryDetails?.isPiSend!!.equals(0L)&&enquiryDetails?.isMoqSend!!.equals(1L)){
+                enquiryDetails?.isMoqRejected?.let {
+                    if (enquiryDetails?.isMoqRejected!!.equals(1L)) {
                         mBinding?.piDetailsLayout?.visibility = View.GONE
-                    }else{
-                        mBinding?.piDetailsLayout?.visibility = View.GONE
+                    } else {
+                        Log.e("EnquiryDetails", "enquiryStageID: ${enquiryDetails?.enquiryStageID}")
+                        Log.e("EnquiryDetails", "enquiryStageID: ${enquiryDetails?.enquiryStatusID}")
+                        if (enquiryDetails?.enquiryStageID!!.equals(3L)) {
+                            mBinding?.piDetailsLayout?.visibility = View.VISIBLE
+                        } else if (enquiryDetails?.isPiSend!!.equals(1L)) {
+                            mBinding?.piDetailsLayout?.visibility = View.VISIBLE
+                        } else if (enquiryDetails?.isPiSend!!.equals(0L) && enquiryDetails?.isMoqSend!!.equals(
+                                1L
+                            )
+                        ) {
+                            mBinding?.piDetailsLayout?.visibility = View.GONE
+                        } else {
+                            mBinding?.piDetailsLayout?.visibility = View.GONE
+                        }
                     }
                 }
-
                 setViewTransactionButton()
 
                 when (enquiryDetails?.productType) {
@@ -513,7 +515,7 @@ EnquiryViewModel.FetchEnquiryInterface,
 
             })
         }catch (e:Exception){
-            Log.e("ViewEnqProd","Details : "+e.printStackTrace())
+            Log.e("EnquiryDetails","Details : "+e.printStackTrace())
         }
     }
 
@@ -555,10 +557,10 @@ EnquiryViewModel.FetchEnquiryInterface,
         stageList?.clear()
         if(enquiryDetails?.productType == "Custom Product" || enquiryDetails?.productStatusID == AvailableStatus.MADE_TO_ORDER.getId()){
             stageList = Utility.getEnquiryStagesData() // custom product or made to order
-            Log.e("enqdata", "List All : $stageList")
+            Log.e("EnquiryDetails", "List All : $stageList")
 
             innerStageList = Utility.getInnerEnquiryStagesData()
-            Log.e("enqdata", "List Inner : $innerStageList")
+            Log.e("EnquiryDetails", "List Inner : $innerStageList")
 
 
             if(enquiryDetails?.innerEnquiryStageID != null && enquiryDetails?.enquiryStageID == 5L){
@@ -659,7 +661,7 @@ EnquiryViewModel.FetchEnquiryInterface,
             }
         }else{
             stageAPList = Utility.getAvaiProdEnquiryStagesData() // available product
-            Log.e("enqdata", "List AP : $stageAPList")
+            Log.e("EnquiryDetails", "List AP : $stageAPList")
             stageAPList?.forEach {
                 if(it.second == enquiryDetails?.enquiryStageID){
                     currEnqStageSerNo = it.first
@@ -827,32 +829,42 @@ EnquiryViewModel.FetchEnquiryInterface,
 
     override fun onResume() {
         super.onResume()
-        enqID?.let { mEnqVM?.getSingleOnEnqData(it) }
+        if(Utility.checkIfInternetConnected(requireActivity())){
+            enqID?.let { mEnqVM.getSingleOngoingEnquiry(it) }
+            viewLoader()
+            mEnqVM.getMoqs(enqID!!)
+            mEnqVM?.getSinglePi(enqID!!)
+        }else{
+            Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
+            setDetails()
+        }
+
+//        enqID?.let { mEnqVM.getSingleOngoingEnquiry(it) }
         setDetails()
     }
 
     override fun onFailure() {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
-                Log.e("Enquiry Details", "onFailure")
+                Log.e("EnquiryDetails", "onFailure")
                 enqID?.let { mEnqVM.getSingleOnEnqData(it) }
                 hideLoader()
             })
         } catch (e: Exception) {
-            Log.e("Enquiry Details", "Exception onFailure " + e.message)
+            Log.e("EnquiryDetails", "Exception onFailure " + e.message)
         }
     }
 
     override fun onSuccess() {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
-                Log.e("Enquiry Details", "onSuccess")
+                Log.e("EnquiryDetails", "onSuccess")
                 enqID?.let { mEnqVM.getSingleOnEnqData(it) }
                 hideLoader()
                 setDetails()
             })
         } catch (e: Exception) {
-            Log.e("Enquiry Details", "Exception onFailure " + e.message)
+            Log.e("EnquiryDetails", "Exception onFailure " + e.message)
         }
     }
 
@@ -877,14 +889,14 @@ EnquiryViewModel.FetchEnquiryInterface,
                 setDetails()
             })
         } catch (e: Exception) {
-            Log.e("Enquiry Details", "Exception onAddMoqSuccess " + e.message)
+            Log.e("EnquiryDetails", "Exception onAddMoqSuccess " + e.message)
         }
     }
 
     override fun onSendCustomMoqSuccess(moqId:Long) {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
-                Log.e("Enquiry Details", "onSendCustomMoqSuccess: $moqId")
+                Log.e("EnquiryDetails", "onSendCustomMoqSuccess: $moqId")
                 if(Utility.checkIfInternetConnected(requireActivity())){
                     enqID?.let { mEnqVM.getSingleOngoingEnquiry(it) }
                     viewLoader()
@@ -896,7 +908,7 @@ EnquiryViewModel.FetchEnquiryInterface,
                 showSendMoqSuccesDialog(moqId)
             })
         } catch (e: Exception) {
-            Log.e("Enquiry Details", "Exception onAddMoqSuccess " + e.message)
+            Log.e("EnquiryDetails", "Exception onAddMoqSuccess " + e.message)
         }
     }
 
@@ -908,7 +920,7 @@ EnquiryViewModel.FetchEnquiryInterface,
                 Utility.displayMessage("Unable to send moq, please try again",requireContext())
             })
         } catch (e: Exception) {
-            Log.e("Enquiry Details", "Exception onAddMoqSuccess " + e.message)
+            Log.e("EnquiryDetails", "Exception onAddMoqSuccess " + e.message)
         }
     }
 
@@ -989,7 +1001,15 @@ EnquiryViewModel.FetchEnquiryInterface,
     }
 
     override fun onPiFailure() {
-        Utility.displayMessage("PI Failure",requireActivity())
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Utility.displayMessage("PI Failure",requireActivity())
+               setDetails()
+            })
+        } catch (e: Exception) {
+            Log.e("EnquiryDetails", "Exception onPiFailure " + e.message)
+        }
+
     }
 
     override fun getPiSuccess(id: Long) {

@@ -9,9 +9,7 @@ import com.adrosonic.craftexchange.databinding.ActivityEnquiryDetailsBinding
 import com.adrosonic.craftexchange.enums.EnquiryStatus
 import com.adrosonic.craftexchange.enums.getId
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.ArtisanOnGoEnqDetailsFragment
-import com.adrosonic.craftexchange.ui.modules.buyer.auth.login.BuyerLoginUsernameFragment
 import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.adapter.BuyerOnGoEnqDetailsFragment
-import com.adrosonic.craftexchange.ui.modules.search.SearchSuggestionActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.pixplicity.easyprefs.library.Prefs
 

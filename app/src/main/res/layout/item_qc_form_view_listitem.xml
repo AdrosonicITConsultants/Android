@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/qc_form_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white_text"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/margin_regular">
+
+    <TextView
+        android:id="@+id/exp_ques_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_semimedium"
+        android:layout_marginTop="@dimen/margin_regular"
+        android:layout_marginEnd="@dimen/margin_semimedium"
+        android:fontFamily="@font/lato_bold"
+        android:textStyle="bold"
+        android:textColor="@color/darker_gray"
+        android:textSize="@dimen/product_availability_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/exp_ans_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_semimedium"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="@dimen/margin_semimedium"
+        android:textColor="#FFA500"
+        android:background="@drawable/rect_outline_grey"
+        android:fontFamily="@font/lato_bold"
+        android:gravity="start"
+        android:padding="@dimen/margin_regular"
+        android:textSize="@dimen/product_availability_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/exp_ques_text" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

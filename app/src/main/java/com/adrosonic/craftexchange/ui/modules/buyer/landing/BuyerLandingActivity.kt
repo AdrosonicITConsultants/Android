@@ -46,6 +46,7 @@ import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
+import com.adrosonic.craftexchange.viewModels.CMSViewModel
 import com.adrosonic.craftexchange.viewModels.LandingViewModel
 import com.adrosonic.craftexchange.viewModels.ProfileViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -92,6 +93,7 @@ class BuyerLandingActivity : AppCompatActivity(),
     val mViewModel: LandingViewModel by viewModels()
     var craftUser : CraftUser?= null
     val mProVM : ProfileViewModel by viewModels()
+    val mCMSViewModel : CMSViewModel by viewModels()
     var imageName : String ?= ""
     var url : String ?= ""
     var noti_badge:TextView? = null
@@ -108,12 +110,7 @@ class BuyerLandingActivity : AppCompatActivity(),
             }
         }).execute()
 
-        mViewModel.getProductUploadData()
-        mViewModel.getEnquiryStageData()
-        mViewModel?.getInnerEnquiryStageData()
-        mViewModel.getEnquiryStageAvailableProdsData()
-        mViewModel.getwishlisteProductIds()
-        mViewModel?.getMoqDeliveryTimes()
+
 
         refreshProfile()
         mProVM.listener = this
@@ -420,6 +417,9 @@ class BuyerLandingActivity : AppCompatActivity(),
         if (!Utility.checkIfInternetConnected(this)) {
             Utility.displayMessage(getString(R.string.no_internet_connection), this)
         } else {
+
+            mViewModel.getwishlisteProductIds()
+            mViewModel?.getMoqDeliveryTimes()
             mViewModel.getProductsOfArtisan(this)
             mViewModel.getProductUploadData()
             mViewModel.getEnquiryStageData()
@@ -430,6 +430,13 @@ class BuyerLandingActivity : AppCompatActivity(),
             mProVM.getBuyerProfileDetails(this)
             mProVM.getUserMutableData()
             mViewModel?.getTransactionStatus()
+            mViewModel?.getChangeRequestStatuses()
+            mViewModel?.getQCQuestionData()
+            mViewModel?.getQCStageData()
+
+
+            mCMSViewModel?.getRegionData()
+            mCMSViewModel?.getCategoriesData()
         }
     }
 
