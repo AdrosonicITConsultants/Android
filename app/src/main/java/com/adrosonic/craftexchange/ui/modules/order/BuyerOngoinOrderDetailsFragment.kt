@@ -24,6 +24,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
+import com.adrosonic.craftexchange.database.entities.realmEntities.OrderProgressDetails
 import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
 import com.adrosonic.craftexchange.database.predicates.*
 import com.adrosonic.craftexchange.databinding.FragmentArtisanOnGoEnqDetailsBinding
@@ -39,6 +40,7 @@ import com.adrosonic.craftexchange.ui.modules.order.cr.crContext
 import com.adrosonic.craftexchange.ui.modules.order.finalPay.orderPaymentIntent
 import com.adrosonic.craftexchange.ui.modules.order.taxInv.raiseTaxInvIntent
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
+import com.adrosonic.craftexchange.ui.modules.raiseConcern.raiseConcernIntent
 import com.adrosonic.craftexchange.ui.modules.transaction.adapter.OnGoingTransactionRecyclerAdapter
 import com.adrosonic.craftexchange.ui.modules.transaction.viewDocument
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
@@ -65,7 +67,8 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
     OrdersViewModel.FetchOrderInterface,
     OrdersViewModel.changeStatusInterface,
     OrdersViewModel.FetchCrInterface,
-    TransactionViewModel.TransactionInterface{
+    TransactionViewModel.TransactionInterface,
+    OrdersViewModel.GetOrderProgressInterface{
 
     private var param1: String? = null
     private var param2: String? = null
@@ -73,6 +76,7 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
     private var enqID : Long ?= 0
     private var enqCode : String ?= ""
     private var orderDetails : Orders ?= null
+    private var orderProgressDetails : OrderProgressDetails ?= null
     private var stageList : ArrayList<Pair<Long,String>> ?= null
     private var stageAPList : ArrayList<Triple<Long,Long,String>> ?= null
     private var innerStageList : ArrayList<Pair<Long,String>> ?= null
@@ -121,14 +125,10 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
         mOrderVm?.changeStatusListener = this
         mOrderVm?.fetcCrListener = this
         mBinding?.swipeEnquiryDetails?.isEnabled = false
+
         if(Utility.checkIfInternetConnected(requireActivity())){
-            enqID?.let {
-                viewLoader()
-                mOrderVm.getSingleOngoingOrder(it)
-                mTranVM.getSingleOngoingTransactions(it)
-                mOrderVm?.getChangeRequestDetails(it)
-                mQcVM.getBuyerQCResponse(it)
-            }
+            viewLoader()
+            reloadContent()
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
         }
@@ -143,6 +143,7 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
             activity?.onBackPressed()
         }
 
+        //Upload Final Payment Receipt
         mBinding?.btnUplFinPayReceipt?.setOnClickListener {
             startActivity(requireContext().orderPaymentIntent()
                 ?.putExtra(ConstantsDirectory.ENQUIRY_ID,enqID)
@@ -150,6 +151,13 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
 //                ?.putExtra(ConstantsDirectory.PI_ID,0))
         }
 
+        //Raise Concern
+        mBinding?.raiseConcernLayer?.setOnClickListener {
+            if(orderProgressDetails?.isFaulty == 0L)
+            startActivity(enqID?.let { it1 -> requireContext().raiseConcernIntent(it1,false) })
+        }
+
+        //Brand Details
         mBinding?.brandDetailsLayer?.setOnClickListener {
             if (savedInstanceState == null) {
                 activity?.supportFragmentManager?.beginTransaction()
@@ -163,6 +171,7 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
             startActivity(enqID?.let { it1 -> requireContext()?.viewDocument(it1,DocumentType.DELIVERY_CHALLAN.getId()) })
         }
 
+        //productDetails
         mBinding?.productDetailsLayer?.setOnClickListener {
             if (savedInstanceState == null) {
                 isCustom?.let { it1 ->
@@ -181,20 +190,25 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
 
         }
 
+        //Proforma Invoice details
         mBinding?.piDetailsLayer?.setOnClickListener {
             enqID?.let {  startActivity(requireContext().raisePiContext(it,true, SendPiRequest())) }
         }
 
+        //Payment Details
         mBinding?.viewPaymentLayer?.setOnClickListener {
             if(mBinding?.transactionList!!.visibility==View.VISIBLE) mBinding?.transactionList!!.visibility=View.GONE
             else mBinding?.transactionList!!.visibility=View.VISIBLE
         }
+
+        //Quality Check Details
         mBinding?.qualityCheckLayer?.setOnClickListener {
             startActivity(context?.qcFormIntent()
                 ?.putExtra(ConstantsDirectory.ENQUIRY_ID,enqID)
                 ?.putExtra(ConstantsDirectory.ORDER_STATUS_FLAG, 0L))
         }
 
+        //Change Request
         mBinding?.changeRequestLayer?.setOnClickListener {
             if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType.equals(ConstantsDirectory.CUSTOM_PRODUCT)) {
                 if (orderDetails?.changeRequestOn == 1L) {
@@ -225,6 +239,16 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
 
         mBinding?.btnConfirmDelivery?.setOnClickListener {
             startActivityForResult(requireActivity().confirmDeliveryContext(enqID?:0),ConstantsDirectory.RESULT_CONFIRM_ORDER)
+        }
+    }
+
+    fun reloadContent(){
+        enqID?.let {
+            mOrderVm.getSingleOngoingOrder(it)
+            mTranVM.getSingleOngoingTransactions(it)
+            mOrderVm?.getChangeRequestDetails(it)
+            mQcVM.getBuyerQCResponse(it)
+            mOrderVm.getOrderProgressDetails(it)
         }
     }
 
@@ -654,19 +678,21 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
             mBinding?.deliveryReceiptLayer?.visibility = View.GONE
         }
 
+        //Raise Concern
+        if(orderDetails?.enquiryStageId!! >= EnquiryStages.ORDER_DISPATCHED.getId()){
+            mBinding?.raiseConcernLayer?.visibility = View.VISIBLE
+        }else{
+            mBinding?.raiseConcernLayer?.visibility = View.GONE
+        }
+
     }
 
     override fun onResume() {
         super.onResume()
 
         if(Utility.checkIfInternetConnected(requireActivity())){
-            enqID?.let {
-                viewLoader()
-                mOrderVm.getSingleOngoingOrder(it)
-                mTranVM.getSingleOngoingTransactions(it)
-                mOrderVm?.getChangeRequestDetails(it)
-                mQcVM.getBuyerQCResponse(it)
-            }
+            viewLoader()
+            reloadContent()
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
             setDetails()
@@ -785,6 +811,27 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
     }
 
     override fun onFetchCrFailure() {
+    }
+
+    override fun onOPFailure() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("OPD","onFailure")
+            })
+        } catch (e: Exception) {
+            Log.e("OPD", "Exception onFailure " + e.message)
+        }
+    }
+
+    override fun onOPSuccess() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("OPD","onSuccess")
+                orderProgressDetails = enqID?.toLong()?.let { mOrderVm?.loadOrderProgressDetails(it) }
+            })
+        } catch (e: Exception) {
+            Log.e("OPD", "Exception onFailure " + e.message)
+        }
     }
 
 }

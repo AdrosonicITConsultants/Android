@@ -14,7 +14,6 @@ import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Build
-import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -26,13 +25,14 @@ import androidx.core.app.ShareCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
-import com.adrosonic.craftexchange.database.predicates.QcPredicates
 import com.adrosonic.craftexchange.database.predicates.CrPredicates
 import com.adrosonic.craftexchange.database.predicates.UserPredicates
 import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.uploadData.ProductUploadData
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryAvaProdStageData
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryStageData
 import com.adrosonic.craftexchange.repository.data.response.enquiry.InnerStageData
+import com.adrosonic.craftexchange.repository.data.response.faultyOrders.FaultRefData
+import com.adrosonic.craftexchange.repository.data.response.faultyOrders.FaultReviewRefResponse
 import com.adrosonic.craftexchange.repository.data.response.moq.Datum
 import com.adrosonic.craftexchange.repository.data.response.moq.MoqDeliveryTimesResponse
 import com.adrosonic.craftexchange.repository.data.response.qc.BuyerQcResponse
@@ -40,7 +40,6 @@ import com.adrosonic.craftexchange.repository.data.response.qc.QCData
 import com.adrosonic.craftexchange.repository.data.response.qc.QCQuestionData
 import com.adrosonic.craftexchange.repository.data.response.transaction.TranStatData
 import com.adrosonic.craftexchange.repository.data.response.transaction.TransactionStatusData
-import com.adrosonic.craftexchange.ui.modules.enquiry.enquiryDetails
 import com.bumptech.glide.Glide
 import com.google.gson.GsonBuilder
 import com.pixplicity.easyprefs.library.Prefs
@@ -528,6 +527,16 @@ class Utility {
             val gson = GsonBuilder().create()
             var qcObj = gson.fromJson(UserConfig.shared.qcQuestionData.toString(), QCQuestionData::class.java)
             return  qcObj
+        }
+
+        fun getArtFaultReviewData() : FaultReviewRefResponse? {
+            val gson = GsonBuilder().create()
+            return gson.fromJson(UserConfig.shared.artisanFaultReviewData.toString(), FaultReviewRefResponse::class.java)
+        }
+
+        fun getBuyFaultReviewData() : FaultReviewRefResponse? {
+            val gson = GsonBuilder().create()
+            return gson.fromJson(UserConfig.shared.buyerFaultReviewData.toString(), FaultReviewRefResponse::class.java)
         }
 
         fun getArtisanQcResponse(respString : String) : QCData? {

@@ -40,6 +40,7 @@ import com.adrosonic.craftexchange.ui.modules.order.revisePi.viewPiContextPostCr
 import com.adrosonic.craftexchange.ui.modules.order.taxInv.raiseTaxInvIntent
 import com.adrosonic.craftexchange.ui.modules.order.taxInv.taxInvoiceIntent
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
+import com.adrosonic.craftexchange.ui.modules.raiseConcern.raiseConcernIntent
 import com.adrosonic.craftexchange.ui.modules.transaction.adapter.OnGoingTransactionRecyclerAdapter
 import com.adrosonic.craftexchange.ui.modules.transaction.viewDocument
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
@@ -122,13 +123,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         mBinding?.swipeEnquiryDetails?.isEnabled = false
         if(Utility.checkIfInternetConnected(requireActivity())){
             viewLoader()
-            enqID?.let {
-                mOrderVm.getSingleOngoingOrder(it)
-                mTranVM.getSingleOngoingTransactions(it)
-                mOrderVm?.getChangeRequestDetails(it)
-                mQcVM.getArtisanQCResponse(it)
-            }
-
+           reloadContent()
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
         }
@@ -144,6 +139,11 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
 
         mBinding?.btnBack?.setOnClickListener {
             activity?.onBackPressed()
+        }
+
+        //Raise Concern
+        mBinding?.raiseConcernLayer?.setOnClickListener {
+            startActivity(enqID?.let { it1 -> requireContext().raiseConcernIntent(it1,false) })
         }
 
         mBinding?.btnUploadDeliveryReceipt?.setOnClickListener{
@@ -317,6 +317,16 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
             }else{
                 Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
             }
+        }
+    }
+
+    fun reloadContent(){
+        enqID?.let {
+            mOrderVm.getSingleOngoingOrder(it)
+            mTranVM.getSingleOngoingTransactions(it)
+            mOrderVm?.getChangeRequestDetails(it)
+            mQcVM.getArtisanQCResponse(it)
+            mOrderVm.getOrderProgressDetails(it)
         }
     }
 
@@ -781,6 +791,13 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         }else{
             mBinding?.btnMarkOrderDispatched?.visibility = View.GONE
         }
+
+        //Raise Concern
+        if(orderDetails?.enquiryStageId!! >= EnquiryStages.ORDER_DISPATCHED.getId()){
+            mBinding?.raiseConcernLayer?.visibility = View.VISIBLE
+        }else{
+            mBinding?.raiseConcernLayer?.visibility = View.GONE
+        }
     }
 
     fun setViewEnquiryStageChangeButton(){
@@ -827,12 +844,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         super.onResume()
         if(Utility.checkIfInternetConnected(requireActivity())){
             viewLoader()
-            enqID?.let {
-                mOrderVm.getSingleOngoingOrder(it)
-                mTranVM.getSingleOngoingTransactions(it)
-                mOrderVm?.getChangeRequestDetails(it)
-                mQcVM.getArtisanQCResponse(it)
-            }
+           reloadContent()
 
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())

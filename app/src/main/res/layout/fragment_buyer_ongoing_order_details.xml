@@ -520,6 +520,55 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <LinearLayout
+                    android:id="@+id/raise_concern_layer"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:background="#FFBEBE"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    android:weightSum="10"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/middle_part">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="4"
+                        android:fontFamily="@font/lato_regular"
+                        android:gravity="center|start"
+                        android:text="@string/eh_problem"
+                        android:textColor="#D57272"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="5"
+                        android:fontFamily="@font/lato_regular"
+                        android:gravity="center|end"
+                        android:text="@string/raise_a_concern"
+                        android:textColor="#D57272"
+                        android:textSize="12sp" />
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="?attr/selectableItemBackground"
+                        android:src="@drawable/ic_arrow_right_red" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
                     android:id="@+id/delivery_receipt_layer"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
@@ -531,7 +580,7 @@
                     android:weightSum="10"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/middle_part">
+                    app:layout_constraintTop_toBottomOf="@+id/raise_concern_layer">
 
                     <TextView
                         android:layout_width="0dp"
