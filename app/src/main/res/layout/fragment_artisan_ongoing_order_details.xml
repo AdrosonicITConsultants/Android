@@ -8,7 +8,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -58,8 +57,8 @@
                             android:clickable="true"
                             android:elevation="10dp"
                             android:focusable="true"
-                            android:visibility="gone"
                             android:src="@drawable/ic_chat_enquiry"
+                            android:visibility="gone"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -110,20 +109,21 @@
 
                             <Switch
                                 android:id="@+id/toogle_cr"
-                                android:checked="true"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginBottom="4dp"
+                                android:checked="true"
                                 android:fontFamily="@font/lato_regular"
                                 android:gravity="center_vertical|left"
-                                android:theme="@style/SwitchTheme"
                                 android:layoutDirection="rtl"
                                 android:padding="6dp"
-                                android:layout_marginBottom="4dp"
                                 android:text="@string/disable_change_request"
                                 android:textColor="#DD5A61"
-                                android:textSize="12sp" />
+                                android:textSize="12sp"
+                                android:theme="@style/SwitchTheme" />
 
                         </LinearLayout>
+
                         <TextView
                             android:id="@+id/order_code"
                             android:layout_width="wrap_content"
@@ -472,6 +472,7 @@
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:weightSum="10"
+                        android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/timeline_layout">
@@ -481,9 +482,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/lato_regular"
-                            android:text="Next Step - - - - - - - - - - - - ->"
-                            android:paddingEnd="8dp"
                             android:paddingStart="8dp"
+                            android:paddingEnd="8dp"
+                            android:text="Next Step - - - - - - - - - - - - ->"
                             android:textSize="@dimen/product_availability_text"
                             android:textStyle="bold" />
 
@@ -528,13 +529,13 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
-                            android:textSize="10sp"
                             android:fontFamily="@font/lato_regular"
-                            android:textColor="@color/darker_gray"
                             android:text="@string/update_enq_stage_text1"
-                            app:layout_constraintTop_toBottomOf="@id/btn_start_enq_stage"
+                            android:textColor="@color/darker_gray"
+                            android:textSize="10sp"
+                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"/>
+                            app:layout_constraintTop_toBottomOf="@id/btn_start_enq_stage" />
 
                         <TextView
                             android:id="@+id/update_status_text2"
@@ -542,14 +543,14 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
                             android:layout_marginBottom="4dp"
-                            android:textSize="10sp"
                             android:fontFamily="@font/lato_regular"
-                            android:textStyle="bold"
                             android:text="@string/update_enq_stage_text2"
+                            android:textSize="10sp"
+                            android:textStyle="bold"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/update_status_text1"
+                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"/>
+                            app:layout_constraintTop_toBottomOf="@id/update_status_text1" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -567,6 +568,7 @@
                             android:id="@+id/btn_mark_inprogress"
                             android:layout_width="200dp"
                             android:layout_height="45dp"
+                            android:layout_marginTop="@dimen/margin_regular"
                             android:background="@drawable/rect_outline_blue"
                             android:elevation="8dp"
                             android:fontFamily="@font/lato_regular"
@@ -575,10 +577,9 @@
                             android:textAllCaps="false"
                             android:textColor="@color/nav_menu_text"
                             android:textSize="16sp"
-                            android:layout_marginTop="@dimen/margin_regular"
-                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"/>
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <Button
                             android:id="@+id/btn_mark_move_next_stage"
@@ -601,13 +602,13 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/margin_regular"
-                            android:textSize="10sp"
                             android:fontFamily="@font/lato_regular"
-                            android:textColor="@color/darker_gray"
                             android:text="@string/update_enq_stage_text1"
-                            app:layout_constraintTop_toBottomOf="@id/btn_mark_move_next_stage"
+                            android:textColor="@color/darker_gray"
+                            android:textSize="10sp"
+                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"/>
+                            app:layout_constraintTop_toBottomOf="@id/btn_mark_move_next_stage" />
 
                         <TextView
                             android:id="@+id/update_stage_text2"
@@ -615,22 +616,22 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
                             android:layout_marginBottom="4dp"
-                            android:textSize="10sp"
                             android:fontFamily="@font/lato_regular"
-                            android:textStyle="bold"
                             android:text="@string/hrs_avoid_escalation"
+                            android:textSize="10sp"
+                            android:textStyle="bold"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/update_stage_text1"
+                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"/>
+                            app:layout_constraintTop_toBottomOf="@id/update_stage_text1" />
                     </LinearLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/upload_tax_inv_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:visibility="gone"
                         android:layout_marginTop="@dimen/margin_regular"
+                        android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/change_enquiry_status_layout">
@@ -662,8 +663,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/margin_regular"
-                            android:gravity="center"
                             android:layout_marginBottom="10dp"
+                            android:gravity="center"
                             android:text="@string/enq_note_to_artisan"
                             android:textSize="10sp"
                             android:textStyle="bold"
@@ -694,6 +695,7 @@
                         android:layout_width="250dp"
                         android:layout_height="50dp"
                         android:layout_marginTop="@dimen/margin_regular"
+                        android:layout_marginBottom="@dimen/margin_regular"
                         android:background="@color/dark_green"
                         android:elevation="8dp"
                         android:fontFamily="@font/lato_regular"
@@ -704,7 +706,6 @@
                         android:textColor="@color/white_text"
                         android:textSize="18sp"
                         android:visibility="gone"
-                        android:layout_marginBottom="@dimen/margin_regular"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -715,8 +716,8 @@
                         android:id="@+id/upload_delivery_receipt_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:paddingBottom="4dp"
                         android:visibility="gone"
-                        android:paddingBottom="14dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/btn_view_approve_payment">
@@ -743,11 +744,187 @@
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintVertical_bias="0.0" />
 
-
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+                    <Button
+                        android:id="@+id/btn_mark_order_dispatched"
+                        android:layout_width="250dp"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="@dimen/margin_regular"
+                        android:layout_marginBottom="@dimen/margin_regular"
+                        android:background="@color/dark_green"
+                        android:drawableEnd="@drawable/ic_right_arrow_white"
+                        android:elevation="8dp"
+                        android:fontFamily="@font/lato_regular"
+                        android:padding="4dp"
+                        android:text="@string/mark_order_dispatched"
+                        android:textAlignment="center"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white_text"
+                        android:textSize="18sp"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/upload_delivery_receipt_layout"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <Button
+                        android:id="@+id/btn_order_recreation"
+                        android:layout_width="150dp"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="@dimen/margin_regular"
+                        android:layout_marginBottom="@dimen/margin_regular"
+                        android:elevation="8dp"
+                        android:fontFamily="@font/lato_regular"
+                        android:padding="4dp"
+                        android:text="@string/order_recreation"
+                        android:textAlignment="center"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white_text"
+                        android:textSize="18sp"
+                        android:visibility="gone"
+                        android:background="@drawable/rectangle_round_grad_black_solid"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/btn_mark_order_dispatched"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <LinearLayout
+                        android:id="@+id/order_dispatch_recreation_layer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/btn_order_recreation">
+
+                        <Button
+                            android:id="@+id/btn_order_dispatched_recreation"
+                            android:layout_width="250dp"
+                            android:layout_height="45dp"
+                            android:layout_marginTop="@dimen/margin_regular"
+                            android:layout_marginBottom="@dimen/margin_regular"
+                            android:background="@color/black_text"
+                            android:drawableEnd="@drawable/ic_right_arrow_white"
+                            android:elevation="8dp"
+                            android:fontFamily="@font/lato_regular"
+                            android:padding="4dp"
+                            android:layout_gravity="center"
+                            android:text="@string/mark_order_dispatched_recreation"
+                            android:textAlignment="center"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white_text"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/txt_order_dispatch_recreation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/lato_regular"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="@dimen/margin_regular"
+                            android:text="@string/order_dispatch_recreation"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                    android:id="@+id/raise_concern_layer"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:background="#FFBEBE"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    android:weightSum="10"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/middle_part">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="4"
+                        android:fontFamily="@font/lato_regular"
+                        android:gravity="center|start"
+                        android:text="@string/eh_problem"
+                        android:textColor="#D57272"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="5"
+                        android:fontFamily="@font/lato_regular"
+                        android:gravity="center|end"
+                        android:text="@string/view_raised_concern"
+                        android:textColor="#D57272"
+                        android:textSize="12sp" />
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="?attr/selectableItemBackground"
+                        android:src="@drawable/ic_arrow_right_red" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/delivery_receipt_layer"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:background="#DEF7FF"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    android:weightSum="10"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/raise_concern_layer">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="4"
+                        android:fontFamily="@font/lato_regular"
+                        android:gravity="center|start"
+                        android:text="@string/check_delivery_receipt"
+                        android:textColor="#137EA6"
+                        android:textSize="12sp" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="12dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="5" />
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="?attr/selectableItemBackground"
+                        android:src="@drawable/ic_arrow_right_blue" />
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/quality_check_layer"
@@ -758,7 +935,7 @@
                     android:weightSum="10"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/middle_part">
+                    app:layout_constraintTop_toBottomOf="@+id/delivery_receipt_layer">
 
                     <TextView
                         android:layout_width="0dp"
@@ -851,8 +1028,8 @@
                     android:layout_height="45dp"
                     android:background="#FFF5ED"
                     android:orientation="horizontal"
-                    android:weightSum="10"
                     android:visibility="gone"
+                    android:weightSum="10"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/change_request_layer">
@@ -938,6 +1115,7 @@
                         android:src="@drawable/ic_right_arrow_purple" />
 
                 </LinearLayout>
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/transaction_list"
                     android:layout_width="match_parent"
@@ -945,7 +1123,8 @@
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/view_payment_layer"/>
+                    app:layout_constraintTop_toBottomOf="@+id/view_payment_layer" />
+
                 <LinearLayout
                     android:id="@+id/brand_details_layer"
                     android:layout_width="match_parent"
@@ -967,7 +1146,7 @@
                         android:layout_weight="2"
                         android:fontFamily="@font/lato_regular"
                         android:gravity="center|start"
-                        android:text="@string/artisan_brand"
+                        android:text="@string/buyer_brand"
                         android:textColor="#137EA6"
                         android:textSize="12sp" />
 
@@ -1059,8 +1238,8 @@
                     android:layout_height="45dp"
                     android:background="#F7FFDE"
                     android:orientation="horizontal"
-                    android:weightSum="10"
                     android:visibility="gone"
+                    android:weightSum="10"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/product_details_layer">

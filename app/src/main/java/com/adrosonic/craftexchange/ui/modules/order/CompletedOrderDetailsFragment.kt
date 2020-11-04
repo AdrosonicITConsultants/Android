@@ -21,6 +21,7 @@ import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
 import com.adrosonic.craftexchange.database.predicates.TransactionPredicates
 import com.adrosonic.craftexchange.databinding.FragmentCompOrderDetailsBinding
 import com.adrosonic.craftexchange.enums.AvailableStatus
+import com.adrosonic.craftexchange.enums.DocumentType
 import com.adrosonic.craftexchange.enums.EnquiryStages
 import com.adrosonic.craftexchange.enums.getId
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
@@ -33,6 +34,7 @@ import com.adrosonic.craftexchange.ui.modules.order.cr.crContext
 import com.adrosonic.craftexchange.ui.modules.order.taxInv.raiseTaxInvIntent
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.transaction.adapter.OnGoingTransactionRecyclerAdapter
+import com.adrosonic.craftexchange.ui.modules.transaction.viewDocument
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
@@ -213,6 +215,11 @@ class CompletedOrderDetailsFragment : Fragment(),
                 ?.putExtra(ConstantsDirectory.ORDER_STATUS_FLAG, 1L))
         }
 
+        //delivery receipt
+        mBinding?.deliveryReceiptLayer?.setOnClickListener {
+            startActivity(enqID?.let { it1 -> requireContext()?.viewDocument(it1, DocumentType.DELIVERY_CHALLAN.getId()) })
+        }
+
         mBinding?.viewPaymentLayer?.setOnClickListener {
             if(mBinding?.transactionList!!.visibility==View.VISIBLE) mBinding?.transactionList!!.visibility=View.GONE
             else mBinding?.transactionList!!.visibility=View.VISIBLE
@@ -342,6 +349,7 @@ class CompletedOrderDetailsFragment : Fragment(),
                 stagList?.forEach {
                     if (it.first == orderDetails?.enquiryStageId) {
                         enquiryStage = it.second
+                        if(it.first==10L) enquiryStage="Order delivered"
                     }
                 }
                 when (orderDetails?.enquiryStageId) {
@@ -521,6 +529,13 @@ class CompletedOrderDetailsFragment : Fragment(),
             mBinding?.taxInvoiceLayer?.visibility = View.VISIBLE
         }else{
             mBinding?.taxInvoiceLayer?.visibility = View.GONE
+        }
+
+        //DeliveryReceipt
+        if(orderDetails?.deliveryChallanUploaded == 1L){
+            mBinding?.deliveryReceiptLayer?.visibility = View.VISIBLE
+        }else{
+            mBinding?.deliveryReceiptLayer?.visibility = View.GONE
         }
 //            }
 //            else -> {

@@ -716,13 +716,21 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
 
     override fun onResume() {
         super.onResume()
-//        if(Utility.checkIfInternetConnected(requireActivity())){
-//            enqID?.let { mEnqVM.getSingleOngoingEnquiry(it) }
-////            viewLoader()
-//        }else{
-//            Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
-//        }
-        enqID?.let { mEnqVM?.getSingleOnEnqData(it) }
+        if(Utility.checkIfInternetConnected(requireActivity())){
+            viewLoader()
+            enqID?.let { mEnqVM.getSingleOngoingEnquiry(it) }
+            val moqId=MoqsPredicates.getSingleMoq(enqID)?.moqId?:0
+            Log.e("getSingleMoq","moqId: $moqId")
+            if(moqId<=0){
+                viewLoader()
+                mEnqVM.getSingleMoq(enqID!!)
+            }
+        }else{
+            Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
+            setDetails()
+        }
+
+//        enqID?.let { mEnqVM.getSingleOngoingEnquiry(it) }
         setDetails()
     }
 

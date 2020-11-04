@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="260dp"
     android:layout_height="wrap_content"
-    android:padding="8dp"
     android:background="@color/black_text"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:padding="8dp">
 
     <TextView
         android:id="@+id/update_qc_text"
@@ -41,25 +41,25 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/update_qc_text"/>
+        app:layout_constraintTop_toBottomOf="@+id/update_qc_text" />
 
     <TextView
         android:id="@+id/text_skip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_regular"
+        android:layout_marginBottom="8dp"
+        android:clickable="true"
+        android:focusable="true"
         android:fontFamily="@font/lato_bold"
         android:text="@string/skip"
         android:textAlignment="center"
         android:textColor="@color/white_text"
         android:textSize="@dimen/product_title_text"
-        android:clickable="true"
-        android:focusable="true"
-        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_fill_qc"
+        app:layout_constraintEnd_toEndOf="@+id/btn_fill_qc"
         app:layout_constraintStart_toStartOf="@+id/btn_fill_qc"
-        app:layout_constraintEnd_toEndOf="@+id/btn_fill_qc"/>
+        app:layout_constraintTop_toBottomOf="@+id/btn_fill_qc" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -24,6 +24,7 @@ import com.adrosonic.craftexchange.database.predicates.MoqsPredicates
 import com.adrosonic.craftexchange.database.predicates.PiPredicates
 import com.adrosonic.craftexchange.databinding.ActivityRaisePiBinding
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
+import com.adrosonic.craftexchange.ui.modules.order.revisePi.viewOldPiContext
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
@@ -60,7 +61,7 @@ EnquiryViewModel.piInterface{
             pi=intent.getSerializableExtra("piRequest") as SendPiRequest
             enquiryId?.let{
                 viewLoader()
-                mEnqVM?.previewPi(enquiryId)
+                mEnqVM?.previewPi(enquiryId,"false")
             }
         }
 
@@ -71,12 +72,12 @@ EnquiryViewModel.piInterface{
         mBinding?.txtDownload?.setOnClickListener {
             val cacheFile = File(applicationContext.cacheDir, ConstantsDirectory.PI_PDF_PATH + "Pi${enquiryId}.pdf")
             if (cacheFile.exists()){
-             Utility.openFile(this,enquiryId)
+             Utility.openFile(this,enquiryId,"")
             }
             else {
                 if (Utility.checkIfInternetConnected(applicationContext)) {
                     viewLoader()
-                    mEnqVM?.downloadPi(enquiryId)
+                    mEnqVM?.downloadPi(enquiryId,"false")
                 } else Utility.displayMessage(
                     getString(R.string.no_internet_connection),
                     applicationContext
@@ -96,12 +97,16 @@ EnquiryViewModel.piInterface{
                     finish()
                 }
         }
+        mBinding?.piText?.setOnClickListener {
+            if(enquiryDetails?.isPiSend==1L)startActivity(this.viewOldPiContext(enquiryId))
+        }
         setViews()
     }
 
     fun setViews(){
         if(isView){
             mBinding?.btnRaisePi?.visibility=View.GONE
+            mEnqVM?.getOldPiData(enquiryId)
         }
         else{
             mBinding?.btnRaisePi?.visibility=View.VISIBLE
@@ -154,7 +159,7 @@ EnquiryViewModel.piInterface{
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("Enquiry Details", "onSuccess")
                 hideLoader()
-                Utility.openFile(this,enquiryId)
+                Utility.openFile(this,enquiryId,"")
             })
         } catch (e: Exception) {
             Log.e("Enquiry Details", "Exception onFailure " + e.message)
@@ -189,6 +194,8 @@ EnquiryViewModel.piInterface{
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("Enquiry Details", "onSuccess")
                 hideLoader()
+                enquiryDetails=mEnqVM?.loadSingleEnqDetails(enquiryId)
+                if(enquiryDetails?.isPiSend==1L)mBinding?.piText?.text="View old PI"
                 mBinding?.webviewPiPreview?.loadDataWithBaseURL(null, getString(R.string.preview_not_available), "text/html", "utf-8", null)
             })
         } catch (e: Exception) {

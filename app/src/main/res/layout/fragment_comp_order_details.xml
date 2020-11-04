@@ -231,7 +231,7 @@
                         android:layout_marginBottom="@dimen/margin_regular"
                         android:fontFamily="@font/lato_regular"
                         android:gravity="center"
-                        android:text="Enquiry Closed"
+                        android:text="Order Closed"
                         android:textColor="@color/red_logo"
                         android:textSize="@dimen/product_description_text"
                         android:textStyle="bold"
@@ -329,57 +329,37 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-
                 <LinearLayout
-                    android:id="@+id/brand_details_layer"
+                    android:id="@+id/delivery_receipt_layer"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:background="#DEF7FF"
                     android:clickable="true"
                     android:focusable="true"
                     android:orientation="horizontal"
+                    android:visibility="visible"
                     android:weightSum="10"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/middle_part">
 
                     <TextView
-                        android:id="@+id/profile_name"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginStart="8dp"
-                        android:layout_weight="2"
+                        android:layout_weight="4"
                         android:fontFamily="@font/lato_regular"
                         android:gravity="center|start"
+                        android:text="@string/check_delivery_receipt"
                         android:textColor="#137EA6"
                         android:textSize="12sp" />
 
-                    <TextView
-                        android:id="@+id/brand"
+                    <View
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="12dp"
                         android:layout_gravity="center"
-                        android:layout_marginStart="4dp"
-                        android:layout_weight="4"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/lato_regular"
-                        android:gravity="start|center"
-                        android:maxLines="2"
-                        android:textColor="#137EA6"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="3"
-                        android:fontFamily="@font/lato_regular"
-                        android:gravity="center|end"
-                        android:text="@string/check_details"
-                        android:textColor="#137EA6"
-                        android:textSize="12sp" />
+                        android:layout_weight="5" />
 
                     <ImageView
                         android:layout_width="0dp"
@@ -400,7 +380,7 @@
                     android:weightSum="10"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/brand_details_layer">
+                    app:layout_constraintTop_toBottomOf="@+id/delivery_receipt_layer">
 
                     <TextView
                         android:layout_width="0dp"
@@ -679,6 +659,66 @@
                         android:layout_weight="1"
                         android:background="?attr/selectableItemBackground"
                         android:src="@drawable/ic_right_arrow_violet" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/brand_details_layer"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:background="#DEF7FF"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:orientation="horizontal"
+                    android:weightSum="10"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/pi_details_layer">
+
+                    <TextView
+                        android:id="@+id/profile_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="2"
+                        android:fontFamily="@font/lato_regular"
+                        android:gravity="center|start"
+                        android:textColor="#137EA6"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/brand"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="4dp"
+                        android:layout_weight="4"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/lato_regular"
+                        android:gravity="start|center"
+                        android:maxLines="2"
+                        android:textColor="#137EA6"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="3"
+                        android:fontFamily="@font/lato_regular"
+                        android:gravity="center|end"
+                        android:text="@string/check_details"
+                        android:textColor="#137EA6"
+                        android:textSize="12sp" />
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="?attr/selectableItemBackground"
+                        android:src="@drawable/ic_arrow_right_blue" />
 
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>

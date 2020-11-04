@@ -1031,5 +1031,23 @@ class EnquiryPredicates {
                 }
             }
         }
+        fun updatePiStatus(enquiryId: Long?,piStatus:Long){
+            var realm = CXRealmManager.getRealmInstance()
+            var enquiry : OngoingEnquiries?= null
+            realm.executeTransaction {
+                try{
+                    enquiry = realm.where(OngoingEnquiries::class.java)
+                        .equalTo(OngoingEnquiries.COLUMN_ENQUIRY_ID,enquiryId)
+                        .limit(1)
+                        .findFirst()
+                    enquiry?.let {
+                        enquiry?.isPiSend=piStatus
+                        realm.copyToRealmOrUpdate(enquiry)
+                    }
+                }catch (e:Exception){
+                    Log.e("EnquiryDetails","Exception : "+e.printStackTrace())
+                }
+            }
+        }
     }
 }

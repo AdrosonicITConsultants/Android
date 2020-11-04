@@ -1,6 +1,7 @@
 package com.adrosonic.craftexchange.ui.modules.order
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -15,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -24,6 +26,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
+import com.adrosonic.craftexchange.database.entities.realmEntities.OrderProgressDetails
 import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
 import com.adrosonic.craftexchange.database.predicates.*
 import com.adrosonic.craftexchange.databinding.FragmentArtisanOnGoEnqDetailsBinding
@@ -37,9 +40,13 @@ import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.order.confirmDelivery.confirmDeliveryContext
 import com.adrosonic.craftexchange.ui.modules.order.cr.crContext
 import com.adrosonic.craftexchange.ui.modules.order.finalPay.orderPaymentIntent
+import com.adrosonic.craftexchange.ui.modules.order.revisePi.revisePiContext
+import com.adrosonic.craftexchange.ui.modules.order.revisePi.viewPiContextPostCr
 import com.adrosonic.craftexchange.ui.modules.order.taxInv.raiseTaxInvIntent
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
+import com.adrosonic.craftexchange.ui.modules.raiseConcern.raiseConcernIntent
 import com.adrosonic.craftexchange.ui.modules.transaction.adapter.OnGoingTransactionRecyclerAdapter
+import com.adrosonic.craftexchange.ui.modules.transaction.viewDocument
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.UserConfig
@@ -64,7 +71,10 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
     OrdersViewModel.FetchOrderInterface,
     OrdersViewModel.changeStatusInterface,
     OrdersViewModel.FetchCrInterface,
-    TransactionViewModel.TransactionInterface{
+    TransactionViewModel.TransactionInterface,
+    OrdersViewModel.GetOrderProgressInterface,
+    OrdersViewModel.OrderCloseInterface,
+    OrdersViewModel.OrderCinfirmedInterface{
 
     private var param1: String? = null
     private var param2: String? = null
@@ -72,6 +82,7 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
     private var enqID : Long ?= 0
     private var enqCode : String ?= ""
     private var orderDetails : Orders ?= null
+    private var orderProgressDetails : OrderProgressDetails ?= null
     private var stageList : ArrayList<Pair<Long,String>> ?= null
     private var stageAPList : ArrayList<Triple<Long,Long,String>> ?= null
     private var innerStageList : ArrayList<Pair<Long,String>> ?= null
@@ -95,7 +106,7 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
 
     var estId=0L
     var mBinding : FragmentBuyerOngoingOrderDetailsBinding?= null
-
+    var isCloseOrderInitiated=false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -120,14 +131,10 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
         mOrderVm?.changeStatusListener = this
         mOrderVm?.fetcCrListener = this
         mBinding?.swipeEnquiryDetails?.isEnabled = false
+
         if(Utility.checkIfInternetConnected(requireActivity())){
-            enqID?.let {
-                viewLoader()
-                mOrderVm.getSingleOngoingOrder(it)
-                mTranVM.getSingleOngoingTransactions(it)
-                mOrderVm?.getChangeRequestDetails(it)
-                mQcVM.getBuyerQCResponse(it)
-            }
+            viewLoader()
+            reloadContent()
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
         }
@@ -142,6 +149,7 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
             activity?.onBackPressed()
         }
 
+        //Upload Final Payment Receipt
         mBinding?.btnUplFinPayReceipt?.setOnClickListener {
             startActivity(requireContext().orderPaymentIntent()
                 ?.putExtra(ConstantsDirectory.ENQUIRY_ID,enqID)
@@ -149,6 +157,12 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
 //                ?.putExtra(ConstantsDirectory.PI_ID,0))
         }
 
+        //Raise Concern
+        mBinding?.raiseConcernLayer?.setOnClickListener {
+            startActivity(enqID?.let { it1 -> requireContext().raiseConcernIntent(it1,false) })
+        }
+
+        //Brand Details
         mBinding?.brandDetailsLayer?.setOnClickListener {
             if (savedInstanceState == null) {
                 activity?.supportFragmentManager?.beginTransaction()
@@ -157,6 +171,12 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
                     ?.commit()
             }
         }
+        //delivery receipt
+        mBinding?.deliveryReceiptLayer?.setOnClickListener {
+            startActivity(enqID?.let { it1 -> requireContext()?.viewDocument(it1,DocumentType.DELIVERY_CHALLAN.getId()) })
+        }
+
+        //productDetails
         mBinding?.productDetailsLayer?.setOnClickListener {
             if (savedInstanceState == null) {
                 isCustom?.let { it1 ->
@@ -175,20 +195,26 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
 
         }
 
+        //Proforma Invoice details
         mBinding?.piDetailsLayer?.setOnClickListener {
-            enqID?.let {  startActivity(requireContext().raisePiContext(it,true, SendPiRequest())) }
+//            enqID?.let {  startActivity(requireContext().raisePiContext(it,true, SendPiRequest())) }
+            enqID?.let {startActivityForResult(requireContext().viewPiContextPostCr(it),ConstantsDirectory.RESULT_PI)}
         }
 
+        //Payment Details
         mBinding?.viewPaymentLayer?.setOnClickListener {
             if(mBinding?.transactionList!!.visibility==View.VISIBLE) mBinding?.transactionList!!.visibility=View.GONE
             else mBinding?.transactionList!!.visibility=View.VISIBLE
         }
+
+        //Quality Check Details
         mBinding?.qualityCheckLayer?.setOnClickListener {
             startActivity(context?.qcFormIntent()
                 ?.putExtra(ConstantsDirectory.ENQUIRY_ID,enqID)
                 ?.putExtra(ConstantsDirectory.ORDER_STATUS_FLAG, 0L))
         }
 
+        //Change Request
         mBinding?.changeRequestLayer?.setOnClickListener {
             if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType.equals(ConstantsDirectory.CUSTOM_PRODUCT)) {
                 if (orderDetails?.changeRequestOn == 1L) {
@@ -219,6 +245,22 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
 
         mBinding?.btnConfirmDelivery?.setOnClickListener {
             startActivityForResult(requireActivity().confirmDeliveryContext(enqID?:0),ConstantsDirectory.RESULT_CONFIRM_ORDER)
+        }
+        mBinding?.btnIsPartialRefundRcvd?.setOnClickListener {
+            showPartialRefundDialog()
+        }
+        mBinding?.btnCloseOrder?.setOnClickListener {
+            showCloseOrderDialog()
+        }
+    }
+
+    fun reloadContent(){
+        enqID?.let {
+            mOrderVm.getSingleOngoingOrder(it)
+            mTranVM.getSingleOngoingTransactions(it)
+            mOrderVm?.getChangeRequestDetails(it)
+            mQcVM.getBuyerQCResponse(it)
+            mOrderVm.getOrderProgressDetails(it)
         }
     }
 
@@ -425,8 +467,22 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
                  mBinding?.txtCrDate?.text=getString(R.string.cr_not_applicable)
              }
 
-             if(orderDetails?.enquiryStageId==10L)mBinding?.layerConfirmDelivery?.visibility=View.VISIBLE
-             else mBinding?.layerConfirmDelivery?.visibility=View.GONE
+//             if(orderDetails?.enquiryStageId==10L)mBinding?.layerConfirmDelivery?.visibility=View.VISIBLE
+//             else mBinding?.layerConfirmDelivery?.visibility=View.GONE
+
+             if(orderDetails?.enquiryStageId!!<9L) {
+                 if (orderDetails?.isPartialRefundReceived == 0L) {
+                     mBinding?.btnIsPartialRefundRcvd?.visibility = View.VISIBLE
+                     mBinding?.btnCloseOrder?.visibility = View.GONE
+                 } else {
+                     mBinding?.btnIsPartialRefundRcvd?.visibility = View.GONE
+                     mBinding?.btnCloseOrder?.visibility = View.VISIBLE
+                 }
+             }else{
+                 mBinding?.btnIsPartialRefundRcvd?.visibility = View.GONE
+                 mBinding?.btnCloseOrder?.visibility = View.GONE
+             }
+
          })
         } catch (e: Exception) {
             Log.e("setDetails", "Exception " + e.message)
@@ -435,10 +491,16 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
 
     fun setActionButtonVisibilites(){
         //upload final Payment //TODO isBlue param check after API fix
-        if(orderDetails?.enquiryStageId == EnquiryStages.FINAL_INVOICE_RAISED.getId() /*&& orderDetails?.isBlue == 0L*/){
+        if(orderDetails?.enquiryStageId == EnquiryStages.FINAL_INVOICE_RAISED.getId() && orderDetails?.isBlue == 0L){
             mBinding?.finalTransactionLayout?.visibility = View.VISIBLE
         }else{
             mBinding?.finalTransactionLayout?.visibility = View.GONE
+        }
+
+        if(orderDetails?.enquiryStageId==EnquiryStages.ORDER_DISPATCHED.getId() && orderDetails?.isReprocess == 0L){
+            mBinding?.layerConfirmDelivery?.visibility=View.VISIBLE
+        } else {
+            mBinding?.layerConfirmDelivery?.visibility=View.GONE
         }
     }
 
@@ -594,10 +656,6 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
             }
         }
 
-//        when(currEnqStageId){
-//            2L,7L -> mBinding?.uploadDocLayout?.visibility = View.VISIBLE
-//            else -> mBinding?.uploadDocLayout?.visibility = View.GONE
-//        }
 
     }
 
@@ -634,8 +692,6 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
                 mBinding?.qualityCheckLayer?.visibility = View.GONE
             }
         }
-
-
         //TaxInvoice
         if(orderDetails?.enquiryStageId!! >= EnquiryStages.FINAL_INVOICE_RAISED.getId()){
             mBinding?.taxInvoiceLayer?.visibility = View.VISIBLE
@@ -643,15 +699,39 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
             mBinding?.taxInvoiceLayer?.visibility = View.GONE
         }
 
+        //DeliveryReceipt
+        if(orderDetails?.enquiryStageId!! >= EnquiryStages.ORDER_DISPATCHED.getId() && orderDetails?.deliveryChallanUploaded == 1L){
+            mBinding?.deliveryReceiptLayer?.visibility = View.VISIBLE
+        }else{
+            mBinding?.deliveryReceiptLayer?.visibility = View.GONE
+        }
+
+        //Raise Concern
+        if(orderDetails?.enquiryStageId!! >= EnquiryStages.ORDER_DISPATCHED.getId() && orderDetails?.isReprocess == 0L){
+            mBinding?.raiseConcernLayer?.visibility = View.VISIBLE
+        }else{
+            mBinding?.raiseConcernLayer?.visibility = View.GONE
+        }
+
+        //order recreation text
+        if(orderDetails?.isReprocess == 1L){
+            mBinding?.txtOrderRecreation?.visibility = View.VISIBLE
+        }else{
+            mBinding?.txtOrderRecreation?.visibility = View.GONE
+        }
+
     }
 
     override fun onResume() {
         super.onResume()
-        enqID?.let {
-            mOrderVm?.getChangeRequestDetails(it)
-            orderDetails= mOrderVm?.getSingleOnOrderData(it,0).value
+
+        if(Utility.checkIfInternetConnected(requireActivity())){
+            viewLoader()
+            reloadContent()
+        }else{
+            Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
+            setDetails()
         }
-        setDetails()
     }
 
     override fun onFailure() {
@@ -660,6 +740,10 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
                 Log.e("OrderDetails", "onFailure")
                 enqID?.let { mOrderVm.getSingleOnOrderData(it,0) }
                 hideLoader()
+                if(isCloseOrderInitiated){
+                    isCloseOrderInitiated=false
+                    Utility.displayMessage("Unable to initiate partial payment",requireContext())
+                }
             })
         } catch (e: Exception) {
             Log.e("OrderDetails", "Exception onFailure " + e.message)
@@ -670,9 +754,12 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("OrderDetails", "onSuccess enqID: $enqID")
-                enqID?.let { orderDetails=mOrderVm.getSingleOnOrderData(it,0).value }
-                hideLoader()
-                setDetails()
+                if(isCloseOrderInitiated) activity?.onBackPressed()
+                else {
+                    enqID?.let { orderDetails = mOrderVm.getSingleOnOrderData(it, 0).value }
+                    hideLoader()
+                    setDetails()
+                }
             })
         } catch (e: Exception) {
             Log.e("OrderDetails", "Exception onFailure " + e.message)
@@ -768,4 +855,97 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
     override fun onFetchCrFailure() {
     }
 
+    override fun onOPFailure() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("OPD","onFailure")
+            })
+        } catch (e: Exception) {
+            Log.e("OPD", "Exception onFailure " + e.message)
+        }
+    }
+
+    override fun onOPSuccess() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("OPD","onSuccess")
+                orderProgressDetails = enqID?.let { mOrderVm?.loadOrderProgressDetails(it) }
+            })
+        } catch (e: Exception) {
+            Log.e("OPD", "Exception onFailure " + e.message)
+        }
+    }
+
+    fun showCloseOrderDialog(){
+        var dialog = Dialog(requireContext())
+        dialog.setContentView(R.layout.dialog_confirm_close_order)
+        dialog.create()
+        dialog.show()
+
+        val txt_order_code = dialog?.findViewById(R.id.txt_order_code) as TextView
+        val btn_no = dialog?.findViewById(R.id.btn_no) as Button
+        val btn_yes = dialog?.findViewById(R.id.btn_yes) as Button
+        txt_order_code.text="Order Code: ${orderDetails?.orderCode}"
+        btn_yes.setOnClickListener {
+            if(Utility?.checkIfInternetConnected(requireContext())) {
+                enqID?.let {
+                    dialog.cancel()
+                    viewLoader()
+                    mOrderVm?.orderCloseListener = this
+                    mOrderVm.initializePartialRefund(it)
+                }
+            }else Utility.displayMessage(getString(R.string.no_internet_connection),requireContext())
+        }
+        btn_no.setOnClickListener {  dialog.cancel() }
+    }
+
+    fun showPartialRefundDialog(){
+        var dialog = Dialog(requireContext())
+        dialog.setContentView(R.layout.dialog_confirm_partial_refund)
+        dialog.create()
+        dialog.show()
+        dialog.setCanceledOnTouchOutside(true)
+        val txt_order_code = dialog?.findViewById(R.id.txt_order_code) as TextView
+        val btn_yes = dialog?.findViewById(R.id.btn_yes) as Button
+        txt_order_code.text="Order Code: ${orderDetails?.orderCode}"
+        btn_yes.setOnClickListener {
+            if(Utility?.checkIfInternetConnected(requireContext())) {
+                enqID?.let {
+                    dialog.cancel()
+                    viewLoader()
+                    isCloseOrderInitiated=true
+                    mOrderVm?.orderConfirmListener = this
+                    mOrderVm.markEnquiryCompleted(it)
+                }
+            }else Utility.displayMessage(getString(R.string.no_internet_connection),requireContext())
+        }
+    }
+
+    override fun onOrderCloseSuccess() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+
+                enqID?.let { orderDetails=mOrderVm.getSingleOnOrderData(it,0).value }
+                Log.e("initializePartialRefund","getSingleTransactions Success: ${orderDetails?.isPartialRefundReceived}")
+                setDetails()
+                showPartialRefundDialog()
+                hideLoader()
+            })
+        } catch (e: Exception) {
+            Log.e("initializePartialRefund", "Exception onStatusChangeFailure " + e.message)
+        }
+    }
+
+    override fun onOrderCloseFailure() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("Transaction","getSingleTransactions Success")
+                setDetails()
+                hideLoader()
+                Utility.displayMessage("Unable to close order!",requireContext())
+            })
+        } catch (e: Exception) {
+            Log.e("Transaction", "Exception onStatusChangeFailure " + e.message)
+        }
+    }
 }

@@ -90,7 +90,7 @@
     <string name="home">Home</string>
     <string name="enquiries">Enquiries</string>
     <string name="wishlist">Wishlist</string>
-    <string name="chat">Chat</string>
+    <string name="chat">\tChat\t\t\t</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -356,6 +356,7 @@
     <string name="mark_as_still_in_progress">Mark as still in progress</string>
     <string name="mark_as_completed">Mark as completed and move to next stage</string>
     <string name="you_have_to_update_8hrs">You have to update the status every \n8 hours to avoid escalation</string>
+    <string name="change_request_initiated">\tChange request initiated</string>
     <string name="disable_change_request">Disable change request</string>
     <string name="cr_not_applicable">Change request is not applicable for in stock Products.</string>
     <string name="cr_pleas_note">Please Note:\nChange request may be accepted or rejected subjective to the feasibility of the change by artisan.If accepted, there may be a change in final amount and hence the pro forma invoice.</string>
@@ -373,9 +374,6 @@
     <string name="select_an_option">Select an option</string>
     <string name="quality_check">Quality Check</string>
     <string name="no_qc_available">No Quality Check Available.</string>
-    <string name="change_request_initiated"> Change request initiated</string>
-    <string name="chats">Chats</string>
-    <string name="search_chat_by_enquiryId">Search chat by enquiryId</string>
 
 
     <string name="new_pi_post_cr">Generate new PI post CR</string>
@@ -411,4 +409,47 @@
     <string name="facebook_app_id">3667875393263473</string>
     <string name="fb_login_protocol_scheme">fb3667875393263473</string>
 
+    <string name="mark_order_dispatched">Mark Order Dispatched</string>
+    <string name="check_delivery_receipt">Check Delivery Receipt</string>
+    <string name="buyer_brand">Buyer Brand</string>
+    <string name="dispatch">Dispatch</string>
+    <string name="mark_as_dispatched">Mark as dispatched</string>
+    <string name="eta">ETA</string>
+    <string name="dispatch_date">Dispatch Date</string>
+    <string name="eh_problem">Eh! Problem?</string>
+    <string name="raise_a_concern">Raise a concern</string>
+    <string name="uh_oh">Uh Oh!!!</string>
+    <string name="what_went_wrong">Please let us know what went wrong so that we can take this up.</string>
+    <string name="report_problem_2_days">2 days to report a problem.</string>
+    <string name="select_relevant_fault_options">Select if any of the options are relevant</string>
+    <string name="select_relevant_fault_options_note"><![CDATA[Make sure to choose the right option or else choose \'Others\'\n& simply describe your problem in comments below.]]></string>
+    <string name="desc_of_problem_mandatory">Description of the problem (Mandatory)</string>
+    <string name="type_here">Type here...</string>
+    <string name="please_note">Please note:</string>
+    <string name="note_faulty_order"><![CDATA[Hand made products are prone to few minor defects, which makes it unique to the style & tradition of the culture. Also it is a mark of authenticity. We humbly request you to respect & trust the artisans on the same before raising any concerns]]></string>
+    <string name="submit">Submit</string>
+    <string name="sure">Sure?</string>
+    <string name="review_beofre_sending_faulty">If you want to review before\nsending, you can still do it.</string>
+    <string name="review_beofre_sending_faulty_second">Please note that, if the order is beyond repair or the\nissue is not addressable, we would escalate it to the\nadmin. The final decision shall be an agreement.</string>
+    <string name="yes_submit">Yes, submit!</string>
+    <string name="upload_photo_chat_reference">Upload photos (IN CHAT) for reference.</string>
+    <string name="ack_raise_concern">Please acknowledge the raised concern to avoid escalations.</string>
+    <string name="reply_before_48hrs">Please reply before 48hrs for raised concern</string>
+    <string name="desc_of_fault">Description of the fault</string>
+    <string name="note">Note</string>
+    <string name="remarks_by_artisan">Remarks by Artisan Entrepreneur</string>
+    <string name="comment_here">Add your comment</string>
+    <string name="view_raised_concern">View Raised Concern</string>
+    <string name="problem_reported_pls_bear_for_48hrs">Please bear, it may take upto 48hrs to\naddress and respond to your raised concern.</string>
+    <string name="fault_concern_resolved">We\'re glad that your concern is\nresolved on mutual agreement.</string>
+    <string name="mark_resolved">Mark Resolved</string>
+    <string name="view_defect_response"><![CDATA[View defect & response]]></string>
+    <string name="rate_review_order"><![CDATA[Rate & review this order]]></string>
+    <string name="great_job">Great job!</string>
+    <string name="order_recreation">Order Recreation</string>
+    <string name="order_dispatch_recreation">"Order under recreation.\nKindly keep updating the buyer\nabout the status of product over chat "</string>
+    <string name="mark_order_dispatched_recreation">Mark Order dispatched after recreation</string>
+    <string name="are_you_sure_recreate_order">Are you sure you want to recreate this order?</string>
+    <string name="confirm">Confirm</string>
+    <string name="order_being_recreated_refer_chat">Order under Recreation\nKindly refer chats for regular updates and\nin-case of any inconvenience, feel free\nto escalate the issue over chat</string>
 </resources>

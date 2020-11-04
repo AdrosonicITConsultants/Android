@@ -10,8 +10,6 @@
     <uses-permission-sdk-23 android:name="android.permission.READ_EXTERNAL_STORAGE " />
     <uses-permission-sdk-23 android:name="android.permission.CAMERA" />
 
-
-
     <application
         android:name=".App"
         android:icon="@mipmap/ic_logo_main_round"
@@ -41,6 +39,25 @@
 
 
         <activity android:name=".ui.modules.order.confirmDelivery.ConfirmDeliveryActivity"
+
+        <activity
+            android:name=".ui.modules.order.revisePi.ViewOldPiActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.modules.raiseConcern.RaiseConcernActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.modules.order.confirmDelivery.ConfirmDeliveryActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.modules.order.taxInv.TaxInvoiceActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.modules.order.taxInv.RaiseTaxInvActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".ui.modules.order.taxInv.TaxInvoiceActivity"></activity>
         <activity android:name=".ui.modules.order.taxInv.RaiseTaxInvActivity" />
@@ -49,6 +66,7 @@
         <activity
             android:name=".ui.modules.order.revisePi.ViewPiActivity"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.modules.order.revisePi.RevisePiActivity"
             android:screenOrientation="portrait" />

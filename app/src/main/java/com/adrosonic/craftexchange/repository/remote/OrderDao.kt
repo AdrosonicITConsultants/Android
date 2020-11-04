@@ -6,6 +6,7 @@ import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.IfExis
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryAvaProdStageData
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryStageData
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryResponse
+import com.adrosonic.craftexchange.repository.data.response.orders.OrderProgressResponse
 import com.adrosonic.craftexchange.repository.data.response.orders.OrderResponse
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -21,6 +22,10 @@ interface OrderDao {
 //    @GET("enquiry/getEnquiryStagesForAvailableProduct")
 //    fun getAvailableProdEnquiryStagesData(@Header("Authorization") token: String): Call<EnquiryAvaProdStageData>
 
+    @Headers("Accept: application/json")
+    @GET("enquiry/getOrderProgress/{orderId}")
+    fun getOrderProgress(@Header("Authorization") token:String,
+                         @Path("orderId")orderId:Long) : Call<OrderProgressResponse>
 
     @Headers("Accept: application/json")
     @GET("/order/getOpenOrders")
@@ -53,5 +58,23 @@ interface OrderDao {
     @POST("enquiry/markEnquiryCompleted/{enquiryId}")
     fun markEnquiryCompleted(@Header("Authorization") token:String,
                              @Path("enquiryId") enquiryId : Long
+    ) : Call<NotificationReadResponse>
+
+    @Headers("Accept: application/json")
+    @POST("order/recreateOrder")
+    fun recreateOrder(@Header("Authorization") token:String,
+                             @Query("orderId") orderId : Long
+    ) : Call<ResponseBody>
+
+    @Headers("Accept: application/json")
+    @POST("order/orderDispatchAfterRecreation")
+    fun orderDispatchAfterRecreation(@Header("Authorization") token:String,
+                      @Query("orderId") orderId : Long
+    ) : Call<ResponseBody>
+
+    @Headers("Accept: application/json")
+    @POST("/order/initializePartialRefund")
+    fun initializePartialRefund(@Header("Authorization") token:String,
+                             @Query("orderId") orderId : Long
     ) : Call<NotificationReadResponse>
 }

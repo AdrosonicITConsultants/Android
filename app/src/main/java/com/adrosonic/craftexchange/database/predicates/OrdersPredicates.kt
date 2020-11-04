@@ -5,6 +5,7 @@ import com.adrosonic.craftexchange.database.CXRealmManager
 import com.adrosonic.craftexchange.database.entities.realmEntities.*
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryResponse
+import com.adrosonic.craftexchange.repository.data.response.orders.OrderProgressResponse
 import com.adrosonic.craftexchange.repository.data.response.orders.OrderResponse
 import io.realm.RealmResults
 import io.realm.Sort
@@ -12,24 +13,27 @@ import java.lang.Exception
 
 class OrdersPredicates {
     companion object {
-        private val TAG="OrdersPredicates"
-        private var nextID : Long? = 0
+        private val TAG = "OrdersPredicates"
+        private var nextID: Long? = 0
 
-        fun insertOngoingOrders(orderDetails : OrderResponse?,isCompleted:Long){
+        fun insertOngoingOrders(orderDetails: OrderResponse?, isCompleted: Long) {
             val realm = CXRealmManager.getRealmInstance()
             var orderList = orderDetails?.data
-            var idList=ArrayList<Long>()
+            var idList = ArrayList<Long>()
             var iterator = orderList?.iterator()
-            realm.executeTransaction{
+            realm.executeTransaction {
                 try {
-                    if(iterator!=null) {
+                    if (iterator != null) {
                         while (iterator.hasNext()) {
 
-                            Log.e("OrderDetails","isCompleted: "+isCompleted)
+                            Log.e("OrderDetails", "isCompleted: " + isCompleted)
                             var order = iterator.next()
                             idList.add(order?.openEnquiriesResponse?.enquiryId)
                             var orderObj = realm.where(Orders::class.java)
-                                .equalTo(Orders.COLUMN_ORDER_CODE, order.openEnquiriesResponse?.orderCode )
+                                .equalTo(
+                                    Orders.COLUMN_ORDER_CODE,
+                                    order.openEnquiriesResponse?.orderCode
+                                )
                                 .limit(1)
                                 .findFirst()
                             if (orderObj == null) {
@@ -109,7 +113,14 @@ class OrdersPredicates {
                                 exEnq?.isMoqRejected = order?.isMoqRejected?:0
                                 exEnq?.changeRequestOn = order?.openEnquiriesResponse?.changeRequestOn
                                 exEnq?.isBlue = order?.isBlue ?: 0
-                                exEnq?.isOrderFromCompleted=isCompleted
+                                exEnq?.isOrderFromCompleted = isCompleted
+                                exEnq?.artisanReviewId = order?.openEnquiriesResponse?.artisanReviewId ?: 0
+                                exEnq?.isReprocess = order?.openEnquiriesResponse?.isReprocess ?: 0
+                                exEnq?.isNewGenerated = order?.openEnquiriesResponse?.isNewGenerated ?: 0
+                                exEnq?.isPartialRefundReceived=order?.openEnquiriesResponse?.isPartialRefundReceived
+                                exEnq?.isRefundReceived=order?.openEnquiriesResponse?.isRefundReceived
+                                exEnq?.isProductReturned=order?.openEnquiriesResponse?.isProductReturned
+
                                 realm.copyToRealmOrUpdate(exEnq)
                             }else{
                                 nextID = orderObj?._id ?: 0
@@ -186,20 +197,26 @@ class OrdersPredicates {
                                 orderObj?.changeRequestOn = order?.openEnquiriesResponse?.changeRequestOn
                                 orderObj?.isBlue = order?.isBlue?: 0
                                 orderObj?.isOrderFromCompleted=isCompleted
+                                orderObj?.isPartialRefundReceived=order?.openEnquiriesResponse?.isPartialRefundReceived
+                                orderObj?.isRefundReceived=order?.openEnquiriesResponse?.isRefundReceived
+                                orderObj?.isProductReturned=order?.openEnquiriesResponse?.isProductReturned
+                                orderObj?.artisanReviewId = order?.openEnquiriesResponse?.artisanReviewId ?: 0
+                                orderObj?.isReprocess = order?.openEnquiriesResponse?.isReprocess ?: 0
+                                orderObj?.isNewGenerated = order?.openEnquiriesResponse?.isNewGenerated ?: 0
                                 Log.e("OrderDetails","enquiryStageId: "+order?.openEnquiriesResponse?.enquiryStageId)
                                 realm.copyToRealmOrUpdate(orderObj)
                             }
                         }
 
                     }
-                }catch (e:Exception){
-                    Log.e("InsertOnEnquiry",e.printStackTrace().toString())
+                } catch (e: Exception) {
+                    Log.e("InsertOnEnquiry", e.printStackTrace().toString())
                 }
             }
 //            deleteOrders(idList,isCompleted)
         }
 
-        fun insertOrdPaymentDetails(details : OrderResponse?){
+        fun insertOrdPaymentDetails(details: OrderResponse?) {
             val realm = CXRealmManager.getRealmInstance()
             var detailsItr = details?.data?.iterator()
             realm.executeTransaction {
@@ -208,8 +225,8 @@ class OrdersPredicates {
                         while (detailsItr?.hasNext()) {
                             var details = detailsItr.next()
                             var payItr = details?.paymentAccountDetails?.iterator()
-                            if(payItr!=null){
-                                while(payItr.hasNext()){
+                            if (payItr != null) {
+                                while (payItr.hasNext()) {
                                     var pay = payItr.next()
                                     var payObj = realm.where(EnquiryPaymentDetails::class.java)
                                         .equalTo(EnquiryPaymentDetails.COLUMN_ID, pay.id)
@@ -217,7 +234,8 @@ class OrdersPredicates {
                                         .findFirst()
 
                                     if (payObj == null) {
-                                        var primId = it.where(EnquiryPaymentDetails::class.java).max(EnquiryPaymentDetails.COLUMN__ID)
+                                        var primId = it.where(EnquiryPaymentDetails::class.java)
+                                            .max(EnquiryPaymentDetails.COLUMN__ID)
                                         if (primId == null) {
                                             nextID = 1
                                         } else {
@@ -239,7 +257,7 @@ class OrdersPredicates {
                                         expay.accountDesc = pay.accountType.accountDesc
 
                                         realm.copyToRealmOrUpdate(expay)
-                                    }else{
+                                    } else {
                                         nextID = payObj._id ?: 0
 
                                         payObj.id = pay.id
@@ -259,24 +277,26 @@ class OrdersPredicates {
                             }
                         }
                     }
-                }catch (e: Exception) {
-                    Log.e("PaymentEnq","${e.printStackTrace()}")
+                } catch (e: Exception) {
+                    Log.e("PaymentEnq", "${e.printStackTrace()}")
                 }
 
             }
         }
 
 
-        fun deleteOrders(idList : List<Long>?,isCompleted:Long){
+        fun deleteOrders(idList: List<Long>?, isCompleted: Long) {
             val realm = CXRealmManager.getRealmInstance()
             var ordersRealm: RealmResults<Orders>? = null
             try {
                 realm?.executeTransaction {
-                    ordersRealm= realm.where(Orders::class.java).equalTo(Orders.COLUMN_IS_COMPLETED,isCompleted).findAll()
+                    ordersRealm = realm.where(Orders::class.java)
+                        .equalTo(Orders.COLUMN_IS_COMPLETED, isCompleted).findAll()
                     ordersRealm?.forEach {
-                        if(!idList!!.contains(it.enquiryId)){
+                        if (!idList!!.contains(it.enquiryId)) {
                             //todo delete
-                            val deletOrders=realm.where(Orders::class.java).equalTo(Orders.COLUMN_ENQUIRY_ID,it.enquiryId).findAll()
+                            val deletOrders = realm.where(Orders::class.java)
+                                .equalTo(Orders.COLUMN_ENQUIRY_ID, it.enquiryId).findAll()
                             deletOrders.deleteAllFromRealm()
                         }
                     }
@@ -290,112 +310,120 @@ class OrdersPredicates {
 
         fun getAllOngoingOrders(): RealmResults<Orders>? {
             val realm = CXRealmManager.getRealmInstance()
-            return realm.where(Orders::class.java)  .equalTo(Orders.COLUMN_IS_COMPLETED,0L).sort(Orders.COLUMN_LAST_UPDATED, Sort.DESCENDING).findAll()
+            return realm.where(Orders::class.java).equalTo(Orders.COLUMN_IS_COMPLETED, 0L)
+                .sort(Orders.COLUMN_LAST_UPDATED, Sort.DESCENDING).findAll()
         }
 
         fun getAllCompletedOrders(): RealmResults<Orders>? {
             val realm = CXRealmManager.getRealmInstance()
-            return realm.where(Orders::class.java)  .equalTo(Orders.COLUMN_IS_COMPLETED,1L).sort(Orders.COLUMN_LAST_UPDATED, Sort.DESCENDING).findAll()
+            return realm.where(Orders::class.java).equalTo(Orders.COLUMN_IS_COMPLETED, 1L)
+                .sort(Orders.COLUMN_LAST_UPDATED, Sort.DESCENDING).findAll()
         }
 
-        fun getSingleOnGoOrderDetails(enquiryId : Long?,isCompleted: Long): Orders? {
+        fun getSingleOnGoOrderDetails(enquiryId: Long?, isCompleted: Long): Orders? {
             var realm = CXRealmManager.getRealmInstance()
-            var orders : Orders?= null
+            var orders: Orders? = null
             realm.executeTransaction {
-                try{
+                try {
                     orders = realm.where(Orders::class.java)
-                        .equalTo(Orders.COLUMN_ENQUIRY_ID,enquiryId)
+                        .equalTo(Orders.COLUMN_ENQUIRY_ID, enquiryId)
                         .and()
-                        .equalTo(Orders.COLUMN_IS_COMPLETED,isCompleted)
+                        .equalTo(Orders.COLUMN_IS_COMPLETED, isCompleted)
                         .limit(1)
                         .findFirst()
-                }catch (e:Exception){
-                    Log.e("OrderDetails","Exception : "+e.printStackTrace())
+                } catch (e: Exception) {
+                    Log.e("OrderDetails", "Exception : " + e.printStackTrace())
                 }
             }
             return orders
         }
 
-        fun updateCrStatus(enquiryId: Long?){
+        fun updateCrStatus(enquiryId: Long?) {
             var realm = CXRealmManager.getRealmInstance()
-            var orders : Orders?= null
+            var orders: Orders? = null
             realm.executeTransaction {
-                try{
+                try {
                     orders = realm.where(Orders::class.java)
-                        .equalTo(Orders.COLUMN_ENQUIRY_ID,enquiryId)
+                        .equalTo(Orders.COLUMN_ENQUIRY_ID, enquiryId)
                         .limit(1)
                         .findFirst()
-                    Log.e("Toggle","orders 1111: ${orders?.changeRequestOn}")
+                    Log.e("Toggle", "orders 1111: ${orders?.changeRequestOn}")
                     orders?.let {
-                        orders?.changeRequestOn=1L
-                        orders?.actionMarkCr=0L
+                        orders?.changeRequestOn = 1L
+                        orders?.actionMarkCr = 0L
                         realm.copyToRealmOrUpdate(orders)
                     }
-                    Log.e("Toggle","orders 2222: ${orders?.changeRequestOn}")
-                }catch (e:Exception){
-                    Log.e("Toggle","Exception : "+e.printStackTrace())
+                    Log.e("Toggle", "orders 2222: ${orders?.changeRequestOn}")
+                } catch (e: Exception) {
+                    Log.e("Toggle", "Exception : " + e.printStackTrace())
                 }
             }
         }
 
-        fun updateChangeRequestStatus(enquiryId: Long?,status:Long){
+        fun updateChangeRequestStatus(enquiryId: Long?, status: Long) {
             var realm = CXRealmManager.getRealmInstance()
-            var orders : Orders?= null
+            var orders: Orders? = null
             realm.executeTransaction {
-                try{
+                try {
                     orders = realm.where(Orders::class.java)
-                        .equalTo(Orders.COLUMN_ENQUIRY_ID,enquiryId)
+                        .equalTo(Orders.COLUMN_ENQUIRY_ID, enquiryId)
                         .limit(1)
                         .findFirst()
-                    Log.e("RaiseCr","updateChangerequestStatus 1111: ${orders?.changeRequestStatus}")
+                    Log.e(
+                        "RaiseCr",
+                        "updateChangerequestStatus 1111: ${orders?.changeRequestStatus}"
+                    )
                     orders?.let {
-                        orders?.changeRequestStatus=status
+                        orders?.changeRequestStatus = status
                         realm.copyToRealmOrUpdate(orders)
                     }
-                    Log.e("RaiseCr","updateChangerequestStatus 2222: ${orders?.changeRequestStatus}")
-                }catch (e:Exception){
-                    Log.e("RaiseCr","Exception : "+e.printStackTrace())
+                    Log.e(
+                        "RaiseCr",
+                        "updateChangerequestStatus 2222: ${orders?.changeRequestStatus}"
+                    )
+                } catch (e: Exception) {
+                    Log.e("RaiseCr", "Exception : " + e.printStackTrace())
                 }
             }
         }
 
-        fun updateCrStatusForOffline(enquiryId: Long?){
+        fun updateCrStatusForOffline(enquiryId: Long?) {
             var realm = CXRealmManager.getRealmInstance()
-            var orders : Orders?= null
+            var orders: Orders? = null
             realm.executeTransaction {
-                try{
+                try {
                     orders = realm.where(Orders::class.java)
-                        .equalTo(Orders.COLUMN_ENQUIRY_ID,enquiryId)
+                        .equalTo(Orders.COLUMN_ENQUIRY_ID, enquiryId)
                         .limit(1)
                         .findFirst()
-                    Log.e("Toggle","update 1111: ${orders?.changeRequestOn}")
+                    Log.e("Toggle", "update 1111: ${orders?.changeRequestOn}")
                     orders?.let {
-                        orders?.changeRequestOn=1L
-                        orders?.actionMarkCr=1L
+                        orders?.changeRequestOn = 1L
+                        orders?.actionMarkCr = 1L
                         realm.copyToRealmOrUpdate(orders)
                     }
-                    Log.e("Toggle","update 2222: ${orders?.changeRequestOn}")
-                }catch (e:Exception){
-                    Log.e("Toggle","Exception : "+e.printStackTrace())
+                    Log.e("Toggle", "update 2222: ${orders?.changeRequestOn}")
+                } catch (e: Exception) {
+                    Log.e("Toggle", "Exception : " + e.printStackTrace())
                 }
             }
         }
 
-        fun getOrderMarkedForActions(actionsMarked:String): ArrayList<Long>? {
+        fun getOrderMarkedForActions(actionsMarked: String): ArrayList<Long>? {
             var realm = CXRealmManager.getRealmInstance()
-            var itemId=ArrayList<Long>()
+            var itemId = ArrayList<Long>()
             try {
                 realm.executeTransaction {
 
                     var message = when (actionsMarked) {
                         "actionMarkCr=1" -> {
                             realm.where(Orders::class.java)
-                                .equalTo(Orders.COLUMN_ACTION_MARK_CR,1L)
+                                .equalTo(Orders.COLUMN_ACTION_MARK_CR, 1L)
                                 .findAll()
                         }
                         "actionMarkCrStatusUpdate=1" -> {
                             realm.where(Orders::class.java)
-                                .equalTo(Orders.COLUMN_ACTION_MARK_CR_STATUS_UPDATE,1L)
+                                .equalTo(Orders.COLUMN_ACTION_MARK_CR_STATUS_UPDATE, 1L)
                                 .findAll()
                         }
                         else -> null
@@ -408,19 +436,101 @@ class OrdersPredicates {
                     }
                 }
             } catch (e: Exception) {
-                Log.e(TAG,"while fetching actions : "+e.message)
+                Log.e(TAG, "while fetching actions : " + e.message)
             } finally {
 //                realm.close()
             }
             return itemId
         }
 
-        fun getEnquiryId(_id:Long): Long {
+        fun getEnquiryId(_id: Long): Long {
             val realm = CXRealmManager.getRealmInstance()
-            return realm.where(Orders::class.java).equalTo(Orders.COLUMN__ID,_id).limit(1).findFirst()?.enquiryId?:0
+            return realm.where(Orders::class.java).equalTo(Orders.COLUMN__ID, _id).limit(1)
+                .findFirst()?.enquiryId ?: 0
         }
 
-        fun updateChangeRequestStatusOffline(enquiryId: Long?,jsonString:String,actionMarkCrStatusUpdate:Long,changeRequestStatus:Long){
+        fun updateChangeRequestStatusOffline(
+            enquiryId: Long?,
+            jsonString: String,
+            actionMarkCrStatusUpdate: Long,
+            changeRequestStatus: Long
+        ) {
+            var realm = CXRealmManager.getRealmInstance()
+            var orders: Orders? = null
+            realm.executeTransaction {
+                try {
+                    orders = realm.where(Orders::class.java)
+                        .equalTo(Orders.COLUMN_ENQUIRY_ID, enquiryId)
+                        .limit(1)
+                        .findFirst()
+                    Log.e("RaiseCr", "orders 1111: ${orders?.changeRequestOn}")
+                    orders?.let {
+                        orders?.actionMarkCrStatusUpdate = actionMarkCrStatusUpdate
+                        orders?.crStatusUpdateInput = jsonString
+                        orders?.changeRequestStatus = changeRequestStatus
+                        realm.copyToRealmOrUpdate(orders)
+                    }
+                    Log.e("RaiseCr", "orders 2222: ${orders?.changeRequestOn}")
+                } catch (e: Exception) {
+                    Log.e("RaiseCr", "Exception : " + e.printStackTrace())
+                }
+            }
+        }
+
+        fun updatIsPiSend(enquiryId: Long?, status: Long) {
+            var realm = CXRealmManager.getRealmInstance()
+            var orders: Orders? = null
+            realm.executeTransaction {
+                try {
+                    orders = realm.where(Orders::class.java)
+                        .equalTo(Orders.COLUMN_ENQUIRY_ID, enquiryId)
+                        .limit(1)
+                        .findFirst()
+                    Log.e(
+                        "RaiseCr",
+                        "updateChangerequestStatus 1111: ${orders?.changeRequestStatus}"
+                    )
+                    orders?.let {
+                        orders?.isPiSend = status
+                        realm.copyToRealmOrUpdate(orders)
+                    }
+                    Log.e(
+                        "RaiseCr",
+                        "updateChangerequestStatus 2222: ${orders?.changeRequestStatus}"
+                    )
+                } catch (e: Exception) {
+                    Log.e("RaiseCr", "Exception : " + e.printStackTrace())
+                }
+            }
+        }
+
+        fun updatPostDeliveryConfirmed(enquiryId: Long?) {
+            var realm = CXRealmManager.getRealmInstance()
+            var orders: Orders? = null
+            realm.executeTransaction {
+                try {
+                    orders = realm.where(Orders::class.java)
+                        .equalTo(Orders.COLUMN_ENQUIRY_ID, enquiryId)
+                        .limit(1)
+                        .findFirst()
+                    Log.e(
+                        "RaiseCr",
+                        "updateChangerequestStatus 1111: ${orders?.changeRequestStatus}"
+                    )
+                    orders?.let {
+                        orders?.isOrderFromCompleted = 1
+                        realm.copyToRealmOrUpdate(orders)
+                    }
+                    Log.e(
+                        "RaiseCr",
+                        "updateChangerequestStatus 2222: ${orders?.changeRequestStatus}"
+                    )
+                } catch (e: Exception) {
+                    Log.e("RaiseCr", "Exception : " + e.printStackTrace())
+                }
+            }
+        }
+        fun updatPostInitializePartialRefund(enquiryId: Long?){
             var realm = CXRealmManager.getRealmInstance()
             var orders : Orders?= null
             realm.executeTransaction {
@@ -429,60 +539,117 @@ class OrdersPredicates {
                         .equalTo(Orders.COLUMN_ENQUIRY_ID,enquiryId)
                         .limit(1)
                         .findFirst()
-                    Log.e("RaiseCr","orders 1111: ${orders?.changeRequestOn}")
+                    Log.e("initializePartialRefund","1111: ${orders?.isPartialRefundReceived}")
                     orders?.let {
-                        orders?.actionMarkCrStatusUpdate=actionMarkCrStatusUpdate
-                        orders?.crStatusUpdateInput=jsonString
-                        orders?.changeRequestStatus=changeRequestStatus
+                        orders?.isPartialRefundReceived=0L
                         realm.copyToRealmOrUpdate(orders)
                     }
-                    Log.e("RaiseCr","orders 2222: ${orders?.changeRequestOn}")
+                    Log.e("initializePartialRefund","updateChangerequestStatus 2222: ${orders?.isPartialRefundReceived}")
                 }catch (e:Exception){
-                    Log.e("RaiseCr","Exception : "+e.printStackTrace())
+                    Log.e("initializePartialRefund","Exception : "+e.printStackTrace())
                 }
             }
         }
 
-        fun updatIsPiSend(enquiryId: Long?,status:Long){
-            var realm = CXRealmManager.getRealmInstance()
-            var orders : Orders?= null
+        fun insertOrderProgressDetails(orderDetails: OrderProgressResponse?) {
+            val realm = CXRealmManager.getRealmInstance()
+            var orderDetails = orderDetails?.data
             realm.executeTransaction {
-                try{
-                    orders = realm.where(Orders::class.java)
-                        .equalTo(Orders.COLUMN_ENQUIRY_ID,enquiryId)
+                try {
+                    var orderObj = realm.where(OrderProgressDetails::class.java).equalTo(OrderProgressDetails.COLUMN_ENQUIRY_ID, orderDetails?.orderProgress?.enquiryId)
                         .limit(1)
                         .findFirst()
-                    Log.e("RaiseCr","updateChangerequestStatus 1111: ${orders?.changeRequestStatus}")
-                    orders?.let {
-                        orders?.isPiSend=status
-                        realm.copyToRealmOrUpdate(orders)
+                    if (orderObj == null) {
+                        var primId = it.where(OrderProgressDetails::class.java).max(OrderProgressDetails?.COLUMN__ID)
+                        if (primId == null) {
+                            nextID = 1
+                        } else {
+                            nextID = primId.toLong() + 1
+                        }
+
+                        var exOrd = it.createObject(OrderProgressDetails::class.java, nextID)
+
+                        exOrd?.orderProgressID = orderDetails?.orderProgress?.id
+                        exOrd?.enquiryID = orderDetails?.orderProgress?.enquiryId
+                        exOrd?.isFaulty = orderDetails?.orderProgress?.isFaulty
+                        exOrd?.brand = orderDetails?.brand
+                        exOrd?.totalAmount = orderDetails?.totalAmount
+                        exOrd?.productType = orderDetails?.productType
+                        exOrd?.isResolved = orderDetails?.orderProgress?.isResolved
+                        exOrd?.isAutoClosed = orderDetails?.orderProgress?.isAutoClosed
+                        exOrd?.artisanReviewComment = orderDetails?.orderProgress?.artisanReviewComment
+                        exOrd?.buyerReviewComment = orderDetails?.orderProgress?.buyerReviewComment
+                        exOrd?.artisanReviewId = orderDetails?.orderProgress?.artisanReviewId
+                        exOrd?.buyerReviewId = orderDetails?.orderProgress?.buyerReviewId
+                        exOrd?.orderDispatchDate = orderDetails?.orderProgress?.orderDispatchDate
+                        exOrd?.orderReceiveDate = orderDetails?.orderProgress?.orderReceiveDate
+                        exOrd?.orderCompleteDate = orderDetails?.orderProgress?.orderCompleteDate
+                        exOrd?.orderDeliveryDate = orderDetails?.orderProgress?.orderDeliveryDate
+                        exOrd?.faultyMarkedOn = orderDetails?.orderProgress?.faultyMarkedOn
+                        exOrd?.isRefundReceived = orderDetails?.orderProgress?.isRefundReceived
+                        exOrd?.isProductReturned = orderDetails?.orderProgress?.isProductReturned
+                        exOrd?.createdOn = orderDetails?.orderProgress?.createdOn
+                        exOrd?.modifiedOn = orderDetails?.orderProgress?.modifiedOn
+                        exOrd?.eta= orderDetails?.orderProgress?.eta
+                        exOrd?.isPartialRefundReceived = orderDetails?.orderProgress?.isPartialRefundReceived
+                        exOrd?.partialRefundInitializedOn = orderDetails?.orderProgress?.partialRefundInitializedOn
+                        exOrd?.partialRefundReceivedOn = orderDetails?.orderProgress?.partialRefundReceivedOn
+
+                        realm.copyToRealmOrUpdate(exOrd)
+                    } else {
+                        nextID = orderObj?._id ?: 0
+
+                        orderObj?.orderProgressID = orderDetails?.orderProgress?.id
+                        orderObj?.enquiryID = orderDetails?.orderProgress?.enquiryId
+                        orderObj?.isFaulty = orderDetails?.orderProgress?.isFaulty
+                        orderObj?.brand = orderDetails?.brand
+                        orderObj?.totalAmount = orderDetails?.totalAmount
+                        orderObj?.productType = orderDetails?.productType
+                        orderObj?.isResolved = orderDetails?.orderProgress?.isResolved
+                        orderObj?.isAutoClosed = orderDetails?.orderProgress?.isAutoClosed
+                        orderObj?.artisanReviewComment = orderDetails?.orderProgress?.artisanReviewComment
+                        orderObj?.buyerReviewComment = orderDetails?.orderProgress?.buyerReviewComment
+                        orderObj?.artisanReviewId = orderDetails?.orderProgress?.artisanReviewId
+                        orderObj?.buyerReviewId = orderDetails?.orderProgress?.buyerReviewId
+                        orderObj?.orderDispatchDate = orderDetails?.orderProgress?.orderDispatchDate
+                        orderObj?.orderReceiveDate = orderDetails?.orderProgress?.orderReceiveDate
+                        orderObj?.orderCompleteDate = orderDetails?.orderProgress?.orderCompleteDate
+                        orderObj?.orderDeliveryDate = orderDetails?.orderProgress?.orderDeliveryDate
+                        orderObj?.faultyMarkedOn = orderDetails?.orderProgress?.faultyMarkedOn
+                        orderObj?.isRefundReceived = orderDetails?.orderProgress?.isRefundReceived
+                        orderObj?.isProductReturned = orderDetails?.orderProgress?.isProductReturned
+                        orderObj?.createdOn = orderDetails?.orderProgress?.createdOn
+                        orderObj?.modifiedOn = orderDetails?.orderProgress?.modifiedOn
+                        orderObj?.eta= orderDetails?.orderProgress?.eta
+                        orderObj?.isPartialRefundReceived = orderDetails?.orderProgress?.isPartialRefundReceived
+                        orderObj?.partialRefundInitializedOn = orderDetails?.orderProgress?.partialRefundInitializedOn
+                        orderObj?.partialRefundReceivedOn = orderDetails?.orderProgress?.partialRefundReceivedOn
+
+                        realm.copyToRealmOrUpdate(orderObj)
                     }
-                    Log.e("RaiseCr","updateChangerequestStatus 2222: ${orders?.changeRequestStatus}")
-                }catch (e:Exception){
-                    Log.e("RaiseCr","Exception : "+e.printStackTrace())
+
+
+                } catch (e: Exception) {
+                    Log.e("InsertOnEnquiry", e.printStackTrace().toString())
                 }
             }
+//            deleteOrders(idList,isCompleted)
         }
 
-        fun updatPostDeliveryConfirmed(enquiryId: Long?){
+        fun getOrderProgressDetails(enquiryId: Long?): OrderProgressDetails? {
             var realm = CXRealmManager.getRealmInstance()
-            var orders : Orders?= null
+            var orders: OrderProgressDetails? = null
             realm.executeTransaction {
-                try{
-                    orders = realm.where(Orders::class.java)
-                        .equalTo(Orders.COLUMN_ENQUIRY_ID,enquiryId)
+                try {
+                    orders = realm.where(OrderProgressDetails::class.java)
+                        .equalTo(OrderProgressDetails.COLUMN_ENQUIRY_ID, enquiryId)
                         .limit(1)
                         .findFirst()
-                    Log.e("RaiseCr","updateChangerequestStatus 1111: ${orders?.changeRequestStatus}")
-                    orders?.let {
-                        orders?.isOrderFromCompleted=1
-                        realm.copyToRealmOrUpdate(orders)
-                    }
-                    Log.e("RaiseCr","updateChangerequestStatus 2222: ${orders?.changeRequestStatus}")
-                }catch (e:Exception){
-                    Log.e("RaiseCr","Exception : "+e.printStackTrace())
+                } catch (e: Exception) {
+                    Log.e("OrderProgressDetails", "Exception : " + e.printStackTrace())
                 }
             }
+            return orders
         }
     }
 }
