@@ -403,4 +403,13 @@
     <string name="currency">Currency</string>
     <string name="net_amt_to_be_paid">Net amount to be paid</string>
     <string name="approve_final_payment">Approve Final Payment</string>
+    <string name="buyer_provided_rating">View rating provide by buyer</string>
+    <string name="ratingByBuyer">Rating by buyer</string>
+    <string name="response">Response</string>
+    <string name="reviewRating"><![CDATA[Review & Rating]]></string>
+    <string name="reviewExperience">Review Your Experience</string>
+    <string name="averageScore">Average Score</string>
+    <string name="yourwordsMatter">Because Your Words Matter!!</string>
+    <string name="reviewtext">If you like it or you feel that you want to share. We would like to hear from you!</string>
+
 </resources>

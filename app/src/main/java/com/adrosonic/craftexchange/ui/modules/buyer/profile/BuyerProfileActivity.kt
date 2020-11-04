@@ -94,7 +94,7 @@ class BuyerProfileActivity : AppCompatActivity(),
     }
 
     fun setDetails(){
-        var rating = "${craftUser?.rating} / 5"
+        var rating = "${craftUser?.rating} / 10"
         mBinding?.rating?.text = rating
 
         mBinding?.textFirstname?.text = Prefs.getString(ConstantsDirectory.FIRST_NAME,"Craft")

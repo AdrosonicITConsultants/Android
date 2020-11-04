@@ -70,6 +70,8 @@ class CompletedOrderFragment : Fragment(),
             Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
         } else {
             mOrderVm.getAllCompletedOrders()
+            mOrderVm.ratingQuestions()
+
         }
 
         mBinding?.swipeCompletedEnquiries?.isRefreshing = true

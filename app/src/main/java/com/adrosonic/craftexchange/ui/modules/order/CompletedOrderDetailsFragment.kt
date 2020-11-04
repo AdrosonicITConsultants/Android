@@ -1,5 +1,6 @@
 package com.adrosonic.craftexchange.ui.modules.order
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -7,12 +8,12 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +25,7 @@ import com.adrosonic.craftexchange.enums.AvailableStatus
 import com.adrosonic.craftexchange.enums.EnquiryStages
 import com.adrosonic.craftexchange.enums.getId
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
+import com.adrosonic.craftexchange.repository.data.response.Rating.RatingEnquiryUserResponse
 import com.adrosonic.craftexchange.repository.data.response.moq.Datum
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
 import com.adrosonic.craftexchange.ui.modules.artisan.qcForm.qcFormIntent
@@ -32,6 +34,8 @@ import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.order.cr.crContext
 import com.adrosonic.craftexchange.ui.modules.order.taxInv.raiseTaxInvIntent
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
+import com.adrosonic.craftexchange.ui.modules.rating.SendRatingActivity
+import com.adrosonic.craftexchange.ui.modules.rating.ViewBuyerRatingActivity
 import com.adrosonic.craftexchange.ui.modules.transaction.adapter.OnGoingTransactionRecyclerAdapter
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
@@ -39,6 +43,7 @@ import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.OrdersViewModel
 import com.adrosonic.craftexchange.viewModels.QCViewModel
 import com.adrosonic.craftexchange.viewModels.TransactionViewModel
+import com.google.gson.GsonBuilder
 import com.pixplicity.easyprefs.library.Prefs
 
 // TODO: Rename parameter arguments, choose names that match
@@ -49,7 +54,8 @@ private const val ARG_PARAM2 = "param2"
 
 class CompletedOrderDetailsFragment : Fragment(),
     OrdersViewModel.FetchOrderInterface,
-    TransactionViewModel.TransactionInterface{
+    TransactionViewModel.TransactionInterface,
+    OrdersViewModel.RatingDataInteface{
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -72,10 +78,10 @@ class CompletedOrderDetailsFragment : Fragment(),
     private var isCustom : Boolean ?= false
     var profile : String ?= ""
 
-
     var mBinding : FragmentCompOrderDetailsBinding?= null
     var moqDeliveryTimeList=ArrayList<Datum>()
     var moqId=0L
+    var userId : String?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,22 +96,40 @@ class CompletedOrderDetailsFragment : Fragment(),
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_comp_order_details, container, false)
+        mBinding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_comp_order_details,
+            container,
+            false
+        )
         enqID = param1?.toLong()
         enqStatus = param2?.toLong()
         return mBinding?.root
     }
 
+    override fun onStart() {
+        super.onStart()
+        Log.d("apirecall", "onActivityCreated: recall rating api")
+        mOrdersVm.ratingData(enqID!!, userId!!.toLong())
+    }
+//    override fun onActivityCreated(savedInstanceState: Bundle?) {
+//        super.onActivityCreated(savedInstanceState)
+//
+//    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        profile = Prefs.getString(ConstantsDirectory.PROFILE,"")
+        profile = Prefs.getString(ConstantsDirectory.PROFILE, "")
+        userId = Prefs.getString(ConstantsDirectory.USER_ID, "")
+
         Utility.getDeliveryTimeList()?.let {moqDeliveryTimeList.addAll(it)  }
         mOrdersVm.fetchEnqListener = this
+        mOrdersVm.ratingListener = this
         if(Utility.checkIfInternetConnected(requireActivity())){
             enqID?.let {
+                mOrdersVm.ratingData(it, userId!!.toLong())
                 mOrdersVm.getSingleCompletedOrder(it)
                 mTranVM.getSingleCompletedTransactions(it)
-                when(Prefs.getString(ConstantsDirectory.PROFILE,"")){
+                when(Prefs.getString(ConstantsDirectory.PROFILE, "")){
                     ConstantsDirectory.ARTISAN -> {
                         mQcVM?.getArtisanQCResponse(it)
                     }
@@ -117,17 +141,30 @@ class CompletedOrderDetailsFragment : Fragment(),
             }
             viewLoader()
         }else{
-            Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
+            Utility.displayMessage(getString(R.string.no_internet_connection), requireActivity())
             setDetails()
         }
 
         enqID?.let {
-            mOrdersVm.getSingleOnOrderData(it,1)
+            mOrdersVm.getSingleOnOrderData(it, 1)
                 .observe(viewLifecycleOwner, Observer<Orders> {
                     orderDetails = it
                 })
         }
+        mBinding?.rateText?.setOnClickListener{
+            val myIntent = Intent(context, SendRatingActivity::class.java)
+            myIntent.putExtra("enquiryId", enqID)
+            startActivity(myIntent)
+            Log.d("Rate Artisan", "onViewCreated: clicked on review button ")
+        }
+        mBinding?.BuyerRatingShow?.setOnClickListener {
+            val myIntent = Intent(context, ViewBuyerRatingActivity::class.java)
+            myIntent.putExtra("enquiryId", enqID)
+            startActivity(myIntent)
+            Log.d("BuyerRating", "onViewCreated: clicked on buyerrating ")
+//            startActivity(Intent(activity, ViewBuyerRatingActivity::class.java))
 
+        }
         mBinding?.swipeOrderDetails?.setOnRefreshListener {
             enqID?.let { mOrdersVm.getSingleCompletedOrder(it) }
         }
@@ -140,8 +177,13 @@ class CompletedOrderDetailsFragment : Fragment(),
                 ConstantsDirectory.ARTISAN -> {
                     if (savedInstanceState == null) {
                         activity?.supportFragmentManager?.beginTransaction()
-                            ?.replace(R.id.enquiry_details_container,
-                                BuyEnqDetailsFragment.newInstance(orderDetails?.enquiryId.toString(),orderDetails?.enquiryStatusId.toString()))
+                            ?.replace(
+                                R.id.enquiry_details_container,
+                                BuyEnqDetailsFragment.newInstance(
+                                    orderDetails?.enquiryId.toString(),
+                                    orderDetails?.enquiryStatusId.toString()
+                                )
+                            )
                             ?.addToBackStack(null)
                             ?.commit()
                     }
@@ -149,8 +191,14 @@ class CompletedOrderDetailsFragment : Fragment(),
                 ConstantsDirectory.BUYER -> {
                     if (savedInstanceState == null) {
                         activity?.supportFragmentManager?.beginTransaction()
-                            ?.replace(R.id.enquiry_details_container,
-                                ArtEnqDetailsFragment.newInstance(orderDetails?.enquiryId.toString(),orderDetails?.enquiryStatusId.toString(),0))
+                            ?.replace(
+                                R.id.enquiry_details_container,
+                                ArtEnqDetailsFragment.newInstance(
+                                    orderDetails?.enquiryId.toString(),
+                                    orderDetails?.enquiryStatusId.toString(),
+                                    0
+                                )
+                            )
                             ?.addToBackStack(null)
                             ?.commit()
                     }
@@ -159,18 +207,20 @@ class CompletedOrderDetailsFragment : Fragment(),
         }
 
         mBinding?.taxInvoiceLayer?.setOnClickListener {
-            enqID?.let {  startActivity(requireContext().raiseTaxInvIntent(it,true)) }
+            enqID?.let {  startActivity(requireContext().raiseTaxInvIntent(it, true)) }
         }
 
         mBinding?.productDetailsLayer?.setOnClickListener {
             if (savedInstanceState == null) {
                 isCustom?.let { it1 ->
-                    ViewProductDetailsFragment.newInstance(orderDetails?.productId!!.toLong(),
+                    ViewProductDetailsFragment.newInstance(
+                        orderDetails?.productId!!.toLong(),
                         it1
                     )
                 }?.let { it2 ->
                     activity?.supportFragmentManager?.beginTransaction()
-                        ?.replace(R.id.enquiry_details_container,
+                        ?.replace(
+                            R.id.enquiry_details_container,
                             it2
                         )
                         ?.addToBackStack(null)
@@ -181,10 +231,12 @@ class CompletedOrderDetailsFragment : Fragment(),
         }
 
         mBinding?.piDetailsLayer?.setOnClickListener {
-            enqID?.let {  startActivity(requireContext().raisePiContext(it,true, SendPiRequest())) }
+            enqID?.let {  startActivity(requireContext().raisePiContext(it, true, SendPiRequest())) }
         }
         mBinding?.changeRequestLayer?.setOnClickListener {
-            if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType.equals(ConstantsDirectory.CUSTOM_PRODUCT)) {
+            if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType.equals(
+                    ConstantsDirectory.CUSTOM_PRODUCT
+                )) {
                 if (orderDetails?.changeRequestOn == 1L) {
                     when (orderDetails?.changeRequestStatus) {
                         0L -> {
@@ -196,8 +248,15 @@ class CompletedOrderDetailsFragment : Fragment(),
                         else -> {
                             when (profile) {
                                 ConstantsDirectory.BUYER -> {
-                                    val days = Utility.getDateDiffInDays(Utility.returnDisplayDate( orderDetails?.orderCreatedOn ?: "" ))
-                                    if (days >10) Utility.displayMessage("Last date to raise Change Request passed.", requireContext())
+                                    val days = Utility.getDateDiffInDays(
+                                        Utility.returnDisplayDate(
+                                            orderDetails?.orderCreatedOn ?: ""
+                                        )
+                                    )
+                                    if (days > 10) Utility.displayMessage(
+                                        "Last date to raise Change Request passed.",
+                                        requireContext()
+                                    )
                                 }
                             }
                         }
@@ -208,9 +267,11 @@ class CompletedOrderDetailsFragment : Fragment(),
         }
 
         mBinding?.qualityCheckLayer?.setOnClickListener {
-            startActivity(context?.qcFormIntent()
-                ?.putExtra(ConstantsDirectory.ENQUIRY_ID,enqID)
-                ?.putExtra(ConstantsDirectory.ORDER_STATUS_FLAG, 1L))
+            startActivity(
+                context?.qcFormIntent()
+                    ?.putExtra(ConstantsDirectory.ENQUIRY_ID, enqID)
+                    ?.putExtra(ConstantsDirectory.ORDER_STATUS_FLAG, 1L)
+            )
         }
 
         mBinding?.viewPaymentLayer?.setOnClickListener {
@@ -237,7 +298,10 @@ class CompletedOrderDetailsFragment : Fragment(),
                 mBinding?.enquiryCode?.text = orderDetails?.orderCode
                 mBinding?.enquiryStartDate?.text =
                     "Date started : ${orderDetails?.startedOn?.split("T")?.get(0)}"
-
+                if(orderDetails?.enquiryStageId != 10.toLong() )
+                {
+                    mBinding?.RatingLayout?.visibility = View.GONE
+                }
                 val image = orderDetails?.productImages?.split((",").toRegex())
                     ?.dropLastWhile { it.isEmpty() }?.toTypedArray()?.get(0)
 
@@ -250,7 +314,7 @@ class CompletedOrderDetailsFragment : Fragment(),
                     isCustom = false
                 }
                 mBinding?.productImage?.let {
-                  if(requireContext()!=null) ImageSetter.setImage(
+                    if (requireContext() != null) ImageSetter.setImage(
                         requireContext(),
                         url!!,
                         mBinding?.productImage!!,
@@ -405,7 +469,7 @@ class CompletedOrderDetailsFragment : Fragment(),
                     mBinding?.closedText?.text = "Order Completed"
 
                 } else {
-                 context?.let {
+                    context?.let {
                         ContextCompat.getColor(
                             it, R.color.red_logo
                         )
@@ -419,23 +483,36 @@ class CompletedOrderDetailsFragment : Fragment(),
                     mBinding?.closedText?.text = "Order Closed"
                 }
 
-                mBinding?.enquiryUpdateDate?.text = "Last updated : ${orderDetails?.lastUpdated?.split("T")?.get(0)}"
+                mBinding?.enquiryUpdateDate?.text = "Last updated : ${
+                    orderDetails?.lastUpdated?.split(
+                        "T"
+                    )?.get(0)
+                }"
                 mBinding?.brand?.text = orderDetails?.companyName
 
-                var tranList = TransactionPredicates.getTransactionByEnquiryId(enqID?:0)
-                if(tranList!!.size>0){
+                var tranList = TransactionPredicates.getTransactionByEnquiryId(enqID ?: 0)
+                if (tranList!!.size > 0) {
                     mBinding?.viewPaymentLayer?.visibility = View.VISIBLE
-                    mBinding?.viewTransaction?.text="View"
-                    mBinding?.transactionList?.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false )
-                    val transactionAdapter =  OnGoingTransactionRecyclerAdapter(requireContext(), tranList)
+                    mBinding?.viewTransaction?.text = "View"
+                    mBinding?.transactionList?.layoutManager = LinearLayoutManager(
+                        requireContext(),
+                        LinearLayoutManager.VERTICAL,
+                        false
+                    )
+                    val transactionAdapter = OnGoingTransactionRecyclerAdapter(
+                        requireContext(),
+                        tranList
+                    )
                     mBinding?.transactionList?.adapter = transactionAdapter
 //                    transactionAdapter.listener = this
                 } else {
-                    mBinding?.viewTransaction?.text="No transaction present"
+                    mBinding?.viewTransaction?.text = "No transaction present"
                 }
             })
 
-            if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType.equals(ConstantsDirectory.CUSTOM_PRODUCT)){
+            if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType.equals(
+                    ConstantsDirectory.CUSTOM_PRODUCT
+                )){
                 if(orderDetails?.changeRequestOn==1L) {
                     when (profile) {
                         ConstantsDirectory.ARTISAN -> {
@@ -547,6 +624,28 @@ class CompletedOrderDetailsFragment : Fragment(),
         }
     }
 
+    override fun onRatingFailure() {
+    }
+
+    override fun onRatingSuccess(response: String) {
+        val gson = GsonBuilder().create()
+        val RatingData = gson.fromJson(response, RatingEnquiryUserResponse::class.java)
+        Log.d("RatingAPI", "data received: $RatingData")
+        when(Prefs.getString(ConstantsDirectory.PROFILE, "")){
+            ConstantsDirectory.ARTISAN -> {
+                if(RatingData.data.isBuyerRatingDone == 1 )
+                {
+                    Log.d("RatingAPI", "Rating Provided by buyer: ")
+                    mBinding?.BuyerRatingShow?.visibility = View.VISIBLE
+
+                }            }
+            ConstantsDirectory.BUYER -> {
+//                mQcVM?.getBuyerQCResponse(it)
+            }
+        }
+
+    }
+
 
     override fun onSuccess() {
         try {
@@ -563,7 +662,7 @@ class CompletedOrderDetailsFragment : Fragment(),
 
     companion object {
 
-        fun newInstance(param1: String,param2 : String) =
+        fun newInstance(param1: String, param2: String) =
             CompletedOrderDetailsFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
@@ -575,7 +674,7 @@ class CompletedOrderDetailsFragment : Fragment(),
     override fun onGetTransactionsSuccess() {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
-                Log.e("Transaction","getSingleTransactions Success")
+                Log.e("Transaction", "getSingleTransactions Success")
                 setDetails()
                 hideLoader()
             })
@@ -587,7 +686,7 @@ class CompletedOrderDetailsFragment : Fragment(),
     override fun onGetTransactionsFailure() {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
-                Log.e("Transaction","onGetTransactionsFailure")
+                Log.e("Transaction", "onGetTransactionsFailure")
                 hideLoader()
             })
         } catch (e: Exception) {
