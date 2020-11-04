@@ -203,6 +203,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/colorSplash"
+                    android:paddingBottom="@dimen/margin_regular"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/top_part">
@@ -444,9 +445,9 @@
                     <Button
                         android:id="@+id/btn_close_order"
                         android:layout_width="wrap_content"
-                        android:layout_height="48dp"
+                        android:layout_height="45dp"
                         android:layout_margin="16dp"
-                        android:layout_marginBottom="16dp"
+                        android:layout_marginBottom="@dimen/margin_regular"
                         android:background="@color/red_logo"
                         android:drawableEnd="@drawable/ic_right_arrow_white"
                         android:fontFamily="@font/lato_light"
@@ -459,6 +460,7 @@
                         android:textColor="@color/white_text"
                         android:textSize="16sp"
                         android:visibility="gone"
+                        app:layout_constraintBottom_toTopOf="@+id/final_transaction_layout"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/btn_is_partial_refund_rcvd" />
