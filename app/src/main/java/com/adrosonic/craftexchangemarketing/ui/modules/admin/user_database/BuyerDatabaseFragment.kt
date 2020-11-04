@@ -66,8 +66,8 @@ class BuyerDatabaseFragment :Fragment(),
             mBinding?.clusterParent?.visibility=View.GONE
             mViewModel.getDatabaseCountForAdmin(-1,1,-1,roleId,null,"desc","date")
 
-            val spClusterAdapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item,clusterList)
-            spClusterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            val spClusterAdapter = ArrayAdapter<String>(requireContext(), R.layout.spinner_item,clusterList)
+            spClusterAdapter.setDropDownViewResource(R.layout.spinner_item)
             mBinding?.spCluster?.adapter = spClusterAdapter
 
             ratingList.clear()
@@ -75,8 +75,8 @@ class BuyerDatabaseFragment :Fragment(),
             ratingList.add("Greater than 3")
             ratingList.add("Greater than 6")
             ratingList.add("Greater than 8")
-            val spRatingAdapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item,ratingList)
-            spRatingAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            val spRatingAdapter = ArrayAdapter<String>(requireContext(), R.layout.spinner_item,ratingList)
+            spRatingAdapter.setDropDownViewResource(R.layout.spinner_item)
             mBinding?.spRating?.adapter = spRatingAdapter
             initializeTableView()
             mBinding?.btnApply?.setOnClickListener {
