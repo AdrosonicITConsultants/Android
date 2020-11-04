@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<!--    <data>-->
+<!--        <variable-->
+<!--            name="event"-->
+<!--            type="com.adrosonic.adroscanner.modules.landing.ClickingInterface"/>-->
+
+<!--        <variable-->
+<!--            name="data"-->
+<!--            type="com.adrosonic.adroscanner.entity.UserEntity"/>-->
+<!--    </data>-->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/fault_comment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:textColor="#875C5E"
+            android:fontFamily="@font/lato_regular"
+            android:textSize="@dimen/product_note_text"
+            android:layout_marginStart="@dimen/margin_regular"
+            android:layout_marginTop="@dimen/margin_regular"
+            android:layout_marginEnd="@dimen/margin_regular"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/fault_subcomment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/bg_unchecked_fault"
+            android:fontFamily="@font/lato_bold"
+            android:gravity="start"
+            android:padding="@dimen/margin_regular"
+            android:textSize="@dimen/product_note_text"
+            android:clickable="true"
+            android:textColor="@color/red_logo"
+            app:layout_constraintEnd_toEndOf="@id/fault_comment"
+            app:layout_constraintStart_toStartOf="@+id/fault_comment"
+            app:layout_constraintTop_toBottomOf="@+id/fault_comment"
+            android:focusable="true" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

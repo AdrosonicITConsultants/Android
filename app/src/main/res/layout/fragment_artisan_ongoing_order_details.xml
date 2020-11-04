@@ -770,8 +770,119 @@
                         app:layout_constraintTop_toBottomOf="@+id/upload_delivery_receipt_layout"
                         app:layout_constraintVertical_bias="0.0" />
 
+                    <Button
+                        android:id="@+id/btn_order_recreation"
+                        android:layout_width="150dp"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="@dimen/margin_regular"
+                        android:layout_marginBottom="@dimen/margin_regular"
+                        android:elevation="8dp"
+                        android:fontFamily="@font/lato_regular"
+                        android:padding="4dp"
+                        android:text="@string/order_recreation"
+                        android:textAlignment="center"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white_text"
+                        android:textSize="18sp"
+                        android:visibility="gone"
+                        android:background="@drawable/rectangle_round_grad_black_solid"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/btn_mark_order_dispatched"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <LinearLayout
+                        android:id="@+id/order_dispatch_recreation_layer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/btn_order_recreation">
+
+                        <Button
+                            android:id="@+id/btn_order_dispatched_recreation"
+                            android:layout_width="250dp"
+                            android:layout_height="45dp"
+                            android:layout_marginTop="@dimen/margin_regular"
+                            android:layout_marginBottom="@dimen/margin_regular"
+                            android:background="@color/black_text"
+                            android:drawableEnd="@drawable/ic_right_arrow_white"
+                            android:elevation="8dp"
+                            android:fontFamily="@font/lato_regular"
+                            android:padding="4dp"
+                            android:layout_gravity="center"
+                            android:text="@string/mark_order_dispatched_recreation"
+                            android:textAlignment="center"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white_text"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/txt_order_dispatch_recreation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/lato_regular"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="@dimen/margin_regular"
+                            android:text="@string/order_dispatch_recreation"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                    android:id="@+id/raise_concern_layer"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:background="#FFBEBE"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    android:weightSum="10"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/middle_part">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="4"
+                        android:fontFamily="@font/lato_regular"
+                        android:gravity="center|start"
+                        android:text="@string/eh_problem"
+                        android:textColor="#D57272"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="5"
+                        android:fontFamily="@font/lato_regular"
+                        android:gravity="center|end"
+                        android:text="@string/view_raised_concern"
+                        android:textColor="#D57272"
+                        android:textSize="12sp" />
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="?attr/selectableItemBackground"
+                        android:src="@drawable/ic_arrow_right_red" />
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/delivery_receipt_layer"
@@ -785,7 +896,7 @@
                     android:weightSum="10"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/middle_part">
+                    app:layout_constraintTop_toBottomOf="@+id/raise_concern_layer">
 
                     <TextView
                         android:layout_width="0dp"

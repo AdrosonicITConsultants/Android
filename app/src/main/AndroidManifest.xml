@@ -18,90 +18,132 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+
         <activity
             android:name=".ui.modules.order.revisePi.ViewOldPiActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.modules.order.confirmDelivery.ConfirmDeliveryActivity"
+
+        <activity
+            android:name=".ui.modules.raiseConcern.RaiseConcernActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.modules.order.taxInv.TaxInvoiceActivity"></activity>
-        <activity android:name=".ui.modules.order.taxInv.RaiseTaxInvActivity" />
-        <activity android:name=".ui.modules.order.finalPay.OrderPaymentActivity" />
-        <activity android:name=".ui.modules.artisan.deliveryReceipt.UploadDeliveryReceiptActivity" />
+
+        <activity
+            android:name=".ui.modules.order.confirmDelivery.ConfirmDeliveryActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.modules.order.taxInv.TaxInvoiceActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.modules.order.taxInv.RaiseTaxInvActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.modules.order.finalPay.OrderPaymentActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.modules.artisan.deliveryReceipt.UploadDeliveryReceiptActivity"
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.modules.order.revisePi.ViewPiActivity"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.modules.order.revisePi.RevisePiActivity"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.modules.order.cr.CrActivity"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.modules.artisan.qcForm.QCActivity"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.modules.transaction.ViewDocumentActivity"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.modules.transaction.TransactionActivity"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.modules.buyer.enquiry.advPay.EnquiryPaymentActivity"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.modules.artisan.enquiry.pi.RaisePiActivity"
             android:configChanges="orientation|screenSize" />
+
         <activity
             android:name=".ui.modules.artisan.enquiry.pi.PiActivity"
             android:configChanges="orientation|screenSize" />
+
         <activity
             android:name=".ui.modules.dashboard.DashboardActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_dashboard" />
+
         <activity
             android:name=".ui.modules.enquiry.EnquiryDetailsActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.modules.order.OrderDetailsActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.modules.search.SearchSuggestionActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
+
         <activity
             android:name=".ui.modules.editPhoto.EditPhotoActivity"
             android:label="@string/title_activity_edit_photo" />
+
         <activity
             android:name=".ui.modules.buyer.ownDesign.BuyerAddOwnProductDesignActivity"
             android:label="@string/title_activity_buyer_add_own_product_design"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".ui.modules.buyer.productDetails.FullScreenImageActivity"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.modules.buyer.productDetails.CatalogueProductDetailsActivity"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.modules.artisan.profile.editProfile.ArtisanEditProfileActivity"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.modules.artisan.profile.ArtisanProfileActivity"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.modules.artisan.landing.ArtisanLandingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan" />
+
         <activity
             android:name=".ui.modules.buyer.profile.editProfile.BuyerEditProfileActivity"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.modules.buyer.profile.BuyerProfileActivity"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.modules.cx_demovideo.CXVideoActivity"
             android:screenOrientation="portrait" />
@@ -193,7 +235,6 @@
             android:name=".services.qc.QcService"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
-
         <service
             android:name=".services.cr.CrToggleService"
             android:exported="false"

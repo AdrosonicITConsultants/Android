@@ -418,8 +418,7 @@ class ArtFillViewQcFormFragment : Fragment(),
             }
         }
         mBinding?.formRecycler?.adapter = mFillQcAdapter
-        mFillQcAdapter?.qcAdapterListener =
-            this  //important to set adapter first and then call listener
+        mFillQcAdapter?.qcAdapterListener = this  //important to set adapter first and then call listener
     }
 
     fun setSaveForms() {

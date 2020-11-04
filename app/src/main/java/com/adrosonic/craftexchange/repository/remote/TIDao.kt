@@ -11,13 +11,19 @@ import retrofit2.http.*
 interface TIDao {
     @Headers("Accept: application/json")
     @POST("enquiry/generateTaxInvoice")
-    fun generateTaxInvoice(@Header("Authorization") token:String, @Body invoicerequest: SendTiRequest) : Call<TaxInvoiceResponse>
+    fun generateTaxInvoice(@Header("Authorization") token:String,
+                           @Body invoicerequest: SendTiRequest) : Call<TaxInvoiceResponse>
 
     @Headers("Accept: application/pdf")
-    @GET("/enquiry/getPreviewPiPDF") //TODO : change into taxinv url
-    fun getPreviewTaxInvPDF(@Header("Authorization") token:String, @Query("enquiryId") enquiryId : Int) : Call<ResponseBody>
+    @GET("/enquiry/getTaxInvPDFoice")
+    fun getPreviewTaxInvPDF(@Header("Authorization") token:String,
+                            @Query("enquiryId") enquiryId : Int,
+                            @Query("isOld") isOld : String) : Call<ResponseBody>
+
 
     @Headers("Accept: text/html")
-    @GET("/enquiry/getPreviewPiHTML") //TODO : change into taxinv url
-    fun getPreviewTaxInvHTML(@Header("Authorization") token:String, @Query("enquiryId") enquiryId : Int) : Call<ResponseBody>
+    @GET("/enquiry/getTaxInvoicePreviewHTML")
+    fun getPreviewTaxInvHTML(@Header("Authorization") token:String,
+                             @Query("enquiryId") enquiryId : Int,
+                             @Query("isOld") isOld : String) : Call<ResponseBody>
 }
