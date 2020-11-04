@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.adrosonic.craftexchangemarketing.R
 import com.adrosonic.craftexchangemarketing.databinding.ActivityIndArtisanProfileBinding
+//import com.adrosonic.craftexchangemarketing.databinding.ActivityIndArtisanProfile1Binding
+//import com.adrosonic.craftexchangemarketing.databinding.ActivityIndArtisanProfileBinding
 import com.adrosonic.craftexchangemarketing.databinding.ActivityIndBuyerProfileBinding
 import com.adrosonic.craftexchangemarketing.repository.data.response.admin.userDatabase.UserProfileResponse
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.adapter.AdminDatabaseAdapter
@@ -21,8 +23,10 @@ import com.adrosonic.craftexchangemarketing.utils.UserConfig
 import com.adrosonic.craftexchangemarketing.utils.Utility
 import com.adrosonic.craftexchangemarketing.viewModels.UserProfileViewModal
 import com.google.android.material.tabs.TabLayout
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_ind_artisan_profile.view.*
+import java.util.*
 
 
 fun Context.ArtisanProfileIntent(artisanId : Long): Intent {
@@ -54,18 +58,24 @@ UserProfileViewModal.setRatinginterface{
         mUPVM.deactivateListener = this
         mUPVM.setratingListener =this
         if(intent.extras!=null){
+            Log.d("debug", "id before assign $userId")
             userId = intent.getLongExtra("artisanId", 9)
+            UserConfig.shared.indUserDataJson= ""
+
+            Log.d("debug", "id after assign $userId")
+
         }
 //        userId = 9
         if(Utility.checkIfInternetConnected(applicationContext)){
-//            Utility.displayMessage("calling function", applicationContext)
+            Log.d("debug", "callling api ")
+
             mUPVM?.getUserData(userId!!)
-//            Utility.displayMessage("function called", applicationContext)
+            Log.d("debug", "called api ")
+
 
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection), applicationContext)
-//            mBinding?.antaranImage?.setImageResource(R.drawable.antaran_image)
-//            mBinding?.artisanImage?.setImageResource(R.drawable.artisan_catalogue_image)
+
         }
 
         mBinding = ActivityIndArtisanProfileBinding.inflate(layoutInflater)
@@ -76,6 +86,8 @@ UserProfileViewModal.setRatinginterface{
             mBinding?.layoutForMenuArtisan?.visibility = View.VISIBLE
             mBinding?.menuArtisanProfile?.visibility = View.VISIBLE
             mBinding?.giveRating?.visibility = View.GONE
+            initialData = false
+
         }
         mBinding?.layoutForMenuArtisan?.setOnClickListener {
             mBinding?.layoutForMenuArtisan?.visibility = View.GONE
@@ -136,8 +148,10 @@ UserProfileViewModal.setRatinginterface{
 //        viewPager = findViewById(R.id.artisanDetailsPager)
 //        val adapter = ArtisanProfileAdapter(this, supportFragmentManager)
 //        val adapter = ArtisanProfileAdapter(this,supportFragmentManager)
-        mBinding?.artisanDetailsPager?.adapter = ArtisanProfileAdapter(this,supportFragmentManager)
-        mBinding?.profileTabLayout?.setupWithViewPager(mBinding?.artisanDetailsPager)
+
+
+
+
 
     }
     override fun onProfileFailure() {
@@ -164,6 +178,8 @@ UserProfileViewModal.setRatinginterface{
                 val gson = GsonBuilder().create()
                 userProfileResponse = gson.fromJson(indUserData, UserProfileResponse::class.java)
                 Log.d("API data ", "onProfileSuccess:" +  userProfileResponse )
+                mBinding?.artisanDetailsPager?.adapter = ArtisanProfileAdapter(this,supportFragmentManager)
+                mBinding?.profileTabLayout?.setupWithViewPager(mBinding?.artisanDetailsPager)
                 initialData= true
                  if(userProfileResponse?.data?.status == 1) {
                      mBinding?.statusArtisanSwitch?.isChecked = true
@@ -315,6 +331,12 @@ UserProfileViewModal.setRatinginterface{
 
         }
 
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        this.finish()
+//        UserConfig.shared.indUserDataJson= ""
     }
 
 }

@@ -50,6 +50,8 @@ UserProfileViewModal.ActivateInterface{
         mUPVM.deactivateListener = this
         if(intent.extras!=null){
             userId = intent.getLongExtra("buyerId", 0)
+            UserConfig.shared.indUserDataJson= ""
+
         }
         Log.e("BuyerProfileActivity","userId: $userId")
 //        userId = 10
@@ -70,6 +72,7 @@ UserProfileViewModal.ActivateInterface{
 
         mBinding?.menuBuyerProfileIcon?.setOnClickListener {
             mBinding?.layoutForMenuBuyer?.visibility = View.VISIBLE
+            initialData = false
         }
         mBinding?.layoutForMenuBuyer?.setOnClickListener {
             mBinding?.layoutForMenuBuyer?.visibility = View.GONE
@@ -140,31 +143,33 @@ UserProfileViewModal.ActivateInterface{
                 initialData= true
                 mBinding?.statusBuyerSwitch?.isChecked = userProfileResponse?.data?.status == 1
                 mBinding?.buyerName?.text = userProfileResponse?.data?.firstName + " " + userProfileResponse?.data?.lastName
-                mBinding?.buyerDesignation?.text = userProfileResponse?.data?.designation
-                mBinding?.buyerCompany?.text = userProfileResponse?.data?.companyDetails?.companyName
-                mBinding?.buyerRating?.text = "Rating : " + userProfileResponse?.data?.rating
-                mBinding?.pocName?.text = userProfileResponse?.data?.poc?.firstName
-                mBinding?.pocMobile?.text = userProfileResponse?.data?.poc?.contactNo
-                mBinding?.pocEmail?.text = userProfileResponse?.data?.poc?.email
-                mBinding?.gstNo?.text = userProfileResponse?.data?.companyDetails?.gstNo
-                mBinding?.cinNo?.text = userProfileResponse?.data?.companyDetails?.cin
-                mBinding?.panNo?.text = userProfileResponse?.data?.pancard
-                mBinding?.buyerEmail1?.text = userProfileResponse?.data?.email
-                mBinding?.primaryPhone?.text = userProfileResponse?.data?.mobile
-                mBinding?.alternatePhone?.text = userProfileResponse?.data?.alternateMobile
-                mBinding?.brandNameDelivery?.text = userProfileResponse?.data?.companyDetails?.companyName
+                mBinding?.buyerDesignation?.text = userProfileResponse?.data?.designation?: "NA"
+                mBinding?.buyerCompany?.text = userProfileResponse?.data?.companyDetails?.companyName ?: "NA"
+                mBinding?.buyerRating?.text = "Rating : " + userProfileResponse?.data?.rating?: "NA"
+                mBinding?.pocName?.text = userProfileResponse?.data?.poc?.firstName?: "NA"
+                mBinding?.pocMobile?.text = userProfileResponse?.data?.poc?.contactNo?: "NA"
+                mBinding?.pocEmail?.text = userProfileResponse?.data?.poc?.email?: "NA"
+                mBinding?.gstNo?.text = userProfileResponse?.data?.companyDetails?.gstNo?: "NA"
+                mBinding?.cinNo?.text = userProfileResponse?.data?.companyDetails?.cin?: "NA"
+                mBinding?.panNo?.text = userProfileResponse?.data?.pancard?: "NA"
+                mBinding?.buyerEmail1?.text = userProfileResponse?.data?.email?: "NA"
+                mBinding?.primaryPhone?.text = userProfileResponse?.data?.mobile?: "NA"
+                mBinding?.alternatePhone?.text = userProfileResponse?.data?.alternateMobile?: "NA"
+                mBinding?.brandNameDelivery?.text = userProfileResponse?.data?.companyDetails?.companyName?: "NA"
                 mBinding?.buyerDeliveryAddress?.text = userProfileResponse?.data?.deliveryAddress?.line1 + " "+ userProfileResponse?.data?.deliveryAddress?.line2 + " " + userProfileResponse?.data?.deliveryAddress?.street + " " + userProfileResponse?.data?.deliveryAddress?.city + " " + userProfileResponse?.data?.deliveryAddress?.state
-                mBinding?.countryDelivery7?.text = userProfileResponse?.data?.deliveryAddress?.country?.name
-                var image = userProfileResponse?.data?.companyDetails?.logo
-                var url = Utility.getBrandLogoUrl(userId!!.toLong() , image)
-                ImageSetter.setImage(
-                    applicationContext,
-                    url!!,
-                    mBinding?.brandImage!!,
-                    R.drawable.buyer_logo_placeholder,
-                    R.drawable.buyer_logo_placeholder,
-                    R.drawable.buyer_logo_placeholder
-                )
+                mBinding?.countryDelivery7?.text = userProfileResponse?.data?.deliveryAddress?.country?.name?: "NA"
+                var image = userProfileResponse?.data?.companyDetails?.logo?: "NA"
+                if(image !="NA") {
+                    var url = Utility.getBrandLogoUrl(userId!!.toLong(), image)
+                    ImageSetter.setImage(
+                        applicationContext,
+                        url!!,
+                        mBinding?.brandImage!!,
+                        R.drawable.buyer_logo_placeholder,
+                        R.drawable.buyer_logo_placeholder,
+                        R.drawable.buyer_logo_placeholder
+                    )
+                }
 
 
 

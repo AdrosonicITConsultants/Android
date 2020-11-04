@@ -354,5 +354,16 @@
     <string name="cancelEdit">Cancel Edit</string>
     <string name="saveEdit">Save Edit</string>
     <string name="descriptionText">Description</string>
+    <string name="rateDetails">Rate starts below from !st being poor to 5th as best</string>
+    <string name="thanksForHelp"><![CDATA[Thankyou for helping a buyer bring some confidence & smile !]]></string>
+    <string name="buyerResponsiveness">Buyer\'s Responsiveness</string>
+    <string name="buyerFriendliness">Buyer\'s Friendliness</string>
+    <string name="buyerability">Buyer\'s ability to adjust to changes</string>
+    <string name="overallExperience">Overall Experience</string>
+    <string name="buyerpayment">Buyer\'s timely payment and updates</string>
+    <string name="overallRating" />
+    <string name="overallRatings">Overall Rating</string>
+    <string name="becauseyourWordMatter">Because your word matter !!</string>
+    <string name="reviewtext">If you like it or you feel that you want to share. We would like to hear from you1</string>
 
 </resources>

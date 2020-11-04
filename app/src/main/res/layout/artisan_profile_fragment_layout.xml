@@ -48,7 +48,6 @@
                 android:layout_marginEnd="20dp"
                 android:background="#991E1D1D"
                 android:padding="10dp"
-                android:text="niid@gmail.com"
                 android:textColor="@color/colorBackground"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -77,14 +76,11 @@
                 android:layout_marginEnd="20dp"
                 android:background="#991E1D1D"
                 android:padding="10dp"
-                android:text="9835548808"
                 android:textColor="@color/colorBackground"
                 android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/mobileNumberText"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintTop_toBottomOf="@+id/mobileNumberText" />
 
             <TextView
                 android:id="@+id/AddressText"
@@ -108,14 +104,11 @@
                 android:layout_marginEnd="20dp"
                 android:background="#991E1D1D"
                 android:padding="10dp"
-                android:text="Annad Dresses , Gandhi chowk , Rajbadi road , Katras Bazar , Dhanbad, Jharkhand , 828114"
                 android:textColor="@color/colorBackground"
                 android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/AddressText"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintTop_toBottomOf="@+id/AddressText" />
 
             <TextView
                 android:id="@+id/descriptionText"
@@ -139,7 +132,6 @@
                 android:layout_marginEnd="20dp"
                 android:background="#991E1D1D"
                 android:padding="10dp"
-                android:text="good artisan , skilled , talented, experienced, highest rated"
                 android:textColor="@color/colorBackground"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"

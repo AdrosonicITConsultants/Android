@@ -11,6 +11,7 @@ import com.adrosonic.craftexchangemarketing.utils.ConstantsDirectory
 import com.adrosonic.craftexchangemarketing.utils.UserConfig
 import com.adrosonic.craftexchangemarketing.utils.Utility
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.pixplicity.easyprefs.library.Prefs
 import com.wajahatkarim3.easyvalidation.core.collection_ktx.onlyNumbersList
 import retrofit2.Call
@@ -18,7 +19,9 @@ import retrofit2.Response
 import javax.security.auth.callback.Callback
 
 class UserProfileViewModal(application: Application) : AndroidViewModel(application)  {
-
+    private var mUserConfig = UserConfig()
+    var indUserData : String ?=""
+    var userProfileResponse : UserProfileResponse?= null
     interface ProfileDataInterface{
         fun onProfileFailure()
         fun onProfileSuccess()
@@ -43,6 +46,8 @@ class UserProfileViewModal(application: Application) : AndroidViewModel(applicat
 
 
     fun getUserData(id:Long){
+        Log.d("debug", "function enter ")
+
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
 //        Utility.displayMessage(token,Context)
 
@@ -58,9 +63,17 @@ class UserProfileViewModal(application: Application) : AndroidViewModel(applicat
                 }
                 override fun onResponse(call: Call<UserProfileResponse>, response: Response<UserProfileResponse>) {
                     if (response?.isSuccessful) {
-                        profileListener?.onProfileSuccess()
                         if(response.body()?.valid == true){
+                            Log.d("debug", "assigning api data "+userProfileResponse)
+                            indUserData = mUserConfig.indUserDataJson.toString()
+                            val gson = GsonBuilder().create()
+                            userProfileResponse = gson.fromJson(indUserData, UserProfileResponse::class.java)
+
                             UserConfig.shared.indUserDataJson= Gson().toJson(response.body())
+                            Log.d("debug", "assigned api data "+userProfileResponse)
+
+                            profileListener?.onProfileSuccess()
+
                         }
 
 

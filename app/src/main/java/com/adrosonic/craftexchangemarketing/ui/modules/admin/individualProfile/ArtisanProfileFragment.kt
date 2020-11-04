@@ -38,7 +38,12 @@ class ArtisanProfileFragment : Fragment(){
         indUserData = mUserConfig.indUserDataJson.toString()
         val gson = GsonBuilder().create()
         userProfileResponse = gson.fromJson(indUserData, UserProfileResponse::class.java)
-        Log.d("API data ", "onProfileSuccess:" +  userProfileResponse )
+        Log.d("debug", "assigned api data in Profile"+userProfileResponse)
+//        while(userProfileResponse == null)
+//        {
+//
+//        }
+
         mBinding?.artisanEmail?.text = userProfileResponse?.data?.email
         mBinding?.artisanMobileNumber?.text = userProfileResponse?.data?.mobile
         mBinding?.artisanAddress?.text = userProfileResponse?.data?.registeredAddress?.line1 + " "+ userProfileResponse?.data?.registeredAddress?.district + " " + userProfileResponse?.data?.registeredAddress?.state + " " + userProfileResponse?.data?.registeredAddress?.pincode

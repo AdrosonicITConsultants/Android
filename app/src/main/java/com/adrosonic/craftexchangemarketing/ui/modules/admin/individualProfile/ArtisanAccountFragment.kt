@@ -37,6 +37,8 @@ class ArtisanAccountFragment : Fragment(){
         val gson = GsonBuilder().create()
         userProfileResponse = gson.fromJson(indUserData, UserProfileResponse::class.java)
         Log.d("API data ", "onProfileSuccess:" +  userProfileResponse )
+        Log.d("debug", "assigned api data in Account"+userProfileResponse)
+
 //        mBinding?.artisanCluster?.text = userProfileResponse?.data?.cluster
 //        mBinding?.artisanBrandName?.text = userProfileResponse?.data?.companyDetails?.companyName
 ////        var listOfProducts = List

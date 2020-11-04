@@ -47,7 +47,6 @@
                     android:id="@+id/artisanName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Isha Srivastav"
                     android:textColor="@color/colorSplash"
                     android:textSize="24sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -58,7 +57,6 @@
                     android:id="@+id/artisanWeaverId"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="W-EA-123"
                     android:textColor="@color/colorBackground"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -68,7 +66,6 @@
                     android:id="@+id/artisanRating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Rating : 6.7"
                     android:textColor="@color/yellow"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.498"
@@ -147,18 +144,21 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/artisanDetailsTop" />
+                app:layout_constraintTop_toBottomOf="@+id/artisanDetailsTop" >
+
+            </androidx.viewpager.widget.ViewPager>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layoutForMenuArtisan"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:elevation="10dp"
-                android:visibility="visible"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/artisanDetailsTop">
+                app:layout_constraintTop_toTopOf="@+id/artisanDetailsTop"
+                tools:visibility="visible">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/giveRating"
@@ -167,7 +167,7 @@
                     android:background="@color/filter_list_background"
                     android:elevation="45dp"
                     android:padding="10dp"
-                    android:visibility="visible"
+                    android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -242,7 +242,7 @@
                     android:layout_marginEnd="60dp"
                     android:background="@color/colorBackground"
                     android:elevation="30dp"
-                    android:visibility="visible"
+                    android:visibility="invisible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
@@ -306,6 +306,29 @@
                             app:layout_constraintTop_toTopOf="@+id/editRatingText"
                             app:srcCompat="@drawable/ic_edit" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--                    <FrameLayout-->
+<!--                        android:id="@+id/progress_layout"-->
+<!--                        android:layout_width="194dp"-->
+<!--                        android:layout_height="296dp"-->
+<!--                        android:contextClickable="false"-->
+<!--                        android:elevation="10dp"-->
+<!--                        android:visibility="@{sendOtpLoader ? View.VISIBLE : View.GONE}"-->
+<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        app:layout_constraintHorizontal_bias="0.497"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                        app:layout_constraintTop_toTopOf="parent"-->
+<!--                        app:layout_constraintVertical_bias="0.473">-->
+
+<!--                        <ProgressBar-->
+<!--                            android:id="@+id/progressBar"-->
+<!--                            style="?android:attr/progressBarStyle"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:elevation="10dp" />-->
+<!--                    </FrameLayout>-->
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
