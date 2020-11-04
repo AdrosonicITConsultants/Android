@@ -73,6 +73,9 @@ open class Orders:RealmObject() {
     var isMoqSend: Long?  = 0
     var isPiSend: Long?  = 0
     var isMoqRejected: Long?  = 0
+    var isPartialRefundReceived: Long?  = 0
+    var isRefundReceived: Long?  = 0
+    var isProductReturned: Long?  = 0
     var changeRequestOn: Long?  = 0
     var isBlue: Long?  = 0
     var userId: Long?= 0

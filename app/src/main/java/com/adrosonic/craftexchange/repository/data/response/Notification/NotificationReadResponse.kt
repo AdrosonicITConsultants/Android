@@ -6,6 +6,7 @@ data class NotificationReadResponse (
     val errorMessage: String? = null,
     val errorCode: Long
 )
+//{"data":"saved","valid":true,"errorMessage":null,"errorCode":0}
 //{"data":"Enquiry closed","valid":true,"errorMessage":null,"errorCode":0}
 //{"data":"Status Updated!","valid":true,"errorMessage":null,"errorCode":0}
 //{

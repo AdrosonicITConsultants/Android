@@ -54,4 +54,10 @@ interface OrderDao {
     fun markEnquiryCompleted(@Header("Authorization") token:String,
                              @Path("enquiryId") enquiryId : Long
     ) : Call<NotificationReadResponse>
+
+    @Headers("Accept: application/json")
+    @POST("/order/initializePartialRefund")
+    fun initializePartialRefund(@Header("Authorization") token:String,
+                             @Query("orderId") orderId : Long
+    ) : Call<NotificationReadResponse>
 }

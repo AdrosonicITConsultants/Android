@@ -520,6 +520,7 @@ class UserPredicates{
                     realm?.where(EnquiryProductDetails::class.java).findAll().deleteAllFromRealm()
                     realm?.where(Transactions::class.java).findAll().deleteAllFromRealm()
                     realm?.where(Orders::class.java).findAll().deleteAllFromRealm()
+                    realm?.where(ChatUser::class.java).findAll().deleteAllFromRealm()
                     realm?.where(QcDetails::class.java).findAll().deleteAllFromRealm()
                     realm?.where(ChangeRequests::class.java).findAll().deleteAllFromRealm()
                     realm?.where(TaxInvDetails::class.java).findAll().deleteAllFromRealm()

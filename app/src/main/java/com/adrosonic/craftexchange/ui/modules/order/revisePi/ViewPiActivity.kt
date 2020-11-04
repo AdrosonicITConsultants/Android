@@ -29,6 +29,7 @@ import com.adrosonic.craftexchange.databinding.ActivityViewPiBinding
 import com.adrosonic.craftexchange.enums.AvailableStatus
 import com.adrosonic.craftexchange.enums.getId
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
+import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
@@ -67,7 +68,7 @@ EnquiryViewModel.piInterface{
                 if(enquiryDetails==null)mEnqVM?.getSingleOngoingEnquiry(enquiryId)
                 orderDetails= OrdersPredicates.getSingleOnGoOrderDetails(it,0)
                 mEnqVM?.getOldPiData(it)
-                mEnqVM?.previewPi(enquiryId)
+                mEnqVM?.previewPi(enquiryId,"false")
             }
         }
 
@@ -77,12 +78,12 @@ EnquiryViewModel.piInterface{
         mBinding?.txtDownload?.setOnClickListener {
             val cacheFile = File(applicationContext.cacheDir, ConstantsDirectory.PI_PDF_PATH + "Pi${enquiryId}.pdf")
             if (cacheFile.exists()){
-             Utility.openFile(this,enquiryId)
+             Utility.openFile(this,enquiryId,"")
             }
             else {
                 if (Utility.checkIfInternetConnected(applicationContext)) {
                     viewLoader()
-                    mEnqVM?.downloadPi(enquiryId)
+                    mEnqVM?.downloadPi(enquiryId,"false")
                 } else Utility.displayMessage(
                     getString(R.string.no_internet_connection),
                     applicationContext
@@ -94,8 +95,8 @@ EnquiryViewModel.piInterface{
          enquiryId?.let {startActivityForResult(this.revisePiContext(it),ConstantsDirectory.RESULT_PI)}
         }
         mBinding?.viewOldPi?.setOnClickListener {
-            //todo raisePi can be called here
-            Utility.displayMessage("Coming soon",this)
+            startActivity(this.viewOldPiContext(enquiryId))
+
         }
         setViews()
     }
@@ -155,7 +156,7 @@ EnquiryViewModel.piInterface{
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("Enquiry Details", "onSuccess")
                 hideLoader()
-                Utility.openFile(this,enquiryId)
+                Utility.openFile(this,enquiryId,"")
             })
         } catch (e: Exception) {
             Log.e("Enquiry Details", "Exception onFailure " + e.message)
@@ -199,14 +200,6 @@ EnquiryViewModel.piInterface{
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-//        Log.e("revisePi","onResume :${enquiryId}")
-//        mEnqVM?.previewPi(enquiryId)
-//        mOrderVm?.getSingleOngoingOrder(enquiryId)
-//        orderDetails= OrdersPredicates.getSingleOnGoOrderDetails(enquiryId,0)
-//        setViews()
-    }
     fun isRevised():Boolean{
         Log.e("PiPostCr","isRevisedPi isPiSend: ${orderDetails?.isPiSend}")
         try {
@@ -222,6 +215,7 @@ EnquiryViewModel.piInterface{
     //                    } else return false
                     } else return false
                 } else return false
+
                 } else return false
             }else return false
         } catch (e: Exception) {
@@ -255,7 +249,7 @@ EnquiryViewModel.piInterface{
         if (requestCode == ConstantsDirectory.RESULT_PI) { // Please, use a final int instead of hardcoded int value
             if (resultCode == Activity.RESULT_OK) {
                 viewLoader()
-                mEnqVM?.previewPi(enquiryId)
+                mEnqVM?.previewPi(enquiryId, "false")
                 mOrderVm?.getSingleOngoingOrder(enquiryId)
             }
         }

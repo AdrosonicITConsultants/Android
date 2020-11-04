@@ -441,6 +441,7 @@
                             android:inputType="none" />
 
                         <ImageView
+                            android:id="@+id/img_date"
                             android:layout_width="0dp"
                             android:layout_height="24dp"
                             android:layout_gravity="center_vertical|end"

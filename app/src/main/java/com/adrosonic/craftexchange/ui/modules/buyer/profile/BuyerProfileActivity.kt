@@ -86,6 +86,7 @@ class BuyerProfileActivity : AppCompatActivity(),
         mBinding?.btnEditProfile?.setOnClickListener {
             startActivity(buyerEditProfileIntent())
         }
+
     }
 
     override fun onBackPressed() {

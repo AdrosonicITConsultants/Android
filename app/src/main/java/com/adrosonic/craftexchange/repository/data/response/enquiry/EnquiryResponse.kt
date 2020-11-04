@@ -1,5 +1,7 @@
 package com.adrosonic.craftexchange.repository.data.response.enquiry
 
+import com.google.gson.annotations.SerializedName
+
 
 data class EnquiryResponse (
     val data: List<EnquiryData>,
@@ -102,5 +104,7 @@ data class ProductCategory (
     val userId: Long?=0,
     val productCategoryId: Long?=0
 )
+
+
 
 

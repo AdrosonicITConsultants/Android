@@ -16,7 +16,9 @@ import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.repository.data.response.Notification.NotificationReadResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.generateEnquiry.GenerateEnquiryResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.IfExistEnquiryResponse
+import com.adrosonic.craftexchange.repository.data.response.enquiry.DetailsData
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryResponse
+import com.adrosonic.craftexchange.repository.data.response.enquiry.PayEnqInvResponse
 import com.adrosonic.craftexchange.repository.data.response.marketing.ArtisanDetailsResponse
 import com.adrosonic.craftexchange.repository.data.response.moq.GetMoqsResponse
 import com.adrosonic.craftexchange.repository.data.response.moq.SendMoqResponse
@@ -84,6 +86,12 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
         fun onRevisePiFailure()
         fun onRevisePiSuccess()
     }
+
+    interface PayEnqInvInterface{
+        fun onFetchDetailsFailure()
+        fun onFetchDetailsSuccess(details :DetailsData)
+    }
+
     val ongoingEnqList : MutableLiveData<RealmResults<OngoingEnquiries>> by lazy { MutableLiveData<RealmResults<OngoingEnquiries>>() }
     val onGoEnqDetails : MutableLiveData<OngoingEnquiries> by lazy { MutableLiveData<OngoingEnquiries>() }
 
@@ -100,6 +108,7 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
     var singlePiListener : singlePiInterface ?= null
     var changeEnqListener : changeEnquiryInterface ?= null
     var revisePiInterface : RevisePiInterface ?= null
+    var payDetailsListener : PayEnqInvInterface ?= null
 
     fun getOnEnqListMutableData(): MutableLiveData<RealmResults<OngoingEnquiries>> {
         ongoingEnqList.value=loadOnEnqList()
@@ -550,12 +559,12 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
             })
     }
 
-    fun downloadPi(enquiryId:Long){
+    fun downloadPi(enquiryId:Long,isOld:String){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         Log.e(TAG,"downloadPi :${enquiryId}")
         CraftExchangeRepository
             .getPiService()
-            .getPreviewPiPDF(token,enquiryId.toInt()).enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
+            .getPreviewPiPDF(token,enquiryId.toInt(),isOld).enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     Log.e(TAG,"downloadPi :${t.message}")
                     t.printStackTrace()
@@ -571,6 +580,7 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
                             Utility.writeResponseBodyToDisk(
                                 it,
                                 enquiryId.toString(),
+                                if(isOld.equals("true")) "Old"  else "",
                                 getApplication()
                             )
                             Timer().schedule(object : TimerTask() {
@@ -585,12 +595,12 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
             })
     }
 
-    fun previewPi(enquiryId:Long){
+    fun previewPi(enquiryId:Long,isOld:String){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         Log.e(TAG,"previewPi :${enquiryId}")
         CraftExchangeRepository
             .getPiService()
-            .getPreviewPiHTML(token,enquiryId.toInt()).enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
+            .getPreviewPiHTML(token,enquiryId.toInt(),isOld).enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     Log.e(TAG,"previewPi :${t.message}")
                     t.printStackTrace()
@@ -727,11 +737,40 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
                 ) {
                     Log.e(TAG,"onResponse getOldPiData :${response.code()}")
                     piLisener?.onPiHTMLFailure()
-                  if(response.code()==200) OrdersPredicates.updatIsPiSend(enquiryId,1L)
-                   else  OrdersPredicates.updatIsPiSend(enquiryId,0L)
+                  if(response.code()==200) {
+                      OrdersPredicates.updatIsPiSend(enquiryId,1L)
+                      EnquiryPredicates.updatePiStatus(enquiryId,1L)
+                  }
+                   else {
+                      OrdersPredicates.updatIsPiSend(enquiryId,0L)
+                      EnquiryPredicates.updatePiStatus(enquiryId,0L)
+                  }
                 }
             })
     }
+
+    fun fetchPayEnqInvDetails(enquiryId:Long){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getEnquiryService()
+            .getPayEnqInvDetails(token,enquiryId).enqueue(object : Callback, retrofit2.Callback<PayEnqInvResponse> {
+                override fun onFailure(call: Call<PayEnqInvResponse>, t: Throwable) {
+                    t.printStackTrace()
+                    payDetailsListener?.onFetchDetailsFailure()
+                }
+                override fun onResponse(
+                    call: Call<PayEnqInvResponse>,
+                    response: Response<PayEnqInvResponse>
+                ) {
+                    if(response.body()?.valid == true){
+                        payDetailsListener?.onFetchDetailsSuccess(response?.body()?.data!!)
+                    }else{
+                        payDetailsListener?.onFetchDetailsFailure()
+                    }
+                }
+            })
+    }
+
 }
 
 

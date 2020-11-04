@@ -18,6 +18,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".ui.modules.order.revisePi.ViewOldPiActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".ui.modules.order.confirmDelivery.ConfirmDeliveryActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".ui.modules.order.taxInv.TaxInvoiceActivity"></activity>
@@ -141,6 +144,15 @@
         <activity
             android:name=".ui.modules.artisan.productTemplate.ArtisanAddProductTemplateActivity"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.modules.chat.ChatLogDetailsActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.modules.artisan.landing.PDFViewerActivity"
+            android:screenOrientation="portrait" />
+
 
         <provider
             android:name="androidx.core.content.FileProvider"
