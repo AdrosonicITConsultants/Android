@@ -95,4 +95,13 @@ object CraftExchangeRepository {
     }
 
 
+    fun getCrService(): ChangeRequestDao {
+        return builder(ChangeRequestDao::class.java)
+    }
+    fun getQCService(): QCDao {
+        return builder(QCDao::class.java)
+    }
+    fun getTiService(): TIDao {
+        return builder(TIDao::class.java)
+    }
 }

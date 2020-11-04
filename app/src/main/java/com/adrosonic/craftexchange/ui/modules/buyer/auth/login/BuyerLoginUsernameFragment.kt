@@ -18,6 +18,7 @@ import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.FragmentBuyerLoginUsernameBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.loginResponse.LoginValidationResponse
+import com.adrosonic.craftexchange.ui.modules.artisan.landing.PDFViewerActivity
 import com.adrosonic.craftexchange.ui.modules.authentication.register.RegisterActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
@@ -141,6 +142,19 @@ class BuyerLoginUsernameFragment : Fragment() {
             } else {
                 Utility.displayMessage(requireActivity().getString(R.string.enter_email_mobile),requireContext())
             }
+        }
+
+        mBinding?.privacyPolicy?.setOnClickListener {
+
+            val intent = Intent(context, PDFViewerActivity::class.java)
+            intent.putExtra("ViewType", "PRIVACY_POLICY_PDF")
+            startActivity(intent)
+        }
+
+        mBinding?.legalDisclaimer?.setOnClickListener {
+            val intent = Intent(context, PDFViewerActivity::class.java)
+            intent.putExtra("ViewType", "LEGAL_DISCLAIMER")
+            startActivity(intent)
         }
     }
 }

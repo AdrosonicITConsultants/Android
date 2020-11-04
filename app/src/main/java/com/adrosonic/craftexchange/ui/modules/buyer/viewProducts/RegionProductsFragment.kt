@@ -18,6 +18,7 @@ import com.adrosonic.craftexchange.database.entities.realmEntities.ClusterList
 import com.adrosonic.craftexchange.databinding.FragmentRegionProductsBinding
 import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.adapter.RegionAdapter
 import com.adrosonic.craftexchange.utils.Utility
+import com.adrosonic.craftexchange.viewModels.CMSViewModel
 import com.adrosonic.craftexchange.viewModels.ClusterViewModel
 import io.realm.RealmResults
 
@@ -34,6 +35,7 @@ ClusterViewModel.ClusterProdInterface{
     private var regionAdapter: RegionAdapter?= null
     private var mCLusterList : RealmResults<ClusterList> ?= null
     val mViewModel: ClusterViewModel by viewModels()
+    val mCMSViewModel: CMSViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,6 +57,7 @@ ClusterViewModel.ClusterProdInterface{
         if (!Utility.checkIfInternetConnected(requireContext())) {
             Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
         } else {
+            mCMSViewModel.getRegionData()
             mViewModel.getAllClusters()
         }
 

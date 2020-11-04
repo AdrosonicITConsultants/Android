@@ -39,16 +39,12 @@ import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
+import com.adrosonic.craftexchange.viewModels.CMSViewModel
 import com.adrosonic.craftexchange.viewModels.LandingViewModel
 import com.adrosonic.craftexchange.viewModels.ProfileViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.iid.FirebaseInstanceId
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.multi.BaseMultiplePermissionsListener
 import com.pixplicity.easyprefs.library.Prefs
 import kotlinx.android.synthetic.main.activity_artisan_landing.*
 import kotlinx.android.synthetic.main.nav_header_landing.view.*
@@ -82,6 +78,7 @@ class ArtisanLandingActivity : AppCompatActivity(),
 
     private var mBinding : ActivityArtisanLandingBinding ?= null
     val mViewModel:LandingViewModel by viewModels()
+//    val mCMSViewModel : CMSViewModel by viewModels()
     var craftUser : MutableLiveData<CraftUser>?= null
     val mProVM : ProfileViewModel by viewModels()
     var profileImage : String ?= ""
@@ -254,24 +251,8 @@ class ArtisanLandingActivity : AppCompatActivity(),
                 startActivity(dashboardIntent())
             }
             R.id.nav_support -> {
-
-                Dexter.withActivity(this)
-                    .withPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    .withListener(object : BaseMultiplePermissionsListener(){
-                        override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                            super.onPermissionsChecked(report)
-                        }
-
-                        override fun onPermissionRationaleShouldBeShown(
-                            permissions: MutableList<PermissionRequest>?,
-                            token: PermissionToken?
-                        ) {
-                            super.onPermissionRationaleShouldBeShown(permissions, token)
-                        }
-                    })
-
                 val intent = Intent(this@ArtisanLandingActivity, PDFViewerActivity::class.java)
-                intent.putExtra("ViewType", "assets")
+                intent.putExtra("ViewType", "FAQ_PDF")
                 startActivity(intent)
             }
             R.id.nav_logout -> {
@@ -408,12 +389,18 @@ class ArtisanLandingActivity : AppCompatActivity(),
             mViewModel?.getEnquiryStageData()
 //            mViewModel?.getProgressTimeData()
             mViewModel?.getInnerEnquiryStageData()
+            mViewModel?.getQCStageData()
+            mViewModel?.getQCQuestionData()
             mViewModel?.getEnquiryStageAvailableProdsData()
             mViewModel?.getAllNotifications()
             mProVM.getArtisanProfileDetails(this)
             mViewModel?.getTransactionStatus()
+            mViewModel?.getChangeRequestStatuses()
+            mViewModel?.getChatList()
             craftUser = mProVM.getUserMutableData()
             setProfileImage()
+
+//            mCMSViewModel?.getCategoriesData()
 
         }
     }

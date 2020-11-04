@@ -1,11 +1,11 @@
 package com.adrosonic.craftexchange.ui.modules.artisan.landing
 
-import android.Manifest.permission.READ_EXTERNAL_STORAGE
-import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.View
+import android.webkit.WebView
 import androidx.appcompat.app.AppCompatActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityFaqViewerBinding
@@ -29,28 +29,33 @@ class PDFViewerActivity: AppCompatActivity() {
        setContentView(R.layout.activity_faq_viewer)
 
 
-
-//       mBinding?.FAQPDFView?.fromAsset( "FAQ_Dummy.pdf")
-//           ?.password(null)
-//          ?.defaultPage(0)
-//           ?.enableSwipe(true)
-//           ?.swipeHorizontal(false)
-//           ?.enableDoubletap(true)
-//           ?.load()
+       val webview = findViewById<View>(R.id.web_view) as WebView
 
        if(intent!=null){
            val viewType: String? = intent.getStringExtra("ViewType")
-
            if(!TextUtils.isEmpty(viewType) || viewType!=null){
-               if(viewType.equals("assets")){
-                   FAQ_PDF_view.fromAsset( "FAQ_Dummy.pdf")
-                       .password(null)
-                       .defaultPage(0)
-                       .enableSwipe(true)
-                       .swipeHorizontal(false)
-                       .enableDoubletap(true)
-                       .load()
+               if(viewType.equals("Terms_conditions")){
+                   webview.settings.javaScriptEnabled = true
+                   val pdf =
+                       "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/documents/TERMS_and_CONDITIONS.pdf"
+                   webview.loadUrl("https://drive.google.com/viewerng/viewer?embedded=true&url=$pdf")
                }
+
+               if(viewType.equals("PRIVACY_POLICY_PDF")){
+                   webview.settings.javaScriptEnabled = true
+                   val pdf =
+                       "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/documents/PRIVACY%20POLICY.pdf"
+                   webview.loadUrl("https://drive.google.com/viewerng/viewer?embedded=true&url=$pdf")
+
+               }
+
+               if(viewType.equals("LEGAL_DISCLAIMER")){
+                   webview.settings.javaScriptEnabled = true
+                   val pdf =
+                       "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/documents/LEGAL%20DISCLAIMER.pdf"
+                   webview.loadUrl("https://drive.google.com/viewerng/viewer?embedded=true&url=$pdf")
+               }
+
            }
        }
 

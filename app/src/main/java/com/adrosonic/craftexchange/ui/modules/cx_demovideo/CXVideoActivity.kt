@@ -3,11 +3,18 @@ package com.adrosonic.craftexchange.ui.modules.cx_demovideo
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.adrosonic.craftexchange.databinding.ActivityCXVideoBinding
 import com.adrosonic.craftexchange.ui.modules.artisan.landing.artisanLandingIntent
 import com.adrosonic.craftexchange.ui.modules.buyer.landing.buyerLandingIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.adrosonic.craftexchange.utils.UserConfig
+import com.adrosonic.craftexchange.utils.Utility
+import com.adrosonic.craftexchange.viewModels.CMSViewModel
 import com.pixplicity.easyprefs.library.Prefs
 
 
@@ -17,9 +24,13 @@ fun Context.demoVideoIntent(): Intent {
     }
 }
 
-class CXVideoActivity : AppCompatActivity() {
+class CXVideoActivity : AppCompatActivity(),
+CMSViewModel.CMSDataInterface{
 
     private var mBinding : ActivityCXVideoBinding ?= null
+    var url : String ?= ""
+    var profile : String?= ""
+    val mViewModel : CMSViewModel by viewModels()
 //    var videoView = mBinding?.demoVideo
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,7 +39,17 @@ class CXVideoActivity : AppCompatActivity() {
         val view = mBinding?.root
         setContentView(view)
 
-        var profile = Prefs.getLong(ConstantsDirectory.REF_ROLE_ID,0)
+        mViewModel?.cmsListener = this
+
+        val webSettings = mBinding?.videoview?.settings
+        webSettings?.javaScriptEnabled = true
+        webSettings?.builtInZoomControls = true
+
+        if(Utility.checkIfInternetConnected(this)){
+            mViewModel?.getDemoVideo()
+        }
+
+        profile = Prefs.getString(ConstantsDirectory.PROFILE,"")
 
         // initiate a video view
 //        videoView?.setVideoURI(Uri.parse("android.resource://" + packageName + "/" + R.raw.demo_video));
@@ -47,12 +68,12 @@ class CXVideoActivity : AppCompatActivity() {
 
         mBinding?.btnSkipVideo?.setOnClickListener {
             when(profile){
-                1.toLong() ->{
+                ConstantsDirectory.ARTISAN ->{
 //                    videoView?.stopPlayback()
                     startActivity(artisanLandingIntent())
                 }
 
-                2.toLong() -> {
+                ConstantsDirectory.BUYER -> {
 //                    videoView?.stopPlayback()
                     startActivity(buyerLandingIntent())
                 }
@@ -63,5 +84,38 @@ class CXVideoActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         this.finish()
+    }
+
+    override fun onCMSFailure() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("CMS", "OnFailure")
+                Utility.displayMessage("No Video",this)
+            }
+            )
+        } catch (e: Exception) {
+            Log.e("CMS", "Exception onFailure " + e.message)
+        }
+    }
+
+    override fun onCMSSuccess() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("CMS", "onSuccess")
+                when(profile){
+                    ConstantsDirectory.BUYER -> {
+                        url = UserConfig.shared.videoBuyer
+                    }
+
+                    ConstantsDirectory.ARTISAN -> {
+                        url = UserConfig.shared.videoArtisan
+                    }
+                }
+                mBinding?.videoview?.loadUrl(url)
+            }
+            )
+        } catch (e: Exception) {
+            Log.e("CMS", "Exception onFailure " + e.message)
+        }
     }
 }

@@ -239,7 +239,6 @@ class RegionProdListFragment : Fragment(),
     }
 
     override fun onEnquiryGenClick(productId: Long, isCustom: Boolean) {
-
         if (!Utility.checkIfInternetConnected(requireContext())) {
             Utility.displayMessage(getString(R.string.no_internet_connection), requireActivity())
         } else {

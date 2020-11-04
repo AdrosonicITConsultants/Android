@@ -33,7 +33,9 @@ import io.realm.annotations.RealmModule
     EnquiryProductDetails::class,
     Transactions::class,
     ChatUser::class,
-    ChatLogUserData::class
-
+    ChatLogUserData::class,
+    QcDetails::class,
+    ChangeRequests::class,
+    TaxInvDetails::class
 ])
 class CXRealmModule

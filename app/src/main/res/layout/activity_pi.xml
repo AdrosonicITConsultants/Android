@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-
     <RelativeLayout
         android:id="@+id/swipe_enquiry_details"
         android:layout_width="match_parent"
@@ -610,8 +609,29 @@
                                 android:layout_weight="0.25"
                                 android:text="%" />
                         </LinearLayout>
-                    </LinearLayout>
 
+                    </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:layout_marginLeft="4dp"
+                    android:background="@drawable/bd_underline"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <androidx.appcompat.widget.AppCompatCheckBox
+                        android:id="@+id/chb_tnc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Agree to "/>
+                    <TextView
+                        android:id="@+id/txt_tnc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/lato_regular"
+                        android:text="terms and conditions"
+                        android:textColor="@color/clickable_text_color"
+                        android:textSize="@dimen/product_note_text" />
+                </LinearLayout>
                     <Button
                         android:id="@+id/txt_pi_swipe"
                         android:layout_width="match_parent"

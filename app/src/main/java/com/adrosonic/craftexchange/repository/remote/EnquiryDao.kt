@@ -2,10 +2,7 @@ package com.adrosonic.craftexchange.repository.remote
 
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.generateEnquiry.GenerateEnquiryResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.enquiry.IfExistEnquiryResponse
-import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryAvaProdStageData
-import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryStageData
-import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryResponse
-import com.adrosonic.craftexchange.repository.data.response.enquiry.InnerStageData
+import com.adrosonic.craftexchange.repository.data.response.enquiry.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
@@ -75,4 +72,9 @@ interface EnquiryDao {
     fun setCompleteOrderStage(@Header("Authorization") token:String,
                          @Path("stageId") stageId : Long,
                          @Path("enquiryId") enquiryId : Long) : Call<ResponseBody>
+
+    @Headers("Accept: application/json")
+    @GET("enquiry/fetchEnquiryAndPaymentDetails")
+    fun getPayEnqInvDetails(@Header("Authorization") token:String,
+                            @Query("enquiryId") enquiryId : Long) : Call<PayEnqInvResponse>
 }

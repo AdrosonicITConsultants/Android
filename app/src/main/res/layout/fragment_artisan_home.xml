@@ -52,7 +52,6 @@
                     android:layout_marginTop="@dimen/margin_regular"
                     android:layout_marginBottom="@dimen/margin_semimedium"
                     android:background="@drawable/brand_logo_back"
-                    android:src="@mipmap/ic_logo_main_round"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/welcome_text"
                     app:layout_constraintStart_toStartOf="@+id/welcome_text"
@@ -134,12 +133,12 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/product_recycler_list"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="250dp"
                 android:layout_marginStart="@dimen/margin_regular"
+                android:layout_marginEnd="@dimen/margin_regular"
                 android:layout_marginTop="@dimen/margin_regular"
                 android:layout_marginBottom="@dimen/margin_regular"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -148,9 +147,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/divider1"
                 app:layout_constraintVertical_bias="0.25"
                 android:visibility="visible"/>
-
-
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

@@ -14,6 +14,7 @@ import com.adrosonic.craftexchange.repository.data.response.artisan.profile.Prof
 import com.adrosonic.craftexchange.repository.data.response.buyer.login.BuyerResponse
 import io.realm.Realm
 import io.realm.RealmResults
+import io.realm.Sort
 import java.lang.Exception
 
 class NotificationPredicates {
@@ -107,7 +108,12 @@ class NotificationPredicates {
             var notifications: RealmResults<Notifications>? = null
             try {
                 realm?.executeTransaction {
-                    notifications = realm.where(Notifications::class.java).notEqualTo(Notifications.COLUMN_ACTION_MARK_READ,1L).findAll()
+                    notifications = realm.where(Notifications::class.java)
+                        .notEqualTo(Notifications.COLUMN_ACTION_MARK_READ,1L)
+                        .sort(Notifications.COLUMN_CREATED_ON,Sort.DESCENDING)
+                        .findAll()
+//                    notifications = realm.where(Notifications::class.java).notEqualTo(Notifications.COLUMN_ACTION_MARK_READ,1L)
+//                        .sort(Notifications.COLUMN_CREATED_ON, Sort.DESCENDING).findAll()
                 }
             } catch (e: Exception) {
                 Log.e("Notifications", " Exception: ${e}")

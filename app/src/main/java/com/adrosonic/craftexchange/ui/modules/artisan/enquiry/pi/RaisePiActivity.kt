@@ -46,6 +46,7 @@ EnquiryViewModel.piInterface{
     var enquiryDetails: OngoingEnquiries? = null
     private var mBinding: ActivityRaisePiBinding? = null
     var pi=SendPiRequest()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityRaisePiBinding.inflate(layoutInflater)
@@ -56,13 +57,14 @@ EnquiryViewModel.piInterface{
             enquiryId = intent.getLongExtra("enquiryId",0)
             isView=intent.getBooleanExtra("isView",false)
             enquiryDetails=mEnqVM?.loadSingleEnqDetails(enquiryId)
-//            piDetails=PiPredicates.getSinglePi(enquiryId)
             pi=intent.getSerializableExtra("piRequest") as SendPiRequest
             enquiryId?.let{
                 viewLoader()
                 mEnqVM?.previewPi(enquiryId)
             }
         }
+
+        Log.e("PiPostCr","enquiryId: $enquiryId")
         mBinding?.btnBack?.setOnClickListener {
             finish()
         }
@@ -82,17 +84,17 @@ EnquiryViewModel.piInterface{
             }
         }
         mBinding?.btnRaisePi?.setOnClickListener {
-            if (Utility.checkIfInternetConnected(applicationContext)) {
-                viewLoader()
-                mBinding?.btnRaisePi?.setText("Pi request being raise")
-                mBinding?.btnRaisePi?.isEnabled=true
-                mEnqVM?.sendPi(enquiryId,pi)
-            } else {
-                PiPredicates.insertPiForOffline(enquiryId,1,1,pi)
-                Utility.displayMessage("Pi will be send once internet connectivity regained.",applicationContext)
-                setResult(Activity.RESULT_OK)
-                finish()
-            }
+                if (Utility.checkIfInternetConnected(applicationContext)) {
+                    viewLoader()
+                    mBinding?.btnRaisePi?.setText("Pi request being raise")
+                    mBinding?.btnRaisePi?.isEnabled = true
+                    mEnqVM?.sendPi(enquiryId, pi)
+                } else {
+                    PiPredicates.insertPiForOffline(enquiryId, 1, 1, pi)
+                    Utility.displayMessage( "Pi will be send once internet connectivity regained.", applicationContext)
+                    setResult(Activity.RESULT_OK)
+                    finish()
+                }
         }
         setViews()
     }
@@ -113,7 +115,6 @@ EnquiryViewModel.piInterface{
         }else{
             mBinding?.webviewPiPreview?.loadDataWithBaseURL(null, getString(R.string.preview_not_available), "text/html", "utf-8", null)
         }
-
     }
     fun viewLoader(){
         mBinding?.pbLoader?.visibility=View.VISIBLE
@@ -192,6 +193,18 @@ EnquiryViewModel.piInterface{
             })
         } catch (e: Exception) {
             Log.e("Enquiry Details", "Exception onFailure " + e.message)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.e("RaisePiActivity", "onActivityResult RESULT_OK ${Activity.RESULT_OK}")
+        if (requestCode == ConstantsDirectory.RESULT_PI) { // Please, use a final int instead of hardcoded int value
+            if (resultCode == Activity.RESULT_OK) {
+                setResult(Activity.RESULT_OK)
+                finish()
+
+            }
         }
     }
 }

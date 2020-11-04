@@ -356,9 +356,59 @@
     <string name="mark_as_still_in_progress">Mark as still in progress</string>
     <string name="mark_as_completed">Mark as completed and move to next stage</string>
     <string name="you_have_to_update_8hrs">You have to update the status every \n8 hours to avoid escalation</string>
+    <string name="disable_change_request">Disable change request</string>
+    <string name="cr_not_applicable">Change request is not applicable for in stock Products.</string>
+    <string name="cr_pleas_note">Please Note:\nChange request may be accepted or rejected subjective to the feasibility of the change by artisan.If accepted, there may be a change in final amount and hence the pro forma invoice.</string>
+    <string name="cr_note">You can only submit this change request once.Be sure about the change requested before submitting.\n\n</string>
+    <string name="cr_confirm_note">This change request may or may not be accepted. You can raise change request if rejected by first discussing with artisan in advance to avoid any rejection.</string>
+    <string name="cr_disabled">Change request disabled.</string>
+    <string name="cr_pleas_note_artisan">Please Note:\nChange request is only one time facility to buyer for their ongoing order with you.\nDo consider with checking box if able to accept the request.</string>
+    <string name="cr_note_artisan">If you accept this change request, the buyer shall not be able to raise another change request.\n\n</string>
+    <string name="want_to_discuss_more">Want to discuss more?</string>
+    <string name="post_cr">Post change request process</string>
+    <string name="update_qc_form_text"><![CDATA[Please update the\nQuality Check\nform & send to\nproceed before moving\nto next stage]]></string>
+    <string name="fill_in_qc_form">Fill in QC form</string>
+    <string name="send">Send</string>
+    <string name="quality_check_for">Quality check for\t</string>
+    <string name="select_an_option">Select an option</string>
+    <string name="quality_check">Quality Check</string>
+    <string name="no_qc_available">No Quality Check Available.</string>
     <string name="change_request_initiated"> Change request initiated</string>
     <string name="chats">Chats</string>
     <string name="search_chat_by_enquiryId">Search chat by enquiryId</string>
 
+
+    <string name="new_pi_post_cr">Generate new PI post CR</string>
+    <string name="create_and_send_ti"><![CDATA[Create & Send Tax Invoice]]></string>
+    <string name="tax_invoice">Tax invoice</string>
+    <string name="fill_tax_inv_for_order">Fill in Tax invoice for this order</string>
+    <string name="rate_per_unit">Rate per unit(or metre)</string>
+    <string name="prev_total_amt">Previous Total amount\n(as per PI)</string>
+    <string name="adv_pay_rec_as_pi">Advance payment received\n(Previously as per PI)</string>
+    <string name="delivery_charges">Delivery charges\n(Freight charges)</string>
+    <string name="upload_delivery_receipt_non_mandatory">Upload delivery receipt\n(non-mandatory)</string>
+    <string name="final_amt">Final Amount</string>
+    <string name="amt_to_pay">Amount to be paid\n(Final Amount - Advance Payment)</string>
+    <string name="date_dispatch">Date of dispatch</string>
+    <string name="revised_eta">Revised ETA\n(if required)</string>
+    <string name="swipe_generate_ti_preview">Swipe to generate Tax invoice preview</string>
+    <string name="upld_your_delivery_receipt">Upload your delivery receipt</string>
+    <string name="upld_delivery_receipt">Upload delivery receipt</string>
+
+    <string name="del_rec_upload_note">Make sure you send the correct delivery receipt.\nAlso make sure the attached document is clear and readable\nwith the <b>LR</b> number and amount.</string>
+    <string name="upload_del_receipt">Upload receipt</string>
+    <string name="upload_final_payment_receipt">Upload Final Payment Receipt</string>
+    <string name="delivery_challan">Delivery Challan</string>
+    <string name="this_is_a_preview">This is a preview</string>
+    <string name="download_pdf">Download this invoice pdf</string>
+    <string name="quantity">Quantity</string>
+    <string name="currency">Currency</string>
+    <string name="net_amt_to_be_paid">Net amount to be paid</string>
+    <string name="approve_final_payment">Approve Final Payment</string>
+    <string name="qc_disclaimer_text"><![CDATA["Declaration by AE- I, hereby certify from my end that all the processes have been Monitored & Supervised under my guidence and any issue in Quality Certified by me in person or my staff in charge is liable to be discussed with me directly on mail. Once the goods received at your doorsteps, we will not be liable for quality issue if informed after 72 hrs of receipts. "]]></string>
+    <string name="legal_disclaimer">Legal Disclaimer</string>
+
+    <string name="facebook_app_id">3667875393263473</string>
+    <string name="fb_login_protocol_scheme">fb3667875393263473</string>
 
 </resources>

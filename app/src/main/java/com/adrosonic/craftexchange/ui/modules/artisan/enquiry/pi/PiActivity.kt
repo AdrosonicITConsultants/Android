@@ -27,10 +27,12 @@ import com.adrosonic.craftexchange.database.predicates.PiPredicates
 import com.adrosonic.craftexchange.databinding.ActivityPiBinding
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.repository.data.response.moq.Datum
+import com.adrosonic.craftexchange.ui.modules.artisan.landing.PDFViewerActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
+import kotlinx.android.synthetic.main.activity_artisan_add_product_template.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -40,16 +42,14 @@ fun Context.piContext(enquiryId:Long): Intent {
     intent.putExtra("enquiryId", enquiryId)
     return intent
 }
-
 class PiActivity : AppCompatActivity(),
-    EnquiryViewModel.piInterface{
+    EnquiryViewModel.piInterface,
+    EnquiryViewModel.singlePiInterface {
     var enquiryId=0L
     val mEnqVM : EnquiryViewModel by viewModels()
     var moqs: Moqs? = null
     var enquiryDetails: OngoingEnquiries? = null
-//    var moqDeliveryJson=""
     var moqDeliveryTimeList=ArrayList<Datum>()
-//    private var mBinding: FragmentCreatePiBinding? = null
     private var url : String?=""
     var weft : String ?= ""
     var warp : String ?= ""
@@ -66,18 +66,15 @@ class PiActivity : AppCompatActivity(),
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_pi)
         val view = mBinding?.root
         setContentView(view)
+
         mEnqVM?.piLisener=this
         if (intent.extras != null) {
             enquiryId = intent.getLongExtra("enquiryId",0)
             enquiryDetails = mEnqVM?.loadSingleEnqDetails(enquiryId)
             moqs = MoqsPredicates.getSingleMoq(enquiryId)
-//            moqDeliveryJson = UserConfig.shared.moqDeliveryDates
-//            val gson = GsonBuilder().create()
-//            val moqDeliveryTime = gson.fromJson(moqDeliveryJson, MoqDeliveryTimesResponse::class.java)
             Utility.getDeliveryTimeList()?.let {moqDeliveryTimeList.addAll(it)  }
             setDetails()
         }
-        Log.e("RaisePi", "pi enquiryId : ${enquiryId}")
         mBinding?.btnBack?.setOnClickListener {
             finish()
         }
@@ -96,6 +93,13 @@ class PiActivity : AppCompatActivity(),
 
 //            view?.onTouchEvent(motionEvent) ?: true
         }
+        mBinding?.chbTnc?.setOnClickListener {
+            Utility?.displayMessage("Coming soon",this)
+        }
+        mBinding?.txtTnc?.setOnClickListener {
+            Utility?.displayMessage("Coming soon",this)
+        }
+        
         mBinding?.txtPiSwipe?.setOnClickListener {
             val qty = mBinding?.etQty?.text.toString()
             val date = mBinding?.etDeliveryDate?.text.toString()
@@ -129,6 +133,12 @@ class PiActivity : AppCompatActivity(),
                     startActivityForResult(applicationContext.raisePiContext(enquiryId,false,pi),ConstantsDirectory.RESULT_PI)
                 }
             }
+        }
+
+        mBinding?.txtTnc?.setOnClickListener {
+            val intent = Intent(this, PDFViewerActivity::class.java)
+            intent.putExtra("ViewType", "Terms_conditions")
+            startActivity(intent)
         }
     }
 
@@ -214,8 +224,10 @@ class PiActivity : AppCompatActivity(),
             }
         }
         currencyList.clear()
-        currencyList.add("$")
         currencyList.add(" ₹")
+        currencyList.add("$")
+        currencyList.add(" £")
+        currencyList.add(" €")
         val spEstDaysAdapter = ArrayAdapter<String>(applicationContext, android.R.layout.simple_spinner_item,currencyList)
         spEstDaysAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         mBinding?.spCurrency?.adapter = spEstDaysAdapter
@@ -227,16 +239,28 @@ class PiActivity : AppCompatActivity(),
     fun hideLoader(){
         mBinding?.swipeEnquiryDetails?.visibility= View.VISIBLE
     }
+
     override fun onPiFailure() {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 hideLoader()
-                mBinding?.txtPiSwipe?.setText("Swipe to generate PI preview")
-                mBinding?.txtPiSwipe?.isEnabled=true
                 Utility.displayMessage("Unable to raise PI, please try after some time",applicationContext)
+                mBinding?.txtPiSwipe?.setText("Swipe to generate PI preview")
+                mBinding?.txtPiSwipe?.isEnabled = true
             })
         } catch (e: Exception) {
             Log.e("Enquiry Details", "Exception onFailure " + e.message)
+        }
+    }
+
+    override fun getPiSuccess(id: Long) {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("PiPostCr", "getPiSuccess")
+                setDetails()
+            })
+        } catch (e: Exception) {
+            Log.e("PiActivity", "Exception onFailure " + e.message)
         }
     }
 
@@ -271,7 +295,6 @@ class PiActivity : AppCompatActivity(),
             if (resultCode == Activity.RESULT_OK) {
                 setResult(Activity.RESULT_OK)
                 finish()
-
             }
         }
     }

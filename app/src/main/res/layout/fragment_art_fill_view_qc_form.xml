@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/fill_view_qc_form"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorSplash"
+                tools:context=".ui.modules.artisan.qcForm.ArtFillViewQcFormFragment">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/top_part"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:elevation="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/btn_back"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="@dimen/margin_regular"
+                            android:background="?selectableItemBackgroundBorderless"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:src="@drawable/ic_keyboard_backspace_black_24dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/stage_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="4dp"
+                            android:fontFamily="@font/lato_regular"
+                            android:textColor="@color/black_text"
+                            android:textSize="@dimen/product_note_text"
+                            android:textStyle="bold"
+                            android:text="@string/quality_check_for"
+                            app:layout_constraintStart_toEndOf="@+id/btn_back"
+                            app:layout_constraintTop_toTopOf="@+id/btn_back" />
+
+
+                        <TextView
+                            android:id="@+id/order_code"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:fontFamily="@font/lato_regular"
+                            android:textSize="10sp"
+                            app:layout_constraintStart_toStartOf="@+id/stage_name"
+                            app:layout_constraintTop_toBottomOf="@+id/stage_name" />
+
+                        <FrameLayout
+                            android:id="@+id/prod_image_background"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:background="@drawable/ic_back_enq_view_artisan"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/order_code"
+                            app:layout_constraintVertical_bias="0.0">
+
+                            <ImageView
+                                android:id="@+id/product_image"
+                                android:layout_width="70dp"
+                                android:layout_height="70dp"
+                                android:layout_gravity="center"
+                                android:background="@drawable/brand_logo_back"
+                                android:scaleType="fitXY" />
+
+                        </FrameLayout>
+
+                        <TextView
+                            android:id="@+id/product_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:fontFamily="@font/lato_regular"
+                            android:textSize="@dimen/product_availability_text"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/prod_image_background" />
+
+                        <TextView
+                            android:id="@+id/company_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:fontFamily="@font/lato_regular"
+                            android:textColor="@color/swipe_background"
+                            android:textSize="8sp"
+                            android:paddingBottom="8dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/product_name" />
+
+
+                        <ImageView
+                            android:id="@+id/enquiry_status_dot"
+                            android:layout_width="8sp"
+                            android:layout_height="8sp"
+                            android:layout_marginEnd="4dp"
+                            android:src="@drawable/ic_dot"
+                            android:visibility="gone"
+                            app:layout_constraintBottom_toBottomOf="@+id/enquiry_status_text"
+                            app:layout_constraintEnd_toStartOf="@+id/enquiry_status_text"
+                            app:layout_constraintTop_toTopOf="@+id/enquiry_status_text" />
+
+                        <TextView
+                            android:id="@+id/enquiry_status_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:fontFamily="@font/lato_regular"
+                            android:textColor="@color/light_green"
+                            android:textSize="10sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="@+id/company_name"
+                            app:layout_constraintStart_toStartOf="@+id/company_name"
+                            app:layout_constraintTop_toBottomOf="@+id/company_name" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/qc_stage_form_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_regular"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/top_part">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/form_recycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+
+                    <LinearLayout
+                        android:id="@+id/action_qc_btn_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_regular"
+                        android:orientation="horizontal"
+                        android:paddingBottom="@dimen/margin_regular"
+                        android:weightSum="5"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/form_recycler">
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="35dp"
+                            android:layout_weight="1" />
+
+                        <Button
+                            android:id="@+id/btn_save_qc"
+                            android:layout_width="0dp"
+                            android:layout_height="35dp"
+                            android:layout_weight="1.25"
+                            android:background="@drawable/rect_outline_blue"
+                            android:text="@string/save"
+                            android:elevation="8dp"
+                            android:textAllCaps="false"
+                            android:textColor="@color/nav_menu_text" />
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="35dp"
+                            android:layout_weight="0.5" />
+
+                        <Button
+                            android:id="@+id/btn_send_qc"
+                            android:layout_width="0dp"
+                            android:layout_height="35dp"
+                            android:layout_weight="1.25"
+                            android:background="@color/nav_menu_text"
+                            android:text="@string/send"
+                            android:elevation="8dp"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white_text" />
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="35dp"
+                            android:layout_weight="1" />
+
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/view_qc_form_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_regular"
+                    android:layout_marginBottom="@dimen/margin_regular"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:background="@color/landing_toolbar_color"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/qc_stage_form_layout"
+                    app:layout_constraintVertical_bias="0.0">
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+</layout>
+
+
+

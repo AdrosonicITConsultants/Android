@@ -58,10 +58,72 @@
                             android:clickable="true"
                             android:elevation="10dp"
                             android:focusable="true"
+                            android:visibility="gone"
                             android:src="@drawable/ic_chat_enquiry"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
+                        <ImageView
+                            android:id="@+id/btn_menu"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_marginTop="@dimen/margin_regular"
+                            android:layout_marginEnd="10dp"
+                            android:background="?selectableItemBackgroundBorderless"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:src="@drawable/ic_enquiry_menu"
+                            android:visibility="visible"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <LinearLayout
+                            android:id="@+id/menu_list"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/colorSplash"
+                            android:elevation="15dp"
+                            android:orientation="vertical"
+                            android:visibility="gone"
+                            app:layout_constraintEnd_toStartOf="@+id/btn_menu"
+                            app:layout_constraintTop_toBottomOf="@+id/btn_menu">
+
+                            <TextView
+                                android:id="@+id/chat"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/custom_ripple"
+                                android:clickable="true"
+                                android:drawableLeft="@drawable/ic_chat_enquiry"
+                                android:focusable="true"
+                                android:fontFamily="@font/lato_regular"
+                                android:gravity="center_vertical"
+                                android:padding="6dp"
+                                android:text="  Chat                 "
+                                android:textColor="@color/popup_txt_color"
+                                android:textSize="12sp" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/lighter_gray" />
+
+                            <Switch
+                                android:id="@+id/toogle_cr"
+                                android:checked="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/lato_regular"
+                                android:gravity="center_vertical|left"
+                                android:theme="@style/SwitchTheme"
+                                android:layoutDirection="rtl"
+                                android:padding="6dp"
+                                android:layout_marginBottom="4dp"
+                                android:text="@string/disable_change_request"
+                                android:textColor="#DD5A61"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
                         <TextView
                             android:id="@+id/order_code"
                             android:layout_width="wrap_content"
@@ -403,169 +465,289 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+                    <LinearLayout
+                        android:id="@+id/next_enq_stage_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:weightSum="10"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/timeline_layout">
+
+                        <TextView
+                            android:id="@+id/text_next_steps"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/lato_regular"
+                            android:text="Next Step - - - - - - - - - - - - ->"
+                            android:paddingEnd="8dp"
+                            android:paddingStart="8dp"
+                            android:textSize="@dimen/product_availability_text"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/next_step_arrow_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/product_availability_text" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/start_enq_stage_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/next_enq_stage_layout">
+
+                        <Button
+                            android:id="@+id/btn_start_enq_stage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:layout_marginTop="@dimen/margin_regular"
+                            android:layout_marginBottom="8dp"
+                            android:background="#0060D0"
+                            android:drawableEnd="@drawable/ic_right_arrow_white"
+                            android:elevation="8dp"
+                            android:fontFamily="@font/lato_regular"
+                            android:padding="8dp"
+                            android:text="@string/start_this_stage"
+                            android:textAlignment="center"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white_text"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/update_status_text1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:textSize="10sp"
+                            android:fontFamily="@font/lato_regular"
+                            android:textColor="@color/darker_gray"
+                            android:text="@string/update_enq_stage_text1"
+                            app:layout_constraintTop_toBottomOf="@id/btn_start_enq_stage"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"/>
+
+                        <TextView
+                            android:id="@+id/update_status_text2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginBottom="4dp"
+                            android:textSize="10sp"
+                            android:fontFamily="@font/lato_regular"
+                            android:textStyle="bold"
+                            android:text="@string/update_enq_stage_text2"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/update_status_text1"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/change_enquiry_status_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/start_enq_stage_layout">
+
+                        <Button
+                            android:id="@+id/btn_mark_inprogress"
+                            android:layout_width="200dp"
+                            android:layout_height="45dp"
+                            android:background="@drawable/rect_outline_blue"
+                            android:elevation="8dp"
+                            android:fontFamily="@font/lato_regular"
+                            android:text="@string/mark_inprogress"
+                            android:textAlignment="center"
+                            android:textAllCaps="false"
+                            android:textColor="@color/nav_menu_text"
+                            android:textSize="16sp"
+                            android:layout_marginTop="@dimen/margin_regular"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"/>
+
+                        <Button
+                            android:id="@+id/btn_mark_move_next_stage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="16dp"
+                            android:background="@color/black_text"
+                            android:drawableEnd="@drawable/ic_right_arrow_white"
+                            android:elevation="8dp"
+                            android:fontFamily="@font/lato_regular"
+                            android:padding="8dp"
+                            android:text="@string/mark_as_completed"
+                            android:textAlignment="center"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white_text"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/update_stage_text1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_regular"
+                            android:textSize="10sp"
+                            android:fontFamily="@font/lato_regular"
+                            android:textColor="@color/darker_gray"
+                            android:text="@string/update_enq_stage_text1"
+                            app:layout_constraintTop_toBottomOf="@id/btn_mark_move_next_stage"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"/>
+
+                        <TextView
+                            android:id="@+id/update_stage_text2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginBottom="4dp"
+                            android:textSize="10sp"
+                            android:fontFamily="@font/lato_regular"
+                            android:textStyle="bold"
+                            android:text="@string/hrs_avoid_escalation"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/update_stage_text1"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"/>
+                    </LinearLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/upload_tax_inv_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:layout_marginTop="@dimen/margin_regular"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/change_enquiry_status_layout">
+
+                        <Button
+                            android:id="@+id/btn_upload_tax_inv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="50dp"
+                            android:layout_marginTop="@dimen/margin_regular"
+                            android:layout_marginBottom="8dp"
+                            android:background="#0060D0"
+                            android:drawableEnd="@drawable/ic_right_arrow_white"
+                            android:elevation="8dp"
+                            android:fontFamily="@font/lato_regular"
+                            android:padding="4dp"
+                            android:text="@string/create_and_send_ti"
+                            android:textAlignment="center"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white_text"
+                            android:textSize="18sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.0" />
+
+                        <TextView
+                            android:id="@+id/note_to_artisan"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_regular"
+                            android:gravity="center"
+                            android:layout_marginBottom="10dp"
+                            android:text="@string/enq_note_to_artisan"
+                            android:textSize="10sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="@+id/btn_upload_tax_inv"
+                            app:layout_constraintStart_toStartOf="@+id/btn_upload_tax_inv"
+                            app:layout_constraintTop_toBottomOf="@+id/btn_upload_tax_inv" />
+
+                        <!--                    <TextView-->
+                        <!--                        android:id="@+id/pi_note_to_artisan"-->
+                        <!--                        android:layout_width="wrap_content"-->
+                        <!--                        android:layout_height="wrap_content"-->
+                        <!--                        android:layout_marginTop="@dimen/margin_regular"-->
+                        <!--                        android:layout_marginBottom="10dp"-->
+                        <!--                        android:gravity="center"-->
+                        <!--                        android:text="@string/pi_note_to_artisan"-->
+                        <!--                        android:textSize="10sp"-->
+                        <!--                        android:textStyle="bold"-->
+                        <!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+                        <!--                        app:layout_constraintEnd_toEndOf="@+id/btn_upload_tax_inv"-->
+                        <!--                        app:layout_constraintStart_toStartOf="@+id/btn_upload_tax_inv"-->
+                        <!--                        app:layout_constraintTop_toBottomOf="@+id/note_to_artisan" />-->
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <Button
+                        android:id="@+id/btn_view_approve_payment"
+                        android:layout_width="250dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="@dimen/margin_regular"
+                        android:background="@color/dark_green"
+                        android:elevation="8dp"
+                        android:fontFamily="@font/lato_regular"
+                        android:padding="4dp"
+                        android:text="@string/view_approve_payment"
+                        android:textAlignment="center"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white_text"
+                        android:textSize="18sp"
+                        android:visibility="gone"
+                        android:layout_marginBottom="@dimen/margin_regular"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/upload_tax_inv_layout"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/upload_delivery_receipt_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:paddingBottom="14dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/btn_view_approve_payment">
+
+                        <Button
+                            android:id="@+id/btn_upload_delivery_receipt"
+                            android:layout_width="250dp"
+                            android:layout_height="45dp"
+                            android:layout_marginTop="@dimen/margin_regular"
+                            android:layout_marginBottom="8dp"
+                            android:background="@color/black_text"
+                            android:drawableEnd="@drawable/ic_right_arrow_white"
+                            android:elevation="8dp"
+                            android:fontFamily="@font/lato_regular"
+                            android:padding="4dp"
+                            android:text="@string/upld_delivery_receipt"
+                            android:textAlignment="center"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white_text"
+                            android:textSize="18sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.0" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <LinearLayout
-                    android:id="@+id/next_enq_stage_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:weightSum="10"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/middle_part">
-
-                    <TextView
-                        android:id="@+id/text_next_steps"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_regular"
-                        android:layout_weight="6"
-                        android:fontFamily="@font/lato_regular"
-                        android:text="Next Step  - - - - - - - - - - - - ->"
-                        android:textSize="@dimen/product_availability_text"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/next_step_arrow_text"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="4"
-                        android:text="Yarn Procurred"
-                        android:textSize="@dimen/product_availability_text" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/start_enq_stage_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
-                    android:visibility="gone"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/next_enq_stage_layout">
-
-                    <Button
-                        android:id="@+id/btn_start_enq_stage"
-                        android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:layout_marginTop="@dimen/margin_regular"
-                        android:layout_marginBottom="8dp"
-                        android:background="#0060D0"
-                        android:drawableEnd="@drawable/ic_right_arrow_white"
-                        android:elevation="8dp"
-                        android:fontFamily="@font/lato_regular"
-                        android:padding="8dp"
-                        android:text="@string/start_this_stage"
-                        android:textAlignment="center"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white_text"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:id="@+id/update_status_text1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:textSize="10sp"
-                        android:fontFamily="@font/lato_regular"
-                        android:textColor="@color/darker_gray"
-                        android:text="@string/update_enq_stage_text1"
-                        app:layout_constraintTop_toBottomOf="@id/btn_start_enq_stage"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"/>
-
-                    <TextView
-                        android:id="@+id/update_status_text2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:layout_marginBottom="4dp"
-                        android:textSize="10sp"
-                        android:fontFamily="@font/lato_regular"
-                        android:textStyle="bold"
-                        android:text="@string/update_enq_stage_text2"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/update_status_text1"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/change_enquiry_status_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
-                    android:visibility="gone"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/start_enq_stage_layout">
-
-                    <Button
-                        android:id="@+id/btn_mark_inprogress"
-                        android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:layout_marginTop="@dimen/margin_regular"
-                        android:layout_marginBottom="8dp"
-                        android:background="@drawable/rect_outline_blue"
-                        android:drawableEnd="@drawable/ic_right_arrow_white"
-                        android:elevation="8dp"
-                        android:fontFamily="@font/lato_regular"
-                        android:padding="8dp"
-                        android:text="@string/mark_as_still_in_progress"
-                        android:textAlignment="center"
-                        android:textAllCaps="false"
-                        android:textColor="@color/swipe_background"
-                        android:textSize="16sp" />
-
-                    <Button
-                        android:id="@+id/btn_mark_move_next_stage"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:background="@color/black_text"
-                        android:drawableEnd="@drawable/ic_right_arrow_white"
-                        android:elevation="8dp"
-                        android:fontFamily="@font/lato_regular"
-                        android:padding="8dp"
-                        android:text="@string/mark_as_completed"
-                        android:textAlignment="center"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white_text"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:id="@+id/update_stage_text1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_regular"
-                        android:textSize="10sp"
-                        android:fontFamily="@font/lato_regular"
-                        android:textColor="@color/darker_gray"
-                        android:text="@string/update_enq_stage_text1"
-                        app:layout_constraintTop_toBottomOf="@id/btn_mark_move_next_stage"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"/>
-
-                    <TextView
-                        android:id="@+id/update_stage_text2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:layout_marginBottom="4dp"
-                        android:textSize="10sp"
-                        android:fontFamily="@font/lato_regular"
-                        android:textStyle="bold"
-                        android:text="@string/hrs_avoid_escalation"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/update_stage_text1"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"/>
-                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/quality_check_layer"
@@ -576,8 +758,7 @@
                     android:weightSum="10"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/change_enquiry_status_layout">
-
+                    app:layout_constraintTop_toBottomOf="@+id/middle_part">
 
                     <TextView
                         android:layout_width="0dp"
@@ -587,7 +768,7 @@
                         android:layout_weight="2"
                         android:fontFamily="@font/lato_regular"
                         android:gravity="center|start"
-                        android:text="Quality Check"
+                        android:text="@string/quality_check"
                         android:textColor="#7F8D54"
                         android:textSize="12sp" />
 
@@ -640,6 +821,7 @@
                         android:textSize="12sp" />
 
                     <TextView
+                        android:id="@+id/txtCrLayerStatus"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -670,6 +852,7 @@
                     android:background="#FFF5ED"
                     android:orientation="horizontal"
                     android:weightSum="10"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/change_request_layer">

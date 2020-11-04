@@ -46,16 +46,12 @@ import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
+import com.adrosonic.craftexchange.viewModels.CMSViewModel
 import com.adrosonic.craftexchange.viewModels.LandingViewModel
 import com.adrosonic.craftexchange.viewModels.ProfileViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.iid.FirebaseInstanceId
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.multi.BaseMultiplePermissionsListener
 import com.pixplicity.easyprefs.library.Prefs
 import kotlinx.android.synthetic.main.activity_buyer_landing.*
 import kotlinx.android.synthetic.main.custom_bell_icon_layout.*
@@ -92,6 +88,7 @@ class BuyerLandingActivity : AppCompatActivity(),
     val mViewModel: LandingViewModel by viewModels()
     var craftUser : CraftUser?= null
     val mProVM : ProfileViewModel by viewModels()
+    val mCMSViewModel : CMSViewModel by viewModels()
     var imageName : String ?= ""
     var url : String ?= ""
     var noti_badge:TextView? = null
@@ -108,12 +105,7 @@ class BuyerLandingActivity : AppCompatActivity(),
             }
         }).execute()
 
-        mViewModel.getProductUploadData()
-        mViewModel.getEnquiryStageData()
-        mViewModel?.getInnerEnquiryStageData()
-        mViewModel.getEnquiryStageAvailableProdsData()
-        mViewModel.getwishlisteProductIds()
-        mViewModel?.getMoqDeliveryTimes()
+
 
         refreshProfile()
         mProVM.listener = this
@@ -280,23 +272,8 @@ class BuyerLandingActivity : AppCompatActivity(),
                 startActivity(dashboardIntent())
             }
             R.id.nav_support -> {
-                Dexter.withActivity(this)
-                    .withPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    .withListener(object : BaseMultiplePermissionsListener(){
-                        override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                            super.onPermissionsChecked(report)
-                        }
-
-                        override fun onPermissionRationaleShouldBeShown(
-                            permissions: MutableList<PermissionRequest>?,
-                            token: PermissionToken?
-                        ) {
-                            super.onPermissionRationaleShouldBeShown(permissions, token)
-                        }
-                    })
-
                 val intent = Intent(this@BuyerLandingActivity, PDFViewerActivity::class.java)
-                intent.putExtra("ViewType", "assets")
+                intent.putExtra("ViewType", "FAQ_PDF")
                 startActivity(intent)
             }
             R.id.nav_logout -> {
@@ -420,6 +397,9 @@ class BuyerLandingActivity : AppCompatActivity(),
         if (!Utility.checkIfInternetConnected(this)) {
             Utility.displayMessage(getString(R.string.no_internet_connection), this)
         } else {
+
+            mViewModel.getwishlisteProductIds()
+            mViewModel?.getMoqDeliveryTimes()
             mViewModel.getProductsOfArtisan(this)
             mViewModel.getProductUploadData()
             mViewModel.getEnquiryStageData()
@@ -430,6 +410,13 @@ class BuyerLandingActivity : AppCompatActivity(),
             mProVM.getBuyerProfileDetails(this)
             mProVM.getUserMutableData()
             mViewModel?.getTransactionStatus()
+            mViewModel?.getChangeRequestStatuses()
+            mViewModel?.getQCQuestionData()
+            mViewModel?.getQCStageData()
+
+
+            mCMSViewModel?.getRegionData()
+            mCMSViewModel?.getCategoriesData()
         }
     }
 

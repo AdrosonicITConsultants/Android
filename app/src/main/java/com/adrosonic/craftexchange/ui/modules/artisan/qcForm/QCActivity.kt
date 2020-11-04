@@ -1,0 +1,53 @@
+package com.adrosonic.craftexchange.ui.modules.artisan.qcForm
+
+import android.content.Context
+import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import com.adrosonic.craftexchange.R
+import com.adrosonic.craftexchange.databinding.ActivityQCBinding
+import com.adrosonic.craftexchange.ui.modules.buyer.BuyerViewQcFormFragment
+import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.pixplicity.easyprefs.library.Prefs
+
+fun Context.qcFormIntent(): Intent {
+    return Intent(this, QCActivity::class.java).apply {}
+}
+
+class QCActivity : AppCompatActivity() {
+
+    private var mBinding: ActivityQCBinding? = null
+
+    var enqID : Long?= 0
+    var status: Long?= 0
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mBinding = ActivityQCBinding.inflate(layoutInflater)
+        val view = mBinding?.root
+        setContentView(view)
+
+        enqID = intent?.getLongExtra(ConstantsDirectory.ENQUIRY_ID,0)
+        status = intent?.getLongExtra(ConstantsDirectory.ORDER_STATUS_FLAG,0)
+
+        when(Prefs.getString(ConstantsDirectory.PROFILE,"")){
+            ConstantsDirectory.ARTISAN -> {
+                if (savedInstanceState == null) {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.qc_container,
+                            ArtFillViewQcFormFragment.newInstance(enqID.toString(),status!!))
+                        .commit()
+                }
+            }
+
+            ConstantsDirectory.BUYER -> {
+                if (savedInstanceState == null) {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.qc_container,
+                            BuyerViewQcFormFragment.newInstance(enqID.toString(),status.toString()))
+                        .commit()
+                }
+            }
+        }
+    }
+}
