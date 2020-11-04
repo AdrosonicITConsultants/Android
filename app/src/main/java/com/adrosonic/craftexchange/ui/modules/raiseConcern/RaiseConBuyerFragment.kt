@@ -162,6 +162,10 @@ class RaiseConBuyerFragment : Fragment(),
         mBinding?.btnRateReview?.setOnClickListener {
             Utility?.displayMessage("Coming Soon",requireContext())
         }
+
+        mBinding?.btnViewGotoChat?.setOnClickListener {
+            Utility?.displayMessage("Coming Soon",requireContext())
+        }
     }
 
     //sets static buyer artisan review data

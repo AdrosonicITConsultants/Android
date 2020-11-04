@@ -453,9 +453,6 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
                  mBinding?.txtCr?.visibility = View.GONE
                  mBinding?.txtCrDate?.text=getString(R.string.cr_not_applicable)
              }
-
-             if(orderDetails?.enquiryStageId==10L)mBinding?.layerConfirmDelivery?.visibility=View.VISIBLE
-             else mBinding?.layerConfirmDelivery?.visibility=View.GONE
          })
         } catch (e: Exception) {
             Log.e("setDetails", "Exception " + e.message)
@@ -468,6 +465,12 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
             mBinding?.finalTransactionLayout?.visibility = View.VISIBLE
         }else{
             mBinding?.finalTransactionLayout?.visibility = View.GONE
+        }
+
+        if(orderDetails?.enquiryStageId==EnquiryStages.ORDER_DISPATCHED.getId() && orderDetails?.isReprocess == 0L){
+            mBinding?.layerConfirmDelivery?.visibility=View.VISIBLE
+        } else {
+            mBinding?.layerConfirmDelivery?.visibility=View.GONE
         }
     }
 
@@ -682,6 +685,13 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
             mBinding?.raiseConcernLayer?.visibility = View.VISIBLE
         }else{
             mBinding?.raiseConcernLayer?.visibility = View.GONE
+        }
+
+        //order recreation text
+        if(orderDetails?.isReprocess == 1L){
+            mBinding?.txtOrderRecreation?.visibility = View.VISIBLE
+        }else{
+            mBinding?.txtOrderRecreation?.visibility = View.GONE
         }
 
     }

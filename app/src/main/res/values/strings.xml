@@ -446,4 +446,5 @@
     <string name="mark_order_dispatched_recreation">Mark Order dispatched after recreation</string>
     <string name="are_you_sure_recreate_order">Are you sure you want to recreate this order?</string>
     <string name="confirm">Confirm</string>
+    <string name="order_being_recreated_refer_chat">Order under Recreation\nKindly refer chats for regular updates and\nin-case of any inconvenience, feel free\nto escalate the issue over chat</string>
 </resources>
