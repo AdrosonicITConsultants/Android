@@ -35,5 +35,6 @@ open class ChatUser: RealmObject(){
         const val COLUMN_ORDER_RECEIVE_DATE = "orderReceiveDate"
         const val COLUMN_IS_INITIATED_CHAT = "isInitiatedChat"
         const val COLUMN_LAST_CHAT_DATE = "lastChatDate"
+        const val COLUMN_BUYER_COMPANY_NAME = "buyerCompanyName"
     }
 }

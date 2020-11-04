@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityEnquiryDetailsBinding
 import com.adrosonic.craftexchange.enums.EnquiryStatus
@@ -33,7 +34,7 @@ class EnquiryDetailsActivity : AppCompatActivity() {
             ConstantsDirectory.ARTISAN -> true
             else-> false
         }
-
+        Log.e("ViewEnquiry","22222222222222: $profile")
         when(enqStatus){
             //Closed
             EnquiryStatus.COMPLETED.getId() -> {
@@ -50,6 +51,7 @@ class EnquiryDetailsActivity : AppCompatActivity() {
                 when(profile){
                     ConstantsDirectory.ARTISAN -> {
                         if (savedInstanceState == null) {
+                            Log.e("ViewEnquiry","333333333")
                             enqID?.let { ArtisanOnGoEnqDetailsFragment.newInstance(it) }?.let {
                                 supportFragmentManager.beginTransaction()
                                     .replace(R.id.enquiry_details_container, it)
@@ -59,6 +61,7 @@ class EnquiryDetailsActivity : AppCompatActivity() {
                     }
                     ConstantsDirectory.BUYER -> {
                         if (savedInstanceState == null) {
+                            Log.e("ViewEnquiry","44444444444")
                             enqID?.let { BuyerOnGoEnqDetailsFragment.newInstance(it) }?.let {
                                 supportFragmentManager.beginTransaction()
                                     .replace(R.id.enquiry_details_container, it)

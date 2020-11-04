@@ -4,63 +4,44 @@ import android.graphics.ColorSpace
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.ChatUser
-import com.adrosonic.craftexchange.database.predicates.ChatUserPredicates
-import com.adrosonic.craftexchange.database.predicates.TransactionPredicates
 import com.adrosonic.craftexchange.databinding.FragmentChatListBinding
-import com.adrosonic.craftexchange.repository.data.response.search.SuggestionResponse
-import com.adrosonic.craftexchange.ui.modules.buyer.search.BuyerSearchResultFragment
-import com.adrosonic.craftexchange.ui.modules.buyer.search.BuyerSuggestionFragment
 import com.adrosonic.craftexchange.ui.modules.chat.adapter.InitiatedChatRecyclerAdapter
-import com.adrosonic.craftexchange.ui.modules.chat.adapter.UninitiatedChatRecyclerAdapter
-import com.adrosonic.craftexchange.ui.modules.search.SuggestionAdapter
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.ChatListViewModel
-import com.adrosonic.craftexchange.viewModels.SearchViewModel
-import com.bumptech.glide.load.model.Model
-import com.wajahatkarim3.easyvalidation.core.view_ktx.textEqualTo
 import io.realm.RealmResults
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 
-class ChatListFragment: Fragment(), ChatListViewModel.ChatListInterface, ChatListViewModel.InitiateChatInterface,UninitiatedChatRecyclerAdapter.initiateChatInterface, InitiatedChatRecyclerAdapter.openChatLogInterface,
-    ChatListViewModel.OpenChatLogInterface, SearchViewModel.FetchBuyerSuggestions {
+class ChatListFragment: Fragment(),
+    ChatListViewModel.ChatListInterface,
+    ChatListViewModel.OpenChatLogInterface,
+    InitiatedChatRecyclerAdapter.ChatUpdateInterface {
 
     private var param1: String? = null
     private var param2: String? = null
 
     val mChatVM : ChatListViewModel by viewModels()
-
     var mInitiatedChatListAdapter : InitiatedChatRecyclerAdapter?= null
-    var mUninitiatedChatListAdapter : UninitiatedChatRecyclerAdapter? = null
-
     var mChatList : RealmResults<ChatUser>?= null
-    var mFilteredList : RealmResults<ChatUser>?= null
-    var mSearchedList : RealmResults<ChatUser>?= null
-
     var mBinding : FragmentChatListBinding?= null
-
-    var filterList : Array<String> ?= null
     var productID : Long ?= 0L
-
-    val mViewModel : SearchViewModel by viewModels()
-    var adapter : SuggestionAdapter?= null
-
+    var initiatedChat : Long = 1L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,11 +63,11 @@ class ChatListFragment: Fragment(), ChatListViewModel.ChatListInterface, ChatLis
      override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
          mChatVM?.chatListner = this
-         mChatVM?.initiateChatListner = this
+
+//         mChatVM?.initiateChatListner = this
          mChatVM?.openChatLogListner = this
 
-         setInitiatedChatRecyclerList()
-         setUnInitiatedChatRecyclerList()
+         setInitiatedChatRecyclerList(initiatedChat)
 
          if (!Utility.checkIfInternetConnected(requireContext())) {
              Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
@@ -95,94 +76,22 @@ class ChatListFragment: Fragment(), ChatListViewModel.ChatListInterface, ChatLis
              mChatVM.getUninitiatedChatList()
          }
 
-        mChatVM.getInitiatedChatListMutableData()
-            .observe(viewLifecycleOwner, Observer<RealmResults<ChatUser>> {
+        mChatVM.getInitiatedChatListMutableData(initiatedChat,mBinding?.searchChat?.text.toString()).observe(viewLifecycleOwner, Observer<RealmResults<ChatUser>> {
                 mChatList = it
                 mInitiatedChatListAdapter?.updateInitiatedChatList(mChatList)
             })
 
-        mChatVM.getUninitiatedChatListMutableData()
-            .observe(viewLifecycleOwner, Observer<RealmResults<ChatUser>> {
-                mChatList = it
-                mUninitiatedChatListAdapter?.updateUninitiatedChatList(mChatList)
-            })
-
          mBinding?.initiateChat?.setOnClickListener {
-             if(mBinding?.chatInitiatedLayout?.visibility == View.GONE){
-                 mBinding?.chatInitiatedLayout?.visibility = View.VISIBLE
-                 mBinding?.chatUninitiatedLayout?.visibility = View.GONE
-             }
-             else{
-                 mBinding?.chatUninitiatedLayout?.visibility = View.VISIBLE
-                 mBinding?.chatInitiatedLayout?.visibility = View.GONE
-             }
+             if(initiatedChat==1L){
+
+                 initiatedChat=0
+
+             }else initiatedChat=1
+             setInitiatedChatRecyclerList(initiatedChat)
          }
 
-
-
-
-//         mBinding?.searchOngoChat?.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-//             override fun onQueryTextSubmit(query:String):Boolean {
-//                 mSearchedList = ChatUserPredicates.getChatByEnquiryId(query.toLong())
-//                 if( mBinding?.chatInitiatedLayout?.visibility == View.VISIBLE){
-//                     mInitiatedChatListAdapter?.updateInitiatedChatList(mSearchedList)
-//                 }
-//                 else{
-//                     mUninitiatedChatListAdapter?.updateUninitiatedChatList(mSearchedList)
-//                 }
-//
-//                 return false
-//             }
-//             override fun onQueryTextChange(newText:String):Boolean {
-////                mSearchedList = TransactionPredicates.getTransactionByEnquiryId(newText.toLong())
-////                mTranListAdapter?.updateTransactionList(mSearchedList)
-//                 return false
-//             }
-//         })
-
-//         mViewModel.buySugListener = this
-//
-//         var search = activity?.findViewById<SearchView>(R.id.search_ongo_chat)
-//         search?.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-//             override fun onQueryTextSubmit(query:String):Boolean {
-//                 return false
-//             }
-//             override fun onQueryTextChange(newText:String):Boolean {
-//                 if(Utility?.checkIfInternetConnected(requireContext())){
-//                     activity?.supportFragmentManager?.beginTransaction()
-//                         ?.replace(R.id.search_container, ChatListFragment.newInstance())
-//                         ?.addToBackStack(null)
-//                         ?.commit()
-//                 }else{
-//                     Utility?.displayMessage(getString(R.string.no_internet_connection),requireContext())
-//                 }
-//                 return false
-//             }
-//         })
-
-//         var search = activity?.findViewById<SearchView>(R.id.search_ongo_chat)
-//         search?.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-//             override fun onQueryTextSubmit(query:String):Boolean {
-//                 return false
-//             }
-//             override fun onQueryTextChange(newText:String):Boolean {
-//                 if(Utility?.checkIfInternetConnected(requireContext())){
-//                     activity?.supportFragmentManager?.beginTransaction()
-//                         ?.replace(R.id.search_container, BuyerSuggestionFragment.newInstance())
-//                         ?.addToBackStack(null)
-//                         ?.commit()
-//                 }else{
-//                     Utility?.displayMessage(getString(R.string.no_internet_connection),requireContext())
-//                 }
-//                 return false
-//             }
-//         })
-
-
-         setVisiblities()
-
-         mBinding?.swipeOngoingChats?.isRefreshing = true
-         mBinding?.swipeOngoingChats?.setOnRefreshListener {
+         mBinding?.swipeRefreshLayout?.isRefreshing = true
+         mBinding?.swipeRefreshLayout?.setOnRefreshListener {
              if (!Utility.checkIfInternetConnected(requireContext())) {
                  Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
              } else {
@@ -190,63 +99,51 @@ class ChatListFragment: Fragment(), ChatListViewModel.ChatListInterface, ChatLis
                  mChatVM.getUninitiatedChatList()
              }
          }
-
+         mBinding?.searchChat?.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(expr: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+            override fun afterTextChanged(p0: Editable?) {
+                var searchExpression = p0?.toString() ?: ""
+//                if(searchExpression.length>0)  {
+                    mChatVM.getInitiatedChatListMutableData(initiatedChat,searchExpression)
+//                }
+//                else manageSearchAndSync(false)
+            }
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+        })
+//         etSearch.setOnTouchListener(View.OnTouchListener { v, event ->
+//             val drawableRight = 2
+//             if (event.action == MotionEvent.ACTION_UP) {
+//                 if (event.rawX >= etSearch.right - etSearch.compoundDrawables[drawableRight].bounds.width()) {
+//                     etSearch.text.clear()
+////          if(etSearch.text.length>0)  mViewModel.getItemCursorMutableData(currentMenu,currentMenu.associatedIdentifier(mViewModel.exchangeUser),etSearch.text.toString())
+////          else
+//                     manageSearchAndSync(false)
+//                     return@OnTouchListener true
+//                 }
+//             }
+//             false
+//         })
 }
 
 
-    private fun setInitiatedChatRecyclerList(){
+    private fun setInitiatedChatRecyclerList(isInitiated:Long){
 
-
-        mBinding?.initiatedChatListView?.layoutManager = LinearLayoutManager(
-            requireContext(),
-            LinearLayoutManager.VERTICAL, false
-        )
-        mInitiatedChatListAdapter = InitiatedChatRecyclerAdapter(
-            requireContext(),
-            mChatVM.getInitiatedChatListMutableData().value!!
-        )
-
+        mBinding?.initiatedChatListView?.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL, false )
+        mInitiatedChatListAdapter = InitiatedChatRecyclerAdapter(requireContext(),mChatVM.getInitiatedChatListMutableData(isInitiated,mBinding?.searchChat?.text.toString()).value!!,initiatedChat )
         mBinding?.initiatedChatListView?.adapter = mInitiatedChatListAdapter
+        mInitiatedChatListAdapter?.onChatReadListener=this
         //mEnqListAdapter?.enqListener = this  //important to set adapter first and then call listener
-
-
-    }
-
-    private fun setUnInitiatedChatRecyclerList(){
-        mBinding?.uninitiatedChatListView?.layoutManager = LinearLayoutManager(
-            requireContext(),
-            LinearLayoutManager.VERTICAL, false
-        )
-
-        mUninitiatedChatListAdapter = UninitiatedChatRecyclerAdapter(
-            requireContext(),
-            mChatVM.getUninitiatedChatListMutableData().value!!
-        )
-
-        mBinding?.uninitiatedChatListView?.adapter = mUninitiatedChatListAdapter
-
-        mUninitiatedChatListAdapter?.initiateChatListner = this //Fragment on Click communication
-    }
-
-   fun setVisiblities() {
-        if (mChatVM.getInitiatedChatListMutableData().value?.size!! > 0) {
-            mBinding?.initiatedChatListView?.visibility = View.VISIBLE
-           // mBinding?.emptyView?.visibility = View.GONE
-        } else {
-            mBinding?.initiatedChatListView?.visibility = View.GONE
-          //  mBinding?.emptyView?.visibility = View.VISIBLE
-        }
     }
 
     override fun onGetChatListSuccess() {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("OnGoingTChatList", "onSuccess")
-                mBinding?.swipeOngoingChats?.isRefreshing = false
-
-                mInitiatedChatListAdapter?.updateInitiatedChatList(mChatVM.getInitiatedChatListMutableData().value)
-                mUninitiatedChatListAdapter?.updateUninitiatedChatList(mChatVM.getUninitiatedChatListMutableData().value)
-                setVisiblities()
+                mBinding?.swipeRefreshLayout?.isRefreshing = false
+                mInitiatedChatListAdapter?.updateInitiatedChatList(mChatVM.getInitiatedChatListMutableData(initiatedChat,mBinding?.searchChat?.text.toString()).value)
+                setInitiatedChatRecyclerList(initiatedChat)
             })
         } catch (e: Exception) {
             Log.e("OnGoingChatList", "Exception onSuccess " + e.message)
@@ -257,95 +154,18 @@ class ChatListFragment: Fragment(), ChatListViewModel.ChatListInterface, ChatLis
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("OnGoingTChatList", "onSuccess")
-                mBinding?.swipeOngoingChats?.isRefreshing = false
-                mInitiatedChatListAdapter?.updateInitiatedChatList(mChatVM.getInitiatedChatListMutableData().value)
-                mUninitiatedChatListAdapter?.updateUninitiatedChatList(mChatVM.getUninitiatedChatListMutableData().value)
-                setVisiblities()
+                mBinding?.swipeRefreshLayout?.isRefreshing = false
+                mInitiatedChatListAdapter?.updateInitiatedChatList(mChatVM.getInitiatedChatListMutableData(initiatedChat,mBinding?.searchChat?.text.toString()).value)
+                setInitiatedChatRecyclerList(initiatedChat)
             })
         } catch (e: Exception) {
             Log.e("OnGoingChatList", "Exception onSuccess " + e.message)
         }
     }
 
-    override fun onInitiateChat(enquiryId: Long) {
-        if (!Utility.checkIfInternetConnected(requireContext())) {
-            Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
-        } else {
-            mChatVM.initiateChat(enquiryId)
-        }
-
-        if (!Utility.checkIfInternetConnected(requireContext())) {
-            Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
-        } else {
-            mBinding?.chatInitiatedLayout?.visibility = View.VISIBLE
-            mBinding?.chatUninitiatedLayout?.visibility = View.GONE
-
-            mChatVM.getInitiatedChatList()
-            mChatVM.getUninitiatedChatList()
-        }
-
-
-    }
-
-    override fun openChatLog(enquiryId: Long) {
-        if (!Utility.checkIfInternetConnected(requireContext())) {
-            Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
-        } else {
-            mChatVM.openChatLog(enquiryId)
-        }
-
-    }
-
-
-    override fun onInitiateChatSuccess() {
-        try {
-            Handler(Looper.getMainLooper()).post(Runnable {
-                Log.e("OnGoingTChatList", "onSuccess")
-                mBinding?.swipeOngoingChats?.isRefreshing = false
-
-                mInitiatedChatListAdapter?.updateInitiatedChatList(mChatVM.getInitiatedChatListMutableData().value)
-                mUninitiatedChatListAdapter?.updateUninitiatedChatList(mChatVM.getUninitiatedChatListMutableData().value)
-
-                setVisiblities()
-            })
-        } catch (e: Exception) {
-            Log.e("OnGoingInitiateChatList", "Exception onSuccess " + e.message)
-        }
-    }
-
-    override fun onInitiateChatFailure() {
-        try {
-            Handler(Looper.getMainLooper()).post(Runnable {
-                Log.e("OnGoingChatList", "onFailure")
-                mBinding?.swipeOngoingChats?.isRefreshing = false
-                mInitiatedChatListAdapter?.updateInitiatedChatList(mChatVM.getInitiatedChatListMutableData().value)
-                mUninitiatedChatListAdapter?.updateUninitiatedChatList(mChatVM.getUninitiatedChatListMutableData().value)
-                setVisiblities()
-            })
-        } catch (e: Exception) {
-            Log.e("OnGoingInitiateChat", "Exception onFailure " + e.message)
-        }
-    }
-
-    override fun onOpenChatLogSuccess() {
-        TODO("Not yet implemented")
-    }
-
-    override fun onOpenChatLogFailure() {
-        TODO("Not yet implemented")
-    }
-
-    override fun onSuccessSugg(sug: SuggestionResponse) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onFailureSugg() {
-        TODO("Not yet implemented")
-    }
 
     companion object {
         fun newInstance() = ChatListFragment()
-
 //        @JvmStatic
 //        fun newInstance(param1: String,param2: Long) =
 //            ChatListFragment().apply {
@@ -356,7 +176,38 @@ class ChatListFragment: Fragment(), ChatListViewModel.ChatListInterface, ChatLis
 //            }
     }
 
+    override fun onChatRead(enquiryId: Long) {
+        if(Utility.checkIfInternetConnected(requireContext())) {
+            mBinding?.swipeRefreshLayout?.isRefreshing = true
+            mChatVM?.openChatLog(enquiryId)
+        }else Utility.displayMessage(getString(R.string.no_internet_connection),requireContext())
+    }
 
+    override fun onOpenChatLogSuccess() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("OnGoingTChatList", "onSuccess")
+                mBinding?.swipeRefreshLayout?.isRefreshing = false
+                mInitiatedChatListAdapter?.updateInitiatedChatList(mChatVM.getInitiatedChatListMutableData(initiatedChat,mBinding?.searchChat?.text.toString()).value)
+                setInitiatedChatRecyclerList(initiatedChat)
+            })
+        } catch (e: Exception) {
+            Log.e("OnGoingChatList", "Exception onSuccess " + e.message)
+        }
+    }
+
+    override fun onOpenChatLogFailure() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("OnGoingTChatList", "onSuccess")
+                mBinding?.swipeRefreshLayout?.isRefreshing = false
+                Utility.displayMessage("Unable to mark as read, try again later",requireContext())
+            })
+        } catch (e: Exception) {
+            Log.e("OnGoingChatList", "Exception onSuccess " + e.message)
+        }
+
+    }
 
 
 }

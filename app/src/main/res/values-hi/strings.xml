@@ -284,4 +284,7 @@
     <string name="want_to_discuss_more">Want to discuss more?</string>
     <string name="post_cr">Post change request process</string>
     <string name="new_pi_post_cr">Generate new PI post CR</string>
+    <string name="view_details">View Details</string>
+    <string name="go_to_enquiry">\tGo to enquiry</string>
+    <string name="swipe_up_to_close">Click up to close</string>
 </resources>

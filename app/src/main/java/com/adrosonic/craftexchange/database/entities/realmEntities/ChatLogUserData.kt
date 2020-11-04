@@ -7,6 +7,7 @@ open class ChatLogUserData : RealmObject(){
 
     @PrimaryKey
     var _id : Long?=0
+    var id: Long?=0
     var enquiryId : Long? = 0
     var messageFrom : Int? = 0
     var messageTo : Int? = 0
@@ -22,6 +23,8 @@ open class ChatLogUserData : RealmObject(){
 
     companion object{
         const val COLUMN_ENQUIRY_ID = "enquiryId"
+        const val COLUMN__ID = "_id"
+        const val COLUMN_ID = "id"
         const val COLUMN_DATE = "date"
     }
 

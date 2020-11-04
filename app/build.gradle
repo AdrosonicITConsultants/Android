@@ -74,8 +74,6 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
-    implementation 'com.github.bassaer:chatmessageview:2.0.1'
-
     //gson
     implementation 'com.google.code.gson:gson:2.8.6'
 
@@ -132,6 +130,8 @@ dependencies {
 
    // Chat Library
     implementation 'com.github.bassaer:chatmessageview:2.0.1'
+//    implementation 'com.github.bassaer:chatmessageview:1.8.8'
+
 
     //Pdf Library
     implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'

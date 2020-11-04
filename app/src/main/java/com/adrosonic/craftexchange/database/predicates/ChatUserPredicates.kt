@@ -36,10 +36,7 @@ class ChatUserPredicates {
                         while (chatItr.hasNext()) {
                             var chat = chatItr.next()
                             var chatObj = realm.where(ChatUser::class.java)
-                                .equalTo(
-                                    ChatUser.COLUMN_ENQUIRY_NO,
-                                    chat?.enquiryNumber
-                                )
+                                .equalTo( ChatUser.COLUMN_ENQUIRY_NO, chat?.enquiryNumber)
                                 .limit(1)
                                 .findFirst()
 
@@ -50,10 +47,7 @@ class ChatUserPredicates {
                                 } else {
                                     nextID = primId.toLong() + 1
                                 }
-                                var exTra = it.createObject(
-                                    ChatUser::class.java,
-                                    nextID
-                                )
+                                var exTra = it.createObject( ChatUser::class.java, nextID)
                                 exTra?.enquiryNumber = chat?.enquiryNumber
                                 exTra?.enquiryId = chat?.enquiryId
                                 exTra?.productTypeId = chat?.productTypeId
@@ -117,102 +111,112 @@ class ChatUserPredicates {
 
         fun insertOpenChatLog(chatDetails: ChatLogListData?,isInitiatedChat: Long?) {
             val realm = CXRealmManager.getRealmInstance()
-            // var chatItr = chatDetails.data?.iterator()
-
             var chatList = chatDetails?.data
-            //var chatList2 = chatDetails?.data?.listIterator()
-            var chatItr = chatList?.iterator()
-
             realm.executeTransaction {
                 try{
+                    var chatItr = chatList?.iterator()
                     if (chatItr != null) {
                         while (chatItr.hasNext()) {
-                            var chatItr2 = chatItr.next().chatBoxList.iterator()
+                            Log.e("InsertChat","eeeeeeeeeeeeeee")
+                            var firstIterator=chatItr.next()
+                            var date=firstIterator?.date?:""
+                            var chatItr2 = firstIterator.chatBoxList.iterator()
+                            Log.e("InsertChat","aaaaaaaaaaaaaaaaa")
+//                            var date=chatItr.next().date
+//                            Log.e("InsertChat","000000000000")
                             if(chatItr2!=null){
+                                Log.e("InsertChat","bbbbbbbbbbb")
                                 while(chatItr2.hasNext()){
+                                    Log.e("InsertChat","cccccccccccc")
                                     var chatData = chatItr2.next()
-
-                                    var chatObj = realm.where(ChatLogUserData::class.java)
-                                        .equalTo(
-                                            ChatLogUserData.COLUMN_ENQUIRY_ID,
-                                            chatData?.enquiryId
-                                        )
-                                        .limit(1)
-                                        .findFirst()
-
-                                    if (chatObj == null) {
-                                        var primId = it.where(ChatLogUserData::class.java).max("_id")
+                                    Log.e("InsertChat","ddddddddddddddddd: ${chatData?.id}")
+                                    var chatObj = realm.where(ChatLogUserData::class.java) .equalTo( ChatLogUserData.COLUMN_ID, chatData?.id).limit(1) .findFirst()
+                                    Log.e("InsertChat","111111111111: ${chatObj?.id}")
+                                    if (chatObj?.id != chatData?.id) {
+                                        var primId = it.where(ChatLogUserData::class.java).max(ChatLogUserData.COLUMN__ID)
                                         if (primId == null) {
                                             nextID = 1
                                         } else {
                                             nextID = primId.toLong() + 1
                                         }
-                                        var exTra = it.createObject(
-                                            ChatLogUserData::class.java,
-                                            nextID
-                                        )
+                                        Log.e("InsertChat","2222222 if $nextID")
+                                        var exTra = it.createObject( ChatLogUserData::class.java,  nextID)
+                                        exTra?.id = chatData?.id
                                         exTra?.enquiryId = chatData?.enquiryId
                                         exTra?.createdOn = chatData?.createdOn
+                                        Log.e("InsertChat","3333333333")
                                         exTra?.isDelete = chatData?.isDelete
-
-
                                         exTra?.mediaName = chatData?.mediaName
                                         exTra?.messageFrom = chatData?.messageFrom
                                         exTra?.messageString = chatData?.messageString
-
+                                        Log.e("InsertChat","4444444444444")
                                         exTra?.messageTo = chatData?.messageTo
                                         exTra?.path = chatData?.path
                                         exTra?.seen = chatData?.seen
                                         exTra?.mediaType = chatData?.mediaType
-
-                                        exTra?.date = chatItr?.next().date
-
+                                        exTra?.isInitiatedChat = isInitiatedChat
+                                        Log.e("InsertChat","date: $date")
+                                        exTra?.date = date
 
                                         realm.copyToRealmOrUpdate(exTra)
-                                    } else {
-                                        nextID = chatObj?._id ?: 0
-
+                                    }
+                                    else {
+                                        Log.e("InsertChat","else 111111111111")
                                         chatObj?.enquiryId = chatData?.enquiryId
                                         chatObj?.createdOn = chatData?.createdOn
                                         chatObj?.isDelete = chatData?.isDelete
-
-
+                                        Log.e("InsertChat","else 22222222222")
                                         chatObj?.mediaName = chatData?.mediaName
                                         chatObj?.messageFrom = chatData?.messageFrom
                                         chatObj?.messageString = chatData?.messageString
-
+                                        Log.e("InsertChat","else 33333333333")
                                         chatObj?.messageTo = chatData?.messageTo
                                         chatObj?.path = chatData?.path
                                         chatObj?.seen = chatData?.seen
+                                        Log.e("InsertChat","else 444444444444")
                                         chatObj?.mediaType = chatData?.mediaType
-
-                                        chatObj?.date = chatItr?.next().date
-
+                                        chatObj?.isInitiatedChat = isInitiatedChat
+                                        Log.e("InsertChat","else 55555555555: $date")
+                                        chatObj?.date = date
                                         realm.copyToRealmOrUpdate(chatObj)
                                     }
-
                                 }
                             }
-//
-
-
-
-
                         }
                     }
                 }  catch (e: Exception) {
-                    Log.e("InsertChat", e.printStackTrace().toString())
+                    Log.e("InsertChat", e.stackTrace.toString())
                 }
             }
         }
 
 
-        fun getUninitiatedChatList(): RealmResults<ChatUser>? {
+        fun getInitiatedChatList(isInitiated:Long,searchString:String): RealmResults<ChatUser>? {
             val realm = CXRealmManager.getRealmInstance()
             var chatObj : RealmResults<ChatUser>?= null
             realm?.executeTransaction {
                 try {
-                    chatObj = realm?.where(ChatUser::class.java).equalTo(ChatUser.COLUMN_IS_INITIATED_CHAT,0L).findAll()
+                    if(searchString.isEmpty()) {
+                        chatObj = realm?.where(ChatUser::class.java)
+                            .equalTo(ChatUser.COLUMN_IS_INITIATED_CHAT, isInitiated)
+                            .sort(ChatUser.COLUMN_LAST_CHAT_DATE, Sort.DESCENDING).findAll()
+                    }else{
+                        if (searchString.matches(Regex("[0-9]+")) && searchString.length > 1){
+                            chatObj = realm?.where(ChatUser::class.java)
+                                .equalTo(ChatUser.COLUMN_IS_INITIATED_CHAT, isInitiated)
+                                .sort(ChatUser.COLUMN_LAST_CHAT_DATE, Sort.DESCENDING).findAll()
+                                .where()
+                                .equalTo(ChatUser.COLUMN_ENQUIRY_ID,searchString.toInt())
+                                .or()
+                                .contains(ChatUser.COLUMN_BUYER_COMPANY_NAME,searchString,Case.INSENSITIVE)
+                                .findAll()
+                        }else  chatObj = realm?.where(ChatUser::class.java)
+                            .equalTo(ChatUser.COLUMN_IS_INITIATED_CHAT, isInitiated)
+                            .sort(ChatUser.COLUMN_LAST_CHAT_DATE, Sort.DESCENDING).findAll()
+                            .where()
+                            .contains(ChatUser.COLUMN_BUYER_COMPANY_NAME,searchString,Case.INSENSITIVE)
+                            .findAll()
+                    }
                 }catch (e: Exception){
                     Log.e("Transactions",e.printStackTrace().toString())
                 }
@@ -220,27 +224,13 @@ class ChatUserPredicates {
             return chatObj
         }
 
-        fun getInitiatedChatList(): RealmResults<ChatUser>? {
+
+        fun getChatDetailsByEnquiryId(enquiryId : Long): ChatUser? {
             val realm = CXRealmManager.getRealmInstance()
-            var chatObj : RealmResults<ChatUser>?= null
+            var chatObj : ChatUser ?= null
             realm?.executeTransaction {
                 try {
-                    chatObj = realm?.where(ChatUser::class.java).equalTo(ChatUser.COLUMN_IS_INITIATED_CHAT,1L)
-                        .sort(ChatUser.COLUMN_LAST_CHAT_DATE, Sort.DESCENDING).findAll()
-                }catch (e: Exception){
-                    Log.e("Transactions",e.printStackTrace().toString())
-                }
-            }
-            return chatObj
-        }
-
-
-        fun getChatByEnquiryId(searchString : Long): RealmResults<ChatUser>? {
-            val realm = CXRealmManager.getRealmInstance()
-            var chatObj : RealmResults<ChatUser> ?= null
-            realm?.executeTransaction {
-                try {
-                    chatObj = realm?.where(ChatUser::class.java).equalTo(ChatUser.COLUMN_ENQUIRY_ID,searchString).findAll()
+                    chatObj = realm?.where(ChatUser::class.java).equalTo(ChatUser.COLUMN_ENQUIRY_ID,enquiryId).findFirst()
                 }catch (e:Exception){
                     Log.e("Chats",e.printStackTrace().toString())
                 }
@@ -248,12 +238,11 @@ class ChatUserPredicates {
             return chatObj
         }
 
-        fun getChatDetails(enquiryId:Long?): ChatLogUserData? {
+        fun getChatDetails(enquiryId:Long?): RealmResults<ChatLogUserData>? {
             val realm = CXRealmManager.getRealmInstance()
             return realm.where(ChatLogUserData::class.java)
-                .equalTo("enquiryId", enquiryId)
-                .limit(1)
-                .findFirst()
+                .equalTo(ChatLogUserData.COLUMN_ENQUIRY_ID, enquiryId)
+                .findAll()
         }
 
         fun getChatHeaderDetailsFromId(enquiryId: Long?): ChatUser? {

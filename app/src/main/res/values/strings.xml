@@ -413,4 +413,7 @@
     <string name="mark_as_dispatched">Mark as dispatched</string>
     <string name="eta">ETA</string>
     <string name="dispatch_date">Dispatch Date</string>
+    <string name="view_details">View Details</string>
+    <string name="go_to_enquiry">\tGo to enquiry</string>
+    <string name="swipe_up_to_close">Click up to close</string>
 </resources>

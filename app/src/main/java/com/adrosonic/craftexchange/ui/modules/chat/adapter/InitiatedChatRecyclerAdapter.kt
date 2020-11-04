@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
@@ -18,33 +20,42 @@ import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.ChatListViewModel
+import com.daimajia.swipe.SwipeLayout
 import io.realm.RealmResults
 
-class InitiatedChatRecyclerAdapter(var context: Context?, private var chats: RealmResults<ChatUser>) : RecyclerView.Adapter<InitiatedChatRecyclerAdapter.MyViewHolder>() {
+class InitiatedChatRecyclerAdapter(var context: Context?, private var chats: RealmResults<ChatUser>,var isInitiated:Long) : RecyclerView.Adapter<InitiatedChatRecyclerAdapter.MyViewHolder>() {
 
     inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        var statusIcon: ImageView = view.findViewById(R.id.chat_stage_color)
-        var chatProfileImage: ImageView = view.findViewById(R.id.chat_profile_image)
-        var enquiryNumber: TextView = view.findViewById(R.id.enquiry_id_text)
-        var date: TextView = view.findViewById(R.id.date_text)
-        var brandName: TextView = view.findViewById(R.id.brand_name)
-        var chatText: TextView = view.findViewById(R.id.chat_text)
-      //var newEnqMsgChatListBtn : ImageView = view.findViewById(R.id.initiate_chat)
-        var layout: ConstraintLayout = view.findViewById(R.id.item_chat_list)
-
+        var chat_stage_color: ImageView
+        var chat_contact_pic: ImageView
+        var imgEscalations: ImageView
+        var txt_buyer_name: TextView
+        var txt_enq_code: TextView
+        var txt_date_time: TextView
+        var txt_unread_count: TextView
+        var ll_markasread: LinearLayout
+        var swipe: SwipeLayout
+        init {
+            chat_stage_color = view.findViewById(R.id.chat_stage_color)
+            chat_contact_pic = view.findViewById(R.id.chat_contact_pic)
+            imgEscalations = view.findViewById(R.id.imgEscalations)
+            txt_buyer_name = view.findViewById(R.id.txt_buyer_name)
+            txt_enq_code = view.findViewById(R.id.txt_enq_code)
+            txt_date_time = view.findViewById(R.id.txt_date_time)
+            txt_unread_count = view.findViewById(R.id.txt_unread_count)
+            ll_markasread = view.findViewById(R.id.ll_markasread)
+            swipe = view.findViewById(R.id.swipe)
+        }
     }
-
-
 
     var url : String ?= ""
     var date : String?=""
-    //var chatListener: ChatListViewModel.NewEnqMessageChatListGenListener?=null
 
-    interface openChatLogInterface{
-        fun openChatLog(enquiryId: Long)
+    interface ChatUpdateInterface{
+        fun onChatRead(enquiryId: Long)
     }
 
-    var openChatLogListner : openChatLogInterface? = null
+    var onChatReadListener : ChatUpdateInterface? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView =
@@ -66,30 +77,44 @@ class InitiatedChatRecyclerAdapter(var context: Context?, private var chats: Rea
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
         var chatData = chats?.get(position)
-
-        holder.layout.setOnClickListener {
+        holder.swipe.setOnClickListener {
             val intent = Intent(context?.chatLogDetailsIntent())
             val bundle = Bundle()
-            bundle.putString(ConstantsDirectory.ENQUIRY_ID, chatData?.enquiryId?.toString())
+            bundle.putLong(ConstantsDirectory.ENQUIRY_ID, chatData?.enquiryId?:0)
             intent.putExtras(bundle)
             context?.startActivity(intent)
         }
-
         var image = chatData?.buyerLogo
-       // val imgArrSplit = image?.split((",").toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()
         var first_image = chatData?.buyerLogo.toString()
-
         url = Utility.getBrandLogoUrl(chatData?.buyerId, first_image)
 
-        holder.brandName.text = chatData?.buyerCompanyName
-        holder.date.text = chatData?.lastChatDate?.split("T")?.get(0)
-        holder.enquiryNumber.text = chatData?.enquiryNumber.toString()
-        context?.let { ImageSetter.setImage(it, url!!,holder?.chatProfileImage, R.drawable.artisan_logo_placeholder,  R.drawable.artisan_logo_placeholder,  R.drawable.artisan_logo_placeholder) }
+        holder.txt_buyer_name.text = chatData?.buyerCompanyName
+        holder.txt_date_time.text = if(isInitiated==1L)chatData?.lastChatDate?.split("T")?.get(0) else chatData?.lastUpdatedOn?.split("T")?.get(0)
+        holder.txt_enq_code.text = chatData?.enquiryNumber.toString()
+        context?.let { ImageSetter.setImage(it, url!!,holder?.chat_contact_pic, R.drawable.artisan_logo_placeholder,  R.drawable.artisan_logo_placeholder,  R.drawable.artisan_logo_placeholder) }
 
+        if(chatData?.escalation!!>0) holder.imgEscalations.visibility = View.VISIBLE
+        else holder.imgEscalations.visibility = View.INVISIBLE
 
+        if(isInitiated==1L) {
+            if (chatData?.unreadMessage!! > 0) {
+                holder.txt_unread_count.text = chatData?.unreadMessage.toString()
+                holder.txt_unread_count.visibility = View.VISIBLE
+            }
+            else holder.txt_unread_count.visibility = View.INVISIBLE
+        }
+
+        if(isInitiated==0L) {
+            holder!!.swipe.addDrag(SwipeLayout.DragEdge.Right, null)
+            holder.txt_unread_count.visibility = View.INVISIBLE
+        }
+        holder?.ll_markasread?.setOnClickListener {
+            if(isInitiated==1L) markAsUnread( chatData?.enquiryId?:0)
+        }
+    }
+    fun markAsUnread(enquiryId:Long){
+        notifyDataSetChanged()
+        onChatReadListener?.onChatRead(enquiryId)
     }
 
-//    fun generateNewEnquiryMessageChatList(enquiryId : Long){
-//        chatListener?.generateNewEnquiryMessageChatList(enquiryId)
-//    }
 }
