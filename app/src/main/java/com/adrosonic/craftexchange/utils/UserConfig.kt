@@ -18,6 +18,8 @@ const val PROFILE = "profile"
 const val REF_ROLE_ID = "roleId"
 const val ACC_TOKEN = "accesstoken"
 const val USER_ID = "userid"
+const val RATING_QUESTIONS = "rating_questions"
+const val SHOW_BUYER_RATING = "show_buyer_rating"
 const val IS_LOGGED_IN = "checklogin"
 const val IS_EDITTABLE = "iseditable"
 const val USER_EMAIL = "useremail"
@@ -194,9 +196,23 @@ class UserConfig {
         }
 
     var userId: String? = ""
-        get() = Prefs.getString(USER_ID,"")
+    get() = Prefs.getString(USER_ID,"")
+    set(value) {
+        Prefs.putString(USER_ID, value)
+        field = value
+    }
+
+    var ratingQuestions: String? = ""
+    get() = Prefs.getString(RATING_QUESTIONS,"")
+    set(value) {
+        Prefs.putString(RATING_QUESTIONS, value)
+        field = value
+    }
+
+    var showBuyerRating: String? = ""
+        get() = Prefs.getString(SHOW_BUYER_RATING,"")
         set(value) {
-            Prefs.putString(USER_ID, value)
+            Prefs.putString(SHOW_BUYER_RATING, value)
             field = value
         }
 

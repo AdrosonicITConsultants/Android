@@ -43,6 +43,12 @@
             android:name=".ui.modules.transaction.ViewDocumentActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.modules.rating.ViewBuyerRatingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.modules.rating.SendRatingActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.modules.transaction.TransactionActivity"
             android:screenOrientation="portrait" />
         <activity

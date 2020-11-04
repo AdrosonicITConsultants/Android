@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ShowIndRatingLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/RatingQuestions"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="Artisan Quality of Products"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <hyogeun.github.com.colorratingbarlib.ColorRatingBar
+        android:id="@+id/IndRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:rating="3.5"
+        android:stepSize="0.5"
+        app:changeable="false"
+        app:empty_color="@color/lighter_gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/RatingQuestions"
+        app:progress_color="@color/profile_text_bg" />
+</androidx.constraintlayout.widget.ConstraintLayout>

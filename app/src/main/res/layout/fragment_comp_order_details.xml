@@ -199,16 +199,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_regular"
-                        android:layout_marginTop="@dimen/margin_regular"
+                        android:layout_marginTop="10dp"
                         android:fontFamily="@font/lato_bold"
                         android:text="@string/enquiry_details"
                         android:textColor="@color/black_text"
                         android:textSize="@dimen/product_availability_text"
                         android:textStyle="bold"
+                        android:visibility="visible"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@+id/BuyerRatingShow" />
 
                     <ImageView
                         android:id="@+id/closed_dot"
@@ -220,6 +221,7 @@
                         android:backgroundTint="@color/red_logo"
                         android:elevation="4dp"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.498"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/enquiry_details_text" />
 
@@ -237,8 +239,10 @@
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="@+id/closed_dot"
+                        app:layout_constraintHorizontal_bias="0.495"
                         app:layout_constraintStart_toStartOf="@+id/closed_dot"
-                        app:layout_constraintTop_toBottomOf="@+id/closed_dot" />
+                        app:layout_constraintTop_toBottomOf="@+id/closed_dot"
+                        app:layout_constraintVertical_bias="0.0" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/upload_doc_layout"
@@ -326,9 +330,60 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
+                    <TextView
+                        android:id="@+id/BuyerRatingShow"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@color/profile_text_bg"
+                        android:padding="5dp"
+                        android:text="@string/buyer_provided_rating"
+                        android:textColor="@color/clickable_text_color"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+<<<<<<< HEAD
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/RatingLayout"
+                    android:layout_width="409dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/middle_part">
+
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="30dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_icon_material_rate_review" />
+
+                    <TextView
+                        android:id="@+id/rateText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="30dp"
+                        android:text="@string/reviewRating"
+                        android:textColor="#663399"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+=======
+>>>>>>> 8b4af608fe469248dc708c3f0041f36b6cc96f1c
                 <LinearLayout
                     android:id="@+id/delivery_receipt_layer"
                     android:layout_width="match_parent"
@@ -341,7 +396,7 @@
                     android:weightSum="10"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/middle_part">
+                    app:layout_constraintTop_toBottomOf="@+id/RatingLayout">
 
                     <TextView
                         android:layout_width="0dp"
