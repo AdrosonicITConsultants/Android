@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.Spinner
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -39,7 +40,8 @@ private const val ARG_PARAM2 = "param2"
 
 class RaiseConArtisanFragment : Fragment(),
     OrdersViewModel.GetOrderProgressInterface,
-    FaultyOrdersViewModel.PostReviewInterface{
+    FaultyOrdersViewModel.PostReviewInterface,
+    OrdersViewModel.RecreationDispatchInterface{
 
     private var param1: String? = null
     private var param2: String? = null
@@ -53,6 +55,7 @@ class RaiseConArtisanFragment : Fragment(),
     var status: String? = ""
 
     var mBuyerList = ArrayList<FaultRefData>()
+    var mArtisanViewList = ArrayList<FaultRefData>()
     var mArtisanList = ArrayList<String>()
     var dialog : Dialog ?= null
 
@@ -91,8 +94,9 @@ class RaiseConArtisanFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
         mOrdVM?.getOrderProgressListener = this
         mFOVM?.postReviewListener = this
+        mOrdVM?.recreationDispatchListener = this
+
         setReviewListData()
-        setArtisanReviewList(requireContext(),mArtisanList,mBinding?.listArtisanReview)
 
         if(Utility?.checkIfInternetConnected(requireContext())){
             enqID?.toLong()?.let { mOrdVM?.getOrderProgressDetails(it) }
@@ -100,7 +104,7 @@ class RaiseConArtisanFragment : Fragment(),
             Utility?.displayMessage(getString(R.string.no_internet_connection),requireContext())
             orderProgressDetails = enqID?.toLong()?.let { mOrdVM?.loadOrderProgressDetails(it) }
             if (orderProgressDetails != null){
-                setBuyerReviewList(orderProgressDetails!!)
+                orderProgressDetails?.let { setViews(it) }
             }
         }
 
@@ -110,6 +114,7 @@ class RaiseConArtisanFragment : Fragment(),
         }
 
         dialog = Utility?.loadingDialog(requireContext())
+
         mBinding?.txtGotoChat?.setOnClickListener {
             Utility?.displayMessage("Coming Soon",requireContext())
         }
@@ -134,6 +139,18 @@ class RaiseConArtisanFragment : Fragment(),
                 Utility?.displayMessage(getString(R.string.no_internet_connection),requireContext())
             }
         }
+
+        mBinding?.btnViewResppnse?.setOnClickListener {
+            if(mBinding?.viewFaultDetailsLayout?.visibility == View.GONE){
+                mBinding?.viewFaultDetailsLayout?.visibility = View.VISIBLE
+            }else{
+                mBinding?.viewFaultDetailsLayout?.visibility = View.GONE
+            }
+        }
+
+        mBinding?.btnRateReview?.setOnClickListener {
+            Utility?.displayMessage("Coming Soon",requireContext())
+        }
     }
 
     fun setReviewListData(){
@@ -146,11 +163,13 @@ class RaiseConArtisanFragment : Fragment(),
             }
         }
         mArtisanList?.clear()
+        mArtisanViewList?.clear()
         var itr2 = Utility?.getArtFaultReviewData()?.data?.iterator()
         if (itr2 != null) {
             while (itr2?.hasNext()) {
                 var data2 = itr2?.next()
                 mArtisanList?.add(data2?.comment)
+                mArtisanViewList?.add(data2)
             }
         }
     }
@@ -162,7 +181,6 @@ class RaiseConArtisanFragment : Fragment(),
 
         setProductImage()
         setProductName()
-        setFaultStatus()
     }
 
     fun setArtisanReviewList(context: Context, array: ArrayList<String>, spinner: Spinner?) {
@@ -203,7 +221,6 @@ class RaiseConArtisanFragment : Fragment(),
             var adapter= ArrayAdapter(requireContext(), R.layout.item_view_fault_review,stringList)
             mBinding?.faultyReviewList?.adapter = adapter
         }
-
         mBinding?.note?.text = details?.buyerReviewComment
     }
 
@@ -265,25 +282,134 @@ class RaiseConArtisanFragment : Fragment(),
         }
     }
 
-    fun setFaultStatus() {
-        mBinding?.faultStatusText?.text = "Fault Raised"
-        context?.let {
-            ContextCompat.getColor(
-                it, R.color.light_green
-            )
-        }?.let { mBinding?.faultStatusText?.setTextColor(it) }
+    fun showConfirmDialog() {
+        var cDialog = Dialog(requireContext())
+        cDialog.setContentView(R.layout.dialog_confirm_skip_recreate)
+        cDialog.show()
 
-        context?.let {
-            ContextCompat.getColor(
-                it, R.color.light_green
-            )
-        }?.let { mBinding?.faultStatusDot?.setColorFilter(it) }
+        val confirmRecreate = cDialog.findViewById(R.id.btn_confirm_recreate) as Button
+        val skipRecreate = cDialog.findViewById(R.id.btn_skip_recreate) as Button
+        skipRecreate?.setOnClickListener {
+            cDialog?.cancel()
+        }
+        confirmRecreate.setOnClickListener {
+            cDialog.cancel()
+            if(Utility?.checkIfInternetConnected(requireContext())){
+                dialog?.show()
+                enqID?.toLong()?.let { it1 -> mOrdVM?.recreateOrder(it1) }
+            }else{
+                Utility.displayMessage(getString(R.string.no_internet_connection),requireContext())
+            }
+        }
     }
+
+    fun setFaultStatus(details: OrderProgressDetails) {
+        if(details?.isResolved == 0L){
+            mBinding?.faultStatusText?.text = "Fault Raised"
+            context?.let {
+                ContextCompat.getColor(
+                    it, R.color.red_logo
+                )
+            }?.let { mBinding?.faultStatusText?.setTextColor(it) }
+
+            context?.let {
+                ContextCompat.getColor(
+                    it, R.color.red_logo
+                )
+            }?.let { mBinding?.faultStatusDot?.setColorFilter(it) }
+        }else{
+            mBinding?.faultStatusText?.text = "Concern Resolved"
+            context?.let {
+                ContextCompat.getColor(
+                    it, R.color.light_green
+                )
+            }?.let { mBinding?.faultStatusText?.setTextColor(it) }
+
+            context?.let {
+                ContextCompat.getColor(
+                    it, R.color.light_green
+                )
+            }?.let { mBinding?.faultStatusDot?.setColorFilter(it) }
+        }
+    }
+
+    fun setRemarkData(details: OrderProgressDetails){
+        //set buyer response
+        var revBuyerData = details?.buyerReviewId
+        var stringList = arrayListOf<String>()
+        stringList?.clear()
+        val array = revBuyerData?.split((",").toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()
+        if (array != null) {
+            for(iD in array){
+                mBuyerList?.forEach {
+                    if(iD == it.id.toString() ){
+                        stringList?.add(it.comment)
+                    }
+                }
+            }
+        }
+        if (stringList != null) {
+            var adapter= ArrayAdapter(requireContext(), R.layout.item_view_fault_review,stringList)
+            mBinding?.buyerFaultReviewList?.adapter = adapter
+        }
+        mBinding?.buyerNote?.text = details?.buyerReviewComment
+
+        //set artisan response
+        if(details?.artisanReviewComment!=null){
+            mBinding?.txtRemarks?.visibility = View.VISIBLE
+            mBinding?.artisanCommentBox?.visibility = View.VISIBLE
+            mBinding?.artisanReview?.visibility = View.VISIBLE
+
+            var revArtisanData = details?.artisanReviewId
+            mArtisanViewList?.forEach {
+                if(revArtisanData == it?.id.toString()){
+                    mBinding?.artisanReview?.text = it?.comment
+                }
+            }
+            mBinding?.artisanCommentBox?.text = details?.artisanReviewComment
+        }else{
+            mBinding?.txtRemarks?.visibility = View.GONE
+            mBinding?.artisanCommentBox?.visibility = View.GONE
+            mBinding?.artisanReview?.visibility = View.GONE
+        }
+    }
+
+    fun setActionButtonVisibilities(details: OrderProgressDetails){
+        if(details?.isResolved == 0L){
+            mBinding?.rateReviewLayout?.visibility = View.GONE
+        }else{
+            mBinding?.rateReviewLayout?.visibility = View.VISIBLE
+        }
+    }
+
+
+    fun setViews(details: OrderProgressDetails){
+        setFaultStatus(details)
+        if(details?.isResolved == 0L){
+            if(details?.artisanReviewComment == null){
+                mBinding?.fillArtisanFaultyFormLayout?.visibility = View.VISIBLE
+                mBinding?.viewFaultyFormLayout?.visibility = View.GONE
+                setArtisanReviewList(requireContext(),mArtisanList,mBinding?.listArtisanReview)
+                setBuyerReviewList(orderProgressDetails!!)
+            }else{
+                mBinding?.fillArtisanFaultyFormLayout?.visibility = View.GONE
+                mBinding?.viewFaultyFormLayout?.visibility = View.VISIBLE
+                setRemarkData(details)
+            }
+        }else{
+            mBinding?.fillArtisanFaultyFormLayout?.visibility = View.GONE
+            mBinding?.viewFaultyFormLayout?.visibility = View.VISIBLE
+            setRemarkData(details)
+            setActionButtonVisibilities(details)
+        }
+    }
+
 
     override fun onOPFailure() {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("OPD","onFailure")
+                dialog?.cancel()
             })
         } catch (e: Exception) {
             Log.e("OPD", "Exception onFailure " + e.message)
@@ -294,9 +420,10 @@ class RaiseConArtisanFragment : Fragment(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("OPD","onSuccess")
+                dialog?.cancel()
                 orderProgressDetails = enqID?.toLong()?.let { mOrdVM?.loadOrderProgressDetails(it) }
                 if (orderProgressDetails != null){
-                    setBuyerReviewList(orderProgressDetails!!)
+                    orderProgressDetails?.let { setViews(it) }
                 }
             })
         } catch (e: Exception) {
@@ -307,9 +434,21 @@ class RaiseConArtisanFragment : Fragment(),
     override fun onPostSuccess() {
         try {
             Handler(Looper.getMainLooper()).post {
-                dialog?.cancel()
-                activity?.onBackPressed()
-                Utility?.displayMessage("Success",requireContext())
+
+                if(artisanReviewId == 2){
+                    if(Utility?.checkIfInternetConnected(requireContext())){
+                        enqID?.toLong()?.let { mOrdVM?.getOrderProgressDetails(it) }
+                    }else{
+                        Utility?.displayMessage(getString(R.string.no_internet_connection),requireContext())
+                        dialog?.cancel()
+                        activity?.onBackPressed()
+                    }
+                    showConfirmDialog()
+                }else{
+                    dialog?.cancel()
+                    activity?.onBackPressed()
+                }
+
             }
         } catch (e: Exception) {
             Log.e("FaultReviewPost", "Exception onFailure " + e.message)
@@ -324,6 +463,29 @@ class RaiseConArtisanFragment : Fragment(),
             }
         } catch (e: Exception) {
             Log.e("FaultReviewPost", "Exception onFailure " + e.message)
+        }
+    }
+
+    override fun onRDFailure() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Utility.displayMessage("Failed to update Recreation status",requireContext())
+                dialog?.cancel()
+            })
+        } catch (e: Exception) {
+            Log.e("OrderProgress", "Exception onFailure " + e.message)
+        }
+    }
+
+    override fun onRDSuccess() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                dialog?.cancel()
+                Utility.displayMessage("Order Recreation Success",requireContext())
+                activity?.onBackPressed()
+            })
+        } catch (e: Exception) {
+            Log.e("OrderProgress", "Exception onFailure " + e.message)
         }
     }
 

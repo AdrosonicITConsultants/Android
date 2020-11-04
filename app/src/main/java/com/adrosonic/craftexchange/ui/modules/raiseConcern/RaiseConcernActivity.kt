@@ -31,7 +31,7 @@ class RaiseConcernActivity : AppCompatActivity() {
             isView = intent.getBooleanExtra("isView",false)
         }
 
-        if(isView == false){
+//        if(isView == false){
             when(Prefs.getString(ConstantsDirectory.PROFILE,"")){
                 ConstantsDirectory.ARTISAN -> {
                     if (savedInstanceState == null) {
@@ -50,8 +50,8 @@ class RaiseConcernActivity : AppCompatActivity() {
                     }
                 }
             }
-        }else{
-
-        }
+//        }else{
+//
+//        }
     }
 }

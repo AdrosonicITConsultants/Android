@@ -59,4 +59,16 @@ interface OrderDao {
     fun markEnquiryCompleted(@Header("Authorization") token:String,
                              @Path("enquiryId") enquiryId : Long
     ) : Call<NotificationReadResponse>
+
+    @Headers("Accept: application/json")
+    @POST("order/recreateOrder")
+    fun recreateOrder(@Header("Authorization") token:String,
+                             @Query("orderId") orderId : Long
+    ) : Call<ResponseBody>
+
+    @Headers("Accept: application/json")
+    @POST("order/orderDispatchAfterRecreation")
+    fun orderDispatchAfterRecreation(@Header("Authorization") token:String,
+                      @Query("orderId") orderId : Long
+    ) : Call<ResponseBody>
 }

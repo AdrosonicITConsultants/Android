@@ -435,7 +435,15 @@
     <string name="remarks_by_artisan">Remarks by Artisan Entrepreneur</string>
     <string name="comment_here">Add your comment</string>
     <string name="view_raised_concern">View Raised Concern</string>
-    <string name="problem_reported_pls_bear_for_48hrs">Please bear, it may take upto 48hrs for Admin to\naddress and respond to your raised concern.</string>
+    <string name="problem_reported_pls_bear_for_48hrs">Please bear, it may take upto 48hrs to\naddress and respond to your raised concern.</string>
     <string name="fault_concern_resolved">We\'re glad that your concern is\nresolved on mutual agreement.</string>
     <string name="mark_resolved">Mark Resolved</string>
+    <string name="view_defect_response"><![CDATA[View defect & response]]></string>
+    <string name="rate_review_order"><![CDATA[Rate & review this order]]></string>
+    <string name="great_job">Great job!</string>
+    <string name="order_recreation">Order Recreation</string>
+    <string name="order_dispatch_recreation">"Order under recreation.\nKindly keep updating the buyer\nabout the status of product over chat "</string>
+    <string name="mark_order_dispatched_recreation">Mark Order dispatched after recreation</string>
+    <string name="are_you_sure_recreate_order">Are you sure you want to recreate this order?</string>
+    <string name="confirm">Confirm</string>
 </resources>

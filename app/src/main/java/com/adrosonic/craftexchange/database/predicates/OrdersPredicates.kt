@@ -138,6 +138,10 @@ class OrdersPredicates {
                                     order?.openEnquiriesResponse?.changeRequestOn
                                 exEnq?.isBlue = order?.isBlue ?: 0
                                 exEnq?.isOrderFromCompleted = isCompleted
+                                exEnq?.artisanReviewId = order?.openEnquiriesResponse?.artisanReviewId ?: 0
+                                exEnq?.isReprocess = order?.openEnquiriesResponse?.isReprocess ?: 0
+                                exEnq?.isNewGenerated = order?.openEnquiriesResponse?.isNewGenerated ?: 0
+
                                 realm.copyToRealmOrUpdate(exEnq)
                             } else {
                                 nextID = orderObj?._id ?: 0
@@ -248,6 +252,10 @@ class OrdersPredicates {
                                     order?.openEnquiriesResponse?.changeRequestOn
                                 orderObj?.isBlue = order?.isBlue ?: 0
                                 orderObj?.isOrderFromCompleted = isCompleted
+                                orderObj?.artisanReviewId = order?.openEnquiriesResponse?.artisanReviewId ?: 0
+                                orderObj?.isReprocess = order?.openEnquiriesResponse?.isReprocess ?: 0
+                                orderObj?.isNewGenerated = order?.openEnquiriesResponse?.isNewGenerated ?: 0
+
                                 Log.e(
                                     "OrderDetails",
                                     "enquiryStageId: " + order?.openEnquiriesResponse?.enquiryStageId

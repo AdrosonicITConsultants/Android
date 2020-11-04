@@ -26,9 +26,16 @@ class FaultyOrdersViewModel(application: Application): AndroidViewModel(applicat
         fun onPostSuccess()
     }
 
+    interface ResolveFaultInterface{
+        fun onResolveFailure()
+        fun onResolveSuccess()
+    }
+
     var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
 
     var postReviewListener : PostReviewInterface?= null
+    var resolveFaultListener : ResolveFaultInterface?= null
+
 
     fun postBuyerFaultReview(orderId : String, buyerComment : String, multicheck : String) {
         CraftExchangeRepository
@@ -63,6 +70,25 @@ class FaultyOrdersViewModel(application: Application): AndroidViewModel(applicat
                         postReviewListener?.onPostSuccess()
                     }else{
                         postReviewListener?.onPostFailure()
+                    }
+                }
+            })
+    }
+
+    fun markFaultResolved(orderId : String) {
+        CraftExchangeRepository
+            .getFaultyOrderService()
+            .faultResolved(token,orderId.toLong()).enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    resolveFaultListener?.onResolveFailure()
+                }
+                override fun onResponse(
+                    call: Call<ResponseBody>, response: Response<ResponseBody>
+                ) {
+                    if(response?.isSuccessful){
+                        resolveFaultListener?.onResolveSuccess()
+                    }else{
+                        resolveFaultListener?.onResolveFailure()
                     }
                 }
             })

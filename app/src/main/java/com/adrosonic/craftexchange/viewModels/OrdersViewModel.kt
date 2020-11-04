@@ -30,10 +30,16 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
     companion object {
         const val TAG = "OrdersViewModel"
     }
-interface GetOrderProgressInterface{
-    fun onOPFailure()
-    fun onOPSuccess()
-}
+
+    interface GetOrderProgressInterface{
+        fun onOPFailure()
+        fun onOPSuccess()
+    }
+
+    interface RecreationDispatchInterface{
+        fun onRDFailure()
+        fun onRDSuccess()
+    }
 
     interface FetchOrderInterface{
         fun onFailure()
@@ -77,6 +83,7 @@ interface GetOrderProgressInterface{
 
     val compOrderList : MutableLiveData<RealmResults<Orders>> by lazy { MutableLiveData<RealmResults<Orders>>() }
 
+    var recreationDispatchListener : RecreationDispatchInterface ?= null
     var getOrderProgressListener : GetOrderProgressInterface ?= null
     var fetchEnqListener : FetchOrderInterface ?= null
     var changeStatusListener : changeStatusInterface?= null
@@ -482,6 +489,47 @@ interface GetOrderProgressInterface{
 
             })
     }
+
+    fun recreateOrder(enquiryId : Long){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getOrderService()
+            .recreateOrder(token,enquiryId)
+            .enqueue(object: Callback, retrofit2.Callback<ResponseBody> {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    t.printStackTrace()
+                    recreationDispatchListener?.onRDFailure()
+                }
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: retrofit2.Response<ResponseBody>) {
+                    if(response?.isSuccessful){
+                        recreationDispatchListener?.onRDSuccess()
+                    }
+                }
+            })
+    }
+
+    fun markOrderDispatchedAfterRecreation(enquiryId : Long){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getOrderService()
+            .orderDispatchAfterRecreation(token,enquiryId)
+            .enqueue(object: Callback, retrofit2.Callback<ResponseBody> {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    t.printStackTrace()
+                    recreationDispatchListener?.onRDFailure()
+                }
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: retrofit2.Response<ResponseBody>) {
+                    if(response?.isSuccessful){
+                        recreationDispatchListener?.onRDSuccess()
+                    }
+                }
+            })
+    }
+
 
     fun generateTaxInvoice(invoiceRequest : SendTiRequest){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"

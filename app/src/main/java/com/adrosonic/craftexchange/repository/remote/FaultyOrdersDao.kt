@@ -23,6 +23,11 @@ interface FaultyOrdersDao {
                              @Path("multiCheck")multiCheck:String) : Call<ResponseBody>
 
     @Headers("Accept: application/json")
+    @POST("enquiry/isResolved/{orderId}")
+    fun faultResolved(@Header("Authorization") token: String,
+                               @Path("orderId")orderId:Long): Call<ResponseBody>
+
+    @Headers("Accept: application/json")
     @POST("enquiry/faultyOrderArisan/{orderId}/{artisanReviewComment}/{multiCheck}")
     fun postArtisanFaultReview(@Header("Authorization") token: String,
                              @Path("orderId")orderId:String,

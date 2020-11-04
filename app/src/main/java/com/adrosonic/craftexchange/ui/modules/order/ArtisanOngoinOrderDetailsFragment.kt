@@ -22,13 +22,16 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrosonic.craftexchange.R
+import com.adrosonic.craftexchange.database.entities.realmEntities.OrderProgressDetails
 import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
 import com.adrosonic.craftexchange.database.predicates.OrdersPredicates
 import com.adrosonic.craftexchange.database.predicates.TransactionPredicates
+import com.adrosonic.craftexchange.database.predicates.WishlistPredicates
 import com.adrosonic.craftexchange.databinding.FragmentArtisanOngoingOrderDetailsBinding
 import com.adrosonic.craftexchange.enums.*
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.repository.data.response.moq.Datum
+import com.adrosonic.craftexchange.syncManager.SyncCoordinator
 import com.adrosonic.craftexchange.ui.modules.artisan.deliveryReceipt.uploadDeliveryReceiptIntent
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.piContext
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
@@ -59,7 +62,9 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
     OrdersViewModel.FetchOrderInterface,
     OrdersViewModel.changeStatusInterface,
     OrdersViewModel.ToggleChangeInterface,
-    TransactionViewModel.TransactionInterface{
+    TransactionViewModel.TransactionInterface,
+    OrdersViewModel.GetOrderProgressInterface,
+    OrdersViewModel.RecreationDispatchInterface{
 
     private var param1: String? = null
     private var param2: String? = null
@@ -67,6 +72,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
     private var enqID : Long ?= 0
     private var enqCode : String ?= ""
     private var orderDetails : Orders ?= null
+    private var orderProgressDetails : OrderProgressDetails ?= null
     private var stageList : ArrayList<Pair<Long,String>> ?= null
     private var stageAPList : ArrayList<Triple<Long,Long,String>> ?= null
     private var innerStageList : ArrayList<Pair<Long,String>> ?= null
@@ -119,6 +125,8 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         mOrderVm?.fetchEnqListener = this
         mOrderVm?.changeStatusListener = this
         mOrderVm?.toggleListener = this
+        mOrderVm?.getOrderProgressListener = this
+        mOrderVm?.recreationDispatchListener = this
 //        mTranVM?.transactionListener = this
         mBinding?.swipeEnquiryDetails?.isEnabled = false
         if(Utility.checkIfInternetConnected(requireActivity())){
@@ -126,6 +134,11 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
            reloadContent()
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
+            //to set raise concern layer visibilty (different table created)
+            orderProgressDetails = enqID?.let { mOrderVm?.loadOrderProgressDetails(it) }
+            if(orderProgressDetails!=null){
+                orderProgressDetails?.let { setRaiseConcernLayerVisibilty(it) }
+            }
         }
 
         loadDialog = Utility.loadingDialog(requireActivity())
@@ -139,6 +152,19 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
 
         mBinding?.btnBack?.setOnClickListener {
             activity?.onBackPressed()
+        }
+
+        mBinding?.btnOrderDispatchedRecreation?.setOnClickListener {
+            if(Utility.checkIfInternetConnected(requireActivity())){
+                loadDialog?.show()
+                enqID?.let { it1 -> mOrderVm?.markOrderDispatchedAfterRecreation(it1) }
+            }else{
+                Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
+            }
+        }
+
+        mBinding?.btnOrderRecreation?.setOnClickListener {
+            showConfirmDialog()
         }
 
         //Raise Concern
@@ -319,6 +345,23 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
             }
         }
     }
+
+    fun showConfirmDialog() {
+        var cDialog = Dialog(requireContext())
+        cDialog.setContentView(R.layout.dialog_confirm_recreate)
+        cDialog.show()
+        val confirmRecreate = cDialog.findViewById(R.id.btn_confirm_recreate) as Button
+        confirmRecreate.setOnClickListener {
+            cDialog.cancel()
+            if(Utility?.checkIfInternetConnected(requireContext())){
+                loadDialog?.show()
+                enqID?.let { it1 -> mOrderVm?.recreateOrder(it1) }
+            }else{
+                Utility?.displayMessage(getString(R.string.no_internet_connection),requireContext())
+            }
+        }
+    }
+
 
     fun reloadContent(){
         enqID?.let {
@@ -792,8 +835,24 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
             mBinding?.btnMarkOrderDispatched?.visibility = View.GONE
         }
 
+        //Order Recreation
+        if(orderDetails?.artisanReviewId == 2L && orderDetails?.isReprocess == 0L){
+            mBinding?.btnOrderRecreation?.visibility = View.VISIBLE
+        }else{
+            mBinding?.btnOrderRecreation?.visibility = View.GONE
+        }
+
+        //mark order after recreation
+        if(orderDetails?.isReprocess == 1L){
+            mBinding?.orderDispatchRecreationLayer?.visibility = View.VISIBLE
+        }else{
+            mBinding?.orderDispatchRecreationLayer?.visibility = View.GONE
+        }
+    }
+
+    fun setRaiseConcernLayerVisibilty(details: OrderProgressDetails){
         //Raise Concern
-        if(orderDetails?.enquiryStageId!! >= EnquiryStages.ORDER_DISPATCHED.getId()){
+        if(orderDetails?.enquiryStageId!! >= EnquiryStages.ORDER_DISPATCHED.getId() && details?.isFaulty == 1L){
             mBinding?.raiseConcernLayer?.visibility = View.VISIBLE
         }else{
             mBinding?.raiseConcernLayer?.visibility = View.GONE
@@ -856,6 +915,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("OrderDetails", "onFailure")
+                loadDialog?.cancel()
                 enqID?.let { mOrderVm.getSingleOnOrderData(it,0) }
                 hideLoader()
             })
@@ -970,6 +1030,54 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         }
     }
 
+    override fun onOPFailure() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+
+            })
+        } catch (e: Exception) {
+            Log.e("OrderProgress", "Exception onFailure " + e.message)
+        }
+    }
+
+    override fun onOPSuccess() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+               orderProgressDetails = enqID?.let { mOrderVm?.loadOrderProgressDetails(it) }
+                if(orderProgressDetails!=null){
+                    orderProgressDetails?.let { setRaiseConcernLayerVisibilty(it) }
+                }
+            })
+        } catch (e: Exception) {
+            Log.e("OrderProgress", "Exception onFailure " + e.message)
+        }
+    }
+
+    override fun onRDFailure() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Utility.displayMessage("Failed to update Recreation status",requireContext())
+                loadDialog?.cancel()
+            })
+        } catch (e: Exception) {
+            Log.e("OrderProgress", "Exception onFailure " + e.message)
+        }
+    }
+
+    override fun onRDSuccess() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                if(Utility?.checkIfInternetConnected(requireContext())){
+                    reloadContent()
+                }else{
+                    Utility?.displayMessage(getString(R.string.no_internet_connection),requireContext())
+                }
+            })
+        } catch (e: Exception) {
+            Log.e("OrderProgress", "Exception onFailure " + e.message)
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         Log.e("ArtOngonDetails", "RESULT_OK ${Activity.RESULT_OK}")
@@ -986,7 +1094,6 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         }
         orderDetails= mOrderVm?.getSingleOnOrderData(enqID?:0,0).value
         orderDetails?.let{setDetails()}
-
     }
 
     companion object {
@@ -998,7 +1105,6 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
                 }
             }
     }
-
 
 
 

@@ -153,7 +153,6 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
 
         //Raise Concern
         mBinding?.raiseConcernLayer?.setOnClickListener {
-            if(orderProgressDetails?.isFaulty == 0L)
             startActivity(enqID?.let { it1 -> requireContext().raiseConcernIntent(it1,false) })
         }
 
@@ -679,7 +678,7 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
         }
 
         //Raise Concern
-        if(orderDetails?.enquiryStageId!! >= EnquiryStages.ORDER_DISPATCHED.getId()){
+        if(orderDetails?.enquiryStageId!! >= EnquiryStages.ORDER_DISPATCHED.getId() && orderDetails?.isReprocess == 0L){
             mBinding?.raiseConcernLayer?.visibility = View.VISIBLE
         }else{
             mBinding?.raiseConcernLayer?.visibility = View.GONE
@@ -827,7 +826,7 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("OPD","onSuccess")
-                orderProgressDetails = enqID?.toLong()?.let { mOrderVm?.loadOrderProgressDetails(it) }
+                orderProgressDetails = enqID?.let { mOrderVm?.loadOrderProgressDetails(it) }
             })
         } catch (e: Exception) {
             Log.e("OPD", "Exception onFailure " + e.message)
