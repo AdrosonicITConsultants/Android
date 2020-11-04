@@ -356,6 +356,8 @@
     <string name="mark_as_still_in_progress">Mark as still in progress</string>
     <string name="mark_as_completed">Mark as completed and move to next stage</string>
     <string name="you_have_to_update_8hrs">You have to update the status every \n8 hours to avoid escalation</string>
+    <string name="chats">Chats</string>
+    <string name="search_chat_by_enquiryId">Search chat by enquiryId</string>
     <string name="change_request_initiated">\tChange request initiated</string>
     <string name="disable_change_request">Disable change request</string>
     <string name="cr_not_applicable">Change request is not applicable for in stock Products.</string>
@@ -374,6 +376,7 @@
     <string name="select_an_option">Select an option</string>
     <string name="quality_check">Quality Check</string>
     <string name="no_qc_available">No Quality Check Available.</string>
+>>>>>>>>> Temporary merge branch 2
 
 
     <string name="new_pi_post_cr">Generate new PI post CR</string>

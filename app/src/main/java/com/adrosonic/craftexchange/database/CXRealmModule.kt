@@ -36,7 +36,6 @@ import io.realm.annotations.RealmModule
     ChatLogUserData::class,
     QcDetails::class,
     ChangeRequests::class,
-    TaxInvDetails::class
     Transactions::class,
     TaxInvDetails::class,
     OrderProgressDetails::class

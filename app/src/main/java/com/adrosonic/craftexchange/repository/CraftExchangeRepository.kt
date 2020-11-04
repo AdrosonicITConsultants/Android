@@ -89,12 +89,14 @@ object CraftExchangeRepository {
     fun getOrderService(): OrderDao {
         return builder(OrderDao::class.java)
     }
+<<<<<<<<< Temporary merge branch 1
 
     fun getChatService(): ChatListDao {
         return builder(ChatListDao::class.java)
     }
 
 
+=========
     fun getCrService(): ChangeRequestDao {
         return builder(ChangeRequestDao::class.java)
     }
@@ -107,4 +109,5 @@ object CraftExchangeRepository {
     fun getFaultyOrderService(): FaultyOrdersDao {
         return builder(FaultyOrdersDao::class.java)
     }
+>>>>>>>>> Temporary merge branch 2
 }
