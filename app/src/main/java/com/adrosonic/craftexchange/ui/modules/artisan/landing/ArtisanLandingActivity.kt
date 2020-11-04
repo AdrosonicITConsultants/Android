@@ -29,9 +29,9 @@ import com.adrosonic.craftexchange.repository.data.response.Notification.SaveUse
 import com.adrosonic.craftexchange.ui.modules.Notification.NotifcationFragment
 import com.adrosonic.craftexchange.ui.modules.artisan.profile.artisanProfileIntent
 import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.CommonEnquiryFragment
-import com.adrosonic.craftexchange.ui.modules.chat.ChatListFragment
 import com.adrosonic.craftexchange.ui.modules.dashboard.dashboardIntent
 import com.adrosonic.craftexchange.ui.modules.order.CommonOrderFragment
+import com.adrosonic.craftexchange.ui.modules.pdfViewer.PdfViewerActivity
 import com.adrosonic.craftexchange.ui.modules.role.roleselectIntent
 import com.adrosonic.craftexchange.ui.modules.search.searchSuggestionIntent
 import com.adrosonic.craftexchange.ui.modules.transaction.transactionIntent
@@ -39,7 +39,6 @@ import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
-import com.adrosonic.craftexchange.viewModels.CMSViewModel
 import com.adrosonic.craftexchange.viewModels.LandingViewModel
 import com.adrosonic.craftexchange.viewModels.ProfileViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -179,11 +178,6 @@ class ArtisanLandingActivity : AppCompatActivity(),
                         return true
                     }
                     R.id.action_chat -> {
-                        if (savedInstanceState == null) {
-                            supportFragmentManager.beginTransaction() .add(R.id.artisan_home_container, ChatListFragment.newInstance())
-                                .addToBackStack(null)
-                                .commit()
-                        }
                         return true
                     }
 
@@ -251,7 +245,7 @@ class ArtisanLandingActivity : AppCompatActivity(),
                 startActivity(dashboardIntent())
             }
             R.id.nav_support -> {
-                val intent = Intent(this@ArtisanLandingActivity, PDFViewerActivity::class.java)
+                val intent = Intent(this@ArtisanLandingActivity, PdfViewerActivity::class.java)
                 intent.putExtra("ViewType", "FAQ_PDF")
                 startActivity(intent)
             }

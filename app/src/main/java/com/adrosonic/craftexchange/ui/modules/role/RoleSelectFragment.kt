@@ -10,12 +10,11 @@ import androidx.databinding.DataBindingUtil
 
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.FragmentRoleSelectBinding
-import com.adrosonic.craftexchange.ui.modules.artisan.landing.PDFViewerActivity
+import com.adrosonic.craftexchange.ui.modules.pdfViewer.PdfViewerActivity
 import com.adrosonic.craftexchange.ui.modules.authentication.login.LoginActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
 import com.pixplicity.easyprefs.library.Prefs
-import java.util.*
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -32,11 +31,6 @@ class RoleSelectFragment : Fragment() {
 
     private var param1: String? = null
     private var param2: String? = null
-   // lateinit var providers : List<AuthUI.IdpConfig>
-
-//    var productArray = ArrayList<String>()
-//    var countryId = ArrayList<Int>()
-//    var nameArray = ArrayList<String>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,25 +40,7 @@ class RoleSelectFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
 
-        //init
-//        providers = Arrays.asList<AuthUI.IdpConfig>(
-//            AuthUI.IdpConfig.EmailBuilder().build(),
-//            AuthUI.IdpConfig.FacebookBuilder().build(),
-//            AuthUI.IdpConfig.GoogleBuilder().build(),
-//            AuthUI.IdpConfig.PhoneBuilder().build()
-//
-//        )
-
-      //  showSignInOptions()
     }
-    private val MY_REQUEST_CODE: Int = 7117 //any number you want
-
-//    private fun showSignInOptions(){
-//        startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder()
-//            .setAvailableProviders(providers)
-//            .setTheme(R.style.MyTheme)
-//            .build(), MY_REQUEST_CODE)
-//    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -87,27 +63,22 @@ class RoleSelectFragment : Fragment() {
             Prefs.putLong(ConstantsDirectory.REF_ROLE_ID,1)
         }
 
-        mBinding?.roleBuyer?.setOnClickListener{
+        mBinding?.roleBuyer?.setOnClickListener {
             //TODO:Uncommnt lter
             Utility.clearPrefs()
             startActivity(Intent(activity, LoginActivity::class.java))
-            Prefs.putString(ConstantsDirectory.PROFILE,"Buyer")
-            Prefs.putLong(ConstantsDirectory.REF_ROLE_ID,2)
-//            DeviceRegistration(object : DeviceTokenCallback {
-//                override fun registeredToken(token: String) {
-//                    addUserDevice(true,token)
-//                }
-//            }).execute()
+            Prefs.putString(ConstantsDirectory.PROFILE, "Buyer")
+            Prefs.putLong(ConstantsDirectory.REF_ROLE_ID, 2)
         }
 
         mBinding?.privacyPolicy?.setOnClickListener {
-            val intent = Intent(context, PDFViewerActivity::class.java)
+            val intent = Intent(context, PdfViewerActivity::class.java)
             intent.putExtra("ViewType", "PRIVACY_POLICY_PDF")
             startActivity(intent)
         }
 
         mBinding?.legalDisclaimer?.setOnClickListener {
-            val intent = Intent(context, PDFViewerActivity::class.java)
+            val intent = Intent(context, PdfViewerActivity::class.java)
             intent.putExtra("ViewType", "LEGAL_DISCLAIMER")
             startActivity(intent)
         }

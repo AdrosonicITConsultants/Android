@@ -182,14 +182,8 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.modules.chat.ChatLogDetailsActivity"
+            android:name=".ui.modules.pdfViewer.PdfViewerActivity"
             android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".ui.modules.artisan.landing.PDFViewerActivity"
-            android:screenOrientation="portrait" />
-
-
 
 
         <provider
@@ -206,59 +200,73 @@
             android:name=".services.moq.MoqSendService"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+
         <service
             android:name=".services.notification.NotificationReadService"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+
         <service
             android:name=".services.customDesign.UpdateOwnProductService"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+
         <service
             android:name=".services.ProductUpdateService"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+
         <service
             android:name=".services.ProductDeletingService"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+
         <service
             android:name=".services.customDesign.AddOwnProductService"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+
         <service
             android:name=".services.customDesign.DeleteOwnProductService"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+
         <service
             android:name=".services.ProductCreateService"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+
         <service
             android:name=".services.wishlist.WishlistService"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+
         <service
             android:name=".services.pi.PiService"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+
         <service
             android:name=".services.qc.QcService"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+
         <service
             android:name=".services.cr.CrToggleService"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+
         <service
             android:name=".services.cr.CrAcceptRejectService"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+
         <service android:name=".services.InstanceIdService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+
         <service android:name=".services.notification.MessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

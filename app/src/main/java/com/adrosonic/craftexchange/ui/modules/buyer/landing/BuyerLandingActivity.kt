@@ -18,7 +18,6 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
@@ -26,13 +25,9 @@ import com.adrosonic.craftexchange.database.predicates.NotificationPredicates
 import com.adrosonic.craftexchange.database.predicates.UserPredicates
 import com.adrosonic.craftexchange.databinding.ActivityBuyerLandingBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
-import com.adrosonic.craftexchange.repository.data.response.Notification.NotificationReadResponse
 import com.adrosonic.craftexchange.repository.data.response.Notification.SaveUserTokenResponse
-import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryProductResponse
 import com.adrosonic.craftexchange.ui.modules.Notification.NotifcationFragment
-import com.adrosonic.craftexchange.ui.modules.artisan.landing.ArtisanLandingActivity
-import com.adrosonic.craftexchange.ui.modules.artisan.landing.PDFViewerActivity
-import com.adrosonic.craftexchange.ui.modules.artisan.landing.artisanLandingIntent
+import com.adrosonic.craftexchange.ui.modules.pdfViewer.PdfViewerActivity
 import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.CommonEnquiryFragment
 import com.adrosonic.craftexchange.ui.modules.buyer.ownDesign.OwnProductListFragment
 import com.adrosonic.craftexchange.ui.modules.buyer.profile.buyerProfileIntent
@@ -54,7 +49,6 @@ import com.google.android.material.navigation.NavigationView
 import com.google.firebase.iid.FirebaseInstanceId
 import com.pixplicity.easyprefs.library.Prefs
 import kotlinx.android.synthetic.main.activity_buyer_landing.*
-import kotlinx.android.synthetic.main.custom_bell_icon_layout.*
 import kotlinx.android.synthetic.main.nav_header_landing.view.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -272,7 +266,7 @@ class BuyerLandingActivity : AppCompatActivity(),
                 startActivity(dashboardIntent())
             }
             R.id.nav_support -> {
-                val intent = Intent(this@BuyerLandingActivity, PDFViewerActivity::class.java)
+                val intent = Intent(this@BuyerLandingActivity, PdfViewerActivity::class.java)
                 intent.putExtra("ViewType", "FAQ_PDF")
                 startActivity(intent)
             }

@@ -15,7 +15,7 @@ import com.adrosonic.craftexchange.databinding.FragmentBuyerRegisterUsernameBind
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.model.OtpVerifyModel
 import com.adrosonic.craftexchange.repository.data.registerResponse.RegisterResponse
-import com.adrosonic.craftexchange.ui.modules.artisan.landing.PDFViewerActivity
+import com.adrosonic.craftexchange.ui.modules.pdfViewer.PdfViewerActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
 import com.pixplicity.easyprefs.library.Prefs
@@ -154,7 +154,7 @@ class BuyerRegisterUsernameFragment : Fragment() {
         }
     }
         mBinding?.privacyPolicy?.setOnClickListener {
-            val intent = Intent(context, PDFViewerActivity::class.java)
+            val intent = Intent(context, PdfViewerActivity::class.java)
             intent.putExtra("ViewType", "PRIVACY_POLICY_PDF")
             startActivity(intent)
         }

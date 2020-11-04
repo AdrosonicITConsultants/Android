@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -13,45 +12,43 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/role_select"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/colorBackground"
             tools:context=".ui.modules.role.RoleSelectFragment">
 
             <include
                 android:id="@+id/logo_part"
                 layout="@layout/logo_bottom"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.050000012" />
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/textView_description"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginStart="@dimen/margin_semimedium"
+                android:layout_marginTop="@dimen/margin_regular"
+                android:layout_marginEnd="@dimen/margin_semimedium"
                 android:fontFamily="@font/playfair_regular"
-                android:paddingStart="48dp"
-                android:paddingEnd="48dp"
                 android:text="@string/description"
                 android:textAlignment="center"
                 android:textColor="#000"
                 android:textSize="@dimen/Ques_text"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/logo_part"
-                app:layout_constraintVertical_bias="0.050000012" />
+                app:layout_constraintTop_toBottomOf="@+id/logo_part" />
 
             <ImageView
                 android:id="@+id/role_artisan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/margin_regular"
                 android:background="@drawable/rectangle_round_grad"
                 android:contentDescription="@string/artisan_logo"
                 android:src="@mipmap/ic_artist_text_round"
@@ -63,7 +60,7 @@
                 android:id="@+id/or"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/margin_regular"
                 android:fontFamily="@font/playfair_regular"
                 android:text="@string/or"
                 android:textColor="@android:color/darker_gray"
@@ -106,24 +103,23 @@
                 android:id="@+id/textView_help"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_regular"
                 android:text="@string/need_help"
                 android:textColor="@android:color/holo_blue_light"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toTopOf="@+id/change_language"
-                app:layout_constraintEnd_toEndOf="@+id/change_language"
-                app:layout_constraintStart_toStartOf="@+id/change_language"
-                app:layout_constraintTop_toBottomOf="@+id/role_buyer"
-                app:layout_constraintVertical_bias="1.0" />
+                android:textSize="@dimen/product_description_text"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:fontFamily="@font/lato_regular"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/role_buyer" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/change_language"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_regular"
-                app:layout_constraintBottom_toTopOf="@+id/privacy_policy"
-                app:layout_constraintEnd_toEndOf="@+id/privacy_policy"
-                app:layout_constraintStart_toStartOf="@+id/privacy_policy">
+                android:layout_marginTop="@dimen/margin_regular"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_help">
 
                 <TextView
                     android:id="@+id/change_language_text"
@@ -132,7 +128,7 @@
                     android:layout_marginStart="2dp"
                     android:gravity="center"
                     android:text="@string/change_language"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/product_note_text"
                     app:layout_constraintBottom_toBottomOf="@+id/language_icon"
                     app:layout_constraintStart_toEndOf="@+id/language_icon"
                     app:layout_constraintTop_toTopOf="@+id/language_icon" />
@@ -157,25 +153,41 @@
                 android:id="@+id/legal_disclaimer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="32dp"
+                android:fontFamily="@font/lato_regular"
                 android:text="@string/legal_disclaimer"
-                android:textSize="10sp"
+                android:layout_marginEnd="8dp"
+                android:textSize="@dimen/product_note_text"
+                app:layout_constraintBottom_toBottomOf="@+id/div_line"
+                app:layout_constraintEnd_toStartOf="@+id/div_line"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/div_line" />
+
+            <View
+                android:id="@+id/div_line"
+                android:layout_width="1dp"
+                android:layout_height="@dimen/product_description_text"
+                android:layout_marginTop="@dimen/margin_regular"
+                android:layout_marginBottom="@dimen/margin_regular"
+                android:background="@color/darker_gray"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/change_language" />
 
             <TextView
                 android:id="@+id/privacy_policy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_regular"
-                android:layout_marginBottom="12dp"
                 android:text="@string/privacy_policy"
-                android:textSize="10sp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:textSize="@dimen/product_note_text"
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/lato_regular"
+                app:layout_constraintBottom_toBottomOf="@+id/div_line"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.502"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/div_line"
+                app:layout_constraintTop_toTopOf="@+id/div_line" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

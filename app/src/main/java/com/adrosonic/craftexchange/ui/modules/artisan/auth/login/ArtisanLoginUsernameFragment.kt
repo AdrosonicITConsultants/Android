@@ -8,29 +8,24 @@ import android.text.Spanned
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.appcompat.widget.SearchView
 
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.FragmentArtisanLoginUsernameBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.loginResponse.LoginValidationResponse
-import com.adrosonic.craftexchange.ui.modules.artisan.landing.PDFViewerActivity
+import com.adrosonic.craftexchange.ui.modules.pdfViewer.PdfViewerActivity
 import com.adrosonic.craftexchange.ui.modules.authentication.register.RegisterActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
 import com.pixplicity.easyprefs.library.Prefs
-import kotlinx.android.synthetic.main.fragment_buyer_login_username.*
 import retrofit2.Call
 import retrofit2.Response
-import java.lang.Exception
 import javax.security.auth.callback.Callback
 
 private const val ARG_PARAM1 = "param1"
@@ -145,14 +140,14 @@ class ArtisanLoginUsernameFragment : Fragment() {
 
         mBinding?.privacyPolicy?.setOnClickListener{
 
-            val intent = Intent(context, PDFViewerActivity::class.java)
+            val intent = Intent(context, PdfViewerActivity::class.java)
             intent.putExtra("ViewType", "PRIVACY_POLICY_PDF")
             startActivity(intent)
         }
 
         mBinding?.legalDisclaimer?.setOnClickListener {
 
-            val intent = Intent(context, PDFViewerActivity::class.java)
+            val intent = Intent(context, PdfViewerActivity::class.java)
             intent.putExtra("ViewType", "LEGAL_DISCLAIMER")
             startActivity(intent)
         }
