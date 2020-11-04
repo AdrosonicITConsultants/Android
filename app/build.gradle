@@ -129,7 +129,7 @@ dependencies {
 
 
    // Chat Library
-    implementation 'com.github.bassaer:chatmessageview:2.0.1'
+    implementation 'com.github.bassaer:chatmessageview:2.0.0'
 //    implementation 'com.github.bassaer:chatmessageview:1.8.8'
 
 
