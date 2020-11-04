@@ -31,6 +31,7 @@ import com.adrosonic.craftexchange.repository.data.response.Notification.SaveUse
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryProductResponse
 import com.adrosonic.craftexchange.ui.modules.Notification.NotifcationFragment
 import com.adrosonic.craftexchange.ui.modules.artisan.landing.ArtisanLandingActivity
+import com.adrosonic.craftexchange.ui.modules.artisan.landing.PDFViewerActivity
 import com.adrosonic.craftexchange.ui.modules.artisan.landing.artisanLandingIntent
 import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.CommonEnquiryFragment
 import com.adrosonic.craftexchange.ui.modules.buyer.ownDesign.OwnProductListFragment
@@ -270,7 +271,11 @@ class BuyerLandingActivity : AppCompatActivity(),
             R.id.nav_my_dashboard -> {
                 startActivity(dashboardIntent())
             }
-            R.id.nav_support -> {}
+            R.id.nav_support -> {
+                val intent = Intent(this@BuyerLandingActivity, PDFViewerActivity::class.java)
+                intent.putExtra("ViewType", "FAQ_PDF")
+                startActivity(intent)
+            }
             R.id.nav_logout -> {
                 if (Utility.checkIfInternetConnected(this)) {
                     val builder = AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar)

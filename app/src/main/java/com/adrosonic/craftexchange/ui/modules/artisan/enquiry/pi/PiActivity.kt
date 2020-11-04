@@ -27,6 +27,7 @@ import com.adrosonic.craftexchange.database.predicates.PiPredicates
 import com.adrosonic.craftexchange.databinding.ActivityPiBinding
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.repository.data.response.moq.Datum
+import com.adrosonic.craftexchange.ui.modules.artisan.landing.PDFViewerActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
@@ -144,6 +145,12 @@ class PiActivity : AppCompatActivity(),
                     startActivityForResult(applicationContext.raisePiContext(enquiryId,false,pi),ConstantsDirectory.RESULT_PI)
                 }
             }
+        }
+
+        mBinding?.txtTnc?.setOnClickListener {
+            val intent = Intent(this, PDFViewerActivity::class.java)
+            intent.putExtra("ViewType", "Terms_conditions")
+            startActivity(intent)
         }
     }
 

@@ -1,5 +1,6 @@
 package com.adrosonic.craftexchange.ui.modules.artisan.auth.register
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -14,6 +15,7 @@ import com.adrosonic.craftexchange.databinding.FragmentArtisanRegisterArtisanidB
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.model.artisan.ArtisanidModel
 import com.adrosonic.craftexchange.repository.data.registerResponse.RegisterResponse
+import com.adrosonic.craftexchange.ui.modules.artisan.landing.PDFViewerActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.pixplicity.easyprefs.library.Prefs
 import com.wajahatkarim3.easyvalidation.core.view_ktx.nonEmpty
@@ -82,6 +84,12 @@ class ArtisanRegisterArtisanidFragment : Fragment() {
                         }
                     })
             }else{ mBinding?.textBoxArtisanId?.nonEmpty{ mBinding?.textBoxArtisanId?.error = it } }
+        }
+
+        mBinding?.privacyPolicy?.setOnClickListener {
+            val intent = Intent(context, PDFViewerActivity::class.java)
+            intent.putExtra("ViewType", "PRIVACY_POLICY_PDF")
+            startActivity(intent)
         }
     }
 }

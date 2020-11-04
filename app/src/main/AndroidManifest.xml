@@ -181,6 +181,17 @@
             android:name=".ui.modules.artisan.productTemplate.ArtisanAddProductTemplateActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".ui.modules.chat.ChatLogDetailsActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.modules.artisan.landing.PDFViewerActivity"
+            android:screenOrientation="portrait" />
+
+
+
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.adrosonic.craftexchange.provider"

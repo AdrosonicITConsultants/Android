@@ -96,6 +96,17 @@
             app:layout_constraintTop_toBottomOf="@+id/textBox_username"
             app:layout_constraintVertical_bias="0.0" />
 
+<!--        <com.facebook.login.widget.LoginButton-->
+<!--            android:id="@+id/login_button"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center_horizontal"-->
+<!--            android:layout_margin="@android:dimen/app_icon_size"-->
+<!--            app:layout_constraintEnd_toEndOf="@+id/button_next"-->
+<!--            app:layout_constraintStart_toStartOf="@+id/button_next"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/button_next"-->
+<!--            />-->
+
         <View
             android:id="@+id/divider2"
             style="@style/HorizontalDivider3"
@@ -128,6 +139,19 @@
             app:layout_constraintBottom_toTopOf="@+id/privacy_policy"
             app:layout_constraintEnd_toEndOf="@+id/privacy_policy"
             app:layout_constraintStart_toStartOf="@+id/privacy_policy" />
+
+        <TextView
+            android:id="@+id/legal_disclaimer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:fontFamily="@font/lato_regular"
+            android:text="@string/legal_disclaimer"
+            android:textColor="@color/lighter_gray"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/privacy_policy"

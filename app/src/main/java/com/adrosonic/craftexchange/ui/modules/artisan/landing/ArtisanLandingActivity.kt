@@ -29,6 +29,7 @@ import com.adrosonic.craftexchange.repository.data.response.Notification.SaveUse
 import com.adrosonic.craftexchange.ui.modules.Notification.NotifcationFragment
 import com.adrosonic.craftexchange.ui.modules.artisan.profile.artisanProfileIntent
 import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.CommonEnquiryFragment
+import com.adrosonic.craftexchange.ui.modules.chat.ChatListFragment
 import com.adrosonic.craftexchange.ui.modules.dashboard.dashboardIntent
 import com.adrosonic.craftexchange.ui.modules.order.CommonOrderFragment
 import com.adrosonic.craftexchange.ui.modules.role.roleselectIntent
@@ -90,6 +91,8 @@ class ArtisanLandingActivity : AppCompatActivity(),
         val view = mBinding?.root
         setContentView(view)
         mViewModel?.noficationlistener=this
+
+
 
         if(Utility.checkIfInternetConnected(applicationContext)){
             mViewModel?.getAllNotifications()
@@ -176,7 +179,11 @@ class ArtisanLandingActivity : AppCompatActivity(),
                         return true
                     }
                     R.id.action_chat -> {
-                        //                        initTab(BranchesFragment.newInstance(), BranchesFragment.TAG)
+                        if (savedInstanceState == null) {
+                            supportFragmentManager.beginTransaction() .add(R.id.artisan_home_container, ChatListFragment.newInstance())
+                                .addToBackStack(null)
+                                .commit()
+                        }
                         return true
                     }
 
@@ -243,7 +250,11 @@ class ArtisanLandingActivity : AppCompatActivity(),
             R.id.nav_my_dashboard -> {
                 startActivity(dashboardIntent())
             }
-            R.id.nav_support -> {}
+            R.id.nav_support -> {
+                val intent = Intent(this@ArtisanLandingActivity, PDFViewerActivity::class.java)
+                intent.putExtra("ViewType", "FAQ_PDF")
+                startActivity(intent)
+            }
             R.id.nav_logout -> {
                 if (Utility.checkIfInternetConnected(this)) {
                     val builder = AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar)
