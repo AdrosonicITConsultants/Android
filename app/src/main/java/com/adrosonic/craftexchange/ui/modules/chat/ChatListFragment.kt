@@ -163,7 +163,15 @@ class ChatListFragment: Fragment(),
         }
     }
 
-
+    override fun onResume() {
+        super.onResume()
+        if (!Utility.checkIfInternetConnected(requireContext())) {
+            Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
+        } else {
+            mChatVM.getInitiatedChatList()
+            mChatVM.getUninitiatedChatList()
+        }
+    }
     companion object {
         fun newInstance() = ChatListFragment()
 //        @JvmStatic
