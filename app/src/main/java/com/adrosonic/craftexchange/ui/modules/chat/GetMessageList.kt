@@ -75,8 +75,8 @@ companion object {
                     message.text = it.messageString
                 }
                 else {
-                    message.type =Message.Type.TEXT
-                    message.text =  "File: "+it.path
+                    message.type =Message.Type.LINK
+                    message.text =  "File: "+it.mediaName
                 }
                 messageList.add(message)
             }

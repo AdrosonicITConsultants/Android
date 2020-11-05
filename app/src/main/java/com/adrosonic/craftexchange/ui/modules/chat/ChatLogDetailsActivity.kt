@@ -36,6 +36,7 @@ import com.github.bassaer.chatmessageview.model.Message
 import com.github.bassaer.chatmessageview.model.Message.OnIconClickListener
 import com.github.bassaer.chatmessageview.view.MessageView
 import com.pixplicity.easyprefs.library.Prefs
+import kotlinx.android.synthetic.main.activity_chat_log.*
 import java.io.IOException
 
 
@@ -148,30 +149,20 @@ class  ChatLogDetailsActivity : AppCompatActivity(),
         mBinding?.chatView?.setOnClickOptionButtonListener(View.OnClickListener {
             showDialog()
         })
-//            mBinding?.chatView?.setOnBubbleClickListener(object : Message.OnBubbleClickListener {
-//
-//                override fun onClick(message: Message) {
-//                    Toast.makeText(
-//                        this@ChatLogDetailsActivity,
-//                        "click : icon " + message.user.getName(),
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                }
-//            })
-        var listener = object: Message.OnBubbleLongClickListener{
-            override fun onLongClick(message: Message) {
+
+        chat_view?.setOnBubbleClickListener(object: Message.OnBubbleClickListener{
+            override fun onClick(message: Message) {
                 Log.e("ViewEnquiry","OnBubbleClickListener")
-                Utility.displayMessage(getString(R.string.no_internet_connection),applicationContext)
-//                if(message.type!=Message.Type.TEXT){
-                    if(Utility.checkIfInternetConnected(applicationContext)) {
-                        mBinding?.swipeChats?.isRefreshing = true
-                        val filename = message.text
-                        mChatVM.downLoadChatMedia(enquiryId ?: 0, filename ?: "")
-                    }else Utility.displayMessage(getString(R.string.no_internet_connection),applicationContext)
-//                }
+//                Utility.displayMessage(getString(R.string.no_internet_connection),applicationContext)
+                if(message.type!=Message.Type.TEXT){
+                if(Utility.checkIfInternetConnected(applicationContext)) {
+                    mBinding?.swipeChats?.isRefreshing = true
+                    val filename = message.text?.replace("File: ","")
+                    mChatVM.downLoadChatMedia(enquiryId ?: 0, filename ?: "")
+                }else Utility.displayMessage(getString(R.string.no_internet_connection),applicationContext)
+                }
             }
-        }
-        mBinding?.chatView?.setOnBubbleLongClickListener(listener)
+        })
     }
 
     fun setChatHeaderDetails(enquiryId : Long?){
