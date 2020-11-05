@@ -419,7 +419,6 @@
 
     <string name="facebook_app_id">3667875393263473</string>
     <string name="fb_login_protocol_scheme">fb3667875393263473</string>
-    <string name="chats">Chats</string>
     <string name="mark_order_dispatched">Mark Order Dispatched</string>
     <string name="check_delivery_receipt">Check Delivery Receipt</string>
     <string name="buyer_brand">Buyer Brand</string>

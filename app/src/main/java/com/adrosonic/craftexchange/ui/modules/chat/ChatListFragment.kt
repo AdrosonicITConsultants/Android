@@ -129,9 +129,11 @@ class ChatListFragment: Fragment(),
     private fun setInitiatedChatRecyclerList(isInitiated:Long){
 
         mBinding?.initiatedChatListView?.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL, false )
+        if(mChatVM.getInitiatedChatListMutableData(isInitiated,mBinding?.searchChat?.text.toString()).value!=null){
         mInitiatedChatListAdapter = InitiatedChatRecyclerAdapter(requireContext(),mChatVM.getInitiatedChatListMutableData(isInitiated,mBinding?.searchChat?.text.toString()).value!!,initiatedChat )
         mBinding?.initiatedChatListView?.adapter = mInitiatedChatListAdapter
         mInitiatedChatListAdapter?.onChatReadListener=this
+        }
         //mEnqListAdapter?.enqListener = this  //important to set adapter first and then call listener
     }
 

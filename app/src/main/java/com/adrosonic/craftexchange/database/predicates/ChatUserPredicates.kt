@@ -28,50 +28,52 @@ class ChatUserPredicates {
             // var chatItr = chatDetails.data?.iterator()
 
             var chatList = chatDetails?.data
-            var chatItr = chatList?.iterator()
 
+            Log.e("Chat","Size 00000: ${chatList?.size}")
             realm.executeTransaction {
                 try {
+                    var chatItr = chatList?.iterator()
                     if (chatItr != null) {
                         while (chatItr.hasNext()) {
                             var chat = chatItr.next()
                             var chatObj = realm.where(ChatUser::class.java)
-                                .equalTo( ChatUser.COLUMN_ENQUIRY_NO, chat?.enquiryNumber)
+                                .equalTo( ChatUser.COLUMN_ENQUIRY_ID, chat?.enquiryId)
                                 .limit(1)
                                 .findFirst()
-
-                            if (chatObj == null) {
+                            Log.e("Chat","chatObj: ${chatObj?.enquiryId}")
+                            if (chatObj?.enquiryId != chat.enquiryId) {
                                 var primId = it.where(ChatUser::class.java).max("_id")
                                 if (primId == null) {
                                     nextID = 1
                                 } else {
                                     nextID = primId.toLong() + 1
                                 }
+                                Log.e("Chat","11111111111111111")
                                 var exTra = it.createObject( ChatUser::class.java, nextID)
                                 exTra?.enquiryNumber = chat?.enquiryNumber
                                 exTra?.enquiryId = chat?.enquiryId
                                 exTra?.productTypeId = chat?.productTypeId
                                 exTra?.buyerCompanyName = chat?.buyerCompanyName
-
+                                Log.e("Chat","222222222222")
                                 exTra?.buyerId = chat?.buyerId
                                 exTra?.enquiryGeneratedOn = chat?.enquiryGeneratedOn
                                 exTra?.convertedToOrderDate = chat?.convertedToOrderDate
                                 exTra?.unreadMessage = chat?.unreadMessage
-
+                                Log.e("Chat","3333333333333333333")
                                 exTra?.escalation = chat?.escalation
                                 exTra?.orderStatus = chat?.orderStatus
                                 exTra?.lastUpdatedOn = chat?.lastUpdatedOn
-
+                                Log.e("Chat","44444444444444")
                                 exTra?.orderStatsId = chat?.orderStatusId
                                 exTra?.orderAmouunt = chat?.orderAmount
                                 exTra?.changeRequestDone = chat?.changeRequestDone
-
+                                Log.e("Chat","555555555555")
                                 exTra?.lastChatDate = chat?.lastChatDate
                                 exTra?.orderReceiveDate = chat?.orderReceiveDate
                                 exTra?.buyerLogo = chat?.buyerLogo
-
+                                Log.e("Chat","66666666666666")
                                 exTra?.isInitiatedChat = isInitiatedChat
-
+                                Log.e("Chat","77777777777777777")
                                 realm.copyToRealmOrUpdate(exTra)
                             } else {
                                 nextID = chatObj?._id ?: 0
@@ -104,7 +106,7 @@ class ChatUserPredicates {
                         }
                     }
                 } catch (e: Exception) {
-                    Log.e("InsertChat", e.printStackTrace().toString())
+                    Log.e("InsertChat", e.localizedMessage)
                 }
             }
         }

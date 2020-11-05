@@ -98,7 +98,6 @@ class ChatListViewModel (application: Application) : AndroidViewModel(applicatio
                 ) {
                     if(response.body()?.valid == true){
                         Log.e("Chat","Size: ${response?.body()?.data?.size}")
-
                         chatListner?.onGetChatListSuccess()
                         ChatUserPredicates.insertChat(response.body()!!, 1L)
                     }else

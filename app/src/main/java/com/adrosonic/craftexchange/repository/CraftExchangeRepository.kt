@@ -106,4 +106,7 @@ object CraftExchangeRepository {
     fun getFaultyOrderService(): FaultyOrdersDao {
         return builder(FaultyOrdersDao::class.java)
     }
+    fun getChatService(): ChatListDao {
+        return builder(ChatListDao::class.java)
+    }
 }

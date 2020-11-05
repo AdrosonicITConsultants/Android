@@ -186,7 +186,9 @@
         <activity
             android:name=".ui.modules.artisan.productTemplate.ArtisanAddProductTemplateActivity"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name=".ui.modules.chat.ChatLogDetailsActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.modules.pdfViewer.PdfViewerActivity"
             android:screenOrientation="portrait" />
