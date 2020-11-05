@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.FragmentRoleSelectBinding
+import com.adrosonic.craftexchange.ui.modules.pdfViewer.PdfViewerActivity
 import com.adrosonic.craftexchange.ui.modules.authentication.login.LoginActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
@@ -31,10 +32,6 @@ class RoleSelectFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-//    var productArray = ArrayList<String>()
-//    var countryId = ArrayList<Int>()
-//        var nameArray = ArrayList<String>()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +39,7 @@ class RoleSelectFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
     }
 
     override fun onCreateView(
@@ -65,17 +63,24 @@ class RoleSelectFragment : Fragment() {
             Prefs.putLong(ConstantsDirectory.REF_ROLE_ID,1)
         }
 
-        mBinding?.roleBuyer?.setOnClickListener{
+        mBinding?.roleBuyer?.setOnClickListener {
             //TODO:Uncommnt lter
             Utility.clearPrefs()
             startActivity(Intent(activity, LoginActivity::class.java))
-            Prefs.putString(ConstantsDirectory.PROFILE,"Buyer")
-            Prefs.putLong(ConstantsDirectory.REF_ROLE_ID,2)
-//            DeviceRegistration(object : DeviceTokenCallback {
-//                override fun registeredToken(token: String) {
-//                    addUserDevice(true,token)
-//                }
-//            }).execute()
+            Prefs.putString(ConstantsDirectory.PROFILE, "Buyer")
+            Prefs.putLong(ConstantsDirectory.REF_ROLE_ID, 2)
+        }
+
+        mBinding?.privacyPolicy?.setOnClickListener {
+            val intent = Intent(context, PdfViewerActivity::class.java)
+            intent.putExtra("ViewType", "PRIVACY_POLICY_PDF")
+            startActivity(intent)
+        }
+
+        mBinding?.legalDisclaimer?.setOnClickListener {
+            val intent = Intent(context, PdfViewerActivity::class.java)
+            intent.putExtra("ViewType", "LEGAL_DISCLAIMER")
+            startActivity(intent)
         }
     }
 

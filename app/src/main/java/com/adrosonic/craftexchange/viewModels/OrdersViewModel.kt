@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.adrosonic.craftexchange.database.entities.realmEntities.OrderProgressDetails
 import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
 import com.adrosonic.craftexchange.database.predicates.*
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
@@ -14,6 +15,7 @@ import com.adrosonic.craftexchange.repository.data.response.Rating.RatingEnquiry
 import com.adrosonic.craftexchange.repository.data.response.Rating.RatingQuestionsResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.ownDesign.DeleteOwnProductRespons
 import com.adrosonic.craftexchange.repository.data.response.changeReequest.CrDetailsResponse
+import com.adrosonic.craftexchange.repository.data.response.orders.OrderProgressResponse
 import com.adrosonic.craftexchange.repository.data.response.orders.OrderResponse
 import com.adrosonic.craftexchange.repository.data.response.taxInv.TaxInvoiceResponse
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
@@ -31,6 +33,16 @@ import javax.security.auth.callback.Callback
 class OrdersViewModel(application: Application) : AndroidViewModel(application){
     companion object {
         const val TAG = "OrdersViewModel"
+    }
+
+    interface GetOrderProgressInterface{
+        fun onOPFailure()
+        fun onOPSuccess()
+    }
+
+    interface RecreationDispatchInterface{
+        fun onRDFailure()
+        fun onRDSuccess()
     }
 
     interface FetchOrderInterface{
@@ -86,6 +98,9 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
 
     val compOrderList : MutableLiveData<RealmResults<Orders>> by lazy { MutableLiveData<RealmResults<Orders>>() }
     var ratingListener : RatingDataInteface ?= null
+
+    var recreationDispatchListener : RecreationDispatchInterface ?= null
+    var getOrderProgressListener : GetOrderProgressInterface ?= null
     var fetchEnqListener : FetchOrderInterface ?= null
     var changeStatusListener : changeStatusInterface?= null
     var toggleListener : ToggleChangeInterface?= null
@@ -127,6 +142,10 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
         return orderDetails
     }
 
+    fun loadOrderProgressDetails(enqId : Long): OrderProgressDetails?{
+        var orderDetails = OrdersPredicates.getOrderProgressDetails(enqId)
+        return orderDetails
+    }
 
     fun getAllOngoingOrders(){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
@@ -488,6 +507,47 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
             })
     }
 
+    fun recreateOrder(enquiryId : Long){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getOrderService()
+            .recreateOrder(token,enquiryId)
+            .enqueue(object: Callback, retrofit2.Callback<ResponseBody> {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    t.printStackTrace()
+                    recreationDispatchListener?.onRDFailure()
+                }
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: retrofit2.Response<ResponseBody>) {
+                    if(response?.isSuccessful){
+                        recreationDispatchListener?.onRDSuccess()
+                    }
+                }
+            })
+    }
+
+    fun markOrderDispatchedAfterRecreation(enquiryId : Long){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getOrderService()
+            .orderDispatchAfterRecreation(token,enquiryId)
+            .enqueue(object: Callback, retrofit2.Callback<ResponseBody> {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    t.printStackTrace()
+                    recreationDispatchListener?.onRDFailure()
+                }
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: retrofit2.Response<ResponseBody>) {
+                    if(response?.isSuccessful){
+                        recreationDispatchListener?.onRDSuccess()
+                    }
+                }
+            })
+    }
+
+
     fun initializePartialRefund(enquiryId : Long){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         CraftExchangeRepository
@@ -548,10 +608,10 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
 
     fun downloadTi(enquiryId:Long){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
-        Log.e(EnquiryViewModel.TAG,"downloadPi :${enquiryId}")
+        Log.e(EnquiryViewModel.TAG,"downloadTi :${enquiryId}")
         CraftExchangeRepository
             .getTiService()
-            .getPreviewTaxInvPDF(token,enquiryId.toInt()).enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
+            .getPreviewTaxInvPDF(token,enquiryId.toInt(),"0").enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     Log.e(EnquiryViewModel.TAG,"downloadTi :${t.message}")
                     t.printStackTrace()
@@ -587,7 +647,7 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
         Log.e(EnquiryViewModel.TAG,"previewTi :${enquiryId}")
         CraftExchangeRepository
             .getTiService()
-            .getPreviewTaxInvHTML(token,enquiryId.toInt()).enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
+            .getPreviewTaxInvHTML(token,enquiryId.toInt(),"0").enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     Log.e(EnquiryViewModel.TAG,"previewTi :${t.message}")
                     t.printStackTrace()
@@ -683,6 +743,33 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
             })
     }
 
+
+    fun getOrderProgressDetails(orderId: Long){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getOrderService()
+            .getOrderProgress(token,orderId)
+            .enqueue(object: Callback, retrofit2.Callback<OrderProgressResponse> {
+                override fun onFailure(call: Call<OrderProgressResponse>, t: Throwable) {
+                    t.printStackTrace()
+                    Log.e("Order Progress","Failure: "+t.message)
+                    getOrderProgressListener?.onOPFailure()
+                }
+                override fun onResponse(
+                    call: Call<OrderProgressResponse>,
+                    response: retrofit2.Response<OrderProgressResponse>) {
+                    if(response.body()?.valid == true){
+                        Log.e("Order Progress","Success: "+response.body()?.errorMessage)
+                        getOrderProgressListener?.onOPSuccess()
+                        OrdersPredicates?.insertOrderProgressDetails(response?.body())
+                    }else{
+                        Log.e("Order Progress","Failure: "+response.body()?.errorMessage)
+                        getOrderProgressListener?.onOPFailure()
+                    }
+                }
+
+            })
+    }
 }
 
 

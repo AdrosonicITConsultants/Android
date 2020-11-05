@@ -85,4 +85,8 @@
         <item name="android:colorControlActivated">@color/popup_txt_color</item>
         <item name="android:colorControlNormal">@color/enquiry_swipe_background</item>
     </style>
+
+    <style name="MyTheme" parent="AppTheme">
+        <item name="android:windowBackground">@android:color/white</item>
+    </style>
 </resources>

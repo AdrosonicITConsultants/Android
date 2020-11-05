@@ -86,8 +86,10 @@ data class OpenEnquiriesResponse (
     val isMoqSend: Long? = null,
     val lastUpdated: String,
     val state: String? = null,
-    val country: String? = null
-
+    val country: String? = null,
+    val artisanReviewId: Long?=0,
+    val isReprocess: Long?=0,
+    val isNewGenerated: Long?=0
 )
 
 enum class ProductType {

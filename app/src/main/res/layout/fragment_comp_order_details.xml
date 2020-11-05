@@ -348,6 +348,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/RatingLayout"
                     android:layout_width="409dp"
@@ -380,10 +381,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/imageView2" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
-=======
->>>>>>> 8b4af608fe469248dc708c3f0041f36b6cc96f1c
-                <LinearLayout
+<LinearLayout
                     android:id="@+id/delivery_receipt_layer"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"

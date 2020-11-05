@@ -70,6 +70,10 @@ open class Orders:RealmObject() {
     var country: String? = ""
     var brandName: String?=""
 
+    var artisanReviewId: Long ?= 0
+    var isReprocess: Long?=0
+    var isNewGenerated: Long?=0
+
     var isMoqSend: Long?  = 0
     var isPiSend: Long?  = 0
     var isMoqRejected: Long?  = 0

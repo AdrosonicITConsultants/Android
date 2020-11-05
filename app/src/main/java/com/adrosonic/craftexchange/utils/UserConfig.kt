@@ -91,6 +91,9 @@ const val ENQUIRY_AVAI_PROD_STAGE_DATA = "enquiry_available_product_stage_data"
 const val PROGRESS_TIMELINE_DATA = "progress_timeline_data"
 const val TRANSACTION_STATUS_DATA ="transaction_status_data"
 const val CR_STATUS_DATA ="cr_status_data"
+const val ARTISAN_FAULT_REVIEW = "artisan_fault_review"
+const val BUYER_FAULT_REVIEW = "buyer_fault_review"
+
 
 ////
 const val REGION_CMS_DATA = "region_cms_data"
@@ -631,6 +634,20 @@ class UserConfig {
         get() = Prefs.getString(CR_STATUS_DATA,"")
         set(value) {
             Prefs.putString(CR_STATUS_DATA, value)
+            field = value
+        }
+
+    var artisanFaultReviewData : String? = ""
+        get() = Prefs.getString(ARTISAN_FAULT_REVIEW,"")
+        set(value) {
+            Prefs.putString(ARTISAN_FAULT_REVIEW, value)
+            field = value
+        }
+
+    var buyerFaultReviewData : String? = ""
+        get() = Prefs.getString(BUYER_FAULT_REVIEW,"")
+        set(value) {
+            Prefs.putString(BUYER_FAULT_REVIEW, value)
             field = value
         }
 }
