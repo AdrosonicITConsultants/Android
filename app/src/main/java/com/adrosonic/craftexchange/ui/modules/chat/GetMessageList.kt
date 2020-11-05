@@ -33,24 +33,18 @@ companion object {
             val chatList = ChatUserPredicates.getChatDetails(enquiryId)
             Log.e("GetMessageList", "chatList: ${chatList?.count()}")
             val userId = UserConfig.shared?.userId!!.toInt()
-            Log.e("GetMessageList", "${userId}")
             chatList?.forEach {
                 var message = Message()
                 message.iconVisibility = false
                 message.hideIcon(true)
                 message.usernameVisibility = true
-                Log.e("GetMessageList", "${it?.messageFrom}")
-
                 if (it?.messageFrom!!.equals(userId)) {
-                    Log.e("GetMessageList", "ifffff")
                     message.isRight = true
                     val yourIcon = BitmapFactory.decodeResource(
                         context.getResources(),
-                        R.drawable.ic_account_circle
-                    )
+                        R.drawable.ic_account_circle )
                     message.user = User(it?.messageFrom ?: 0, UserConfig.shared?.firstname, yourIcon)
                 } else {
-                    Log.e("GetMessageList", "elseeee")
                     message.isRight = false
                     val yourIcon = BitmapFactory.decodeResource(
                         context.getResources(),
@@ -58,14 +52,9 @@ companion object {
                     )
                     message.user = User(it?.messageTo ?: 0, buyerName, yourIcon)
                 }
-
-//            val cal: Calendar = Calendar.getInstance()
-//            val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
-//            cal.setTime(sdf.parse(it.date)) // all done
-
                 val cal: Calendar = Calendar.getInstance()
                 val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.ENGLISH)
-                cal.setTime(sdf.parse(it.createdOn)) // all done
+                cal.setTime(sdf.parse(it.createdOn))
                 message.sendTime=cal
 
                 message.isDateCell = false
@@ -74,8 +63,12 @@ companion object {
                     message.type = Message.Type.TEXT
                     message.text = it.messageString
                 }
+//                else if (it.mediaType!!.equals(3)) {
+//                    message.type = Message.Type.PICTURE
+//                    message.text = it.messageString
+//                }
                 else {
-                    message.type =Message.Type.LINK
+                    message.type =Message.Type.MAP
                     message.text =  "File: "+it.mediaName
                 }
                 messageList.add(message)

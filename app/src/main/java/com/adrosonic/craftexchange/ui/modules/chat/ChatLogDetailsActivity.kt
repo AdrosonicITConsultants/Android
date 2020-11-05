@@ -89,7 +89,13 @@ class  ChatLogDetailsActivity : AppCompatActivity(),
             this.onBackPressed()
         }
         mBinding?.swipeChats?.setOnRefreshListener {
-            mChatVM?.openChatLog(enquiryId!!)
+            if(Utility.checkIfInternetConnected(this)) {
+                mBinding?.swipeChats?.isRefreshing=true
+                mChatVM?.openChatLog(enquiryId!!)
+            }else{
+                mBinding?.swipeChats?.isRefreshing=false
+                Utility.displayMessage(getString(R.string.no_internet_connection), this)
+            }
         }
         mBinding?.txtGotoEnq?.setOnClickListener {
             Log.e("ViewEnquiry","11111111111")
@@ -147,7 +153,7 @@ class  ChatLogDetailsActivity : AppCompatActivity(),
         mBinding?.chatView?.setOnClickOptionButtonListener(View.OnClickListener {
             showDialog()
         })
-        chat_view?.setOnBubbleClickListener(object: Message.OnBubbleClickListener{
+        mBinding?.chatView?.setOnBubbleClickListener(object: Message.OnBubbleClickListener{
             override fun onClick(message: Message) {
                 Log.e("ViewEnquiry","OnBubbleClickListener")
 //                Utility.displayMessage(getString(R.string.no_internet_connection),applicationContext)
@@ -190,16 +196,15 @@ class  ChatLogDetailsActivity : AppCompatActivity(),
     }
 
     fun setChatView(){
-        mBinding?.chatView?.getMessageView()?.setRightBubbleColor( R.color.chat_right_bubble_color)
+//        mBinding?.chatView?.setRightBubbleColor(ContextCompat.getColor( this,  R.color.chat_right_bubble_color) )
 //        mBinding?.chatView?.setRightBubbleColor( R.color.chat_right_bubble_color)
 //        mBinding?.chatView?.setLeftBubbleColor(R.color.white_text)
-//        mBinding?.chatView?.setBackgroundColor( ContextCompat.getColor(this, com.github.bassaer.example.MessengerActivity.BACKGROUND_COLOR ))
         mBinding?.chatView?.setSendButtonColor(ContextCompat.getColor( this,  R.color.darker_gray))
 //        mBinding?.chatView?.setSendIcon(com.github.bassaer.example.MessengerActivity.SEND_ICON)
         mBinding?.chatView?.setOptionIcon(R.drawable.ic_attach_files)
         mBinding?.chatView?.setOptionButtonColor(R.color.teal500)
-        mBinding?.chatView?.setRightMessageTextColor(ContextCompat.getColor( this,  R.color.black_text))
-        mBinding?.chatView?.setLeftMessageTextColor(ContextCompat.getColor( this,  R.color.black_text))
+//        mBinding?.chatView?.setRightMessageTextColor(ContextCompat.getColor( this,  R.color.black_text))
+//        mBinding?.chatView?.setLeftMessageTextColor(ContextCompat.getColor( this,  R.color.black_text))
         mBinding?.chatView?.setUsernameTextColor(R.color.clickable_text_color)
         mBinding?.chatView?.setSendTimeTextColor(R.color.gray200)
         mBinding?.chatView?.setDateSeparatorColor(R.color.white_text)
@@ -212,21 +217,6 @@ class  ChatLogDetailsActivity : AppCompatActivity(),
         mBinding?.chatView?.inputType = InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
         mBinding?.chatView?.inputTextColor = ContextCompat.getColor(this, R.color.black_text)
         mBinding?.chatView?.setInputTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
-    }
-
-    override fun onOpenChatLogSuccess() {
-        try {
-            Handler(Looper.getMainLooper()).post(Runnable {
-                Log.e("OnGoingTChatList", "onSuccess")
-                mBinding?.swipeChats?.isRefreshing=false
-                loadMessages()
-            })
-        } catch (e: Exception) {
-            Log.e("OnGoingChatList", "Exception onSuccess " + e.message)
-        }
-    }
-
-    override fun onOpenChatLogFailure() {
     }
 
     private fun loadMessages() {
@@ -246,7 +236,40 @@ class  ChatLogDetailsActivity : AppCompatActivity(),
         val messageView: MessageView = mBinding?.chatView?.getMessageView()!!
         messageView.removeAll()
         messageView.init(messages)
+        messageView.setRightBubbleColor(ContextCompat.getColor( this,  R.color.chat_right_bubble_color))
+        messageView.setLeftBubbleColor(ContextCompat.getColor( this,  R.color.lighter_gray))
+        messageView.setRightMessageTextColor(ContextCompat.getColor( this,  R.color.black_text))
+        messageView.setOnBubbleClickListener(object: Message.OnBubbleClickListener{
+            override fun onClick(message: Message) {
+                Log.e("ViewEnquiry","OnBubbleClickListener")
+//                Utility.displayMessage(getString(R.string.no_internet_connection),applicationContext)
+                if(message.type!=Message.Type.TEXT){
+                    if(Utility.checkIfInternetConnected(applicationContext)) {
+                        mBinding?.swipeChats?.isRefreshing = true
+                        val filename = message.text?.replace("File: ","")
+                        mChatVM.downLoadChatMedia(enquiryId ?: 0, filename ?: "")
+                    }else{
+                        Utility.displayMessage(getString(R.string.no_internet_connection),applicationContext)
+                    }
+                }
+            }
+        })
         messageView.setSelection(messageView.count - 1)
+    }
+
+    override fun onOpenChatLogSuccess() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("OnGoingTChatList", "onSuccess")
+                mBinding?.swipeChats?.isRefreshing=false
+                loadMessages()
+            })
+        } catch (e: Exception) {
+            Log.e("OnGoingChatList", "Exception onSuccess " + e.message)
+        }
+    }
+
+    override fun onOpenChatLogFailure() {
     }
 
     override fun onChatSentSuccess() {
@@ -371,7 +394,4 @@ class  ChatLogDetailsActivity : AppCompatActivity(),
         } catch (e: Exception) {
         }
     }
-
-
-
 }
