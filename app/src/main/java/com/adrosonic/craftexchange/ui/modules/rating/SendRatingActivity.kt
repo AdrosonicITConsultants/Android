@@ -187,7 +187,7 @@ SendRatingAdapter.averagerating{
                 }
                 var average =  sum/ratingArr.size
 //                ratingDataRequest.add(RatingRequest(enquiryId!!,userId!!,questions[0].id,ratingArr[0],null))
-                var commentId = questions[questions.size-1].id - 1
+                var commentId = questions[questions.size-1].id + 1
                 val message = mBinding?.message?.text
                 if (message.toString() != ""){
                     ratingDataRequest.add(RatingRequest(enquiryId!!,userId!!,commentId,0.0 , message.toString() ))
