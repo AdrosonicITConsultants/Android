@@ -356,6 +356,8 @@
     <string name="mark_as_still_in_progress">Mark as still in progress</string>
     <string name="mark_as_completed">Mark as completed and move to next stage</string>
     <string name="you_have_to_update_8hrs">You have to update the status every \n8 hours to avoid escalation</string>
+    <string name="chats">Chats</string>
+    <string name="search_chat_by_enquiryId">Search chat by enquiryId</string>
     <string name="change_request_initiated">\tChange request initiated</string>
     <string name="disable_change_request">Disable change request</string>
     <string name="cr_not_applicable">Change request is not applicable for in stock Products.</string>
@@ -403,12 +405,20 @@
     <string name="currency">Currency</string>
     <string name="net_amt_to_be_paid">Net amount to be paid</string>
     <string name="approve_final_payment">Approve Final Payment</string>
+    <string name="buyer_provided_rating">View rating provide by buyer</string>
+    <string name="ratingByBuyer">Rating by buyer</string>
+    <string name="response">Response</string>
+    <string name="reviewRating"><![CDATA[Review & Rating]]></string>
+    <string name="reviewExperience">Review Your Experience</string>
+    <string name="averageScore">Average Score</string>
+    <string name="yourwordsMatter">Because Your Words Matter!!</string>
+    <string name="reviewtext">If you like it or you feel that you want to share. We would like to hear from you!</string>
+
     <string name="qc_disclaimer_text"><![CDATA["Declaration by AE- I, hereby certify from my end that all the processes have been Monitored & Supervised under my guidence and any issue in Quality Certified by me in person or my staff in charge is liable to be discussed with me directly on mail. Once the goods received at your doorsteps, we will not be liable for quality issue if informed after 72 hrs of receipts. "]]></string>
     <string name="legal_disclaimer">Legal Disclaimer</string>
 
     <string name="facebook_app_id">3667875393263473</string>
     <string name="fb_login_protocol_scheme">fb3667875393263473</string>
-
     <string name="mark_order_dispatched">Mark Order Dispatched</string>
     <string name="check_delivery_receipt">Check Delivery Receipt</string>
     <string name="buyer_brand">Buyer Brand</string>
@@ -452,9 +462,13 @@
     <string name="are_you_sure_recreate_order">Are you sure you want to recreate this order?</string>
     <string name="confirm">Confirm</string>
     <string name="order_being_recreated_refer_chat">Order under Recreation\nKindly refer chats for regular updates and\nin-case of any inconvenience, feel free\nto escalate the issue over chat</string>
+    <string name="view_details">View Details</string>
+    <string name="go_to_enquiry">\tGo to enquiry</string>
+    <string name="swipe_up_to_close">Click up to close</string>
     <string name="congts_order_mark_complete">Congrats!\nYou are about to mark this order complete.</string>
     <string name="completing_order">Completing Order</string>
     <string name="enter_receiving_date">Enter date of receiving</string>
     <string name="confirm_delivery_check_text_note">Just in case you find your order to be faulty,\nyou can always raise a concern within\n10 days from date received.</string>
     <string name="confirm_delivery">Confirm Delivery</string>
+
 </resources>

@@ -24,6 +24,7 @@ object ConstantsDirectory {
     //////////////////////////////////////////////////////////////////////
     const val PI_PDF_PATH: String = "PiPdfs/"
     const val TI_PDF_PATH: String = "TiPdfs/"
+    const val CHAT_MEDIA: String = "ChatMedia/"
     const val CHANNEL_ID: String = "Enquiry status"
     const val CHANNEL_NAME: String = "TTCE Notification"
     const val PERMISSION_REQUEST_CODE = 20

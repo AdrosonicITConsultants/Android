@@ -11,13 +11,17 @@ import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.request.changeRequest.RaiseCrInput
 import com.adrosonic.craftexchange.repository.data.request.taxInv.SendTiRequest
 import com.adrosonic.craftexchange.repository.data.response.Notification.NotificationReadResponse
+import com.adrosonic.craftexchange.repository.data.response.Rating.RatingEnquiryUserResponse
+import com.adrosonic.craftexchange.repository.data.response.Rating.RatingQuestionsResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.ownDesign.DeleteOwnProductRespons
 import com.adrosonic.craftexchange.repository.data.response.changeReequest.CrDetailsResponse
 import com.adrosonic.craftexchange.repository.data.response.orders.OrderProgressResponse
 import com.adrosonic.craftexchange.repository.data.response.orders.OrderResponse
 import com.adrosonic.craftexchange.repository.data.response.taxInv.TaxInvoiceResponse
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
+import com.google.gson.Gson
 import com.pixplicity.easyprefs.library.Prefs
 import io.realm.RealmResults
 import okhttp3.ResponseBody
@@ -69,10 +73,18 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
         fun onGenTaxInvSuccess()
         fun onGenTaxInvFailure()
     }
+
+    interface RatingDataInteface{
+        fun onRatingSuccess(string: String)
+        fun onRatingFailure()
+    }
+
+
     interface OrderCloseInterface{
         fun onOrderCloseSuccess()
         fun onOrderCloseFailure()
     }
+
     interface tiInterface{
         //        fun onTiFailure()
 //        fun onTiSuccess()
@@ -85,6 +97,7 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
     val onGoingOrderDetails : MutableLiveData<Orders> by lazy { MutableLiveData<Orders>() }
 
     val compOrderList : MutableLiveData<RealmResults<Orders>> by lazy { MutableLiveData<RealmResults<Orders>>() }
+    var ratingListener : RatingDataInteface ?= null
 
     var recreationDispatchListener : RecreationDispatchInterface ?= null
     var getOrderProgressListener : GetOrderProgressInterface ?= null
@@ -658,6 +671,79 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
             })
     }
 
+    fun ratingData(enquiryId: Long , userId :Long){
+        Log.d("RatingAPI", "function called: $enquiryId $userId")
+
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getUserEnquiryRatingservise()
+            .getRatingEnquiryUser(
+                token,
+                enquiryId,
+                userId
+            ).enqueue(object : Callback, retrofit2.Callback<RatingEnquiryUserResponse> {
+                override fun onFailure(call: Call<RatingEnquiryUserResponse>, t: Throwable) {
+                    t.printStackTrace()
+                    Log.d("RatingAPI","no response ")
+
+                }
+                override fun onResponse(
+                    call: Call<RatingEnquiryUserResponse>,
+                    response: Response<RatingEnquiryUserResponse>) {
+                    if(response.body()?.valid == true){
+
+                        val body= Gson().toJson(response.body())
+                        Log.d("RatingAPI","response: "+body)
+
+                        ratingListener?.onRatingSuccess(body)
+                        UserConfig.shared.showBuyerRating= Gson().toJson(response.body())
+
+
+                    }else{
+//                        fetchEnqListener?.onFailure()
+                        Log.d("RatingAPI","Failure: "+response.body()?.errorMessage)
+                    }
+                }
+            })
+        }
+
+    fun ratingQuestions(){
+        Log.d("RatingAPI", "function called:ratingQuestions")
+
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getUserEnquiryRatingservise()
+            .getRatingQuestions(
+                token
+            ).enqueue(object : Callback, retrofit2.Callback<RatingQuestionsResponse> {
+                override fun onFailure(call: Call<RatingQuestionsResponse>, t: Throwable) {
+                    t.printStackTrace()
+                    Log.d("RatingAPI","no response ")
+
+                }
+                override fun onResponse(
+                    call: Call<RatingQuestionsResponse>,
+                    response: Response<RatingQuestionsResponse>) {
+//                    Log.d("RatingAPI","hhh")
+                    if(response.body()?.valid == true){
+//                        val body = response.body()
+
+//                        Log.d("RatingAPI","response: "+body)
+////                        val body= Gson().toJson(response.body())
+//                        Log.d("RatingAPI","response: "+body)
+                        UserConfig.shared.ratingQuestions= Gson().toJson(response.body())
+
+//                        ratingListener?.onRatingSuccess(body)
+
+                    }else{
+//                        fetchEnqListener?.onFailure()
+                        Log.d("RatingAPI","Failure: "+response.body()?.errorMessage)
+                    }
+                }
+            })
+    }
+
+
     fun getOrderProgressDetails(orderId: Long){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         CraftExchangeRepository
@@ -685,5 +771,6 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
             })
     }
 }
+
 
 

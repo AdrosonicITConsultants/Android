@@ -38,5 +38,7 @@ object ImageDownloadRepository {
         return builder(BuyerOwnDesignDao::class.java)
     }
 
-
+    fun getChatListService(): ChatListDao {
+        return builder(ChatListDao::class.java)
+    }
 }

@@ -7,4 +7,7 @@
     <cache-path
         name="PiPdfs"
         path="PiPdfs/" />
+    <cache-path
+        name="ChatMedia"
+        path="ChatMedia/" />
 </paths>

@@ -68,6 +68,12 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".ui.modules.rating.ViewBuyerRatingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.modules.rating.SendRatingActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.modules.transaction.TransactionActivity"
             android:screenOrientation="portrait" />
 
@@ -180,7 +186,9 @@
         <activity
             android:name=".ui.modules.artisan.productTemplate.ArtisanAddProductTemplateActivity"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name=".ui.modules.chat.ChatLogDetailsActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.modules.pdfViewer.PdfViewerActivity"
             android:screenOrientation="portrait" />
