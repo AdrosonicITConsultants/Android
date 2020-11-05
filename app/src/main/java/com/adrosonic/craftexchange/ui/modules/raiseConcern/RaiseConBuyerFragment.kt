@@ -190,7 +190,7 @@ class RaiseConBuyerFragment : Fragment(),
 
     fun setDetails() {
         mBinding?.orderCode?.text = orderDetails?.orderCode ?: "N.A"
-        mBinding?.orderDate?.text = "Order Created on : ${orderDetails?.orderCreatedOn}"
+        mBinding?.orderDate?.text = "Order Created on : ${orderDetails?.orderCreatedOn?.split("T")?.get(0)}"
         mBinding?.productAmount?.text = "₹ ${orderDetails?.totalAmount}"
 
         setProductImage()

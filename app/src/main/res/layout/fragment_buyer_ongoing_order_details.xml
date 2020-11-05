@@ -523,7 +523,7 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <LinearLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/layer_confirm_delivery"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -532,6 +532,7 @@
                         android:padding="@dimen/expandable_layout_std_padding"
                         android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.51"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/final_transaction_layout">
 
@@ -544,6 +545,7 @@
                             android:layout_marginBottom="4dp"
                             android:background="@color/dark_green"
                             android:drawableEnd="@drawable/ic_right_arrow_white"
+                            android:elevation="8dp"
                             android:fontFamily="@font/lato_light"
                             android:padding="4dp"
                             android:text="Confirm Delivery  "
@@ -551,17 +553,35 @@
                             android:textAllCaps="false"
                             android:textColor="@color/white_text"
                             android:textSize="16sp"
-                            android:visibility="visible" />
+                            android:visibility="visible"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
+                            android:layout_marginTop="@dimen/margin_regular"
+                            android:elevation="8dp"
                             android:gravity="center"
                             android:text="If you found any defects,don't worry!\nYou can proceed to raise a concern within 10 days\nafter making it as delivered."
-                            android:textSize="@dimen/product_availability_text" />
+                            android:textSize="@dimen/product_availability_text"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/btn_confirm_delivery" />
 
-                    </LinearLayout>
+                        <ImageView
+                            android:id="@+id/icon_confirm_delivery"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_order_del_confirm"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <TextView
                         android:id="@+id/txt_order_recreation"

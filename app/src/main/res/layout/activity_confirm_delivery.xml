@@ -130,17 +130,17 @@
                             android:id="@+id/disclaimer_text_2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginBottom="16dp"
+                            android:layout_marginTop="8dp"
                             android:fontFamily="@font/lato_regular"
                             android:gravity="center_horizontal"
-                            android:text="Completing Order"
+                            android:text="@string/completing_order"
                             android:textColor="@color/dark_green"
                             android:textSize="@dimen/product_availability_text"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/product_type" />
+                            app:layout_constraintTop_toBottomOf="@id/product_type"
+                            app:layout_constraintVertical_bias="0.0" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -186,21 +186,29 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/middle_part">
 
+                    <ImageView
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:src="@drawable/ic_order_del_confirm"
+                        android:layout_gravity="center"/>
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:text="Congrats! You are about to mark this order Complete."
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/lato_regular"
+                        android:text="@string/congts_order_mark_complete"
                         android:textColor="@color/dark_green"
-                        android:textSize="18sp" />
+                        android:textSize="@dimen/product_description_text" />
 
                     <LinearLayout
                         android:id="@+id/select_date"
                         android:layout_width="wrap_content"
                         android:layout_height="56dp"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="32dp"
+                        android:layout_marginTop="@dimen/margin_semimedium"
                         android:orientation="horizontal">
 
                         <TextView
@@ -209,7 +217,8 @@
                             android:layout_height="48dp"
                             android:background="@drawable/search_background"
                             android:gravity="center"
-                            android:hint="Enter date of receiving" />
+                            android:fontFamily="@font/lato_regular"
+                            android:hint="@string/enter_receiving_date" />
 
                         <ImageView
                             android:layout_width="32dp"
@@ -221,26 +230,30 @@
                     </LinearLayout>
 
                     <TextView
-                        android:layout_marginTop="32dp"
+                        android:layout_marginTop="@dimen/margin_semimedium"
                         android:gravity="center"
                         android:layout_gravity="center_horizontal"
                         android:id="@+id/next_step_arrow_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Please check the order, before marking order as complete.\nOnce marked the order will be considered as completed\nAnd no concern can be raised against it."
+                        android:fontFamily="@font/lato_regular"
+                        android:textColor="@color/darker_gray"
+                        android:text="@string/confirm_delivery_check_text_note"
                         android:textSize="@dimen/product_availability_text" />
 
                     <Button
                         android:id="@+id/btn_confirm_received"
-                        android:layout_width="match_parent"
+                        android:layout_width="300dp"
                         android:layout_height="48dp"
                         android:layout_marginTop="56dp"
                         android:background="@color/dark_green"
-                        android:drawableLeft="@drawable/ic_swipe_arrow"
+                        android:drawableStart="@drawable/ic_swipe_arrow"
+                        android:drawableEnd="@drawable/ic_swipe_arrow"
                         android:paddingLeft="4dp"
                         android:paddingRight="4dp"
                         android:textAllCaps="false"
-                        android:text="Order received as required"
+                        android:layout_gravity="center"
+                        android:text="@string/confirm_delivery"
                         android:textColor="@color/white_text" />
                 </LinearLayout>
 

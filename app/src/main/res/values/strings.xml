@@ -452,4 +452,9 @@
     <string name="are_you_sure_recreate_order">Are you sure you want to recreate this order?</string>
     <string name="confirm">Confirm</string>
     <string name="order_being_recreated_refer_chat">Order under Recreation\nKindly refer chats for regular updates and\nin-case of any inconvenience, feel free\nto escalate the issue over chat</string>
+    <string name="congts_order_mark_complete">Congrats!\nYou are about to mark this order complete.</string>
+    <string name="completing_order">Completing Order</string>
+    <string name="enter_receiving_date">Enter date of receiving</string>
+    <string name="confirm_delivery_check_text_note">Just in case you find your order to be faulty,\nyou can always raise a concern within\n10 days from date received.</string>
+    <string name="confirm_delivery">Confirm Delivery</string>
 </resources>
