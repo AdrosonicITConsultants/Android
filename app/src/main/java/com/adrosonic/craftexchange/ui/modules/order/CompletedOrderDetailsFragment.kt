@@ -648,6 +648,8 @@ class CompletedOrderDetailsFragment : Fragment(),
         Log.d("RatingAPI", "data received: $RatingData")
         when(Prefs.getString(ConstantsDirectory.PROFILE, "")){
             ConstantsDirectory.ARTISAN -> {
+                Log.d("RatingAPI", "Artisan ")
+
                 if(RatingData.data.isBuyerRatingDone == 1 )
                 {
                     Log.d("RatingAPI", "Rating Provided by buyer: ")
@@ -655,6 +657,8 @@ class CompletedOrderDetailsFragment : Fragment(),
 
                 }            }
             ConstantsDirectory.BUYER -> {
+                Log.d("RatingAPI", "Buyer ")
+
 //                mQcVM?.getBuyerQCResponse(it)
             }
         }
