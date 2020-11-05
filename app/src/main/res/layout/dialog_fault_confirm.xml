@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="350dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/white_text">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/margin_regular"
+        android:fontFamily="@font/playfair_regular"
+        android:text="@string/sure"
+        android:textAlignment="center"
+        android:textColor="@color/red_logo"
+        android:textSize="@dimen/title_text" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_fault_backthread"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black_text"
+        android:layout_gravity="center"
+        android:textSize="@dimen/product_availability_text"
+        android:fontFamily="@font/playfair_regular"
+        android:text="@string/review_beofre_sending_faulty"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/red_logo"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:textSize="@dimen/product_availability_text"
+        android:fontFamily="@font/playfair_regular"
+        android:text="@string/review_beofre_sending_faulty_second"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="10"
+        android:layout_marginBottom="@dimen/margin_regular"
+        android:layout_marginTop="@dimen/margin_semimedium">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="5" />
+
+        <TextView
+            android:id="@+id/btn_cancel_fault"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_weight="2"
+            android:background="@drawable/rectangle_round_grad"
+            android:text="@string/cancel"
+            android:textAlignment="center"
+            android:textColor="@color/black_text" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/btn_submit_fault"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/rect_round_red_solid"
+            android:text="@string/yes_submit"
+            android:textAlignment="center"
+            android:textColor="@color/white_text" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+</LinearLayout>

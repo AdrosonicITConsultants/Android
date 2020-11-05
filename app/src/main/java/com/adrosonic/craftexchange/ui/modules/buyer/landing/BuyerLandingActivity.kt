@@ -18,7 +18,6 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
@@ -26,13 +25,9 @@ import com.adrosonic.craftexchange.database.predicates.NotificationPredicates
 import com.adrosonic.craftexchange.database.predicates.UserPredicates
 import com.adrosonic.craftexchange.databinding.ActivityBuyerLandingBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
-import com.adrosonic.craftexchange.repository.data.response.Notification.NotificationReadResponse
 import com.adrosonic.craftexchange.repository.data.response.Notification.SaveUserTokenResponse
-import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryProductResponse
 import com.adrosonic.craftexchange.ui.modules.Notification.NotifcationFragment
-import com.adrosonic.craftexchange.ui.modules.artisan.landing.ArtisanLandingActivity
-import com.adrosonic.craftexchange.ui.modules.artisan.landing.PDFViewerActivity
-import com.adrosonic.craftexchange.ui.modules.artisan.landing.artisanLandingIntent
+import com.adrosonic.craftexchange.ui.modules.pdfViewer.PdfViewerActivity
 import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.CommonEnquiryFragment
 import com.adrosonic.craftexchange.ui.modules.buyer.ownDesign.OwnProductListFragment
 import com.adrosonic.craftexchange.ui.modules.buyer.profile.buyerProfileIntent
@@ -53,14 +48,8 @@ import com.adrosonic.craftexchange.viewModels.ProfileViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.iid.FirebaseInstanceId
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.PermissionRequest
-import com.karumi.dexter.listener.multi.BaseMultiplePermissionsListener
 import com.pixplicity.easyprefs.library.Prefs
 import kotlinx.android.synthetic.main.activity_buyer_landing.*
-import kotlinx.android.synthetic.main.custom_bell_icon_layout.*
 import kotlinx.android.synthetic.main.nav_header_landing.view.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -282,23 +271,8 @@ class BuyerLandingActivity : AppCompatActivity(),
                 startActivity(dashboardIntent())
             }
             R.id.nav_support -> {
-                Dexter.withActivity(this)
-                    .withPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    .withListener(object : BaseMultiplePermissionsListener(){
-                        override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                            super.onPermissionsChecked(report)
-                        }
-
-                        override fun onPermissionRationaleShouldBeShown(
-                            permissions: MutableList<PermissionRequest>?,
-                            token: PermissionToken?
-                        ) {
-                            super.onPermissionRationaleShouldBeShown(permissions, token)
-                        }
-                    })
-
-                val intent = Intent(this@BuyerLandingActivity, PDFViewerActivity::class.java)
-                intent.putExtra("ViewType", "assets")
+                val intent = Intent(this@BuyerLandingActivity, PdfViewerActivity::class.java)
+                intent.putExtra("ViewType", "FAQ_PDF")
                 startActivity(intent)
             }
             R.id.nav_logout -> {
@@ -438,8 +412,8 @@ class BuyerLandingActivity : AppCompatActivity(),
             mViewModel?.getChangeRequestStatuses()
             mViewModel?.getQCQuestionData()
             mViewModel?.getQCStageData()
-
-
+            mViewModel?.getArtisanFaultReviewData()
+            mViewModel?.getBuyerFaultReviewData()
             mCMSViewModel?.getRegionData()
             mCMSViewModel?.getCategoriesData()
         }

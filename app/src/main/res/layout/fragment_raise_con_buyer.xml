@@ -1,0 +1,636 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/raise_concern_buyer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorSplash"
+            tools:context=".ui.modules.raiseConcern.RaiseConBuyerFragment">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/top_part"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/btn_back"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="@dimen/margin_regular"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:src="@drawable/ic_keyboard_backspace_black_24dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/order_code"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="@font/lato_regular"
+                        android:textColor="@color/black_text"
+                        android:textSize="@dimen/product_note_text"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toEndOf="@+id/btn_back"
+                        app:layout_constraintTop_toTopOf="@+id/btn_back" />
+
+
+                    <TextView
+                        android:id="@+id/order_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="@font/lato_regular"
+                        android:textSize="10sp"
+                        app:layout_constraintStart_toStartOf="@+id/order_code"
+                        app:layout_constraintTop_toBottomOf="@+id/order_code" />
+
+                    <FrameLayout
+                        android:id="@+id/prod_image_background"
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/ic_fault_backthread"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/order_date"
+                        app:layout_constraintVertical_bias="0.0">
+
+                        <ImageView
+                            android:id="@+id/product_image"
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/brand_logo_back"
+                            android:scaleType="fitXY" />
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/product_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:fontFamily="@font/lato_regular"
+                        android:textSize="@dimen/product_availability_text"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/prod_image_background" />
+
+
+                    <TextView
+                        android:id="@+id/product_amount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/lato_regular"
+                        android:textColor="@color/black_text"
+                        android:textSize="@dimen/product_note_text"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/product_name" />
+
+                    <ImageView
+                        android:id="@+id/fault_status_dot"
+                        android:layout_width="8sp"
+                        android:layout_height="8sp"
+                        android:layout_marginEnd="4dp"
+                        android:src="@drawable/ic_dot"
+                        app:layout_constraintBottom_toBottomOf="@+id/fault_status_text"
+                        app:layout_constraintEnd_toStartOf="@+id/fault_status_text"
+                        app:layout_constraintTop_toTopOf="@+id/fault_status_text" />
+
+                    <TextView
+                        android:id="@+id/fault_status_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:fontFamily="@font/lato_regular"
+                        android:textSize="10sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/product_amount"
+                        app:layout_constraintStart_toStartOf="@+id/product_amount"
+                        app:layout_constraintTop_toBottomOf="@+id/product_amount" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/fill_faulty_form_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/top_part">
+
+                <TextView
+                    android:id="@+id/txt_uh"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_regular"
+                    android:fontFamily="@font/playfair_regular"
+                    android:text="@string/uh_oh"
+                    android:textColor="@color/red_logo"
+                    android:textSize="@dimen/title_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/txt_what_went_wrong"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_regular"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="@dimen/margin_regular"
+                    android:fontFamily="@font/playfair_regular"
+                    android:text="@string/what_went_wrong"
+                    android:textColor="@color/black_text"
+                    android:textSize="@dimen/product_note_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_uh" />
+
+                <TextView
+                    android:id="@+id/txt_report_problem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_regular"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="@dimen/margin_regular"
+                    android:background="@color/lighter_gray"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center"
+                    android:text="@string/report_problem_2_days"
+                    android:textColor="@color/black_text"
+                    android:textSize="@dimen/product_note_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_what_went_wrong" />
+
+                <TextView
+                    android:id="@+id/txt_select_options"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_regular"
+                    android:layout_marginTop="@dimen/margin_semimedium"
+                    android:layout_marginEnd="@dimen/margin_regular"
+                    android:fontFamily="@font/lato_bold"
+                    android:gravity="center"
+                    android:text="@string/select_relevant_fault_options"
+                    android:textColor="@color/black_text"
+                    android:textSize="@dimen/product_note_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_report_problem" />
+
+                <TextView
+                    android:id="@+id/txt_select_options_note"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_regular"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="@dimen/margin_regular"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center"
+                    android:text="@string/select_relevant_fault_options_note"
+                    android:textColor="@color/black_text"
+                    android:textSize="@dimen/product_availability_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_select_options" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/faulty_review_form_recyceler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_regular"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_select_options_note" />
+
+                <TextView
+                    android:id="@+id/txt_description_problem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_regular"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="@dimen/margin_regular"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center"
+                    android:text="@string/desc_of_problem_mandatory"
+                    android:textColor="@color/red_logo"
+                    android:textSize="@dimen/product_note_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/faulty_review_form_recyceler" />
+
+                <EditText
+                    android:id="@+id/commentBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_regular"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="@dimen/margin_regular"
+                    android:background="@drawable/rect_outline_grey"
+                    android:fontFamily="@font/lato_bold"
+                    android:gravity="start"
+                    android:hint="@string/type_here"
+                    android:maxLength="500"
+                    android:padding="@dimen/margin_regular"
+                    android:textSize="@dimen/product_note_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_description_problem" />
+
+                <TextView
+                    android:id="@+id/txt_please_note"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_regular"
+                    android:fontFamily="@font/lato_bold"
+                    android:text="@string/please_note"
+                    android:textColor="@color/black_text"
+                    android:textSize="@dimen/product_availability_text"
+                    app:layout_constraintStart_toStartOf="@+id/commentBox"
+                    app:layout_constraintTop_toBottomOf="@+id/commentBox" />
+
+                <TextView
+                    android:id="@+id/txt_note_faulty_order"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="start"
+                    android:text="@string/note_faulty_order"
+                    android:textColor="@color/black_text"
+                    android:textSize="@dimen/product_availability_text"
+                    app:layout_constraintEnd_toEndOf="@+id/commentBox"
+                    app:layout_constraintStart_toStartOf="@+id/txt_please_note"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_please_note" />
+
+                <Button
+                    android:id="@+id/btn_submit"
+                    android:layout_width="100dp"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="@dimen/margin_semimedium"
+                    android:background="@drawable/rectangle_round_grad_black_solid"
+                    android:fontFamily="@font/lato_regular"
+                    android:text="@string/submit"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white_text"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_note_faulty_order" />
+
+                <LinearLayout
+                    android:id="@+id/upload_photo_chat_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_regular"
+                    android:background="@color/lighter_gray"
+                    android:orientation="vertical"
+                    android:paddingTop="@dimen/margin_regular"
+                    android:paddingBottom="@dimen/margin_semimedium"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btn_submit">
+
+                    <TextView
+                        android:id="@+id/txt_goto_chat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/margin_regular"
+                        android:background="@drawable/rect_round_grad_magenta_solid"
+                        android:drawableLeft="@drawable/ic_chat_outline"
+                        android:fontFamily="@font/lato_regular"
+                        android:paddingStart="@dimen/margin_regular"
+                        android:paddingEnd="@dimen/margin_regular"
+                        android:textAlignment="center"
+                        android:textColor="@color/white_text" />
+
+                    <TextView
+                        android:id="@+id/txt_upload_photo_chat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/margin_regular"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="@dimen/margin_regular"
+                        android:fontFamily="@font/lato_regular"
+                        android:text="@string/upload_photo_chat_reference"
+                        android:textColor="@color/enquiry_swipe_background"
+                        android:textSize="@dimen/product_availability_text"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/txt_goto_chat" />
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/view_faulty_form_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fill_faulty_form_layout">
+
+                <TextView
+                    android:id="@+id/txt_reported_problem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_regular"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="@dimen/margin_regular"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center"
+                    android:text="@string/problem_reported_pls_bear_for_48hrs"
+                    android:textColor="@color/red_logo"
+                    android:textSize="@dimen/product_note_text"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/txt_concern_resolved"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_regular"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="@dimen/margin_regular"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center"
+                    android:text="@string/fault_concern_resolved"
+                    android:textColor="@color/light_green"
+                    android:textSize="@dimen/product_note_text"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_reported_problem" />
+
+                <LinearLayout
+                    android:id="@+id/rate_review_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:background="@color/white_text"
+                    android:layout_marginTop="@dimen/margin_regular"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_concern_resolved">
+
+                    <Button
+                        android:id="@+id/btn_rate_review"
+                        android:layout_width="250dp"
+                        android:layout_height="45dp"
+                        android:background="@drawable/rect_round_grad_violet_solid"
+                        android:drawableStart="@drawable/ic_rate_review_white"
+                        android:textColor="@color/white_text"
+                        android:textSize="18sp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/rate_review_order"
+                        android:textAllCaps="false"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:paddingStart="@dimen/margin_regular"
+                        android:fontFamily="@font/lato_regular" />
+
+                    <TextView
+                        android:layout_marginTop="@dimen/margin_regular"
+                        android:layout_marginBottom="@dimen/margin_regular"
+                        android:id="@+id/txt_great_job"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/great_job"
+                        android:textSize="@dimen/title_text"
+                        android:fontFamily="@font/lato_regular"
+                        android:layout_gravity="center"
+                        android:textColor="@color/dark_green"/>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/btn_view_resppnse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/lato_bold"
+                    android:text="@string/view_defect_response"
+                    android:textSize="@dimen/product_description_text"
+                    android:layout_marginTop="@dimen/margin_regular"
+                    android:layout_marginStart="@dimen/margin_regular"
+                    android:drawableEnd="@drawable/ic_key_down_grey"
+                    android:paddingEnd="8dp"
+                    android:paddingTop="@dimen/margin_regular"
+                    android:textColor="#279472"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rate_review_layout" />
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/view_fault_details_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btn_view_resppnse">
+
+                    <TextView
+                        android:id="@+id/txt_desc_of_fault"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_regular"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="@dimen/margin_regular"
+                        android:fontFamily="@font/lato_regular"
+                        android:gravity="center"
+                        android:text="@string/desc_of_fault"
+                        android:textColor="@color/black_text"
+                        android:textSize="@dimen/product_description_text"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0" />
+
+                    <ListView
+                        android:id="@+id/faulty_review_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:layout_marginStart="@dimen/margin_regular"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="@dimen/margin_regular"
+                        android:divider="@null"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/txt_desc_of_fault" />
+
+                    <TextView
+                        android:id="@+id/txt_note"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_regular"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="@dimen/margin_regular"
+                        android:fontFamily="@font/lato_regular"
+                        android:gravity="center"
+                        android:text="@string/note"
+                        android:textColor="@color/enquiry_swipe_background"
+                        android:textSize="@dimen/product_description_text"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/faulty_review_list" />
+
+                    <TextView
+                        android:id="@+id/buyer_note"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_regular"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="@dimen/margin_regular"
+                        android:fontFamily="@font/lato_regular"
+                        android:gravity="start"
+                        android:maxLength="500"
+                        android:textColor="@color/black_text"
+                        android:textSize="@dimen/product_note_text"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/txt_note" />
+
+                    <TextView
+                        android:id="@+id/btn_view_goto_chat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_regular"
+                        android:elevation="8dp"
+                        android:background="@drawable/rect_round_grad_magenta_solid"
+                        android:drawableStart="@drawable/ic_chat_outline"
+                        android:paddingStart="@dimen/margin_regular"
+                        android:paddingEnd="@dimen/margin_regular"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/buyer_note" />
+
+                    <TextView
+                        android:id="@+id/txt_remarks"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_regular"
+                        android:layout_marginTop="@dimen/margin_semimedium"
+                        android:layout_marginEnd="@dimen/margin_regular"
+                        android:fontFamily="@font/lato_regular"
+                        android:text="@string/remarks_by_artisan"
+                        android:textColor="#319879"
+                        android:visibility="gone"
+                        android:textSize="@dimen/product_description_text"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/btn_view_goto_chat" />
+
+                    <TextView
+                        android:id="@+id/artisan_review"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_regular"
+                        android:layout_marginEnd="@dimen/margin_regular"
+                        android:background="@drawable/rect_outline_grey"
+                        android:gravity="start"
+                        android:visibility="gone"
+                        android:padding="@dimen/margin_regular"
+                        android:textSize="@dimen/product_note_text"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/txt_remarks"
+                        app:layout_constraintTop_toBottomOf="@+id/txt_remarks" />
+
+                    <TextView
+                        android:id="@+id/artisanCommentBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_regular"
+                        android:layout_marginTop="@dimen/margin_regular"
+                        android:layout_marginEnd="@dimen/margin_regular"
+                        android:layout_marginBottom="@dimen/margin_regular"
+                        android:background="@drawable/rect_outline_grey"
+                        android:fontFamily="@font/lato_regular"
+                        android:gravity="start"
+                        android:maxLength="500"
+                        android:padding="@dimen/margin_regular"
+                        android:textSize="@dimen/product_note_text"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/artisan_review" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <Button
+                    android:id="@+id/btn_mark_concern_resolved"
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="@dimen/margin_semimedium"
+                    android:layout_marginBottom="@dimen/margin_regular"
+                    android:background="@color/dark_green"
+                    android:elevation="8dp"
+                    android:fontFamily="@font/lato_regular"
+                    android:padding="4dp"
+                    android:text="@string/mark_resolved"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white_text"
+                    android:textSize="18sp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view_fault_details_layout"
+                    app:layout_constraintVertical_bias="0.0" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+</layout>
+
