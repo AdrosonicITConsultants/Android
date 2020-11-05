@@ -405,7 +405,6 @@
     <string name="currency">Currency</string>
     <string name="net_amt_to_be_paid">Net amount to be paid</string>
     <string name="approve_final_payment">Approve Final Payment</string>
-<<<<<<< HEAD
     <string name="buyer_provided_rating">View rating provide by buyer</string>
     <string name="ratingByBuyer">Rating by buyer</string>
     <string name="response">Response</string>
@@ -414,8 +413,6 @@
     <string name="averageScore">Average Score</string>
     <string name="yourwordsMatter">Because Your Words Matter!!</string>
     <string name="reviewtext">If you like it or you feel that you want to share. We would like to hear from you!</string>
-
-=======
     <string name="qc_disclaimer_text"><![CDATA["Declaration by AE- I, hereby certify from my end that all the processes have been Monitored & Supervised under my guidence and any issue in Quality Certified by me in person or my staff in charge is liable to be discussed with me directly on mail. Once the goods received at your doorsteps, we will not be liable for quality issue if informed after 72 hrs of receipts. "]]></string>
     <string name="mark_order_dispatched">Mark Order Dispatched</string>
     <string name="check_delivery_receipt">Check Delivery Receipt</string>
@@ -427,5 +424,5 @@
     <string name="view_details">View Details</string>
     <string name="go_to_enquiry">\tGo to enquiry</string>
     <string name="swipe_up_to_close">Click up to close</string>
->>>>>>> 8b4af608fe469248dc708c3f0041f36b6cc96f1c
+
 </resources>

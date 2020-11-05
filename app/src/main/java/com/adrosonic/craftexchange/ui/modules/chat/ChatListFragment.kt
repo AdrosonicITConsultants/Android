@@ -63,8 +63,6 @@ class ChatListFragment: Fragment(),
      override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
          mChatVM?.chatListner = this
-
-//         mChatVM?.initiateChatListner = this
          mChatVM?.openChatLogListner = this
 
          setInitiatedChatRecyclerList(initiatedChat)

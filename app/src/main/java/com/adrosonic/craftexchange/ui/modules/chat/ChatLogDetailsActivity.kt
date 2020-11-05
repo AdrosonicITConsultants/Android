@@ -98,8 +98,6 @@ class  ChatLogDetailsActivity : AppCompatActivity(),
             Prefs.putString(ConstantsDirectory.ENQUIRY_ID, enquiryId?.toString()) //TODO change later
             bundle.putString(ConstantsDirectory.ENQUIRY_ID, enquiryId?.toString())
             bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG, "2")
-
-//            bundle.putString(ConstantsDirectory.ENQUIRY_CODE,enquiry?.enquiryCode)
             intent.putExtras(bundle)
             this?.startActivity(intent)
         }
@@ -149,7 +147,6 @@ class  ChatLogDetailsActivity : AppCompatActivity(),
         mBinding?.chatView?.setOnClickOptionButtonListener(View.OnClickListener {
             showDialog()
         })
-
         chat_view?.setOnBubbleClickListener(object: Message.OnBubbleClickListener{
             override fun onClick(message: Message) {
                 Log.e("ViewEnquiry","OnBubbleClickListener")
@@ -159,7 +156,9 @@ class  ChatLogDetailsActivity : AppCompatActivity(),
                     mBinding?.swipeChats?.isRefreshing = true
                     val filename = message.text?.replace("File: ","")
                     mChatVM.downLoadChatMedia(enquiryId ?: 0, filename ?: "")
-                }else Utility.displayMessage(getString(R.string.no_internet_connection),applicationContext)
+                }else{
+                    Utility.displayMessage(getString(R.string.no_internet_connection),applicationContext)
+                }
                 }
             }
         })
@@ -238,23 +237,9 @@ class  ChatLogDetailsActivity : AppCompatActivity(),
         } else {
             for (i in 0 until mMessageList.size) {
                 val message = mMessageList[i]
-                //Set extra info because they were removed before save messages.
-//                mUsers?.forEach {
-//                    if (message.user.getId() == it.getId()) {
-//                        message.user.setIcon(it.getIcon()!!)
-//                    }
-//                }
-//                for (user in mUsers!!) {
-//                    if (message.user.getId() == user.getId()) {
-//                        message.user.setIcon(user.getIcon()!!)
-//                    }
-//                }
                 if (!message.isDateCell && message.isRight) {
                     message.hideIcon(true)
                 }
-//                message.statusStyle = STATUS_ICON_RIGHT_ONLY
-//                message.statusIconFormatter = MyMessageStatusFormatter(this)
-//                message.status = MyMessageStatusFormatter.STATUS_DELIVERED
                 messages.add(message)
             }
         }
@@ -262,7 +247,6 @@ class  ChatLogDetailsActivity : AppCompatActivity(),
         messageView.removeAll()
         messageView.init(messages)
         messageView.setSelection(messageView.count - 1)
-
     }
 
     override fun onChatSentSuccess() {
@@ -324,13 +308,11 @@ class  ChatLogDetailsActivity : AppCompatActivity(),
         }
         intent.type = fileType
         if( mediaType==2){
-            intent.putExtra( Intent.EXTRA_MIME_TYPES,  arrayOf("application/pdf","application/doc","application/msword","application/vnd.ms-excel") )
+            intent.putExtra( Intent.EXTRA_MIME_TYPES,  arrayOf("application/pdf","application/doc","application/msword","application/vnd.ms-excel","application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                "application/vnd.ms-powerpoint","application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                "application/vnd.ms-excel","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "text/plain"))
         }
-//        intent.type = "*/*"
-//        intent.putExtra(
-//            Intent.EXTRA_MIME_TYPES,
-//            arrayOf("image/*",  "video/mp4", "video/quicktime","audio/mpeg","application/pdf","application/doc","application/msword")
-//        )
         startActivityForResult(   intent,  100)
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int,data: Intent?) {
@@ -377,7 +359,6 @@ class  ChatLogDetailsActivity : AppCompatActivity(),
                 Utility.openChatMedia(this,enquiryId?:0,imageName)
             })
         } catch (e: Exception) {
-            Log.e("SendChat", "onChatMediaSuccess onSuccess " + e.message)
         }
     }
 
@@ -388,7 +369,6 @@ class  ChatLogDetailsActivity : AppCompatActivity(),
                 mBinding?.swipeChats?.isRefreshing=false
             })
         } catch (e: Exception) {
-            Log.e("SendChat", "onChatMediaFailure " + e.message)
         }
     }
 

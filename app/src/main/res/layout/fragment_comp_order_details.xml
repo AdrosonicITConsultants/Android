@@ -347,7 +347,6 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-<<<<<<< HEAD
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/RatingLayout"
