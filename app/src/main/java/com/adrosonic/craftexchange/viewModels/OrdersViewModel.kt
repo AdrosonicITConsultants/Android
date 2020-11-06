@@ -616,6 +616,7 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
 
 
     fun downloadTi(enquiryId:Long){
+        //TODO : API not fixed
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         Log.e(EnquiryViewModel.TAG,"downloadTi :${enquiryId}")
         CraftExchangeRepository
