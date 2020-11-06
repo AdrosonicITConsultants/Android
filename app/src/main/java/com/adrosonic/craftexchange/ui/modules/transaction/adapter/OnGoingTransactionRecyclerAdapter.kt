@@ -21,6 +21,7 @@ import com.adrosonic.craftexchange.database.entities.realmEntities.Transactions
 import com.adrosonic.craftexchange.enums.DocumentType
 import com.adrosonic.craftexchange.enums.getId
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
+import com.adrosonic.craftexchange.repository.data.request.taxInv.SendTiRequest
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
 import com.adrosonic.craftexchange.ui.modules.enquiry.enquiryDetails
 import com.adrosonic.craftexchange.ui.modules.order.taxInv.raiseTaxInvIntent
@@ -300,7 +301,9 @@ class OnGoingTransactionRecyclerAdapter(var context: Context?, private var trans
                 }
                 //Tax Invoice
                 12L -> {
-                    val intent = Intent(transaction?.enquiryID?.let { it1 -> context?.raiseTaxInvIntent(it1,true) })
+                    val intent = Intent(transaction?.enquiryID?.let { it1 -> context?.raiseTaxInvIntent(it1,true,
+                        SendTiRequest()
+                    ) })
                     context?.startActivity(intent)
                 }
                 //View Final Payment

@@ -34,6 +34,7 @@ import com.adrosonic.craftexchange.databinding.FragmentArtisanOngoingOrderDetail
 import com.adrosonic.craftexchange.databinding.FragmentBuyerOngoingOrderDetailsBinding
 import com.adrosonic.craftexchange.enums.*
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
+import com.adrosonic.craftexchange.repository.data.request.taxInv.SendTiRequest
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
 import com.adrosonic.craftexchange.ui.modules.artisan.qcForm.qcFormIntent
 import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
@@ -239,7 +240,7 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
 
         mBinding?.taxInvoiceLayer?.setOnClickListener {
             mBinding?.taxInvoiceLayer?.setOnClickListener {
-                enqID?.let {  startActivity(requireContext().raiseTaxInvIntent(it,true)) }
+                enqID?.let {  startActivity(requireContext().raiseTaxInvIntent(it,true, SendTiRequest())) }
             }
         }
 

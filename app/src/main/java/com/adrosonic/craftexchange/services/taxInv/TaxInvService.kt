@@ -65,7 +65,6 @@ class TaxInvService: JobIntentService() {
 
     fun generateTaxInvoice(invoiceRequest : SendTiRequest){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
-//        var reqString = Gson().toJson(invoiceRequest)
         CraftExchangeRepository
             .getTiService()
             .generateTaxInvoice(token,invoiceRequest)

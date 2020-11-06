@@ -9,6 +9,7 @@ import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
 import com.adrosonic.craftexchange.database.predicates.*
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.request.changeRequest.RaiseCrInput
+import com.adrosonic.craftexchange.repository.data.request.taxInv.SendTiPreviewRequest
 import com.adrosonic.craftexchange.repository.data.request.taxInv.SendTiRequest
 import com.adrosonic.craftexchange.repository.data.response.Notification.NotificationReadResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.ownDesign.DeleteOwnProductRespons
@@ -18,6 +19,7 @@ import com.adrosonic.craftexchange.repository.data.response.orders.OrderResponse
 import com.adrosonic.craftexchange.repository.data.response.taxInv.TaxInvoiceResponse
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
+import com.google.gson.Gson
 import com.pixplicity.easyprefs.library.Prefs
 import io.realm.RealmResults
 import okhttp3.ResponseBody
@@ -566,7 +568,6 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
 
     fun generateTaxInvoice(invoiceRequest : SendTiRequest){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
-//        var reqString = Gson().toJson(invoiceRequest)
         CraftExchangeRepository
             .getTiService()
             .generateTaxInvoice(token,invoiceRequest)
@@ -579,11 +580,7 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
                     call: Call<TaxInvoiceResponse>,
                     response: Response<TaxInvoiceResponse>
                 ) {
-//                    if(response.isSuccessful){
-//                        taxInvGenListener?.onGenTaxInvSuccess()
-////                        TaxInvPredicates.insertTi(response.body()!!) TODO :implement after api is fixed from backend
-//                    }
-                    if(response?.body()?.valid!!){
+                    if(response?.body()?.valid!!) {
                         taxInvGenListener?.onGenTaxInvSuccess()
                         TaxInvPredicates.insertTi(response.body()!!)
                     }else{
@@ -593,12 +590,37 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
             })
     }
 
+    fun generateTaxInvoicePreview(invoiceRequest : SendTiPreviewRequest){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+//        var reqString = Gson().toJson(invoiceRequest)
+        CraftExchangeRepository
+            .getTiService()
+            .generateTaxInvoicePreview(token,invoiceRequest)
+            .enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    t.printStackTrace()
+                    taxInvGenListener?.onGenTaxInvFailure()
+                }
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    if(response?.isSuccessful){
+                        taxInvGenListener?.onGenTaxInvSuccess()
+                    }else{
+                        taxInvGenListener?.onGenTaxInvFailure()
+                    }
+                }
+            })
+    }
+
+
     fun downloadTi(enquiryId:Long){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         Log.e(EnquiryViewModel.TAG,"downloadTi :${enquiryId}")
         CraftExchangeRepository
             .getTiService()
-            .getPreviewTaxInvPDF(token,enquiryId.toInt(),"0").enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
+            .getPreviewTaxInvPDF(token,enquiryId.toInt(),"false").enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     Log.e(EnquiryViewModel.TAG,"downloadTi :${t.message}")
                     t.printStackTrace()
@@ -634,7 +656,7 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
         Log.e(EnquiryViewModel.TAG,"previewTi :${enquiryId}")
         CraftExchangeRepository
             .getTiService()
-            .getPreviewTaxInvHTML(token,enquiryId.toInt(),"0").enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
+            .getPreviewTaxInvHTML(token,enquiryId.toInt(),"false").enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     Log.e(EnquiryViewModel.TAG,"previewTi :${t.message}")
                     t.printStackTrace()
