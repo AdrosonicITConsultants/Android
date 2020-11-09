@@ -29,12 +29,14 @@ import com.daimajia.swipe.adapters.BaseSwipeAdapter
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter
 import io.realm.RealmResults
 import kotlinx.android.synthetic.main.activity_artisan_add_product_template.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class NotificationAdapter(
     private val context: Context,
     private var notificationsData: RealmResults<Notifications>?
-) : RecyclerSwipeAdapter<NotificationAdapter.MyViewHolder>() {
+) : RecyclerView.Adapter<NotificationAdapter.MyViewHolder>() {
     interface NotificationUpdatedListener {
         fun onSelected(productId:Long,isRead:Long)
     }
@@ -48,23 +50,13 @@ class NotificationAdapter(
     }
 
     inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        var statusImage: ImageView
-        var txt_inquiry_id: TextView
-        var txt_buyer_brand: TextView
-        var txt_prod_details: TextView
-        var txt_status: TextView
-        var txt_date: TextView
-        var ll_markasread:LinearLayout
-        var constraint_bg:ConstraintLayout
+        var txtNotiType: TextView
+        var txtNotiCode: TextView
+        var txtNotiDate: TextView
         init {
-            statusImage = view.findViewById(R.id.img_status)
-            txt_inquiry_id = view.findViewById(R.id.txt_inquiry_id)
-            txt_buyer_brand = view.findViewById(R.id.txt_buyer_brand)
-            txt_prod_details = view.findViewById(R.id.txt_prod_details)
-            txt_status = view.findViewById(R.id.txt_status)
-            txt_date = view.findViewById(R.id.txt_date)
-            ll_markasread = view.findViewById(R.id.ll_markasread)
-            constraint_bg = view.findViewById(R.id.constraint_bg)
+            txtNotiType = view.findViewById(R.id.txtNotiType)
+            txtNotiCode = view.findViewById(R.id.txtNotiCode)
+            txtNotiDate = view.findViewById(R.id.txtNotiDate)
         }
     }
 
@@ -76,19 +68,16 @@ class NotificationAdapter(
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val pos=position
         var notification = notificationItems?.get(position)
-        holder.txt_inquiry_id.text = "Enquiry Id: ${notification?.code}"
-        holder.txt_buyer_brand.text = notification?.companyName
-        holder.txt_prod_details.text = notification?.productDesc
-        holder.txt_status.text = notification?.type
-        holder.txt_date.text =Utility.returnDisplayDate( notification?.createdOn?:"")
-        Utility.setImageResource(context, holder.statusImage, getIcon(notification?.type?:""))
-        holder?.ll_markasread?.setOnClickListener {
-                markAsUnread(position,0,notification?.notificationId?:0)
-            }
-//        if(notification!!.seen!!.equals(0)){
-//            holder?.constraint_bg.setBackgroundColor(Color.parseColor("#F8F0FF"))
-//        } else holder?.constraint_bg.setBackgroundColor(Color.parseColor("#FFFFFF"))
+        holder.txtNotiType.text =notification?.notificationType?:""
+        holder.txtNotiCode.text = notification?.code
 
+
+        val cal: Calendar = Calendar.getInstance()
+        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.ENGLISH)
+        cal.setTime(sdf.parse(notification?.createdOn))
+        cal.time
+        //2020-11-06T00:30:01.000+0000
+        holder.txtNotiDate.text ="${cal.get(Calendar.DAY_OF_MONTH)}-"+ cal.get(Calendar.MONTH)+"-"+ cal.get(Calendar.YEAR)+"\n"+cal.get(Calendar.HOUR_OF_DAY)+":"+ cal.get(Calendar.MINUTE)
     }
 
 
@@ -102,58 +91,58 @@ class NotificationAdapter(
             listener?.onSelected(productId, isUnread)
     }
 
-    override fun getSwipeLayoutResourceId(position: Int): Int {
-        return R.id.swipeLayout
-    }
+//    override fun getSwipeLayoutResourceId(position: Int): Int {
+//        return R.id.swipeLayout
+//    }
 
     override fun getItemId(p0: Int): Long {
         return notificationsData!!.get(p0)!!._id ?: 0
     }
 
-    private fun getIcon(name:String): Int {
-        return when (name) {
-            "Enquiry Generated", "Enquiry Closed" -> {
-                R.drawable.ic_status_recipt
-            }
-            "Moq Received","Moq accepted"  -> {
-                R.drawable.ic_moq_received
-            }
-            "Pi finalized", "Tax Invoice Raised","Delivery Challan Uploaded","Order Received" -> {
-                R.drawable.ic_status_invoice
-            }
-            "Advance Payment Received","Advanced Payment Accepted","Advanced Payment Rejected" -> {
-                R.drawable.ic_advance_payent_received
-            }
-            "Change Requested Initiated","Change Requested Accepted","Change Request Rejected"  -> {
-                R.drawable.ic_cr_accepted
-            }
-            "Account Disable" -> {
-                R.drawable.ic_receipt
-            }
-            "Account Enabled" -> {
-                R.drawable.ic_receipt
-            }
-            "Yarn procured" -> {
-                R.drawable.ic_receipt
-            }
-            "Yarn Dyeing" -> {
-                R.drawable.ic_receipt
-            }
-            "Pre loom process initiated" -> {
-                R.drawable.ic_receipt
-            }
-            "Weaving initiated" -> {
-                R.drawable.ic_receipt
-            }
-            "Post loom process initiated" -> {
-                R.drawable.ic_receipt
-            }
-            "Completion of Order" -> {
-                R.drawable.ic_receipt
-            }
-            else -> {
-                R.drawable.ic_receipt
-            }
-        }
-    }
+//    private fun getIcon(name:String): Int {
+//        return when (name) {
+//            "Enquiry Generated", "Enquiry Closed" -> {
+//                R.drawable.ic_status_recipt
+//            }
+//            "Moq Received","Moq accepted"  -> {
+//                R.drawable.ic_moq_received
+//            }
+//            "Pi finalized", "Tax Invoice Raised","Delivery Challan Uploaded","Order Received" -> {
+//                R.drawable.ic_status_invoice
+//            }
+//            "Advance Payment Received","Advanced Payment Accepted","Advanced Payment Rejected" -> {
+//                R.drawable.ic_advance_payent_received
+//            }
+//            "Change Requested Initiated","Change Requested Accepted","Change Request Rejected"  -> {
+//                R.drawable.ic_cr_accepted
+//            }
+//            "Account Disable" -> {
+//                R.drawable.ic_receipt
+//            }
+//            "Account Enabled" -> {
+//                R.drawable.ic_receipt
+//            }
+//            "Yarn procured" -> {
+//                R.drawable.ic_receipt
+//            }
+//            "Yarn Dyeing" -> {
+//                R.drawable.ic_receipt
+//            }
+//            "Pre loom process initiated" -> {
+//                R.drawable.ic_receipt
+//            }
+//            "Weaving initiated" -> {
+//                R.drawable.ic_receipt
+//            }
+//            "Post loom process initiated" -> {
+//                R.drawable.ic_receipt
+//            }
+//            "Completion of Order" -> {
+//                R.drawable.ic_receipt
+//            }
+//            else -> {
+//                R.drawable.ic_receipt
+//            }
+//        }
+//    }
 }

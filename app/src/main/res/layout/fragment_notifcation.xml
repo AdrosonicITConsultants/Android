@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
+    android:background="@color/marketing_bg"
     android:orientation="vertical">
 
     <RelativeLayout
-        android:padding="8dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="8dp">
 
         <TextView
             android:id="@+id/notification_elements"
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/lato_regular"
             android:text="@string/no_new_notifications"
-            android:textColor="@color/black_text"
+            android:textColor="@color/lighter_gray"
             android:textSize="@dimen/edit_text" />
 
         <TextView
@@ -30,56 +30,60 @@
             android:fontFamily="@font/lato_regular"
             android:gravity="center_vertical"
             android:text="@string/mark_all_as_read"
-            android:textColor="@color/red_logo" />
+            android:textColor="@color/red_logo"
+            android:visibility="invisible" />
     </RelativeLayout>
 
     <FrameLayout
-        android:layout_marginTop="@dimen/margin_regular"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/margin_regular">
+
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:visibility="visible"
                 android:id="@+id/notificationList"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:visibility="visible" />
 
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <RelativeLayout
             android:id="@+id/empty_view"
-            android:visibility="gone"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/empty_text"
-                android:gravity="center_vertical"
-                android:layout_centerInParent="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
                 android:layout_marginTop="48dp"
                 android:fontFamily="@font/playfair_regular"
+                android:gravity="center_vertical"
                 android:text="No new notifications"
-                android:textColor="@color/notification_lavender"
+                android:textColor="@color/darker_gray"
                 android:textSize="32sp"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:text="\n\n It's a timeless story!"
-                android:layout_centerHorizontal="true"
-                android:layout_alignParentBottom="true"
                 android:layout_width="wrap_content"
-                android:textSize="@dimen/edit_text"
-                android:textColor="@color/notification_lavender"
                 android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="@dimen/expandable_layout_std_padding"
                 android:gravity="center_horizontal"
-                android:layout_marginBottom="@dimen/expandable_layout_std_padding" />
+                android:text="\n\n It's a timeless story!"
+                android:textColor="@color/darker_gray"
+                android:textSize="@dimen/edit_text" />
         </RelativeLayout>
     </FrameLayout>
 </LinearLayout>

@@ -14,11 +14,13 @@ import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.adrosonic.craftexchangemarketing.R
+import com.adrosonic.craftexchangemarketing.database.predicates.NotificationPredicates
 import com.adrosonic.craftexchangemarketing.databinding.ActivityAdminLandingBinding
 import com.adrosonic.craftexchangemarketing.repository.craftexchangemarketingRepository
 import com.adrosonic.craftexchangemarketing.repository.data.response.Notification.SaveUserTokenResponse
 import com.adrosonic.craftexchangemarketing.ui.modules.Notification.NotifcationFragment
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.CommonUserFragment
+import com.adrosonic.craftexchangemarketing.ui.modules.buyer.landing.BuyerLandingActivity
 import com.adrosonic.craftexchangemarketing.utils.ConstantsDirectory
 import com.adrosonic.craftexchangemarketing.utils.UserConfig
 import com.adrosonic.craftexchangemarketing.utils.Utility
@@ -46,10 +48,12 @@ fun Context.adminLandingIntent(): Intent {
 ////        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 ////    }
 //}
-class AdminLandingActivity : AppCompatActivity(){
+class AdminLandingActivity : AppCompatActivity(),
+ClusterViewModel.notificationInterface,
+NotifcationFragment.Companion.notifcationsInterface{
 
     companion object{
-        const val TAG = "ArtisanLanding"
+        const val TAG = "AdminLandingActivity"
     }
 
     private var mBinding : ActivityAdminLandingBinding?= null
@@ -66,8 +70,14 @@ class AdminLandingActivity : AppCompatActivity(){
         val view = mBinding?.root
         setContentView(view)
         mViewModel.getAllClusters()
-//        mViewModel?.noficationlistener=this
-//        mViewModel?.getAllNotifications()
+
+        DeviceRegistration(object : DeviceTokenCallback {
+            override fun registeredToken(token: String) {
+                addUserDevice(true, token)
+            }
+        }).execute()
+        mViewModel?.noficationlistener=this
+        mViewModel?.getAllNotifications()
 //        mViewModel?.getMoqDeliveryTimes()
 //        ArtisanLandingActivity.DeviceRegistration(object :
 //            ArtisanLandingActivity.DeviceTokenCallback {
@@ -175,55 +185,8 @@ class AdminLandingActivity : AppCompatActivity(){
                 }
             }
         }
-////        NotifcationFragment.badgeCountListener=this
+        NotifcationFragment.badgeCountListener=this
     }
-    private fun addUserDevice(login: Boolean,authtoken:String) {
-        try {
-            var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
-            Log.e(TAG, "authtoken: $authtoken")
-            val deviceRegistration = craftexchangemarketingRepository.getRegisterService().saveDeviceToken(token,authtoken,authtoken)
-            deviceRegistration.enqueue(object : Callback<SaveUserTokenResponse> {
-                override fun onResponse(call: Call<SaveUserTokenResponse>, response: Response<SaveUserTokenResponse>?) {
-                    response?.takeUnless { response.isSuccessful }?.apply {
-                        Log.e(TAG, "Error registering device token "+response.message()+" raw code "+ response.raw().code)
-                    }
-                    response?.takeIf { response.isSuccessful }?.apply {
-                        Log.e(TAG, "Device registration successful ${response.body()?.data?.deviceType}")
-                        Log.e(TAG, "valid ${response.body()?.valid}")
-                    }
-                }
-                override fun onFailure(call: Call<SaveUserTokenResponse>, t: Throwable) {
-                    Log.e(TAG, "Error registering device token ")
-                }
-            })
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-    class DeviceRegistration(var callback: DeviceTokenCallback) : AsyncTask<Void, Void, String>() {
-        override fun doInBackground(vararg p0: Void?): String? {
-            var token = FirebaseInstanceId.getInstance().token
-            while (token == null)//this is used to get Firebase token until its null so it will save you from null pointer exception
-            {
-                token = FirebaseInstanceId.getInstance().token
-            }
-            UserConfig.shared.deviceRegistrationToken = token
-            Log.e(TAG, "token: $token")
-            return token
-        }
-        override fun onPostExecute(result: String) {
-            callback.registeredToken(result)
-        }
-
-    }
-    interface DeviceTokenCallback {
-        fun registeredToken(token: String)
-    }
-
-//        interface DeviceTokenCallback {
-//            fun registeredToken(token: String)
-//        }
-
         override fun onOptionsItemSelected(item:MenuItem):Boolean {
         // The action bar home/up action should open or close the drawer.
 
@@ -246,7 +209,7 @@ class AdminLandingActivity : AppCompatActivity(){
     }
 //
     private fun setupBadge() {
-        val count = 2
+        val count = NotificationPredicates.getAllNotifications()?.size?:0
         if (noti_badge != null) {
             if (count < 1) {
                 if (noti_badge?.getVisibility() !== View.GONE) {
@@ -281,6 +244,57 @@ class AdminLandingActivity : AppCompatActivity(){
             }
 
     }
+    interface DeviceTokenCallback {
+        fun registeredToken(token: String)
+    }
 
+    class DeviceRegistration(var callback: DeviceTokenCallback) : AsyncTask<Void, Void, String>() {
+        override fun doInBackground(vararg p0: Void?): String? {
+            var token = FirebaseInstanceId.getInstance().token
+            while (token == null)//this is used to get Firebase token until its null so it will save you from null pointer exception
+            {
+                token = FirebaseInstanceId.getInstance().token
+            }
+            UserConfig.shared.deviceRegistrationToken = token
+            Log.e(TAG,"token: $token")
+            return token
+        }
 
+        override fun onPostExecute(result: String) {
+            callback.registeredToken(result)
+        }
+
+    }
+
+    private fun addUserDevice(login: Boolean,authtoken:String) {
+        try {
+            var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+            val deviceRegistration = craftexchangemarketingRepository.getRegisterService().saveDeviceTokenAdmin(token,"AND",authtoken)
+
+            deviceRegistration.enqueue(object : Callback<SaveUserTokenResponse> {
+                override fun onResponse(call: Call<SaveUserTokenResponse>, response: retrofit2.Response<SaveUserTokenResponse>?) {
+                    response?.takeUnless { response.isSuccessful }?.apply {
+                        Log.e(TAG, "Error registering device token "+response.message()+" raw code "+ response.raw().code)
+                    }
+                    response?.takeIf { response.isSuccessful }?.apply {
+                        Log.e(TAG, "Device registration successful ${response.body()?.data?.deviceType}")
+                        Log.e(TAG, "valid ${response.body()?.valid}")
+                    }
+                }
+                override fun onFailure(call: Call<SaveUserTokenResponse>, t: Throwable) {
+                    Log.e(TAG, "Error registering device token ")
+                }
+            })
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    override fun onBadgeCOuntUpdated() {
+        setupBadge()
+    }
+
+    override fun onNotificationDataFetched() {
+        setupBadge()
+    }
 }

@@ -54,16 +54,15 @@ class NotifcationFragment : Fragment(),
             mViewModel.getAllNotifications()
         }
 
-
         notificationList.layoutManager =LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         notificationAdapter = NotificationAdapter(requireContext(), mViewModel.getNotificationsMutableData().value)
         notificationList.adapter = notificationAdapter
         notificationAdapter.listener=this
         Log.e("Wishlist", "Size :" + mViewModel.getNotificationsMutableData().value?.size)
         notificationList.setOnScrollChangeListener { view, i, i2, i3, i4 ->
-            if (notificationAdapter.openItems.size > 0) {
-                notificationAdapter.closeAllExcept(null)
-            }
+//            if (notificationAdapter.openItems.size > 0) {
+//                notificationAdapter.closeAllExcept(null)
+//            }
         }
         mViewModel.getNotificationsMutableData().observe(viewLifecycleOwner, Observer<RealmResults<Notifications>> {
                 Log.e("Wishlist", "updateWishlist ${it.size}")
@@ -87,12 +86,12 @@ class NotifcationFragment : Fragment(),
         if (mViewModel.getNotificationsMutableData().value?.size!! > 0) {
             notificationList?.visibility = View.VISIBLE
             empty_view.visibility = View.GONE
-            readAll.visibility=View.VISIBLE
+            readAll.visibility=View.INVISIBLE
             notification_elements.text =  "${mViewModel.getNotificationsMutableData().value?.size} new notifications"
         } else {
             notificationList?.visibility = View.GONE
             empty_view.visibility = View.VISIBLE
-            readAll.visibility=View.GONE
+            readAll.visibility=View.INVISIBLE
             notification_elements.text = "No notification"
 
         }

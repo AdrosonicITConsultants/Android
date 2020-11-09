@@ -24,7 +24,7 @@ class MoqAdapter(
     private val context: Context,
     private var moqsData: RealmResults<Moqs>?,
     private val moqDeliveryTimeList:ArrayList<Datum>
-) : RecyclerSwipeAdapter<MoqAdapter.MyViewHolder>() {
+) : RecyclerView.Adapter<MoqAdapter.MyViewHolder>() {
     interface MoqListener {
         fun onAccepted(artisanId:Long,moqId:Long)
         fun viewArtisanProfile(id:Long)
@@ -120,9 +120,9 @@ class MoqAdapter(
             listener?.onAccepted(artisanId, moqId)
     }
 
-    override fun getSwipeLayoutResourceId(position: Int): Int {
-        return R.id.swipeLayout
-    }
+//    override fun getSwipeLayoutResourceId(position: Int): Int {
+//        return R.id.swipeLayout
+//    }
 
     override fun getItemId(p0: Int): Long {
         return moqsData!!.get(p0)!!._id ?: 0

@@ -8,11 +8,14 @@ import androidx.lifecycle.MutableLiveData
 import com.adrosonic.craftexchangemarketing.database.entities.realmEntities.ClusterList
 import com.adrosonic.craftexchangemarketing.database.entities.realmEntities.ProductCatalogue
 import com.adrosonic.craftexchangemarketing.database.predicates.ClusterPredicates
+import com.adrosonic.craftexchangemarketing.database.predicates.NotificationPredicates
 import com.adrosonic.craftexchangemarketing.database.predicates.ProductPredicates
 import com.adrosonic.craftexchangemarketing.repository.craftexchangemarketingRepository
+import com.adrosonic.craftexchangemarketing.repository.data.response.Notification.NotificationResponse
 import com.adrosonic.craftexchangemarketing.repository.data.response.buyer.viewProducts.productCatalogue.CatalogueProductsResponse
 import com.adrosonic.craftexchangemarketing.repository.data.response.clusterResponse.CLusterResponse
 import com.adrosonic.craftexchangemarketing.utils.ConstantsDirectory
+import com.adrosonic.craftexchangemarketing.utils.UserConfig
 import com.pixplicity.easyprefs.library.Prefs
 import io.realm.RealmResults
 import retrofit2.Call
@@ -25,8 +28,10 @@ class ClusterViewModel(application: Application) : AndroidViewModel(application)
         fun onFailure()
         fun onSuccess()
     }
-
-
+    interface notificationInterface{
+        fun onNotificationDataFetched()
+    }
+    var noficationlistener: notificationInterface? = null
     var clusterListener : ClusterProdInterface ?= null
 
     val clusterList : MutableLiveData<RealmResults<ClusterList>> by lazy { MutableLiveData<RealmResults<ClusterList>>() }
@@ -103,5 +108,32 @@ class ClusterViewModel(application: Application) : AndroidViewModel(application)
                 }
             })
 
+    }
+
+    fun getAllNotifications(){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        craftexchangemarketingRepository
+            .getNotificationService()
+            .getAllAdminNotifications(token)
+            .enqueue(object: Callback, retrofit2.Callback<NotificationResponse> {
+                override fun onFailure(call: Call<NotificationResponse>, t: Throwable) {
+                    t.printStackTrace()
+                    Log.e(LandingViewModel.TAG,"onFailure: "+t.message)
+                    noficationlistener?.onNotificationDataFetched()
+                }
+                override fun onResponse(
+                    call: Call<NotificationResponse>,
+                    response: Response<NotificationResponse>) {
+                    if(response.body()?.valid == true){
+                        Log.e(LandingViewModel.TAG,"getProductUploadData :"+response.body()?.data?.getAllNotifications?.size)
+                        NotificationPredicates.insertNotification(response.body()?.data?.getAllNotifications)
+                        UserConfig.shared?.notiBadgeCount=response.body()?.data?.count?:0
+                        noficationlistener?.onNotificationDataFetched()
+                    }else{
+                        Log.e(NotificationViewModel.TAG,"getProductUploadData onFailure: "+response.body()?.errorCode)
+                        noficationlistener?.onNotificationDataFetched()
+                    }
+                }
+            })
     }
 }

@@ -254,7 +254,7 @@ class LandingViewModel(application: Application) : AndroidViewModel(application)
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         craftexchangemarketingRepository
             .getNotificationService()
-            .getAllNotifications(token)
+            .getAllAdminNotifications(token)
             .enqueue(object: Callback, retrofit2.Callback<NotificationResponse> {
                 override fun onFailure(call: Call<NotificationResponse>, t: Throwable) {
                     t.printStackTrace()
