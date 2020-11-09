@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.databinding.ActivityMainBinding
 import com.adrosonic.craftexchange.ui.modules.artisan.landing.artisanLandingIntent
 import com.adrosonic.craftexchange.ui.modules.buyer.landing.buyerLandingIntent
@@ -18,7 +19,7 @@ fun Context.mainIntent(): Intent {
     }
 }
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : LocaleBaseActivity() {
     private var mBinding : ActivityMainBinding ?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {

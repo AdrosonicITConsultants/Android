@@ -1,5 +1,7 @@
 package com.adrosonic.craftexchange.ui.modules.artisan.auth.login
 
+import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -8,19 +10,24 @@ import android.text.Spanned
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.Spinner
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
-
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import com.adrosonic.craftexchange.LocalizationManager.LocaleManager
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.FragmentArtisanLoginUsernameBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.loginResponse.LoginValidationResponse
-import com.adrosonic.craftexchange.ui.modules.pdfViewer.PdfViewerActivity
 import com.adrosonic.craftexchange.ui.modules.authentication.register.RegisterActivity
+import com.adrosonic.craftexchange.ui.modules.pdfViewer.PdfViewerActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
 import com.pixplicity.easyprefs.library.Prefs
@@ -152,6 +159,9 @@ class ArtisanLoginUsernameFragment : Fragment() {
             startActivity(intent)
         }
 
+        mBinding?.changeLanguageText?.setOnClickListener {
+            showLanguageSelectionDialog()
+        }
 //        mBinding?.loginButton?.setOnClickListener {
 //            login_button.setReadPermissions(listOf(EMAIL))
 //            callbackManager = CallbackManager.Factory.create()
@@ -197,5 +207,36 @@ class ArtisanLoginUsernameFragment : Fragment() {
 //        callbackManager.onActivityResult(requestCode, resultCode, data)
 //    }
 
+    fun showLanguageSelectionDialog() {
+        var dialog = Dialog(requireContext())
+        dialog.setContentView(R.layout.dialog_select_language)
+        dialog.show()
+        val spLanguage = dialog.findViewById(R.id.sp_language) as Spinner
+        val btnConfirm = dialog.findViewById(R.id.btn_confirm) as Button
+
+        val spLanguageAdapter = ArrayAdapter<String>(requireContext(),android.R.layout.simple_spinner_item,resources.getStringArray(R.array.lang_selector))
+        spLanguageAdapter.setDropDownViewResource(R.layout.spinner_item)
+        spLanguage?.adapter = spLanguageAdapter
+        btnConfirm.setOnClickListener {
+            val builder = AlertDialog.Builder(requireContext(),android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar)
+            builder.setMessage("Are you sure? You want to set ${spLanguage?.selectedItem.toString()} as your app language?")
+                .setCancelable(true)
+                .setPositiveButton("OK") { dialog1, id ->
+                    if(spLanguage?.selectedItem.toString().equals("Hindi"))setNewLocale(requireActivity(), LocaleManager.HINDI)
+                    else setNewLocale(requireActivity(), LocaleManager.ENGLISH)
+                    dialog1.cancel()
+                    dialog.cancel()
+                }
+            builder.show()
+        }
+    }
+    private fun setNewLocale(
+        mContext: FragmentActivity,
+        language: String
+    ) {
+        LocaleManager.setNewLocale(requireContext(), language)
+        val intent: Intent = mContext.getIntent()
+        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
+    }
 
 }

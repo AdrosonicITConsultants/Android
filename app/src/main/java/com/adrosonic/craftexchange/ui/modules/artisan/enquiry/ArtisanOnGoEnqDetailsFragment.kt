@@ -193,13 +193,13 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
                 val additionalInfo=mBinding?.etAddNote?.text.toString()
                 val moq=mBinding?.etMoq?.text.toString()
                 val ppu=mBinding?.etPrice?.text.toString()
-                if(moq.isEmpty()) Utility.displayMessage("Please add MOQ",requireContext())
-                else if(ppu.isEmpty()) Utility.displayMessage("Please add price per unit",requireContext())
-                else if(estId<=0) Utility.displayMessage("Please select estimated days",requireContext())
+                if(moq.isEmpty()) Utility.displayMessage(getString(R.string.add_moq),requireContext())
+                else if(ppu.isEmpty()) Utility.displayMessage(getString(R.string.add_ppu),requireContext())
+                else if(estId<=0) Utility.displayMessage(getString(R.string.select_est_days),requireContext())
                 else {
                     enqID?.let {
                         if (Utility.checkIfInternetConnected(requireContext())) {
-                            mBinding?.txtBidMoq?.setText("Sending MOQ")
+                            mBinding?.txtBidMoq?.setText(getString(R.string.sending_moq))
                             viewLoader()
                             mEnqVM?.sendMoq(it, additionalInfo, estId, moq.toLong(), ppu)
                         }else {
@@ -468,7 +468,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
             mBinding?.etPrice?.setText("${moq?.ppu?:""}", TextView.BufferType.EDITABLE)
             mBinding?.etAddNote?.setText("${moq?.additionalInfo?:""}", TextView.BufferType.EDITABLE)
             mBinding?.spEstDays?.setSelection((moq?.deliveryTimeId?:0).toInt())
-            mBinding?.txtFillDetails?.text="MOQ Details"
+            mBinding?.txtFillDetails?.text=getString(R.string.moq_detaila)
             mBinding?.txtBidMoq?.visibility=View.GONE
             mBinding?.etMoq?.isEnabled=false
             mBinding?.etPrice?.isEnabled=false
@@ -764,7 +764,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
     override fun onAddMoqFailure() {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
-                Utility.displayMessage("Unable to add MOQ, please try again after some time",requireContext())
+                Utility.displayMessage(getString(R.string.unable_to_add),requireContext())
                 hideLoader()
                 setDetails()
             })
@@ -776,7 +776,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
     override fun onAddMoqSuccess() {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
-                Utility.displayMessage("MOQ added succesfully",requireContext())
+                Utility.displayMessage(getString(R.string.moq_added),requireContext())
                 hideLoader()
                 setDetails()
             })
@@ -805,7 +805,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
                 }else{
                     Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
                 }
-                Utility.displayMessage("Enquiry Stage Updated!",requireActivity())
+                Utility.displayMessage(getString(R.string.enq_stage_updated),requireActivity())
             })
         } catch (e: Exception) {
             Log.e("Enquiry Change", "Exception onChangeEnqFailure " + e.message)
@@ -816,7 +816,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 dialog?.cancel()
-                Utility.displayMessage("Please Try Again",requireActivity())
+                Utility.displayMessage(getString(R.string.plz_try_again),requireActivity())
             })
         } catch (e: Exception) {
             Log.e("Enquiry Change", "Exception onChangeEnqFailure " + e.message)

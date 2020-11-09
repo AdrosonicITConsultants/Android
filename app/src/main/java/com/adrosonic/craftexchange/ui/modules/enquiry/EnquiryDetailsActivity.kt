@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityEnquiryDetailsBinding
 import com.adrosonic.craftexchange.enums.EnquiryStatus
@@ -17,7 +18,7 @@ import com.pixplicity.easyprefs.library.Prefs
 fun Context.enquiryDetails(): Intent {
     return Intent(this, EnquiryDetailsActivity::class.java).apply {}
 }
-class EnquiryDetailsActivity : AppCompatActivity() {
+class EnquiryDetailsActivity : LocaleBaseActivity() {
 
     private var mBinding: ActivityEnquiryDetailsBinding? = null
 

@@ -19,6 +19,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.Moqs
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
@@ -43,7 +44,7 @@ fun Context.revisePiContext(enquiryId:Long): Intent {
     intent.putExtra("enquiryId", enquiryId)
     return intent
 }
-class RevisePiActivity : AppCompatActivity(),
+class RevisePiActivity : LocaleBaseActivity(),
     EnquiryViewModel.RevisePiInterface,
     EnquiryViewModel.singlePiInterface {
     var enquiryId=0L
@@ -114,14 +115,14 @@ class RevisePiActivity : AppCompatActivity(),
             val sgst = mBinding?.etSgst?.text.toString()
             val cgst = mBinding?.etCgst?.text.toString()
             currency = mBinding?.spCurrency?.selectedItem.toString()
-            if (qty.isEmpty()) Utility.displayMessage("Please add Quantity", applicationContext)
-            else if (date.isEmpty()) Utility.displayMessage("Please select delivery date", applicationContext )
-            else if (ppu.isEmpty()) Utility.displayMessage("Please add price per unit", applicationContext)
-            else if (hsn.isEmpty()) Utility.displayMessage("Please add HSN code",applicationContext)
-            else if (sgst.isEmpty()) Utility.displayMessage("Please add SGST", applicationContext)
-            else if (cgst.isEmpty()) Utility.displayMessage("Please add CGST", applicationContext)
-            else if (currency!!.isEmpty()) Utility.displayMessage("Please select Currency", applicationContext)
-            else if(!mBinding?.chbTnc!!.isChecked)Utility.displayMessage("Please accept terms and conditions", applicationContext)
+            if (qty.isEmpty()) Utility.displayMessage(getString(R.string.plz_add_qty), applicationContext)
+            else if (date.isEmpty()) Utility.displayMessage(getString(R.string.plz_add_del_date), applicationContext )
+            else if (ppu.isEmpty()) Utility.displayMessage(getString(R.string.add_ppu), applicationContext)
+            else if (hsn.isEmpty()) Utility.displayMessage(getString(R.string.plz_add_hsn),applicationContext)
+            else if (sgst.isEmpty()) Utility.displayMessage(getString(R.string.plz_add_sgst), applicationContext)
+            else if (cgst.isEmpty()) Utility.displayMessage(getString(R.string.plz_add_cgst), applicationContext)
+            else if (currency!!.isEmpty()) Utility.displayMessage(getString(R.string.plz_add_currency), applicationContext)
+            else if(!mBinding?.chbTnc!!.isChecked)Utility.displayMessage(getString(R.string.plz_accept_tnc), applicationContext)
             else {
                 pi.cgst=cgst.toLong()
                 pi.expectedDateOfDelivery=date
@@ -135,10 +136,9 @@ class RevisePiActivity : AppCompatActivity(),
                     viewLoader()
                     mEnqVM?.revisePi(enquiryId,  pi)
                 } else {
-//                    todo add dat to pi table
                     PiPredicates.insertPiForOfflineForRevise(enquiryId,pi)
                     OrdersPredicates.updatIsPiSend(enquiryId,1L)
-                    Utility.displayMessage("PI will be raised once internet connectivity regained",applicationContext)
+                    Utility.displayMessage(getString(R.string.raise_pi_offline),applicationContext)
                     setResult(Activity.RESULT_OK)
                     finish()
                 }
@@ -153,8 +153,8 @@ class RevisePiActivity : AppCompatActivity(),
     }
 
     fun setDetails(){
-        mBinding?.enquiryCode?.text="PI for ${enquiryDetails?.enquiryCode}"
-        mBinding?.enquiryStartDate?.text = "Date accepted : ${enquiryDetails?.startedOn?.split("T")?.get(0)}"
+        mBinding?.enquiryCode?.text=getString(R.string.proforma_invoice)+": ${enquiryDetails?.enquiryCode}"
+        mBinding?.enquiryStartDate?.text = getString(R.string.date_accepted)+": ${enquiryDetails?.startedOn?.split("T")?.get(0)}"
         val image = enquiryDetails?.productImages?.split((",").toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()?.get(0)
         if(enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
             url = Utility.getCustomProductImagesUrl(enquiryDetails?.productID, image)
@@ -260,7 +260,7 @@ class RevisePiActivity : AppCompatActivity(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 hideLoader()
-                Utility.displayMessage("Sorry,Unable to fetch PI details",applicationContext)
+                Utility.displayMessage(getString(R.string.unable_tofetch_pi),applicationContext)
             })
         } catch (e: Exception) {
             Log.e("Enquiry Details", "Exception onFailure " + e.message)
@@ -294,7 +294,7 @@ class RevisePiActivity : AppCompatActivity(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 hideLoader()
-                Utility.displayMessage("Unable to raise PI, please try again later",applicationContext)
+                Utility.displayMessage(getString(R.string.unable_raise_pi),applicationContext)
             })
         } catch (e: Exception) {
             Log.e("revisePi", "Exception onFailure " + e.message)
@@ -305,7 +305,7 @@ class RevisePiActivity : AppCompatActivity(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 hideLoader()
-                Utility.displayMessage("PI raised succesfully",applicationContext)
+                Utility.displayMessage(getString(R.string.pi_raised_succesfully),applicationContext)
                 setResult(Activity.RESULT_OK)
                 finish()
                 //todo setresult

@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
 import com.adrosonic.craftexchange.database.predicates.NotificationPredicates
@@ -68,7 +69,7 @@ fun Context.buyerLandingIntent(isNotification:Boolean): Intent {
 //        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
 //    }
 }
-class BuyerLandingActivity : AppCompatActivity(),
+class BuyerLandingActivity : LocaleBaseActivity(),
     NavigationView.OnNavigationItemSelectedListener,
     ProfileViewModel.FetchUserDetailsInterface,
     LandingViewModel.notificationInterface,

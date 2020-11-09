@@ -21,6 +21,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.ChatUser
 import com.adrosonic.craftexchange.database.predicates.ChatUserPredicates
@@ -47,7 +48,7 @@ fun Context.chatLogDetailsIntent(): Intent {
         }
 }
 
-class  ChatLogDetailsActivity : AppCompatActivity(),
+class  ChatLogDetailsActivity : LocaleBaseActivity(),
     ChatListViewModel.OpenChatLogInterface,
     ChatListViewModel.GetChatMediaInterface,
     ChatListViewModel.SendChatInterface {
@@ -179,11 +180,11 @@ class  ChatLogDetailsActivity : AppCompatActivity(),
         mBinding?.txtEnquiryNo?.text = chatHeader?.enquiryNumber.toString()
         mBinding?.enquiryStatusText?.text = chatHeader?.orderStatus?:""
         chatUserDetails?.let {
-            mBinding?.txtDateStarted?.text="Date started: "+try{chatUserDetails?.enquiryGeneratedOn?.split("T")?.get(0)}catch (e:java.lang.Exception){"NA"}
-            mBinding?.txtDateConvertedToOrder?.text="Converted to order on: "+try{chatUserDetails?.convertedToOrderDate?.split("T")?.get(0)}catch (e:java.lang.Exception){"NA"}
-            mBinding?.txtDateLastUpdated?.text="Last updated on: "+try{chatUserDetails?.lastUpdatedOn?.split("T")?.get(0)?:"NA"}catch (e:java.lang.Exception){"NA"}
+            mBinding?.txtDateStarted?.text=getString(R.string.date_started)+": "+try{chatUserDetails?.enquiryGeneratedOn?.split("T")?.get(0)}catch (e:java.lang.Exception){"NA"}
+            mBinding?.txtDateConvertedToOrder?.text=getString(R.string.date_converted)+": "+try{chatUserDetails?.convertedToOrderDate?.split("T")?.get(0)}catch (e:java.lang.Exception){"NA"}
+            mBinding?.txtDateLastUpdated?.text=getString(R.string.date_last_updated)+": "+try{chatUserDetails?.lastUpdatedOn?.split("T")?.get(0)?:"NA"}catch (e:java.lang.Exception){"NA"}
             mBinding?.txtProdType?.text=chatUserDetails?.productTypeId
-            mBinding?.txtOrderAmt?.text="Order amount: ₹ "+chatUserDetails?.orderAmouunt?.toString()
+            mBinding?.txtOrderAmt?.text=getString(R.string.order_amount)+": ₹ "+chatUserDetails?.orderAmouunt?.toString()
         }
         fromId=UserConfig.shared.userId?.toLong()?:0
         toId=chatUserDetails?.buyerId?:0
@@ -209,7 +210,7 @@ class  ChatLogDetailsActivity : AppCompatActivity(),
         mBinding?.chatView?.setSendTimeTextColor(R.color.gray200)
         mBinding?.chatView?.setDateSeparatorColor(R.color.white_text)
         mBinding?.chatView?.setMessageStatusTextColor(R.color.white_text)
-        mBinding?.chatView?.setInputTextHint("Type your message here")
+        mBinding?.chatView?.setInputTextHint(getString(R.string.type_your_msg))
         mBinding?.chatView?.setMessageMarginTop(4)
         mBinding?.chatView?.setMessageMarginBottom(8)
         mBinding?.chatView?.setMaxInputLine(4)
@@ -358,7 +359,7 @@ class  ChatLogDetailsActivity : AppCompatActivity(),
                 sendChatRequest.messageTo=toId
                 sendChatRequest.messageString=""
                 mChatVM?.sendChatboxMessageWithMedia(sendChatRequest.toString(),absolutePath)
-                Utility.displayMessage("Please wait..",this)
+                Utility.displayMessage(getString(R.string.please_wait),this)
             }else Utility.displayMessage(getString(R.string.no_internet_connection),this)
         } catch (e: IOException) {
             e.printStackTrace()

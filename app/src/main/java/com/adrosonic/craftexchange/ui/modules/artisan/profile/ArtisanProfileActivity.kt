@@ -8,6 +8,7 @@ import android.util.Log
 import androidx.activity.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
 import com.adrosonic.craftexchange.database.entities.realmEntities.UserAddress
@@ -27,7 +28,7 @@ fun Context.artisanProfileIntent(): Intent {
     }
 }
 
-class ArtisanProfileActivity : AppCompatActivity(),
+class ArtisanProfileActivity : LocaleBaseActivity(),
 ProfileViewModel.FetchUserDetailsInterface{
 
     companion object{
@@ -64,7 +65,7 @@ ProfileViewModel.FetchUserDetailsInterface{
             })
 
 
-        var welcome_text = "Hello ${Prefs.getString(ConstantsDirectory.FIRST_NAME,"User")}"
+        var welcome_text = getString(R.string.hello)+" ${Prefs.getString(ConstantsDirectory.FIRST_NAME,"User")}"
         mBinding?.artisanName?.text = welcome_text
 
         supportFragmentManager.let{

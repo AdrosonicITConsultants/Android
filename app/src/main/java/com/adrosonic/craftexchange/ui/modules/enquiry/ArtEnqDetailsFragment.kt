@@ -71,10 +71,7 @@ EnquiryViewModel.ArtisanDetailsInterface
             mBinding?.tabLayoutArtEnqDetails?.visibility = View.GONE
             mEnqVM?.artisanListener = this
             mEnqVM?.getArtisanProfile(artisanId)
-            Utility.displayMessage(
-                "Please wait while we are fetching details for you",
-                requireContext()
-            )
+            Utility.displayMessage(getString(R.string.please_wait_while),  requireContext())
         } else {
             childFragmentManager.let {
                 mBinding?.viewPagerArtEnqDetails?.adapter =

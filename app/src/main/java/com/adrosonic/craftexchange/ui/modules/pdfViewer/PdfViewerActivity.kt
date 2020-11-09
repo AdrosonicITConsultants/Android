@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import androidx.appcompat.app.AppCompatActivity
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.databinding.ActivityPdfViewerBinding
 
 fun Context.pdfViewerIntent(): Intent {
@@ -13,7 +14,7 @@ fun Context.pdfViewerIntent(): Intent {
     }
 }
 
-class PdfViewerActivity: AppCompatActivity() {
+class PdfViewerActivity: LocaleBaseActivity() {
 
     private var mBinding : ActivityPdfViewerBinding?= null
 

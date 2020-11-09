@@ -45,7 +45,7 @@
             android:drawablePadding="8dp"
             android:drawableTint="@color/darker_gray"
             android:focusable="true"
-            android:hint="Search by Enquiry Id/ Order Id/buyer's name"
+            android:hint="@string/search_by_enquiry_id_order_id_buyer_s_name"
             android:inputType="text"
             android:paddingLeft="8dp"
             android:textColorHint="@color/darker_gray"

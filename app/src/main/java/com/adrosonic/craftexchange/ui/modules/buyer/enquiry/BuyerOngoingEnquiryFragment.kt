@@ -124,7 +124,7 @@ EnquiryViewModel.FetchEnquiryInterface{
                 Log.e("OngoingEnqList", "OnFailure")
                 mBinding?.swipeOngoingEnquiries?.isRefreshing = false
                 mEnqVM.getOnEnqListMutableData()
-                Utility.displayMessage("Error while fetching list", requireContext())
+                Utility.displayMessage(getString(R.string.err_fetch_list), requireContext())
                 setVisiblities()
             })
         } catch (e: Exception) {

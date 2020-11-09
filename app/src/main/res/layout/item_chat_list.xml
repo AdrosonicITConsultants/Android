@@ -39,7 +39,7 @@
                     android:id="@+id/markRead"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Mark as read"
+                    android:text="@string/mark_as_read"
                     android:textColor="@color/white_text"
                     android:textSize="16sp" />
             </LinearLayout>

@@ -124,9 +124,23 @@
             android:text="@string/new_user"
             android:textSize="16sp"
             android:layout_margin="@dimen/margin_regular"
+            app:layout_constraintBottom_toTopOf="@+id/change_language_text"
+            app:layout_constraintEnd_toEndOf="@+id/change_language_text"
+            app:layout_constraintStart_toStartOf="@+id/change_language_text" />
+
+
+        <TextView
+            android:id="@+id/change_language_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:text="@string/change_language"
+            android:textSize="@dimen/product_note_text"
+            android:drawableLeft="@drawable/ic_change_language"
             app:layout_constraintBottom_toTopOf="@+id/need_help"
             app:layout_constraintEnd_toEndOf="@+id/need_help"
-            app:layout_constraintStart_toStartOf="@+id/need_help" />
+            app:layout_constraintStart_toStartOf="@+id/need_help"  />
 
         <TextView
             android:id="@+id/need_help"

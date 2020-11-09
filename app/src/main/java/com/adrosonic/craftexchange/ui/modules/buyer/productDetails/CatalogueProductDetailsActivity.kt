@@ -17,6 +17,7 @@ import android.widget.ImageView
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCatalogue
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
@@ -65,7 +66,7 @@ private var exDialog : Dialog ?= null
 
 
 
-class CatalogueProductDetailsActivity : AppCompatActivity(),
+class CatalogueProductDetailsActivity : LocaleBaseActivity(),
     EnquiryViewModel.GenerateEnquiryInterface{
     val mEnqVM: EnquiryViewModel by viewModels()
 
@@ -404,7 +405,7 @@ class CatalogueProductDetailsActivity : AppCompatActivity(),
             Handler(Looper.getMainLooper()).post {
                 dialog?.cancel()
                 Log.e("EnquiryGeneration", "onFailure")
-                Utility.displayMessage("Enquiry Generation Failed",this)
+                Utility.displayMessage(getString(R.string.enq_gen_failed),this)
             }
         } catch (e: Exception) {
             dialog?.cancel()

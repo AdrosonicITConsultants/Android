@@ -353,7 +353,7 @@ class FinalPayReceiptFragment : Fragment(),
                 Log.e("PaymentValidation", "OnSuccess")
                 loadingDialog?.cancel()
                 if(isAccepted == true){
-                    Utility.displayMessage("Payment Accepted",requireActivity())
+                    Utility.displayMessage(getString(R.string.payment_Accepted),requireActivity())
                 }else{
                     Utility.displayMessage("Payment Rejected",requireActivity())
                 }

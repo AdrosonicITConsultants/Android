@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityCatalogueProductDetailsBinding
 import com.adrosonic.craftexchange.databinding.ActivityFullScreenImageBinding
@@ -23,7 +24,7 @@ private var mBinding : ActivityFullScreenImageBinding ?= null
 private var mUserConfig = UserConfig()
 
 
-class FullScreenImageActivity : AppCompatActivity() {
+class FullScreenImageActivity : LocaleBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

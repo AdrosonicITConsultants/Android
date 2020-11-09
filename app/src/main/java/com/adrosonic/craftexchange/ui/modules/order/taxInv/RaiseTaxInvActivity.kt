@@ -10,6 +10,7 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
 import com.adrosonic.craftexchange.database.entities.realmEntities.TaxInvDetails
@@ -29,7 +30,7 @@ fun Context.raiseTaxInvIntent(enquiryId:Long, isView:Boolean): Intent {
     return intent
 }
 
-class RaiseTaxInvActivity : AppCompatActivity(),OrdersViewModel.tiInterface {
+class RaiseTaxInvActivity : LocaleBaseActivity(),OrdersViewModel.tiInterface {
     var enquiryId=0L
     var isView=false
     var tiDetails: TaxInvDetails? = null
@@ -85,12 +86,12 @@ class RaiseTaxInvActivity : AppCompatActivity(),OrdersViewModel.tiInterface {
     }
 
     fun setViews(){
-        mBinding?.enquiryCode?.text="Tax invoice for ${orderDetails?.orderCode}"
+        mBinding?.enquiryCode?.text=getString(R.string.tax_invoice)+": ${orderDetails?.orderCode}"
         val webSettings = mBinding?.webviewTiPreview?.settings
         webSettings?.javaScriptEnabled = true
         webSettings?.builtInZoomControls = true
         if(Utility.checkIfInternetConnected(applicationContext)){
-            mBinding?.webviewTiPreview?.loadDataWithBaseURL(null,"Please wait...", "text/html", "utf-8", null)
+            mBinding?.webviewTiPreview?.loadDataWithBaseURL(null,getString(R.string.please_wait), "text/html", "utf-8", null)
         }else{
             mBinding?.webviewTiPreview?.loadDataWithBaseURL(null, getString(R.string.preview_not_available), "text/html", "utf-8", null)
         }
@@ -120,7 +121,8 @@ class RaiseTaxInvActivity : AppCompatActivity(),OrdersViewModel.tiInterface {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 hideLoader()
-                Utility.displayMessage("Unable to download PDF, pleas try again later",applicationContext)
+                getString(R.string.unable_download_pdf)
+                Utility.displayMessage( getString(R.string.unable_download_pdf),applicationContext)
             })
         } catch (e: Exception) {
             Log.e("Enquiry Details", "Exception onFailure " + e.message)

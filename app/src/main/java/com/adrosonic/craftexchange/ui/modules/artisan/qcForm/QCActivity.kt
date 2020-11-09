@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityQCBinding
 import com.adrosonic.craftexchange.ui.modules.buyer.BuyerViewQcFormFragment
@@ -14,7 +15,7 @@ fun Context.qcFormIntent(): Intent {
     return Intent(this, QCActivity::class.java).apply {}
 }
 
-class QCActivity : AppCompatActivity() {
+class QCActivity : LocaleBaseActivity() {
 
     private var mBinding: ActivityQCBinding? = null
 

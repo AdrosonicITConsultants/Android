@@ -209,7 +209,7 @@ class ChatListFragment: Fragment(),
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("OnGoingTChatList", "onSuccess")
                 mBinding?.swipeRefreshLayout?.isRefreshing = false
-                Utility.displayMessage("Unable to mark as read, try again later",requireContext())
+                Utility.displayMessage(getString(R.string.unable_to_mark_read),requireContext())
             })
         } catch (e: Exception) {
             Log.e("OnGoingChatList", "Exception onSuccess " + e.message)

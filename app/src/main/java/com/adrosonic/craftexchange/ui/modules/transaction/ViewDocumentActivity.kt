@@ -8,6 +8,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import androidx.activity.viewModels
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
 import com.adrosonic.craftexchange.databinding.ActivityRaisePiBinding
@@ -30,7 +31,7 @@ fun Context.viewDocument(enquiryId:Long, documentType:Long): Intent {
     return intent
 }
 
-class ViewDocumentActivity : AppCompatActivity(), TransactionViewModel.PaymentReceiptInterface {
+class ViewDocumentActivity : LocaleBaseActivity(), TransactionViewModel.PaymentReceiptInterface {
 
     private var mBinding: ActivityViewDocumentBinding? = null
     val mTranVM : TransactionViewModel by viewModels()

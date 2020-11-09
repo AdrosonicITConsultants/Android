@@ -152,7 +152,7 @@ BrandViewModel.BrandListInterface{
                 mBinding?.swipeBrand?.isRefreshing = false
                 mViewModel.getBrandListMutableData()
                 Utility.displayMessage(
-                    "Error while fetching list",
+                    getString(R.string.err_fetch_list),
                     requireContext()
                 )
             }

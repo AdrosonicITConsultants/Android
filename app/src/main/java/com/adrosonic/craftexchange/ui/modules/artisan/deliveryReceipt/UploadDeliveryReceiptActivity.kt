@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.advPay.CompPaymentReceiptFragment
@@ -15,7 +16,7 @@ fun Context.uploadDeliveryReceiptIntent(enquiryId:Long,orderStatus:Long): Intent
     intent.putExtra("orderStatus",orderStatus)
     return intent
 }
-class UploadDeliveryReceiptActivity : AppCompatActivity() {
+class UploadDeliveryReceiptActivity : LocaleBaseActivity() {
 
     var enquiryId=0L
     var orderStatus = 0L

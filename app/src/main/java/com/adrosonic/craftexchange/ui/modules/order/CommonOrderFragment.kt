@@ -45,7 +45,7 @@ class CommonOrderFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mBinding?.yourEnquiriesText?.text="Your Orders"
+        mBinding?.yourEnquiriesText?.text=getString(R.string.your_orders)
         var profile = Prefs.getString(ConstantsDirectory.PROFILE,"")
         when(profile){
             "Artisan" -> {

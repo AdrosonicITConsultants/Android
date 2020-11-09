@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.predicates.AddressPredicates
 import com.adrosonic.craftexchange.database.predicates.UserPredicates
@@ -33,7 +34,7 @@ fun Context.buyerEditProfileIntent(): Intent {
     }
 }
 
-class BuyerEditProfileActivity : AppCompatActivity() {
+class BuyerEditProfileActivity : LocaleBaseActivity() {
 
     companion object{
         var craftUser = UserPredicates.findUser(Prefs.getString(ConstantsDirectory.USER_ID,"0").toLong())

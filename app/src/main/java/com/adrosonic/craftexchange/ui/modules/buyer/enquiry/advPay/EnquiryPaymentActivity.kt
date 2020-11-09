@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityEnquiryPaymentBinding
 import com.adrosonic.craftexchange.enums.EnquiryStatus
@@ -18,7 +19,7 @@ fun Context.enquiryPayment(): Intent {
 }
 
 const val ENQ_SCREEN = 75
-class EnquiryPaymentActivity : AppCompatActivity() {
+class EnquiryPaymentActivity : LocaleBaseActivity() {
 
     private var mBinding: ActivityEnquiryPaymentBinding? = null
 

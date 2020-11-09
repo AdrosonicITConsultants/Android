@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
 import com.adrosonic.craftexchange.database.entities.realmEntities.PiDetails
@@ -39,7 +40,7 @@ fun Context.taxInvoiceIntent(enquiryId:Long): Intent {
 }
 
 
-class TaxInvoiceActivity : AppCompatActivity(),
+class TaxInvoiceActivity : LocaleBaseActivity(),
     EnquiryViewModel.PayEnqInvInterface,
     OrdersViewModel.GenTaxInvInterface {
 
@@ -106,17 +107,17 @@ class TaxInvoiceActivity : AppCompatActivity(),
             currency = mBinding?.spCurrency?.selectedItem.toString()
 
             if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
-                if (qty.isEmpty()) Utility.displayMessage("Please add Quantity", applicationContext)
-                else if (ppu.isEmpty()) Utility.displayMessage("Please add price per unit", applicationContext)
-                else if (sgst.isEmpty()) Utility.displayMessage("Please add SGST", applicationContext)
-                else if (cgst.isEmpty()) Utility.displayMessage("Please add CGST", applicationContext)
-                else if (prevTotAmt.isEmpty()) Utility.displayMessage("Please add previous total amount", applicationContext)
-                else if (advPay.isEmpty()) Utility.displayMessage("Please add paid advance amount", applicationContext)
-                else if (finAmt.isEmpty()) Utility.displayMessage("Please add Final amount", applicationContext)
-                else if (amtToPay.isEmpty()) Utility.displayMessage("Please add amount to be paid", applicationContext)
-                else if (delCharge.isEmpty()) Utility.displayMessage("Please add Delivery Charges", applicationContext)
-                else if (currency!!.isEmpty()) Utility.displayMessage("Please select Currency", applicationContext)
-                else if (!mBinding?.chbTnc?.isChecked!!) Utility.displayMessage("Please read the terms & conditions", applicationContext)
+                if (qty.isEmpty()) Utility.displayMessage(getString(R.string.plz_add_qty), applicationContext)
+                else if (ppu.isEmpty()) Utility.displayMessage(getString(R.string.add_ppu), applicationContext)
+                else if (sgst.isEmpty()) Utility.displayMessage(getString(R.string.plz_add_sgst), applicationContext)
+                else if (cgst.isEmpty()) Utility.displayMessage(getString(R.string.plz_add_cgst), applicationContext)
+                else if (prevTotAmt.isEmpty()) Utility.displayMessage(getString(R.string.plz_add_prev_total), applicationContext)
+                else if (advPay.isEmpty()) Utility.displayMessage(getString(R.string.plz_add_paid_adv), applicationContext)
+                else if (finAmt.isEmpty()) Utility.displayMessage(getString(R.string.plz_add_final_amt), applicationContext)
+                else if (amtToPay.isEmpty()) Utility.displayMessage(getString(R.string.plz_add_amt_tobe_paid), applicationContext)
+                else if (delCharge.isEmpty()) Utility.displayMessage(getString(R.string.plz_add_del_charges), applicationContext)
+                else if (currency!!.isEmpty()) Utility.displayMessage(getString(R.string.plz_add_currency), applicationContext)
+                else if (!mBinding?.chbTnc?.isChecked!!) Utility.displayMessage(getString(R.string.plz_accept_tnc), applicationContext)
                 else {
                     taxInv.cgst=cgst
                     taxInv.ppu=ppu.toLong()
@@ -128,27 +129,25 @@ class TaxInvoiceActivity : AppCompatActivity(),
                     taxInv.finalTotalAmt = finAmt?.toLong()
 
                     if (Utility.checkIfInternetConnected(applicationContext)) {
-                        mBinding?.btnSwipeTi?.text = "Tax Invoice preview being generated"
+                        mBinding?.btnSwipeTi?.text = getString(R.string.tax_invoic_gen)
                         mBinding?.btnSwipeTi?.isEnabled=false
                         viewLoader()
-
                         mOrdVM?.generateTaxInvoice(taxInv)
                     } else {
-//                    todo add dat to pi table
                         TaxInvPredicates.insertTiForOffline(enquiryId,1,taxInv)
                         startActivityForResult(applicationContext.raiseTaxInvIntent(enquiryId,true),ConstantsDirectory.RESULT_TI)
                     }
                 }
             }else{
-                if (qty.isEmpty()) Utility.displayMessage("Please add Quantity", applicationContext)
-                else if (ppu.isEmpty()) Utility.displayMessage("Please add price per unit", applicationContext)
-                else if (sgst.isEmpty()) Utility.displayMessage("Please add SGST", applicationContext)
-                else if (cgst.isEmpty()) Utility.displayMessage("Please add CGST", applicationContext)
-                else if (prevTotAmt.isEmpty()) Utility.displayMessage("Please add previous total amount", applicationContext)
-                else if (finAmt.isEmpty()) Utility.displayMessage("Please add Final amount", applicationContext)
-                else if (delCharge.isEmpty()) Utility.displayMessage("Please add Delivery Charges", applicationContext)
-                else if (currency!!.isEmpty()) Utility.displayMessage("Please select Currency", applicationContext)
-                else if (!mBinding?.chbTnc?.isChecked!!) Utility.displayMessage("Please read the terms & conditions", applicationContext)
+                if (qty.isEmpty()) Utility.displayMessage( getString(R.string.plz_add_qty), applicationContext)
+                else if (ppu.isEmpty()) Utility.displayMessage( getString(R.string.add_ppu), applicationContext)
+                else if (sgst.isEmpty()) Utility.displayMessage( getString(R.string.plz_add_sgst), applicationContext)
+                else if (cgst.isEmpty()) Utility.displayMessage( getString(R.string.plz_add_cgst), applicationContext)
+                else if (prevTotAmt.isEmpty()) Utility.displayMessage( getString(R.string.plz_add_prev_total), applicationContext)
+                else if (finAmt.isEmpty()) Utility.displayMessage( getString(R.string.plz_add_final_amt), applicationContext)
+                else if (delCharge.isEmpty()) Utility.displayMessage( getString(R.string.plz_add_del_charges), applicationContext)
+                else if (currency!!.isEmpty()) Utility.displayMessage( getString(R.string.plz_add_currency), applicationContext)
+                else if (!mBinding?.chbTnc?.isChecked!!) Utility.displayMessage( getString(R.string.plz_accept_tnc), applicationContext)
                 else {
                     taxInv.cgst=cgst
                     taxInv.ppu=ppu.toLong()
@@ -160,7 +159,7 @@ class TaxInvoiceActivity : AppCompatActivity(),
                     taxInv.finalTotalAmt = finAmt?.toLong()
 
                     if (Utility.checkIfInternetConnected(applicationContext)) {
-                        mBinding?.btnSwipeTi?.text = "Tax Invoice preview being generated"
+                        mBinding?.btnSwipeTi?.text = getString(R.string.tax_invoic_gen)
                         mBinding?.btnSwipeTi?.isEnabled=false
                         viewLoader()
 
@@ -201,7 +200,7 @@ class TaxInvoiceActivity : AppCompatActivity(),
     }
 
     fun setDetails(){
-        mBinding?.orderCode?.text="Tax Invoice for ${orderDetails?.orderCode}"
+        mBinding?.orderCode?.text=getString(R.string.tax_invoice)+": ${orderDetails?.orderCode}"
         mBinding?.orderStartDate?.text = orderDetails?.startedOn?.split("T")?.get(0)
         val image = orderDetails?.productImages?.split((",").toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()?.get(0)
         if(orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
@@ -412,7 +411,7 @@ class TaxInvoiceActivity : AppCompatActivity(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 hideLoader()
-                Utility.displayMessage("Tax Invoice sent!",applicationContext)
+                Utility.displayMessage(getString(R.string.tax_invoic_sent),applicationContext)
                 startActivityForResult(applicationContext.raiseTaxInvIntent(enquiryId,true),ConstantsDirectory.RESULT_TI)
             })
         } catch (e: Exception) {
@@ -424,7 +423,7 @@ class TaxInvoiceActivity : AppCompatActivity(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 hideLoader()
-                Utility.displayMessage("Error generating Tax Invoice",applicationContext)
+                Utility.displayMessage(getString(R.string.err_gen_ti),applicationContext)
             })
         } catch (e: Exception) {
             Log.e("Enquiry Details", "Exception onFailure " + e.message)
@@ -435,7 +434,7 @@ class TaxInvoiceActivity : AppCompatActivity(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 hideFormLoader()
-                Utility.displayMessage("Sorry,Unable to fetch PI details",applicationContext)
+                Utility.displayMessage( getString(R.string.unable_tofetch_pi),applicationContext)
             })
         } catch (e: Exception) {
             Log.e("Enquiry Details", "Exception onFailure " + e.message)

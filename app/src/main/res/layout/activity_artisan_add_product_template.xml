@@ -47,7 +47,8 @@
                 android:fontFamily="@font/lato_regular"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
-                android:text=" Save "
+                android:text="@string/save"
+                android:drawablePadding="@dimen/expandable_layout_std_padding"
                 android:textColor="@color/white_text" />
         </androidx.appcompat.widget.Toolbar>
         <RelativeLayout
@@ -88,7 +89,7 @@
                         android:layout_gravity="center"
                         android:layout_weight="8"
                         android:fontFamily="@font/lato_regular"
-                        android:text="Step 1 : Add Photo"
+                        android:text="@string/step_1_add_photo"
                         android:textColor="@color/black_text" />
 
                     <ImageView
@@ -168,7 +169,7 @@
                         android:layout_gravity="center"
                         android:layout_weight="8"
                         android:fontFamily="@font/lato_regular"
-                        android:text="Step 2 : Add general details"
+                        android:text="@string/step_2_add_general_details"
                         android:textColor="@color/black_text" />
 
                     <ImageView
@@ -196,7 +197,7 @@
                         android:layout_marginBottom="@dimen/expandable_layout_std_padding"
                         android:background="@drawable/rectangle_edittext_bg"
                         android:fontFamily="@font/lato_regular"
-                        android:hint="Name of the product (40 characters)"
+                        android:hint="@string/name_of_the_product_40_characters"
                         android:maxLength="40"
                         android:maxLines="1"
                         android:textSize="@dimen/edit_text" />
@@ -208,7 +209,7 @@
                         android:layout_marginBottom="@dimen/expandable_layout_std_padding"
                         android:background="@drawable/rectangle_edittext_bg"
                         android:fontFamily="@font/lato_regular"
-                        android:hint="Product code(Eg. NAG09_89)"
+                        android:hint="@string/product_code"
                         android:maxLength="20"
                         android:maxLines="1"
                         android:textSize="@dimen/edit_text" />
@@ -224,7 +225,7 @@
                             style="@style/Widget.AppCompat.DropDownItem.Spinner"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
-                            android:autofillHints="Select product category" />
+                            android:autofillHints="@string/select_prod_cat" />
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -238,7 +239,7 @@
                             style="@style/Widget.AppCompat.DropDownItem.Spinner"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
-                            android:autofillHints="Product type" />
+                            android:autofillHints="@string/prod_type" />
                     </RelativeLayout>
 
                     <TextView
@@ -276,7 +277,7 @@
                         android:layout_gravity="center"
                         android:layout_weight="8"
                         android:fontFamily="@font/lato_regular"
-                        android:text="Step 3 : Select weave type"
+                        android:text="@string/step_3_select_weave_type"
                         android:textColor="@color/black_text" />
 
                     <ImageView
@@ -349,7 +350,7 @@
                         android:layout_gravity="center"
                         android:layout_weight="8"
                         android:fontFamily="@font/lato_regular"
-                        android:text="Step 4 : Select warp, weft and yarn"
+                        android:text="@string/step_4_select_warp_weft_and_yarn"
                         android:textColor="@color/black_text" />
 
                     <ImageView
@@ -423,7 +424,7 @@
                         android:layout_gravity="center"
                         android:layout_weight="8"
                         android:fontFamily="@font/lato_regular"
-                        android:text="Step 5 : Enter the reed count"
+                        android:text="@string/step_5_enter_the_reed_count"
                         android:textColor="@color/black_text" />
 
                     <ImageView
@@ -500,7 +501,7 @@
                         android:layout_gravity="center"
                         android:layout_weight="8"
                         android:fontFamily="@font/lato_regular"
-                        android:text="Step 6 : Enter the dimensions"
+                        android:text="@string/step_6_enter_the_dimensions"
                         android:textColor="@color/black_text" />
 
                     <ImageView
@@ -691,7 +692,7 @@
                         android:layout_gravity="center"
                         android:layout_weight="8"
                         android:fontFamily="@font/lato_regular"
-                        android:text="Step 7 : Enter the wash care instructions"
+                        android:text="@string/step_7_enter_the_wash_care_instructions"
                         android:textColor="@color/black_text" />
 
                     <ImageView
@@ -739,7 +740,7 @@
                         android:layout_gravity="center"
                         android:layout_weight="8"
                         android:fontFamily="@font/lato_regular"
-                        android:text="Step 8 : Select the availability"
+                        android:text="@string/step_8_select_the_availability"
                         android:textColor="@color/black_text" />
 
                     <ImageView
@@ -861,7 +862,7 @@
                         android:layout_gravity="center"
                         android:layout_weight="8"
                         android:fontFamily="@font/lato_regular"
-                        android:text="Step 9 : Enter the weight"
+                        android:text="@string/step_9_enter_the_weight"
                         android:textColor="@color/black_text" />
 
                     <ImageView
@@ -947,7 +948,7 @@
                         android:layout_gravity="center"
                         android:layout_weight="8"
                         android:fontFamily="@font/lato_regular"
-                        android:text="Step 10 : Enter GSM value of fabric"
+                        android:text="@string/step_10_enter_gsm_value_of_fabric"
                         android:textColor="@color/black_text" />
 
                     <ImageView
@@ -1023,7 +1024,7 @@
                         android:layout_gravity="center"
                         android:layout_weight="8"
                         android:fontFamily="@font/lato_regular"
-                        android:text="Step 11 : Enter description"
+                        android:text="@string/step_11_enter_description"
                         android:textColor="@color/black_text" />
 
                     <ImageView
@@ -1088,8 +1089,9 @@
                         android:drawableRight="@drawable/ic_save_upload"
                         android:fontFamily="@font/lato_regular"
                         android:paddingLeft="8dp"
+                        android:drawablePadding="@dimen/expandable_layout_std_padding"
                         android:paddingRight="8dp"
-                        android:text="  Save  "
+                        android:text="@string/save"
                         android:textAlignment="center"
                         android:textColor="@color/white_text" />
 
@@ -1102,7 +1104,7 @@
                         android:fontFamily="@font/lato_regular"
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
-                        android:text=" Reset All "
+                        android:text="@string/reset_all"
                         android:textAlignment="center"
                         android:textColor="@color/clickable_text_color" />
                 </LinearLayout>

@@ -105,7 +105,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:fontFamily="@font/lato_bold"
-                    android:text="View old PI"
+                    android:text="@string/view_old_pi"
                     android:textColor="@color/black_text"
                     android:textSize="@dimen/product_availability_text"
                     android:textStyle="bold"

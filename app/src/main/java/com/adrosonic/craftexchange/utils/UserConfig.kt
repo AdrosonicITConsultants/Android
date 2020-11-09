@@ -93,13 +93,10 @@ const val TRANSACTION_STATUS_DATA ="transaction_status_data"
 const val CR_STATUS_DATA ="cr_status_data"
 const val ARTISAN_FAULT_REVIEW = "artisan_fault_review"
 const val BUYER_FAULT_REVIEW = "buyer_fault_review"
-
-
 ////
 const val REGION_CMS_DATA = "region_cms_data"
 const val CATEGORY_CMS_DATA = "category_cms_data"
 const val PAGE_CMS_DATA = "page_cms_data"
-
 ///QC
 const val QC_STAGE_DATA ="qc_stage_data"
 const val QC_QUESTION_DATA ="qc_question_data"
@@ -650,5 +647,6 @@ class UserConfig {
             Prefs.putString(BUYER_FAULT_REVIEW, value)
             field = value
         }
+
 }
 

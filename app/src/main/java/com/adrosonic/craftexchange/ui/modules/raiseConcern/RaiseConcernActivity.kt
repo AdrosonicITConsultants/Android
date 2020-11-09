@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.ui.modules.role.RoleSelectFragment
 import com.adrosonic.craftexchange.ui.modules.transaction.ViewDocumentActivity
@@ -17,7 +18,7 @@ fun Context.raiseConcernIntent(enquiryId:Long,isView : Boolean): Intent {
     return intent
 }
 
-class RaiseConcernActivity : AppCompatActivity() {
+class RaiseConcernActivity : LocaleBaseActivity() {
 
     var enqID : Long?= 0L
     var isView : Boolean?= false

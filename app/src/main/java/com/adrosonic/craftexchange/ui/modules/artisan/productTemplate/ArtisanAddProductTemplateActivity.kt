@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.ArtisanProducts
 import com.adrosonic.craftexchange.database.entities.realmEntities.RelatedProducts
@@ -56,7 +57,7 @@ fun Context.addProductIntent(id: Long): Intent {
 //    return Intent(this, ArtisanAddProductTemplateActivity::class.java).apply {
 }
 
-class ArtisanAddProductTemplateActivity : AppCompatActivity(),
+class ArtisanAddProductTemplateActivity : LocaleBaseActivity(),
     View.OnClickListener,
     ProdImageListAdapter.ProdUpdateListener,
     WeaveSelectionAdapter.selectionListener,
@@ -149,13 +150,13 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
                 txt_save_upload.text="Update"
                 productEntry=ProductPredicates.getArtisanProductsByRemoteId(productId)
             } else {
-                txt_save_upload_top.text="Save"
-                txt_save_upload.text="Save"
+                txt_save_upload_top.text=getString(R.string.save)
+                txt_save_upload.text=getString(R.string.save)
                 img_delete.visibility = View.GONE
             }
         } else {
-            txt_save_upload_top.text="Save"
-            txt_save_upload.text="Save"
+            txt_save_upload_top.text=getString(R.string.save)
+            txt_save_upload.text=getString(R.string.save)
             img_delete.visibility = View.GONE
         }
         parent_step1.setOnClickListener(this)

@@ -106,7 +106,7 @@ class CategoryProductsFragment : Fragment(),
                 mBinding?.swipeCategory?.isRefreshing = false
                 mViewModel.getCategoryListMutableData()
                 Utility.displayMessage(
-                    "Error while fetching list",
+                    getString(R.string.err_fetch_list),
                     requireContext()
                 )
             }

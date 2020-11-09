@@ -19,6 +19,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.Moqs
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
@@ -41,7 +42,7 @@ fun Context.piContext(enquiryId:Long): Intent {
     intent.putExtra("enquiryId", enquiryId)
     return intent
 }
-class PiActivity : AppCompatActivity(),
+class PiActivity : LocaleBaseActivity(),
     EnquiryViewModel.piInterface,
     EnquiryViewModel.singlePiInterface {
     var enquiryId=0L
@@ -154,8 +155,8 @@ class PiActivity : AppCompatActivity(),
     }
 
     fun setDetails(){
-        mBinding?.enquiryCode?.text="PI for ${enquiryDetails?.enquiryCode}"
-        mBinding?.enquiryStartDate?.text = "Date accepted : ${enquiryDetails?.startedOn?.split("T")?.get(0)}"
+        mBinding?.enquiryCode?.text=getString(R.string.proforma_invoice)+": ${enquiryDetails?.enquiryCode}"
+        mBinding?.enquiryStartDate?.text =getString(R.string.date_accepted)+ " : ${enquiryDetails?.startedOn?.split("T")?.get(0)}"
         val image = enquiryDetails?.productImages?.split((",").toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()?.get(0)
         if(enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
             url = Utility.getCustomProductImagesUrl(enquiryDetails?.productID, image)
@@ -255,7 +256,7 @@ class PiActivity : AppCompatActivity(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 hideLoader()
-                Utility.displayMessage("Unable to raise PI, please try after some time",applicationContext)
+                Utility.displayMessage(getString(R.string.unable_raise_pi),applicationContext)
                 mBinding?.txtPiSwipe?.setText("Swipe to generate PI preview")
                 mBinding?.txtPiSwipe?.isEnabled = true
             })

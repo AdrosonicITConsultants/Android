@@ -254,7 +254,7 @@ class CategoryProdListFragment : Fragment(),
                 mBinding?.swipeCategoryProducts?.isRefreshing = false
                 categoryId?.let { mCatVM.getCatProdListMutableData(it) }
                 Utility.displayMessage(
-                    "Error while fetching list",
+                    getString(R.string.err_fetch_list),
                     requireContext()
                 )
             }

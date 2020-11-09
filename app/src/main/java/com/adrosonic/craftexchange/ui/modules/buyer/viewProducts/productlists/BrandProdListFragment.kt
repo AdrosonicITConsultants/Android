@@ -270,7 +270,7 @@ class BrandProdListFragment : Fragment(),
                 mBinding?.swipeBrandProducts?.isRefreshing = false
                 artisanId?.let { mBrandVM.getBrandProdListMutableData(it) }
                 Utility.displayMessage(
-                    "Error while fetching list",
+                    getString(R.string.err_fetch_list),
                     requireContext()
                 )
             }

@@ -8,6 +8,7 @@ import android.os.Looper
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.databinding.ActivityCXVideoBinding
 import com.adrosonic.craftexchange.ui.modules.artisan.landing.artisanLandingIntent
 import com.adrosonic.craftexchange.ui.modules.buyer.landing.buyerLandingIntent
@@ -24,7 +25,7 @@ fun Context.demoVideoIntent(): Intent {
     }
 }
 
-class CXVideoActivity : AppCompatActivity(),
+class CXVideoActivity : LocaleBaseActivity(),
 CMSViewModel.CMSDataInterface{
 
     private var mBinding : ActivityCXVideoBinding ?= null

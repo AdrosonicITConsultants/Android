@@ -59,14 +59,12 @@ class NotifcationFragment : Fragment(),
         notificationAdapter = NotificationAdapter(requireContext(), mViewModel.getNotificationsMutableData().value)
         notificationList.adapter = notificationAdapter
         notificationAdapter.listener=this
-        Log.e("Wishlist", "Size :" + mViewModel.getNotificationsMutableData().value?.size)
         notificationList.setOnScrollChangeListener { view, i, i2, i3, i4 ->
             if (notificationAdapter.openItems.size > 0) {
                 notificationAdapter.closeAllExcept(null)
             }
         }
         mViewModel.getNotificationsMutableData().observe(viewLifecycleOwner, Observer<RealmResults<Notifications>> {
-                Log.e("Wishlist", "updateWishlist ${it.size}")
                 notificationAdapter.updateNotificationlist(it)
             })
         setVisiblities()
@@ -81,19 +79,20 @@ class NotifcationFragment : Fragment(),
                 mViewModel.getAllNotifications()
             }
         }
-        notification_elements.text ="${mViewModel.getNotificationsMutableData().value?.size} new notifications"
+        notification_elements.text ="${mViewModel.getNotificationsMutableData().value?.size} "+getString(R.string.new_notifications)
+
     }
     fun setVisiblities() {
         if (mViewModel.getNotificationsMutableData().value?.size!! > 0) {
             notificationList?.visibility = View.VISIBLE
             empty_view.visibility = View.GONE
             readAll.visibility=View.VISIBLE
-            notification_elements.text =  "${mViewModel.getNotificationsMutableData().value?.size} new notifications"
+            notification_elements.text =  "${mViewModel.getNotificationsMutableData().value?.size} "+getString(R.string.new_notifications)
         } else {
             notificationList?.visibility = View.GONE
             empty_view.visibility = View.VISIBLE
             readAll.visibility=View.GONE
-            notification_elements.text = "No notification"
+            notification_elements.text = getString(R.string.no_new_notifications)
 
         }
         badgeCountListener?.onBadgeCOuntUpdated()
@@ -105,7 +104,7 @@ class NotifcationFragment : Fragment(),
         val txt_dscrp = dialog.findViewById(R.id.txt_dscrp) as TextView
         val tvCancel = dialog.findViewById(R.id.txt_cancel) as TextView
         val tvDelete = dialog.findViewById(R.id.txt_back) as TextView
-        txt_dscrp.setText("Are you sure you want to mark all notifications as read?", TextView.BufferType.NORMAL)
+        txt_dscrp.setText(getString(R.string.mark_all_noti_confirmation), TextView.BufferType.NORMAL)
         tvCancel.setOnClickListener {
             dialog.cancel()
         }
@@ -136,15 +135,13 @@ class NotifcationFragment : Fragment(),
     override fun onFailure() {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
-                Log.e("Notifications", "OnFailure")
                 swipe_refresh_layout.isRefreshing = false
                 mViewModel.getNotificationsMutableData()
-                Utility.displayMessage("Error while fetching notifications", requireContext())
+                Utility.displayMessage(getString(R.string.err_fetch_noti), requireContext())
                 setVisiblities()
             }
             )
         } catch (e: Exception) {
-            Log.e("Wishlist", "Exception onFailure " + e.message)
         }
     }
     override fun onSelected(productId: Long, isRead: Long) {

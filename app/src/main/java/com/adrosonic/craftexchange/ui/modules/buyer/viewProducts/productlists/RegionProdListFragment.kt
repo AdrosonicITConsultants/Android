@@ -259,7 +259,7 @@ class RegionProdListFragment : Fragment(),
                 Log.e("clusterList", "OnFailure")
                 mBinding?.swipeRegionProducts?.isRefreshing = false
                 clusterId?.let { mClusVM.getClusterProdListMutableData(it) }
-                Utility.displayMessage("Error while fetching list", requireContext())
+                Utility.displayMessage(getString(R.string.err_fetch_list), requireContext())
             }
             )
         } catch (e: Exception) {

@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.BuyerCustomProduct
 import com.adrosonic.craftexchange.database.entities.realmEntities.RelatedProducts
@@ -54,7 +55,7 @@ fun Context.ownDesignIntent(id: Long): Intent {
     intent.putExtra("productId", id)
     return intent.apply { }
 }
-class BuyerAddOwnProductDesignActivity : AppCompatActivity(),
+class BuyerAddOwnProductDesignActivity : LocaleBaseActivity(),
     View.OnClickListener,
     DownLoadProdImagesViewModel.DownloadImagesCallback,
     ProdImageListAdapter.ProdUpdateListener,

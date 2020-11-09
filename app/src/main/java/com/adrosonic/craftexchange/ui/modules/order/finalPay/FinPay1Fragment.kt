@@ -175,13 +175,13 @@ class FinPay1Fragment : Fragment(),TransactionViewModel.FinalPayDetailsInterface
                         absolutePath?.let { it1 -> paymentObj?.let { it2 -> mTranVM?.uploadPaymentReceipt(it2, it1) } }
                         dialog?.show()
                     }else{
-                        Utility?.displayMessage("Upload Transaction Receipt",requireActivity())
+                        Utility?.displayMessage(getString(R.string.upld_trans_recipt),requireActivity())
                     }
                 }else{
                     Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
                 }
             }else{
-                Utility.displayMessage("Unable to fetch payment details",requireContext())
+                Utility.displayMessage(getString(R.string.unable_fetch_payment),requireContext())
             }
         }
     }

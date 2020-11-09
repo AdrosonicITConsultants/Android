@@ -9,6 +9,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.databinding.ActivityShowBuyerRatingBinding
 import com.adrosonic.craftexchange.repository.data.response.Rating.QuestionRating
 import com.adrosonic.craftexchange.repository.data.response.Rating.Questions
@@ -31,7 +32,7 @@ fun Context.viewBuyerRatingIntent(enquiryId :Long): Intent {
         Intent.FLAG_ACTIVITY_NEW_TASK  }
 }
 
-class ViewBuyerRatingActivity : AppCompatActivity()
+class ViewBuyerRatingActivity : LocaleBaseActivity()
 {
 
     var enquiryId : Long? = 0

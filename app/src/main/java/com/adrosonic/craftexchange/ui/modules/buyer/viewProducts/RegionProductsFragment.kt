@@ -90,7 +90,7 @@ ClusterViewModel.ClusterProdInterface{
                 mBinding?.swipeRegion?.isRefreshing = false
                 mViewModel.getClusterListMutableData()
                 Utility.displayMessage(
-                    "Error while fetching list",
+                    getString(R.string.err_fetch_list),
                     requireContext()
                 )
             }

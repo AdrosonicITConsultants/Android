@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
+import com.adrosonic.craftexchange.LocalizationManager.LocaleManager
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityLoginBinding
 import com.adrosonic.craftexchange.ui.modules.artisan.auth.login.ArtisanLoginUsernameFragment
@@ -17,7 +19,7 @@ fun Context.loginIntent(): Intent {
     }
 }
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : LocaleBaseActivity() {
 
     private var mBinding : ActivityLoginBinding ?= null
 
@@ -46,4 +48,6 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
+
+
 }

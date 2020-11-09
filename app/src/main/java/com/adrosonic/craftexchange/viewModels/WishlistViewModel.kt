@@ -28,7 +28,6 @@ class WishlistViewModel(application: Application) : AndroidViewModel(application
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     t.printStackTrace()
                     Log.e("AddToWishlist failure ","${t.printStackTrace()}")
-                    Utility.displayMessage("Error while adding to wishlist",getApplication())
                 }
                 override fun onResponse(
                     call: Call<ResponseBody>,
@@ -37,7 +36,6 @@ class WishlistViewModel(application: Application) : AndroidViewModel(application
                         Log.e(TAG,"addToWishlist :"+response.body())
                     }else{
                         Log.e(TAG,"addToWishlist "+response.body())
-                        Utility.displayMessage("Error while adding to wishlist",getApplication())
 
                     }
                 }

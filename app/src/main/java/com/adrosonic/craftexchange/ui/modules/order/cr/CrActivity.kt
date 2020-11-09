@@ -18,6 +18,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.ChangeRequests
 import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
@@ -50,7 +51,7 @@ fun Context.crContext(enquiryId:Long,changeRequestStatus:Long): Intent {
     return intent
 }
 
-class CrActivity : AppCompatActivity(),
+class CrActivity : LocaleBaseActivity(),
     OrdersViewModel.FetchCrInterface,
     OrdersViewModel.UpdateCrStatusInterface,
     CrAcceptRejectAdapter.selectionListener {
@@ -95,7 +96,7 @@ class CrActivity : AppCompatActivity(),
              motifSize = mBinding?.etMotifSize?.text.toString()
              motif = mBinding?.etMotif?.text.toString()
 
-            if (weftYarn.isEmpty() && color.isEmpty()&& qty.isEmpty() && motifSize.isEmpty()&&motif.isEmpty()) Utility.displayMessage("Please fill in the required input fields", applicationContext)
+            if (weftYarn.isEmpty() && color.isEmpty()&& qty.isEmpty() && motifSize.isEmpty()&&motif.isEmpty()) Utility.displayMessage(getString(R.string.plz_fill_in), applicationContext)
             else {
                 showDialog()
             }
@@ -117,8 +118,8 @@ class CrActivity : AppCompatActivity(),
             crSelctionList.clear()
             enquiryId?.let{ orderDetails=OrdersPredicates.getSingleOnGoOrderDetails(it,0)}
             profile = Prefs.getString(ConstantsDirectory.PROFILE,"")
-            mBinding?.enquiryCode?.text="CR for ${orderDetails?.orderCode}"
-            mBinding?.enquiryStartDate?.text = "Date accepted : ${orderDetails?.startedOn?.split("T")?.get(0)}"
+            mBinding?.enquiryCode?.text=getString(R.string.cr_for)+": ${orderDetails?.orderCode}"
+            mBinding?.enquiryStartDate?.text = getString(R.string.date_accepted)+": ${orderDetails?.startedOn?.split("T")?.get(0)}"
             when(profile) {
                 ConstantsDirectory.ARTISAN -> {
                     mBinding?.disclaimerText1?.text=getString(R.string.cr_pleas_note_artisan)
@@ -145,7 +146,7 @@ class CrActivity : AppCompatActivity(),
                             crSelectionAdapter = CrAcceptRejectAdapter(this, crSelctionList,stageList,true)
                             crSelectionAdapter.listener = this
                             mBinding?.acceptRejectRecyclerList?.adapter = crSelectionAdapter
-                            mBinding?.txtCountAcceptReject?.text="You have accepted 0 out of ${crSelctionList.size} requests"
+                            mBinding?.txtCountAcceptReject?.text=getString(R.string.accepted_txt1)+" ${crSelctionList.size} "+getString(R.string.accepted_txt2)
                         }
                         ConstantsDirectory.BUYER -> {
                             mBinding?.acceptRejectCr?.visibility=View.GONE
@@ -321,12 +322,12 @@ class CrActivity : AppCompatActivity(),
         if(isAccept){
             @RequiresApi(Build.VERSION_CODES.N)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                txt_changes_dscrp?.text = Html.fromHtml("You are about to accept the changes on <b>$acceptedChanges</b>.", Html.FROM_HTML_MODE_COMPACT)
+                txt_changes_dscrp?.text = Html.fromHtml(getString(R.string.you_abt)+" <b>$acceptedChanges</b>.", Html.FROM_HTML_MODE_COMPACT)
             } else {
-                txt_changes_dscrp?.text = Html.fromHtml("You are about to accept the changes on  <b>$acceptedChanges</b>.")
+                txt_changes_dscrp?.text = Html.fromHtml(getString(R.string.you_abt)+" <b>$acceptedChanges</b>.")
             }
         }
-        else txt_changes_dscrp.text="You are about to reject the complete request"
+        else txt_changes_dscrp.text=getString(R.string.you_abt_reject)
         Log.e("RaiseCr","itemList ${itemList.count()} ")
 
         btn_ok.setOnClickListener {
@@ -373,7 +374,7 @@ class CrActivity : AppCompatActivity(),
             try {
                 Handler(Looper.getMainLooper()).post(Runnable {
                     Log.e("RaiseCr","onFetchCrFailure ")
-                    Utility.displayMessage("Unable to raise CR, please try again later",this)
+                    Utility.displayMessage(getString(R.string.unable_to_raise_cr),this)
                 })
             } catch (e: Exception) {
                 Log.e("RaiseCr", "Exception onFetchCrFailure " + e.message)
@@ -424,7 +425,7 @@ class CrActivity : AppCompatActivity(),
                 changeRequestStatus=crStatus
                 setDetails()
                 showPiDialog()
-                Utility.displayMessage("CR status updated successfully",this)
+                Utility.displayMessage(getString(R.string.cr_status_updated),this)
             })
         } catch (e: Exception) {
             Log.e("RaiseCr", "Exception onFetchCrSuccess " + e.message)
@@ -437,7 +438,7 @@ class CrActivity : AppCompatActivity(),
                 Log.e("RaiseCr","onFetchCrSuccess Success")
                 hideLoader()
                 setDetails()
-                Utility.displayMessage("Unable to update CR status, please try again later",this)
+                Utility.displayMessage(getString(R.string.unable_to_update_cr_stus),this)
             })
         } catch (e: Exception) {
             Log.e("RaiseCr", "Exception onFetchCrSuccess " + e.message)

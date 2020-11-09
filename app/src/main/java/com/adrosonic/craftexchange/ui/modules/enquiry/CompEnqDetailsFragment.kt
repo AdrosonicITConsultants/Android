@@ -389,10 +389,9 @@ class CompEnqDetailsFragment : Fragment(),
         }else{
             mBinding?.moqDetails?.visibility=View.GONE
             mBinding?.imgDownArr?.visibility=View.GONE
-            mBinding?.orderTime?.text="No MOQs present"
+            mBinding?.orderTime?.text=getString(R.string.no_moqs)
 
         }
-        Log.e("Completed","isPiSend: ${enquiryDetails?.isPiSend}")
         if(enquiryDetails?.isPiSend!!.equals(1L)){
             mBinding?.viewPiLayout?.visibility=View.VISIBLE
         }else  mBinding?.viewPiLayout?.visibility=View.GONE

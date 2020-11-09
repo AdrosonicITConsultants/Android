@@ -1,5 +1,6 @@
 package com.adrosonic.craftexchange.ui.modules.buyer.auth.login
 
+import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -11,7 +12,8 @@ import android.text.style.ClickableSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.adrosonic.craftexchange.R
@@ -157,5 +159,7 @@ class BuyerLoginUsernameFragment : Fragment() {
             intent.putExtra("ViewType", "LEGAL_DISCLAIMER")
             startActivity(intent)
         }
+
     }
+
 }

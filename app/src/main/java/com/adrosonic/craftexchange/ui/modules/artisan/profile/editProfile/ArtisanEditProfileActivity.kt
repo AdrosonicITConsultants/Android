@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.content.ContextCompat.startActivity
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityArtisanEditProfileBinding
 import com.adrosonic.craftexchange.ui.modules.buyer.profile.buyerProfileIntent
@@ -20,7 +21,7 @@ fun Context.artisanEditProfileIntent(): Intent {
     }
 }
 
-class ArtisanEditProfileActivity : AppCompatActivity() {
+class ArtisanEditProfileActivity : LocaleBaseActivity() {
 
     companion object;
 
@@ -33,7 +34,7 @@ class ArtisanEditProfileActivity : AppCompatActivity() {
         val view = mBinding?.root
         setContentView(view)
 
-        var welcome_text = "Hello ${Prefs.getString(ConstantsDirectory.FIRST_NAME,"User")}"
+        var welcome_text = getString(R.string.hello)+" ${Prefs.getString(ConstantsDirectory.FIRST_NAME,"User")}"
         mBinding?.artisanName?.text = welcome_text
 
         var section = intent.getStringExtra("Section")

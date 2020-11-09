@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivitySearchSuggestionBinding
 import com.adrosonic.craftexchange.ui.modules.artisan.search.ArtisanSuggestionFragment
@@ -15,7 +16,7 @@ fun Context.searchSuggestionIntent(): Intent {
     return Intent(this, SearchSuggestionActivity::class.java).apply {}
 }
 
-class SearchSuggestionActivity : AppCompatActivity() {
+class SearchSuggestionActivity : LocaleBaseActivity() {
 
     private var mBinding: ActivitySearchSuggestionBinding? = null
 

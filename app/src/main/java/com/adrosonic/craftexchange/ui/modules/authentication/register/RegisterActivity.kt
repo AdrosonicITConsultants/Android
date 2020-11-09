@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityRegisterBinding
 import com.adrosonic.craftexchange.ui.modules.artisan.auth.register.ArtisanRegisterArtisanidFragment
@@ -17,7 +18,7 @@ fun Context.registerIntent(): Intent {
     }
 }
 
-class RegisterActivity : AppCompatActivity() {
+class RegisterActivity : LocaleBaseActivity() {
 
     private var mBinding : ActivityRegisterBinding ?= null
 

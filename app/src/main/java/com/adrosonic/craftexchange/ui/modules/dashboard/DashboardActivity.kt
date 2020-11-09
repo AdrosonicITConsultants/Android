@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityBuyerProfileBinding
 import com.adrosonic.craftexchange.databinding.ActivityDashboardBinding
@@ -21,7 +22,7 @@ fun Context.dashboardIntent(): Intent {
     }
 }
 
-class DashboardActivity : AppCompatActivity() {
+class DashboardActivity : LocaleBaseActivity() {
 
     private var mBinding : ActivityDashboardBinding?= null
 

@@ -19,6 +19,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.ChangeRequests
 import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
@@ -52,7 +53,7 @@ fun Context.confirmDeliveryContext(enquiryId:Long): Intent {
     return intent
 }
 
-class ConfirmDeliveryActivity : AppCompatActivity(),
+class ConfirmDeliveryActivity : LocaleBaseActivity(),
     OrdersViewModel.OrderCinfirmedInterface{
     var enquiryId=0L
     val mOrderVM : OrdersViewModel by viewModels()
@@ -82,7 +83,7 @@ class ConfirmDeliveryActivity : AppCompatActivity(),
                     viewLoader()
                     mOrderVM.markOrderAsReceived(orderDetails?.enquiryId?:0,mBinding?.txtDateReceived?.text.toString())
                 }else Utility.displayMessage(getString(R.string.no_internet_connection),applicationContext)
-            }else Utility.displayMessage("Select received date",applicationContext)
+            }else Utility.displayMessage(getString(R.string.select_revise_date),applicationContext)
         }
        mBinding?.selectDate?.setOnClickListener {
            val c: Calendar = Calendar.getInstance()
@@ -107,8 +108,8 @@ class ConfirmDeliveryActivity : AppCompatActivity(),
             crSelctionList.clear()
             enquiryId?.let{ orderDetails=OrdersPredicates.getSingleOnGoOrderDetails(it,0)}
             profile = Prefs.getString(ConstantsDirectory.PROFILE,"")
-            mBinding?.enquiryCode?.text="Confirming Delivery"
-            mBinding?.enquiryStartDate?.text = "Date : ${orderDetails?.startedOn?.split("T")?.get(0)}"
+            mBinding?.enquiryCode?.text=getString(R.string.confirming_delivery)
+            mBinding?.enquiryStartDate?.text = getString(R.string.date)+" : ${orderDetails?.startedOn?.split("T")?.get(0)}"
     }
 
     fun viewLoader(){
@@ -121,11 +122,10 @@ class ConfirmDeliveryActivity : AppCompatActivity(),
     override fun onSuccess() {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
-                Log.e("ConfirmDeliveryActivity","onFetchCrSuccess Success")
                 hideLoader()
                 setDetails()
                 showRatingDialog()
-                Utility.displayMessage("Order Confirmed Succesfully",this)
+                Utility.displayMessage(getString(R.string.order_confirmed),this)
             })
         } catch (e: Exception) {
             Log.e("ConfirmDeliveryActivity", "Exception onFetchCrSuccess " + e.message)
@@ -138,7 +138,7 @@ class ConfirmDeliveryActivity : AppCompatActivity(),
                 Log.e("ConfirmDeliveryActivity","onFetchCrSuccess Success")
                 hideLoader()
                 setDetails()
-                Utility.displayMessage("Unable to confirm order, please try again later",this)
+                Utility.displayMessage(getString(R.string.unable_order_confirmed),this)
             })
         } catch (e: Exception) {
             Log.e("ConfirmDeliveryActivity", "Exception onFetchCrSuccess " + e.message)
@@ -156,7 +156,7 @@ class ConfirmDeliveryActivity : AppCompatActivity(),
         val txt_dscrp = dialog?.findViewById(R.id.txt_dscrp) as TextView
         val txt_changes_dscrp = dialog?.findViewById(R.id.txt_changes_dscrp) as TextView
         val txt_header_dscro = dialog?.findViewById(R.id.txt_header_dscro) as TextView
-        txt_dscrp.text = "Completed!"
+        txt_dscrp.text = getString(R.string.completed)+"!"
         txt_changes_dscrp.text = "Would you like to review and rate this order?"
         txt_header_dscro.text = "You can find this order under completed tab"
         btn_raise_pi.text = "Review and rating"

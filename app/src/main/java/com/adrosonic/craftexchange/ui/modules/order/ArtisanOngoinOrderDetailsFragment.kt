@@ -283,7 +283,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
                         }
                     }
                 }
-                else Utility.displayMessage("Change request disabled.", requireContext())
+                else Utility.displayMessage(getString(R.string.cr_disabled), requireContext())
             } else Utility.displayMessage(getString(R.string.cr_not_applicable), requireContext())
 
         }
@@ -519,13 +519,13 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         setProgressTimeline()
         var tranList = TransactionPredicates.getTransactionByEnquiryId(enqID?:0)
                 if(tranList!!.size>0){
-                    mBinding?.viewTransaction?.text="View"
+                    mBinding?.viewTransaction?.text=getString(R.string.view)
                     mBinding?.transactionList?.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false )
                     val transactionAdapter =  OnGoingTransactionRecyclerAdapter(requireContext(), tranList)
                     mBinding?.transactionList?.adapter = transactionAdapter
 //                    transactionAdapter.listener = this
                 } else {
-                    mBinding?.viewTransaction?.text="No transaction present"
+                    mBinding?.viewTransaction?.text=getString(R.string.no_transaction)
                 }
         })
         //cr
@@ -744,7 +744,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
             if(orderDetails?.changeRequestOn!!>0 && orderDetails?.actionMarkCr!!<1L){
                 mBinding?.toogleCr?.isEnabled=true
                 mBinding?.toogleCr?.isChecked=true
-                mBinding?.toogleCr?.text="Change request enabled"
+                mBinding?.toogleCr?.text=getString(R.string.cr_enabled)
             }
             else{
                 mBinding?.toogleCr?.isEnabled=false
@@ -974,7 +974,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
             Handler(Looper.getMainLooper()).post(Runnable {
                 setDetails()
                 loadDialog?.cancel()
-                Utility.displayMessage("Please Try Again",requireActivity())
+                Utility.displayMessage(getString(R.string.plz_try_again),requireActivity())
             })
         } catch (e: Exception) {
             Log.e("OrderDetails", "Exception onStatusChangeFailure " + e.message)
@@ -1026,7 +1026,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
                 Log.e("Toggle","onToggleFailure")
                 mBinding?.menuList?.visibility=View.GONE
                 hideLoader()
-                Utility.displayMessage("Error while changing request status",requireContext())
+                Utility.displayMessage(getString(R.string.err_cr_status),requireContext())
 
             })
         } catch (e: Exception) {
@@ -1060,7 +1060,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
     override fun onRDFailure() {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
-                Utility.displayMessage("Failed to update Recreation status",requireContext())
+                Utility.displayMessage(getString(R.string.err_recreation_status),requireContext())
                 loadDialog?.cancel()
             })
         } catch (e: Exception) {

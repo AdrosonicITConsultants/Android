@@ -16,6 +16,7 @@ import androidx.activity.viewModels
 import androidx.core.app.ShareCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.Moqs
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
@@ -42,7 +43,7 @@ fun Context.viewPiContextPostCr(enquiryId:Long): Intent {
     intent.putExtra("enquiryId", enquiryId)
     return intent
 }
-class ViewPiActivity : AppCompatActivity(),
+class ViewPiActivity : LocaleBaseActivity(),
 OrdersViewModel.FetchOrderInterface,
 EnquiryViewModel.FetchEnquiryInterface,
 EnquiryViewModel.piInterface{
@@ -109,12 +110,12 @@ EnquiryViewModel.piInterface{
         if(orderDetails?.isPiSend!!.equals(1L))mBinding?.viewOldPi?.visibility=View.VISIBLE
         else mBinding?.viewOldPi?.visibility=View.GONE
 
-        mBinding?.enquiryCode?.text="Proforma invoice for ${orderDetails?.orderCode}"
+        mBinding?.enquiryCode?.text=getString(R.string.proforma_invoice)+": ${orderDetails?.orderCode}"
         val webSettings = mBinding?.webviewPiPreview?.settings
         webSettings?.javaScriptEnabled = true
         webSettings?.builtInZoomControls = true
         if(Utility.checkIfInternetConnected(applicationContext)){
-            mBinding?.webviewPiPreview?.loadDataWithBaseURL(null,"Please wait...", "text/html", "utf-8", null)
+            mBinding?.webviewPiPreview?.loadDataWithBaseURL(null,getString(R.string.please_wait), "text/html", "utf-8", null)
         }else{
             mBinding?.webviewPiPreview?.loadDataWithBaseURL(null, getString(R.string.preview_not_available), "text/html", "utf-8", null)
         }
@@ -131,7 +132,7 @@ EnquiryViewModel.piInterface{
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 hideLoader()
-                Utility.displayMessage("Unable to raise PI, please try after some time",applicationContext)
+                Utility.displayMessage(getString(R.string.unable_raise_pi),applicationContext)
             })
         } catch (e: Exception) {
             Log.e("Enquiry Details", "Exception onFailure " + e.message)
@@ -167,7 +168,7 @@ EnquiryViewModel.piInterface{
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 hideLoader()
-                Utility.displayMessage("Unable to download PDF, pleas try again later",applicationContext)
+                Utility.displayMessage( getString(R.string.unable_download_pdf),applicationContext)
             })
         } catch (e: Exception) {
             Log.e("Enquiry Details", "Exception onFailure " + e.message)

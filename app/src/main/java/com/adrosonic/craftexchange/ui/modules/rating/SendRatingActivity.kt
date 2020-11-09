@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.databinding.SendRatingActivityBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.request.rating.RatingRequest
@@ -31,7 +32,7 @@ fun Context.sendRatingIntent(enquiryId :Long): Intent {
     return intent.apply { flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
         Intent.FLAG_ACTIVITY_NEW_TASK  }
 }
-class SendRatingActivity: AppCompatActivity(),
+class SendRatingActivity: LocaleBaseActivity(),
 SendRatingAdapter.averagerating{
     var enquiryId : Long? = 0
     var userId : Long? = 0

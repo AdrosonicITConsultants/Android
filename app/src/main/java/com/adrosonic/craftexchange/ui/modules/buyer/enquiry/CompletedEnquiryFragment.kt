@@ -123,7 +123,7 @@ class CompletedEnquiryFragment : Fragment(),
 //                mEnqVM.getAllCompletedEnquiries()
                 mEnqVM.getCompEnqListMutableData()
                 setVisiblities()
-                Utility.displayMessage("Error while fetching list", requireContext())
+                Utility.displayMessage(getString(R.string.err_fetch_list), requireContext())
             })
         } catch (e: Exception) {
             Log.e("compEnqList", "Exception onFailure " + e.message)

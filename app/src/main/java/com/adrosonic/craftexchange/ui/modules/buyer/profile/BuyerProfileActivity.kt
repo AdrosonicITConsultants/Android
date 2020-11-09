@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
 import com.adrosonic.craftexchange.database.entities.realmEntities.UserAddress
@@ -34,7 +35,7 @@ fun Context.buyerProfileIntent(): Intent {
     }
 }
 
-class BuyerProfileActivity : AppCompatActivity(),
+class BuyerProfileActivity : LocaleBaseActivity(),
     ProfileViewModel.FetchUserDetailsInterface {
 
     companion object{

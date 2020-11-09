@@ -98,7 +98,7 @@
                                 android:fontFamily="@font/lato_regular"
                                 android:gravity="center_vertical"
                                 android:padding="6dp"
-                                android:text="  Chat                 "
+                                android:text="@string/chat"
                                 android:textColor="@color/popup_txt_color"
                                 android:textSize="12sp" />
 
@@ -276,7 +276,7 @@
                         android:layout_marginStart="@dimen/margin_regular"
                         android:layout_marginTop="@dimen/margin_regular"
                         android:fontFamily="@font/lato_bold"
-                        android:text="Order Details"
+                        android:text="@string/order_details"
                         android:textColor="@color/black_text"
                         android:textSize="@dimen/product_availability_text"
                         android:textStyle="bold"
@@ -484,7 +484,7 @@
                             android:fontFamily="@font/lato_regular"
                             android:paddingStart="8dp"
                             android:paddingEnd="8dp"
-                            android:text="Next Step - - - - - - - - - - - - ->"
+                            android:text="@string/next_step"
                             android:textSize="@dimen/product_availability_text"
                             android:textStyle="bold" />
 
@@ -993,7 +993,7 @@
                         android:layout_weight="3"
                         android:fontFamily="@font/lato_regular"
                         android:gravity="center|start"
-                        android:text="Change Request"
+                        android:text="@string/change_request"
                         android:textColor="#7793FF"
                         android:textSize="12sp" />
 
@@ -1042,7 +1042,7 @@
                         android:layout_weight="4"
                         android:fontFamily="@font/lato_regular"
                         android:gravity="center|start"
-                        android:text="Tax invoice"
+                        android:text="@string/tax_invoice"
                         android:textColor="#BA7742"
                         android:textSize="12sp" />
 

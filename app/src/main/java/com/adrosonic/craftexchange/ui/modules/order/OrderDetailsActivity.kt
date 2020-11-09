@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityEnquiryDetailsBinding
 import com.adrosonic.craftexchange.enums.EnquiryStatus
@@ -14,7 +15,7 @@ import com.pixplicity.easyprefs.library.Prefs
 fun Context.orderDetails(): Intent {
     return Intent(this, OrderDetailsActivity::class.java).apply {}
 }
-class OrderDetailsActivity : AppCompatActivity() {
+class OrderDetailsActivity : LocaleBaseActivity() {
 
     private var mBinding: ActivityEnquiryDetailsBinding? = null
 

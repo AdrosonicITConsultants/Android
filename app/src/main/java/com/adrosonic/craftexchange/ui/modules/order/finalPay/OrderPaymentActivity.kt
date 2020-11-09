@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityEnquiryPaymentBinding
 import com.adrosonic.craftexchange.databinding.ActivityOrderPaymentBinding
@@ -21,7 +22,7 @@ fun Context.orderPaymentIntent(): Intent {
     return Intent(this, OrderPaymentActivity::class.java).apply {  }
 }
 
-class OrderPaymentActivity : AppCompatActivity() {
+class OrderPaymentActivity : LocaleBaseActivity() {
 
     private var mBinding: ActivityOrderPaymentBinding? = null
 

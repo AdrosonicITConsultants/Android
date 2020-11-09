@@ -14,6 +14,7 @@ import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
@@ -31,7 +32,7 @@ fun Context.editPhotoIntent(location: String): Intent {
     return intent.apply { }
 }
 
-class EditPhotoActivity : AppCompatActivity() {
+class EditPhotoActivity : LocaleBaseActivity() {
     var photoPath=""
     var position=0
     lateinit var updatedUri:Uri

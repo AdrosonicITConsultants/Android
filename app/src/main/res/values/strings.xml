@@ -11,7 +11,7 @@
     <string name="artisan">Artisan</string>
     <string name="artisan_logo">Artisan Logo</string>
     <string name="buyer">Buyer</string>
-    <string name="change_language">Change Language</string>
+    <string name="change_language">\tChange Language</string>
     <string name="need_help">Need help Deciding?</string>
     <string name="need_help2">Need help?</string>
     <string name="change_lang_desc">Change language icon</string>
@@ -254,7 +254,7 @@
     <string name="filter_items_collection">Filter items\nby collection</string>
     <string name="show_both">Show both</string>
     <string name="collapse">Collapse</string>
-    <string name="title_activity_edit_photo">EditPhotoActivity</string>
+    <string name="title_activity_edit_photo">Edit Photo Activity</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="your_enquiries">Your Enquiries</string>
@@ -286,6 +286,7 @@
     <string name="company">Company</string>
     <string name="mark_all_as_read">Mark all as read</string>
     <string name="no_new_notifications">No new notifications</string>
+    <string name="new_notifications"> new notifications</string>
     <string name="fill_in_moq_to_bid">Fill in MOQ to bid for this enquiry</string>
     <string name="type_your_note_here">Type your note here</string>
     <string name="are_you_sure">Are you sure?</string>
@@ -298,7 +299,6 @@
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.
     -->
-    <string name="hello_world">Hello Square World!</string>
     <string name="select_advance_amount_note">Select the % of the total amount (as per PI) you wish\nto pay below :</string>
     <string name="proceed_with_pay">Proceed with advance payment</string>
     <string name="notify_tt_team"><![CDATA[The following will be notified to Artisan &\nthe Administration team at Tata Trusts]]></string>
@@ -349,6 +349,10 @@
         <item>Payment ID</item>
         <item>Tax Invoice ID</item>
         <item>Challan ID</item>
+    </string-array>
+    <string-array name="lang_selector">
+        <item>English</item>
+        <item>Hindi</item>
     </string-array>
     <string name="orders">Orders</string>
     <string name="start_this_stage">Start this stage</string>
@@ -470,5 +474,99 @@
     <string name="enter_receiving_date">Enter date of receiving</string>
     <string name="confirm_delivery_check_text_note">Just in case you find your order to be faulty,\nyou can always raise a concern within\n10 days from date received.</string>
     <string name="confirm_delivery">Confirm Delivery</string>
-
+    <string name="name_of_the_product_40_characters">Name of the product (40 characters)</string>
+    <string name="product_code">Product code(Eg. NAG09_89)</string>
+    <string name="select_prod_cat">Select product category</string>
+    <string name="prod_type">Product type</string>
+    <string name="select_your_langauge">Select your langauge</string>
+    <string name="english">English</string>
+    <string name="hindi">Hindi</string>
+    <string name="step_1_add_photo">Step 1 : Add Photo</string>
+    <string name="step_2_add_general_details">Step 2 : Add general details</string>
+    <string name="step_3_select_weave_type">Step 3 : Select weave type</string>
+    <string name="step_4_select_warp_weft_and_yarn">Step 4 : Select warp, weft and yarn</string>
+    <string name="step_5_enter_the_reed_count">Step 5 : Enter the reed count</string>
+    <string name="step_6_enter_the_dimensions">Step 6 : Enter the dimensions</string>
+    <string name="step_7_enter_the_wash_care_instructions">Step 7 : Enter the wash care instructions</string>
+    <string name="step_8_select_the_availability">Step 8 : Select the availability</string>
+    <string name="step_9_enter_the_weight">Step 9 : Enter the weight</string>
+    <string name="step_10_enter_gsm_value_of_fabric">Step 10 : Enter GSM value of fabric</string>
+    <string name="step_11_enter_description">Step 11 : Enter description</string>
+    <string name="reset_all">Reset All</string>
+    <string name="your_orders">Your Orders</string>
+    <string name="order_details">Order Details</string>
+    <string name="next_step"><![CDATA[Next Step - - - - - - - - - - - - ->]]></string>
+    <string name="change_request">Change Request</string>
+    <string name="mark_all_noti_confirmation">Are you sure you want to mark all notifications as read?</string>
+    <string name="mark_as_read">Mark as read</string>
+    <string name="search_by_enquiry_id_order_id_buyer_s_name">Search by Enquiry Id/ Order Id/buyer\'s name</string>
+    <string name="type_your_msg">Type your message here</string>
+    <string name="err_fetch_list">Error while fetching list</string>
+    <string name="err_fetch_noti">Error while fetching notifications</string>
+    <string name="please_wait">Please wait...</string>
+    <string name="please_wait_while">Please wait while we are fetching details for you</string>
+    <string name="view_old_pi">View old PI</string>
+    <string name="moq_detaila">MOQ Details</string>
+    <string name="date_started">Date started</string>
+    <string name="date_converted">Converted to order on</string>
+    <string name="date_last_updated">Last updated on</string>
+    <string name="order_amount">Order amount</string>
+    <string name="no_moqs">No MOQs present</string>
+    <string name="confirming_delivery">Confirming Delivery</string>
+    <string name="date">Date</string>
+    <string name="date_accepted">Date accepted </string>
+    <string name="cr_for">CR for </string>
+    <string name="accepted_txt1">You have accepted 0 out of  </string>
+    <string name="accepted_txt2">requests </string>
+    <string name="you_abt">You are about to accept the changes on </string>
+    <string name="you_abt_reject">You are about to reject the complete request </string>
+    <string name="cr_enabled">Change request enabled </string>
+    <string name="no_transaction">No transaction present </string>
+    <string name="select_dispatch_date">Please select order dispatch date</string>
+    <string name="unable_to_upload_challan">Unable to upload delivery challan</string>
+    <string name="faile_to_dispatch">Failed to Dispatch Order, Try Again Later</string>
+    <string name="add_moq">Please add MOQ</string>
+    <string name="add_ppu">Please add price per unit</string>
+    <string name="select_est_days">Please select estimated days</string>
+    <string name="sending_moq">Sending MOQ</string>
+    <string name="enq_stage_updated">Enquiry Stage Updated!</string>
+    <string name="plz_try_again">Please Try Again</string>
+    <string name="unable_to_add">Unable to add MOQ, please try again after some time</string>
+    <string name="moq_added">MOQ added succesfully</string>
+    <string name="delivery_challan_uploaded">Delivery Challan uploaded!</string>
+    <string name="payment_Accepted">Payment Accepted</string>
+    <string name="payment_rejected">Payment Rejected</string>
+    <string name="enq_gen_failed">Enquiry Generation Failed</string>
+    <string name="unable_to_mark_read">Unable to mark as read, try again later</string>
+    <string name="unable_download_pdf">Unable to download PDF, pleas try again later</string>
+    <string name="unable_raise_pi">Unable to raise PI, please try after some time</string>
+    <string name="upld_trans_recipt">Upload Transaction Receipt</string>
+    <string name="unable_fetch_payment">Unable to fetch payment details</string>
+    <string name="plz_add_qty">Please add Quantity</string>
+    <string name="plz_add_del_date">Please select delivery date</string>
+    <string name="plz_add_hsn">Please add HSN code</string>
+    <string name="plz_add_sgst">Please add SGST</string>
+    <string name="plz_add_cgst">Please add CGST</string>
+    <string name="plz_add_currency">Please select Currency</string>
+    <string name="plz_accept_tnc">Please accept terms and conditions</string>
+    <string name="raise_pi_offline">PI will be raised once internet connectivity regained</string>
+    <string name="unable_tofetch_pi">Sorry,Unable to fetch PI details</string>
+    <string name="pi_raised_succesfully">PI raised succesfully</string>
+    <string name="err_cr_status">Error while changing request status</string>
+    <string name="err_recreation_status">Failed to update Recreation status</string>
+    <string name="unable_to_update_cr_stus">Unable to update CR status, please try again later</string>
+    <string name="unable_to_raise_cr">Unable to raise CR, please try again later</string>
+    <string name="cr_status_updated">CR status updated successfully</string>
+    <string name="select_revise_date">Select received date</string>
+    <string name="order_confirmed">Order Confirmed Succesfully</string>
+    <string name="unable_order_confirmed">Unable to confirm order, please try again later</string>
+    <string name="plz_fill_in">Please fill in the required input fields</string>
+    <string name="plz_add_prev_total">Please add previous total amount</string>
+    <string name="plz_add_paid_adv">Please add paid advance amount</string>
+    <string name="plz_add_final_amt">Please add Final amount</string>
+    <string name="plz_add_amt_tobe_paid">Please add amount to be paid</string>
+    <string name="plz_add_del_charges">Please add Delivery Charges</string>
+    <string name="tax_invoic_gen">Tax Invoice preview being generated</string>
+    <string name="tax_invoic_sent">Tax Invoice sent</string>
+    <string name="err_gen_ti">Error generating Tax Invoice</string>
 </resources>

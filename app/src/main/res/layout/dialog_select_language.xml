@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/expandable_layout_std_padding">
+
+    <TextView
+        android:id="@+id/txt_dscrp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/margin_regular"
+        android:fontFamily="@font/playfair_regular"
+        android:text="@string/select_your_langauge"
+        android:textAlignment="center"
+        android:textColor="@color/clickable_text_color"
+        android:textSize="@dimen/title_text" />
+
+    <RelativeLayout
+        android:id="@+id/clusterParent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/expandable_layout_std_padding"
+        android:layout_weight="4"
+        android:background="@drawable/search_background">
+
+        <Spinner
+            android:id="@+id/sp_language"
+            style="@style/Widget.AppCompat.DropDownItem.Spinner"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:backgroundTint="@color/clickable_text_color"
+            android:layout_centerInParent="true"
+            android:autofillHints="Select product category" />
+    </RelativeLayout>
+    <Button
+        android:id="@+id/btn_confirm"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginBottom="@dimen/margin_small"
+        android:background="@drawable/rect_round_blue_solid"
+        android:text="Confirm"
+        android:textAllCaps="false"
+        android:textStyle="bold"
+        android:textColor="#FFF"
+        android:textSize="16sp"
+        android:layout_width="100dp"
+        android:layout_height="40dp"/>
+
+
+</LinearLayout>

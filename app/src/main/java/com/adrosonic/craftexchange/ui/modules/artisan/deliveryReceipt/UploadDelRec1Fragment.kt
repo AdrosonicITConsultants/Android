@@ -176,8 +176,8 @@ class UploadDelRec1Fragment : Fragment(),
             var eta = "${mBinding?.revisedEta?.text.toString()} 00:00:00"
             var receiptFilePath = absolutePath.toString()
 
-            if (receiptFilePath.isEmpty()) Utility.displayMessage("Please upload delivery receipt", requireContext())
-            else if (dispatchDate.isEmpty()) Utility.displayMessage("Please select order dispatch date", requireContext())
+            if (receiptFilePath.isEmpty()) Utility.displayMessage(getString(R.string.upld_delivery_receipt), requireContext())
+            else if (dispatchDate.isEmpty()) Utility.displayMessage(getString(R.string.select_dispatch_date), requireContext())
             else{
                 if(Utility.checkIfInternetConnected(requireContext())){
                     loadingDialog?.show()
@@ -358,7 +358,7 @@ class UploadDelRec1Fragment : Fragment(),
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("UploadDeliveryChallan", "OnFailure")
                 loadingDialog?.cancel()
-                Utility.displayMessage("Unable to upload delivery challan",requireContext())
+                Utility.displayMessage(getString(R.string.unable_to_upload_challan),requireContext())
             })
         } catch (e: Exception) {
             Log.e("FinalPayDetails", "Exception OnSuccess " + e.message)
@@ -368,9 +368,8 @@ class UploadDelRec1Fragment : Fragment(),
     override fun onSuccess() {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
-                Log.e("UploadDeliveryChallan", "OnSuccess")
                 loadingDialog?.cancel()
-                Utility.displayMessage("Delivery Challan uploaded!",requireContext())
+                Utility.displayMessage(getString(R.string.delivery_challan_uploaded),requireContext())
                 showDispatchOrderDialog()
 //                activity?.onBackPressed()
             })
@@ -405,7 +404,7 @@ class UploadDelRec1Fragment : Fragment(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 plsWaitDialog?.cancel()
-                Utility.displayMessage("Failed to Dispatch Order, Try Again Later",requireContext())
+                Utility.displayMessage(getString(R.string.faile_to_dispatch),requireContext())
             })
         } catch (e: Exception) {
             Log.e("OrderDetails", "Exception onStatusChangeFailure " + e.message)

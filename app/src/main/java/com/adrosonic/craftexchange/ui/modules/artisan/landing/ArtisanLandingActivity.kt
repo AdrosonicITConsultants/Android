@@ -1,5 +1,6 @@
 package com.adrosonic.craftexchange.ui.modules.artisan.landing
 
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.AsyncTask
@@ -10,6 +11,9 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.Spinner
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.annotation.NonNull
@@ -18,8 +22,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
+import com.adrosonic.craftexchange.LocalizationManager.LocaleManager
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
 import com.adrosonic.craftexchange.database.predicates.UserPredicates
@@ -66,7 +73,7 @@ fun Context.artisanLandingIntent(isNotification:Boolean): Intent {
 //        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 //    }
 }
-class ArtisanLandingActivity : AppCompatActivity(),
+class ArtisanLandingActivity : LocaleBaseActivity(),
     NavigationView.OnNavigationItemSelectedListener,
     ProfileViewModel.FetchUserDetailsInterface,
     LandingViewModel.notificationInterface,
@@ -255,6 +262,9 @@ class ArtisanLandingActivity : AppCompatActivity(),
                 intent.putExtra("ViewType", "FAQ_PDF")
                 startActivity(intent)
             }
+            R.id.nav_change_lang->{
+                showLanguageSelectionDialog()
+            }
             R.id.nav_logout -> {
                 if (Utility.checkIfInternetConnected(this)) {
                     val builder = AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar)
@@ -296,7 +306,37 @@ class ArtisanLandingActivity : AppCompatActivity(),
             }
         }
     }
+    fun showLanguageSelectionDialog() {
+        var dialog = Dialog(this)
+        dialog.setContentView(R.layout.dialog_select_language)
+        dialog.show()
+        val spLanguage = dialog.findViewById(R.id.sp_language) as Spinner
+        val btnConfirm = dialog.findViewById(R.id.btn_confirm) as Button
 
+        val spLanguageAdapter = ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,resources.getStringArray(R.array.lang_selector))
+        spLanguageAdapter.setDropDownViewResource(R.layout.spinner_item)
+        spLanguage?.adapter = spLanguageAdapter
+        btnConfirm.setOnClickListener {
+            val builder = AlertDialog.Builder(this,android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar)
+            builder.setMessage("Are you sure? You want to set ${spLanguage?.selectedItem.toString()} as your app language?")
+                .setCancelable(true)
+                .setPositiveButton("OK") { dialog1, id ->
+                    if(spLanguage?.selectedItem.toString().equals("Hindi"))setNewLocale(this, LocaleManager.HINDI)
+                    else setNewLocale(this, LocaleManager.ENGLISH)
+                    dialog1.cancel()
+                    dialog.cancel()
+                }
+            builder.show()
+        }
+    }
+    private fun setNewLocale(
+        mContext: FragmentActivity,
+        language: String
+    ) {
+        LocaleManager.setNewLocale(this, language)
+        val intent: Intent = mContext.getIntent()
+        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
+    }
     interface DeviceTokenCallback {
         fun registeredToken(token: String)
     }
