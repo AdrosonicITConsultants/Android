@@ -49,7 +49,7 @@ class CommonEnquiryFragment : Fragment() {
         when(profile){
             "Artisan" -> {
                 childFragmentManager.let{
-                    mBinding?.viewPagerViewEnquiries?.adapter = ArtisanEnqVPAdapter(it)
+                    mBinding?.viewPagerViewEnquiries?.adapter = ArtisanEnqVPAdapter(it,requireContext())
                     mBinding?.viewEnquiriesTab?.setupWithViewPager(mBinding?.viewPagerViewEnquiries)
                 }
             }

@@ -8,6 +8,7 @@ import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.CategoryProduct
 import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.RegionProductsFragment
 
 class ViewArtisanProductsPagerAdapter(fragmentManager: FragmentManager): FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+
     override fun getItem(position: Int): Fragment {
 
           return  when (position) {

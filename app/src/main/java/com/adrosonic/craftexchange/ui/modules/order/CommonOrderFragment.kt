@@ -50,7 +50,7 @@ class CommonOrderFragment : Fragment() {
         when(profile){
             "Artisan" -> {
                 childFragmentManager.let{
-                    mBinding?.viewPagerViewEnquiries?.adapter = ArtisanOrdersViewPagerAdapter(it)
+                    mBinding?.viewPagerViewEnquiries?.adapter = ArtisanOrdersViewPagerAdapter(it,requireContext())
                     mBinding?.viewEnquiriesTab?.setupWithViewPager(mBinding?.viewPagerViewEnquiries)
                 }
             }
