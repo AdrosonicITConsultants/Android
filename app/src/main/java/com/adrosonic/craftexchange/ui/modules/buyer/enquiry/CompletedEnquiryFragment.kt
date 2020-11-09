@@ -18,6 +18,7 @@ import com.adrosonic.craftexchange.databinding.FragmentCompletedEnquiryBinding
 import com.adrosonic.craftexchange.ui.modules.enquiry.adapter.CompletedEnqRecyclerAdapter
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
+import com.adrosonic.craftexchange.viewModels.OrdersViewModel
 import io.realm.RealmResults
 
 
@@ -33,6 +34,7 @@ class CompletedEnquiryFragment : Fragment(),
     var mBinding : FragmentCompletedEnquiryBinding?= null
 
     val mEnqVM : EnquiryViewModel by viewModels()
+    val mOrderVM : OrdersViewModel by viewModels()
 
     var mEnqListAdapter : CompletedEnqRecyclerAdapter?= null
 
@@ -59,7 +61,7 @@ class CompletedEnquiryFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mEnqVM.fetchEnqListener =this
-
+        mOrderVM.ratingQuestions()
         setRecyclerList()
 //        setVisiblities()
 
@@ -67,6 +69,7 @@ class CompletedEnquiryFragment : Fragment(),
             Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
         } else {
             mEnqVM.getAllCompletedEnquiries()
+
         }
 
         mBinding?.swipeCompletedEnquiries?.isRefreshing = true

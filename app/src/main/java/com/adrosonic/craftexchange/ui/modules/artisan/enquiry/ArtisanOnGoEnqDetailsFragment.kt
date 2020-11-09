@@ -103,9 +103,6 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        moqDeliveryJson = UserConfig.shared.moqDeliveryDates
-//        val gson = GsonBuilder().create()
-//        val moqDeliveryTime = gson.fromJson(moqDeliveryJson, MoqDeliveryTimesResponse::class.java)
         Utility.getDeliveryTimeList()?.let {moqDeliveryTimeList.addAll(it)  }
         mEnqVM?.moqListener=this
         mEnqVM?.fetchEnqListener = this
@@ -432,27 +429,30 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         setProgressTimeline()
 
         //TODO implement to enq stage
-
-        if(enquiryDetails?.isMoqRejected!! == 1L){
-            mBinding?.uploadDocLayout?.visibility = View.GONE
-            mBinding?.viewPiLayout?.visibility = View.GONE
-        }else{
-            Log.e("PITag","enquiryStageID: ${enquiryDetails?.enquiryStageID}")
-            Log.e("PITag","enquiryStageID: ${enquiryDetails?.enquiryStatusID}")
-            if(enquiryDetails?.enquiryStageID!!.equals(3L)){
-                mBinding?.uploadDocLayout?.visibility = View.GONE
-                mBinding?.viewPiLayout?.visibility = View.VISIBLE
-              }
-            else if(enquiryDetails?.isPiSend!!.equals(1L)){
-                mBinding?.uploadDocLayout?.visibility = View.GONE
-                mBinding?.viewPiLayout?.visibility = View.VISIBLE
-
-            }else if(enquiryDetails?.isPiSend!!.equals(0L)&&enquiryDetails?.isMoqSend!!.equals(1L)){
-                mBinding?.uploadDocLayout?.visibility = View.VISIBLE
-                mBinding?.viewPiLayout?.visibility = View.GONE
-            }else{
+        enquiryDetails?.isMoqRejected?.let {
+            if (enquiryDetails?.isMoqRejected!! == 1L) {
                 mBinding?.uploadDocLayout?.visibility = View.GONE
                 mBinding?.viewPiLayout?.visibility = View.GONE
+            } else {
+                Log.e("PITag", "enquiryStageID: ${enquiryDetails?.enquiryStageID}")
+                Log.e("PITag", "enquiryStageID: ${enquiryDetails?.enquiryStatusID}")
+                if (enquiryDetails?.enquiryStageID!!.equals(3L)) {
+                    mBinding?.uploadDocLayout?.visibility = View.GONE
+                    mBinding?.viewPiLayout?.visibility = View.VISIBLE
+                } else if (enquiryDetails?.isPiSend!!.equals(1L)) {
+                    mBinding?.uploadDocLayout?.visibility = View.GONE
+                    mBinding?.viewPiLayout?.visibility = View.VISIBLE
+
+                } else if (enquiryDetails?.isPiSend!!.equals(0L) && enquiryDetails?.isMoqSend!!.equals(
+                        1L
+                    )
+                ) {
+                    mBinding?.uploadDocLayout?.visibility = View.VISIBLE
+                    mBinding?.viewPiLayout?.visibility = View.GONE
+                } else {
+                    mBinding?.uploadDocLayout?.visibility = View.GONE
+                    mBinding?.viewPiLayout?.visibility = View.GONE
+                }
             }
         }
         arrayDeliveryDscrp.clear()
@@ -750,7 +750,9 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("Enquiry Details", "onSuccess")
-                enqID?.let { mEnqVM.getSingleOnEnqData(it) }
+                enqID?.let { mEnqVM.getSingleOnEnqData(it)
+                    enquiryDetails=mEnqVM.getSingleOnEnqData(it).value
+                }
                 hideLoader()
                 setDetails()
             })

@@ -98,7 +98,15 @@ object CraftExchangeRepository {
     fun getTiService(): TIDao {
         return builder(TIDao::class.java)
     }
+
+    fun getUserEnquiryRatingservise(): RatingDao {
+        return builder(RatingDao::class.java)
+    }
+
     fun getFaultyOrderService(): FaultyOrdersDao {
         return builder(FaultyOrdersDao::class.java)
+    }
+    fun getChatService(): ChatListDao {
+        return builder(ChatListDao::class.java)
     }
 }

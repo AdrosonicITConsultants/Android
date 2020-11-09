@@ -32,6 +32,7 @@ import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.CommonEnquiryFragmen
 import com.adrosonic.craftexchange.ui.modules.buyer.ownDesign.OwnProductListFragment
 import com.adrosonic.craftexchange.ui.modules.buyer.profile.buyerProfileIntent
 import com.adrosonic.craftexchange.ui.modules.buyer.wishList.wishlistFragment
+import com.adrosonic.craftexchange.ui.modules.chat.ChatListFragment
 import com.adrosonic.craftexchange.ui.modules.dashboard.dashboardIntent
 import com.adrosonic.craftexchange.ui.modules.order.CommonOrderFragment
 import com.adrosonic.craftexchange.ui.modules.role.roleselectIntent
@@ -180,7 +181,11 @@ class BuyerLandingActivity : AppCompatActivity(),
                         return true
                     }
                     R.id.action_chat -> {
-    //                        initTab(BranchesFragment.newInstance(), BranchesFragment.TAG)
+                        if (savedInstanceState == null) {
+                            supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container, ChatListFragment.newInstance())
+                                .addToBackStack(null)
+                                .commit()
+                        }
                         return true
                     }
 

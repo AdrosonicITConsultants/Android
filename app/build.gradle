@@ -17,7 +17,7 @@ android {
         applicationId "com.adrosonic.craftexchange"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 48
+        versionCode 50
         versionName "1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -74,8 +74,6 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
-    implementation 'com.github.bassaer:chatmessageview:2.0.1'
-
     //gson
     implementation 'com.google.code.gson:gson:2.8.6'
 
@@ -129,6 +127,17 @@ dependencies {
    //pinch to zoom image
     implementation 'com.bogdwellers:pinchtozoom:0.1'
 
+
+   // Chat Library
+    implementation 'com.github.bassaer:chatmessageview:2.0.0'
+//    implementation 'com.github.bassaer:chatmessageview:1.8.8'
+
+
+    //Pdf Library
+    implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
+    implementation 'com.github.kk121:File-Loader:1.2'
+    implementation 'com.karumi:dexter:5.0.0'
+
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.0'
@@ -138,6 +147,9 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    //rating bar
+    implementation 'hyogeun.github.com.colorratingbar:ColorRatingBar:1.0.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

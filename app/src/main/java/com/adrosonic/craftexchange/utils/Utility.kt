@@ -19,6 +19,7 @@ import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.View
+import android.webkit.MimeTypeMap
 import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ShareCompat
@@ -70,6 +71,7 @@ class Utility {
         var craftUser = UserPredicates.findUser(Prefs.getString(ConstantsDirectory.USER_ID,"0").toLong())
         var mCraftUser = CraftUser()
         const val BROWSING_IMGS: String = "BrowsedImages/"
+
 
 
         fun displayMessage(message: String, context: Context) {
@@ -648,7 +650,33 @@ class Utility {
                 displayMessage("  Application not installed " + e, context)
             }
         }
+        fun openChatMedia(context: Activity,enquiryId:Long,imageName:String){
+//            File(context.cacheDir,  Utility.CHAT_MEDIA).exists()) File(context.cacheDir, Utility.CHAT_MEDIA).mkdir()
+            val cacheFile = File(context.cacheDir, ConstantsDirectory.CHAT_MEDIA +imageName)
+            try {
+                val uri = FileProvider.getUriForFile(context, "com.adrosonic.craftexchange.provider", cacheFile)
+                val myIntent = Intent(Intent.ACTION_VIEW)
+                myIntent.putExtra(ShareCompat.EXTRA_CALLING_PACKAGE, context.getPackageName())
+                val componentName = context.componentName
+                myIntent.putExtra(ShareCompat.EXTRA_CALLING_ACTIVITY, componentName)
+                myIntent.setDataAndType(uri, getFileType(imageName))
+                myIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(Intent.createChooser(myIntent, "Open with"))
 
+            } catch (e: Exception) {
+                displayMessage("  Application not installed " + e, context)
+            }
+        }
+        fun getFileType(filename: String): String? {
+            var type: String? = ""
+            val extension = MimeTypeMap.getFileExtensionFromUrl(filename)
+            if (extension != null) {
+                type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.toLowerCase())
+            } else type = ""
+            Log.e("getFileType", "type:   ${type}")
+            return type
+        }
         fun openTaxInvFile(context: Activity,enquiryId:Long){
             val cacheFile = File(context.cacheDir, ConstantsDirectory.TI_PDF_PATH + "Ti${enquiryId}.pdf")
             try {
@@ -666,8 +694,6 @@ class Utility {
                 displayMessage(" Application not installed $e", context)
             }
         }
-
-
         fun getDateDiffInDays(orderCreatedOn:String):Long{
             val currentDateTime=System.currentTimeMillis()
 //            val orderCreatedOn=Utility.returnDisplayDate(orderDetails?.orderCreatedOn?:"")
@@ -701,5 +727,54 @@ class Utility {
                 return ""
             }
         }
+
+        fun getRealPathFromFileUriForChat(context: Context, contentUri: Uri): String {
+            var filePath = ""
+            val myDir: File
+            try {
+                if (!File(context.cacheDir, ConstantsDirectory.CHAT_MEDIA).exists()) File(context.cacheDir, ConstantsDirectory.CHAT_MEDIA).mkdir()
+                if (contentUri.path!!.contains(".")) {
+                    if(contentUri.lastPathSegment!!.contains("/")) {
+                        myDir = File(context.cacheDir, ConstantsDirectory.CHAT_MEDIA + "/" + contentUri.lastPathSegment!!.substring(contentUri.lastPathSegment!!.lastIndexOf("/")+1))
+                    } else myDir = File(context.cacheDir, ConstantsDirectory.CHAT_MEDIA + "/" + contentUri.lastPathSegment + "")
+                }
+                else myDir = File(context.cacheDir, ConstantsDirectory.CHAT_MEDIA + "/" + contentUri.lastPathSegment + "")
+                Log.e("FileName","1111 ${myDir.name} : ${myDir.name.length}")
+                if(myDir.name!!.length>42){
+                    val renamed = File(context.cacheDir, BROWSING_IMGS + "/" + System.currentTimeMillis()+ "")
+                    Log.e("FileName","33333  ${renamed.name}")
+                    myDir.renameTo( renamed)
+                }
+                Log.e("FileName","4444  ${myDir.name}")
+                var inputStream: InputStream? = context.contentResolver.openInputStream(contentUri)
+                var outputStream: OutputStream = FileOutputStream(myDir)
+                try {
+                    var fileReader = ByteArray(4096)
+                    var fileSizeDownloaded = 0
+                    while (true) {
+                        var read = inputStream?.read(fileReader)
+                        if (read == -1) {
+                            break
+                        }
+                        read?.let { outputStream.write(fileReader, 0, it) }
+                        if (read != null) {
+                            fileSizeDownloaded += read
+                        }
+                    }
+                    outputStream.flush()
+                    filePath = myDir.path
+                    return filePath
+                } catch (e: IOException) {
+                    return filePath
+                } finally {
+                    inputStream?.close()
+                    outputStream.close()
+                }
+            } catch (e: IOException) {
+                Log.e("ShareIntent", "IOException : $e")
+                return filePath
+            }
+        }
     }
+
 }
