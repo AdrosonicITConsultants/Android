@@ -36,6 +36,7 @@ import com.adrosonic.craftexchange.ui.modules.artisan.deliveryReceipt.uploadDeli
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.piContext
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
 import com.adrosonic.craftexchange.ui.modules.artisan.qcForm.qcFormIntent
+import com.adrosonic.craftexchange.ui.modules.chat.chatLogDetailsIntent
 import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.order.cr.crContext
 import com.adrosonic.craftexchange.ui.modules.order.finalPay.orderPaymentIntent
@@ -341,6 +342,12 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
             }else{
                 Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
             }
+        }
+        mBinding?.btnChat?.setOnClickListener {
+            enqID?.let {  startActivity(Intent(requireContext()?.chatLogDetailsIntent(it)))}
+        }
+        mBinding?.chat?.setOnClickListener {
+            enqID?.let {  startActivity(Intent(requireContext()?.chatLogDetailsIntent(it)))}
         }
     }
 

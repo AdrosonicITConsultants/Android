@@ -80,11 +80,11 @@ class InitiatedChatRecyclerAdapter(var context: Context?, private var chats: Rea
 
         var chatData = chats?.get(position)
         holder.chat_container_layout.setOnClickListener {
-            val intent = Intent(context?.chatLogDetailsIntent())
-            val bundle = Bundle()
-            bundle.putLong(ConstantsDirectory.ENQUIRY_ID, chatData?.enquiryId?:0)
-            intent.putExtras(bundle)
-            context?.startActivity(intent)
+//            val intent = Intent(context?.chatLogDetailsIntent())
+//            val bundle = Bundle()
+//            bundle.putLong(ConstantsDirectory.ENQUIRY_ID, chatData?.enquiryId?:0)
+//            intent.putExtras(bundle)
+            context?.startActivity(Intent(context?.chatLogDetailsIntent(chatData?.enquiryId?:0)))
         }
         var image = chatData?.buyerLogo
         var first_image = chatData?.buyerLogo.toString()

@@ -19,6 +19,7 @@ import com.adrosonic.craftexchange.databinding.FragmentAdvPay2Binding
 import com.adrosonic.craftexchange.databinding.FragmentAdvPay3Binding
 import com.adrosonic.craftexchange.enums.AvailableStatus
 import com.adrosonic.craftexchange.enums.getId
+import com.adrosonic.craftexchange.ui.modules.chat.chatLogDetailsIntent
 import com.adrosonic.craftexchange.ui.modules.enquiry.enquiryDetails
 import com.adrosonic.craftexchange.ui.modules.transaction.transactionIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
@@ -96,6 +97,9 @@ class AdvPay3Fragment : Fragment() {
 
         mBinding?.btnViewTransac?.setOnClickListener {
             requireActivity()?.startActivity(requireActivity()?.transactionIntent())
+        }
+        mBinding?.btnChat?.setOnClickListener {
+            enqID?.let {  startActivity(Intent(requireContext()?.chatLogDetailsIntent(it.toLong())))}
         }
     }
 

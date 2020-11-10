@@ -36,6 +36,7 @@ import com.adrosonic.craftexchange.enums.*
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
 import com.adrosonic.craftexchange.ui.modules.artisan.qcForm.qcFormIntent
+import com.adrosonic.craftexchange.ui.modules.chat.chatLogDetailsIntent
 import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.order.confirmDelivery.confirmDeliveryContext
 import com.adrosonic.craftexchange.ui.modules.order.cr.crContext
@@ -251,6 +252,9 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
         }
         mBinding?.btnCloseOrder?.setOnClickListener {
             showCloseOrderDialog()
+        }
+        mBinding?.btnChat?.setOnClickListener {
+            enqID?.let {  startActivity(Intent(requireContext()?.chatLogDetailsIntent(it)))}
         }
     }
 

@@ -57,6 +57,7 @@
                             android:clickable="true"
                             android:elevation="10dp"
                             android:focusable="true"
+                            android:visibility="visible"
                             android:src="@drawable/ic_chat_enquiry"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />

@@ -1,5 +1,6 @@
 package com.adrosonic.craftexchange.ui.modules.order.finalPay
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -14,6 +15,7 @@ import androidx.fragment.app.viewModels
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
 import com.adrosonic.craftexchange.databinding.FragmentFinPay2Binding
+import com.adrosonic.craftexchange.ui.modules.chat.chatLogDetailsIntent
 import com.adrosonic.craftexchange.ui.modules.transaction.transactionIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
@@ -84,6 +86,9 @@ class FinPay2Fragment : Fragment() {
 
         mBinding?.btnViewTransac?.setOnClickListener {
             requireActivity()?.startActivity(requireActivity()?.transactionIntent())
+        }
+        mBinding?.btnChat?.setOnClickListener {
+            enqID?.let {  startActivity(Intent(requireContext()?.chatLogDetailsIntent(it.toLong())))}
         }
     }
 

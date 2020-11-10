@@ -27,6 +27,7 @@ import com.adrosonic.craftexchange.database.entities.realmEntities.ChatUser
 import com.adrosonic.craftexchange.database.predicates.ChatUserPredicates
 import com.adrosonic.craftexchange.databinding.ActivityChatLogBinding
 import com.adrosonic.craftexchange.repository.data.request.chat.SendChatRequest
+import com.adrosonic.craftexchange.ui.modules.artisan.deliveryReceipt.UploadDeliveryReceiptActivity
 import com.adrosonic.craftexchange.ui.modules.enquiry.enquiryDetails
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
@@ -41,13 +42,13 @@ import kotlinx.android.synthetic.main.activity_chat_log.*
 import java.io.IOException
 
 
-fun Context.chatLogDetailsIntent(): Intent {
-    return Intent(this, ChatLogDetailsActivity::class.java)
-        .apply {
+fun Context.chatLogDetailsIntent(enquiryId:Long): Intent {
+    val intent= Intent(this, ChatLogDetailsActivity::class.java) .apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
         }
+    intent.putExtra(ConstantsDirectory.ENQUIRY_ID, enquiryId)
+    return intent
 }
-
 class  ChatLogDetailsActivity : LocaleBaseActivity(),
     ChatListViewModel.OpenChatLogInterface,
     ChatListViewModel.GetChatMediaInterface,

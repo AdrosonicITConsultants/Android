@@ -39,6 +39,7 @@ import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
 import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.advPay.enquiryPayment
 import com.adrosonic.craftexchange.ui.modules.buyer.ownDesign.ownDesignIntent
 import com.adrosonic.craftexchange.ui.modules.buyer.productDetails.catalogueProductDetailsIntent
+import com.adrosonic.craftexchange.ui.modules.chat.chatLogDetailsIntent
 import com.adrosonic.craftexchange.ui.modules.enquiry.ArtEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
@@ -161,7 +162,7 @@ EnquiryViewModel.FetchEnquiryInterface,
         }
 
         mBinding?.btnChat?.setOnClickListener {
-            Utility?.displayMessage("Coming soon",requireActivity())
+            enqID?.let {  startActivity(Intent(context?.chatLogDetailsIntent(it)))}
         }
 
         mBinding?.btnBack?.setOnClickListener {
@@ -219,6 +220,13 @@ EnquiryViewModel.FetchEnquiryInterface,
 
         mBinding?.viewPi?.setOnClickListener {
             enqID?.let {  startActivity(requireContext().raisePiContext(it,true, SendPiRequest())) }
+        }
+
+        mBinding?.chat?.setOnClickListener {
+            enqID?.let {  startActivity(Intent(context?.chatLogDetailsIntent(it)))}
+        }
+        mBinding?.btnChat?.setOnClickListener {
+            enqID?.let {  startActivity(Intent(context?.chatLogDetailsIntent(it)))}
         }
     }
 
@@ -996,7 +1004,7 @@ EnquiryViewModel.FetchEnquiryInterface,
             confirmDialog.dismiss()
         }
         txt_goto_chat.setOnClickListener {
-        Utility.displayMessage("Coming Soon",requireContext())
+            enqID?.let {  startActivity(Intent(context?.chatLogDetailsIntent(it)))}
         }
     }
 

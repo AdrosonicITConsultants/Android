@@ -26,6 +26,7 @@ import com.adrosonic.craftexchange.enums.AvailableStatus
 import com.adrosonic.craftexchange.enums.getId
 import com.adrosonic.craftexchange.repository.data.request.taxInv.SendTiRequest
 import com.adrosonic.craftexchange.repository.data.response.enquiry.DetailsData
+import com.adrosonic.craftexchange.ui.modules.chat.chatLogDetailsIntent
 import com.adrosonic.craftexchange.ui.modules.pdfViewer.PdfViewerActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
@@ -178,7 +179,9 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
             intent.putExtra("ViewType", "Terms_conditions")
             startActivity(intent)
         }
-
+        mBinding?.btnChat?.setOnClickListener {
+            enquiryId?.let {  startActivity(Intent(this?.chatLogDetailsIntent(it)))}
+        }
     }
 
     fun viewLoader(){
