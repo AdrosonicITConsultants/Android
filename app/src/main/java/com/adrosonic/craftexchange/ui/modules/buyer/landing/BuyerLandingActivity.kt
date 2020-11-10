@@ -412,6 +412,7 @@ class BuyerLandingActivity : AppCompatActivity(),
             mViewModel?.getChangeRequestStatuses()
             mViewModel?.getQCQuestionData()
             mViewModel?.getQCStageData()
+            mViewModel?.getEscalationData()
             mViewModel?.getArtisanFaultReviewData()
             mViewModel?.getBuyerFaultReviewData()
             mCMSViewModel?.getRegionData()

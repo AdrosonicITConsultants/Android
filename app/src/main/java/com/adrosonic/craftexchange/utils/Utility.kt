@@ -29,6 +29,7 @@ import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
 import com.adrosonic.craftexchange.database.predicates.CrPredicates
 import com.adrosonic.craftexchange.database.predicates.UserPredicates
 import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.uploadData.ProductUploadData
+import com.adrosonic.craftexchange.repository.data.response.chat.escalations.EscalationCategoryResponse
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryAvaProdStageData
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryStageData
 import com.adrosonic.craftexchange.repository.data.response.enquiry.InnerStageData
@@ -529,6 +530,12 @@ class Utility {
             val gson = GsonBuilder().create()
             var qcObj = gson.fromJson(UserConfig.shared.qcQuestionData.toString(), QCQuestionData::class.java)
             return  qcObj
+        }
+
+        fun getEscalationData() : EscalationCategoryResponse? {
+            val gson = GsonBuilder().create()
+            var escObj = gson.fromJson(UserConfig.shared.escalationData.toString(), EscalationCategoryResponse::class.java)
+            return  escObj
         }
 
         fun getArtFaultReviewData() : FaultReviewRefResponse? {

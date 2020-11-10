@@ -70,8 +70,8 @@
 
             <ImageView
                 android:id="@+id/imgEscalations"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
                 app:layout_constraintBottom_toBottomOf="@+id/txt_num_escalations"
                 app:layout_constraintStart_toStartOf="@+id/enquiry_code"
                 app:layout_constraintTop_toTopOf="@+id/txt_num_escalations"
@@ -81,7 +81,7 @@
                 android:id="@+id/icon_change_request"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:layout_marginEnd="@dimen/margin_regular"
+                android:layout_marginEnd="@dimen/margin_semimedium"
                 android:src="@drawable/ic_cr_with_txt"
                 android:background="?selectableItemBackgroundBorderless"
                 app:layout_constraintBottom_toBottomOf="@+id/icon_escalation"
@@ -106,23 +106,61 @@
             android:id="@+id/swipe_chats"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/new_escalation_layer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
-<!--            <com.github.bassaer.chatmessageview.view.ChatView-->
-<!--                android:id="@+id/chat_view"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                app:date_separator_font_size="16sp"-->
-<!--                app:message_font_size="12sp"-->
-<!--                app:message_max_width="200dp"-->
-<!--                app:time_label_font_size="10sp"-->
-<!--                app:username_font_size="12sp"-->
-<!--                app:text_selectable="true">-->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/escalation_recylerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
-<!--            </com.github.bassaer.chatmessageview.view.ChatView>-->
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/new_escalation_layer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#C64045"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <EditText
+                android:id="@+id/txt_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rect_outline_grey"
+                android:fontFamily="@font/lato_bold"
+                android:gravity="start"
+                android:maxLines="4"
+                android:textColor="#696969"
+                app:layout_constraintStart_toStartOf="parent"
+                android:padding="@dimen/margin_regular"
+                android:textSize="@dimen/product_note_text"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:layout_marginEnd="@dimen/margin_semimedium"
+                app:layout_constraintEnd_toStartOf="@+id/btn_send_escalation"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <ImageView
+                android:id="@+id/btn_send_escalation"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_send_esc"
+                android:background="?selectableItemBackgroundBorderless"
+                android:layout_marginBottom="@dimen/margin_regular"
+                android:layout_marginTop="@dimen/margin_regular"
+                android:layout_marginEnd="@dimen/margin_regular"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

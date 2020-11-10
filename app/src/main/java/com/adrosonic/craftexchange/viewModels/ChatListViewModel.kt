@@ -11,11 +11,13 @@ import com.adrosonic.craftexchange.database.predicates.ChatUserPredicates
 import com.adrosonic.craftexchange.database.predicates.SearchPredicates
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.ImageDownloadRepository
+import com.adrosonic.craftexchange.repository.data.request.chat.RaiseEscalationRequest
 import com.adrosonic.craftexchange.repository.data.response.Notification.NotificationReadResponse
 import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.ArtisanProductTemplateRespons
 import com.adrosonic.craftexchange.repository.data.response.chat.ChatData
 import com.adrosonic.craftexchange.repository.data.response.chat.ChatListResponse
 import com.adrosonic.craftexchange.repository.data.response.chat.ChatLogListData
+import com.adrosonic.craftexchange.repository.data.response.chat.escalations.EscalationSummResponse
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
 import com.pixplicity.easyprefs.library.Prefs
@@ -48,6 +50,19 @@ class ChatListViewModel (application: Application) : AndroidViewModel(applicatio
     var initiateChatListner :ChatListViewModel.InitiateChatInterface?=null
 
     var openChatLogListner : OpenChatLogInterface? = null
+
+    var escalationListListener : EscalationListInterface ?= null
+    var actionEscalationListener : EscalationActionInterface ?= null
+
+    interface EscalationListInterface{
+        fun onGetEscalationListSuccess()
+        fun onGetEscalationListFailure()
+    }
+
+    interface EscalationActionInterface{
+        fun onESCActionSuccess()
+        fun onESCActionFailure()
+    }
 
     interface ChatListInterface{
         fun onGetChatListSuccess()
@@ -358,4 +373,77 @@ class ChatListViewModel (application: Application) : AndroidViewModel(applicatio
             return false
         }
     }
+
+    fun getEscalationsList(enquiryId : Long){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,null)}"
+        CraftExchangeRepository
+            .getChatService()
+            .getEscalationSummary(token,enquiryId).enqueue(object : Callback, retrofit2.Callback<EscalationSummResponse> {
+                override fun onFailure(call: Call<EscalationSummResponse>, t: Throwable) {
+                    t.printStackTrace()
+                    Log.e("Escalation List","onFailure")
+                    escalationListListener?.onGetEscalationListFailure()
+                }
+                override fun onResponse(
+                    call: Call<EscalationSummResponse>,
+                    response: Response<EscalationSummResponse>
+                ) {
+                    if(response.body()?.valid == true){
+                        escalationListListener?.onGetEscalationListSuccess()
+                    }else
+                    {
+                        escalationListListener?.onGetEscalationListFailure()
+                    }
+                }
+            })
+    }
+
+    fun markResolveEscalation(escalationId : Long){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,null)}"
+        CraftExchangeRepository
+            .getChatService()
+            .resolveEscalation(token,escalationId).enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    t.printStackTrace()
+                    Log.e("Escalation","onFailure")
+                    actionEscalationListener?.onESCActionFailure()
+                }
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    if(response.isSuccessful){
+                        actionEscalationListener?.onESCActionFailure()
+                    }else
+                    {
+                        actionEscalationListener?.onESCActionFailure()
+                    }
+                }
+            })
+    }
+
+    fun raiseEscalation(escRequest : RaiseEscalationRequest){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,null)}"
+        CraftExchangeRepository
+            .getChatService()
+            .raiseEscalation(token,escRequest).enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    t.printStackTrace()
+                    Log.e("Escalation","onFailure")
+                    actionEscalationListener?.onESCActionFailure()
+                }
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    if(response.isSuccessful){
+                        actionEscalationListener?.onESCActionFailure()
+                    }else
+                    {
+                        actionEscalationListener?.onESCActionFailure()
+                    }
+                }
+            })
+    }
+
 }

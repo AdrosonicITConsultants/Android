@@ -1,9 +1,12 @@
 package com.adrosonic.craftexchange.repository.remote
 
+import com.adrosonic.craftexchange.repository.data.request.chat.RaiseEscalationRequest
 import com.adrosonic.craftexchange.repository.data.response.Notification.NotificationReadResponse
 import com.adrosonic.craftexchange.repository.data.response.chat.ChatData
 import com.adrosonic.craftexchange.repository.data.response.chat.ChatListResponse
 import com.adrosonic.craftexchange.repository.data.response.chat.ChatLogListData
+import com.adrosonic.craftexchange.repository.data.response.chat.escalations.EscalationCategoryResponse
+import com.adrosonic.craftexchange.repository.data.response.chat.escalations.EscalationSummResponse
 import com.adrosonic.craftexchange.repository.data.response.enquiry.InnerStageData
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import okhttp3.MultipartBody
@@ -63,7 +66,21 @@ interface ChatListDao {
 
 
     @Headers("Accept: application/json")
-    @GET("/enquiry/getEscalations")
-    fun getEscalationData(@Header("Authorization") token:String) : Call<ResponseBody>
+    @GET("enquiry/getEscalations")
+    fun getEscalationData(@Header("Authorization") token:String) : Call<EscalationCategoryResponse>
 
+    @Headers("Accept: application/json")
+    @GET("enquiry/getEscalationSummaryForEnquiry")
+    fun getEscalationSummary(@Header("Authorization") token:String,
+                             @Query("enquiryId")enquiryId:Long) : Call<EscalationSummResponse>
+
+    @Headers("Accept: application/json")
+    @POST("enquiry/resolveEscalation")
+    fun resolveEscalation(@Header("Authorization") token:String,
+                          @Query("escalationId")escalationId:Long) : Call<ResponseBody>
+
+    @Headers("Accept: application/json")
+    @POST("enquiry/raiseEscalaton")
+    fun raiseEscalation(@Header("Authorization") token:String,
+                          @Body escalation:RaiseEscalationRequest) : Call<ResponseBody>
 }

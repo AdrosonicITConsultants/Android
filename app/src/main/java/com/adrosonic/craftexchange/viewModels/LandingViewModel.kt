@@ -18,6 +18,7 @@ import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.s
 import com.adrosonic.craftexchange.repository.data.response.buyer.wishList.WishListedIds
 import com.adrosonic.craftexchange.repository.data.response.changeReequest.ChatListResponse
 import com.adrosonic.craftexchange.repository.data.response.changeReequest.CrOptionsResponse
+import com.adrosonic.craftexchange.repository.data.response.chat.escalations.EscalationCategoryResponse
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryAvaProdStageData
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryStageData
 import com.adrosonic.craftexchange.repository.data.response.enquiry.InnerStageData
@@ -224,6 +225,30 @@ class LandingViewModel(application: Application) : AndroidViewModel(application)
 
             })
     }
+
+    fun getEscalationData(){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getChatService()
+            .getEscalationData(token)
+            .enqueue(object: Callback, retrofit2.Callback<EscalationCategoryResponse> {
+                override fun onFailure(call: Call<EscalationCategoryResponse>, t: Throwable) {
+                    t.printStackTrace()
+                    Log.e("LandingViewModel","getEscalationData onFailure: "+t.message)
+                }
+                override fun onResponse(
+                    call: Call<EscalationCategoryResponse>,
+                    response: retrofit2.Response<EscalationCategoryResponse>) {
+                    if(response.body()?.valid == true){
+                        UserConfig.shared.escalationData= Gson().toJson(response.body())
+                    }else{
+                        Log.e("LandingViewModel","getEscalationData onFailure: "+response.body()?.errorCode)
+                    }
+                }
+
+            })
+    }
+
 
     fun getArtisanFaultReviewData(){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
