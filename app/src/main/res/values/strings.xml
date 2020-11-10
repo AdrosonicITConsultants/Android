@@ -365,5 +365,15 @@
     <string name="overallRatings">Overall Rating</string>
     <string name="becauseyourWordMatter">Because your word matter !!</string>
     <string name="reviewtext">If you like it or you feel that you want to share. We would like to hear from you1</string>
+    <string name="topHeadingEnquiries"><![CDATA[Enquiries, orders & escalations]]></string>
+    <string name="redirectEnquiries">Redirect Enquiries</string>
+    <string name="escalations">Escalations</string>
+    <string name="ongoingEnquiries">Ongoing Enquiries</string>
+    <string name="incmpleteClosed"><![CDATA[Incomplete & Closed]]></string>
+    <string name="enquiriesConverted">Enquiries Converted</string>
+    <string name="AwaitingMoq">Awaiting response over MOQ from Buyer</string>
+    <string name="ongoingOrders">Ongoing Orders</string>
+    <string name="completedSuccessfully">Completed Successfully</string>
+    <string name="faultyInResolution">Faulty - In resolution</string>
 
 </resources>

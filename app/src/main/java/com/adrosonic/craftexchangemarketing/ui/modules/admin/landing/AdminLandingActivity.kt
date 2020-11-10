@@ -19,6 +19,7 @@ import com.adrosonic.craftexchangemarketing.databinding.ActivityAdminLandingBind
 import com.adrosonic.craftexchangemarketing.repository.craftexchangemarketingRepository
 import com.adrosonic.craftexchangemarketing.repository.data.response.Notification.SaveUserTokenResponse
 import com.adrosonic.craftexchangemarketing.ui.modules.Notification.NotifcationFragment
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.enquiriesOrders.EnquiriesAndOrdersFragment
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.CommonUserFragment
 import com.adrosonic.craftexchangemarketing.ui.modules.buyer.landing.BuyerLandingActivity
 import com.adrosonic.craftexchangemarketing.utils.ConstantsDirectory
@@ -168,6 +169,11 @@ NotifcationFragment.Companion.notifcationsInterface{
 
                     R.id.enquiries -> {
                         //                        initTab(BranchesFragment.newInstance(), BranchesFragment.TAG)
+                        if (savedInstanceState == null) {
+                            supportFragmentManager.beginTransaction() .add(R.id.admin_home_container, EnquiriesAndOrdersFragment.newInstance())
+                                .addToBackStack(null)
+                                .commit()
+                        }
                         return true
                     }
                     R.id.escalations -> {
