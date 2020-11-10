@@ -175,17 +175,17 @@ class  ChatLogDetailsActivity : LocaleBaseActivity(),
     fun setChatHeaderDetails(enquiryId : Long?){
         var chatHeader = ChatUserPredicates.getChatHeaderDetailsFromId(enquiryId)
         var profile = chatHeader?.buyerLogo.toString()
-        var companyName = chatHeader?.buyerCompanyName.toString()
+        var companyName = try{if(chatHeader?.buyerCompanyName.isNullOrEmpty())"NA" else chatHeader?.buyerCompanyName.toString()}catch (e:java.lang.Exception){"NA"}
 
         mBinding?.brandName?.text = companyName
         mBinding?.txtEnquiryNo?.text = chatHeader?.enquiryNumber.toString()
         mBinding?.enquiryStatusText?.text = chatHeader?.orderStatus?:""
         chatUserDetails?.let {
-            mBinding?.txtDateStarted?.text=getString(R.string.date_started)+": "+try{chatUserDetails?.enquiryGeneratedOn?.split("T")?.get(0)}catch (e:java.lang.Exception){"NA"}
-            mBinding?.txtDateConvertedToOrder?.text=getString(R.string.date_converted)+": "+try{chatUserDetails?.convertedToOrderDate?.split("T")?.get(0)}catch (e:java.lang.Exception){"NA"}
-            mBinding?.txtDateLastUpdated?.text=getString(R.string.date_last_updated)+": "+try{chatUserDetails?.lastUpdatedOn?.split("T")?.get(0)?:"NA"}catch (e:java.lang.Exception){"NA"}
+            mBinding?.txtDateStarted?.text=getString(R.string.date_started)+": "+try{chatUserDetails?.enquiryGeneratedOn!!.split("T")?.get(0)}catch (e:java.lang.Exception){"NA"}
+            mBinding?.txtDateConvertedToOrder?.text=getString(R.string.date_converted)+": "+try{chatUserDetails?.convertedToOrderDate!!.split("T")?.get(0)}catch (e:java.lang.Exception){"NA"}
+            mBinding?.txtDateLastUpdated?.text=getString(R.string.date_last_updated)+": "+try{chatUserDetails?.lastUpdatedOn!!.split("T")?.get(0)?:"NA"}catch (e:java.lang.Exception){"NA"}
             mBinding?.txtProdType?.text=chatUserDetails?.productTypeId
-            mBinding?.txtOrderAmt?.text=getString(R.string.order_amount)+": ₹ "+chatUserDetails?.orderAmouunt?.toString()
+            mBinding?.txtOrderAmt?.text=getString(R.string.order_amount)+": ₹ "+ try{if(chatUserDetails?.orderAmouunt!!>0) chatUserDetails?.orderAmouunt.toString() else "0"}catch (e:java.lang.Exception){"0"}
         }
         fromId=UserConfig.shared.userId?.toLong()?:0
         toId=chatUserDetails?.buyerId?:0
