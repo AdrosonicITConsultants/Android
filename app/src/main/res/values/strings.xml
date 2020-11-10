@@ -475,5 +475,6 @@
     <string name="new_escalation">New Escalation</string>
     <string name="note_confirm_escalation">The time limit for this escalation to be resolved is 48hrs after you escalate. Else it will be highlighted to the Tata Trusts Management Team.</string>
     <string name="raise_escalation">Raise escalation</string>
+    <string name="sign_in_google">Sign in with Google</string>
 
 </resources>

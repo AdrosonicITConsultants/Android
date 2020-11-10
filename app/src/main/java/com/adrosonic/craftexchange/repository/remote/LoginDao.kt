@@ -10,6 +10,17 @@ import retrofit2.http.*
 interface LoginDao {
 
     @Headers("Accept: application/json")
+    @POST("/login/authenticate/")
+    fun authSocialArtisan(@Query("socialTokenType") socialTokenType: String,
+        @Query("socialToken") socialToken: String) : Call<ArtisanResponse>
+
+    @Headers("Accept: application/json")
+    @POST("/login/authenticate/")
+    fun authSocialBuyer(
+        @Query("socialTokenType") socialTokenType: String,
+        @Query("socialToken") socialToken: String) : Call<BuyerResponse>
+
+    @Headers("Accept: application/json")
     @POST("login/authenticate")
     fun authenticateBuyer(@Header("Content-Type") headerValue:String,
                           @Body userAuthenticate : UserAuthModel

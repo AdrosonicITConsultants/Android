@@ -41,9 +41,6 @@ class BuyerLoginUsernameFragment : Fragment() {
             }
     }
 
-//    companion object {
-//        fun newInstance() = BuyerLoginUsernameFragment()
-//    }
 
     private var mBinding: FragmentBuyerLoginUsernameBinding ?= null
 
