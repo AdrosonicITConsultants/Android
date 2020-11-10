@@ -22,7 +22,7 @@ class MessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(p0: RemoteMessage) {
         // when App is in foreground, notification message:
         Log.e(TAG, "onMessageReceived: " + p0.notification?.title)
-        val intent = adminLandingIntent()
+        val intent = adminLandingIntent(true)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT)
         val channelId =ConstantsDirectory.CHANNEL_ID

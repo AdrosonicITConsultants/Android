@@ -39,15 +39,12 @@ fun Context.adminLandingIntent(): Intent {
         flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
     }
 }
-//fun Context.adminLandingIntent(isNotification:Boolean): Intent {
-//    val intent = Intent(this, AdminLandingActivity::class.java)
-//    intent.putExtra("isNotification", isNotification)
-//    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//    return intent
-////    return Intent(this, AdminLandingActivity::class.java).apply {
-////        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-////    }
-//}
+fun Context.adminLandingIntent(isNotification:Boolean): Intent {
+    val intent = Intent(this, AdminLandingActivity::class.java)
+    intent.putExtra("isNotification", isNotification)
+    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+    return intent
+}
 class AdminLandingActivity : AppCompatActivity(),
 ClusterViewModel.notificationInterface,
 NotifcationFragment.Companion.notifcationsInterface{
@@ -133,23 +130,20 @@ NotifcationFragment.Companion.notifcationsInterface{
         }else{
             Utility?.displayMessage(getString(R.string.no_internet_connection),applicationContext)
         }
-//        if (intent.extras != null) {
-//            if (intent.getBooleanExtra("isNotification", false)) {
-//                supportFragmentManager.beginTransaction() .add(R.id.artisan_home_container, NotifcationFragment.newInstance())
-//                    .addToBackStack(null)
-//                    .commit()
-//            }
-//        }
+        if (intent.extras != null) {
+            if (intent.getBooleanExtra("isNotification", false)) {
+                supportFragmentManager.beginTransaction() .add(R.id.admin_home_container, NotifcationFragment.newInstance())
+                    .addToBackStack(null)
+                    .commit()
+            }
+        }
         tab_bar.onNavigationItemSelectedListener = object: BottomNavigationView.OnNavigationItemSelectedListener{
             override fun onNavigationItemSelected(@NonNull item: MenuItem):Boolean {
                 when (item.itemId) {
                     R.id.action_home -> {
                         if (savedInstanceState == null) {
                             supportFragmentManager.beginTransaction()
-                                .replace(
-                                    R.id.admin_home_container,
-                                    AdminHomeFragment.newInstance()
-                                )
+                                .replace(R.id.admin_home_container, AdminHomeFragment.newInstance())
                                 .detach(AdminHomeFragment())
                                 .attach(AdminHomeFragment())
                                 .commitNow()

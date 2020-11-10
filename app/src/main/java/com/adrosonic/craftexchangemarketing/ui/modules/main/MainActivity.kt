@@ -39,19 +39,16 @@ class MainActivity : AppCompatActivity() {
 //            var isNotification=false
             var title=""
             var text=""
-            var profile = Prefs.getString(ConstantsDirectory.PROFILE,"1")
-//            if (intent.extras != null) {
-//                for (key in intent.extras!!.keySet()) {
-//                    Log.e(  "notificationManager", "MainActivity Key: $key Value:${ intent.extras!!.getString(key)}" )
-//                    if(key.equals("title"))title=intent.extras!!.getString(key)?:""
-//                    if(key.equals("text"))text=intent.extras!!.getString(key)?:""
-//                }
-//            }
-//            else isNotification=false
-//            if(title.isNotEmpty())isNotification=true
+            if (intent.extras != null) {
+                for (key in intent.extras!!.keySet()) {
+                    Log.e(  "notificationManager", "Key: $key Value:${ intent.extras!!.getString(key)}" )
+                    if(key.equals("title"))title=intent.extras!!.getString(key)?:""
+                    if(key.equals("text"))text=intent.extras!!.getString(key)?:""
+                }
+            }
             Log.e(  "notificationManager", "title: $title" )
-            startActivity(adminLandingIntent())
-
+            if(title.isNotEmpty()) startActivity(adminLandingIntent(true))
+            else startActivity(adminLandingIntent())
         } else {
             startActivity(loginIntent())
             Prefs.putString(ConstantsDirectory.PROFILE,"Admin")
