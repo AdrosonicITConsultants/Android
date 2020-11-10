@@ -22,6 +22,8 @@ import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.ChatListViewModel
 import com.daimajia.swipe.SwipeLayout
 import io.realm.RealmResults
+import java.text.SimpleDateFormat
+import java.util.*
 
 class InitiatedChatRecyclerAdapter(var context: Context?, private var chats: RealmResults<ChatUser>,var isInitiated:Long) : RecyclerView.Adapter<InitiatedChatRecyclerAdapter.MyViewHolder>() {
 
@@ -91,7 +93,12 @@ class InitiatedChatRecyclerAdapter(var context: Context?, private var chats: Rea
         url = Utility.getBrandLogoUrl(chatData?.buyerId, first_image)
 
         holder.txt_buyer_name.text = chatData?.buyerCompanyName
-        holder.txt_date_time.text = if(isInitiated==1L)chatData?.lastChatDate?.split("T")?.get(0) else chatData?.lastUpdatedOn?.split("T")?.get(0)
+        val cal: Calendar = Calendar.getInstance()
+        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.ENGLISH)
+        cal.setTime(sdf.parse(chatData?.lastChatDate))
+        cal.time
+        holder.txt_date_time.text ="${cal.get(Calendar.DAY_OF_MONTH)}-"+ cal.get(Calendar.MONTH)+"-"+ cal.get(
+            Calendar.YEAR)+"\n"+cal.get(Calendar.HOUR_OF_DAY)+":"+ cal.get(Calendar.MINUTE)
         holder.txt_enq_code.text = chatData?.enquiryNumber.toString()
         context?.let { ImageSetter.setImage(it, url!!,holder?.chat_contact_pic, R.drawable.artisan_logo_placeholder,  R.drawable.artisan_logo_placeholder,  R.drawable.artisan_logo_placeholder) }
 
