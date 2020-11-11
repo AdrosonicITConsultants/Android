@@ -143,7 +143,7 @@ class PiActivity : LocaleBaseActivity(),
                 } else {
 //                    todo add dat to pi table
                     PiPredicates.insertPiForOffline(enquiryId,0,1,pi)
-                    startActivityForResult(applicationContext.raisePiContext(enquiryId,false,pi),ConstantsDirectory.RESULT_PI)
+                    startActivityForResult(applicationContext.raisePiContext(enquiryId,false,pi,false),ConstantsDirectory.RESULT_PI)
                 }
             }
         }
@@ -285,7 +285,7 @@ class PiActivity : LocaleBaseActivity(),
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("PiActivity", "onSuccess")
                 hideLoader()
-                startActivityForResult(applicationContext.raisePiContext(enquiryId,false,pi),ConstantsDirectory.RESULT_PI)
+                startActivityForResult(applicationContext.raisePiContext(enquiryId,false,pi,false),ConstantsDirectory.RESULT_PI)
             })
         } catch (e: Exception) {
             Log.e("PiActivity", "Exception onFailure " + e.message)

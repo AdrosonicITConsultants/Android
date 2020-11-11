@@ -219,7 +219,7 @@ EnquiryViewModel.FetchEnquiryInterface,
         }
 
         mBinding?.viewPi?.setOnClickListener {
-            enqID?.let {  startActivity(requireContext().raisePiContext(it,true, SendPiRequest())) }
+            enqID?.let {  startActivity(requireContext().raisePiContext(it,true, SendPiRequest(),false)) }
         }
 
         mBinding?.chat?.setOnClickListener {

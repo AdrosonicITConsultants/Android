@@ -222,7 +222,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         }
 
         mBinding?.viewPiLayout?.setOnClickListener {
-            enqID?.let {  startActivity(requireContext().raisePiContext(it,true, SendPiRequest())) }
+            enqID?.let {  startActivity(requireContext().raisePiContext(it,true, SendPiRequest(),false)) }
         }
 
         mBinding?.btnViewApprovePayment?.setOnClickListener {

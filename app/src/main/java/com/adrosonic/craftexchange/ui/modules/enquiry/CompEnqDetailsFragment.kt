@@ -182,7 +182,7 @@ class CompEnqDetailsFragment : Fragment(),
 
         }
         mBinding?.viewPi?.setOnClickListener {
-            enqID?.let {  startActivity(requireContext().raisePiContext(it,true, SendPiRequest())) }
+            enqID?.let {  startActivity(requireContext().raisePiContext(it,true, SendPiRequest(),true)) }
         }
 
         mBinding?.viewPaymentLayer?.setOnClickListener {

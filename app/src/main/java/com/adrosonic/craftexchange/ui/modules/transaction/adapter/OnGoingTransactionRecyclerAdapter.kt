@@ -290,7 +290,7 @@ class OnGoingTransactionRecyclerAdapter(var context: Context?, private var trans
             when(transaction?.accomplishedStatus){
                 //View PI & Updated PI
                 1L,4L -> {
-                    val intent = Intent(transaction?.enquiryID?.let { it1 -> context?.raisePiContext(it1, true, SendPiRequest()) })
+                    val intent = Intent(transaction?.enquiryID?.let { it1 -> context?.raisePiContext(it1, true, SendPiRequest(),false) })
                     context?.startActivity(intent)
                 }
                 //View Advance Payment

@@ -60,7 +60,6 @@
                 android:id="@+id/initiated_chat_list_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:elevation="8dp"
                 android:visibility="visible" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </LinearLayout>
