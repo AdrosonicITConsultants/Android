@@ -15,7 +15,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/item_sent_escalation"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="120dp"
             android:visibility="gone">
 
             <TextView
@@ -23,15 +23,18 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
                 android:fontFamily="@font/lato_regular"
+                android:maxLength="500"
                 android:maxLines="4"
-                android:textSize="@dimen/product_note_text"
                 android:textColor="@color/black_text"
+                android:textSize="@dimen/product_note_text"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/txt_sen_status_esc"
@@ -56,9 +59,8 @@
                 android:id="@+id/txt_sen_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_regular"
+                android:layout_marginStart="8dp"
                 android:fontFamily="@font/lato_bold"
-                android:textColor="@color/black_text"
                 android:textSize="@dimen/product_availability_text"
                 app:layout_constraintBottom_toBottomOf="@+id/txt_sen_status_esc"
                 app:layout_constraintEnd_toStartOf="@+id/txt_sen_status_esc"
@@ -72,7 +74,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/item_receive_escalation"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="120dp"
             android:background="@color/black_text"
             android:visibility="gone">
 
@@ -81,15 +83,18 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
                 android:fontFamily="@font/lato_regular"
+                android:maxLength="500"
                 android:maxLines="4"
                 android:textColor="@color/white_text"
                 android:textSize="@dimen/product_note_text"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/txt_rec_status_esc"
@@ -116,7 +121,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/margin_regular"
                 android:fontFamily="@font/lato_bold"
-                android:textColor="@color/white_text"
+                android:textColor="@color/lighter_gray"
                 android:textSize="@dimen/product_availability_text"
                 app:layout_constraintBottom_toBottomOf="@+id/txt_rec_status_esc"
                 app:layout_constraintEnd_toEndOf="parent"

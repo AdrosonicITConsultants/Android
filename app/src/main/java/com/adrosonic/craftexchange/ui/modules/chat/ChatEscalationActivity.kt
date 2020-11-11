@@ -155,7 +155,15 @@ class ChatEscalationActivity : AppCompatActivity(),
         radioGroup.setOnCheckedChangeListener { group, checkedId ->
             val rb = (group.findViewById(checkedId) as RadioButton).text
             Log.e("EscalationCatSel","$rb")
-            escSelectedCat = checkedId%5  //to counter adding ov multiple radiobuttons
+            var catId = checkedId%5 //to counter adding ov multiple radiobuttons
+            when(catId){
+                0 -> {
+                    escSelectedCat = 5
+                }
+                else -> {
+                    escSelectedCat = catId
+                }
+            }
         }
 
         cancel.setOnClickListener {
