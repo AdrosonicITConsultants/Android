@@ -61,7 +61,7 @@ class RaiseTaxInvActivity : LocaleBaseActivity(),OrdersViewModel.tiInterface,Ord
 
         if (intent.extras != null) {
             enquiryId = intent.getLongExtra("enquiryId",0)
-            isView=intent.getBooleanExtra("isView",false)
+            isView=intent.getBooleanExtra("isView",true)
             orderDetails=mOrdVM.loadSingleOrderDetails(enquiryId,0)
 //            ti=intent.getSerializableExtra("tiRequest") as SendTiRequest
             ti=intent.getSerializableExtra("tiRequest") as SendTiRequest
