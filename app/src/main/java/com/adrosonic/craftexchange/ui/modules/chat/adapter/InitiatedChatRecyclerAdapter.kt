@@ -93,12 +93,14 @@ class InitiatedChatRecyclerAdapter(var context: Context?, private var chats: Rea
         url = Utility.getBrandLogoUrl(chatData?.buyerId, first_image)
 
         holder.txt_buyer_name.text = chatData?.buyerCompanyName
-        val cal: Calendar = Calendar.getInstance()
-        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.ENGLISH)
-        cal.setTime(sdf.parse(chatData?.lastChatDate))
-        cal.time
-        holder.txt_date_time.text ="${cal.get(Calendar.DAY_OF_MONTH)}-"+ cal.get(Calendar.MONTH)+"-"+ cal.get(
-            Calendar.YEAR)+"\n"+cal.get(Calendar.HOUR_OF_DAY)+":"+ cal.get(Calendar.MINUTE)
+
+            val cal: Calendar = Calendar.getInstance()
+            val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.ENGLISH)
+        if(isInitiated==1L) cal.setTime(sdf.parse(chatData?.lastChatDate))
+        else cal.setTime(sdf.parse(chatData?.lastUpdatedOn))
+
+        holder.txt_date_time.text ="${cal.get(Calendar.DAY_OF_MONTH)}-"+ cal.get(Calendar.MONTH)+"-"+ cal.get( Calendar.YEAR)+"\n"+cal.get(Calendar.HOUR_OF_DAY)+":"+ cal.get(Calendar.MINUTE)
+
         holder.txt_enq_code.text = chatData?.enquiryNumber.toString()
         context?.let { ImageSetter.setImage(it, url!!,holder?.chat_contact_pic, R.drawable.artisan_logo_placeholder,  R.drawable.artisan_logo_placeholder,  R.drawable.artisan_logo_placeholder) }
 

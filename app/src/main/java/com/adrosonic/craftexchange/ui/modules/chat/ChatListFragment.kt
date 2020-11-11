@@ -110,19 +110,6 @@ class ChatListFragment: Fragment(),
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
         })
-//         etSearch.setOnTouchListener(View.OnTouchListener { v, event ->
-//             val drawableRight = 2
-//             if (event.action == MotionEvent.ACTION_UP) {
-//                 if (event.rawX >= etSearch.right - etSearch.compoundDrawables[drawableRight].bounds.width()) {
-//                     etSearch.text.clear()
-////          if(etSearch.text.length>0)  mViewModel.getItemCursorMutableData(currentMenu,currentMenu.associatedIdentifier(mViewModel.exchangeUser),etSearch.text.toString())
-////          else
-//                     manageSearchAndSync(false)
-//                     return@OnTouchListener true
-//                 }
-//             }
-//             false
-//         })
 }
 
 
@@ -164,10 +151,12 @@ class ChatListFragment: Fragment(),
     }
 
     override fun onResume() {
+        mBinding?.swipeRefreshLayout?.isRefreshing = true
         super.onResume()
         if (!Utility.checkIfInternetConnected(requireContext())) {
             Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
         } else {
+
             mChatVM.getInitiatedChatList()
             mChatVM.getUninitiatedChatList()
         }
@@ -196,6 +185,7 @@ class ChatListFragment: Fragment(),
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("OnGoingTChatList", "onSuccess")
                 mBinding?.swipeRefreshLayout?.isRefreshing = false
+                mChatVM.getInitiatedChatList()
                 mInitiatedChatListAdapter?.updateInitiatedChatList(mChatVM.getInitiatedChatListMutableData(initiatedChat,mBinding?.searchChat?.text.toString()).value)
                 setInitiatedChatRecyclerList(initiatedChat)
             })

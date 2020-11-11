@@ -195,6 +195,9 @@ class  ChatLogDetailsActivity : LocaleBaseActivity(),
         mBinding?.chatProfileImage?.let {
             ImageSetter.setImage(applicationContext,url,it,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
         }
+
+        if(chatHeader?.changeRequestDone==1L)mBinding?.iconChangeRequest?.visibility=View.VISIBLE
+        else mBinding?.iconChangeRequest?.visibility=View.GONE
     }
 
     fun setChatView(){
