@@ -186,11 +186,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         }
 
         mBinding?.btnUploadTaxInv?.setOnClickListener {
-            Log.e("RaiseTi", "upload : $enqID")
-            Log.e("RaiseTi", "upload : ${orderDetails?.enquiryId}")
-//            startActivity(enqID?.let { it1 -> requireContext().taxInvoiceIntent(it1) })
             enqID?.let {startActivityForResult(requireContext().taxInvoiceIntent(it),ConstantsDirectory.RESULT_TI)}
-
         }
 
         mBinding?.brandDetailsLayer?.setOnClickListener {
@@ -382,7 +378,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
     try {
         Handler(Looper.getMainLooper()).post(Runnable {
         setTabVisibilities()
-            setActionButtonVisibilites()
+        setActionButtonVisibilites()
         setViewEnquiryStageChangeButton()
         viewChangeStatusLayer()
         setToggleVisiblity()

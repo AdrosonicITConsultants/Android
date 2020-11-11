@@ -268,7 +268,7 @@ SendRatingAdapter.averagerating{
 
     }
     override fun averageRatingSuccess(ar: Array<Double>) {
-        Log.d("SendRating", "averageRatingSuccess: ")
+        Log.e("SendRating", "averageRatingSuccess: ")
         var sum = 0.0
         var size = questions.size
         for (i in 0..questions.size - 1) {

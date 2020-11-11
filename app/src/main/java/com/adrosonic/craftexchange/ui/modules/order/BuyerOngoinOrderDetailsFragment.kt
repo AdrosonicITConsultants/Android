@@ -471,21 +471,19 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
                  mBinding?.txtCrDate?.text=getString(R.string.cr_not_applicable)
              }
 
-//             if(orderDetails?.enquiryStageId==10L)mBinding?.layerConfirmDelivery?.visibility=View.VISIBLE
-//             else mBinding?.layerConfirmDelivery?.visibility=View.GONE
 
-             if(orderDetails?.enquiryStageId!!<9L) {
-                 if (orderDetails?.isPartialRefundReceived == 0L) {
-                     mBinding?.btnIsPartialRefundRcvd?.visibility = View.VISIBLE
-                     mBinding?.btnCloseOrder?.visibility = View.GONE
+                 if (orderDetails?.enquiryStageId!! < 9L) {
+                     if (orderDetails?.isPartialRefundReceived == 0L) {
+                         if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType.equals(ConstantsDirectory.CUSTOM_PRODUCT))  mBinding?.btnIsPartialRefundRcvd?.visibility = View.VISIBLE
+                         mBinding?.btnCloseOrder?.visibility = View.GONE
+                     } else {
+                         mBinding?.btnIsPartialRefundRcvd?.visibility = View.GONE
+                         mBinding?.btnCloseOrder?.visibility = View.VISIBLE
+                     }
                  } else {
                      mBinding?.btnIsPartialRefundRcvd?.visibility = View.GONE
-                     mBinding?.btnCloseOrder?.visibility = View.VISIBLE
+                     mBinding?.btnCloseOrder?.visibility = View.GONE
                  }
-             }else{
-                 mBinding?.btnIsPartialRefundRcvd?.visibility = View.GONE
-                 mBinding?.btnCloseOrder?.visibility = View.GONE
-             }
 
          })
         } catch (e: Exception) {
@@ -931,8 +929,13 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
 
                 enqID?.let { orderDetails=mOrderVm.getSingleOnOrderData(it,0).value }
                 Log.e("initializePartialRefund","getSingleTransactions Success: ${orderDetails?.isPartialRefundReceived}")
+
+                if(orderDetails?.productStatusId==AvailableStatus.IN_STOCK.getId()){
+                    OrdersPredicates.updatPostDeliveryConfirmed(enqID?:0)
+                    EnquiryPredicates.deleteEnquiry(enqID?:0)
+                    requireActivity().onBackPressed()
+                }else showPartialRefundDialog()//here in case of instock products finish should be called
                 setDetails()
-                showPartialRefundDialog()
                 hideLoader()
             })
         } catch (e: Exception) {
