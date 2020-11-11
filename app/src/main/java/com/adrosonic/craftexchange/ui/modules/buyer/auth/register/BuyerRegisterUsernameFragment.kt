@@ -158,6 +158,10 @@ class BuyerRegisterUsernameFragment : Fragment() {
             intent.putExtra("ViewType", "PRIVACY_POLICY_PDF")
             startActivity(intent)
         }
+
+        mBinding?.buttonReach?.setOnClickListener {
+            Utility.reachUsDialog(it.context)
+        }
 }
 
 }

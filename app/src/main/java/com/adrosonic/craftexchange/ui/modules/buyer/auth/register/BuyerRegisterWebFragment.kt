@@ -87,6 +87,7 @@ class BuyerRegisterWebFragment : Fragment() {
         mBinding?.textTnct?.append(clickSpan)
         mBinding?.textTnct?.movementMethod = LinkMovementMethod.getInstance()
         mBinding?.textTnct?.highlightColor = Color.TRANSPARENT
+        mBinding?.textTnct?.setOnClickListener {  Utility.reachUsDialog(it.context) }
 
         var addrType = AddressType("", 0)
         var country = Country(Prefs.getString(ConstantsDirectory.COUNTRY_ID, "0").toLong())

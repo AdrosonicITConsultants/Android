@@ -159,6 +159,12 @@ class ArtisanLoginUsernameFragment : Fragment() {
             startActivity(intent)
         }
 
+        mBinding?.needHelp?.setOnClickListener {
+
+            val intent = Intent(context, PdfViewerActivity::class.java)
+            intent.putExtra("ViewType", "HELP")
+            startActivity(intent)
+        }
         mBinding?.changeLanguageText?.setOnClickListener {
             showLanguageSelectionDialog()
         }

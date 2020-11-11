@@ -60,7 +60,9 @@ class ResetUsernameFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
+        mBinding?.buttonReach?.setOnClickListener {
+            Utility.reachUsDialog(it.context)
+        }
         mBinding?.buttonSendOtp?.setOnClickListener{
             if(mBinding?.textBoxUsername?.text.toString().isNotEmpty()){
                 showProgress()

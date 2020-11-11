@@ -82,6 +82,11 @@ class RoleSelectFragment : Fragment() {
             intent.putExtra("ViewType", "LEGAL_DISCLAIMER")
             startActivity(intent)
         }
+        mBinding?.textViewHelp?.setOnClickListener {
+            val intent = Intent(context, PdfViewerActivity::class.java)
+            intent.putExtra("ViewType", "HELP")
+            startActivity(intent)
+        }
     }
 
 //    interface DeviceTokenCallback {

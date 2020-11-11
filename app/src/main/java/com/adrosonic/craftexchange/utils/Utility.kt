@@ -775,6 +775,16 @@ class Utility {
                 return filePath
             }
         }
+
+        fun reachUsDialog(context: Context):Dialog{
+            var dialog = Dialog(context)
+            dialog.setContentView(com.adrosonic.craftexchange.R.layout.dialog_reach_out_us)
+            dialog.setCanceledOnTouchOutside(true) // disables outside the box touch
+            dialog.setCancelable(true) // disables backbtn click when popup visible//
+            dialog.create()
+            dialog.show()
+            return dialog
+        }
     }
 
 }

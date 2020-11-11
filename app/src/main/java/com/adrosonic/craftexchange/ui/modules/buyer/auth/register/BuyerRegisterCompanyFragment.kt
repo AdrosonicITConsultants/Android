@@ -65,7 +65,6 @@ class BuyerRegisterCompanyFragment : Fragment() {
         mBinding?.textBoxPocName?.setText(Prefs.getString(ConstantsDirectory.POC_NAME,""))
         mBinding?.textBoxPocContact?.setText(Prefs.getString(ConstantsDirectory.POC_CONTACT,""))
         mBinding?.textBoxPocEmail?.setText(Prefs.getString(ConstantsDirectory.POC_EMAIL,""))
-
         return mBinding?.root
     }
 

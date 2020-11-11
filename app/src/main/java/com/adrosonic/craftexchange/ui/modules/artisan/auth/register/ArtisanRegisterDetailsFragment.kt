@@ -1,5 +1,6 @@
 package com.adrosonic.craftexchange.ui.modules.artisan.auth.register
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Spannable
@@ -19,6 +20,7 @@ import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.FragmentArtisanRegisterDetailsBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.response.clusterResponse.CLusterResponse
+import com.adrosonic.craftexchange.ui.modules.pdfViewer.PdfViewerActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
 import com.google.gson.Gson
@@ -64,7 +66,14 @@ class ArtisanRegisterDetailsFragment : Fragment() {
         mBinding?.textBoxState?.setText(Prefs.getString(ConstantsDirectory.STATE,""))
 //        mBinding?.textBoxCluster?.setText(Prefs.getString(ConstantsDirectory.ADDR_LINE2,""))
         mBinding?.textBoxAddress?.setText(Prefs.getString(ConstantsDirectory.ADDR_LINE1,""))
-
+        mBinding?.buttonReach?.setOnClickListener {
+            Utility.reachUsDialog(it.context)
+        }
+        mBinding?.textViewHelp?.setOnClickListener {
+            val intent = Intent(context, PdfViewerActivity::class.java)
+            intent.putExtra("ViewType", "HELP")
+            startActivity(intent)
+        }
         CraftExchangeRepository
             .getClusterService()
             .getAllClusters().enqueue(object: Callback, retrofit2.Callback<CLusterResponse>{

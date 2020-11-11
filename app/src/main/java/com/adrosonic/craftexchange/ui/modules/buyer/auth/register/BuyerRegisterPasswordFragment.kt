@@ -40,6 +40,9 @@ class BuyerRegisterPasswordFragment : Fragment() {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_buyer_register_password, container, false)
         mBinding?.textBoxPassword?.setText(Prefs.getString(ConstantsDirectory.USER_PWD,""))
+        mBinding?.buttonReach?.setOnClickListener {
+            Utility.reachUsDialog(it.context)
+        }
         return mBinding?.root
     }
 

@@ -46,12 +46,12 @@
 
             <ImageView
                 android:id="@+id/role_artisan"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="88dp"
+                android:layout_height="88dp"
                 android:layout_marginTop="@dimen/margin_regular"
                 android:background="@drawable/rectangle_round_grad"
                 android:contentDescription="@string/artisan_logo"
-                android:src="@mipmap/ic_artist_text_round"
+                android:src="@drawable/ic_artist_text_round1"
                 app:layout_constraintEnd_toEndOf="@+id/textView_description"
                 app:layout_constraintStart_toStartOf="@+id/textView_description"
                 app:layout_constraintTop_toBottomOf="@+id/textView_description" />
@@ -89,12 +89,12 @@
 
             <ImageView
                 android:id="@+id/role_buyer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="88dp"
+                android:layout_height="88dp"
                 android:layout_marginTop="@dimen/margin_regular"
                 android:background="@drawable/rectangle_round_grad"
                 android:contentDescription="@string/buyer_logo"
-                android:src="@mipmap/ic_buyer_round"
+                android:src="@drawable/ic_buyer"
                 app:layout_constraintEnd_toEndOf="@+id/divider3"
                 app:layout_constraintStart_toStartOf="@+id/divider2"
                 app:layout_constraintTop_toBottomOf="@+id/or" />

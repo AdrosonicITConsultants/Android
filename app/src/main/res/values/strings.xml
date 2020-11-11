@@ -569,4 +569,6 @@
     <string name="tax_invoic_gen">Tax Invoice preview being generated</string>
     <string name="tax_invoic_sent">Tax Invoice sent</string>
     <string name="err_gen_ti">Error generating Tax Invoice</string>
+    <string name="plz_Wait">Please wait while we are downloading the document</string>
+    <string name="for_any_query_reach_us">For any query reach us @</string>
 </resources>

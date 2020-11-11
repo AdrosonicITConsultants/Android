@@ -1,5 +1,6 @@
 package com.adrosonic.craftexchange.ui.modules.artisan.auth.register
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import androidx.databinding.DataBindingUtil
 
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.FragmentArtisanRegisterPasswordBinding
+import com.adrosonic.craftexchange.ui.modules.pdfViewer.PdfViewerActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
 import com.pixplicity.easyprefs.library.Prefs
@@ -73,6 +75,14 @@ class ArtisanRegisterPasswordFragment : Fragment() {
             }else{
                 Toast.makeText(activity,"Passwords are mismatched",Toast.LENGTH_SHORT).show()
             }
+        }
+        mBinding?.buttonReach?.setOnClickListener {
+            Utility.reachUsDialog(it.context)
+        }
+        mBinding?.textViewHelp?.setOnClickListener {
+            val intent = Intent(context, PdfViewerActivity::class.java)
+            intent.putExtra("ViewType", "HELP")
+            startActivity(intent)
         }
     }
 

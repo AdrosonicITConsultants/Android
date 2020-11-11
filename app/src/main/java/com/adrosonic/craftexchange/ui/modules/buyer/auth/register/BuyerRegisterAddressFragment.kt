@@ -106,7 +106,6 @@ class BuyerRegisterAddressFragment : Fragment() {
         mBinding?.textBoxState?.setText(Prefs.getString(ConstantsDirectory.STATE,""))
 //        mBinding?.textBoxCountry?.setText(Prefs.getString(ConstantsDirectory.POC_CONTACT,""))
         mBinding?.textBoxPincode?.setText(Prefs.getString(ConstantsDirectory.PINCODE,""))
-
         return mBinding?.root
     }
 

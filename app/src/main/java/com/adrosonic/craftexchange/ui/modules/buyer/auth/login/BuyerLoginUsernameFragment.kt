@@ -159,6 +159,11 @@ class BuyerLoginUsernameFragment : Fragment() {
             intent.putExtra("ViewType", "LEGAL_DISCLAIMER")
             startActivity(intent)
         }
+        mBinding?.needHelp?.setOnClickListener {
+            val intent = Intent(context, PdfViewerActivity::class.java)
+            intent.putExtra("ViewType", "HELP")
+            startActivity(intent)
+        }
 
     }
 
