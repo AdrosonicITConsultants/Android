@@ -27,6 +27,7 @@ import com.adrosonic.craftexchange.enums.EnquiryStages
 import com.adrosonic.craftexchange.enums.getId
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.repository.data.response.Rating.RatingEnquiryUserResponse
+import com.adrosonic.craftexchange.repository.data.request.taxInv.SendTiRequest
 import com.adrosonic.craftexchange.repository.data.response.moq.Datum
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
 import com.adrosonic.craftexchange.ui.modules.artisan.qcForm.qcFormIntent
@@ -209,7 +210,7 @@ class CompletedOrderDetailsFragment : Fragment(),
         }
 
         mBinding?.taxInvoiceLayer?.setOnClickListener {
-            enqID?.let {  startActivity(requireContext().raiseTaxInvIntent(it, true)) }
+            enqID?.let {  startActivity(requireContext().raiseTaxInvIntent(it,true, SendTiRequest())) }
         }
 
         mBinding?.productDetailsLayer?.setOnClickListener {

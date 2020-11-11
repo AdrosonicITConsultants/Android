@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/chat_esc_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/chat_esc_back"
+        tools:context=".ui.modules.chat.ChatEscalationActivity">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="4dp"
+            android:paddingBottom="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/btn_back"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:layout_marginTop="@dimen/margin_regular"
+                android:background="?selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_back_arrow_white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/txt_escalations"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:fontFamily="@font/lato_regular"
+                android:textColor="@color/white_text"
+                android:text="@string/escalations"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:textSize="@dimen/product_title_text"
+                app:layout_constraintTop_toTopOf="@+id/btn_back"
+                app:layout_constraintStart_toEndOf="@+id/btn_back"/>
+
+            <TextView
+                android:id="@+id/enquiry_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato_regular"
+                android:textColor="#FF7C7E"
+                android:text="AN-432-N9"
+                android:layout_marginTop="6dp"
+                android:textSize="@dimen/product_description_text"
+                app:layout_constraintTop_toBottomOf="@+id/txt_escalations"
+                app:layout_constraintStart_toStartOf="@+id/txt_escalations"/>
+
+            <TextView
+                android:id="@+id/txt_num_escalations"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato_regular"
+                android:textColor="@color/white_text"
+                android:layout_marginTop="6dp"
+                android:layout_marginStart="8dp"
+                android:textSize="@dimen/product_note_text"
+                app:layout_constraintTop_toBottomOf="@+id/enquiry_code"
+                app:layout_constraintStart_toEndOf="@+id/imgEscalations"/>
+
+            <ImageView
+                android:id="@+id/imgEscalations"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                app:layout_constraintBottom_toBottomOf="@+id/txt_num_escalations"
+                app:layout_constraintStart_toStartOf="@+id/enquiry_code"
+                app:layout_constraintTop_toTopOf="@+id/txt_num_escalations"
+                app:srcCompat="@drawable/ic_escalation_white" />
+
+            <ImageView
+                android:id="@+id/icon_change_request"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginEnd="@dimen/margin_regular"
+                android:src="@drawable/ic_cr_with_txt"
+                android:background="?selectableItemBackgroundBorderless"
+                app:layout_constraintBottom_toBottomOf="@+id/icon_escalation"
+                app:layout_constraintEnd_toStartOf="@+id/icon_escalation"
+                app:layout_constraintTop_toTopOf="@+id/brand_name"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <ImageView
+                android:id="@+id/icon_escalation"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="@dimen/margin_regular"
+                android:background="?selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_escalation_white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_chats"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/new_escalation_layer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/escalation_recylerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/new_escalation_layer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#C64045"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <EditText
+                android:id="@+id/txt_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_regular"
+                android:layout_marginEnd="@dimen/margin_regular"
+                android:background="@drawable/rect_outline_grey"
+                android:fontFamily="@font/lato_bold"
+                android:gravity="start"
+                android:maxLength="500"
+                android:padding="@dimen/margin_regular"
+                android:textColor="#696969"
+                android:textSize="@dimen/product_note_text"
+                android:hint="@string/esc_desc"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btn_send_escalation"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/btn_send_escalation"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_send_esc"
+                android:background="?selectableItemBackgroundBorderless"
+                android:layout_marginBottom="@dimen/margin_regular"
+                android:layout_marginTop="@dimen/margin_regular"
+                android:layout_marginEnd="@dimen/margin_regular"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

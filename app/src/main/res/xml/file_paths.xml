@@ -8,6 +8,9 @@
         name="PiPdfs"
         path="PiPdfs/" />
     <cache-path
+        name="TiPdfs"
+        path="TiPdfs/" />
+    <cache-path
         name="ChatMedia"
         path="ChatMedia/" />
 </paths>

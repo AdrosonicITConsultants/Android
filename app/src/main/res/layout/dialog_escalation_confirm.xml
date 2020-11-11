@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/item_confirm_escalation"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/txt_select_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_regular"
+        android:fontFamily="@font/lato_bold"
+        android:gravity="center"
+        android:drawableStart="@drawable/ic_red_exclamation"
+        android:drawablePadding="8dp"
+        android:text="@string/new_escalation"
+        android:textColor="@color/black_text"
+        android:textSize="@dimen/product_title_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/margin_regular"
+        android:background="@color/darker_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_select_type" />
+
+   <TextView
+       android:id="@+id/txt_are_you_sure"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="@string/are_you_sure"
+       android:textColor="@color/black_text"
+       android:fontFamily="@font/lato_regular"
+       android:layout_marginTop="8dp"
+       android:textSize="@dimen/product_description_text"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintTop_toBottomOf="@+id/divider"/>
+
+    <TextView
+        android:id="@+id/txt_timelimit_esc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/note_confirm_escalation"
+        android:fontFamily="@font/lato_regular"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="@dimen/margin_regular"
+        android:layout_marginEnd="@dimen/margin_regular"
+        android:gravity="center"
+        android:textSize="@dimen/product_note_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_are_you_sure"/>
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_esc_question"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_timelimit_esc"/>
+
+    <LinearLayout
+        android:id="@+id/button_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingBottom="8dp"
+        android:weightSum="3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/icon">
+
+        <TextView
+            android:id="@+id/btn_goback_escalation"
+            android:layout_width="100dp"
+            android:layout_height="35dp"
+            android:background="@color/white_text"
+            android:text="@string/go_back"
+            android:gravity="center"
+            android:textAllCaps="false"
+            android:clickable="true"
+            android:focusable="true"
+            android:textColor="@color/black_text"
+            android:textSize="@dimen/product_note_text" />
+
+
+        <TextView
+            android:layout_width="30dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+
+        <Button
+            android:id="@+id/btn_ok_escalation"
+            android:layout_width="100dp"
+            android:layout_height="35dp"
+            android:background="@color/red_logo"
+            android:text="@string/ok"
+            android:textAllCaps="false"
+            android:textColor="#FFF"
+            android:textSize="@dimen/product_note_text" />
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

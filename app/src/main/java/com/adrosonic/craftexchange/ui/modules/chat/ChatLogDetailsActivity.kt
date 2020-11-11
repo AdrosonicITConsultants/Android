@@ -169,6 +169,16 @@ class  ChatLogDetailsActivity : LocaleBaseActivity(),
                 }
             }
         })
+
+        mBinding?.iconEscalation?.setOnClickListener {
+            startActivity(enquiryId?.let { it1 -> this.chatEscalationIntent(it1) })
+            overridePendingTransition(R.anim.fragment_fade_enter, R.anim.fragment_fade_exit)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        overridePendingTransition(R.anim.fragment_fade_enter, R.anim.fragment_fade_exit)
     }
 
     fun setChatHeaderDetails(enquiryId : Long?){
@@ -204,6 +214,7 @@ class  ChatLogDetailsActivity : LocaleBaseActivity(),
 //        mBinding?.chatView?.setSendIcon(com.github.bassaer.example.MessengerActivity.SEND_ICON)
         mBinding?.chatView?.setOptionIcon(R.drawable.ic_attach_files)
         mBinding?.chatView?.setOptionButtonColor(R.color.teal500)
+
 //        mBinding?.chatView?.setRightMessageTextColor(ContextCompat.getColor( this,  R.color.black_text))
 //        mBinding?.chatView?.setLeftMessageTextColor(ContextCompat.getColor( this,  R.color.black_text))
         mBinding?.chatView?.setUsernameTextColor(R.color.clickable_text_color)
@@ -217,7 +228,6 @@ class  ChatLogDetailsActivity : LocaleBaseActivity(),
         mBinding?.chatView?.setUsernameFontSize(resources.getDimension(R.dimen.font_small))
         mBinding?.chatView?.inputType = InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
         mBinding?.chatView?.inputTextColor = ContextCompat.getColor(this, R.color.black_text)
-        mBinding?.chatView?.setInputTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
     }
 
     private fun loadMessages() {

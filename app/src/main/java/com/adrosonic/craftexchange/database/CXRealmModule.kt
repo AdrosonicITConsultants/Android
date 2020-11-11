@@ -38,6 +38,7 @@ import io.realm.annotations.RealmModule
     TaxInvDetails::class,
     OrderProgressDetails::class,
     ChatUser::class,
-    ChatLogUserData::class
+    ChatLogUserData::class,
+    Escalations::class
 ])
 class CXRealmModule

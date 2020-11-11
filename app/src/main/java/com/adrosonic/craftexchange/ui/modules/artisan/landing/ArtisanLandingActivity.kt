@@ -431,6 +431,7 @@ class ArtisanLandingActivity : LocaleBaseActivity(),
             mViewModel?.getInnerEnquiryStageData()
             mViewModel?.getQCStageData()
             mViewModel?.getQCQuestionData()
+            mViewModel?.getEscalationData()
             mViewModel?.getEnquiryStageAvailableProdsData()
             mViewModel?.getAllNotifications()
             mProVM.getArtisanProfileDetails(this)
