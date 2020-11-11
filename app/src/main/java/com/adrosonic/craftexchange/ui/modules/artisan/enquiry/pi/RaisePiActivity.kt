@@ -31,11 +31,12 @@ import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
 import java.io.File
 
-fun Context.raisePiContext(enquiryId:Long,isView:Boolean,piRequest: SendPiRequest?): Intent {
+fun Context.raisePiContext(enquiryId:Long,isView:Boolean,piRequest: SendPiRequest?,isCompleted:Boolean): Intent {
     val intent = Intent(this, RaisePiActivity::class.java)
     intent.putExtra("enquiryId", enquiryId)
     intent.putExtra("isView", isView)
     intent.putExtra("piRequest", piRequest)
+    intent.putExtra("isCompleted", isCompleted)
     return intent
 }
 
@@ -43,6 +44,7 @@ class RaisePiActivity : LocaleBaseActivity(),
 EnquiryViewModel.piInterface{
     var enquiryId=0L
     var isView=false
+    var isCompleted=false
     var piDetails: PiDetails? = null
     val mEnqVM : EnquiryViewModel by viewModels()
     var enquiryDetails: OngoingEnquiries? = null
@@ -58,12 +60,14 @@ EnquiryViewModel.piInterface{
         if (intent.extras != null) {
             enquiryId = intent.getLongExtra("enquiryId",0)
             isView=intent.getBooleanExtra("isView",false)
+            isCompleted=intent.getBooleanExtra("isCompleted",false)
             enquiryDetails=mEnqVM?.loadSingleEnqDetails(enquiryId)
             pi=intent.getSerializableExtra("piRequest") as SendPiRequest
             enquiryId?.let{
                 viewLoader()
                 mEnqVM?.previewPi(enquiryId,"false")
             }
+            Log.e("PINull","enquiryId: $enquiryId")
         }
 
         Log.e("PiPostCr","enquiryId: $enquiryId")
@@ -113,6 +117,7 @@ EnquiryViewModel.piInterface{
             mBinding?.btnRaisePi?.visibility=View.VISIBLE
         }
         mBinding?.enquiryCode?.text=getString(R.string.proforma_invoice)+" : ${enquiryDetails?.enquiryCode}"
+        try{ if(isCompleted)mBinding?.enquiryCode?.text=getString(R.string.proforma_invoice)+" : "+mEnqVM.getSingleCompEnqData(enquiryId).value?.enquiryCode} catch (e:Exception){}
         val webSettings = mBinding?.webviewPiPreview?.settings
         webSettings?.javaScriptEnabled = true
         webSettings?.builtInZoomControls = true

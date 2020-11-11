@@ -57,7 +57,6 @@ class BuyerRegisterDetailsFragment : Fragment() {
         mBinding?.textBoxAltMobile?.setText(Prefs.getString(ConstantsDirectory.ALT_MOBILE,""))
         mBinding?.textBoxDesignation?.setText(Prefs.getString(ConstantsDirectory.DESIGNATION,""))
 
-
         return mBinding?.root
     }
 

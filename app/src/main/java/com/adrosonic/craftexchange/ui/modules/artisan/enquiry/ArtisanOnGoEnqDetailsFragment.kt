@@ -32,6 +32,7 @@ import com.adrosonic.craftexchange.repository.data.response.moq.Datum
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.piContext
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
 import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.advPay.enquiryPayment
+import com.adrosonic.craftexchange.ui.modules.chat.chatLogDetailsIntent
 import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
@@ -221,7 +222,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         }
 
         mBinding?.viewPiLayout?.setOnClickListener {
-            enqID?.let {  startActivity(requireContext().raisePiContext(it,true, SendPiRequest())) }
+            enqID?.let {  startActivity(requireContext().raisePiContext(it,true, SendPiRequest(),false)) }
         }
 
         mBinding?.btnViewApprovePayment?.setOnClickListener {
@@ -277,6 +278,9 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
             }else{
                 Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
             }
+        }
+        mBinding?.btnChat?.setOnClickListener {
+            enqID?.let {  startActivity(Intent(requireContext()?.chatLogDetailsIntent(it)))}
         }
     }
 

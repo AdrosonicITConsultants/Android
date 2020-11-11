@@ -27,6 +27,7 @@ import com.adrosonic.craftexchange.repository.data.model.UserAuthModel
 import com.adrosonic.craftexchange.ui.modules.authentication.register.RegisterActivity
 import com.adrosonic.craftexchange.ui.modules.authentication.reset.ResetPasswordActivity
 import com.adrosonic.craftexchange.ui.modules.cx_demovideo.CXVideoActivity
+import com.adrosonic.craftexchange.ui.modules.pdfViewer.PdfViewerActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
@@ -171,6 +172,17 @@ class ArtisanLoginPasswordFragment : Fragment() {
             }else{
                 Utility.displayMessage(requireActivity().getString(R.string.no_internet_connection),requireContext())
             }
+        }
+
+        mBinding?.needHelp?.setOnClickListener {
+            val intent = Intent(context, PdfViewerActivity::class.java)
+            intent.putExtra("ViewType", "HELP")
+            startActivity(intent)
+        }
+        mBinding?.privacyPolicy?.setOnClickListener {
+            val intent = Intent(context, PdfViewerActivity::class.java)
+            intent.putExtra("ViewType", "PRIVACY_POLICY_PDF")
+            startActivity(intent)
         }
     }
 

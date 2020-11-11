@@ -234,7 +234,8 @@ class CompletedOrderDetailsFragment : Fragment(),
         }
 
         mBinding?.piDetailsLayer?.setOnClickListener {
-            enqID?.let {  startActivity(requireContext().raisePiContext(it, true, SendPiRequest())) }
+            Log.e("PINull","enqID: $enqID")
+            enqID?.let {  startActivity(requireContext().raisePiContext(it, true, SendPiRequest(),true)) }
         }
         mBinding?.changeRequestLayer?.setOnClickListener {
             if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType.equals(

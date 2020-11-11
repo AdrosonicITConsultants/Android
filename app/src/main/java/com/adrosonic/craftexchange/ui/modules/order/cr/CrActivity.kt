@@ -29,6 +29,7 @@ import com.adrosonic.craftexchange.repository.data.request.changeRequest.ItemLis
 import com.adrosonic.craftexchange.repository.data.request.changeRequest.RaiseCrInput
 import com.adrosonic.craftexchange.repository.data.response.changeReequest.CrOption
 import com.adrosonic.craftexchange.repository.data.response.changeReequest.CrOptionsResponse
+import com.adrosonic.craftexchange.ui.modules.chat.chatLogDetailsIntent
 import com.adrosonic.craftexchange.ui.modules.order.cr.adapter.CrAcceptRejectAdapter
 import com.adrosonic.craftexchange.ui.modules.order.revisePi.revisePiContext
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
@@ -111,6 +112,9 @@ class CrActivity : LocaleBaseActivity(),
             crSelctionList.forEach { if (it.second) crFlagList?.add(it.second) }
             if(!crFlagList.contains(true)){showAcceptRejectDialog(false)}
             else showAcceptRejectDialog(true)
+        }
+        mBinding?.btnChat?.setOnClickListener {
+            enquiryId?.let {  startActivity(Intent(this?.chatLogDetailsIntent(it)))}
         }
     }
 

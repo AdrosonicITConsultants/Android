@@ -22,6 +22,8 @@ import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.ChatListViewModel
 import com.daimajia.swipe.SwipeLayout
 import io.realm.RealmResults
+import java.text.SimpleDateFormat
+import java.util.*
 
 class InitiatedChatRecyclerAdapter(var context: Context?, private var chats: RealmResults<ChatUser>,var isInitiated:Long) : RecyclerView.Adapter<InitiatedChatRecyclerAdapter.MyViewHolder>() {
 
@@ -35,6 +37,7 @@ class InitiatedChatRecyclerAdapter(var context: Context?, private var chats: Rea
         var txt_unread_count: TextView
         var ll_markasread: LinearLayout
         var swipe: SwipeLayout
+        var chat_container_layout: ConstraintLayout
         init {
             chat_stage_color = view.findViewById(R.id.chat_stage_color)
             chat_contact_pic = view.findViewById(R.id.chat_contact_pic)
@@ -45,6 +48,7 @@ class InitiatedChatRecyclerAdapter(var context: Context?, private var chats: Rea
             txt_unread_count = view.findViewById(R.id.txt_unread_count)
             ll_markasread = view.findViewById(R.id.ll_markasread)
             swipe = view.findViewById(R.id.swipe)
+            chat_container_layout = view.findViewById(R.id.chat_container_layout)
         }
     }
 
@@ -77,19 +81,26 @@ class InitiatedChatRecyclerAdapter(var context: Context?, private var chats: Rea
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
         var chatData = chats?.get(position)
-        holder.swipe.setOnClickListener {
-            val intent = Intent(context?.chatLogDetailsIntent())
-            val bundle = Bundle()
-            bundle.putLong(ConstantsDirectory.ENQUIRY_ID, chatData?.enquiryId?:0)
-            intent.putExtras(bundle)
-            context?.startActivity(intent)
+        holder.chat_container_layout.setOnClickListener {
+//            val intent = Intent(context?.chatLogDetailsIntent())
+//            val bundle = Bundle()
+//            bundle.putLong(ConstantsDirectory.ENQUIRY_ID, chatData?.enquiryId?:0)
+//            intent.putExtras(bundle)
+            context?.startActivity(Intent(context?.chatLogDetailsIntent(chatData?.enquiryId?:0)))
         }
         var image = chatData?.buyerLogo
         var first_image = chatData?.buyerLogo.toString()
         url = Utility.getBrandLogoUrl(chatData?.buyerId, first_image)
 
         holder.txt_buyer_name.text = chatData?.buyerCompanyName
-        holder.txt_date_time.text = if(isInitiated==1L)chatData?.lastChatDate?.split("T")?.get(0) else chatData?.lastUpdatedOn?.split("T")?.get(0)
+
+            val cal: Calendar = Calendar.getInstance()
+            val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.ENGLISH)
+        if(isInitiated==1L) cal.setTime(sdf.parse(chatData?.lastChatDate))
+        else cal.setTime(sdf.parse(chatData?.lastUpdatedOn))
+
+        holder.txt_date_time.text ="${cal.get(Calendar.DAY_OF_MONTH)}-"+ cal.get(Calendar.MONTH)+"-"+ cal.get( Calendar.YEAR)+"\n"+cal.get(Calendar.HOUR_OF_DAY)+":"+ cal.get(Calendar.MINUTE)
+
         holder.txt_enq_code.text = chatData?.enquiryNumber.toString()
         context?.let { ImageSetter.setImage(it, url!!,holder?.chat_contact_pic, R.drawable.artisan_logo_placeholder,  R.drawable.artisan_logo_placeholder,  R.drawable.artisan_logo_placeholder) }
 

@@ -507,6 +507,7 @@ class LandingViewModel(application: Application) : AndroidViewModel(application)
                 }
             })
     }
+
     fun getChatList(){
         Log.e("Chat","Start")
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"

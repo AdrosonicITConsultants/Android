@@ -180,6 +180,12 @@ class ArtisanLoginUsernameFragment : Fragment() {
             startActivity(intent)
         }
 
+        mBinding?.needHelp?.setOnClickListener {
+
+            val intent = Intent(context, PdfViewerActivity::class.java)
+            intent.putExtra("ViewType", "HELP")
+            startActivity(intent)
+        }
         mBinding?.googleLoginBtn?.setOnClickListener {
             // Build a GoogleSignInClient with the options specified by gso.
             mGoogleSignInClient = activity?.let { GoogleSignIn.getClient(it, gso) }!!

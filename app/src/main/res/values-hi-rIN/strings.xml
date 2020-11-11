@@ -521,4 +521,6 @@
     <string name="tax_invoic_gen">कर चालान पूर्वावलोकन उत्पन्न किया जा रहा है</string>
     <string name="tax_invoic_sent">कर चालान भेजा गया</string>
     <string name="err_gen_ti">टैक्स इनवॉइस जनरेट करने में त्रुटि</string>
+    <string name="plz_Wait">कृपया दस्तावेज़ डाउनलोड करते समय प्रतीक्षा करें</string>
+    <string name="for_any_query_reach_us">किसी भी प्रश्न के लिए हम तक पहुँचने @</string>
 </resources>

@@ -109,6 +109,7 @@ class AdvPay1Fragment : Fragment() {
                     ?.commit()
             }
         }
+
     }
 
     fun setDetails(){

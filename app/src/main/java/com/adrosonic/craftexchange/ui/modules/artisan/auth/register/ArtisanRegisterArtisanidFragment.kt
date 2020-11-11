@@ -24,6 +24,7 @@ import com.adrosonic.craftexchange.repository.data.model.artisan.ArtisanidModel
 import com.adrosonic.craftexchange.repository.data.registerResponse.RegisterResponse
 import com.adrosonic.craftexchange.ui.modules.pdfViewer.PdfViewerActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
+import com.adrosonic.craftexchange.utils.Utility
 import com.pixplicity.easyprefs.library.Prefs
 import com.wajahatkarim3.easyvalidation.core.view_ktx.nonEmpty
 import retrofit2.Call
@@ -98,7 +99,15 @@ class ArtisanRegisterArtisanidFragment : Fragment() {
             intent.putExtra("ViewType", "PRIVACY_POLICY_PDF")
             startActivity(intent)
         }
+        mBinding?.buttonReach?.setOnClickListener {
+            Utility.reachUsDialog(it.context)
+        }
         mBinding?.changeLanguage?.setOnClickListener { showLanguageSelectionDialog() }
+        mBinding?.textViewHelp?.setOnClickListener {
+            val intent = Intent(context, PdfViewerActivity::class.java)
+            intent.putExtra("ViewType", "HELP")
+            startActivity(intent)
+        }
     }
     fun showLanguageSelectionDialog() {
         var dialog = Dialog(requireContext())

@@ -27,6 +27,7 @@ import com.adrosonic.craftexchange.database.entities.realmEntities.ChatUser
 import com.adrosonic.craftexchange.database.predicates.ChatUserPredicates
 import com.adrosonic.craftexchange.databinding.ActivityChatLogBinding
 import com.adrosonic.craftexchange.repository.data.request.chat.SendChatRequest
+import com.adrosonic.craftexchange.ui.modules.artisan.deliveryReceipt.UploadDeliveryReceiptActivity
 import com.adrosonic.craftexchange.ui.modules.enquiry.enquiryDetails
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
@@ -41,13 +42,13 @@ import kotlinx.android.synthetic.main.activity_chat_log.*
 import java.io.IOException
 
 
-fun Context.chatLogDetailsIntent(): Intent {
-    return Intent(this, ChatLogDetailsActivity::class.java)
-        .apply {
+fun Context.chatLogDetailsIntent(enquiryId:Long): Intent {
+    val intent= Intent(this, ChatLogDetailsActivity::class.java) .apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
         }
+    intent.putExtra(ConstantsDirectory.ENQUIRY_ID, enquiryId)
+    return intent
 }
-
 class  ChatLogDetailsActivity : LocaleBaseActivity(),
     ChatListViewModel.OpenChatLogInterface,
     ChatListViewModel.GetChatMediaInterface,
@@ -184,17 +185,17 @@ class  ChatLogDetailsActivity : LocaleBaseActivity(),
     fun setChatHeaderDetails(enquiryId : Long?){
         var chatHeader = ChatUserPredicates.getChatHeaderDetailsFromId(enquiryId)
         var profile = chatHeader?.buyerLogo.toString()
-        var companyName = chatHeader?.buyerCompanyName.toString()
+        var companyName = try{if(chatHeader?.buyerCompanyName.isNullOrEmpty())"NA" else chatHeader?.buyerCompanyName.toString()}catch (e:java.lang.Exception){"NA"}
 
         mBinding?.brandName?.text = companyName
         mBinding?.txtEnquiryNo?.text = chatHeader?.enquiryNumber.toString()
         mBinding?.enquiryStatusText?.text = chatHeader?.orderStatus?:""
         chatUserDetails?.let {
-            mBinding?.txtDateStarted?.text=getString(R.string.date_started)+": "+try{chatUserDetails?.enquiryGeneratedOn?.split("T")?.get(0)}catch (e:java.lang.Exception){"NA"}
-            mBinding?.txtDateConvertedToOrder?.text=getString(R.string.date_converted)+": "+try{chatUserDetails?.convertedToOrderDate?.split("T")?.get(0)}catch (e:java.lang.Exception){"NA"}
-            mBinding?.txtDateLastUpdated?.text=getString(R.string.date_last_updated)+": "+try{chatUserDetails?.lastUpdatedOn?.split("T")?.get(0)?:"NA"}catch (e:java.lang.Exception){"NA"}
+            mBinding?.txtDateStarted?.text=getString(R.string.date_started)+": "+try{chatUserDetails?.enquiryGeneratedOn!!.split("T")?.get(0)}catch (e:java.lang.Exception){"NA"}
+            mBinding?.txtDateConvertedToOrder?.text=getString(R.string.date_converted)+": "+try{chatUserDetails?.convertedToOrderDate!!.split("T")?.get(0)}catch (e:java.lang.Exception){"NA"}
+            mBinding?.txtDateLastUpdated?.text=getString(R.string.date_last_updated)+": "+try{chatUserDetails?.lastUpdatedOn!!.split("T")?.get(0)?:"NA"}catch (e:java.lang.Exception){"NA"}
             mBinding?.txtProdType?.text=chatUserDetails?.productTypeId
-            mBinding?.txtOrderAmt?.text=getString(R.string.order_amount)+": ₹ "+chatUserDetails?.orderAmouunt?.toString()
+            mBinding?.txtOrderAmt?.text=getString(R.string.order_amount)+": ₹ "+ try{if(chatUserDetails?.orderAmouunt!!>0) chatUserDetails?.orderAmouunt.toString() else "0"}catch (e:java.lang.Exception){"0"}
         }
         fromId=UserConfig.shared.userId?.toLong()?:0
         toId=chatUserDetails?.buyerId?:0
@@ -204,6 +205,9 @@ class  ChatLogDetailsActivity : LocaleBaseActivity(),
         mBinding?.chatProfileImage?.let {
             ImageSetter.setImage(applicationContext,url,it,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
         }
+
+        if(chatHeader?.changeRequestDone==1L)mBinding?.iconChangeRequest?.visibility=View.VISIBLE
+        else mBinding?.iconChangeRequest?.visibility=View.GONE
     }
 
     fun setChatView(){

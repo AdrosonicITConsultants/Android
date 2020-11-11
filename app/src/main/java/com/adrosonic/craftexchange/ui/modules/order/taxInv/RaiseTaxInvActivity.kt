@@ -19,6 +19,7 @@ import com.adrosonic.craftexchange.database.predicates.TaxInvPredicates
 import com.adrosonic.craftexchange.databinding.ActivityRaiseTaxInvBinding
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.repository.data.request.taxInv.SendTiRequest
+import com.adrosonic.craftexchange.ui.modules.chat.chatLogDetailsIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
@@ -91,7 +92,9 @@ class RaiseTaxInvActivity : LocaleBaseActivity(),OrdersViewModel.tiInterface,Ord
                 )
             }
         }
-
+        mBinding?.btnChat?.setOnClickListener {
+            enquiryId?.let {  startActivity(Intent(this?.chatLogDetailsIntent(it)))}
+        }
         setViews()
 
         mBinding?.btnRaiseTaxInv?.setOnClickListener {

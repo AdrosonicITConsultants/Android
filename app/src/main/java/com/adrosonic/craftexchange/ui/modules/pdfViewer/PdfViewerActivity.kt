@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.text.TextUtils
 import androidx.appcompat.app.AppCompatActivity
 import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
+import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityPdfViewerBinding
+import com.adrosonic.craftexchange.utils.Utility
 
 fun Context.pdfViewerIntent(): Intent {
     return Intent(this, PdfViewerActivity::class.java).apply {
@@ -31,8 +33,7 @@ class PdfViewerActivity: LocaleBaseActivity() {
            if(!TextUtils.isEmpty(viewType) || viewType!=null){
                if(viewType.equals("Terms_conditions")){
                    mBinding?.webView?.settings?.javaScriptEnabled = true
-                   pdf =
-                       "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/documents/TERMS_and_CONDITIONS.pdf"
+                   pdf = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/documents/TERMS_and_CONDITIONS.pdf"
                    mBinding?.webView?.loadUrl("https://drive.google.com/viewerng/viewer?embedded=true&url=$pdf")
                }
 
@@ -49,8 +50,19 @@ class PdfViewerActivity: LocaleBaseActivity() {
                    pdf = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/documents/LEGAL%20DISCLAIMER.pdf"
                    mBinding?.webView?.loadUrl("https://drive.google.com/viewerng/viewer?embedded=true&url=$pdf")
                }
-
+               if(viewType.equals("HELP")){
+                   mBinding?.webView?.settings?.javaScriptEnabled = true
+                   pdf = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/documents/Help.pdf"
+                   mBinding?.webView?.loadUrl("https://drive.google.com/viewerng/viewer?embedded=true&url=$pdf")
+               }
+               if(viewType.equals("FAQ_PDF")){
+                   mBinding?.webView?.settings?.javaScriptEnabled = true
+                   pdf = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/documents/LEGAL%20DISCLAIMER.pdf"
+                   mBinding?.webView?.loadUrl("https://drive.google.com/viewerng/viewer?embedded=true&url=$pdf")
+               }
+                Utility.displayMessage(getString(R.string.plz_Wait),this)
            }
+
        }
    }
 }
