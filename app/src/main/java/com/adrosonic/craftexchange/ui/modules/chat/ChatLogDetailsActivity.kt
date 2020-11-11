@@ -170,7 +170,7 @@ class  ChatLogDetailsActivity : AppCompatActivity(),
         })
 
         mBinding?.iconEscalation?.setOnClickListener {
-            startActivity(this.chatEscalationIntent())
+            startActivity(enquiryId?.let { it1 -> this.chatEscalationIntent(it1) })
             overridePendingTransition(R.anim.fragment_fade_enter, R.anim.fragment_fade_exit)
         }
     }

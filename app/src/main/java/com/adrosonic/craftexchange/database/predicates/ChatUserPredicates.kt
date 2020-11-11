@@ -2,12 +2,14 @@ package com.adrosonic.craftexchange.database.predicates
 
 import android.util.Log
 import com.adrosonic.craftexchange.database.CXRealmManager
+import com.adrosonic.craftexchange.database.entities.ArtisanProductCategory
 import com.adrosonic.craftexchange.database.entities.realmEntities.*
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.response.chat.ChatData
 import com.adrosonic.craftexchange.repository.data.response.chat.ChatList
 import com.adrosonic.craftexchange.repository.data.response.chat.ChatListResponse
 import com.adrosonic.craftexchange.repository.data.response.chat.ChatLogListData
+import com.adrosonic.craftexchange.repository.data.response.chat.escalations.EscalationSummResponse
 import com.adrosonic.craftexchange.repository.data.response.transaction.TransactionResponse
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.pixplicity.easyprefs.library.Prefs
@@ -192,7 +194,6 @@ class ChatUserPredicates {
             }
         }
 
-
         fun getInitiatedChatList(isInitiated:Long,searchString:String): RealmResults<ChatUser>? {
             val realm = CXRealmManager.getRealmInstance()
             var chatObj : RealmResults<ChatUser>?= null
@@ -270,7 +271,114 @@ class ChatUserPredicates {
             return chats
         }
 
+        fun insertEscalation(details : EscalationSummResponse) {
+            val realm = CXRealmManager.getRealmInstance()
+            var escObj : Escalations ?= null
+            realm.executeTransaction {
+                try{
+                    var escDataItr = details?.data?.iterator()
 
+                    if (escDataItr != null) {
+                        while (escDataItr.hasNext()) {
+                            var escData = escDataItr.next()
+                            escObj = realm?.where(Escalations::class.java)
+                                .equalTo(Escalations.COLUMN_ENQUIRY_ID,escData.enquiryId)
+                                .and()
+                                .equalTo(Escalations.COLUMN_ESCALATION_ID,escData.id)
+                                .limit(1)
+                                .findFirst()
+
+                            if(escObj == null) {
+                                var primId =
+                                    it.where(Escalations::class.java).max(Escalations.COLUMN__ID)
+                                if (primId == null) {
+                                    nextID = 1
+                                } else {
+                                    nextID = primId.toLong() + 1
+                                }
+                                var exEsc = it.createObject(Escalations::class.java, nextID)
+
+                                exEsc.escalationId = escData?.id
+                                exEsc.enquiryId = escData?.enquiryId
+                                exEsc.escalationFrom = escData?.escalationFrom
+                                exEsc.escalationTo = escData?.escalationTo
+                                exEsc.category = escData?.category
+                                exEsc.text = escData?.text
+                                exEsc.isManual = escData?.isManual
+                                exEsc.escalationToadmin = escData?.escalationToadmin
+                                exEsc.escalationToadminDatetime = escData?.escalationToadminDatetime
+                                exEsc.isResolve = escData?.isResolve
+                                exEsc.resolvedOn = escData?.resolvedOn
+                                exEsc.autoEscalationTypeId = escData?.autoEscalationTypeId
+                                exEsc.createdOn = escData?.createdOn
+                                exEsc.modifiedOn = escData?.modifiedOn
+
+                                realm.copyToRealmOrUpdate(exEsc)
+
+                            }else{
+
+                                nextID = escObj?._id ?: 0
+
+                                escObj?.escalationId = escData?.id
+                                escObj?.enquiryId = escData?.enquiryId
+                                escObj?.escalationFrom = escData?.escalationFrom
+                                escObj?.escalationTo = escData?.escalationTo
+                                escObj?.category = escData?.category
+                                escObj?.text = escData?.text
+                                escObj?.isManual = escData?.isManual
+                                escObj?.escalationToadmin = escData?.escalationToadmin
+                                escObj?.escalationToadminDatetime = escData?.escalationToadminDatetime
+                                escObj?.isResolve = escData?.isResolve
+                                escObj?.resolvedOn = escData?.resolvedOn
+                                escObj?.autoEscalationTypeId = escData?.autoEscalationTypeId
+                                escObj?.createdOn = escData?.createdOn
+                                escObj?.modifiedOn = escData?.modifiedOn
+
+                                realm.copyToRealmOrUpdate(escObj)
+
+                            }
+                        }
+                    }
+                }  catch (e: Exception) {
+                    Log.e("InsertEscalations", e.stackTrace.toString())
+                }
+            }
+
+        }
+
+        fun getEscalationEnquiry(enquiryId : Long) : RealmResults<Escalations>? {
+            val realm = CXRealmManager.getRealmInstance()
+            var escObj : RealmResults<Escalations> ?= null
+            realm?.executeTransaction {
+                try {
+                    escObj = realm?.where(Escalations::class.java)
+                        .equalTo(Escalations.COLUMN_ENQUIRY_ID,enquiryId)
+                        .sort(Escalations.COLUMN_MODIFIED_ON, Sort.DESCENDING)
+                        .findAll()
+                }catch (e:Exception){
+                    Log.e("enquiryId",e.printStackTrace().toString())
+                }
+            }
+            return escObj
+        }
+
+        fun getPendingEscalationEnquiry(enquiryId : Long) : RealmResults<Escalations>? {
+            val realm = CXRealmManager.getRealmInstance()
+            var escObj : RealmResults<Escalations> ?= null
+            realm?.executeTransaction {
+                try {
+                    escObj = realm?.where(Escalations::class.java)
+                        .equalTo(Escalations.COLUMN_ENQUIRY_ID,enquiryId)
+                        .and()
+                        .equalTo(Escalations.COLUMN_IS_RESOLVE,0L)
+                        .sort(Escalations.COLUMN_MODIFIED_ON, Sort.DESCENDING)
+                        .findAll()
+                }catch (e:Exception){
+                    Log.e("enquiryId",e.printStackTrace().toString())
+                }
+            }
+            return escObj
+        }
 
     }
 

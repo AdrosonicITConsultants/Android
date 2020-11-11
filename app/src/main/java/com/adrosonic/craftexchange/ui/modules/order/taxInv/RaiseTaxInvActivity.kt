@@ -76,7 +76,7 @@ class RaiseTaxInvActivity : AppCompatActivity(),OrdersViewModel.tiInterface,Orde
         }
 
         mBinding?.txtDownload?.setOnClickListener {
-            val cacheFile = File(applicationContext.cacheDir, ConstantsDirectory.PI_PDF_PATH + "Ti${enquiryId}.pdf")
+            val cacheFile = File(applicationContext.cacheDir, ConstantsDirectory.TI_PDF_PATH + "Ti${enquiryId}.pdf")
             if (cacheFile.exists()){
                 Utility.openTaxInvFile(this,enquiryId)
             }
@@ -152,7 +152,8 @@ class RaiseTaxInvActivity : AppCompatActivity(),OrdersViewModel.tiInterface,Orde
             })
         } catch (e: Exception) {
             Log.e("Enquiry Details", "Exception onFailure " + e.message)
-        }    }
+        }
+    }
 
     override fun onTiHTMLSuccess(data: String) {
         try {

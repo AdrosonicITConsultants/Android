@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.adrosonic.craftexchange.database.entities.realmEntities.ChatUser
+import com.adrosonic.craftexchange.database.entities.realmEntities.Escalations
 import com.adrosonic.craftexchange.database.entities.realmEntities.ProductCatalogue
 import com.adrosonic.craftexchange.database.predicates.ChatUserPredicates
 import com.adrosonic.craftexchange.database.predicates.SearchPredicates
@@ -42,6 +43,8 @@ class ChatListViewModel (application: Application) : AndroidViewModel(applicatio
     var chatListner: ChatListInterface? = null
 
     val initiatedChatList : MutableLiveData<RealmResults<ChatUser>> by lazy { MutableLiveData<RealmResults<ChatUser>>() }
+    val escalationList : MutableLiveData<RealmResults<Escalations>> by lazy { MutableLiveData<RealmResults<Escalations>>() }
+
 
     var chatListener : ChatListInterface?= null
     var sendChatListener : SendChatInterface?= null
@@ -89,6 +92,16 @@ class ChatListViewModel (application: Application) : AndroidViewModel(applicatio
     fun loadInitiatedChatList(isInitiated:Long,searchString:String): RealmResults<ChatUser>?{
         var initiatedChatList = ChatUserPredicates.getInitiatedChatList(isInitiated,searchString)
         return initiatedChatList
+    }
+
+    fun getEscalationList(enquiryId : Long): MutableLiveData<RealmResults<Escalations>> {
+        escalationList.value= loadEscalationList(enquiryId)
+        return escalationList
+    }
+
+    fun loadEscalationList(enquiryId : Long): RealmResults<Escalations>?{
+        var list = ChatUserPredicates.getEscalationEnquiry(enquiryId)
+        return list
     }
 
     fun getInitiatedChatListMutableData(isInitiated:Long,searchString:String): MutableLiveData<RealmResults<ChatUser>> {
@@ -389,6 +402,7 @@ class ChatListViewModel (application: Application) : AndroidViewModel(applicatio
                     response: Response<EscalationSummResponse>
                 ) {
                     if(response.body()?.valid == true){
+                        ChatUserPredicates?.insertEscalation(response?.body()!!)
                         escalationListListener?.onGetEscalationListSuccess()
                     }else
                     {
@@ -413,7 +427,7 @@ class ChatListViewModel (application: Application) : AndroidViewModel(applicatio
                     response: Response<ResponseBody>
                 ) {
                     if(response.isSuccessful){
-                        actionEscalationListener?.onESCActionFailure()
+                        actionEscalationListener?.onESCActionSuccess()
                     }else
                     {
                         actionEscalationListener?.onESCActionFailure()
@@ -437,7 +451,7 @@ class ChatListViewModel (application: Application) : AndroidViewModel(applicatio
                     response: Response<ResponseBody>
                 ) {
                     if(response.isSuccessful){
-                        actionEscalationListener?.onESCActionFailure()
+                        actionEscalationListener?.onESCActionSuccess()
                     }else
                     {
                         actionEscalationListener?.onESCActionFailure()

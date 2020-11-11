@@ -476,5 +476,13 @@
     <string name="note_confirm_escalation">The time limit for this escalation to be resolved is 48hrs after you escalate. Else it will be highlighted to the Tata Trusts Management Team.</string>
     <string name="raise_escalation">Raise escalation</string>
     <string name="sign_in_google">Sign in with Google</string>
+    <string name="mark_as_resolved">Mark as resolved</string>
+    <string name="resolved">Resolved</string>
+    <string name="awaiting_response">Awaiting Response</string>
+    <string name="esc_desc">Describe your issue..</string>
+    <string name="auto_escalated">Auto Escalated</string>
+    <string name="select_one_issue">Select any 1 issue</string>
+    <string name="esc_updated_shortly">Escalation Status will be updated shortly!</string>
+    <string name="error_raise_escalation">Error while raising Escalation</string>
 
 </resources>
