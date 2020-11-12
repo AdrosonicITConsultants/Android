@@ -191,6 +191,9 @@ class ArtisanLoginUsernameFragment : Fragment() {
             mGoogleSignInClient = activity?.let { GoogleSignIn.getClient(it, gso) }!!
             signIn()
         }
+        mBinding?.changeLanguageText?.setOnClickListener {
+            showLanguageSelectionDialog()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -233,9 +236,7 @@ class ArtisanLoginUsernameFragment : Fragment() {
 
             val googleIdToken = account?.idToken ?: ""
             Log.i("Google ID Token", googleIdToken)
-        mBinding?.changeLanguageText?.setOnClickListener {
-            showLanguageSelectionDialog()
-        }
+
 //        mBinding?.loginButton?.setOnClickListener {
 //            login_button.setReadPermissions(listOf(EMAIL))
 //            callbackManager = CallbackManager.Factory.create()
