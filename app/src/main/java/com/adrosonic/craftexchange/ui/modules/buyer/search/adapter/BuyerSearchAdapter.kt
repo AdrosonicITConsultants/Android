@@ -84,7 +84,7 @@ class BuyerSearchAdapter(private val mContext : Context,
     }
 
     override fun onBindViewHolder(holder: BuyerSearchAdapter.MyViewHolder, position: Int) {
-        val pos=position
+        val pos = position
         var product = productList?.get(position)
         holder.productTitle.text = product?.tag
         var status : String ?= ""
@@ -125,21 +125,19 @@ class BuyerSearchAdapter(private val mContext : Context,
 
         var isWishlisted = product?.id?.let { it1 -> WishlistPredicates.isProductWishlisted(it1) }
 
-        holder?.wishlistButton?.isLiked = isWishlisted == true
+        if(isWishlisted == true){
+            holder?.wishlistButton?.isLiked = true
+        }else{
+            holder?.wishlistButton?.isLiked = false
+        }
+        
         holder?.wishlistButton?.setOnLikeListener(object: OnLikeListener {
             override fun liked(likeButton: LikeButton) {
-                WishlistPredicates.updateProductWishlisting(product?.id,1L,1L)
-                if(Utility.checkIfInternetConnected(mContext)){
-                    val coordinator = SyncCoordinator(mContext)
-                    coordinator.performLocallyAvailableActions()
-                }
+                product?.id?.let { wishlistener?.onSelected(it,1L) }
+
             }
             override fun unLiked(likeButton: LikeButton) {
-                WishlistPredicates.updateProductWishlisting(product?.id,0L,1L)
-                if(Utility.checkIfInternetConnected(mContext)){
-                    val coordinator = SyncCoordinator(mContext)
-                    coordinator.performLocallyAvailableActions()
-                }
+                product?.id?.let { wishlistener?.onSelected(it,0L) }
             }
         })
 

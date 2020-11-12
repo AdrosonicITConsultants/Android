@@ -1,10 +1,15 @@
 package com.adrosonic.craftexchange.repository.data.response.search
 
 data class SearchProductResponse (
-    val data: List<SearchProductData>,
+    val data: SearchProductListData,
     val valid: Boolean,
     val errorMessage: String,
     val errorCode: Long
+)
+
+data class SearchProductListData (
+    val searchResponse: List<SearchProductData>,
+    val totalResult: Any? = null
 )
 
 data class SearchProductData (

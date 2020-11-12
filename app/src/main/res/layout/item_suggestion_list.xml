@@ -8,7 +8,6 @@
     android:paddingStart="8dp"
     android:paddingEnd="8dp"
     android:paddingBottom="@dimen/margin_regular"
-    android:paddingTop="8dp"
     android:background="@drawable/custom_ripple"
     android:textSize="@dimen/product_description_text"
     android:fontFamily="@font/lato_regular">

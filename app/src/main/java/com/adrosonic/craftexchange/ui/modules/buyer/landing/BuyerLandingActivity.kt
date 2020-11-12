@@ -127,13 +127,11 @@ class BuyerLandingActivity : LocaleBaseActivity(),
         toggle.syncState()
 
         var firstname = Prefs.getString(ConstantsDirectory.FIRST_NAME,"Craft")
-//        var lastname = Prefs.getString(ConstantsDirectory.LAST_NAME,"User")
-//
-//        var username = "$firstname $lastname""
 
         mBinding?.navView?.setNavigationItemSelectedListener(this)
-//        mBinding?.navView?.menu?.getItem(0)?.isChecked = false
         nav_view.getHeaderView(0).text_user.text = firstname
+
+
         mBinding?.txtVerTag?.text=ConstantsDirectory.VERSION
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
@@ -195,11 +193,7 @@ class BuyerLandingActivity : LocaleBaseActivity(),
             }
         }
         NotifcationFragment.badgeCountListener=this
-//        val fab: FloatingActionButton = findViewById(R.id.fab)
-//        fab.setOnClickListener { view ->
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                    .setAction("Action", null).show()
-//        }
+
 
     }
 

@@ -70,7 +70,7 @@ class BuyerSuggestionFragment : Fragment(),
             override fun onQueryTextSubmit(query:String):Boolean {
                 if(Utility.checkIfInternetConnected(requireContext())){
                     activity?.supportFragmentManager?.beginTransaction()
-                        ?.replace(R.id.ss_container, BuyerSearchResultFragment.newInstance(query,5L)) //for GLOBAL(5) Search
+                        ?.replace(R.id.ss_container, BuyerSearchResultFragment.newInstance(query,5L,-1L)) //for GLOBAL(5) Search
                         ?.addToBackStack(null)
                         ?.commit()
                 }else{
@@ -113,7 +113,8 @@ class BuyerSuggestionFragment : Fragment(),
 
     companion object {
         @JvmStatic
-        fun newInstance(param1: Long) = BuyerSuggestionFragment().apply {
+        fun newInstance(param1: Long) = BuyerSuggestionFragment()
+            .apply {
             arguments = Bundle().apply {
                 putLong(ARG_PARAM1, param1)
             }

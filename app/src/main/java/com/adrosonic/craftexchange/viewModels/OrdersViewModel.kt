@@ -647,7 +647,7 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
                     val body=response.body()
                     if(body!=null) {
                         body?.let {
-                            Utility.writeResponseBodyToDisk(
+                            Utility.writeTIResponseBodyToDisk(
                                 it,
                                 enquiryId.toString(),
                                 "",
