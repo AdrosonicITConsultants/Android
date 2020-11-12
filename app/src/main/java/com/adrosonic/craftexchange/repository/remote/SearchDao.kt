@@ -16,8 +16,8 @@ interface SearchDao {
 
     @Headers("Accept: application/json")
     @GET("search/getSuggestions")
-    fun getSuggestions(@Header("Authorization") token:String,
-                              @Query("str") str : String) : Call<SuggestionResponse>
+    fun getBuyerSuggestions(@Header("Authorization") token:String,
+                            @Query("str") str : String) : Call<SuggestionResponse>
 
 
     @Headers("Accept: application/json")
@@ -29,4 +29,9 @@ interface SearchDao {
     @POST("search/searchProducts")
     fun searchProducts(@Header("Authorization") token:String,
                         @Body searchProduct : SearchProduct) : Call<SearchProductResponse>
+
+    @Headers("Accept: application/json")
+    @POST("search/searchProductCount")
+    fun searchProductCount(@Header("Authorization") token:String,
+                       @Body searchProduct : SearchProduct) : Call<SearchProductResponse>
 }

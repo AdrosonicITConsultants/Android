@@ -14,6 +14,6 @@ fun InnerEnquiryStages.getId() : Long {
         InnerEnquiryStages.YARN_DYE -> 2L
         InnerEnquiryStages.PRE_LOOM_PROCESS -> 3L
         InnerEnquiryStages.WEAVING -> 4L
-    InnerEnquiryStages.POST_LOOM_PROCESS -> 5L
+        InnerEnquiryStages.POST_LOOM_PROCESS -> 5L
     }
 }

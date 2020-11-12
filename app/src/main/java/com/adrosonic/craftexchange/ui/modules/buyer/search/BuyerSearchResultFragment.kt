@@ -1,7 +1,6 @@
 package com.adrosonic.craftexchange.ui.modules.buyer.search
 
 import android.app.Dialog
-import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -27,7 +26,6 @@ import com.adrosonic.craftexchange.ui.modules.search.FilterCollectionAdapter
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
 import com.adrosonic.craftexchange.viewModels.SearchViewModel
-import kotlinx.android.synthetic.main.dialog_gen_enquiry_update_or_new.*
 
 
 private const val ARG_PARAM1 = "param1"
@@ -56,6 +54,7 @@ class BuyerSearchResultFragment : Fragment(),
     var filterList = ArrayList<Pair<String,Long>>()
     var filterSelected : Pair<String,Long> ?= null
     var filterTypeSelected : Long ? = 0
+    var madeWithAntharan : Long ?= 0
 
     private var searchFilter : String ?= ""
     private var searchFilterId : Long ?= 0
@@ -189,9 +188,7 @@ class BuyerSearchResultFragment : Fragment(),
                     pageNo = pageNo?.plus(1)
                     pageNo?.let { searchFilterId?.let { it1 ->
                         searchFilter?.let { it2 ->
-                            mViewModel?.getProductsForBuyer(
-                                it2,
-                                it1, it)
+                            madeWithAntharan?.let { it3 -> mViewModel?.getSearchProductsForBuyer(it2, it1, it, it3) }
                         }
                     } }
                 }
@@ -200,7 +197,9 @@ class BuyerSearchResultFragment : Fragment(),
     }
 
     fun getSearchResults(query : String, resultPageNo: Long, suggId : Long){
-        mViewModel?.getProductsForBuyer(query,suggId,resultPageNo)
+        madeWithAntharan?.let {
+            mViewModel?.getSearchProductsForBuyer(query,suggId,resultPageNo, it)
+        }
     }
 
     private fun setFilterRecycler(mFilterList : ArrayList<Pair<String,Long>>){

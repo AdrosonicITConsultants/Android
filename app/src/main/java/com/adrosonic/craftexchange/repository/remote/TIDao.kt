@@ -27,7 +27,6 @@ interface TIDao {
                             @Query("enquiryId") enquiryId : Int,
                             @Query("isOld") isOld : String) : Call<ResponseBody>
 
-
     @Headers("Accept: text/html")
     @GET("/enquiry/getTaxInvoicePreviewHTML")
     fun getPreviewTaxInvHTML(@Header("Authorization") token:String,

@@ -1,7 +1,8 @@
 package com.adrosonic.craftexchange.repository.data.request.search
 
 data class SearchProduct (
-    val pageNo: Long,
-    val searchString: String,
-    val searchType: Long
-    )
+    var pageNo: Long,
+    var searchString: String,
+    var searchType: Long,
+    var madeWithAntaran : Long
+)
