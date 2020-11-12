@@ -101,6 +101,8 @@ const val PAGE_CMS_DATA = "page_cms_data"
 const val QC_STAGE_DATA ="qc_stage_data"
 const val QC_QUESTION_DATA ="qc_question_data"
 
+const val ESCALATION_DATA ="escalation_data"
+
 class UserConfig {
 
     private object Holder { val INSTANCE = UserConfig() }
@@ -603,6 +605,13 @@ class UserConfig {
         get() = Prefs.getString(QC_QUESTION_DATA,"")
         set(value) {
             Prefs.putString(QC_QUESTION_DATA, value)
+            field = value
+        }
+
+    var escalationData : String? = ""
+        get() = Prefs.getString(ESCALATION_DATA,"")
+        set(value) {
+            Prefs.putString(ESCALATION_DATA, value)
             field = value
         }
 

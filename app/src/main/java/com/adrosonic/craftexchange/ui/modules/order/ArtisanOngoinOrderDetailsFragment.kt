@@ -30,6 +30,7 @@ import com.adrosonic.craftexchange.database.predicates.WishlistPredicates
 import com.adrosonic.craftexchange.databinding.FragmentArtisanOngoingOrderDetailsBinding
 import com.adrosonic.craftexchange.enums.*
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
+import com.adrosonic.craftexchange.repository.data.request.taxInv.SendTiRequest
 import com.adrosonic.craftexchange.repository.data.response.moq.Datum
 import com.adrosonic.craftexchange.syncManager.SyncCoordinator
 import com.adrosonic.craftexchange.ui.modules.artisan.deliveryReceipt.uploadDeliveryReceiptIntent
@@ -285,7 +286,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
 
         }
         mBinding?.taxInvoiceLayer?.setOnClickListener {
-            enqID?.let {  startActivity(requireContext().raiseTaxInvIntent(it,true)) }
+            enqID?.let {  startActivity(requireContext().raiseTaxInvIntent(it,true, SendTiRequest())) }
         }
 
         //mark order dispatch button

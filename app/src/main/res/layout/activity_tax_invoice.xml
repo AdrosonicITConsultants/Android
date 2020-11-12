@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -12,9 +11,9 @@
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/tax_invoice_screen"
-            android:fillViewport="true"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_width="match_parent">
+            android:fillViewport="true">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -279,9 +278,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
                             android:layout_marginTop="4dp"
-                            android:visibility="gone"
                             android:background="@drawable/bd_underline"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:visibility="gone">
 
                             <TextView
                                 android:layout_width="0dp"
@@ -308,9 +307,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
                             android:layout_marginTop="4dp"
-                            android:visibility="gone"
                             android:background="@drawable/bd_underline"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:visibility="gone">
 
                             <TextView
                                 android:layout_width="0dp"
@@ -329,7 +328,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical|end"
                                 android:layout_weight="3"
-                                android:inputType="number"/>
+                                android:inputType="number" />
                         </LinearLayout>
 
 
@@ -393,7 +392,8 @@
                                     android:layout_gravity="center_vertical|end"
                                     android:layout_weight="1"
                                     android:inputType="number"
-                                    android:maxLength="2" />
+                                    android:maxLength="2"
+                                    android:text="9" />
 
                                 <TextView
                                     android:layout_width="0dp"
@@ -429,7 +429,8 @@
                                     android:layout_gravity="center_vertical|end"
                                     android:layout_weight="1"
                                     android:inputType="number"
-                                    android:maxLength="2"/>
+                                    android:maxLength="2"
+                                    android:text="9" />
 
                                 <TextView
                                     android:layout_width="0dp"
@@ -466,7 +467,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical|end"
                                 android:layout_weight="3"
-                                android:inputType="number"/>
+                                android:inputType="number" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -474,9 +475,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
                             android:layout_marginTop="4dp"
-                            android:visibility="gone"
                             android:background="@drawable/bd_underline"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:visibility="gone">
 
                             <TextView
                                 android:layout_width="0dp"
@@ -495,7 +496,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical|end"
                                 android:layout_weight="3"
-                                android:inputType="number"/>
+                                android:inputType="number" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -559,6 +560,7 @@
                             android:paddingLeft="4dp"
                             android:paddingRight="4dp"
                             android:text="Click to generate Tax Invoice preview"
+                            android:textAllCaps="false"
                             android:textColor="@color/white_text" />
                     </LinearLayout>
 

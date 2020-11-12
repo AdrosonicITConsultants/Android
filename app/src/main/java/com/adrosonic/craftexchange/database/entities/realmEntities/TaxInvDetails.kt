@@ -30,7 +30,7 @@ open class TaxInvDetails : RealmObject() {
         const val COLUMN_TABLE = "TaxInvDetails"
         const val COLUMN__ID = "_id"
         const val COLUMN_TI_ID = "taxInvID"
-        const val COLUMN_ENQUIRY_ID = "enquiryId"
+        const val COLUMN_ENQUIRY_ID = "enquiryID"
         const val COLUMN_MARK_TI_FOR_SENDING = "actionMarkTiForSend"
     }
 }

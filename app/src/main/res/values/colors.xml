@@ -32,6 +32,10 @@
     <color name="view_invoice">#ef8181</color>
     <color name="popup_txt_color">#D6709F</color>
     <color name="chat_right_bubble_color">#E6F6FF</color>
+    <color name="chat_esc_back">#C52527</color>
+    <color name="mark_resolve">#369BEB</color>
+    <color name="resolved">#2fc183</color>
+
 
     <color name="white_text">#FFF</color>
     <color name="black_text">#000</color>

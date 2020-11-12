@@ -1,14 +1,17 @@
 package com.adrosonic.craftexchange.ui.modules.order.taxInv
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.icu.text.MessageFormat.format
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Spannable
 import android.text.SpannableString
+import android.text.format.DateFormat
 import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.View
@@ -20,19 +23,26 @@ import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
 import com.adrosonic.craftexchange.database.entities.realmEntities.PiDetails
-import com.adrosonic.craftexchange.database.predicates.TaxInvPredicates
 import com.adrosonic.craftexchange.databinding.ActivityTaxInvoiceBinding
 import com.adrosonic.craftexchange.enums.AvailableStatus
 import com.adrosonic.craftexchange.enums.getId
+import com.adrosonic.craftexchange.repository.data.request.taxInv.DateeFormat
+import com.adrosonic.craftexchange.repository.data.request.taxInv.SendTiPreviewRequest
 import com.adrosonic.craftexchange.repository.data.request.taxInv.SendTiRequest
 import com.adrosonic.craftexchange.repository.data.response.enquiry.DetailsData
 import com.adrosonic.craftexchange.ui.modules.chat.chatLogDetailsIntent
 import com.adrosonic.craftexchange.ui.modules.pdfViewer.PdfViewerActivity
+import com.adrosonic.craftexchange.ui.modules.pdfViewer.pdfViewerIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
 import com.adrosonic.craftexchange.viewModels.OrdersViewModel
+import com.google.gson.internal.bind.util.ISO8601Utils.format
+import java.lang.String.format
+import java.text.MessageFormat.format
+import java.util.*
+import kotlin.collections.ArrayList
 
 fun Context.taxInvoiceIntent(enquiryId:Long): Intent {
     val intent = Intent(this, TaxInvoiceActivity::class.java)
@@ -61,7 +71,23 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
     private var orderDetails : Orders?= null
     private var piDetails : PiDetails?= null
 
+
+    var rrIsActive: Long?= 0
+    var rrModifiedon: DateeFormat ?= null
+    var rrCreatedon: DateeFormat ?= null
+    var rrDate: DateeFormat ?= null
+
+    var rrPiAmt: Long?= 0
+    var rrInvoiceNo: String?= ""
+    var rrId: Long?= 0
+    var rrHSN: Long?= 0
+    var rrArtisanId: Long?= 0
+
+    var loadingDialog : Dialog?= null
+
+    var taxInvPrev = SendTiPreviewRequest()
     var taxInv = SendTiRequest()
+    var dteFrmt = DateeFormat()
     val mEnqVM : EnquiryViewModel by viewModels()
     val mOrdVM : OrdersViewModel by viewModels()
 
@@ -77,23 +103,22 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
 
         if (intent.extras != null) {
             enquiryId = intent.getLongExtra("enquiryId",0)
-            orderDetails = mOrdVM?.loadSingleOrderDetails(enquiryId,0)
-            setDetails()
-
-            if(Utility.checkIfInternetConnected(applicationContext)){
-                mEnqVM?.fetchPayEnqInvDetails(enquiryId)
-                viewFormLoader()
-            }else{
-                Utility.displayMessage(getString(R.string.no_internet_connection),this)
-//                piDetails = PiPredicates.getSinglePi(enquiryId)
-//                if(piDetails!=null){
-//                    setPiDetails()
-//                }
-            }
         }
+
+        orderDetails = mOrdVM?.loadSingleOrderDetails(enquiryId,0)
+        setDetails()
+
+        if(Utility.checkIfInternetConnected(applicationContext)){
+            mEnqVM?.fetchPayEnqInvDetails(enquiryId)
+            viewFormLoader()
+        }else{
+            Utility.displayMessage(getString(R.string.no_internet_connection),this)
+        }
+
         mBinding?.btnBack?.setOnClickListener {
             finish()
         }
+        loadingDialog = Utility?.loadingDialog(this)
 
         mBinding?.btnSwipeTi?.setOnClickListener {
             val qty = mBinding?.orderQuantity?.text.toString()
@@ -120,23 +145,36 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
                 else if (currency!!.isEmpty()) Utility.displayMessage(getString(R.string.plz_add_currency), applicationContext)
                 else if (!mBinding?.chbTnc?.isChecked!!) Utility.displayMessage(getString(R.string.plz_accept_tnc), applicationContext)
                 else {
-                    taxInv.cgst=cgst
-                    taxInv.ppu=ppu.toLong()
-                    taxInv.quantity=qty.toLong()
-                    taxInv.sgst=sgst
-                    taxInv.enquiryId = enquiryId?.toString()
-                    taxInv.advancePaidAmt = advPay
-                    taxInv.deliveryCharges = delCharge
-                    taxInv.finalTotalAmt = finAmt?.toLong()
+                    //Tax Invoice Preview
+                    taxInvPrev?.cgst=cgst?.toLong()
+                    taxInvPrev?.ppu=ppu.toLong()
+                    taxInvPrev?.quantity=qty.toLong()
+                    taxInvPrev?.sgst=sgst.toLong()
+                    taxInvPrev?.enquiryId = enquiryId
+                    taxInvPrev?.advancePaidAmt = advPay.toLong()
+                    taxInvPrev?.deliveryCharges = delCharge.toLong()
+                    taxInvPrev?.finalTotalAmt = finAmt.toLong()
+
+                    //Generate Tax Invoice
+                    taxInv?.cgst=cgst
+                    taxInv?.ppu=ppu.toLong()
+                    taxInv?.quantity=qty.toLong()
+                    taxInv?.sgst=sgst
+                    taxInv?.enquiryId = enquiryId?.toString()
+                    taxInv?.advancePaidAmt = advPay
+                    taxInv?.deliveryCharges = delCharge
+                    taxInv?.finalTotalAmt = finAmt.toLong()
 
                     if (Utility.checkIfInternetConnected(applicationContext)) {
                         mBinding?.btnSwipeTi?.text = getString(R.string.tax_invoic_gen)
                         mBinding?.btnSwipeTi?.isEnabled=false
-                        viewLoader()
-                        mOrdVM?.generateTaxInvoice(taxInv)
+//                        viewLoader()
+                        loadingDialog?.show()
+                        taxInvPrev?.let { it1 -> mOrdVM?.generateTaxInvoicePreview(it1) }
                     } else {
-                        TaxInvPredicates.insertTiForOffline(enquiryId,1,taxInv)
-                        startActivityForResult(applicationContext.raiseTaxInvIntent(enquiryId,true),ConstantsDirectory.RESULT_TI)
+                        Utility.displayMessage(getString(R.string.no_internet_connection),this)
+//                    TaxInvPredicates.insertTiForOffline(enquiryId,1,taxInv) todo
+//                        startActivityForResult(applicationContext.raiseTaxInvIntent(enquiryId,true,taxInv),ConstantsDirectory.RESULT_TI)
                     }
                 }
             }else{
@@ -150,25 +188,35 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
                 else if (currency!!.isEmpty()) Utility.displayMessage( getString(R.string.plz_add_currency), applicationContext)
                 else if (!mBinding?.chbTnc?.isChecked!!) Utility.displayMessage( getString(R.string.plz_accept_tnc), applicationContext)
                 else {
-                    taxInv.cgst=cgst
-                    taxInv.ppu=ppu.toLong()
-                    taxInv.quantity=qty.toLong()
-                    taxInv.sgst=sgst
-                    taxInv.enquiryId = enquiryId?.toString()
-//                    taxInv.advancePaidAmt = advPay
-                    taxInv.deliveryCharges = delCharge
-                    taxInv.finalTotalAmt = finAmt?.toLong()
+
+                    //tax invoice preview
+                    taxInvPrev?.cgst=cgst.toLong()
+                    taxInvPrev?.ppu=ppu.toLong()
+                    taxInvPrev?.quantity=qty.toLong()
+                    taxInvPrev?.sgst=sgst.toLong()
+                    taxInvPrev?.enquiryId = enquiryId
+                    taxInvPrev?.deliveryCharges = delCharge.toLong()
+                    taxInvPrev?.finalTotalAmt = finAmt.toLong()
+
+                    //Generate Tax Invoice
+                    taxInv?.cgst=cgst
+                    taxInv?.ppu=ppu.toLong()
+                    taxInv?.quantity=qty.toLong()
+                    taxInv?.sgst=sgst
+                    taxInv?.enquiryId = enquiryId?.toString()
+                    taxInv?.deliveryCharges = delCharge
+                    taxInv?.finalTotalAmt = finAmt.toLong()
 
                     if (Utility.checkIfInternetConnected(applicationContext)) {
                         mBinding?.btnSwipeTi?.text = getString(R.string.tax_invoic_gen)
                         mBinding?.btnSwipeTi?.isEnabled=false
-                        viewLoader()
-
-                        mOrdVM?.generateTaxInvoice(taxInv)
+//                        viewLoader()
+                        loadingDialog?.show()
+                        taxInvPrev?.let { it1 -> mOrdVM?.generateTaxInvoicePreview(it1) }
                     } else {
-//                    todo add dat to pi table
-                        TaxInvPredicates.insertTiForOffline(enquiryId,1,taxInv)
-                        startActivityForResult(applicationContext.raiseTaxInvIntent(enquiryId,true),ConstantsDirectory.RESULT_TI)
+                        Utility.displayMessage(getString(R.string.no_internet_connection),this)
+//                        TaxInvPredicates.insertTiForOffline(enquiryId,1,taxInv) todo in next screen
+//                        startActivityForResult(applicationContext.raiseTaxInvIntent(enquiryId,true),ConstantsDirectory.RESULT_TI)
                     }
                 }
             }
@@ -178,6 +226,7 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
             val intent = Intent(this, PdfViewerActivity::class.java)
             intent.putExtra("ViewType", "Terms_conditions")
             startActivity(intent)
+//            startActivity(this?.pdfViewerIntent()?.putExtra("ViewType", "Terms_conditions"))
         }
         mBinding?.btnChat?.setOnClickListener {
             enquiryId?.let {  startActivity(Intent(this?.chatLogDetailsIntent(it)))}
@@ -197,6 +246,7 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
         mBinding?.middlePart?.visibility= View.GONE
         mBinding?.swipeTaxInvoice?.isRefreshing = true
     }
+
     fun hideFormLoader(){
         mBinding?.middlePart?.visibility= View.VISIBLE
         mBinding?.swipeTaxInvoice?.isRefreshing = false
@@ -362,14 +412,15 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
         mBinding?.etSgst?.setText(sgst.toString(), TextView.BufferType.EDITABLE)
         mBinding?.etFinalAmt?.setText(finAmt.toString(), TextView.BufferType.EDITABLE)
 
-//        mBinding?.orderQuantity?.setText(piDetails?.quantity?.toString() ?: "", TextView.BufferType.EDITABLE)
-//
-//        mBinding?.etPrevTotalAmt?.setText(prevTotalAmt , TextView.BufferType.EDITABLE)
-//        mBinding?.etFinalAmt?.setText(totalAmt, TextView.BufferType.EDITABLE)
-//
-//        mBinding?.etRate?.setText(piDetails?.ppu?.toString() ?: "", TextView.BufferType.EDITABLE)
-//        mBinding?.etCgst?.setText(piDetails?.cgst?.toString() ?: "", TextView.BufferType.EDITABLE)
-//        mBinding?.etSgst?.setText(piDetails?.sgst?.toString() ?: "", TextView.BufferType.EDITABLE)
+        rrIsActive = details?.invoice?.isactive
+//        rrModifiedon = DateeFormat(date = getDate(details?.invoice?.modifiedon.toLong())?.toLong())
+//        rrCreatedon = DateeFormat(date = getDate(details?.invoice?.createdon.toLong())?.toLong())
+        rrPiAmt = details?.pi?.totalAmount
+        rrInvoiceNo = details?.invoice?.invoiceNo
+        rrId = details?.invoice?.id
+        rrHSN = details?.pi?.hsn
+        rrArtisanId = details?.pi?.artisanId
+
     }
 
 
@@ -384,38 +435,14 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
         }
     }
 
-//    override fun onPiFailure() {
-//        try {
-//            Handler(Looper.getMainLooper()).post(Runnable {
-//                hideLoader()
-//                piDetails = PiPredicates.getSinglePi(enquiryId)
-//                if(piDetails!=null){
-//                    setPiDetails()
-//                }
-//                Utility.displayMessage("Sorry,Unable to fetch PI details",applicationContext)
-//            })
-//        } catch (e: Exception) {
-//            Log.e("Enquiry Details", "Exception onFailure " + e.message)
-//        }
-//    }
-//
-//    override fun getPiSuccess(id: Long) {
-//        try {
-//            Handler(Looper.getMainLooper()).post(Runnable {
-//                hideLoader()
-//                setPiDetails()
-//            })
-//        } catch (e: Exception) {
-//            Log.e("Enquiry Details", "Exception onFailure " + e.message)
-//        }
-//    }
 
     override fun onGenTaxInvSuccess() {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 hideLoader()
-                Utility.displayMessage(getString(R.string.tax_invoic_sent),applicationContext)
-                startActivityForResult(applicationContext.raiseTaxInvIntent(enquiryId,true),ConstantsDirectory.RESULT_TI)
+                loadingDialog?.cancel()
+                Utility.displayMessage("Tax Invoice Preview Generated!",applicationContext)
+                startActivityForResult(applicationContext.raiseTaxInvIntent(enquiryId,false,taxInv),ConstantsDirectory.RESULT_TI)
             })
         } catch (e: Exception) {
             Log.e("Enquiry Details", "Exception onFailure " + e.message)
@@ -426,6 +453,7 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 hideLoader()
+                loadingDialog?.cancel()
                 Utility.displayMessage(getString(R.string.err_gen_ti),applicationContext)
             })
         } catch (e: Exception) {

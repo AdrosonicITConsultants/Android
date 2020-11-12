@@ -263,8 +263,7 @@ class FillQcRecyclerAdapter(
                 var rB = RadioButton(context)
                 val params = RadioGroup.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-                )
+                    ViewGroup.LayoutParams.WRAP_CONTENT)
                 params.setMargins(0, 0, 20, 20)
                 rB.layoutParams = params
                 rB.setPadding(5, 5, 20, 5)

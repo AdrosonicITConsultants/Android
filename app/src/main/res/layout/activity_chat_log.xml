@@ -13,8 +13,8 @@
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_gravity="start"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginStart="@dimen/margin_regular"
+            android:layout_marginTop="@dimen/margin_regular"
             android:background="?selectableItemBackgroundBorderless"
             android:src="@drawable/ic_keyboard_backspace_black_24dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -60,8 +60,9 @@
             android:id="@+id/icon_change_request"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_marginEnd="12dp"
+            android:layout_marginEnd="@dimen/margin_regular"
             android:src="@drawable/ic_cr_with_txt"
+            android:background="?selectableItemBackgroundBorderless"
             app:layout_constraintBottom_toBottomOf="@+id/icon_escalation"
             app:layout_constraintEnd_toStartOf="@+id/icon_escalation"
             app:layout_constraintTop_toTopOf="@+id/brand_name"
@@ -74,6 +75,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginEnd="@dimen/margin_regular"
             android:src="@drawable/ic_escalation"
+            android:background="?selectableItemBackgroundBorderless"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -83,6 +85,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/bd_underline"
             android:padding="4dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -223,10 +226,10 @@
             android:id="@+id/swipe_chats"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginBottom="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/details_layer"
-            tools:layout_editor_absoluteX="0dp">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/details_layer">
 
             <com.github.bassaer.chatmessageview.view.ChatView
                 android:id="@+id/chat_view"
@@ -238,6 +241,7 @@
                 app:option_button_enable="true"
                 app:time_label_font_size="10sp"
                 app:username_font_size="12sp">
+
             </com.github.bassaer.chatmessageview.view.ChatView>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

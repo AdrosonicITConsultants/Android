@@ -116,8 +116,7 @@ class RegionProdListFragment : Fragment(),
     private fun setRecyclerList(){
         mBinding?.regionProdRecyclerList?.layoutManager = LinearLayoutManager(requireContext(),
             LinearLayoutManager.VERTICAL, false)
-        clusterProductAdapter = CatalogueProductAdapter(requireContext(),
-            clusterId?.let { mClusVM.getClusterProdListMutableData(it).value })
+        clusterProductAdapter = CatalogueProductAdapter(requireContext(), clusterId?.let { mClusVM.getClusterProdListMutableData(it).value })
         mBinding?.regionProdRecyclerList?.adapter = clusterProductAdapter
         clusterProductAdapter?.enqListener = this
     }

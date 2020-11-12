@@ -2,12 +2,14 @@ package com.adrosonic.craftexchange.ui.modules.artisan.auth.login
 
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -29,6 +31,13 @@ import com.adrosonic.craftexchange.ui.modules.pdfViewer.PdfViewerActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
+import com.facebook.CallbackManager
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 import com.pixplicity.easyprefs.library.Prefs
 import retrofit2.Call
 import retrofit2.Response
@@ -61,7 +70,6 @@ class ArtisanLoginPasswordFragment : Fragment() {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_artisan_login_password, container, false)
         return mBinding?.root
     }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -70,7 +78,6 @@ class ArtisanLoginPasswordFragment : Fragment() {
             override fun onClick(textView: View) {
                 startActivity(Intent(activity, RegisterActivity::class.java))
             }
-
             override fun updateDrawState(ds: TextPaint) {
                 super.updateDrawState(ds)
                 ds.isUnderlineText = false
@@ -84,9 +91,7 @@ class ArtisanLoginPasswordFragment : Fragment() {
 
         mBinding?.textForgotPwd?.setOnClickListener {
             startActivity(Intent(activity, ResetPasswordActivity::class.java))
-//                .putExtra("profile",ConstantsDirectory.BUYER)
         }
-
         mBinding?.buttonNext?.setOnClickListener{
 
             if(Utility.checkIfInternetConnected(requireContext())) {
@@ -180,4 +185,6 @@ class ArtisanLoginPasswordFragment : Fragment() {
             startActivity(intent)
         }
     }
+
+
 }
