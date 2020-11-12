@@ -30,6 +30,7 @@ import com.adrosonic.craftexchange.databinding.ActivityPiBinding
 import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.repository.data.response.moq.Datum
 import com.adrosonic.craftexchange.ui.modules.chat.chatLogDetailsIntent
+import com.adrosonic.craftexchange.ui.modules.pdfViewer.PdfViewerActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
@@ -146,10 +147,12 @@ class RevisePiActivity : LocaleBaseActivity(),
             }
         }
         mBinding?.chbTnc?.setOnClickListener {
-            Utility?.displayMessage("Coming soon",this)
+            //Utility?.displayMessage("Coming soon",this)
         }
         mBinding?.txtTnc?.setOnClickListener {
-            Utility?.displayMessage("Coming soon",this)
+            val intent = Intent(this, PdfViewerActivity::class.java)
+            intent.putExtra("ViewType", "Terms_conditions")
+            startActivity(intent)
         }
         mBinding?.btnChat?.setOnClickListener {
             enquiryId?.let {  startActivity(Intent(this?.chatLogDetailsIntent(it)))}

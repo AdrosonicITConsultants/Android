@@ -1,6 +1,7 @@
 package com.adrosonic.craftexchange.ui.modules.raiseConcern
 
 import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -31,7 +32,9 @@ import com.adrosonic.craftexchange.repository.data.request.qc.QuestionAnswer
 import com.adrosonic.craftexchange.repository.data.response.faultyOrders.FaultRefData
 import com.adrosonic.craftexchange.repository.data.response.faultyOrders.FaultReviewRefResponse
 import com.adrosonic.craftexchange.ui.modules.artisan.qcForm.adapter.FillQcRecyclerAdapter
+import com.adrosonic.craftexchange.ui.modules.chat.chatLogDetailsIntent
 import com.adrosonic.craftexchange.ui.modules.raiseConcern.adapter.FaultReviewRecyclerAdapter
+import com.adrosonic.craftexchange.ui.modules.rating.SendRatingActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.UserConfig
@@ -131,7 +134,7 @@ class RaiseConBuyerFragment : Fragment(),
         }
 
         mBinding?.txtGotoChat?.setOnClickListener {
-            Utility?.displayMessage("Coming Soon",requireContext())
+            enqID?.let {  startActivity(Intent(requireContext()?.chatLogDetailsIntent(it.toLong())))}
         }
 
         mBinding?.btnSubmit?.setOnClickListener {
@@ -160,11 +163,13 @@ class RaiseConBuyerFragment : Fragment(),
         }
 
         mBinding?.btnRateReview?.setOnClickListener {
-            Utility?.displayMessage("Coming Soon",requireContext())
+            val myIntent = Intent(requireContext(), SendRatingActivity::class.java)
+            myIntent.putExtra("enquiryId", enqID)
+            startActivity(myIntent)
         }
 
         mBinding?.btnViewGotoChat?.setOnClickListener {
-            Utility?.displayMessage("Coming Soon",requireContext())
+            enqID?.let {  startActivity(Intent(requireContext()?.chatLogDetailsIntent(it.toLong())))}
         }
     }
 
