@@ -132,7 +132,7 @@ class BuyerSearchResultFragment : Fragment(),
             override fun onQueryTextChange(newText:String):Boolean {
                 if(Utility?.checkIfInternetConnected(requireContext())){
                     activity?.supportFragmentManager?.beginTransaction()
-                    ?.replace(R.id.ss_container, BuyerSuggestionFragment.newInstance())
+                    ?.replace(R.id.ss_container, BuyerSuggestionFragment.newInstance(0))
                     ?.addToBackStack(null)
                     ?.commit()
                 }else{
@@ -145,10 +145,7 @@ class BuyerSearchResultFragment : Fragment(),
         mBinding?.searchBuyerSwipe?.isRefreshing = true
         mBinding?.searchBuyerSwipe?.setOnRefreshListener {
             if(Utility?.checkIfInternetConnected(requireContext())){
-                searchFilterId?.let { searchFilter?.let { it1 -> pageNo?.let { it2 ->
-                    getSearchResults(it1,
-                        it2, it)
-                } } }
+                searchFilterId?.let { searchFilter?.let { it1 -> pageNo?.let { it2 -> getSearchResults(it1, it2, it) } } }
             }else{
                 Utility?.displayMessage(getString(R.string.no_internet_connection),requireContext())
             }
@@ -291,63 +288,6 @@ class BuyerSearchResultFragment : Fragment(),
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("SearchResultList", "Onsuccess Size : "+search.data.size)
                 mBinding?.searchBuyerSwipe?.isRefreshing = false
-                when(isFilterEnabled){
-                    0L -> {
-                        if(searchProdList.isEmpty()){
-                            search.data.forEach { searchProdList.add(it) }
-                            if(searchProdList.isNotEmpty()){
-                                setSearchResults(searchProdList)
-                            }
-                        }else{
-                            search.data.forEach { searchProdList.add(it) }
-                            updateSearchList(searchProdList)
-                        }
-                        Log.e("SearchResultList","Total Size : "+searchProdList.size)
-
-                    }
-                    1L -> {
-                        search.data.forEach { searchProdList.add(it) }
-                        Log.e("SearchResultList","Total Size : "+searchProdList.size)
-                        when(filterTypeSelected){
-                                2L -> {
-                                    var itr = searchProdList.iterator()
-                                    searchFilterList.clear()
-                                    if(itr != null){
-                                        while (itr.hasNext()){
-                                            var prod = itr.next()
-                                            when(prod.madeWithAnthran){
-                                                1L -> {
-                                                    searchFilterList.add(prod)
-                                                }
-                                            }
-                                        }
-                                    }
-                                    updateSearchList(searchFilterList)
-                                    Log.e("SearchResultList", "AntTotal Size : "+searchProdList.size)
-                                    Log.e("SearchResultList", "AntFiltered Size : "+searchFilterList.size)
-                                }
-                                3L -> {
-                                    var itr = searchProdList.iterator()
-                                    searchFilterList.clear()
-                                    if(itr != null){
-                                        while (itr.hasNext()){
-                                            var prod = itr.next()
-                                            when(prod.madeWithAnthran){
-                                                0L -> {
-                                                    searchFilterList.add(prod)
-                                                }
-                                            }
-                                        }
-                                    }
-                                    updateSearchList(searchFilterList)
-                                    Log.e("SearchResultList", "ArtTotal Size : "+searchProdList.size)
-                                    Log.e("SearchResultList", "ArtFiltered Size : "+searchFilterList.size)
-                                }
-                            }
-
-                    }
-                }
-
             }
             )
         } catch (e: Exception) {

@@ -123,4 +123,6 @@ object ConstantsDirectory {
 
 
     const val PI_ID ="piid"
+
+    const val TAX_INV_WEB_STRING = "tax_inv_web_string"
 }

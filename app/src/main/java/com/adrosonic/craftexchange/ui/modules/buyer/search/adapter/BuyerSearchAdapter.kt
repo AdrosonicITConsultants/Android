@@ -185,8 +185,6 @@ class BuyerSearchAdapter(private val mContext : Context,
 //            bundle.putString(ConstantsDirectory.PRODUCT_ID, product?.id?.toString())
 //            intent.putExtras(bundle)
 //            mContext.startActivity(intent)
-
-
         }
 
         holder.productImage.setOnClickListener{

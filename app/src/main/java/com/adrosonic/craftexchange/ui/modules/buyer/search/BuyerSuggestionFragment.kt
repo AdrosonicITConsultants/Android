@@ -36,6 +36,8 @@ class BuyerSuggestionFragment : Fragment(),
     var adapter : SuggestionAdapter?= null
     var sugList = arrayListOf<SuggData>()
 
+    var madeWithAntharan : Long ?= 0L
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +53,9 @@ class BuyerSuggestionFragment : Fragment(),
     ): View? {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_buyer_suggestion, container, false)
+        arguments?.let {
+            madeWithAntharan = it.getLong(ARG_PARAM1)
+        }
         return mBinding?.root
     }
 
@@ -78,7 +83,6 @@ class BuyerSuggestionFragment : Fragment(),
                 if(newText.length >= 3) {
                     mViewModel.getBuyerSearchSuggestions(newText)
                     mBinding?.suggetionBg?.visibility = View.VISIBLE
-
                 }else{
                     adapter?.notifyDataSetChanged()
                     mBinding?.suggetionBg?.visibility = View.GONE
@@ -108,9 +112,12 @@ class BuyerSuggestionFragment : Fragment(),
     }
 
     companion object {
-
         @JvmStatic
-        fun newInstance() = BuyerSuggestionFragment()
+        fun newInstance(param1: Long) = BuyerSuggestionFragment().apply {
+            arguments = Bundle().apply {
+                putLong(ARG_PARAM1, param1)
+            }
+        }
     }
 
     override fun onSuccessSugg(sug: SuggestionResponse) {
@@ -125,7 +132,6 @@ class BuyerSuggestionFragment : Fragment(),
                     setSuggestionListRecycler(requireContext(),sugList)
                     adapter?.notifyDataSetChanged()
                 }
-
             }
             )
         } catch (e: Exception) {
@@ -138,8 +144,7 @@ class BuyerSuggestionFragment : Fragment(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("Suggestions", "OnFailure")
-            }
-            )
+            })
         } catch (e: Exception) {
             Log.e("Suggestions", "Exception onFailure " + e.message)
         }

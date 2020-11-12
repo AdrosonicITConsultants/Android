@@ -18,6 +18,7 @@ import com.adrosonic.craftexchange.repository.data.response.buyer.ownDesign.Dele
 import com.adrosonic.craftexchange.repository.data.response.changeReequest.CrDetailsResponse
 import com.adrosonic.craftexchange.repository.data.response.orders.OrderProgressResponse
 import com.adrosonic.craftexchange.repository.data.response.orders.OrderResponse
+import com.adrosonic.craftexchange.repository.data.response.taxInv.TaxInvPreviewResponse
 import com.adrosonic.craftexchange.repository.data.response.taxInv.TaxInvoiceResponse
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.UserConfig
@@ -604,21 +605,21 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
 
     fun generateTaxInvoicePreview(invoiceRequest : SendTiPreviewRequest){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
-//        var reqString = Gson().toJson(invoiceRequest)
         CraftExchangeRepository
             .getTiService()
             .generateTaxInvoicePreview(token,invoiceRequest)
-            .enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
-                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+            .enqueue(object : Callback, retrofit2.Callback<TaxInvPreviewResponse> {
+                override fun onFailure(call: Call<TaxInvPreviewResponse>, t: Throwable) {
                     t.printStackTrace()
                     taxInvGenListener?.onGenTaxInvFailure()
                 }
                 override fun onResponse(
-                    call: Call<ResponseBody>,
-                    response: Response<ResponseBody>
+                    call: Call<TaxInvPreviewResponse>,
+                    response: Response<TaxInvPreviewResponse>
                 ) {
-                    if(response?.isSuccessful){
+                    if(response?.body()?.valid == true){
                         taxInvGenListener?.onGenTaxInvSuccess()
+                        Prefs.putString(ConstantsDirectory.TAX_INV_WEB_STRING,response?.body()?.data)
                     }else{
                         taxInvGenListener?.onGenTaxInvFailure()
                     }

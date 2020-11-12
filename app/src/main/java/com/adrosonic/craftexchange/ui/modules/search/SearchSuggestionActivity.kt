@@ -41,14 +41,11 @@ class SearchSuggestionActivity : LocaleBaseActivity() {
                 if (savedInstanceState == null) {
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.ss_container,
-                            BuyerSuggestionFragment.newInstance(),"BuyerSuggestionList")
+                            BuyerSuggestionFragment.newInstance(0),"BuyerSuggestionList")
                         .commit()
                 }
             }
         }
-
-
-
     }
 
 

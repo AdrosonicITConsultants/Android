@@ -150,6 +150,7 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
                     taxInvPrev?.ppu=ppu.toLong()
                     taxInvPrev?.quantity=qty.toLong()
                     taxInvPrev?.sgst=sgst.toLong()
+                    taxInvPrev?.hsn = rrHSN
                     taxInvPrev?.enquiryId = enquiryId
                     taxInvPrev?.advancePaidAmt = advPay.toLong()
                     taxInvPrev?.deliveryCharges = delCharge.toLong()
@@ -194,6 +195,7 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
                     taxInvPrev?.ppu=ppu.toLong()
                     taxInvPrev?.quantity=qty.toLong()
                     taxInvPrev?.sgst=sgst.toLong()
+                    taxInvPrev?.hsn = rrHSN
                     taxInvPrev?.enquiryId = enquiryId
                     taxInvPrev?.deliveryCharges = delCharge.toLong()
                     taxInvPrev?.finalTotalAmt = finAmt.toLong()

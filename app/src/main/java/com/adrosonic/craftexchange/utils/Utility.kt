@@ -597,6 +597,8 @@ class Utility {
             val moqDeliveryTime = gson.fromJson(moqDeliveryJson, MoqDeliveryTimesResponse::class.java)
             return moqDeliveryTime.data
         }
+
+        //TODO write same function for tax inv
         fun writeResponseBodyToDisk(
             body: ResponseBody,
             enquiryId: String,
