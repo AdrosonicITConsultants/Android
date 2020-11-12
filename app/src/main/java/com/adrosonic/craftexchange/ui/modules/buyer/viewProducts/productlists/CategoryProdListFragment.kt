@@ -29,10 +29,9 @@ import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.CategoryViewModel
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
+import com.pixplicity.easyprefs.library.Prefs
 import io.realm.RealmResults
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
@@ -51,6 +50,7 @@ class CategoryProdListFragment : Fragment(),
     var categoryId : Long ?= 0
 
     private var catProdAdapter: CatalogueProductAdapter?= null
+    var madeWithAntharan : Long?= 0L
 
     private var mSpinner = mutableListOf<String>()
     private var mClusterList = mutableListOf<Pair<Long?,String?>>()
@@ -96,10 +96,11 @@ class CategoryProdListFragment : Fragment(),
         mEnqVM.listener = this
         mCatVM.catListener = this
 
-
         setRecyclerList()
         setFilterList()
         mBinding?.swipeCategoryProducts?.isEnabled = false
+
+        madeWithAntharan = Prefs.getLong(ConstantsDirectory.IS_MADE_WITH_ANTHARAN,0)
 
         dialog = Utility.enquiryGenProgressDialog(requireContext())
         mBinding?.productType?.text = productType
@@ -110,22 +111,24 @@ class CategoryProdListFragment : Fragment(),
             categoryId?.let { mCatVM.getProductsByCategory(it) }
         }
         categoryId?.let {
-            mCatVM.getCatProdListMutableData(it)
+            mCatVM.getCatProdListMutableData(it, madeWithAntharan!!)
                 .observe(viewLifecycleOwner, Observer<RealmResults<ProductCatalogue>> {
                     mCatProdList = it
                     catProdAdapter?.updateProductList(mCatProdList)
                 })
         }
         mBinding?.swipeCategoryProducts?.isRefreshing = true
-
-
     }
 
     private fun setRecyclerList(){
         mBinding?.categoryProdRecyclerList?.layoutManager = LinearLayoutManager(requireContext(),
             LinearLayoutManager.VERTICAL, false)
         catProdAdapter = CatalogueProductAdapter(requireContext(),
-            categoryId?.let { mCatVM.getCatProdListMutableData(it).value })
+            categoryId?.let { madeWithAntharan?.let { it1 ->
+                mCatVM.getCatProdListMutableData(it,
+                    it1
+                ).value
+            } })
         mBinding?.categoryProdRecyclerList?.adapter = catProdAdapter
         catProdAdapter?.enqListener = this
 
@@ -166,7 +169,7 @@ class CategoryProdListFragment : Fragment(),
                 if(position > 0){
                     filterBy = parent?.getItemAtPosition(position).toString()
                     Log.e("spin","fil : $filterBy")
-                    mFilteredList = ProductPredicates.getFilteredCategoryProducts(categoryId,filterBy)
+                    mFilteredList = ProductPredicates.getFilteredCategoryProducts(categoryId,filterBy,madeWithAntharan)
                     catProdAdapter?.updateProductList(mFilteredList)
 
                     if(mFilteredList?.size == 0){
@@ -252,7 +255,11 @@ class CategoryProdListFragment : Fragment(),
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("catList", "OnFailure")
                 mBinding?.swipeCategoryProducts?.isRefreshing = false
-                categoryId?.let { mCatVM.getCatProdListMutableData(it) }
+                categoryId?.let { madeWithAntharan?.let { it1 ->
+                    mCatVM.getCatProdListMutableData(it,
+                        it1
+                    )
+                } }
                 Utility.displayMessage(
                     getString(R.string.err_fetch_list),
                     requireContext()
@@ -269,7 +276,11 @@ class CategoryProdListFragment : Fragment(),
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("catList", "onSuccess")
                 mBinding?.swipeCategoryProducts?.isRefreshing = false
-                categoryId?.let { mCatVM.getCatProdListMutableData(it) }
+                categoryId?.let { madeWithAntharan?.let { it1 ->
+                    mCatVM.getCatProdListMutableData(it,
+                        it1
+                    )
+                } }
             }
             )
         } catch (e: Exception) {

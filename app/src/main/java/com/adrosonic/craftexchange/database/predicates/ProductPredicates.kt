@@ -900,9 +900,13 @@ class ProductPredicates {
             return realm.where(ClusterList::class.java).findAll()
         }
 
-        fun getBrandProductsFromId(artisanId : Long?): RealmResults<ProductCatalogue>? {
+        fun getBrandProductsFromId(artisanId : Long?,madeWithAnt : Long?): RealmResults<ProductCatalogue>? {
             val realm = CXRealmManager.getRealmInstance()
-            return realm.where(ProductCatalogue::class.java).equalTo("artisanId",artisanId).findAll()
+            return realm.where(ProductCatalogue::class.java)
+                .equalTo("artisanId",artisanId)
+                .and()
+                .equalTo("madeWithAntaran",madeWithAnt)
+                .findAll()
         }
 
         fun getFilteredBrands(clusterId : Long?): RealmResults<BrandList>? {
@@ -912,37 +916,51 @@ class ProductPredicates {
                 .findAll()
         }
 
-        fun getFilteredBrandProducts(artisanId : Long?,category : String?): RealmResults<ProductCatalogue>? {
+        fun getFilteredBrandProducts(artisanId : Long?,category : String?,madeWithAnt : Long?): RealmResults<ProductCatalogue>? {
             val realm = CXRealmManager.getRealmInstance()
             return realm.where(ProductCatalogue::class.java)
+                .equalTo("madeWithAntaran",madeWithAnt).findAll()
+                .where()
                 .equalTo("artisanId",artisanId)
                 .and()
                 .equalTo("productCategoryName",category)
                 .findAll()
         }
 
-        fun getClusterProductsFromId(clusterId : Long?): RealmResults<ProductCatalogue>? {
-            val realm = CXRealmManager.getRealmInstance()
-            return realm.where(ProductCatalogue::class.java).equalTo("clusterId",clusterId).findAll()
-        }
-
-        fun getFilteredClusterProducts(clusterId : Long?,category : String?): RealmResults<ProductCatalogue>? {
+        fun getClusterProductsFromId(clusterId : Long?, madeWithAnt : Long?): RealmResults<ProductCatalogue>? {
             val realm = CXRealmManager.getRealmInstance()
             return realm.where(ProductCatalogue::class.java)
+                .equalTo("clusterId",clusterId)
+                .and()
+                .equalTo("madeWithAntaran",madeWithAnt)
+                .findAll()
+        }
+
+        fun getFilteredClusterProducts(clusterId : Long?,category : String?,madeWithAnt : Long?): RealmResults<ProductCatalogue>? {
+            val realm = CXRealmManager.getRealmInstance()
+            return realm.where(ProductCatalogue::class.java)
+                .equalTo("madeWithAntaran",madeWithAnt).findAll()
+                .where()
                 .equalTo("clusterId",clusterId)
                 .and()
                 .equalTo("productCategoryName",category)
                 .findAll()
         }
 
-        fun getCategoryProductsFromId(categoryId : Long?): RealmResults<ProductCatalogue>? {
-            val realm = CXRealmManager.getRealmInstance()
-            return realm.where(ProductCatalogue::class.java).equalTo("productCategoryId",categoryId).findAll()
-        }
-
-        fun getFilteredCategoryProducts(categoryId : Long?,category : String?): RealmResults<ProductCatalogue>? {
+        fun getCategoryProductsFromId(categoryId : Long?,madeWithAnt : Long?): RealmResults<ProductCatalogue>? {
             val realm = CXRealmManager.getRealmInstance()
             return realm.where(ProductCatalogue::class.java)
+                .equalTo("productCategoryId",categoryId)
+                .and()
+                .equalTo("madeWithAntaran",madeWithAnt)
+                .findAll()
+        }
+
+        fun getFilteredCategoryProducts(categoryId : Long?,category : String?,madeWithAnt : Long?): RealmResults<ProductCatalogue>? {
+            val realm = CXRealmManager.getRealmInstance()
+            return realm.where(ProductCatalogue::class.java)
+                .equalTo("madeWithAntaran",madeWithAnt).findAll()
+                .where()
                 .equalTo("productCategoryId",categoryId)
                 .and()
                 .equalTo("clusterName",category)

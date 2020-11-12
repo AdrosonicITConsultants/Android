@@ -109,6 +109,7 @@ object ConstantsDirectory {
 
     const val FILTER = "filter"
 
+    const val IS_MADE_WITH_ANTHARAN = "is_made_with_antharan"
     const val PRODUCT_CATEGORY = "productcategory"
     const val PRODUCT_CATEGORY_ID = "productcategoryid"
     const val PRODUCT_ID = "productid"

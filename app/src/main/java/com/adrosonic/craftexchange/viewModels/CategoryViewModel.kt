@@ -43,13 +43,13 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
         return catList!!
     }
 
-    fun getCatProdListMutableData(catID : Long): MutableLiveData<RealmResults<ProductCatalogue>> {
-        catProdList.value=loadCatProdList(catID)
+    fun getCatProdListMutableData(catID : Long,madeWithAnt:Long): MutableLiveData<RealmResults<ProductCatalogue>> {
+        catProdList.value=loadCatProdList(catID,madeWithAnt)
         return catProdList
     }
 
-    fun loadCatProdList(catID : Long): RealmResults<ProductCatalogue> {
-        var catProdList = ProductPredicates.getCategoryProductsFromId(catID)
+    fun loadCatProdList(catID : Long,madeWithAnt : Long): RealmResults<ProductCatalogue> {
+        var catProdList = ProductPredicates.getCategoryProductsFromId(catID,madeWithAnt)
         Log.e("catProdList","catProdList :"+catProdList?.size)
         return catProdList!!
     }

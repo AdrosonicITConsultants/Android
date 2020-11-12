@@ -45,13 +45,13 @@ class BrandViewModel(application: Application) : AndroidViewModel(application) {
         return brandList!!
     }
 
-    fun getBrandProdListMutableData(artisanID : Long): MutableLiveData<RealmResults<ProductCatalogue>> {
-        brandProdList.value=loadBrandProdList(artisanID)
+    fun getBrandProdListMutableData(artisanID : Long,madeWithAnt:Long): MutableLiveData<RealmResults<ProductCatalogue>> {
+        brandProdList.value=loadBrandProdList(artisanID,madeWithAnt)
         return brandProdList
     }
 
-    fun loadBrandProdList(artisanID : Long): RealmResults<ProductCatalogue> {
-        var brandProdList = ProductPredicates.getBrandProductsFromId(artisanID)
+    fun loadBrandProdList(artisanID : Long,madeWithAnt:Long): RealmResults<ProductCatalogue> {
+        var brandProdList = ProductPredicates.getBrandProductsFromId(artisanID,madeWithAnt)
         Log.e("brandProdList","brandProdList :"+brandProdList?.size)
         return brandProdList!!
     }
