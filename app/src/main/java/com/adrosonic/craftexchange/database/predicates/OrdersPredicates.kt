@@ -26,7 +26,6 @@ class OrdersPredicates {
                     if (iterator != null) {
                         while (iterator.hasNext()) {
 
-                            Log.e("OrderDetails", "isCompleted: " + isCompleted)
                             var order = iterator.next()
                             idList.add(order?.openEnquiriesResponse?.enquiryId)
                             var orderObj = realm.where(Orders::class.java)
@@ -124,7 +123,6 @@ class OrdersPredicates {
                                 realm.copyToRealmOrUpdate(exEnq)
                             }else{
                                 nextID = orderObj?._id ?: 0
-                                Log.e("OrderDetails","1111111111111")
                                 orderObj?.userId = order?.userId
                                 orderObj?.comment = order?.openEnquiriesResponse?.comment
                                 orderObj?.orderCreatedOn = order?.openEnquiriesResponse?.orderCreatedOn
@@ -144,7 +142,6 @@ class OrdersPredicates {
                                 orderObj?.weftYarnId = order?.openEnquiriesResponse?.weftYarnId
                                 orderObj?.extraWeftYarnId = order?.openEnquiriesResponse?.extraWeftYarnId
                                 orderObj?.email = order?.openEnquiriesResponse?.email
-                                Log.e("OrderDetails","enquiryId "+order?.openEnquiriesResponse?.enquiryId)
 //                                orderObj?.enquiryId = order?.openEnquiriesResponse?.enquiryId
                                 orderObj?.line1 = order?.openEnquiriesResponse?.line1
                                 orderObj?.line2 = order?.openEnquiriesResponse?.line2
@@ -156,7 +153,6 @@ class OrdersPredicates {
                                 orderObj?.productType = order?.openEnquiriesResponse?.productType?:""
                                 orderObj?.district = order?.openEnquiriesResponse?.district
                                 orderObj?.productName = order?.openEnquiriesResponse?.productName?:""
-                                Log.e("OrderDetails","33333333333333333")
                                 orderObj?.productCode = order?.openEnquiriesResponse?.productCode
                                 orderObj?.productImages = order?.openEnquiriesResponse?.productImages
                                 orderObj?.orderReceiveDate = order?.openEnquiriesResponse?.orderReceiveDate
@@ -170,7 +166,6 @@ class OrdersPredicates {
                                 orderObj?.productCategoryHistoryId = order?.openEnquiriesResponse?.productCategoryHistoryId
                                 orderObj?.warpYarnHistoryId = order?.openEnquiriesResponse?.warpYarnHistoryId
                                 orderObj?.weftYarnHistoryId = order?.openEnquiriesResponse?.weftYarnHistoryId
-                                Log.e("OrderDetails","444444444444444444")
                                 orderObj?.extraWeftYarnHistoryId = order?.openEnquiriesResponse?.extraWeftYarnHistoryId
                                 orderObj?.productStatusHistoryId = order?.openEnquiriesResponse?.productStatusHistoryId
                                 orderObj?.madeWittAnthranHistory = order?.openEnquiriesResponse?.madeWittAnthranHistory
@@ -203,11 +198,9 @@ class OrdersPredicates {
                                 orderObj?.artisanReviewId = order?.openEnquiriesResponse?.artisanReviewId ?: 0
                                 orderObj?.isReprocess = order?.openEnquiriesResponse?.isReprocess ?: 0
                                 orderObj?.isNewGenerated = order?.openEnquiriesResponse?.isNewGenerated ?: 0
-                                Log.e("OrderDetails","enquiryStageId: "+order?.openEnquiriesResponse?.enquiryStageId)
                                 realm.copyToRealmOrUpdate(orderObj)
                             }
                         }
-
                     }
                 } catch (e: Exception) {
                     Log.e("InsertOnEnquiry", e.printStackTrace().toString())
@@ -347,13 +340,11 @@ class OrdersPredicates {
                         .equalTo(Orders.COLUMN_ENQUIRY_ID, enquiryId)
                         .limit(1)
                         .findFirst()
-                    Log.e("Toggle", "orders 1111: ${orders?.changeRequestOn}")
                     orders?.let {
                         orders?.changeRequestOn = 1L
                         orders?.actionMarkCr = 0L
                         realm.copyToRealmOrUpdate(orders)
                     }
-                    Log.e("Toggle", "orders 2222: ${orders?.changeRequestOn}")
                 } catch (e: Exception) {
                     Log.e("Toggle", "Exception : " + e.printStackTrace())
                 }
@@ -369,10 +360,6 @@ class OrdersPredicates {
                         .equalTo(Orders.COLUMN_ENQUIRY_ID, enquiryId)
                         .limit(1)
                         .findFirst()
-                    Log.e(
-                        "RaiseCr",
-                        "updateChangerequestStatus 1111: ${orders?.changeRequestStatus}"
-                    )
                     orders?.let {
                         orders?.changeRequestStatus = status
                         realm.copyToRealmOrUpdate(orders)
@@ -396,7 +383,6 @@ class OrdersPredicates {
                         .equalTo(Orders.COLUMN_ENQUIRY_ID, enquiryId)
                         .limit(1)
                         .findFirst()
-                    Log.e("Toggle", "update 1111: ${orders?.changeRequestOn}")
                     orders?.let {
                         orders?.changeRequestOn = 1L
                         orders?.actionMarkCr = 1L
@@ -463,7 +449,6 @@ class OrdersPredicates {
                         .equalTo(Orders.COLUMN_ENQUIRY_ID, enquiryId)
                         .limit(1)
                         .findFirst()
-                    Log.e("RaiseCr", "orders 1111: ${orders?.changeRequestOn}")
                     orders?.let {
                         orders?.actionMarkCrStatusUpdate = actionMarkCrStatusUpdate
                         orders?.crStatusUpdateInput = jsonString
@@ -486,10 +471,6 @@ class OrdersPredicates {
                         .equalTo(Orders.COLUMN_ENQUIRY_ID, enquiryId)
                         .limit(1)
                         .findFirst()
-                    Log.e(
-                        "RaiseCr",
-                        "updateChangerequestStatus 1111: ${orders?.changeRequestStatus}"
-                    )
                     orders?.let {
                         orders?.isPiSend = status
                         realm.copyToRealmOrUpdate(orders)
@@ -513,10 +494,6 @@ class OrdersPredicates {
                         .equalTo(Orders.COLUMN_ENQUIRY_ID, enquiryId)
                         .limit(1)
                         .findFirst()
-                    Log.e(
-                        "RaiseCr",
-                        "updateChangerequestStatus 1111: ${orders?.changeRequestStatus}"
-                    )
                     orders?.let {
                         orders?.isOrderFromCompleted = 1
                         realm.copyToRealmOrUpdate(orders)
