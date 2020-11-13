@@ -16,10 +16,11 @@ import com.adrosonic.craftexchange.enums.getId
 import com.adrosonic.craftexchange.repository.data.request.qc.QuestionAnswer
 import com.adrosonic.craftexchange.repository.data.response.qc.QuestionListData
 import com.adrosonic.craftexchange.utils.Utility
+import com.wajahatkarim3.easyvalidation.core.view_ktx.contains
 
 class FillQcRecyclerAdapter(
     var context: Context?,
-    private var qcDetails: ArrayList<QuestionListData>,
+    private var qcDetails1: ArrayList<QuestionListData>,
     var maxQCStageID: Long, var enqID: Long
 ) : RecyclerView.Adapter<FillQcRecyclerAdapter.MyViewHolder>() {
 
@@ -37,18 +38,17 @@ class FillQcRecyclerAdapter(
         fun addQuesAns(listElement: QuestionAnswer)
 //        fun removeQuesAns(listElement : QuestionAnswer)
     }
-
+   private var qcDetails= qcDetails1
     var qcAdapterListener: UpdateQuesAnsInterface?=null
-
     var ansOptList = ArrayList<Triple<Long, String, String?>>()
-
     override fun getItemCount(): Int {
         return qcDetails?.size ?: 0
     }
 
     fun updateQcForm(newList: ArrayList<QuestionListData>?, newMaxStageID: Long) {
         if (newList != null) {
-            this.qcDetails = newList
+//            this.qcDetails=newList
+            this.qcDetails.addAll(newList)
         }
         if (newMaxStageID != null) {
             this.maxQCStageID = newMaxStageID
@@ -59,6 +59,7 @@ class FillQcRecyclerAdapter(
     fun refreshAdapter(){
         this.qcDetails?.clear()
         ansOptList?.clear()
+        Log.e("QcList","refreshAdapter qcDetails: ${qcDetails.size}")
         this.notifyDataSetChanged()
     }
 
@@ -83,7 +84,8 @@ class FillQcRecyclerAdapter(
 
         quesDataItr1?.forEach { it ->
             it.forEach {
-                if (it.stageId == maxQCStageID) {
+                if (
+                    it.stageId == maxQCStageID) {
                     if (it.questionNo == quesNo) {
                         holder.quesText.text = it.question
                         ansOptList.add(Triple(it.questionNo, it.answerType, it.optionValue))
@@ -132,12 +134,11 @@ class FillQcRecyclerAdapter(
                                 setSpinnerList(holder, it.optionValue,"")
                             }
                             else -> {
-                                holder.ansText?.visibility = View.VISIBLE
+                                holder.ansText?.visibility = View.GONE
                                 holder.radiogrp?.visibility = View.GONE
                                 holder.ansList.visibility = View.GONE
                                 holder.chckBoxGrp.visibility = View.GONE
                                 holder.addressLayout.visibility = View.GONE
-
                             }
                         }
                     }
@@ -148,7 +149,9 @@ class FillQcRecyclerAdapter(
         //Todo : set saved answers
         if(qcObj!=null){
             var data = qcObj?.qcResponseString?.let { Utility.getArtisanQcResponse(it) }
-            if(data?.isSend == ActionForm.SAVE.getId() && data?.stageId == maxQCStageID){
+//            Log.e("QcList","isSend: ${data?.isSend}, SAVE: ${ActionForm.SAVE.getId()}")
+//            Log.e("QcList","${data?.stageId} ,$maxQCStageID")
+            if(data?.isSend == ActionForm.SAVE.getId() && data?.stageId == maxQCStageID){//todo set data if save is 1 done here
                 var itr1 = data?.artisanQcResponses?.iterator()
                 if(itr1!=null){
                     while (itr1.hasNext()){
@@ -168,8 +171,10 @@ class FillQcRecyclerAdapter(
                                                         qcAdapterListener?.addQuesAns(QuestionAnswer(qcData?.questionId, savedAns))
                                                     }
                                                     "1" -> {
+//                                                        setCheckBox(holder,it.third,savedAns)
                                                     }
                                                     "2" -> {
+//                                                        setRadioButtons(holder,it.third,savedAns)
                                                     }
                                                     "3" -> {
                                                         setSpinnerList(holder,it.third,savedAns)
@@ -218,18 +223,15 @@ class FillQcRecyclerAdapter(
             var ansList = ArrayList<String>()
             var listVal = optionValue.split(",").map { it -> it.trim() }
             listVal.forEach { it ->
-                Log.i("Values", "value=$it")
+                Log.i("Values", "$it : $compareValue")
                 var cB = CheckBox(context)
-                val params = RadioGroup.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-                )
+                val params = RadioGroup.LayoutParams( ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                 params.setMargins(0, 0, 20, 20)
                 cB.layoutParams = params
                 cB.setPadding(5, 5, 20, 5)
                 cB.text = it
                 cB.setBackgroundResource(R.drawable.rect_outline_grey)
-
+                if(compareValue.contains(it))cB.isChecked=true
                 //CheckBox Group Listener
                 cB.setOnCheckedChangeListener { buttonView, isChecked ->
                     var quesNo = holder?.adapterPosition.plus(1)?.toLong()
@@ -249,7 +251,6 @@ class FillQcRecyclerAdapter(
                         qcAdapterListener?.addQuesAns(QuestionAnswer(quesNo, ansList.toString()))
                     }
                 }
-
                 holder.chckBoxGrp.addView(cB)
             }
         }
@@ -259,7 +260,7 @@ class FillQcRecyclerAdapter(
         if (optionValue != null) {
             var listVal = optionValue.split(";").map { it -> it.trim() }
             listVal.forEach { it ->
-                Log.i("Values", "value=$it")
+                Log.i("Values", "$compareValue : $it")
                 var rB = RadioButton(context)
                 val params = RadioGroup.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -268,17 +269,20 @@ class FillQcRecyclerAdapter(
                 rB.layoutParams = params
                 rB.setPadding(5, 5, 20, 5)
                 rB.text = it
+                rB.isChecked=if(compareValue.equals(it,true)) true else false
                 rB.setBackgroundResource(R.drawable.rect_outline_grey)
-
                 //Radio Group Listener
                 holder.radiogrp.setOnCheckedChangeListener { group, checkedId ->
-                    val rb = (group.findViewById(checkedId) as RadioButton).text
-                    Log.e("QCFA", "RadioGroup : Position == ${holder.adapterPosition} , Text == $rb")
-                    var quesNo = holder.adapterPosition.plus(1).toLong()
-                    qcAdapterListener?.addQuesAns(QuestionAnswer(quesNo, rb.toString()))
+                    try {
+                        val rb = (group.findViewById(checkedId) as RadioButton).text
+                        Log.e("QCFA", "RadioGroup : Position == ${holder.adapterPosition} , Text == $rb")
+                        var quesNo = holder.adapterPosition.plus(1).toLong()
+                        qcAdapterListener?.addQuesAns(QuestionAnswer(quesNo, rb.toString()))
+                    } catch (e: Exception) {
+                    }
                 }
-
                 holder.radiogrp.addView(rB)
+
             }
         }
     }
