@@ -57,7 +57,17 @@
                 app:layout_constraintEnd_toEndOf="@+id/textView_description"
                 app:layout_constraintStart_toStartOf="@+id/textView_description"
                 app:layout_constraintTop_toBottomOf="@+id/textView_description" />
-
+            <TextView
+                android:id="@+id/artisan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/playfair_regular"
+                android:text="@string/artisan"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/role_artisan" />
             <TextView
                 android:id="@+id/or"
                 android:layout_width="wrap_content"
@@ -69,7 +79,7 @@
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/role_artisan" />
+                app:layout_constraintTop_toBottomOf="@+id/artisan" />
 
             <View
                 android:id="@+id/divider2"
@@ -101,6 +111,17 @@
                 app:layout_constraintStart_toStartOf="@+id/divider2"
                 app:layout_constraintTop_toBottomOf="@+id/or" />
 
+            <TextView
+                android:id="@+id/buyer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/playfair_regular"
+                android:text="@string/buyer"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/role_buyer" />
             <TextView
                 android:id="@+id/textView_help"
                 android:layout_width="wrap_content"
