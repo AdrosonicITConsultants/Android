@@ -147,7 +147,6 @@ class RevisePiActivity : LocaleBaseActivity(),
             }
         }
         mBinding?.chbTnc?.setOnClickListener {
-            //Utility?.displayMessage("Coming soon",this)
         }
         mBinding?.txtTnc?.setOnClickListener {
             val intent = Intent(this, PdfViewerActivity::class.java)
