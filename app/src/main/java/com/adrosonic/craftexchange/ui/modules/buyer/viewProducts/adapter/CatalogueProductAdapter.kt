@@ -59,9 +59,17 @@ class CatalogueProductAdapter(var context: Context?, private var regionProduct: 
         var product = regionProduct?.get(position)
 
         product?.let { holder.bind(it) }
-//        holder.binding.productDescBck.setBackgroundColor(currentColor)
         holder.binding.productTitle.text = product?.productTag
         var status : String ?= ""
+        when(product?.madeWithAntaran){
+            0L -> {
+                holder.binding.designLogo.setBackgroundResource(R.drawable.ic_artisan_self_design_icon)
+            }
+            1L -> {
+                holder.binding.designLogo.setBackgroundResource(R.drawable.ic_antaran_co_design_icon)
+            }
+        }
+
         when(product?.productStatusId){
             2L -> {
                 status = ConstantsDirectory.AVAILABLE_IN_STOCK

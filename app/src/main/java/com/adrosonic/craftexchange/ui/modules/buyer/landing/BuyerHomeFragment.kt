@@ -76,6 +76,7 @@ CMSViewModel.CMSDataInterface{
 
         mBinding?.artisanCatalogue?.setOnClickListener {
             if (savedInstanceState == null) {
+                Prefs.putLong(ConstantsDirectory.IS_MADE_WITH_ANTHARAN,0)
                 activity?.supportFragmentManager?.beginTransaction()
                     ?.replace(
                         R.id.buyer_home_container,
@@ -88,6 +89,7 @@ CMSViewModel.CMSDataInterface{
 
         mBinding?.antaranCatalogue?.setOnClickListener {
             if (savedInstanceState == null) {
+                Prefs.putLong(ConstantsDirectory.IS_MADE_WITH_ANTHARAN,1)
                 activity?.supportFragmentManager?.beginTransaction()
                     ?.replace(
                         R.id.buyer_home_container,

@@ -302,8 +302,7 @@ class OnGoingTransactionRecyclerAdapter(var context: Context?, private var trans
                 //Tax Invoice
                 12L -> {
                     val intent = Intent(transaction?.enquiryID?.let { it1 -> context?.raiseTaxInvIntent(it1,true,
-                        SendTiRequest()
-                    ) })
+                        SendTiRequest()) })
                     context?.startActivity(intent)
                 }
                 //View Final Payment

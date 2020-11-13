@@ -29,6 +29,7 @@ import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.ClusterViewModel
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
+import com.pixplicity.easyprefs.library.Prefs
 import io.realm.RealmResults
 
 private const val ARG_PARAM1 = "param1"
@@ -42,11 +43,13 @@ class RegionProdListFragment : Fragment(),
     private var param1: String? = null
     private var param2: Long? = null
 
+
     private var mBinding: FragmentRegionProdListBinding ?= null
     var clusterId : Long ?= 0
     var clusterName : String ?= ""
 
     var clusterProductAdapter : CatalogueProductAdapter?= null
+    var madeWithAntharan : Long?= 0L
 
     private var mClusProductList : RealmResults<ProductCatalogue>?= null
     private var mFilteredList : RealmResults<ProductCatalogue>?= null
@@ -94,6 +97,8 @@ class RegionProdListFragment : Fragment(),
         setFilterList()
         mBinding?.swipeRegionProducts?.isEnabled = false
 
+        madeWithAntharan = Prefs.getLong(ConstantsDirectory.IS_MADE_WITH_ANTHARAN,0)
+
         dialog = Utility.enquiryGenProgressDialog(requireContext())
         clusterDescription(clusterName)
         mBinding?.productType?.text = clusterName
@@ -104,7 +109,7 @@ class RegionProdListFragment : Fragment(),
             clusterId?.let { mClusVM.getProductsByCluster(it) }
         }
         clusterId?.let {
-            mClusVM.getClusterProdListMutableData(it)
+            mClusVM.getClusterProdListMutableData(it, madeWithAntharan!!)
                 .observe(viewLifecycleOwner, Observer<RealmResults<ProductCatalogue>> {
                     mClusProductList = it
                     clusterProductAdapter?.updateProductList(mClusProductList)
@@ -116,7 +121,9 @@ class RegionProdListFragment : Fragment(),
     private fun setRecyclerList(){
         mBinding?.regionProdRecyclerList?.layoutManager = LinearLayoutManager(requireContext(),
             LinearLayoutManager.VERTICAL, false)
-        clusterProductAdapter = CatalogueProductAdapter(requireContext(), clusterId?.let { mClusVM.getClusterProdListMutableData(it).value })
+        clusterProductAdapter = CatalogueProductAdapter(requireContext(), clusterId?.let { madeWithAntharan?.let { it1 ->
+            mClusVM.getClusterProdListMutableData(it, it1).value
+        } })
         mBinding?.regionProdRecyclerList?.adapter = clusterProductAdapter
         clusterProductAdapter?.enqListener = this
     }
@@ -154,7 +161,7 @@ class RegionProdListFragment : Fragment(),
                 if(position > 0){
                     filterBy = parent?.getItemAtPosition(position).toString()
                     Log.e("spin","fil : $filterBy")
-                    mFilteredList = ProductPredicates.getFilteredClusterProducts(clusterId,filterBy)
+                    mFilteredList = ProductPredicates.getFilteredClusterProducts(clusterId,filterBy,madeWithAntharan)
                     clusterProductAdapter?.updateProductList(mFilteredList)
                     if(mFilteredList?.size == 0){
                         mBinding?.emptyView?.visibility = View.VISIBLE
@@ -257,7 +264,11 @@ class RegionProdListFragment : Fragment(),
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("clusterList", "OnFailure")
                 mBinding?.swipeRegionProducts?.isRefreshing = false
-                clusterId?.let { mClusVM.getClusterProdListMutableData(it) }
+                clusterId?.let { madeWithAntharan?.let { it1 ->
+                    mClusVM.getClusterProdListMutableData(it,
+                        it1
+                    )
+                } }
                 Utility.displayMessage(getString(R.string.err_fetch_list), requireContext())
             }
             )
@@ -271,7 +282,11 @@ class RegionProdListFragment : Fragment(),
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("clusterList", "onSuccess")
                 mBinding?.swipeRegionProducts?.isRefreshing = false
-                clusterId?.let { mClusVM.getClusterProdListMutableData(it) }
+                clusterId?.let { madeWithAntharan?.let { it1 ->
+                    mClusVM.getClusterProdListMutableData(it,
+                        it1
+                    )
+                } }
             }
             )
         } catch (e: Exception) {

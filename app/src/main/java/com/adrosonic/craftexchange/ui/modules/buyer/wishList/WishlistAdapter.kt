@@ -52,6 +52,7 @@ class WishlistAdapter(
         var productDescription: TextView
         var btnViewMore: Button
         var btnGenerateEnquiry: Button
+        var icon : ImageView
 
         init {
             productImage = view.findViewById(R.id.product_image)
@@ -61,6 +62,7 @@ class WishlistAdapter(
             productDescription = view.findViewById(R.id.product_description)
             btnViewMore = view.findViewById(R.id.btn_view_more)
             btnGenerateEnquiry = view.findViewById(R.id.btn_generate_enquiry)
+            icon = view.findViewById(R.id.design_logo)
         }
     }
 
@@ -74,6 +76,16 @@ class WishlistAdapter(
         var product = categoryProduct?.get(position)
         holder.productTitle.text = product?.productTag
         var status : String ?= ""
+
+        when(product?.madeWithAntaran){
+            0L -> {
+                holder.icon.setBackgroundResource(R.drawable.ic_artisan_self_design_icon)
+            }
+            1L -> {
+                holder.icon.setBackgroundResource(R.drawable.ic_antaran_co_design_icon)
+            }
+        }
+
         when(product?.productStatusId){
             2L-> {
                 status = ConstantsDirectory.AVAILABLE_IN_STOCK

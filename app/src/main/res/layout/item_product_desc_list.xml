@@ -75,7 +75,6 @@
                 android:id="@+id/design_logo"
                 android:layout_width="16dp"
                 android:layout_height="12dp"
-                android:src="@drawable/ic_artisan_self_design_icon"
                 app:layout_constraintBottom_toBottomOf="@+id/product_available_text"
                 app:layout_constraintStart_toStartOf="@+id/product_title"
                 app:layout_constraintTop_toTopOf="@+id/product_available_text" />

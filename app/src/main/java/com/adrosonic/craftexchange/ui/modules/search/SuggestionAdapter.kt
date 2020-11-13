@@ -83,7 +83,7 @@ class SuggestionAdapter(
                 }
                 ConstantsDirectory.BUYER -> {
                     activity.supportFragmentManager.beginTransaction()
-                        ?.replace(R.id.ss_container, BuyerSearchResultFragment.newInstance(suggestion.suggestion,suggestion.suggestionTypeId))
+                        ?.replace(R.id.ss_container, BuyerSearchResultFragment.newInstance(suggestion.suggestion,suggestion.suggestionTypeId,-1L))
                         ?.addToBackStack(null)
                         .commit()
                 }

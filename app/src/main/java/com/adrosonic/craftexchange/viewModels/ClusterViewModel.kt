@@ -43,13 +43,13 @@ class ClusterViewModel(application: Application) : AndroidViewModel(application)
         return clusterList!!
     }
 
-    fun getClusterProdListMutableData(clusterID : Long): MutableLiveData<RealmResults<ProductCatalogue>> {
-        clusterProdList.value=loadClusterProdList(clusterID)
+    fun getClusterProdListMutableData(clusterID : Long,madWithAnt : Long): MutableLiveData<RealmResults<ProductCatalogue>> {
+        clusterProdList.value=loadClusterProdList(clusterID,madWithAnt)
         return clusterProdList
     }
 
-    fun loadClusterProdList(clusterID : Long): RealmResults<ProductCatalogue> {
-        var clusterProdList = ProductPredicates.getClusterProductsFromId(clusterID)
+    fun loadClusterProdList(clusterID : Long,madWithAnt:Long): RealmResults<ProductCatalogue> {
+        var clusterProdList = ProductPredicates.getClusterProductsFromId(clusterID,madWithAnt)
         Log.e("clusterProdList","clusterProdList :"+clusterProdList?.size)
         return clusterProdList!!
     }

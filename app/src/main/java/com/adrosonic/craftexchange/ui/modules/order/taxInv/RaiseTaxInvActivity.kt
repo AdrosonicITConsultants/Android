@@ -25,6 +25,7 @@ import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
 import com.adrosonic.craftexchange.viewModels.OrdersViewModel
 import com.google.gson.Gson
+import com.pixplicity.easyprefs.library.Prefs
 import java.io.File
 
 fun Context.raiseTaxInvIntent(enquiryId:Long, isView:Boolean,tiRequest: SendTiRequest?): Intent {
@@ -65,9 +66,24 @@ class RaiseTaxInvActivity : LocaleBaseActivity(),OrdersViewModel.tiInterface,Ord
             orderDetails=mOrdVM.loadSingleOrderDetails(enquiryId,0)
 //            ti=intent.getSerializableExtra("tiRequest") as SendTiRequest
             ti=intent.getSerializableExtra("tiRequest") as SendTiRequest
+        }
+
+        if(isView == true){
             enquiryId?.let{
                 viewLoader()
                 mOrdVM?.previewTi(enquiryId)
+            }
+        }else{
+            val webSettings = mBinding?.webviewTiPreview?.settings
+            webSettings?.javaScriptEnabled = true
+            webSettings?.builtInZoomControls = true
+
+            if(Utility.checkIfInternetConnected(this)){
+                var taxString = Prefs.getString(ConstantsDirectory.TAX_INV_WEB_STRING,"")
+                mBinding?.webviewTiPreview?.loadDataWithBaseURL(null,taxString, "text/html", "utf-8", null)
+            }
+            else{
+                mBinding?.webviewTiPreview?.loadDataWithBaseURL(null, getString(R.string.preview_not_available), "text/html", "utf-8", null)
             }
         }
 
@@ -92,6 +108,7 @@ class RaiseTaxInvActivity : LocaleBaseActivity(),OrdersViewModel.tiInterface,Ord
                 )
             }
         }
+
         mBinding?.btnChat?.setOnClickListener {
             enquiryId?.let {  startActivity(Intent(this?.chatLogDetailsIntent(it)))}
         }
@@ -113,20 +130,22 @@ class RaiseTaxInvActivity : LocaleBaseActivity(),OrdersViewModel.tiInterface,Ord
 
     fun setViews(){
         mBinding?.enquiryCode?.text=getString(R.string.tax_invoice)+": ${orderDetails?.orderCode}"
-        if(isView == true){
-            mBinding?.btnRaiseTaxInv?.visibility = View.GONE
-        }else{
-            mBinding?.btnRaiseTaxInv?.visibility = View.VISIBLE
-        }
-        mBinding?.enquiryCode?.text="Tax invoice for ${orderDetails?.orderCode}"
+
         val webSettings = mBinding?.webviewTiPreview?.settings
         webSettings?.javaScriptEnabled = true
         webSettings?.builtInZoomControls = true
-        if(Utility.checkIfInternetConnected(applicationContext)){
-            mBinding?.webviewTiPreview?.loadDataWithBaseURL(null,getString(R.string.please_wait), "text/html", "utf-8", null)
+
+        if(isView == true){
+            mBinding?.btnRaiseTaxInv?.visibility = View.GONE
+            if(Utility.checkIfInternetConnected(applicationContext)){
+                mBinding?.webviewTiPreview?.loadDataWithBaseURL(null,getString(R.string.please_wait), "text/html", "utf-8", null)
+            }else{
+                mBinding?.webviewTiPreview?.loadDataWithBaseURL(null, getString(R.string.preview_not_available), "text/html", "utf-8", null)
+            }
         }else{
-            mBinding?.webviewTiPreview?.loadDataWithBaseURL(null, getString(R.string.preview_not_available), "text/html", "utf-8", null)
+            mBinding?.btnRaiseTaxInv?.visibility = View.VISIBLE
         }
+
     }
 
     fun viewLoader(){

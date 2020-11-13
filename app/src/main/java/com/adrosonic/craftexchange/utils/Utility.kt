@@ -597,6 +597,7 @@ class Utility {
             val moqDeliveryTime = gson.fromJson(moqDeliveryJson, MoqDeliveryTimesResponse::class.java)
             return moqDeliveryTime.data
         }
+
         fun writeResponseBodyToDisk(
             body: ResponseBody,
             enquiryId: String,
@@ -636,6 +637,49 @@ class Utility {
                 }
             } catch (e: Exception) {
                 Log.e("SavePiPdf", "Exception : "+e.printStackTrace())
+                return false
+            }
+        }
+
+        fun writeTIResponseBodyToDisk(
+            body: ResponseBody,
+            enquiryId: String,
+            isOld:String,
+            context: Context
+        ): Boolean {
+            try {
+                if (!File(context.cacheDir, ConstantsDirectory.TI_PDF_PATH).exists()) File(context.cacheDir,ConstantsDirectory.TI_PDF_PATH).mkdir()
+//                if (!File(context.cacheDir, Utility.PI_PDF_PATH+ enquiryId).exists()) File(context.cacheDir,Utility.MANAGED_DOC_PATH+ enquiryId).mkdir()
+                val myDir = File(context.cacheDir, "/"+ConstantsDirectory.TI_PDF_PATH + isOld+"Ti${enquiryId}.pdf")
+                var inputStream: InputStream = body.byteStream()
+                var outputStream: OutputStream = FileOutputStream(myDir)
+                try {
+                    var fileReader = ByteArray(4096)
+                    var fileSize = body.contentLength()
+                    var fileSizeDownloaded = 0
+                    while (true) {
+                        var read = inputStream.read(fileReader)
+                        if (read == -1) {
+                            break
+                        }
+                        outputStream.write(fileReader, 0, read)
+                        fileSizeDownloaded += read
+                    }
+                    outputStream.flush()
+                    return true
+                } catch (e: IOException) {
+                    Log.e("SaveTiPdf", "Exception : "+e.printStackTrace())
+                    return false
+                } finally {
+                    if (inputStream != null) {
+                        inputStream.close()
+                    }
+                    if (outputStream != null) {
+                        outputStream.close()
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("SaveTiPdf", "Exception : "+e.printStackTrace())
                 return false
             }
         }

@@ -31,6 +31,7 @@ import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.BrandViewModel
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
+import com.pixplicity.easyprefs.library.Prefs
 import io.realm.RealmResults
 
 private const val ARG_PARAM1 = "param1"
@@ -57,6 +58,8 @@ class BrandProdListFragment : Fragment(),
     var artisanName : String ?= ""
     var brandName : String ?= ""
     var url : String ?=""
+
+    var madeWithAntharan : Long?= 0L
 
     val mEnqVM : EnquiryViewModel by viewModels()
     val mBrandVM : BrandViewModel by viewModels()
@@ -103,6 +106,7 @@ class BrandProdListFragment : Fragment(),
         mEnqVM.listener = this
         mBrandVM.brandListener = this
 
+        madeWithAntharan = Prefs.getLong(ConstantsDirectory.IS_MADE_WITH_ANTHARAN,0)
 
         setRecyclerList()
         setFilterList()
@@ -114,7 +118,7 @@ class BrandProdListFragment : Fragment(),
             artisanId?.let { mBrandVM.getProductsByArtisan(it) }
         }
         artisanId?.let {
-            mBrandVM.getBrandProdListMutableData(it)
+            mBrandVM.getBrandProdListMutableData(it, madeWithAntharan!!)
                 .observe(viewLifecycleOwner, Observer<RealmResults<ProductCatalogue>> {
                     mBrandProdList = it
                     brandProductAdapter?.updateProductList(mBrandProdList)
@@ -134,7 +138,11 @@ class BrandProdListFragment : Fragment(),
         mBinding?.brandProdRecyclerList?.layoutManager = LinearLayoutManager(requireContext(),
             LinearLayoutManager.VERTICAL, false)
         brandProductAdapter = CatalogueProductAdapter(requireContext(),
-            artisanId?.let { mBrandVM.getBrandProdListMutableData(it).value })
+            artisanId?.let { madeWithAntharan?.let { it1 ->
+                mBrandVM.getBrandProdListMutableData(it,
+                    it1
+                ).value
+            } })
         mBinding?.brandProdRecyclerList?.adapter = brandProductAdapter
         brandProductAdapter?.enqListener = this
 
@@ -173,7 +181,7 @@ class BrandProdListFragment : Fragment(),
                 if(position > 0){
                     filterBy = parent?.getItemAtPosition(position).toString()
                     Log.e("spin","fil : $filterBy")
-                    mFilteredList = ProductPredicates.getFilteredBrandProducts(artisanId,filterBy)
+                    mFilteredList = ProductPredicates.getFilteredBrandProducts(artisanId,filterBy,madeWithAntharan)
                     brandProductAdapter?.updateProductList(mFilteredList)
 
                     if(mFilteredList?.size == 0){
@@ -268,7 +276,11 @@ class BrandProdListFragment : Fragment(),
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("brandProdList", "OnFailure")
                 mBinding?.swipeBrandProducts?.isRefreshing = false
-                artisanId?.let { mBrandVM.getBrandProdListMutableData(it) }
+                artisanId?.let { madeWithAntharan?.let { it1 ->
+                    mBrandVM.getBrandProdListMutableData(it,
+                        it1
+                    )
+                } }
                 Utility.displayMessage(
                     getString(R.string.err_fetch_list),
                     requireContext()
@@ -285,7 +297,11 @@ class BrandProdListFragment : Fragment(),
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("brandProdList", "onSuccess")
                 mBinding?.swipeBrandProducts?.isRefreshing = false
-                artisanId?.let { mBrandVM.getBrandProdListMutableData(it) }
+                artisanId?.let { madeWithAntharan?.let { it1 ->
+                    mBrandVM.getBrandProdListMutableData(it,
+                        it1
+                    )
+                } }
             }
             )
         } catch (e: Exception) {

@@ -24,11 +24,6 @@ open class ProductCatalogue : RealmObject() {
     var productCategoryName: String? = ""
     var productCategoryCode: String? = ""
 
-    //subProduct under category
-    //not neccessary to use
-//    var subProductId : Long ?=0
-//    var subProductName : String ?=""
-
     //productType
     var productTypeId: Long? = 0
     var productTypeDesc: String? = ""
