@@ -12,13 +12,15 @@ interface LoginDao {
     @Headers("Accept: application/json")
     @POST("/login/authenticate/")
     fun authSocialArtisan(@Query("socialTokenType") socialTokenType: String,
-        @Query("socialToken") socialToken: String) : Call<ArtisanResponse>
+                          @Query("socialToken") socialToken: String,
+                          @Query("deviceType") deviceType: String) : Call<ArtisanResponse>
 
     @Headers("Accept: application/json")
     @POST("/login/authenticate/")
     fun authSocialBuyer(
         @Query("socialTokenType") socialTokenType: String,
-        @Query("socialToken") socialToken: String) : Call<BuyerResponse>
+        @Query("socialToken") socialToken: String,
+        @Query("deviceType") deviceType: String ) : Call<BuyerResponse>
 
     @Headers("Accept: application/json")
     @POST("login/authenticate")
