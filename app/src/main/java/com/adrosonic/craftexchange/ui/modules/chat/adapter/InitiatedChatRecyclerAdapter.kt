@@ -62,8 +62,7 @@ class InitiatedChatRecyclerAdapter(var context: Context?, private var chats: Rea
     var onChatReadListener : ChatUpdateInterface? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_chat_list, parent, false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_chat_list, parent, false)
         return MyViewHolder(itemView)
     }
 

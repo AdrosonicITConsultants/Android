@@ -40,7 +40,6 @@ open class OngoingEnquiries : RealmObject() {
     var brandName: String? = ""
     var ProductBrandName: String? = "" // TODO : to be changed
 
-
     var historyProductID: Long? = 0
     var productHistoryCode: String? = ""
     var productHistoryName: String? = ""

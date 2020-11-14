@@ -79,7 +79,6 @@ class ArtisanOnGoingRecyclerAdapter(var context: Context?, private var enquiries
             context?.startActivity(intent)
         }
 
-
         var image = enquiry?.productImages
         val imgArrSplit = image?.split((",").toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()
         var first_image = imgArrSplit?.get(0)
