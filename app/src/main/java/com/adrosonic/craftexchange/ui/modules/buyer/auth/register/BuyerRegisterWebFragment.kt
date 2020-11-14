@@ -25,6 +25,7 @@ import com.adrosonic.craftexchange.repository.data.model.buyer.Address
 import com.adrosonic.craftexchange.repository.data.model.buyer.Country
 import com.adrosonic.craftexchange.repository.data.registerResponse.*
 import com.adrosonic.craftexchange.ui.modules.authentication.login.LoginActivity
+import com.adrosonic.craftexchange.ui.modules.pdfViewer.PdfViewerActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
 import com.google.gson.Gson
@@ -87,7 +88,11 @@ class BuyerRegisterWebFragment : Fragment() {
         mBinding?.textTnct?.append(clickSpan)
         mBinding?.textTnct?.movementMethod = LinkMovementMethod.getInstance()
         mBinding?.textTnct?.highlightColor = Color.TRANSPARENT
-        mBinding?.textTnct?.setOnClickListener {  Utility.reachUsDialog(it.context) }
+        mBinding?.textTnct?.setOnClickListener {
+            val intent = Intent(context, PdfViewerActivity::class.java)
+            intent.putExtra("ViewType", "Terms_conditions")
+            startActivity(intent)
+        }
 
         var addrType = AddressType("", 0)
         var country = Country(Prefs.getString(ConstantsDirectory.COUNTRY_ID, "0").toLong())
