@@ -586,4 +586,6 @@
 
     <string name="plz_Wait">Please wait while we are downloading the document</string>
     <string name="for_any_query_reach_us">For any query reach us @</string>
+    <string name="no_products_uploaded">No Products Uploaded!</string>
+    <string name="you">You</string>
 </resources>

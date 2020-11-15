@@ -171,9 +171,6 @@ class RegionProdListFragment : Fragment(),
                         mBinding?.regionProdRecyclerList?.visibility = View.VISIBLE
                     }
                 }
-//                else{
-//                    clusterProductAdapter?.updateProductList(mClusProductList)
-//                }
             }
         })
     }

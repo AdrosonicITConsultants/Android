@@ -38,18 +38,19 @@ class ArtisanHomeFragment : Fragment(),
     ArtisanProductsViewModel.productsFetchInterface,
     ProfileViewModel.FetchUserDetailsInterface,
     CMSViewModel.CMSDataInterface{
-    // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
     private var mBinding: FragmentArtisanHomeBinding ?= null
-    private var mProduct = mutableListOf<ProductCard>()
     private var artisanProductAdapter: ArtisanProductAdapter?= null
     var artisanId : Long ?= 0
     val mViewModel: ArtisanProductsViewModel by viewModels()
     val mProVM : ProfileViewModel by viewModels()
     val mCMSVM : CMSViewModel by viewModels()
     var craftUser : MutableLiveData<CraftUser> ?= null
+
+    var listSize : Int ?= 0
+
     var brandLogo : String ?= ""
     var urlBrand : String ?=""
 
@@ -69,17 +70,8 @@ class ArtisanHomeFragment : Fragment(),
         mProVM.listener = this
         mCMSVM.cmsListener = this
 
-        if (!Utility.checkIfInternetConnected(requireContext())) {
-            mBinding?.swipeRefreshLayout?.isRefreshing = false
-            Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
-        } else {
-            mCMSVM.getCategoriesData()
-        }
-
         refreshProfile()
         setupRecyclerView()
-
-
 
         mViewModel.getProductCategoryListMutableData(artisanId)
             .observe(viewLifecycleOwner, Observer<RealmResults<ArtisanProducts>>{
@@ -100,7 +92,6 @@ class ArtisanHomeFragment : Fragment(),
         }
 
 //        TODO : Fix later Refresh issue
-
         mBinding?.swipeRefreshLayout?.setOnRefreshListener {
             if (!Utility.checkIfInternetConnected(requireContext())) {
                 mBinding?.swipeRefreshLayout?.isRefreshing = false
@@ -109,6 +100,17 @@ class ArtisanHomeFragment : Fragment(),
                 mBinding?.swipeRefreshLayout?.isRefreshing = true
                 refreshProfile()
             }
+        }
+    }
+
+    fun setVisibilities(){
+        listSize = mViewModel.getProductCategoryListMutableData(artisanId)?.value?.size
+        if(listSize != 0){
+            mBinding?.emptyView?.visibility = View.GONE
+            mBinding?.productRecyclerList?.visibility = View.VISIBLE
+        }else{
+            mBinding?.emptyView?.visibility = View.VISIBLE
+            mBinding?.productRecyclerList?.visibility = View.GONE
         }
     }
 
@@ -127,12 +129,15 @@ class ArtisanHomeFragment : Fragment(),
     fun refreshProfile(){
         if (!Utility.checkIfInternetConnected(requireContext())) {
             Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
+            setVisibilities()
         } else {
             mViewModel.getProductsOfArtisan()
             mViewModel.getProductCategoryListMutableData(artisanId)
             mProVM.getArtisanProfileDetails(requireContext())
             craftUser = mProVM.getUserMutableData()
             setBrandImage()
+            mCMSVM.getCategoriesData()
+            setVisibilities()
         }
     }
 
@@ -149,9 +154,9 @@ class ArtisanHomeFragment : Fragment(),
                 mBinding?.swipeRefreshLayout?.isRefreshing = false
                 craftUser = mProVM.getUserMutableData()
                 mViewModel.getProductCategoryListMutableData(artisanId)
+                setVisibilities()
                 setBrandImage()
-            }
-            )
+            })
         } catch (e: Exception) {
             Log.e("CAtegoryList", "Exception onSuccess " + e.message)
         }
@@ -163,12 +168,8 @@ class ArtisanHomeFragment : Fragment(),
                 Log.e("Wishlist", "OnFailure")
                 mBinding?.swipeRefreshLayout?.isRefreshing = false
                 mViewModel.getProductCategoryListMutableData(artisanId)
-                Utility.displayMessage(
-                    "Error while fetching wishlist. Pleas try again after some time",
-                    requireContext()
-                )
-            }
-            )
+                setVisibilities()
+                Utility.displayMessage("Error while fetching wishlist. Pleas try again after some time", requireContext()) })
         } catch (e: Exception) {
             Log.e("CAtegoryList", "Exception onFailure " + e.message)
         }
@@ -189,7 +190,6 @@ class ArtisanHomeFragment : Fragment(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("CMS", "OnFailure")
-
             }
             )
         } catch (e: Exception) {
