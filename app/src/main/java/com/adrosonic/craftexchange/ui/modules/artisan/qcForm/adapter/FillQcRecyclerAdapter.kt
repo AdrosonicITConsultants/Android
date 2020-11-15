@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.view.forEach
+import androidx.core.view.size
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.predicates.QcPredicates
@@ -149,8 +151,6 @@ class FillQcRecyclerAdapter(
         //Todo : set saved answers
         if(qcObj!=null){
             var data = qcObj?.qcResponseString?.let { Utility.getArtisanQcResponse(it) }
-//            Log.e("QcList","isSend: ${data?.isSend}, SAVE: ${ActionForm.SAVE.getId()}")
-//            Log.e("QcList","${data?.stageId} ,$maxQCStageID")
             if(data?.isSend == ActionForm.SAVE.getId() && data?.stageId == maxQCStageID){//todo set data if save is 1 done here
                 var itr1 = data?.artisanQcResponses?.iterator()
                 if(itr1!=null){
@@ -171,10 +171,10 @@ class FillQcRecyclerAdapter(
                                                         qcAdapterListener?.addQuesAns(QuestionAnswer(qcData?.questionId, savedAns))
                                                     }
                                                     "1" -> {
-//                                                        setCheckBox(holder,it.third,savedAns)
+                                                        setCheckBox(holder,it.third,savedAns)
                                                     }
                                                     "2" -> {
-//                                                        setRadioButtons(holder,it.third,savedAns)
+                                                        setRadioButtons(holder,it.third,savedAns)
                                                     }
                                                     "3" -> {
                                                         setSpinnerList(holder,it.third,savedAns)
@@ -216,14 +216,17 @@ class FillQcRecyclerAdapter(
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
         })
+
+
     }
 
     fun setCheckBox(holder: MyViewHolder, optionValue: String?,compareValue : String) {
         if (optionValue != null) {
+            if(compareValue!=null)holder.chckBoxGrp.removeAllViews()
             var ansList = ArrayList<String>()
             var listVal = optionValue.split(",").map { it -> it.trim() }
             listVal.forEach { it ->
-                Log.i("Values", "$it : $compareValue")
+                Log.e("Values", "$it : $compareValue")
                 var cB = CheckBox(context)
                 val params = RadioGroup.LayoutParams( ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                 params.setMargins(0, 0, 20, 20)
@@ -231,26 +234,24 @@ class FillQcRecyclerAdapter(
                 cB.setPadding(5, 5, 20, 5)
                 cB.text = it
                 cB.setBackgroundResource(R.drawable.rect_outline_grey)
-                if(compareValue.contains(it))cB.isChecked=true
+                if(compareValue.contains(it)){
+                    cB.isChecked=true
+                    ansList.add(cB.text.toString())
+                }
                 //CheckBox Group Listener
                 cB.setOnCheckedChangeListener { buttonView, isChecked ->
                     var quesNo = holder?.adapterPosition.plus(1)?.toLong()
                     if(isChecked){
                         ansList.add(cB.text.toString())
-                        Log.e(
-                            "QCFA",
-                            "CheckBtn group: Position == ${holder.adapterPosition} , selectedAns == ${ansList.toString()}"
-                        )
+                        Log.e("Values","CheckBtn group: Position == ${holder.adapterPosition} , selectedAns == ${ansList.toString()}")
                         qcAdapterListener?.addQuesAns(QuestionAnswer(quesNo, ansList.toString()))
                     }else{
                         ansList.remove(cB.text.toString())
-                        Log.e(
-                            "QCFA",
-                            "CheckBtn group: Position == ${holder.adapterPosition} , selectedAns == ${ansList.toString()}"
-                        )
+                        Log.e("Values","CheckBtn group: Position == ${holder.adapterPosition} , selectedAns == ${ansList.toString()}")
                         qcAdapterListener?.addQuesAns(QuestionAnswer(quesNo, ansList.toString()))
                     }
                 }
+
                 holder.chckBoxGrp.addView(cB)
             }
         }
@@ -258,6 +259,7 @@ class FillQcRecyclerAdapter(
 
     fun setRadioButtons(holder: MyViewHolder, optionValue: String?,compareValue : String) {
         if (optionValue != null) {
+            if(compareValue!=null)holder.radiogrp.removeAllViews()
             var listVal = optionValue.split(";").map { it -> it.trim() }
             listVal.forEach { it ->
                 Log.i("Values", "$compareValue : $it")
@@ -269,12 +271,23 @@ class FillQcRecyclerAdapter(
                 rB.layoutParams = params
                 rB.setPadding(5, 5, 20, 5)
                 rB.text = it
-                rB.isChecked=if(compareValue.equals(it,true)) true else false
+                if(compareValue.equals(it,true)) {
+                    rB.isChecked = true
+                    var quesNo = holder.adapterPosition.plus(1).toLong()
+                    qcAdapterListener?.addQuesAns(QuestionAnswer(quesNo, it))
+
+                }
                 rB.setBackgroundResource(R.drawable.rect_outline_grey)
                 //Radio Group Listener
                 holder.radiogrp.setOnCheckedChangeListener { group, checkedId ->
                     try {
                         val rb = (group.findViewById(checkedId) as RadioButton).text
+                        group.forEach {
+                            if(it.id!=checkedId) {
+                                val rd = it as RadioButton
+                                rd.isChecked = false
+                            }
+                        }
                         Log.e("QCFA", "RadioGroup : Position == ${holder.adapterPosition} , Text == $rb")
                         var quesNo = holder.adapterPosition.plus(1).toLong()
                         qcAdapterListener?.addQuesAns(QuestionAnswer(quesNo, rb.toString()))
@@ -282,7 +295,6 @@ class FillQcRecyclerAdapter(
                     }
                 }
                 holder.radiogrp.addView(rB)
-
             }
         }
     }
