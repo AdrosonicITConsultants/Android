@@ -130,7 +130,7 @@ class BuyerSearchAdapter(private val mContext : Context,
         }else{
             holder?.wishlistButton?.isLiked = false
         }
-        
+
         holder?.wishlistButton?.setOnLikeListener(object: OnLikeListener {
             override fun liked(likeButton: LikeButton) {
                 product?.id?.let { wishlistener?.onSelected(it,1L) }

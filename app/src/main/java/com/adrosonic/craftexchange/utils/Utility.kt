@@ -14,6 +14,7 @@ import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Build
+import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -28,6 +29,8 @@ import androidx.core.content.FileProvider
 import com.adrosonic.craftexchange.database.entities.realmEntities.CraftUser
 import com.adrosonic.craftexchange.database.predicates.CrPredicates
 import com.adrosonic.craftexchange.database.predicates.UserPredicates
+import com.adrosonic.craftexchange.enums.EnquiryStatus
+import com.adrosonic.craftexchange.enums.getId
 import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.uploadData.ProductUploadData
 import com.adrosonic.craftexchange.repository.data.response.chat.escalations.EscalationCategoryResponse
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryAvaProdStageData
@@ -42,6 +45,7 @@ import com.adrosonic.craftexchange.repository.data.response.qc.QCData
 import com.adrosonic.craftexchange.repository.data.response.qc.QCQuestionData
 import com.adrosonic.craftexchange.repository.data.response.transaction.TranStatData
 import com.adrosonic.craftexchange.repository.data.response.transaction.TransactionStatusData
+import com.adrosonic.craftexchange.ui.modules.enquiry.enquiryDetails
 import com.bumptech.glide.Glide
 import com.google.gson.GsonBuilder
 import com.pixplicity.easyprefs.library.Prefs
@@ -285,15 +289,14 @@ class Utility {
             dialog.btn_success_view_enquiry?.setOnClickListener {
                 //TODO : View Enquiry details in enquiry landing page
                 dialog.cancel()
-                messageDialog(context,"Fix in Progress") // TODO : to fix FC issue in view enquiry from popup
 
-//                val intent = Intent(context?.enquiryDetails())
-//                var bundle = Bundle()
-//                Prefs.putString(ConstantsDirectory.ENQUIRY_ID, enquiryId) //TODO change later
-//                bundle.putString(ConstantsDirectory.ENQUIRY_ID, enquiryId)
-//                bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG,"2")
-//                intent.putExtras(bundle)
-//                context?.startActivity(intent)
+                val intent = Intent(context?.enquiryDetails())
+                var bundle = Bundle()
+                Prefs.putString(ConstantsDirectory.ENQUIRY_ID, enquiryId)
+                bundle.putString(ConstantsDirectory.ENQUIRY_ID, enquiryId)
+                bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG,EnquiryStatus.ONGOING.getId().toString())
+                intent.putExtras(bundle)
+                context?.startActivity(intent)
             }
             dialog.setCanceledOnTouchOutside(false)
             return dialog
@@ -314,14 +317,14 @@ class Utility {
             }
             dialog.existing_btn_view_enquiry?.setOnClickListener {
                 dialog.cancel()
-                messageDialog(context,"Fix in Progress") // TODO : to fix FC issue in view enquiry from popup
-//                val intent = Intent(context?.enquiryDetails())
-//                var bundle = Bundle()
-//                Prefs.putString(ConstantsDirectory.ENQUIRY_ID, enquiryId) //TODO change later
-//                bundle.putString(ConstantsDirectory.ENQUIRY_ID, enquiryId)
-//                bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG,"2")
-//                intent.putExtras(bundle)
-//                context?.startActivity(intent)
+//                messageDialog(context,"Fix in Progress")
+                val intent = Intent(context?.enquiryDetails())
+                var bundle = Bundle()
+                Prefs.putString(ConstantsDirectory.ENQUIRY_ID, enquiryId)
+                bundle.putString(ConstantsDirectory.ENQUIRY_ID, enquiryId)
+                bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG,EnquiryStatus.ONGOING.getId().toString())
+                intent.putExtras(bundle)
+                context?.startActivity(intent)
             }
             dialog.setCanceledOnTouchOutside(false)
             return dialog

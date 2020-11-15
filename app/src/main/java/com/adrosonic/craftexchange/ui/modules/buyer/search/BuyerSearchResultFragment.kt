@@ -352,7 +352,7 @@ class BuyerSearchResultFragment : Fragment(),
             Handler(Looper.getMainLooper()).post {
                 Log.e("EnquiryGeneration", "Onsucces")
                 dialog?.dismiss()
-                enqID = enquiry?.data?.enquiry?.code.toString()
+                enqID = enquiry?.data?.enquiry?.id.toString()
                 enqCode = enquiry?.data?.enquiry?.code.toString()
                 sucDialog = Utility.enquiryGenSuccessDialog(requireActivity(),enqID.toString(),enqCode.toString())
                 Handler().postDelayed({ sucDialog?.show() }, 500)
