@@ -152,8 +152,9 @@ class RaiseConArtisanFragment : Fragment(),
         }
 
         mBinding?.btnRateReview?.setOnClickListener {
+            Log.e("BuyerRating", "enquiryId: ${enqID?.toLong()}")
             val myIntent = Intent(requireContext(), SendRatingActivity::class.java)
-            myIntent.putExtra("enquiryId", enqID)
+            myIntent.putExtra("enquiryId", enqID?.toLong())
             startActivity(myIntent)
         }
 

@@ -102,6 +102,7 @@ class RaiseConBuyerFragment : Fragment(),
             DataBindingUtil.inflate(inflater, R.layout.fragment_raise_con_buyer, container, false)
         if (param1 != null) {
             enqID = if (param1!!.isNotEmpty()) param1 else "0"
+            Log.e("BuyerRating", "11111111 enquiryId: $enqID")
         }
         return mBinding?.root
     }
@@ -163,8 +164,9 @@ class RaiseConBuyerFragment : Fragment(),
         }
 
         mBinding?.btnRateReview?.setOnClickListener {
+            Log.e("BuyerRating", "enquiryId: ${enqID?.toLong()}")
             val myIntent = Intent(requireContext(), SendRatingActivity::class.java)
-            myIntent.putExtra("enquiryId", enqID)
+            myIntent.putExtra("enquiryId", enqID?.toLong())
             startActivity(myIntent)
         }
 
