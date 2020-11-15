@@ -79,7 +79,9 @@ class NotificationAdapter(
         holder.txt_inquiry_id.text = "Enquiry Id: ${notification?.code}"
         holder.txt_buyer_brand.text = notification?.companyName?:"NA"
         holder.txt_prod_details.text = notification?.productDesc
-        holder.txt_status.text = notification?.type
+
+        if(notification?.details?.length!!>0)holder.txt_status.text = notification?.type +" for\n"+notification?.details
+        else holder.txt_status.text = notification?.type
         holder.txt_date.text =Utility.returnDisplayDate( notification?.createdOn?:"")
         Utility.setImageResource(context, holder.statusImage, getIcon(notification?.type?:""))
         holder?.ll_markasread?.setOnClickListener {

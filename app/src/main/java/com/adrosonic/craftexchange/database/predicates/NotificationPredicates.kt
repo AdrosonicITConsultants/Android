@@ -46,6 +46,7 @@ class NotificationPredicates {
                                 notificationObj?.productDesc = notification.productDesc?:""
                                 notificationObj?.seen = notification.seen?:0
                                 notificationObj?.type = notification.type?:""
+                                notificationObj?.details = notification.details?:""
                                 realm.copyToRealmOrUpdate(notificationObj)
                             }
                             else{
@@ -65,6 +66,7 @@ class NotificationPredicates {
                                 noti.productDesc = notification.productDesc?:""
                                 noti.seen = notification.seen?:0
                                 noti.type = notification.type?:""
+                                noti.details = notification.details?:""
                                 realm.copyToRealmOrUpdate(noti)
                             }
                         }

@@ -21,5 +21,6 @@ data class GetAllNotification (
     val code: String,
     val customProduct: String,
     val notificationId: Long,
+    val details: String,
     val type: String
 )
