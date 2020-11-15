@@ -136,14 +136,18 @@ class RaiseTaxInvActivity : LocaleBaseActivity(),OrdersViewModel.tiInterface,Ord
         webSettings?.builtInZoomControls = true
 
         if(isView == true){
+            mBinding?.tiText?.visibility = View.GONE
             mBinding?.btnRaiseTaxInv?.visibility = View.GONE
+            mBinding?.txtDownload?.visibility = View.VISIBLE
             if(Utility.checkIfInternetConnected(applicationContext)){
                 mBinding?.webviewTiPreview?.loadDataWithBaseURL(null,getString(R.string.please_wait), "text/html", "utf-8", null)
             }else{
                 mBinding?.webviewTiPreview?.loadDataWithBaseURL(null, getString(R.string.preview_not_available), "text/html", "utf-8", null)
             }
         }else{
+            mBinding?.tiText?.visibility = View.VISIBLE
             mBinding?.btnRaiseTaxInv?.visibility = View.VISIBLE
+            mBinding?.txtDownload?.visibility = View.GONE
         }
 
     }

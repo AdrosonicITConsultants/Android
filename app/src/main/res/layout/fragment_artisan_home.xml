@@ -146,7 +146,32 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider1"
                 app:layout_constraintVertical_bias="0.25"
-                android:visibility="visible"/>
+                android:visibility="gone"/>
+
+            <RelativeLayout
+                android:id="@+id/empty_view"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider1"
+                app:layout_constraintVertical_bias="1.0">
+
+                <TextView
+                    android:id="@+id/empty_text"
+                    android:gravity="center"
+                    android:layout_centerInParent="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white_text"
+                    android:fontFamily="@font/playfair_regular"
+                    android:text="@string/no_products_uploaded"
+                    android:textSize="@dimen/Ques_text" />
+
+            </RelativeLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

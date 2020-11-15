@@ -122,6 +122,10 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
 //            setDetails()
+            var enqDbDetails = EnquiryPredicates.getSingleOnGoEnquiryDetails(enqID)
+            if(enqDbDetails!= null){
+                setDetails()
+            }
         }
 
         enqID?.let {
@@ -735,11 +739,18 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
             }
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
-            setDetails()
+            var enqDbDetails = EnquiryPredicates.getSingleOnGoEnquiryDetails(enqID)
+            if(enqDbDetails!= null){
+                setDetails()
+            }
         }
 
 //        enqID?.let { mEnqVM.getSingleOngoingEnquiry(it) }
-        setDetails()
+//        setDetails()
+        var enqDbDetails = EnquiryPredicates.getSingleOnGoEnquiryDetails(enqID)
+        if(enqDbDetails!= null){
+            setDetails()
+        }
     }
 
     override fun onFailure() {

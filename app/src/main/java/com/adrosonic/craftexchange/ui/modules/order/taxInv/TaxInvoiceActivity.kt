@@ -174,8 +174,6 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
                         taxInvPrev?.let { it1 -> mOrdVM?.generateTaxInvoicePreview(it1) }
                     } else {
                         Utility.displayMessage(getString(R.string.no_internet_connection),this)
-//                    TaxInvPredicates.insertTiForOffline(enquiryId,1,taxInv) todo
-//                        startActivityForResult(applicationContext.raiseTaxInvIntent(enquiryId,true,taxInv),ConstantsDirectory.RESULT_TI)
                     }
                 }
             }else{
@@ -196,6 +194,7 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
                     taxInvPrev?.quantity=qty.toLong()
                     taxInvPrev?.sgst=sgst.toLong()
                     taxInvPrev?.hsn = rrHSN
+                    taxInvPrev?.advancePaidAmt = 0
                     taxInvPrev?.enquiryId = enquiryId
                     taxInvPrev?.deliveryCharges = delCharge.toLong()
                     taxInvPrev?.finalTotalAmt = finAmt.toLong()
@@ -205,6 +204,7 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
                     taxInv?.ppu=ppu.toLong()
                     taxInv?.quantity=qty.toLong()
                     taxInv?.sgst=sgst
+                    taxInv?.advancePaidAmt = "0"
                     taxInv?.enquiryId = enquiryId?.toString()
                     taxInv?.deliveryCharges = delCharge
                     taxInv?.finalTotalAmt = finAmt.toLong()
@@ -217,8 +217,6 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
                         taxInvPrev?.let { it1 -> mOrdVM?.generateTaxInvoicePreview(it1) }
                     } else {
                         Utility.displayMessage(getString(R.string.no_internet_connection),this)
-//                        TaxInvPredicates.insertTiForOffline(enquiryId,1,taxInv) todo in next screen
-//                        startActivityForResult(applicationContext.raiseTaxInvIntent(enquiryId,true),ConstantsDirectory.RESULT_TI)
                     }
                 }
             }
@@ -231,7 +229,7 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
 //            startActivity(this?.pdfViewerIntent()?.putExtra("ViewType", "Terms_conditions"))
         }
         mBinding?.btnChat?.setOnClickListener {
-            enquiryId?.let {  startActivity(Intent(this?.chatLogDetailsIntent(it)))}
+            enquiryId?.let { startActivity(Intent(this?.chatLogDetailsIntent(it)))}
         }
     }
 

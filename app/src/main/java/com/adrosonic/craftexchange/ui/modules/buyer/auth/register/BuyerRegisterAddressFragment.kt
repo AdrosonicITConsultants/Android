@@ -31,14 +31,7 @@ import javax.security.auth.callback.Callback
 class BuyerRegisterAddressFragment : Fragment() {
 
     companion object {
-//        @JvmStatic
-//        fun newInstance(param1: String,param2: String) =
-//            BuyerRegisterAddressFragment().apply {
-//                arguments = Bundle().apply {
-//                    putString(ARG_PARAM1,param1)
-//                    putString(ARG_PARAM2,param2)
-//                }
-//            }
+
         fun newInstance() = BuyerRegisterAddressFragment()
         const val TAG = "BuyerRegisterAddr"
     }
@@ -137,7 +130,7 @@ class BuyerRegisterAddressFragment : Fragment() {
 
             if(mBinding?.textBoxAddr1?.nonEmpty() == true &&
                 mBinding?.textBoxPincode?.nonEmpty() == true &&
-                mBinding?.textBoxPincode?.minLength(6) == true &&
+                mBinding?.textBoxPincode?.nonEmpty() == true &&
                 mBinding?.textBoxCountry?.nonEmpty() == true){
 
                 Prefs.putString(ConstantsDirectory.ADDR_LINE1,mBinding?.textBoxAddr1?.text.toString())
@@ -147,7 +140,6 @@ class BuyerRegisterAddressFragment : Fragment() {
                 Prefs.putString(ConstantsDirectory.DISTRICT,mBinding?.textBoxDistrict?.text.toString())
                 Prefs.putString(ConstantsDirectory.CITY,mBinding?.textBoxCity?.text.toString())
                 Prefs.putString(ConstantsDirectory.STATE,mBinding?.textBoxState?.text.toString())
-//                Prefs.putString(ConstantsDirectory.COUNTRY,mBinding?.textBoxCountry.toString())
                 Prefs.putString(ConstantsDirectory.PINCODE,mBinding?.textBoxPincode?.text.toString())
 
                 if (savedInstanceState == null) {
@@ -160,8 +152,7 @@ class BuyerRegisterAddressFragment : Fragment() {
             }else{
                 mBinding?.textBoxAddr1?.nonEmpty{ mBinding?.textBoxAddr1?.error = it }
                 mBinding?.textBoxPincode?.nonEmpty{ mBinding?.textBoxPincode?.error = it }
-                mBinding?.textBoxPincode?.minLength(6){ mBinding?.textBoxPincode?.error = activity?.getString(R.string.pincode_invalid_text) }
-
+                mBinding?.textBoxPincode?.nonEmpty{ mBinding?.textBoxPincode?.error = it }
             }
         }
     }

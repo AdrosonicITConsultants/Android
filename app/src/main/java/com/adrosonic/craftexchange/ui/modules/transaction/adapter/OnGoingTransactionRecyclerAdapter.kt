@@ -24,6 +24,7 @@ import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.repository.data.request.taxInv.SendTiRequest
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
 import com.adrosonic.craftexchange.ui.modules.enquiry.enquiryDetails
+import com.adrosonic.craftexchange.ui.modules.order.orderDetails
 import com.adrosonic.craftexchange.ui.modules.order.taxInv.raiseTaxInvIntent
 import com.adrosonic.craftexchange.ui.modules.transaction.viewDocument
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
@@ -104,21 +105,6 @@ class OnGoingTransactionRecyclerAdapter(var context: Context?, private var trans
                 }
             }
         }
-
-
-        //Status Icon
-        //TODO to implement url for icons
-//        when(profile){
-//            art -> {
-//                iconUrl = Utility.getTransactionIconsUrl(transaction?.accomplishedStatus,art)
-//            }
-//            buy -> {
-//                iconUrl = Utility.getTransactionIconsUrl(transaction?.accomplishedStatus,buy)
-//            }
-//        }
-//
-//        iconUrl?.let { ImageSetter.setSVGIcon(Activity(), it,holder?.statusIcon) }
-
 
         when(transaction?.accomplishedStatus){
             //PI
@@ -229,15 +215,26 @@ class OnGoingTransactionRecyclerAdapter(var context: Context?, private var trans
         }
 
         holder?.btn_enquiry?.setOnClickListener {
-//            context?.let { it1 -> Utility?.messageDialog(it1,"Fix in Progress (direct to enquiry screen)") }
-            if(transaction?.enquiryID!=null){
-                val intent = Intent(context?.enquiryDetails())
-                var bundle = Bundle()
-                Prefs.putString(ConstantsDirectory.ENQUIRY_ID, transaction?.enquiryID.toString()) //TODO change later
-                bundle.putString(ConstantsDirectory.ENQUIRY_ID, transaction?.enquiryID.toString())
-                bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG,"2")
-                intent.putExtras(bundle)
-                context?.startActivity(intent)
+            if(transaction?.enquiryCode != null){
+                if(transaction?.enquiryID!=null){
+                    val intent = Intent(context?.enquiryDetails())
+                    var bundle = Bundle()
+                    Prefs.putString(ConstantsDirectory.ENQUIRY_ID, transaction?.enquiryID.toString())
+                    bundle.putString(ConstantsDirectory.ENQUIRY_ID, transaction?.enquiryID.toString())
+                    bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG,"2")
+                    intent.putExtras(bundle)
+                    context?.startActivity(intent)
+                }
+            }else{
+                if(transaction?.enquiryID!=null){
+                    val intent = Intent(context?.orderDetails())
+                    var bundle = Bundle()
+//                    Prefs.putString(ConstantsDirectory.ENQUIRY_ID, transaction?.enquiryID.toString())
+                    bundle.putString(ConstantsDirectory.ENQUIRY_ID, transaction?.enquiryID.toString())
+                    bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG,"2")
+                    intent.putExtras(bundle)
+                    context?.startActivity(intent)
+                }
             }
         }
 

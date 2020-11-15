@@ -171,9 +171,6 @@ class RegionProdListFragment : Fragment(),
                         mBinding?.regionProdRecyclerList?.visibility = View.VISIBLE
                     }
                 }
-//                else{
-//                    clusterProductAdapter?.updateProductList(mClusProductList)
-//                }
             }
         })
     }
@@ -203,6 +200,7 @@ class RegionProdListFragment : Fragment(),
                 enqID = enquiry?.data?.enquiry?.id.toString()
                 enqCode = enquiry?.data?.enquiry?.code.toString()
                 sucDialog = Utility.enquiryGenSuccessDialog(requireActivity(),enqID.toString(),enqCode.toString())
+
                 Handler().postDelayed({ sucDialog?.show() }, 500)
             }
         } catch (e: Exception) {

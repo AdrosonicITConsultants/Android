@@ -40,7 +40,6 @@ class BuyerRegisterCompanyFragment : Fragment() {
 
     }
 
-
     private var mBinding: FragmentBuyerRegisterCompanyBinding ?= null
     private var PICK_IMAGE: Int = 1
     private val PERMISSION_REQUEST_CODE = 200

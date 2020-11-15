@@ -50,6 +50,16 @@ class UploadedProductsASearchAdapter(var context: Context?, private var artisanP
         holder.binding.productTitle.text = product?.productTag
         holder.binding.productDescription.text = product?.productSpecs
         var status : String ?= ""
+
+        when(product?.madeWithAntaran){
+            0L -> {
+                holder.binding.designIcon.setBackgroundResource(R.drawable.ic_artisan_self_design_icon)
+            }
+            1L -> {
+                holder.binding.designIcon.setBackgroundResource(R.drawable.ic_antaran_co_design_icon)
+            }
+        }
+
         when(product?.productStatusId){
             2.toLong() -> {
                 status = context?.getString(R.string.in_stock)

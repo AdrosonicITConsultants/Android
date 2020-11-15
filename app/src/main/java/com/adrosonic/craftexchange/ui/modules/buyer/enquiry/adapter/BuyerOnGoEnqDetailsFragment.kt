@@ -24,6 +24,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
+import com.adrosonic.craftexchange.database.predicates.EnquiryPredicates
 import com.adrosonic.craftexchange.database.predicates.MoqsPredicates
 import com.adrosonic.craftexchange.database.predicates.WishlistPredicates
 import com.adrosonic.craftexchange.databinding.FragmentBuyerOnGoEnqDetailsBinding
@@ -137,9 +138,12 @@ EnquiryViewModel.FetchEnquiryInterface,
             mEnqVM?.getSinglePi(enqID!!)
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
-
+            var enqDbDetails = EnquiryPredicates.getSingleOnGoEnquiryDetails(enqID)
+            if(enqDbDetails!= null){
+                setDetails()
+            }
         }
-        setDetails()
+//        setDetails()
         enqID?.let {
             mEnqVM.getSingleOnEnqData(it)
                 .observe(viewLifecycleOwner, Observer<OngoingEnquiries> {
@@ -852,11 +856,19 @@ EnquiryViewModel.FetchEnquiryInterface,
             mEnqVM?.getSinglePi(enqID!!)
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
-            setDetails()
+//            setDetails()
+            var enqDbDetails = EnquiryPredicates.getSingleOnGoEnquiryDetails(enqID)
+            if(enqDbDetails!= null){
+                setDetails()
+            }
         }
 
 //        enqID?.let { mEnqVM.getSingleOngoingEnquiry(it) }
-        setDetails()
+//        setDetails()
+        var enqDbDetails = EnquiryPredicates.getSingleOnGoEnquiryDetails(enqID)
+        if(enqDbDetails!= null){
+            setDetails()
+        }
     }
 
     override fun onFailure() {

@@ -170,7 +170,7 @@
                         android:id="@+id/action_qc_btn_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_regular"
+                        android:layout_marginTop="4dp"
                         android:orientation="horizontal"
                         android:paddingBottom="@dimen/margin_regular"
                         android:weightSum="5"
