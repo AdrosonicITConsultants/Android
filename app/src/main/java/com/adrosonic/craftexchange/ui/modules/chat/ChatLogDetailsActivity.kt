@@ -24,7 +24,9 @@ import androidx.core.content.ContextCompat
 import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.ChatUser
+import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
 import com.adrosonic.craftexchange.database.predicates.ChatUserPredicates
+import com.adrosonic.craftexchange.database.predicates.EnquiryPredicates
 import com.adrosonic.craftexchange.databinding.ActivityChatLogBinding
 import com.adrosonic.craftexchange.repository.data.request.chat.SendChatRequest
 import com.adrosonic.craftexchange.ui.modules.artisan.deliveryReceipt.UploadDeliveryReceiptActivity
@@ -49,6 +51,14 @@ fun Context.chatLogDetailsIntent(enquiryId:Long): Intent {
     intent.putExtra(ConstantsDirectory.ENQUIRY_ID, enquiryId)
     return intent
 }
+fun Context.chatLogDetailsIntent(enquiryId:Long,toId:Long): Intent {
+    val intent= Intent(this, ChatLogDetailsActivity::class.java) .apply {
+        flags = Intent.FLAG_ACTIVITY_NEW_TASK
+    }
+    intent.putExtra(ConstantsDirectory.ENQUIRY_ID, enquiryId)
+    intent.putExtra("toId", toId)
+    return intent
+}
 class  ChatLogDetailsActivity : LocaleBaseActivity(),
     ChatListViewModel.OpenChatLogInterface,
     ChatListViewModel.GetChatMediaInterface,
@@ -62,6 +72,7 @@ class  ChatLogDetailsActivity : LocaleBaseActivity(),
     private var mBinding : ActivityChatLogBinding ?= null
     private var mUsers: ArrayList<User>? = null
     private var chatUserDetails:ChatUser?=null
+    private var enquiryDetails: OngoingEnquiries?= null
     private var mediaType=0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -133,6 +144,7 @@ class  ChatLogDetailsActivity : LocaleBaseActivity(),
             else {
                  mBinding?.chatDetailsLayer?.visibility=View.VISIBLE
                  mBinding?.chatDetailsLayer?.animation = slideDown
+
              }
         }
         mBinding?.chatView?.setOnClickSendButtonListener(View.OnClickListener {
@@ -170,7 +182,6 @@ class  ChatLogDetailsActivity : LocaleBaseActivity(),
                 }
             }
         })
-
         mBinding?.iconEscalation?.setOnClickListener {
             startActivity(enquiryId?.let { it1 -> this.chatEscalationIntent(it1) })
             overridePendingTransition(R.anim.fragment_fade_enter, R.anim.fragment_fade_exit)
@@ -183,7 +194,9 @@ class  ChatLogDetailsActivity : LocaleBaseActivity(),
     }
 
     fun setChatHeaderDetails(enquiryId : Long?){
+        fromId=UserConfig.shared.userId?.toLong()?:0
         var chatHeader = ChatUserPredicates.getChatHeaderDetailsFromId(enquiryId)
+        if(chatHeader!=null){
         var profile = chatHeader?.buyerLogo.toString()
         var companyName = try{if(chatHeader?.buyerCompanyName.isNullOrEmpty())"NA" else chatHeader?.buyerCompanyName.toString()}catch (e:java.lang.Exception){"NA"}
 
@@ -197,7 +210,7 @@ class  ChatLogDetailsActivity : LocaleBaseActivity(),
             mBinding?.txtProdType?.text=chatUserDetails?.productTypeId
             mBinding?.txtOrderAmt?.text=getString(R.string.order_amount)+": ₹ "+ try{if(chatUserDetails?.orderAmouunt!!>0) chatUserDetails?.orderAmouunt.toString() else "0"}catch (e:java.lang.Exception){"0"}
         }
-        fromId=UserConfig.shared.userId?.toLong()?:0
+
         toId=chatUserDetails?.buyerId?:0
         buyerName=chatUserDetails?.buyerCompanyName?:""
 
@@ -208,6 +221,34 @@ class  ChatLogDetailsActivity : LocaleBaseActivity(),
 
         if(chatHeader?.changeRequestDone==1L)mBinding?.iconChangeRequest?.visibility=View.VISIBLE
         else mBinding?.iconChangeRequest?.visibility=View.GONE
+        }
+        else{
+            mBinding?.iconChangeRequest?.visibility=View.GONE
+            enquiryDetails= EnquiryPredicates.getSingleOnGoEnquiryDetails(enquiryId)
+            var companyName = try{enquiryDetails?.brandName?:"NA" }catch (e:java.lang.Exception){"NA"}
+            toId=enquiryDetails?.userId?:0
+            mBinding?.brandName?.text = companyName
+            mBinding?.txtEnquiryNo?.text = enquiryDetails?.enquiryCode.toString()
+            mBinding?.txtDateStarted?.text=getString(R.string.date_started)+": "+try{enquiryDetails?.startedOn!!.split("T")?.get(0)}catch (e:Exception){"NA"}
+            mBinding?.txtDateConvertedToOrder?.text=getString(R.string.date_converted)+": "+try{enquiryDetails?.orderCreatedOn!!.split("T")?.get(0)}catch (e:Exception){"NA"}
+            mBinding?.txtDateLastUpdated?.text=getString(R.string.date_last_updated)+": "+try{enquiryDetails?.lastUpdated!!.split("T")?.get(0)?:"NA"}catch (e:Exception){"NA"}
+            mBinding?.txtOrderAmt?.text=getString(R.string.order_amount)+": ₹ "+ try{enquiryDetails?.totalAmount?:0}catch (e:java.lang.Exception){"0"}
+            mBinding?.txtProdType?.text=when(enquiryDetails?.productStatusID){
+                2L ->   this?.getString(R.string.in_stock)
+                1L ->   this?.getString(R.string.made_to_order)
+                else ->  this?.getString(R.string.requested_custom_design)
+            }
+            var enquiryStage : String ?= ""
+            var stageList = Utility.getEnquiryStagesData()
+            Log.e("enqdata", "List : $stageList")
+            stageList.forEach {
+                if(it.first == enquiryDetails?.enquiryStageID){
+                    enquiryStage = it.second
+                }
+            }
+            mBinding?.enquiryStatusText?.text = enquiryStage
+            if(intent.getLongExtra("toId", 0)!=null) toId=intent.getLongExtra("toId", 0)
+        }
     }
 
     fun setChatView(){

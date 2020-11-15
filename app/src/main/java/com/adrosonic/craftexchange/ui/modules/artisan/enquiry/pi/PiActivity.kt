@@ -107,10 +107,12 @@ class PiActivity : LocaleBaseActivity(),
             datePickerDialog.show()
         }
         mBinding?.chbTnc?.setOnClickListener {
-            Utility?.displayMessage("Coming soon",this)
+//            Utility?.displayMessage("Coming soon",this)
         }
         mBinding?.txtTnc?.setOnClickListener {
-            Utility?.displayMessage("Coming soon",this)
+            val intent = Intent(this, PdfViewerActivity::class.java)
+            intent.putExtra("ViewType", "Terms_conditions")
+            startActivity(intent)
         }
         
         mBinding?.txtPiSwipe?.setOnClickListener {

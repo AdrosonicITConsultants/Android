@@ -1,5 +1,6 @@
 package com.adrosonic.craftexchange.ui.modules.enquiry
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import androidx.fragment.app.viewModels
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
 import com.adrosonic.craftexchange.databinding.FragmentBuyEnqDetailsBinding
+import com.adrosonic.craftexchange.ui.modules.chat.chatLogDetailsIntent
 import com.adrosonic.craftexchange.ui.modules.enquiry.adapter.BuyerEnqDetailsAdapter
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
@@ -94,6 +96,9 @@ class BuyEnqDetailsFragment : Fragment() {
         }
         mBinding?.btnBack?.setOnClickListener {
             activity?.onBackPressed()
+        }
+        mBinding?.btnChat?.setOnClickListener {
+            enqID?.let {  startActivity(Intent(requireContext()?.chatLogDetailsIntent(it)))}
         }
     }
 

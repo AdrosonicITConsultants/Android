@@ -199,7 +199,6 @@ class EnquiryPredicates {
                                 exEnq?.pocContact = enquiry?.openEnquiriesResponse?.pocContact
                                 exEnq?.pocEmail = enquiry?.openEnquiriesResponse?.pocEmail
                                 exEnq?.gst = enquiry?.openEnquiriesResponse?.gst
-
                                 realm.copyToRealmOrUpdate(exEnq)
                             }else{
                                 nextID = enqObj?._id ?: 0

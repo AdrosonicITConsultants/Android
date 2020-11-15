@@ -102,13 +102,7 @@ class ArtFillViewQcFormFragment : Fragment(),
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        mBinding =
-            DataBindingUtil.inflate(
-                inflater,
-                R.layout.fragment_art_fill_view_qc_form,
-                container,
-                false
-            )
+        mBinding =DataBindingUtil.inflate(inflater,  R.layout.fragment_art_fill_view_qc_form,   container, false )
         if (param1 != null) {
             enqID = if (param1!!.isNotEmpty()) param1 else "0"
         }
@@ -129,10 +123,7 @@ class ArtFillViewQcFormFragment : Fragment(),
 
         dialog = Utility.multiLoadingDialog(requireContext(), dialogMsg.toString())
         orderDetails = enqID?.toLong()?.let { orderStatus?.toLong()?.let { it1 ->
-            mOrdVM?.getSingleOnOrderData(it,
-                it1
-            )
-        } }?.value
+        mOrdVM?.getSingleOnOrderData(it,   it1 ) } }?.value
         if (orderDetails != null) {
             setDetails()
         }
@@ -386,7 +377,8 @@ class ArtFillViewQcFormFragment : Fragment(),
                         }
                     }
 
-                    maxStageID?.let { mFillQcAdapter?.updateQcForm(mQcQuesList, it) }
+                    maxStageID?.let { mFillQcAdapter?.updateQcForm(mQcQuesList, it)
+                    }
                     mBinding?.enquiryStatusText?.text = maxStage
                     mBinding?.stageName?.text = "Quality check for $maxStage"
                 } else {
@@ -407,14 +399,10 @@ class ArtFillViewQcFormFragment : Fragment(),
     }
 
     fun setFillFormRecycler() {
-        mBinding?.formRecycler?.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        mBinding?.formRecycler?.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         mFillQcAdapter = maxStageID?.let {
             enqID?.toLong()?.let { it1 ->
-                FillQcRecyclerAdapter(
-                    requireContext(), mQcQuesList, it,
-                    it1
-                )
+                FillQcRecyclerAdapter( requireContext(), mQcQuesList, it,  it1)
             }
         }
         mBinding?.formRecycler?.adapter = mFillQcAdapter
@@ -488,8 +476,7 @@ class ArtFillViewQcFormFragment : Fragment(),
     }
 
     fun setViewFormRecycler(recyclerView: RecyclerView?, list: List<ArtBuyQcResponse>?) {
-        recyclerView?.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        recyclerView?.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         mViewQcAdapter = list?.let { ViewQcRecyclerAdapter(requireContext(), it) }
         recyclerView?.adapter = mViewQcAdapter
 //        mViewQcAdapter?.notifyDataSetChanged()

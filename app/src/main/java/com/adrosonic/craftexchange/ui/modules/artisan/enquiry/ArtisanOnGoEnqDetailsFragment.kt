@@ -284,7 +284,9 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
             }
         }
         mBinding?.btnChat?.setOnClickListener {
-            enqID?.let {  startActivity(Intent(requireContext()?.chatLogDetailsIntent(it)))}
+            enqID?.let {
+                startActivity(Intent(requireContext()?.chatLogDetailsIntent(it)))
+            }
         }
     }
 

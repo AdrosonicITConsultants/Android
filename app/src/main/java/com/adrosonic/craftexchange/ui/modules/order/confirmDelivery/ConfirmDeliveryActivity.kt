@@ -34,6 +34,8 @@ import com.adrosonic.craftexchange.repository.data.response.changeReequest.CrOpt
 import com.adrosonic.craftexchange.ui.modules.chat.chatLogDetailsIntent
 import com.adrosonic.craftexchange.ui.modules.order.cr.adapter.CrAcceptRejectAdapter
 import com.adrosonic.craftexchange.ui.modules.order.revisePi.revisePiContext
+import com.adrosonic.craftexchange.ui.modules.rating.SendRatingActivity
+import com.adrosonic.craftexchange.ui.modules.rating.sendRatingIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
@@ -168,10 +170,11 @@ class ConfirmDeliveryActivity : LocaleBaseActivity(),
         btn_raise_pi.setOnClickListener {
             enquiryId?.let {
                 dialog.cancel()
-                Utility.displayMessage("Coming soon",applicationContext)
                 setResult(Activity.RESULT_OK)
                 finish()
-//            startActivityForResult(this.revisePiContext(it),ConstantsDirectory.RESULT_PI)}
+                val myIntent = Intent(this, SendRatingActivity::class.java)
+                myIntent.putExtra("enquiryId", enquiryId)
+                startActivity(myIntent)
             }
         }
         btn_skip.setOnClickListener {

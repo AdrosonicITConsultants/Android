@@ -187,11 +187,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         }
 
         mBinding?.btnUploadTaxInv?.setOnClickListener {
-            Log.e("RaiseTi", "upload : $enqID")
-            Log.e("RaiseTi", "upload : ${orderDetails?.enquiryId}")
-//            startActivity(enqID?.let { it1 -> requireContext().taxInvoiceIntent(it1) })
             enqID?.let {startActivityForResult(requireContext().taxInvoiceIntent(it),ConstantsDirectory.RESULT_TI)}
-
         }
 
         mBinding?.brandDetailsLayer?.setOnClickListener {
@@ -234,7 +230,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
             else mBinding?.menuList!!.visibility=View.VISIBLE
         }
         mBinding?.toogleCr?.setOnClickListener {
-//            if(!b){
+        if(orderDetails?.changeRequestStatus==null){
                 var dialog = Dialog(requireActivity())
                 dialog.setContentView(R.layout.dialog_cr_toggle_confirm)
                 dialog.create()
@@ -259,7 +255,10 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
                         dialog.cancel()
                     }
                 }
-//            }
+            }
+        else{
+            mBinding?.toogleCr?.isChecked=true
+        }
         }
         mBinding?.qualityCheckLayer?.setOnClickListener {
             startActivity(context?.qcFormIntent()
@@ -383,7 +382,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
     try {
         Handler(Looper.getMainLooper()).post(Runnable {
         setTabVisibilities()
-            setActionButtonVisibilites()
+        setActionButtonVisibilites()
         setViewEnquiryStageChangeButton()
         viewChangeStatusLayer()
         setToggleVisiblity()
@@ -548,6 +547,9 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
                     1L,2L,3L -> {
                         mBinding?.toogleCr?.isEnabled=false
                         mBinding?.txtCrLayerStatus?.text = Utility.getCountStatement(enqID?:0)//Utility.returnDisplayDate(orderDetails?.changeRequestModifiedOn ?: "")
+                    }
+                    null->{
+
                     }
                     else -> {
                          mBinding?.txtCrLayerStatus?.text = "Change request not available"

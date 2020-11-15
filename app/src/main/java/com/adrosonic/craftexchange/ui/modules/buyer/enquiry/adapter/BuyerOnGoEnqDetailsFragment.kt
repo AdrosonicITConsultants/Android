@@ -66,7 +66,7 @@ EnquiryViewModel.FetchEnquiryInterface,
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-
+    private var artisanId: Long?=null
     private var piID : Long?= 0
     private var enqID : Long ?= 0
     private var enqCode : String ?= ""
@@ -166,7 +166,10 @@ EnquiryViewModel.FetchEnquiryInterface,
         }
 
         mBinding?.btnChat?.setOnClickListener {
-            enqID?.let {  startActivity(Intent(context?.chatLogDetailsIntent(it)))}
+            if(enquiryDetails?.ProductBrandName != "") {
+                enqID?.let { startActivity(Intent(context?.chatLogDetailsIntent(it))) }
+            }else    Utility.messageDialog(requireActivity(),"No Artisan Assigned to this enquiry")
+
         }
 
         mBinding?.btnBack?.setOnClickListener {
@@ -227,8 +230,11 @@ EnquiryViewModel.FetchEnquiryInterface,
         }
 
         mBinding?.chat?.setOnClickListener {
-            enqID?.let {  startActivity(Intent(context?.chatLogDetailsIntent(it)))}
-        }
+            if(enquiryDetails?.ProductBrandName != "") {
+                enqID?.let { startActivity(Intent(context?.chatLogDetailsIntent(it))) }
+            }else    Utility.messageDialog(requireActivity(),"No Artisan Assigned to this enquiry")
+
+    }
         mBinding?.btnChat?.setOnClickListener {
             enqID?.let {  startActivity(Intent(context?.chatLogDetailsIntent(it)))}
         }
@@ -945,6 +951,7 @@ EnquiryViewModel.FetchEnquiryInterface,
     }
 
     override fun onAccepted(artisanId: Long, moqId: Long) {
+        this.artisanId=artisanId
         confirmDialog = Dialog(requireContext())
         confirmDialog.setContentView(R.layout.dialog_moq_confirmation)
         confirmDialog.show()
@@ -1016,7 +1023,7 @@ EnquiryViewModel.FetchEnquiryInterface,
             confirmDialog.dismiss()
         }
         txt_goto_chat.setOnClickListener {
-            enqID?.let {  startActivity(Intent(context?.chatLogDetailsIntent(it)))}
+            enqID?.let {  startActivity(Intent(context?.chatLogDetailsIntent(it,artisanId?:0 )))}
         }
     }
 

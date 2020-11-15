@@ -16,6 +16,7 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
@@ -333,7 +334,9 @@ class CrActivity : LocaleBaseActivity(),
         }
         else txt_changes_dscrp.text=getString(R.string.you_abt_reject)
         Log.e("RaiseCr","itemList ${itemList.count()} ")
-
+        txt_goto_chat.setOnClickListener {
+            startActivity(Intent(this?.chatLogDetailsIntent(enquiryId)))
+        }
         btn_ok.setOnClickListener {
             var req= RaiseCrInput(enquiryId,itemList)
             Log.e("RaiseCr","itemList ${itemList.size} ")

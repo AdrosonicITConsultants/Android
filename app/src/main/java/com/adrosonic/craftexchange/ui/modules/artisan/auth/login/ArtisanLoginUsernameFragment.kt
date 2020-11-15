@@ -37,25 +37,32 @@ import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
 import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import com.pixplicity.easyprefs.library.Prefs
 import retrofit2.Call
 import retrofit2.Response
+import java.util.*
 import javax.security.auth.callback.Callback
 
 private const val ARG_PARAM1 = "param1"
 
 class ArtisanLoginUsernameFragment : Fragment() {
     private var param1: String? = null
-
     var mGoogleSignInClient: GoogleSignInClient?= null
     var callbackManager: CallbackManager?= null
     private val RC_SIGN_IN = 9001
+    private lateinit var mAuth : FirebaseAuth
 
     companion object {
         @JvmStatic
@@ -93,8 +100,11 @@ class ArtisanLoginUsernameFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         var gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
+        mGoogleSignInClient = activity?.let { GoogleSignIn.getClient(it, gso) }
+        mAuth = FirebaseAuth.getInstance()
 
         var profile = arguments?.get(ARG_PARAM1).toString()
 
@@ -186,160 +196,229 @@ class ArtisanLoginUsernameFragment : Fragment() {
             intent.putExtra("ViewType", "HELP")
             startActivity(intent)
         }
+
+        mBinding?.changeLanguageText?.setOnClickListener {
+            showLanguageSelectionDialog()
+        }
         mBinding?.googleLoginBtn?.setOnClickListener {
-            // Build a GoogleSignInClient with the options specified by gso.
-            mGoogleSignInClient = activity?.let { GoogleSignIn.getClient(it, gso) }!!
+            // mAuth.signOut()
             signIn()
         }
+
+        if(LoginManager.getInstance()!=null){
+            LoginManager.getInstance().logOut()
+        }
+
+        mBinding?.facebookLoginBtn?.setOnClickListener(View.OnClickListener {
+            // Login
+            callbackManager = CallbackManager.Factory.create()
+            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email"))
+
+
+            LoginManager.getInstance().registerCallback(callbackManager,
+                object : FacebookCallback<LoginResult> {
+                    override fun onSuccess(loginResult: LoginResult) {
+                        Log.d("MainActivity", "Facebook token: " + loginResult.accessToken.token)
+
+                        if(Utility.checkIfInternetConnected(requireContext())) {
+                            CraftExchangeRepository
+                                .getLoginService()
+                                .authSocialArtisan("facebook", loginResult.accessToken.token, "android")
+                                .enqueue(object : Callback, retrofit2.Callback<ArtisanResponse> {
+                                    override fun onFailure(call: Call<ArtisanResponse>, t: Throwable) {
+                                        t.printStackTrace()
+                                        context?.let { it1 -> Utility.deleteCache(it1) }
+                                        context?.let { it1 -> Utility.deleteImageCache(it1) }
+                                        Toast.makeText(
+                                            activity,
+                                            // "${t.printStackTrace()}",
+                                            "Your ID has already been registered as Buyer",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+
+                                    override fun onResponse(
+                                        call: Call<ArtisanResponse>, response: Response<ArtisanResponse>
+                                    ) {
+                                        if (response.body()?.valid == true ) {
+
+                                            Prefs.putBoolean(ConstantsDirectory.IS_LOGGED_IN, true)
+                                            UserPredicates.insertArtisan(response.body()!!)
+                                            AddressPredicates.insertArtisanAddress(response.body()!!)
+
+
+                                            mUserConfig?.deviceName = "Android"
+
+
+                                            Prefs.putBoolean(ConstantsDirectory.IS_LOGGED_IN, true)
+                                            Prefs.putString(
+                                                ConstantsDirectory.USER_ID,
+                                                response.body()?.data?.user?.id.toString()
+                                            )
+                                            Prefs.putString(
+                                                ConstantsDirectory.ACC_TOKEN,
+                                                response.body()?.data?.acctoken
+                                            )
+                                            Prefs.putString(
+                                                ConstantsDirectory.FIRST_NAME,
+                                                response.body()?.data?.user?.firstName
+                                            )
+                                            Prefs.putString(
+                                                ConstantsDirectory.LAST_NAME,
+                                                response.body()?.data?.user?.lastName
+                                            )
+
+                                            startActivity(Intent(activity, CXVideoActivity::class.java))
+                                        }else {
+                                            Toast.makeText(
+                                                activity,
+                                                "Please first register your facebook ID as Artisan",
+                                                Toast.LENGTH_LONG
+                                            ).show()
+                                        }
+                                    }
+
+                                })
+
+                        }else{
+                            Utility.displayMessage(requireActivity().getString(R.string.no_internet_connection),requireContext())
+                        }
+                    }
+
+                    override fun onCancel() {
+                        Log.d("MainActivity", "Facebook onCancel.")
+
+                    }
+
+                    override fun onError(error: FacebookException) {
+                        Log.d("MainActivity", "Facebook onError.")
+                        Toast.makeText(
+                            activity,
+                            "Please register as Artisan using facebook ID",
+                            Toast.LENGTH_LONG
+                        ).show()
+
+                    }
+                })
+        })
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        // callbackManager?.onActivityResult(requestCode, resultCode, data)
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
-            val task =
-                GoogleSignIn.getSignedInAccountFromIntent(data)
-            handleSignInResult(task)
-        }
-        else{
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            val exception = task.exception
+            if(task.isSuccessful){
+                try {
+                    // Google Sign In was successful, authenticate with Firebase
+                    val account = task.getResult(ApiException::class.java)!!
+                    Log.d("SignInActivity", "firebaseAuthWithGoogle:" + account.id)
+                    firebaseAuthWithGoogle(account.idToken!!)
+                } catch (e: ApiException) {
+                    // Google Sign In failed, update UI appropriately
+                    Log.w("SignInActivity", "Google sign in failed", e)
+                    // ...
+                }
+
+            }else{
+                Log.w("SignInActivity", exception.toString())
+            }
+
+        }else{
             callbackManager?.onActivityResult(requestCode, resultCode, data)
         }
     }
 
-    private fun signIn(){
-        val signInIntent = mGoogleSignInClient?.signInIntent
-        startActivityForResult(signInIntent, RC_SIGN_IN)
+    private fun firebaseAuthWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        activity?.let {
+            mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(it) { task ->
+                    if (task.isSuccessful) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d("SignInActivity", "signInWithCredential:success")
+
+                        if(Utility.checkIfInternetConnected(requireContext())) {
+
+                            CraftExchangeRepository
+                                .getLoginService()
+                                .authSocialArtisan("google", idToken,"android")
+                                .enqueue(object : Callback, retrofit2.Callback<ArtisanResponse> {
+                                    override fun onFailure(call: Call<ArtisanResponse>, t: Throwable) {
+                                        t.printStackTrace()
+                                        context?.let { it1 -> Utility.deleteCache(it1) }
+                                        context?.let { it1 -> Utility.deleteImageCache(it1) }
+                                        Toast.makeText(
+                                            activity,
+                                            // "${t.printStackTrace()}",
+                                            "Your ID has already been registered as Buyer",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+
+                                    override fun onResponse(
+                                        call: Call<ArtisanResponse>, response: Response<ArtisanResponse>
+                                    ) {
+
+                                        if (response.body()?.valid == true)  {
+
+                                            Prefs.putBoolean(ConstantsDirectory.IS_LOGGED_IN, true)
+                                            UserPredicates.insertArtisan(response.body()!!)
+                                            AddressPredicates.insertArtisanAddress(response.body()!!)
+
+
+                                            mUserConfig?.deviceName = "Android"
+
+
+                                            Prefs.putBoolean(ConstantsDirectory.IS_LOGGED_IN, true)
+                                            Prefs.putString(
+                                                ConstantsDirectory.USER_ID,
+                                                response.body()?.data?.user?.id.toString()
+                                            )
+                                            Prefs.putString(
+                                                ConstantsDirectory.ACC_TOKEN,
+                                                response.body()?.data?.acctoken
+                                            )
+                                            Prefs.putString(
+                                                ConstantsDirectory.FIRST_NAME,
+                                                response.body()?.data?.user?.firstName
+                                            )
+                                            Prefs.putString(
+                                                ConstantsDirectory.LAST_NAME,
+                                                response.body()?.data?.user?.lastName
+                                            )
+
+                                            startActivity(Intent(activity, CXVideoActivity::class.java))
+                                        }else {
+                                            Toast.makeText(
+                                                activity,
+                                                "Register your Google Id & Try Again",
+                                                Toast.LENGTH_LONG
+                                            ).show()
+                                        }
+                                    }
+
+                                })
+
+                        }else{
+                            Utility.displayMessage(requireActivity().getString(R.string.no_internet_connection),requireContext())
+                        }
+
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w("SignInActivity", "signInWithCredential:failure", task.exception)
+                    }
+                }
+        }
     }
 
-    private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
-        try {
-            val account = completedTask.getResult(ApiException::class.java)
-
-            //Signed in successfully
-            val googleId = account?.id ?: ""
-            Log.i("Google ID",googleId)
-
-            val googleFirstName = account?.givenName ?: ""
-            Log.i("Google First Name", googleFirstName)
-
-            val googleLastName = account?.familyName ?: ""
-            Log.i("Google Last Name", googleLastName)
-
-            val googleEmail = account?.email ?: ""
-            Log.i("Google Email", googleEmail)
-
-            val googleProfilePicURL = account?.photoUrl.toString()
-            Log.i("Google Profile Pic URL", googleProfilePicURL)
-
-            val googleIdToken = account?.idToken ?: ""
-            Log.i("Google ID Token", googleIdToken)
-        mBinding?.changeLanguageText?.setOnClickListener {
-            showLanguageSelectionDialog()
-        }
-//        mBinding?.loginButton?.setOnClickListener {
-//            login_button.setReadPermissions(listOf(EMAIL))
-//            callbackManager = CallbackManager.Factory.create()
-//
-//            LoginManager.getInstance().registerCallback(callbackManager, object :FacebookCallback<LoginResult>{
-//                override fun onSuccess(result: LoginResult?) {
-//                   val grapghRequest = GraphRequest.newMeRequest(result?.accessToken){obj, response ->
-//                       try {
-//                           if (obj.has("id")){
-//                                Log.d("FACEBOOKDATA", obj.getString("name"))
-//                                Log.d("FACEBOOKDATA", obj.getString("email"))
-//                                Log.d("FACEBOOKDATA", obj.getString("picture"))
-//                           }
-//                       }catch (e: Exception){
-//
-//                       }
-//
-//                   }
-//                    val param = Bundle()
-//                    param.putString("fields", "name,email,id,picture.type(large)")
-//                    grapghRequest.parameters = param
-//                    grapghRequest.executeAsync()
-//                }
-//
-//                override fun onCancel() {
-//                    TODO("Not yet implemented")
-//                }
-//
-//                override fun onError(error: FacebookException?) {
-//                    TODO("Not yet implemented")
-//                }
-//
-//            })
-//
-//        }
-
-            if(Utility.checkIfInternetConnected(requireContext())) {
-
-                CraftExchangeRepository
-                    .getLoginService()
-                    .authSocialArtisan("google", googleIdToken)
-                    .enqueue(object : Callback, retrofit2.Callback<ArtisanResponse> {
-                        override fun onFailure(call: Call<ArtisanResponse>, t: Throwable) {
-                            t.printStackTrace()
-                            Toast.makeText(
-                                activity,
-                                "${t.printStackTrace()}",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-
-                        override fun onResponse(
-                            call: Call<ArtisanResponse>, response: Response<ArtisanResponse>
-                        ) {
-                            if (response.body()?.valid == true) {
-
-                                Prefs.putBoolean(ConstantsDirectory.IS_LOGGED_IN, true)
-                                UserPredicates.insertArtisan(response.body()!!)
-                                AddressPredicates.insertArtisanAddress(response.body()!!)
-
-
-                                mUserConfig?.deviceName = "Android"
-
-
-                                Prefs.putBoolean(ConstantsDirectory.IS_LOGGED_IN, true)
-                                Prefs.putString(
-                                    ConstantsDirectory.USER_ID,
-                                    response.body()?.data?.user?.id.toString()
-                                )
-                                Prefs.putString(
-                                    ConstantsDirectory.ACC_TOKEN,
-                                    response.body()?.data?.acctoken
-                                )
-                                Prefs.putString(
-                                    ConstantsDirectory.FIRST_NAME,
-                                    response.body()?.data?.user?.firstName
-                                )
-                                Prefs.putString(
-                                    ConstantsDirectory.LAST_NAME,
-                                    response.body()?.data?.user?.lastName
-                                )
-
-                                startActivity(Intent(activity, CXVideoActivity::class.java))
-                            }else {
-                                Toast.makeText(
-                                    activity,
-                                    "Register your Google Id & Try Again",
-                                    Toast.LENGTH_LONG
-                                ).show()
-                            }
-                        }
-
-                    })
-
-            }else{
-                Utility.displayMessage(requireActivity().getString(R.string.no_internet_connection),requireContext())
-            }
-
-
-
-        } catch (e: ApiException) {
-            // Sign in was unsuccessful
-            Log.e("failed code=", e.statusCode.toString())
-        }
+    private fun signIn(){
+        mGoogleSignInClient!!.revokeAccess()
+        val signInIntent = mGoogleSignInClient!!.signInIntent
+        startActivityForResult(signInIntent, RC_SIGN_IN)
     }
     fun showLanguageSelectionDialog() {
         var dialog = Dialog(requireContext())
