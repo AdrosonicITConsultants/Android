@@ -50,6 +50,7 @@ import com.adrosonic.craftexchange.ui.modules.transaction.adapter.OnGoingTransac
 import com.adrosonic.craftexchange.ui.modules.transaction.viewDocument
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
+import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.OrdersViewModel
 import com.adrosonic.craftexchange.viewModels.QCViewModel
@@ -371,6 +372,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
 
     fun reloadContent(){
         enqID?.let {
+            mOrderVm.ratingData(enqID!!,  UserConfig.shared.userId?.toLong()?:0)
             mOrderVm.getSingleOngoingOrder(it)
             mTranVM.getSingleOngoingTransactions(it)
             mOrderVm?.getChangeRequestDetails(it)

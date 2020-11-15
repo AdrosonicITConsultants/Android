@@ -14,9 +14,8 @@ object ConstantsDirectory {
     const val CMS_URL_DEV = "http://101.53.158.227/wordpress/index.php/wp-json/wp/v2/"
     const val CMS_URL_UAT = "http://101.53.158.227/wordpress/index.php/wp-json/wp/v2/"
 
-    const val BUYER_DASHBOARD_URL = "https://datastudio.google.com/embed/reporting/22dd8e4d-ca54-4a5a-8084-571f9b776457/page/iJ7cB?params="
-    const val ARTISAN_DASHBOARD_URL_old = "https://datastudio.google.com/embed/reporting/cef7a3b2-e37f-48a2-9f28-0c3f45a07585/page/RJ8dB?params="
-    const val ARTISAN_DASHBOARD_URL = "https://datastudio.google.com/embed/reporting/0c128fc7-917e-4030-b7b4-370628de1996/page/CEweB="
+    const val BUYER_DASHBOARD_URL = "https://datastudio.google.com/embed/reporting/1ff96a35-a386-4d11-9e64-0d0883bdd7ee/page/iTZoB?params="
+    const val ARTISAN_DASHBOARD_URL = "https://datastudio.google.com/embed/reporting/5fe0ea7a-f3c9-4192-8cc4-5f4dd2e1b995/page/imZoB?params="
 
     const val ADMIN_DASHBOARD_URL = "https://datastudio.google.com/embed/reporting/00758bf8-9835-4bc1-aa7d-c2fb328332ab/page/wVxhB?params="
     const val VIEW_PI_URL = "http://101.53.153.96:8090/enquiry/getPreviewPiHTML?enquiryId="
