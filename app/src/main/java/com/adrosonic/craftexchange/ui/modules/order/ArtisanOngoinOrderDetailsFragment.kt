@@ -355,6 +355,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         var cDialog = Dialog(requireContext())
         cDialog.setContentView(R.layout.dialog_confirm_recreate)
         cDialog.show()
+        cDialog.show()
         val confirmRecreate = cDialog.findViewById(R.id.btn_confirm_recreate) as Button
         confirmRecreate.setOnClickListener {
             cDialog.cancel()

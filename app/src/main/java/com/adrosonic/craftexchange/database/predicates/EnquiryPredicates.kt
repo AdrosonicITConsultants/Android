@@ -199,6 +199,7 @@ class EnquiryPredicates {
                                 exEnq?.pocContact = enquiry?.openEnquiriesResponse?.pocContact
                                 exEnq?.pocEmail = enquiry?.openEnquiriesResponse?.pocEmail
                                 exEnq?.gst = enquiry?.openEnquiriesResponse?.gst
+                                exEnq?.userId=enquiry?.userId
                                 realm.copyToRealmOrUpdate(exEnq)
                             }else{
                                 nextID = enqObj?._id ?: 0
@@ -272,7 +273,7 @@ class EnquiryPredicates {
                                 enqObj?.pocContact = enquiry?.openEnquiriesResponse?.pocContact
                                 enqObj?.pocEmail = enquiry?.openEnquiriesResponse?.pocEmail
                                 enqObj?.gst = enquiry?.openEnquiriesResponse?.gst
-
+                                enqObj?.userId=enquiry?.userId
                                 realm.copyToRealmOrUpdate(enqObj)
                             }
                         }

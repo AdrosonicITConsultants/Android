@@ -289,7 +289,6 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
     fun setDetails(){
 
         setTabVisibilities()
-
         //stage wise button visiblities
         viewApprovePaymentButton()
         setViewEnquiryStageChangeButton()
@@ -489,6 +488,9 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
             mBinding?.etAddNote?.isEnabled=true
             mBinding?.spEstDays?.isEnabled=true
         }
+
+        if(enquiryDetails?.enquiryStageID!!>=2)mBinding?.btnChat?.visibility=View.VISIBLE
+        else mBinding?.btnChat?.visibility=View.GONE
     }
 
     private fun setProgressTimeline(){
