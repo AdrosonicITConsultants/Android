@@ -185,7 +185,7 @@ class CompletedOrderListAdapter(var context: Context?, private var enquiries: Re
                     ContextCompat.getColor(
                         it, R.color.red_logo)
                 }?.let { holder.enquiryStage.setTextColor(it) }
-            holder?.enquiryStage.text = "Enquiry Closed"
+            holder?.enquiryStage.text = "Order Closed"
         }
 
     }
