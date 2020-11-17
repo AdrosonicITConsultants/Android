@@ -25,7 +25,7 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
     var adminParams = ArtDashParam()
 
     fun getArtisanDashboard() : String? {
-        dashUrl = ConstantsDirectory.ARTISAN_DASHBOARD_URL
+        dashUrl = ConstantsDirectory.ARTISAN_DASHBOARD_URL_UAT
         artParams.token0 = token
         artParams.token1 = token
         artParams.token2 = token
@@ -47,7 +47,7 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun getBuyerDashboard() : String? {
-        dashUrl = ConstantsDirectory.BUYER_DASHBOARD_URL
+        dashUrl = ConstantsDirectory.BUYER_DASHBOARD_URL_UAT
         buyParams.email = email
         buyParams.token = token
 //        buyParams.token1 = token

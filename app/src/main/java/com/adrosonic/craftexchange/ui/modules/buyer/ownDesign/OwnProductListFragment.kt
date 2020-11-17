@@ -116,7 +116,6 @@ class OwnProductListFragment : Fragment(),
     override fun onSuccess() {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
-                Log.e("Wishlist", "Onsucces")
                 swipe_refresh_layout?.isRefreshing = false
                 mViewModel.getCustomDesignListMutableData()
                 setVisiblities()
@@ -130,7 +129,6 @@ class OwnProductListFragment : Fragment(),
     override fun onFailure() {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
-                Log.e("Wishlist", "OnFailure")
                 swipe_refresh_layout.isRefreshing = false
                 mViewModel?.getCustomDesignListMutableData()
 //                Utility.displayMessage("Error while fetching custom products. Pleas try again after some time", requireContext() )
@@ -153,7 +151,7 @@ class OwnProductListFragment : Fragment(),
             buyerOwnProductList.visibility = View.GONE
             empty_view.visibility = View.VISIBLE
             deleteAll.visibility=View.GONE
-            own_design_elements.text = "Your wishlist is empty"
+            own_design_elements.text = "Your Custom product list is empty"
 
         }
     }
