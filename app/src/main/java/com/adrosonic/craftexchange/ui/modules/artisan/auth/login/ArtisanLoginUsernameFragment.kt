@@ -340,7 +340,6 @@ class ArtisanLoginUsernameFragment : Fragment() {
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d("SignInActivity", "signInWithCredential:success")
-
                         if(Utility.checkIfInternetConnected(requireContext())) {
 
                             CraftExchangeRepository
@@ -362,9 +361,7 @@ class ArtisanLoginUsernameFragment : Fragment() {
                                     override fun onResponse(
                                         call: Call<ArtisanResponse>, response: Response<ArtisanResponse>
                                     ) {
-
                                         if (response.body()?.valid == true)  {
-
                                             Prefs.putBoolean(ConstantsDirectory.IS_LOGGED_IN, true)
                                             UserPredicates.insertArtisan(response.body()!!)
                                             AddressPredicates.insertArtisanAddress(response.body()!!)

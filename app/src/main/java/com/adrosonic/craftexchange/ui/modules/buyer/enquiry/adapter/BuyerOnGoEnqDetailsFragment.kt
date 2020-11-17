@@ -231,12 +231,13 @@ EnquiryViewModel.FetchEnquiryInterface,
 
         mBinding?.chat?.setOnClickListener {
             if(enquiryDetails?.ProductBrandName != "") {
-                enqID?.let { startActivity(Intent(context?.chatLogDetailsIntent(it))) }
+                enqID?.let { startActivity(Intent(context?.chatLogDetailsIntent(it,enquiryDetails?.userId?:0))) }
             }else    Utility.messageDialog(requireActivity(),"No Artisan Assigned to this enquiry")
-
-    }
+        }
         mBinding?.btnChat?.setOnClickListener {
-            enqID?.let {  startActivity(Intent(context?.chatLogDetailsIntent(it)))}
+            if(enquiryDetails?.ProductBrandName != "") {
+                enqID?.let { startActivity(Intent(context?.chatLogDetailsIntent(it,enquiryDetails?.userId?:0))) }
+            }else    Utility.messageDialog(requireActivity(),"No Artisan Assigned to this enquiry")
         }
     }
 
@@ -530,7 +531,8 @@ EnquiryViewModel.FetchEnquiryInterface,
                         }
                     }
                 }
-
+                if(enquiryDetails?.enquiryStageID!!>=2)mBinding?.btnChat?.visibility=View.VISIBLE
+                else mBinding?.btnChat?.visibility=View.GONE
             })
         }catch (e:Exception){
             Log.e("EnquiryDetails","Details : "+e.printStackTrace())

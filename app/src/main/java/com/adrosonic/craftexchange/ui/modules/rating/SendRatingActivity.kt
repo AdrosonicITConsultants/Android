@@ -60,7 +60,7 @@ SendRatingAdapter.averagerating{
         if(intent.extras!=null){
             enquiryId = intent.getLongExtra("enquiryId", 0)
             userId = Prefs.getString(ConstantsDirectory.USER_ID, "").toLong()
-            Log.d("BuyerRating", "onViewCreated: entered on buyerrating $enquiryId  $userId")
+            Log.e("BuyerRating", "onViewCreated: $enquiryId  $userId")
         }
         val gson = GsonBuilder().create()
         ratingQuestionsResponse = mUserConfig.ratingQuestions.toString()
@@ -164,7 +164,6 @@ SendRatingAdapter.averagerating{
             mBinding?.submitRating?.isEnabled = false
             ratingDataRequest.clear()
             ratingArr = mSendRatingAdapter?.getRating()!!
-//            Log.d("SendRating", "onCreate: get rating " + ratingArr)
             var show = false
             for(i in 0..questions.size-1)
             {
@@ -192,7 +191,6 @@ SendRatingAdapter.averagerating{
                 val message = mBinding?.message?.text
                 if (message.toString() != ""){
                     ratingDataRequest.add(RatingRequest(enquiryId!!,userId!!,commentId,0.0 , message.toString() ))
-
                 }
                 Log.d("message", "onCreate array : " + ratingDataRequest)
                 var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
@@ -207,8 +205,6 @@ SendRatingAdapter.averagerating{
                             Log.d("ApiSEND", "n0 response: ")
                             mBinding?.submitRating?.isEnabled = true
                             Utility.displayMessage("Something went wrong ", this@SendRatingActivity)
-
-
                         }
 
                         override fun onResponse(
@@ -227,13 +223,6 @@ SendRatingAdapter.averagerating{
                                 Log.d("ApiSEND", "API fail: ")
                                 Utility.displayMessage("api fail ", this@SendRatingActivity)
                                 mBinding?.submitRating?.isEnabled = true
-
-//                                Toast.makeText(
-//                                    this@SendRatingActivity,
-//                                    response.body()?.errorMessage.toString(),
-//                                    Toast.LENGTH_SHORT
-//                                ).show()
-
                             }
 
                         }

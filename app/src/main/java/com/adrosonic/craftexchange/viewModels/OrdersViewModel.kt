@@ -570,6 +570,7 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
                         Log.e("initializePartialRefund","Success: ${response?.body()?.valid}")
                         OrdersPredicates.updatPostInitializePartialRefund(enquiryId)
                         orderCloseListener?.onOrderCloseSuccess()
+
                     }else{
                         Log.e("initializePartialRefund","isSuccessful false")
                         orderCloseListener?.onOrderCloseFailure()
@@ -765,7 +766,6 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
                 }
             })
     }
-
 
     fun getOrderProgressDetails(orderId: Long){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"

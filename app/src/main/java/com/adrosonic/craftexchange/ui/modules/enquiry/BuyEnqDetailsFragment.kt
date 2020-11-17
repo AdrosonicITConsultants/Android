@@ -30,7 +30,7 @@ class BuyEnqDetailsFragment : Fragment() {
     var enqStatus : Long ?= 0
 //    var enqDetails : OngoingEnquiries?= null
     var text : String ?= ""
-
+    var userId=0L
     val mEnqVM : EnquiryViewModel by viewModels()
 
 
@@ -92,13 +92,14 @@ class BuyEnqDetailsFragment : Fragment() {
                 mBinding?.brandDescription?.text = enqDetails?.brandDesc ?: " - "
 
                 mBinding?.btnChat?.visibility = View.VISIBLE
+                userId=enqDetails?.userId?:0
             }
         }
         mBinding?.btnBack?.setOnClickListener {
             activity?.onBackPressed()
         }
         mBinding?.btnChat?.setOnClickListener {
-            enqID?.let {  startActivity(Intent(requireContext()?.chatLogDetailsIntent(it)))}
+            enqID?.let {  startActivity(Intent(requireContext()?.chatLogDetailsIntent(it,userId)))}
         }
     }
 

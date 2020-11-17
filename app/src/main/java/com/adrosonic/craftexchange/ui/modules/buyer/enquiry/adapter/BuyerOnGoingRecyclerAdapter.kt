@@ -21,6 +21,7 @@ import com.adrosonic.craftexchange.ui.modules.enquiry.enquiryDetails
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
+import com.daimajia.swipe.SwipeLayout
 import com.pixplicity.easyprefs.library.Prefs
 import io.realm.RealmResults
 
@@ -38,6 +39,7 @@ class BuyerOnGoingRecyclerAdapter(var context: Context?, private var enquiries: 
         var enquiryStage : TextView = view.findViewById(R.id.enquiry_status_text)
         var enquiryStageDot: ImageView = view.findViewById(R.id.enquiry_status_dot)
         var layout : ConstraintLayout = view.findViewById(R.id.enquiry_container_layout)
+        var swipeLayout : SwipeLayout = view.findViewById(R.id.swipe)
 
     }
 
@@ -76,7 +78,7 @@ class BuyerOnGoingRecyclerAdapter(var context: Context?, private var enquiries: 
             intent.putExtras(bundle)
             context?.startActivity(intent)
         }
-
+        holder!!.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, null)
 
         var image = enquiry?.productImages
         val imgArrSplit = image?.split((",").toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()

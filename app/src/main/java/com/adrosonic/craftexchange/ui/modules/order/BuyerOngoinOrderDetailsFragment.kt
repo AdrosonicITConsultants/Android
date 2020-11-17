@@ -252,7 +252,7 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
             showPartialRefundDialog()
         }
         mBinding?.btnCloseOrder?.setOnClickListener {
-            showCloseOrderDialog()
+               showCloseOrderDialog()
         }
         mBinding?.btnChat?.setOnClickListener {
             enqID?.let {  startActivity(Intent(requireContext()?.chatLogDetailsIntent(it)))}
@@ -894,8 +894,14 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
                 enqID?.let {
                     dialog.cancel()
                     viewLoader()
-                    mOrderVm?.orderCloseListener = this
-                    mOrderVm.initializePartialRefund(it)
+
+                    if( orderDetails?.productStatusId == AvailableStatus.IN_STOCK.getId()){
+                        mOrderVm.orderConfirmListener=this
+                        mOrderVm.markEnquiryCompleted(it)
+                    }else {
+                        mOrderVm?.orderCloseListener = this
+                        mOrderVm.initializePartialRefund(it)
+                    }
                 }
             }else Utility.displayMessage(getString(R.string.no_internet_connection),requireContext())
         }
@@ -931,11 +937,13 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
                 enqID?.let { orderDetails=mOrderVm.getSingleOnOrderData(it,0).value }
                 Log.e("initializePartialRefund","getSingleTransactions Success: ${orderDetails?.isPartialRefundReceived}")
 
-                if(orderDetails?.productStatusId==AvailableStatus.IN_STOCK.getId()){
-                    OrdersPredicates.updatPostDeliveryConfirmed(enqID?:0)
-                    EnquiryPredicates.deleteEnquiry(enqID?:0)
-                    requireActivity().onBackPressed()
-                }else showPartialRefundDialog()//here in case of instock products finish should be called
+//                if(orderDetails?.productStatusId==AvailableStatus.IN_STOCK.getId()){
+//                    OrdersPredicates.updatPostDeliveryConfirmed(enqID?:0)
+//                    EnquiryPredicates.deleteEnquiry(enqID?:0)
+//                    requireActivity().onBackPressed()
+//                }
+//                else
+                    showPartialRefundDialog()//here in case of instock products finish should be called
                 setDetails()
                 hideLoader()
             })

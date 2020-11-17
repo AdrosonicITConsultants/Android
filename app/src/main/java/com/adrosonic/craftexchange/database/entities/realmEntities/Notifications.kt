@@ -15,6 +15,7 @@ open class Notifications : RealmObject() {
     var customProduct: String?=""
     var notificationId: Long?=0
     var type: String?=""
+    var details: String?=""
     var actionMarkRead: Long?=0
     companion object {
         const val COLUMN_TABLE = "Notifications"
