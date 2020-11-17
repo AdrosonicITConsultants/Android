@@ -715,15 +715,15 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
     }
 
     fun viewChangeStatusLayer(){
-        if(enquiryDetails?.productStatusID == AvailableStatus.MADE_TO_ORDER.getId() || enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
-            if(enquiryDetails?.enquiryStageID == 5L){
-                mBinding?.changeEnquiryStatusLayout?.visibility = View.VISIBLE
-            }else{
-                mBinding?.changeEnquiryStatusLayout?.visibility = View.GONE
-            }
-        }else{
-            mBinding?.changeEnquiryStatusLayout?.visibility = View.GONE
-        }
+//        if(enquiryDetails?.productStatusID == AvailableStatus.MADE_TO_ORDER.getId() || enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
+//            if(enquiryDetails?.enquiryStageID == 5L){
+//                mBinding?.changeEnquiryStatusLayout?.visibility = View.VISIBLE
+//            }else{
+//                mBinding?.changeEnquiryStatusLayout?.visibility = View.GONE
+//            }
+//        }else{
+//            mBinding?.changeEnquiryStatusLayout?.visibility = View.GONE
+//        }
     }
 
     override fun onResume() {

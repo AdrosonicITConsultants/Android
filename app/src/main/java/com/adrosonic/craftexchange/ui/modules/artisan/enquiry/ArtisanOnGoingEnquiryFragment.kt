@@ -63,6 +63,7 @@ class ArtisanOnGoingEnquiryFragment : Fragment(),
         if (!Utility.checkIfInternetConnected(requireContext())) {
             Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
         } else {
+            mBinding?.swipeOngoingEnquiries?.isRefreshing = true
             mEnqVM.getAllOngoingEnquiries()
         }
 
@@ -73,11 +74,11 @@ class ArtisanOnGoingEnquiryFragment : Fragment(),
             })
         setVisiblities()
 
-        mBinding?.swipeOngoingEnquiries?.isRefreshing = true
         mBinding?.swipeOngoingEnquiries?.setOnRefreshListener {
             if (!Utility.checkIfInternetConnected(requireContext())) {
                 Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
             } else {
+                mBinding?.swipeOngoingEnquiries?.isRefreshing = true
                 mEnqVM.getAllOngoingEnquiries()
             }
         }

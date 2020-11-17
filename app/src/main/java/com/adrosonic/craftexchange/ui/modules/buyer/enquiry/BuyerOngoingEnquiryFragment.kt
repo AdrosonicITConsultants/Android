@@ -64,6 +64,7 @@ EnquiryViewModel.FetchEnquiryInterface{
         if (!Utility.checkIfInternetConnected(requireContext())) {
             Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
         } else {
+            mBinding?.swipeOngoingEnquiries?.isRefreshing = true
             mEnqVM.getAllOngoingEnquiries()
         }
 
@@ -73,11 +74,12 @@ EnquiryViewModel.FetchEnquiryInterface{
                 mEnqListAdapter?.updateProductList(mEnquiryList)
             })
 
-        mBinding?.swipeOngoingEnquiries?.isRefreshing = true
+
         mBinding?.swipeOngoingEnquiries?.setOnRefreshListener {
             if (!Utility.checkIfInternetConnected(requireContext())) {
                 Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
             } else {
+                mBinding?.swipeOngoingEnquiries?.isRefreshing = true
                 mEnqVM.getAllOngoingEnquiries()
             }
         }

@@ -25,7 +25,6 @@ class ArtisanSearchAdapter(var context: Context?, private var artisanProducts: R
     inner class ViewHolder(var binding: ItemArtisanProductBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(artisanProduct: ArtisanProducts){
             binding.itemArtisanProduct = artisanProduct
-//            binding.event = this@ArtisanProductAdapter
             binding.executePendingBindings()
         }
     }
@@ -50,6 +49,15 @@ class ArtisanSearchAdapter(var context: Context?, private var artisanProducts: R
         holder.binding.productTitle.text = product?.productTag
         holder.binding.productDescription.text = product?.productSpecs
         var status : String ?= ""
+
+        when(product?.madeWithAntaran){
+            0L -> {
+                holder.binding.designIcon.setBackgroundResource(R.drawable.ic_artisan_self_design_icon)
+            }
+            1L -> {
+                holder.binding.designIcon.setBackgroundResource(R.drawable.ic_antaran_co_design_icon)
+            }
+        }
         when(product?.productStatusId){
             2.toLong() -> {
                 status = context?.getString(R.string.in_stock)

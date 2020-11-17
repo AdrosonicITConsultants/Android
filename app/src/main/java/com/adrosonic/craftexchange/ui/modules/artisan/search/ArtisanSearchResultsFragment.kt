@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.FragmentArtisanSearchResultsBinding
+import com.adrosonic.craftexchange.ui.modules.artisan.products.UploadedProductsASearchAdapter
 import com.adrosonic.craftexchange.ui.modules.artisan.search.adapter.ArtisanSearchAdapter
 import com.adrosonic.craftexchange.ui.modules.search.FilterCollectionAdapter
 import com.adrosonic.craftexchange.utils.Utility
@@ -31,7 +32,7 @@ class ArtisanSearchResultsFragment : Fragment(),
 
     private var mBinding: FragmentArtisanSearchResultsBinding?= null
     val mViewModel: SearchViewModel by viewModels()
-    var adapter : ArtisanSearchAdapter?= null
+    var adapter : UploadedProductsASearchAdapter?= null
 
     private lateinit var filterAdapter : FilterCollectionAdapter
     var filterList = ArrayList<Pair<String,Long>>()
@@ -119,7 +120,7 @@ class ArtisanSearchResultsFragment : Fragment(),
     }
 
     private fun setupRecyclerView(searchFilter : String, filter : Long){
-        adapter = ArtisanSearchAdapter(requireContext(),searchFilter.let { mViewModel.getArtisanSearchData(it, filter).value })
+        adapter = UploadedProductsASearchAdapter(requireContext(),searchFilter.let { mViewModel.getArtisanSearchData(it, filter).value })
         mBinding?.artisanSearchList?.adapter = adapter
         mBinding?.artisanSearchList?.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         mBinding?.listSizeText?.text = "Found ${adapter?.itemCount} items"
