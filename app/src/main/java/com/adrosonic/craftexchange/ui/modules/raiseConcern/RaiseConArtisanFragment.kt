@@ -34,6 +34,7 @@ import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.FaultyOrdersViewModel
 import com.adrosonic.craftexchange.viewModels.OrdersViewModel
+import com.pixplicity.easyprefs.library.Prefs
 import com.wajahatkarim3.easyvalidation.core.view_ktx.nonEmpty
 import kotlin.collections.ArrayList
 
@@ -498,7 +499,13 @@ class RaiseConArtisanFragment : Fragment(),
             Log.e("OrderProgress", "Exception onFailure " + e.message)
         }
     }
-
+    override fun onStart() {
+        super.onStart()
+        Log.d("apirecall", "onActivityCreated: recall rating api")
+        var userId : String?= null
+        userId = Prefs.getString(ConstantsDirectory.USER_ID, "")
+        mOrdVM.ratingData(enqID?.toLong()!!, userId!!.toLong())
+    }
     companion object {
         fun newInstance(param1: String, param2: String) =
             RaiseConArtisanFragment().apply {

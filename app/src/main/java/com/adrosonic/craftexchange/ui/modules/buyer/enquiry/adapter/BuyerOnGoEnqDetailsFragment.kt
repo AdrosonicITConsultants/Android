@@ -165,19 +165,9 @@ EnquiryViewModel.FetchEnquiryInterface,
             }
         }
 
-        mBinding?.btnChat?.setOnClickListener {
-            if(enquiryDetails?.ProductBrandName != "") {
-                enqID?.let { startActivity(Intent(context?.chatLogDetailsIntent(it))) }
-            }else    Utility.messageDialog(requireActivity(),"No Artisan Assigned to this enquiry")
-
-        }
-
         mBinding?.chat?.setOnClickListener {
-            if(enquiryDetails?.ProductBrandName != "") {
                 enqID?.let { startActivity(Intent(context?.chatLogDetailsIntent(it))) }
-            }else    Utility.messageDialog(requireActivity(),"No Artisan Assigned to this enquiry")
-
-        }
+       }
 
         mBinding?.btnBack?.setOnClickListener {
             activity?.onBackPressed()
@@ -236,16 +226,6 @@ EnquiryViewModel.FetchEnquiryInterface,
             enqID?.let {  startActivity(requireContext().raisePiContext(it,true, SendPiRequest(),false)) }
         }
 
-        mBinding?.chat?.setOnClickListener {
-            if(enquiryDetails?.ProductBrandName != "") {
-                enqID?.let { startActivity(Intent(context?.chatLogDetailsIntent(it,enquiryDetails?.userId?:0))) }
-            }else    Utility.messageDialog(requireActivity(),"No Artisan Assigned to this enquiry")
-        }
-        mBinding?.btnChat?.setOnClickListener {
-            if(enquiryDetails?.ProductBrandName != "") {
-                enqID?.let { startActivity(Intent(context?.chatLogDetailsIntent(it,enquiryDetails?.userId?:0))) }
-            }else    Utility.messageDialog(requireActivity(),"No Artisan Assigned to this enquiry")
-        }
     }
 
     fun showDialog(enquiryId : Long){
@@ -270,7 +250,7 @@ EnquiryViewModel.FetchEnquiryInterface,
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 setTabVisibilities()
-//                setChatIConVisibility()
+                setChatIConVisibility()
 //                handleMoqVisiblities()
                 mBinding?.enquiryCode?.text = enquiryDetails?.enquiryCode
                 mBinding?.enquiryStartDate?.text =
@@ -815,6 +795,27 @@ EnquiryViewModel.FetchEnquiryInterface,
     }
 }
 
+    private fun setChatIConVisibility(){
+        if(enquiryDetails?.enquiryStageID!=null){
+            if(enquiryDetails?.isBlue == null && enquiryDetails?.enquiryStageID!! >= 4L){
+//                mBinding?.btnChat?.visibility = View.VISIBLE
+//                mBinding?.btnMenu?.visibility = View.GONE
+                mBinding?.closeEnquiry?.visibility=View.GONE
+            }else{
+//                mBinding?.btnChat?.visibility = View.GONE
+//                mBinding?.btnMenu?.visibility = View.VISIBLE
+                mBinding?.closeEnquiry?.visibility = View.VISIBLE
+            }
+            if(enquiryDetails?.enquiryStageID!!>=2){
+                mBinding?.chat?.visibility=View.VISIBLE
+            }
+            else {
+                mBinding?.chat?.visibility=View.GONE
+            }
+        }
+
+    }
+
     fun viewLoader(){
         mBinding?.buyerOngoEnqDetails?.visibility = View.GONE
         mBinding?.swipeEnquiryDetails?.isRefreshing = true
@@ -853,7 +854,7 @@ EnquiryViewModel.FetchEnquiryInterface,
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("EnquiryDetails", "onFailure")
-//                enquiryDetails = enqID?.let { mEnqVM.getSingleOnEnqData(it).value }
+                enquiryDetails = enqID?.let { mEnqVM.getSingleOnEnqData(it).value }
                 hideLoader()
             })
         } catch (e: Exception) {

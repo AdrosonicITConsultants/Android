@@ -42,6 +42,7 @@ import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.FaultyOrdersViewModel
 import com.adrosonic.craftexchange.viewModels.OrdersViewModel
 import com.google.gson.Gson
+import com.pixplicity.easyprefs.library.Prefs
 import com.wajahatkarim3.easyvalidation.core.view_ktx.nonEmpty
 import io.realm.RealmResults
 import kotlinx.android.synthetic.main.dialog_save_upload.view.*
@@ -448,7 +449,13 @@ class RaiseConBuyerFragment : Fragment(),
         }
     }
 
-
+    override fun onStart() {
+        super.onStart()
+        Log.d("apirecall", "onActivityCreated: recall rating api")
+        var userId : String?= null
+        userId = Prefs.getString(ConstantsDirectory.USER_ID, "")
+        mOrdVM.ratingData(enqID?.toLong()!!, userId!!.toLong())
+    }
     override fun updateList(faultData: FaultRefData) {
         try {
             Handler(Looper.getMainLooper()).post {
