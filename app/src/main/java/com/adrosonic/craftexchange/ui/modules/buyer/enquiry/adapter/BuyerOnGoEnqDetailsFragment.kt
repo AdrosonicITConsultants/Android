@@ -519,13 +519,6 @@ EnquiryViewModel.FetchEnquiryInterface,
                         }
                     }
                 }
-                if(enquiryDetails?.enquiryStageID!!>=2){
-                    mBinding?.chat?.visibility=View.VISIBLE
-                }
-                else {
-                    mBinding?.chat?.visibility=View.GONE
-                }
-
             })
         }catch (e:Exception){
             Log.e("EnquiryDetails","Details : "+e.printStackTrace())
@@ -829,7 +822,14 @@ EnquiryViewModel.FetchEnquiryInterface,
 //                mBinding?.btnMenu?.visibility = View.VISIBLE
                 mBinding?.closeEnquiry?.visibility = View.VISIBLE
             }
+            if(enquiryDetails?.enquiryStageID!!>=2){
+                mBinding?.chat?.visibility=View.VISIBLE
+            }
+            else {
+                mBinding?.chat?.visibility=View.GONE
+            }
         }
+
     }
 
     fun viewLoader(){
