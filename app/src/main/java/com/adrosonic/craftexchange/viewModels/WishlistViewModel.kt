@@ -32,10 +32,11 @@ class WishlistViewModel(application: Application) : AndroidViewModel(application
                 override fun onResponse(
                     call: Call<ResponseBody>,
                     response: retrofit2.Response<ResponseBody>) {
+                    Log.e(TAG,"addToWishlist:"+response.isSuccessful)
                     if(response.isSuccessful){
-                        Log.e(TAG,"addToWishlist isSuccessful:"+response.body())
+                        Log.e(TAG,"addToWishlist isSuccessful:"+response.isSuccessful)
                     }else{
-                        Log.e(TAG,"addToWishlist "+response.body())
+                        Log.e(TAG,"addToWishlist not "+response.body())
 
                     }
                 }
@@ -98,6 +99,7 @@ class WishlistViewModel(application: Application) : AndroidViewModel(application
 
             })
     }
+
 
     companion object{
         const val TAG = "wishlistVM"
