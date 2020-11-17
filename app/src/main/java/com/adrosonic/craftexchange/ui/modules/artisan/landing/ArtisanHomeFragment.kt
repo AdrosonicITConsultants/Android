@@ -169,7 +169,8 @@ class ArtisanHomeFragment : Fragment(),
                 mBinding?.swipeRefreshLayout?.isRefreshing = false
                 mViewModel.getProductCategoryListMutableData(artisanId)
                 setVisibilities()
-                Utility.displayMessage("Error while fetching wishlist. Pleas try again after some time", requireContext()) })
+//                Utility.displayMessage("Error while fetching wishlist. Pleas try again after some time", requireContext())
+                })
         } catch (e: Exception) {
             Log.e("CAtegoryList", "Exception onFailure " + e.message)
         }

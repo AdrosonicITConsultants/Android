@@ -14,6 +14,7 @@ import com.adrosonic.craftexchange.repository.data.response.Notification.Notific
 import com.adrosonic.craftexchange.repository.data.response.artisan.products.ArtisanProductDetailsResponse
 import com.adrosonic.craftexchange.repository.data.response.artisan.productTemplate.uploadData.ProductUploadData
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.BrandListResponse
+import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.CatalogueProductsResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.singleProduct.SingleProductDetails
 import com.adrosonic.craftexchange.repository.data.response.buyer.wishList.WishListedIds
 import com.adrosonic.craftexchange.repository.data.response.changeReequest.ChatListResponse
@@ -355,7 +356,28 @@ class LandingViewModel(application: Application) : AndroidViewModel(application)
 
             })
     }
+    fun getProductsInWishlist(){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getWishlistService()
+            .getProductsInWishlist(token)
+            .enqueue(object: Callback, retrofit2.Callback<CatalogueProductsResponse> {
+                override fun onFailure(call: Call<CatalogueProductsResponse>, t: Throwable) {
+                    t.printStackTrace()
+                    listener?.onFailure()
+                    Log.e("LandingViewModel","wishlist onFailure: "+t.message)
+                }
+                override fun onResponse(
+                    call: Call<CatalogueProductsResponse>,
+                    response: Response<CatalogueProductsResponse>) {
 
+                    if(response.body()?.valid == true){
+                        val response=response.body()?.data
+                        ProductPredicates.insertProductsInCatalogue(response?.products,1)
+                    }
+                }
+            })
+    }
     fun getBuyerProductDetails(id:Long){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         CraftExchangeRepository

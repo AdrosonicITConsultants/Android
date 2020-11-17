@@ -62,6 +62,7 @@ class wishlistFragment : Fragment(),
         if (!Utility.checkIfInternetConnected(requireContext())) {
             Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
         } else {
+            mViewModel.getProductsInWishlist()
             mViewModel.getwishlisteProductIds()
         }
 
@@ -88,6 +89,7 @@ class wishlistFragment : Fragment(),
             if (!Utility.checkIfInternetConnected(requireContext())) {
                 Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
             } else {
+                mViewModel.getProductsInWishlist()
                 mViewModel.getwishlisteProductIds()
             }
         }

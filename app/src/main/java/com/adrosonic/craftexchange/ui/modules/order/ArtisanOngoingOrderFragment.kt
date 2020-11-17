@@ -75,6 +75,7 @@ class ArtisanOngoingOrderFragment : Fragment(),
                 mOrderListAdapter?.updateProductList(mOrderList)
             })
 
+
         mBinding?.swipeOngoingEnquiries?.setOnRefreshListener {
             if (!Utility.checkIfInternetConnected(requireContext())) {
                 Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
@@ -134,8 +135,8 @@ class ArtisanOngoingOrderFragment : Fragment(),
         if (!Utility.checkIfInternetConnected(requireContext())) {
             Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
         } else {
-            mBinding?.swipeOngoingEnquiries?.isRefreshing = true
             mOrderVm.getAllOngoingOrders()
+            mBinding?.swipeOngoingEnquiries?.isRefreshing= true
         }
     }
 

@@ -180,10 +180,6 @@ ArtisanProductsViewModel.productsFetchInterface{
                 mBinding?.swipeRefreshLayout?.isRefreshing = false
                 initializeView()
                 mViewModel.getProductListMutableData(artisanId,prodCat)
-                Utility.displayMessage(
-                    "Error while fetching wishlist. Pleas try again after some time",
-                    requireContext()
-                )
             }
             )
         } catch (e: Exception) {
