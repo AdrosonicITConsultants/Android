@@ -49,20 +49,7 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
-                        <ImageView
-                            android:id="@+id/btn_chat"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:layout_marginTop="@dimen/margin_regular"
-                            android:layout_marginEnd="@dimen/margin_regular"
-                            android:background="?selectableItemBackgroundBorderless"
-                            android:clickable="true"
-                            android:elevation="10dp"
-                            android:focusable="true"
-                            android:src="@drawable/ic_chat_enquiry"
-                            android:visibility="gone"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+
 
                         <ImageView
                             android:id="@+id/btn_menu"

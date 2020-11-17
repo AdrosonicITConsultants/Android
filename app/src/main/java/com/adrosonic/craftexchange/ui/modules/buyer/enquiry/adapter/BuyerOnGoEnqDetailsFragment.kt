@@ -165,12 +165,6 @@ EnquiryViewModel.FetchEnquiryInterface,
             }
         }
 
-        mBinding?.btnChat?.setOnClickListener {
-            if(enquiryDetails?.ProductBrandName != "") {
-                enqID?.let { startActivity(Intent(context?.chatLogDetailsIntent(it))) }
-            }else    Utility.messageDialog(requireActivity(),"No Artisan Assigned to this enquiry")
-
-        }
 
         mBinding?.btnBack?.setOnClickListener {
             activity?.onBackPressed()
@@ -230,15 +224,9 @@ EnquiryViewModel.FetchEnquiryInterface,
         }
 
         mBinding?.chat?.setOnClickListener {
-            if(enquiryDetails?.ProductBrandName != "") {
                 enqID?.let { startActivity(Intent(context?.chatLogDetailsIntent(it,enquiryDetails?.userId?:0))) }
-            }else    Utility.messageDialog(requireActivity(),"No Artisan Assigned to this enquiry")
         }
-        mBinding?.btnChat?.setOnClickListener {
-            if(enquiryDetails?.ProductBrandName != "") {
-                enqID?.let { startActivity(Intent(context?.chatLogDetailsIntent(it,enquiryDetails?.userId?:0))) }
-            }else    Utility.messageDialog(requireActivity(),"No Artisan Assigned to this enquiry")
-        }
+
     }
 
     fun showDialog(enquiryId : Long){
@@ -531,8 +519,13 @@ EnquiryViewModel.FetchEnquiryInterface,
                         }
                     }
                 }
-                if(enquiryDetails?.enquiryStageID!!>=2)mBinding?.btnChat?.visibility=View.VISIBLE
-                else mBinding?.btnChat?.visibility=View.GONE
+                if(enquiryDetails?.enquiryStageID!!>=2){
+                    mBinding?.chat?.visibility=View.VISIBLE
+                }
+                else {
+                    mBinding?.chat?.visibility=View.GONE
+                }
+
             })
         }catch (e:Exception){
             Log.e("EnquiryDetails","Details : "+e.printStackTrace())
@@ -828,11 +821,13 @@ EnquiryViewModel.FetchEnquiryInterface,
     private fun setChatIConVisibility(){
         if(enquiryDetails?.enquiryStageID!=null){
             if(enquiryDetails?.isBlue == null && enquiryDetails?.enquiryStageID!! >= 4L){
-                mBinding?.btnChat?.visibility = View.VISIBLE
-                mBinding?.btnMenu?.visibility = View.GONE
+//                mBinding?.btnChat?.visibility = View.VISIBLE
+//                mBinding?.btnMenu?.visibility = View.GONE
+                mBinding?.closeEnquiry?.visibility=View.GONE
             }else{
-                mBinding?.btnChat?.visibility = View.GONE
-                mBinding?.btnMenu?.visibility = View.VISIBLE
+//                mBinding?.btnChat?.visibility = View.GONE
+//                mBinding?.btnMenu?.visibility = View.VISIBLE
+                mBinding?.closeEnquiry?.visibility = View.VISIBLE
             }
         }
     }

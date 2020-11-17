@@ -48,7 +48,7 @@ class WishlistService: JobIntentService() {
             .enqueue(object: Callback, retrofit2.Callback<ResponseBody> {
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     t.printStackTrace()
-                    Log.e("AddToWishlist failure ","${t.printStackTrace()}")
+                    Log.e(TAG,"addProductToWishlist Failure ${t.printStackTrace()}")
                 }
                 override fun onResponse(
                     call: Call<ResponseBody>,
