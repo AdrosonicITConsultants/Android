@@ -71,10 +71,9 @@ class CompletedOrderFragment : Fragment(),
         } else {
             mOrderVm.getAllCompletedOrders()
             mOrderVm.ratingQuestions()
-
+            mBinding?.swipeCompletedEnquiries?.isRefreshing = true
         }
 
-        mBinding?.swipeCompletedEnquiries?.isRefreshing = true
         mOrderVm.getCompOrderListMutableData() .observe(viewLifecycleOwner, Observer<RealmResults<Orders>> {
                 mOrderList = it
                 mOrderListAdapter?.updateProductList(mOrderList)
@@ -85,6 +84,7 @@ class CompletedOrderFragment : Fragment(),
                 Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
             } else {
                 mOrderVm.getAllCompletedOrders()
+                mBinding?.swipeCompletedEnquiries?.isRefreshing = true
             }
         }
     }

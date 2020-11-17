@@ -69,10 +69,9 @@ class CompletedEnquiryFragment : Fragment(),
             Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
         } else {
             mEnqVM.getAllCompletedEnquiries()
-
+            mBinding?.swipeCompletedEnquiries?.isRefreshing = true
         }
 
-        mBinding?.swipeCompletedEnquiries?.isRefreshing = true
         mEnqVM.getCompEnqListMutableData()
             .observe(viewLifecycleOwner, Observer<RealmResults<CompletedEnquiries>> {
                 mEnquiryList = it
@@ -83,6 +82,7 @@ class CompletedEnquiryFragment : Fragment(),
             if (!Utility.checkIfInternetConnected(requireContext())) {
                 Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
             } else {
+                mBinding?.swipeCompletedEnquiries?.isRefreshing = true
                 mEnqVM.getAllCompletedEnquiries()
             }
         }

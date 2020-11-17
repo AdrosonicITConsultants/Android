@@ -135,8 +135,8 @@ class BuyerOngoingOrderFragment : Fragment(),
         if (!Utility.checkIfInternetConnected(requireContext())) {
             Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
         } else {
-            mBinding?.swipeOngoingEnquiries?.isRefreshing= true
-            mOrderVm.getOnOrderListMutableData()
+            mBinding?.swipeOngoingEnquiries?.isRefreshing = true
+            mOrderVm.getAllOngoingOrders()
         }
     }
 
