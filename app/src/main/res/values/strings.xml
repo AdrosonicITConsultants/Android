@@ -11,7 +11,7 @@
     <string name="artisan">Artisan</string>
     <string name="artisan_logo">Artisan Logo</string>
     <string name="buyer">Buyer</string>
-    <string name="change_language">\tChange Language</string>
+    <string name="change_language">Change Language</string>
     <string name="need_help">Need help Deciding?</string>
     <string name="need_help2">Need help?</string>
     <string name="change_lang_desc">Change language icon</string>
@@ -587,5 +587,5 @@
     <string name="plz_Wait">Please wait while we are downloading the document</string>
     <string name="for_any_query_reach_us">For any query reach us @</string>
     <string name="no_products_uploaded">No Products Uploaded!</string>
-    <string name="you">You</string>
+    <string name="you">you</string>
 </resources>

@@ -129,9 +129,7 @@ class ArtisanLoginPasswordFragment : Fragment() {
                                     UserPredicates.insertArtisan(response.body()!!)
                                     AddressPredicates.insertArtisanAddress(response.body()!!)
 
-
                                     mUserConfig.deviceName = "Android"
-
 
                                     Prefs.putString(
                                         ConstantsDirectory.USER_PWD,

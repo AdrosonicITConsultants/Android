@@ -1,6 +1,7 @@
 package com.adrosonic.craftexchange.viewModels
 
 import android.app.Application
+import android.os.Handler
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -303,7 +304,11 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
                         EnquiryPredicates?.insertOngoingEnquiries(response?.body()!!)
                         EnquiryPredicates?.insertEnqPaymentDetails(response?.body()!!)
                         EnquiryPredicates?.insertEnqArtisanProductCategory(response?.body()!!)
-                        fetchEnqListener?.onSuccess()
+
+//                        Handler().postDelayed({
+                            fetchEnqListener?.onSuccess()
+//                        }, 5000)
+
                     }else{
                         fetchEnqListener?.onFailure()
                         Log.e("EnquiryDetails","Failure: "+response.body()?.errorMessage)

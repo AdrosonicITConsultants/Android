@@ -667,16 +667,16 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
     }
 
     fun setViewEnquiryStageChangeButton(){
-        if(enquiryDetails?.productStatusID == AvailableStatus.MADE_TO_ORDER.getId() || enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
-            if(enquiryDetails?.enquiryStageID == 4L && enquiryDetails?.innerEnquiryStageID == null){
-                mBinding?.startEnqStageLayout?.visibility = View.VISIBLE
-            }else{
-                mBinding?.startEnqStageLayout?.visibility = View.GONE
-            }
-        }else{
-
-            mBinding?.startEnqStageLayout?.visibility = View.GONE
-        }
+//        if(enquiryDetails?.productStatusID == AvailableStatus.MADE_TO_ORDER.getId() || enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
+//            if(enquiryDetails?.enquiryStageID == 4L && enquiryDetails?.innerEnquiryStageID == null){
+//                mBinding?.startEnqStageLayout?.visibility = View.VISIBLE
+//            }else{
+//                mBinding?.startEnqStageLayout?.visibility = View.GONE
+//            }
+//        }else{
+//
+//            mBinding?.startEnqStageLayout?.visibility = View.GONE
+//        }
     }
 
     private fun setTabVisibilities(){
