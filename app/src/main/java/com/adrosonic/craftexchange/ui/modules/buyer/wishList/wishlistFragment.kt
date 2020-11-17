@@ -117,10 +117,10 @@ class wishlistFragment : Fragment(),
                 Log.e("Wishlist", "OnFailure")
                 swipe_refresh_layout.isRefreshing = false
                 mViewModel.getwishListMutableData()
-               Utility.displayMessage(
-                    "Error while fetching wishlist. Pleas try again after some time",
-                    requireContext()
-                )
+//               Utility.displayMessage(
+//                    "Error while fetching wishlist. Pleas try again after some time",
+//                    requireContext()
+//                )
                 setVisiblities()
             }
             )
