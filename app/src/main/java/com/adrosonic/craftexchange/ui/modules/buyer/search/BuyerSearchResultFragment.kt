@@ -30,6 +30,7 @@ import com.adrosonic.craftexchange.ui.modules.search.FilterCollectionAdapter
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
 import com.adrosonic.craftexchange.viewModels.SearchViewModel
+import com.adrosonic.craftexchange.viewModels.WishlistViewModel
 
 
 private const val ARG_PARAM1 = "param1"
@@ -56,6 +57,7 @@ class BuyerSearchResultFragment : Fragment(),
 
     val mViewModel: SearchViewModel by viewModels()
     val mEnqVM : EnquiryViewModel by viewModels()
+    val mWishListVM : WishlistViewModel by viewModels()
 
     var coordinator: SyncCoordinator? = null
 
@@ -408,11 +410,12 @@ class BuyerSearchResultFragment : Fragment(),
     }
 
     override fun onSelected(productId: Long, isWishListed: Long) {
-        WishlistPredicates.updateProductWishlisting(productId,isWishListed,1)
+//        WishlistPredicates.updateProductWishlisting(productId,isWishListed,1)
         if(Utility.checkIfInternetConnected(requireContext())) {
+            mWishListVM.addProductToWishlist(productId)
             coordinator = SyncCoordinator(requireContext())
             coordinator?.performLocallyAvailableActions()
-        }
+        } else Utility.displayMessage(getString(R.string.no_internet_connection),requireContext())
     }
 
 }
