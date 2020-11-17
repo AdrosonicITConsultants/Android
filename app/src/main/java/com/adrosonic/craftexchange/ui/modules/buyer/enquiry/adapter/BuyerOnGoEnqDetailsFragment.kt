@@ -133,7 +133,7 @@ EnquiryViewModel.FetchEnquiryInterface,
         Log.e("EnquiryDetails", "enqID : $enqID")
         if(Utility.checkIfInternetConnected(requireActivity())){
             enqID?.let { mEnqVM.getSingleOngoingEnquiry(it) }
-            viewLoader()
+//            viewLoader()
             mEnqVM.getMoqs(enqID!!)
             mEnqVM?.getSinglePi(enqID!!)
         }else{
@@ -166,6 +166,13 @@ EnquiryViewModel.FetchEnquiryInterface,
         }
 
         mBinding?.btnChat?.setOnClickListener {
+            if(enquiryDetails?.ProductBrandName != "") {
+                enqID?.let { startActivity(Intent(context?.chatLogDetailsIntent(it))) }
+            }else    Utility.messageDialog(requireActivity(),"No Artisan Assigned to this enquiry")
+
+        }
+
+        mBinding?.chat?.setOnClickListener {
             if(enquiryDetails?.ProductBrandName != "") {
                 enqID?.let { startActivity(Intent(context?.chatLogDetailsIntent(it))) }
             }else    Utility.messageDialog(requireActivity(),"No Artisan Assigned to this enquiry")
@@ -263,7 +270,7 @@ EnquiryViewModel.FetchEnquiryInterface,
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 setTabVisibilities()
-                setChatIConVisibility()
+//                setChatIConVisibility()
 //                handleMoqVisiblities()
                 mBinding?.enquiryCode?.text = enquiryDetails?.enquiryCode
                 mBinding?.enquiryStartDate?.text =
@@ -531,11 +538,11 @@ EnquiryViewModel.FetchEnquiryInterface,
                         }
                     }
                 }
-                if(enquiryDetails?.enquiryStageID!!>=2)mBinding?.btnChat?.visibility=View.VISIBLE
-                else mBinding?.btnChat?.visibility=View.GONE
+//                if(enquiryDetails?.enquiryStageID!!>=2)mBinding?.btnChat?.visibility=View.VISIBLE
+//                else mBinding?.btnChat?.visibility=View.GONE
             })
         }catch (e:Exception){
-            Log.e("EnquiryDetails","Details : "+e.printStackTrace())
+            Log.e("EnquiryDetailsTryCatch","Details : "+e.printStackTrace())
         }
     }
 
@@ -552,11 +559,6 @@ EnquiryViewModel.FetchEnquiryInterface,
                         mBinding?.piDetailsLayout?.visibility = View.VISIBLE
                     }
                     8L -> {
-                        if(enquiryDetails?.isBlue == 1L) {
-                            mBinding?.transactionLayout?.visibility = View.GONE
-                        }else{
-                            mBinding?.transactionLayout?.visibility = View.VISIBLE
-                        }
                         mBinding?.piDetailsLayout?.visibility = View.VISIBLE
                     }
                     else -> {
@@ -776,19 +778,7 @@ EnquiryViewModel.FetchEnquiryInterface,
                     }
                 }
             }
-//            val moq= MoqsPredicates.getMoqs(enqID)
-//            val moqId= moq?.moqId?:0
-//            mBinding?.moqListLayout?.visibility = View.GONE
-//            if(moqId>0) {
-//                if (mBinding?.moqDetails?.visibility == View.GONE) {
-//                    mBinding?.moqDetails?.animation = slideDown
-//                    mBinding?.moqDetails?.visibility = View.VISIBLE
-//
-//                } else {
-//                    mBinding?.moqDetails?.animation = slideUp
-//                    mBinding?.moqDetails?.visibility = View.GONE
-//                }
-//            }
+
         }
         "Custom Product"-> {
             val moq= MoqsPredicates.getMoqs(enqID)
@@ -824,18 +814,6 @@ EnquiryViewModel.FetchEnquiryInterface,
         }
     }
 }
-
-    private fun setChatIConVisibility(){
-        if(enquiryDetails?.enquiryStageID!=null){
-            if(enquiryDetails?.isBlue == null && enquiryDetails?.enquiryStageID!! >= 4L){
-                mBinding?.btnChat?.visibility = View.VISIBLE
-                mBinding?.btnMenu?.visibility = View.GONE
-            }else{
-                mBinding?.btnChat?.visibility = View.GONE
-                mBinding?.btnMenu?.visibility = View.VISIBLE
-            }
-        }
-    }
 
     fun viewLoader(){
         mBinding?.buyerOngoEnqDetails?.visibility = View.GONE
@@ -875,7 +853,7 @@ EnquiryViewModel.FetchEnquiryInterface,
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("EnquiryDetails", "onFailure")
-                enqID?.let { mEnqVM.getSingleOnEnqData(it) }
+//                enquiryDetails = enqID?.let { mEnqVM.getSingleOnEnqData(it).value }
                 hideLoader()
             })
         } catch (e: Exception) {
@@ -887,7 +865,7 @@ EnquiryViewModel.FetchEnquiryInterface,
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("EnquiryDetails", "onSuccess")
-                enqID?.let { mEnqVM.getSingleOnEnqData(it) }
+                enquiryDetails = enqID?.let { mEnqVM.getSingleOnEnqData(it).value }
                 hideLoader()
                 setDetails()
             })
