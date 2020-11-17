@@ -91,7 +91,7 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
                         call: Call<CatalogueProductsResponse>, response: Response<CatalogueProductsResponse>
                     ) {
                         if (response.body()?.valid == true) {
-                            ProductPredicates.insertProductsInCatalogue(response.body()?.data?.products)
+                            ProductPredicates.insertProductsInCatalogue(response.body()?.data?.products,0)
                             catListener?.onSuccess()
                         } else {
                             catListener?.onFailure()

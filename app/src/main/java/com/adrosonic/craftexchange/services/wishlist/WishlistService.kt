@@ -7,6 +7,7 @@ import androidx.core.app.JobIntentService
 import com.adrosonic.craftexchange.database.predicates.ProductPredicates
 import com.adrosonic.craftexchange.database.predicates.WishlistPredicates
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
+import com.adrosonic.craftexchange.repository.data.response.Notification.NotificationReadResponse
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.pixplicity.easyprefs.library.Prefs
 import okhttp3.ResponseBody
@@ -44,15 +45,15 @@ class WishlistService: JobIntentService() {
 
         CraftExchangeRepository
             .getWishlistService()
-            .addToWishlist(token,productId)
-            .enqueue(object: Callback, retrofit2.Callback<ResponseBody> {
-                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+            .addToWishlist(token,productId.toInt())
+            .enqueue(object: Callback, retrofit2.Callback<NotificationReadResponse> {
+                override fun onFailure(call: Call<NotificationReadResponse>, t: Throwable) {
                     t.printStackTrace()
                     Log.e("AddToWishlist failure ","${t.printStackTrace()}")
                 }
                 override fun onResponse(
-                    call: Call<ResponseBody>,
-                    response: retrofit2.Response<ResponseBody>) {
+                    call: Call<NotificationReadResponse>,
+                    response: retrofit2.Response<NotificationReadResponse>) {
                     Log.e(TAG,"onResponse :"+response.code())
                     Log.e(TAG,"onResponse :"+response.isSuccessful)
                     Log.e(TAG,"onResponse :"+call.request().url)

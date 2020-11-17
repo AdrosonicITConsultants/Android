@@ -376,10 +376,6 @@ class BuyerLandingActivity : LocaleBaseActivity(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("LandingAct", "OnFailure")
-                Utility.displayMessage(
-                    "Error while fetching wishlist. Pleas try again after some time",
-                    this
-                )
             }
             )
         } catch (e: Exception) {
@@ -393,6 +389,7 @@ class BuyerLandingActivity : LocaleBaseActivity(),
         } else {
 
             mViewModel.getwishlisteProductIds()
+            mViewModel.getProductsInWishlist()
             mViewModel?.getMoqDeliveryTimes()
             mViewModel.getProductsOfArtisan(this)
             mViewModel.getProductUploadData()

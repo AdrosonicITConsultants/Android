@@ -9,6 +9,7 @@ data class NotificationReadResponse (
 //{"data":"saved","valid":true,"errorMessage":null,"errorCode":0}
 //{"data":"Enquiry closed","valid":true,"errorMessage":null,"errorCode":0}
 //{"data":"Status Updated!","valid":true,"errorMessage":null,"errorCode":0}
+//{"data":"Product added to wishlist","valid":true,"errorMessage":null,"errorCode":0}
 //{
 //    "data": "PI Revised!",
 //    "valid": true,

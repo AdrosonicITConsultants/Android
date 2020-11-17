@@ -255,7 +255,7 @@ class ProductPredicates {
             }
         }
 
-        fun insertProductsInCatalogue(productList: List<Product>?){
+        fun insertProductsInCatalogue(productList: List<Product>?, isWishlisted:Long){
             nextID = 0L
             val realm = CXRealmManager.getRealmInstance()
             var product = productList//?.data?.products
@@ -338,6 +338,7 @@ class ProductPredicates {
                                 exprod.modifiedOn = catalogueProduct?.modifiedOn
                                 exprod.madeWithAntaran = catalogueProduct?.madeWithAnthran
                                 exprod.isDeleted = catalogueProduct?.isDeleted
+                                exprod.isWishlisted = isWishlisted
 
                                 realm.copyToRealmOrUpdate(exprod)
                             }else{
@@ -401,7 +402,7 @@ class ProductPredicates {
                                 productObj.modifiedOn = catalogueProduct?.modifiedOn
                                 productObj.madeWithAntaran = catalogueProduct?.madeWithAnthran
                                 productObj.isDeleted = catalogueProduct?.isDeleted
-
+                                productObj.isWishlisted = isWishlisted
                                 realm.copyToRealmOrUpdate(productObj)
                             }
 
