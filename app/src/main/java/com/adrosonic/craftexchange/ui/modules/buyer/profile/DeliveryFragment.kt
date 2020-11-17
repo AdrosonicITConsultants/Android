@@ -43,8 +43,7 @@ class DeliveryFragment : Fragment() {
         mBinding?.country?.text = delAddr?.country ?: " - "
     }
 
-    companion object {
-        fun newInstance() = DeliveryFragment()
+    companion object { fun newInstance() = DeliveryFragment()
         const val TAG = "DeliveryFrag"
     }
 }

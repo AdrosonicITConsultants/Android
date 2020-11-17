@@ -27,13 +27,13 @@ class WishlistViewModel(application: Application) : AndroidViewModel(application
             .enqueue(object: Callback, retrofit2.Callback<ResponseBody> {
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     t.printStackTrace()
-                    Log.e("AddToWishlist failure ","${t.printStackTrace()}")
+                    Log.e("AddToWishlist","${t.printStackTrace()}")
                 }
                 override fun onResponse(
                     call: Call<ResponseBody>,
                     response: retrofit2.Response<ResponseBody>) {
                     if(response.isSuccessful){
-                        Log.e(TAG,"addToWishlist :"+response.body())
+                        Log.e(TAG,"addToWishlist isSuccessful:"+response.body())
                     }else{
                         Log.e(TAG,"addToWishlist "+response.body())
 
