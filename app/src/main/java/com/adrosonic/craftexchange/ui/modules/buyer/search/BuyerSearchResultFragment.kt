@@ -412,8 +412,11 @@ class BuyerSearchResultFragment : Fragment(),
     override fun onSelected(productId: Long, isWishListed: Long) {
 //        WishlistPredicates.updateProductWishlisting(productId,isWishListed,1)
         Log.e("Wishlist","productId: $productId")
-        if(isWishListed==0L) mWishlistVM?.deleteProductFromWishlist(productID?:0)
-        else if(isWishListed==1L)  mWishlistVM?.addProductToWishlist(productID?:0)
+        Log.e("Wishlist","isWishListed: $isWishListed")
+        productId?.let {
+            if (isWishListed == 0L) mWishlistVM?.deleteProductFromWishlist(productId!!)
+            else if (isWishListed == 1L) mWishlistVM?.addProductToWishlist(productId!!)
+        }
         if(Utility.checkIfInternetConnected(requireContext())) {
             coordinator = SyncCoordinator(requireContext())
             coordinator?.performLocallyAvailableActions()
