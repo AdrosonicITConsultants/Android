@@ -13,6 +13,7 @@ import com.adrosonic.craftexchange.databinding.FragmentDeliveryEditBinding
 import com.adrosonic.craftexchange.ui.modules.buyer.profile.BuyerProfileActivity
 import com.adrosonic.craftexchange.ui.modules.buyer.profile.BuyerProfileActivity.Companion.craftUser
 import com.adrosonic.craftexchange.ui.modules.buyer.profile.BuyerProfileActivity.Companion.delAddr
+import com.adrosonic.craftexchange.ui.modules.buyer.profile.BuyerProfileActivity.Companion.regAddr
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.pixplicity.easyprefs.library.Prefs
 
@@ -41,22 +42,30 @@ class DeliveryEditFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_delivery_edit, container, false)
-        mBinding?.companyName?.text = craftUser?.companyName ?: " - "
-        mBinding?.compAddr?.setText(delAddr?.line1 ?: "")
-        mBinding?.country?.text = delAddr?.country ?: " - "
-
-        Prefs.putString(ConstantsDirectory.ADDR_LINE1, delAddr?.line1 ?: "")
-
         return mBinding?.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        mBinding?.companyName?.text = craftUser?.companyName ?: " - "
+        if(delAddr?.line1 == ""){
+            mBinding?.compAddr?.setText(regAddr?.line1)
+            Prefs.putString(ConstantsDirectory.ADDR_LINE1, regAddr?.line1)
+        }else{
+            mBinding?.compAddr?.setText(delAddr?.line1)
+            Prefs.putString(ConstantsDirectory.ADDR_LINE1, delAddr?.line1)
+        }
+        mBinding?.country?.text = delAddr?.country ?: " - "
+
 
         mBinding?.compAddr?.addTextChangedListener {
             Prefs.putString(ConstantsDirectory.ADDR_LINE1, mBinding?.compAddr?.text.toString())
         }
 
+        mBinding?.compAddr?.addTextChangedListener {
+            Prefs.putString(ConstantsDirectory.ADDR_LINE1, mBinding?.compAddr?.text.toString())
+        }
     }
 
     companion object {
