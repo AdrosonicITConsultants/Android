@@ -96,8 +96,6 @@ class WishlistService: JobIntentService() {
             })
     }
 
-
-
     companion object {
         const val KEY_ID = "prod_id"
         private const val JOB_ID = 4000

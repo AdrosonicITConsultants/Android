@@ -329,9 +329,9 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
 
         currencyList.clear()
         currencyList.add(" ₹")
-        currencyList.add("$")
-        currencyList.add(" £")
-        currencyList.add(" €")
+//        currencyList.add("$")
+//        currencyList.add(" £")
+//        currencyList.add(" €")
         val spEstDaysAdapter = ArrayAdapter<String>(applicationContext, android.R.layout.simple_spinner_item,currencyList)
         spEstDaysAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         mBinding?.spCurrency?.adapter = spEstDaysAdapter

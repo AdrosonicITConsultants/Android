@@ -13,9 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.FragmentArtisanSearchResultsBinding
 import com.adrosonic.craftexchange.ui.modules.artisan.products.UploadedProductsASearchAdapter
-import com.adrosonic.craftexchange.ui.modules.artisan.search.adapter.ArtisanSearchAdapter
 import com.adrosonic.craftexchange.ui.modules.search.FilterCollectionAdapter
-import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.ArtisanProductsViewModel
 import com.adrosonic.craftexchange.viewModels.SearchViewModel
 
