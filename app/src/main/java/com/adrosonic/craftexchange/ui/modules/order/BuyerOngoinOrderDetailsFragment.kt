@@ -266,6 +266,7 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
             mOrderVm?.getChangeRequestDetails(it)
             mQcVM.getBuyerQCResponse(it)
             mOrderVm.getOrderProgressDetails(it)
+            mOrderVm.ratingData(enqID!!, UserConfig.shared.userId?.toLong()?:0)
         }
     }
 
