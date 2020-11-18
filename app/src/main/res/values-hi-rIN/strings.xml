@@ -523,4 +523,51 @@
     <string name="err_gen_ti">टैक्स इनवॉइस जनरेट करने में त्रुटि</string>
     <string name="plz_Wait">कृपया दस्तावेज़ डाउनलोड करते समय प्रतीक्षा करें</string>
     <string name="for_any_query_reach_us">किसी भी प्रश्न के लिए हम तक पहुँचने @</string>
+
+    <string name="select_advance_amount_note">कुल राशि का% (PI के अनुसार) का चयन करें जो आप चाहते हैं\nनीचे भुगतान करने के लिए:</string>
+    <string name="proceed_with_pay">अग्रिम भुगतान के साथ आगे बढ़ें</string>
+    <string name="notify_tt_team"><![CDATA[टाटा ट्रस्ट में निम्नलिखित कारीगर और \n प्रशासन टीम को सूचित किया जाएगा]]></string>
+    <string name="payment_upload_confirmation">पुष्टि करने के लिए भुगतान रसीद अपलोड करें</string>
+    <string name="upload_and_send_transac">अपलोड करें और पुष्टि के लिए भेजें</string>
+    <string name="account_details">खाता विवरण :</string>
+    <string name="amount_paid">भुगतान की गई राशि</string>
+    <string name="thankyou_upload_transac_receipt_text">धन्यवाद! आपकी रसीद को सफलतापूर्वक अपलोड कर दिया गया है और कारीगर को सूचित कर दिया गया है। \n स्वीकृति अब से 3 दिनों के भीतर अधिसूचित की जाएगी।</string>
+    <string name="ps_updated_pi">कृपया ध्यान दें: प्रो फॉर्म का चालान अपडेट किया जाएगा</string>
+    <string name="enq_to_order_text">भुगतान स्वीकृत होने के बाद जांच को ऑर्डर \n में बदल दिया जाएगा। जाँचें आदेश टैब।</string>
+    <string name="view_transaction">लेन-देन देखें</string>
+    <string name="amt_to_be_paid">जितनी राशि अदा की जानी है</string>
+    <string name="select_advance_payment">उन्नत भुगतान का चयन करें</string>
+    <string name="upload_payment_receipt">एडवांस पेमेंट रसीद अपलोड करें</string>
+
+    <string name="awaiting_artisan_confirmation">कारीगर की पुष्टि का इंतजार</string>
+    <string name="payment_receipt_upload_confirmation">भुगतान रसीद अपलोड!</string>
+    <string name="awaiting_payment_confirmation">भुगतान की पुष्टि की प्रतीक्षा कर रहा है</string>
+    <string name="chck_adv_pay_receipt">अग्रिम भुगतान रसीद की जाँच करें</string>
+
+    <string name="search_chat_by_enquiryId">EnquiryID द्वारा खोज चैट</string>
+
+    <string name="update_qc_form_text"><![CDATA[कृपया अगले चरण पर जाने से पहले \n क्वालिटी चेक \n फॉर्म अपडेट करें और \n आगे भेजें]]></string>
+    <string name="fill_in_qc_form">QC फॉर्म भरें</string>
+    <string name="send">भेजें</string>
+    <string name="quality_check_for">गुणवत्ता की जाँच\t</string>
+    <string name="select_an_option">एक विकल्प चुनें</string>
+    <string name="no_qc_available">कोई गुणवत्ता जाँच उपलब्ध नहीं है</string>
+
+    <string name="escalations">Escalations</string>
+    <string name="select_type">प्रकार चुनें</string>
+    <string name="new_escalation">New Escalation</string>
+    <string name="note_confirm_escalation">इस escalation को हल करने की समय सीमा आपके बढ़ने के बाद 48 घंटे है। इसके अलावा इसे टाटा ट्रस्ट्स मैनेजमेंट टीम को हाइलाइट किया जाएगा.</string>
+    <string name="raise_escalation">Raise escalation</string>
+    <string name="sign_in_google">Google के साथ साइन इन करें</string>
+    <string name="mark_as_resolved">सुलझा हुआ चिन्हित करना</string>
+    <string name="resolved">Resolved</string>
+    <string name="awaiting_response">प्रतिक्रिया की प्रतीक्षा</string>
+    <string name="esc_desc">अपनी समस्या का वर्णन करें..</string>
+    <string name="auto_escalated">Auto Escalated</string>
+    <string name="select_one_issue">किसी भी 1 अंक का चयन करें</string>
+    <string name="esc_updated_shortly">Escalation Status शीघ्र ही अद्यतन किया जाएगा!</string>
+    <string name="error_raise_escalation">Error while raising Escalation</string>
+    <string name="no_products_uploaded">कोई भी उत्पाद अपलोड नहीं हुआ!</string>
+    <string name="you">आप</string>
+
 </resources>

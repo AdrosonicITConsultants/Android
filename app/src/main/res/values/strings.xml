@@ -377,9 +377,10 @@
     <string name="fill_in_qc_form">Fill in QC form</string>
     <string name="send">Send</string>
     <string name="quality_check_for">Quality check for\t</string>
-    <string name="select_an_option">Select an option</string>
-    <string name="quality_check">Quality Check</string>
+    <string name="select_an_option">Select an option</string>\
     <string name="no_qc_available">No Quality Check Available.</string>
+    <string name="quality_check">Quality Check</string>
+
 
 
     <string name="new_pi_post_cr">Generate new PI post CR</string>
@@ -421,8 +422,8 @@
     <string name="qc_disclaimer_text"><![CDATA["Declaration by AE- I, hereby certify from my end that all the processes have been Monitored & Supervised under my guidence and any issue in Quality Certified by me in person or my staff in charge is liable to be discussed with me directly on mail. Once the goods received at your doorsteps, we will not be liable for quality issue if informed after 72 hrs of receipts. "]]></string>
     <string name="legal_disclaimer">Legal Disclaimer</string>
 
-    <string name="facebook_app_id">3667875393263473</string>
-    <string name="fb_login_protocol_scheme">fb3667875393263473</string>
+    <string name="facebook_app_id">717798432467327</string>
+    <string name="fb_login_protocol_scheme">fb717798432467327</string>
     <string name="mark_order_dispatched">Mark Order Dispatched</string>
     <string name="check_delivery_receipt">Check Delivery Receipt</string>
     <string name="buyer_brand">Buyer Brand</string>
@@ -583,9 +584,10 @@
     <string name="select_one_issue">Select any 1 issue</string>
     <string name="esc_updated_shortly">Escalation Status will be updated shortly!</string>
     <string name="error_raise_escalation">Error while raising Escalation</string>
+    <string name="no_products_uploaded">No Products Uploaded!</string>
+    <string name="you">you</string>
+
 
     <string name="plz_Wait">Please wait while we are downloading the document</string>
     <string name="for_any_query_reach_us">For any query reach us @</string>
-    <string name="no_products_uploaded">No Products Uploaded!</string>
-    <string name="you">you</string>
 </resources>

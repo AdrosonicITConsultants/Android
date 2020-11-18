@@ -419,10 +419,6 @@ class BuyerSearchResultFragment : Fragment(),
             Utility.displayMessage(getString(R.string.no_internet_connection),requireContext())
         }
 
-//        if(Utility.checkIfInternetConnected(requireContext())) {
-//            coordinator = SyncCoordinator(requireContext())
-//            coordinator?.performLocallyAvailableActions()
-//        }else Utility.displayMessage(getString(R.string.no_internet_connection),requireContext())
     }
 
 }
