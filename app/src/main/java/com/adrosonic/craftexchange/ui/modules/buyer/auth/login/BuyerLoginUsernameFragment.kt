@@ -202,6 +202,9 @@ class BuyerLoginUsernameFragment : Fragment() {
             LoginManager.getInstance().logOut();
         }
 
+//        var accessToken = AccessToken.getCurrentAccessToken()
+//        var isLoggedIn = accessToken != null && !accessToken.isExpired
+
         mBinding?.facebookLoginBtn?.setOnClickListener {
             // Login
             callbackManager = CallbackManager.Factory.create()

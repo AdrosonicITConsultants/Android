@@ -571,4 +571,8 @@
     <string name="no_products_uploaded">कोई भी उत्पाद अपलोड नहीं हुआ!</string>
     <string name="you">आप</string>
 
+    //facebook sdk
+    <string name="facebook_app_id">717798432467327</string>
+    <string name="fb_login_protocol_scheme">fb717798432467327</string>
+
 </resources>

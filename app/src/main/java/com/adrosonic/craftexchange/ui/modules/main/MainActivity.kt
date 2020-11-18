@@ -27,8 +27,6 @@ class MainActivity : LocaleBaseActivity() {
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         val view = mBinding?.root
         setContentView(view)
-
-//        startActivity(roleselectIntent())
     }
 
     override fun onResume() {
