@@ -14,7 +14,7 @@ interface WishlistDao {
     @Headers("Accept: application/json")
     @POST("product/addToWishlist/{productId}")
     fun addToWishlist(@Header("Authorization") token:String,
-                      @Path("productId") productId : Int
+                      @Path("productId") productId : Long
     ) : Call<NotificationReadResponse>
 
     @Headers("Accept: application/json")

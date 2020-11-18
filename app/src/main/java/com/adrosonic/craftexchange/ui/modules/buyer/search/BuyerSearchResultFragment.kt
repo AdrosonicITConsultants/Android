@@ -413,8 +413,8 @@ class BuyerSearchResultFragment : Fragment(),
 //        WishlistPredicates.updateProductWishlisting(productId,isWishListed,1)
         Log.e("Wishlist","productId: $productId")
         if(Utility.checkIfInternetConnected(requireContext())){
-            if(isWishListed==0L) mWishlistVM?.deleteProductFromWishlist(productId?:0)
-            else if(isWishListed==1L)  mWishlistVM?.addProductToWishlist(productId?:0)
+            if(isWishListed==0L) mWishlistVM?.deleteProductFromWishlist(productId!!)
+            else if(isWishListed==1L)  mWishlistVM?.addProductToWishlist(productId!!)
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),requireContext())
         }

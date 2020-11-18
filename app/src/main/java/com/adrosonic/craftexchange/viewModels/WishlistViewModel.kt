@@ -3,8 +3,10 @@ package com.adrosonic.craftexchange.viewModels
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import com.adrosonic.craftexchange.database.predicates.WishlistPredicates
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.response.Notification.NotificationReadResponse
+import com.adrosonic.craftexchange.services.wishlist.WishlistService
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
 import com.pixplicity.easyprefs.library.Prefs
@@ -21,24 +23,28 @@ class WishlistViewModel(application: Application) : AndroidViewModel(application
     var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
     var listener: WishListInterface? = null
 
-    fun addProductToWishlist(productId:Long){
+    fun addProductToWishlist(productId : Long){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        Log.e("Wishlist","productId :"+productId)
         CraftExchangeRepository
             .getWishlistService()
-            .addToWishlist(token,productId.toInt())
+            .addToWishlist(token,productId)
             .enqueue(object: Callback, retrofit2.Callback<NotificationReadResponse> {
                 override fun onFailure(call: Call<NotificationReadResponse>, t: Throwable) {
                     t.printStackTrace()
-                    Log.e("Wishlist","add failure ${t.printStackTrace()}")
+                    Log.e("Wishlist","Failuren  ${t.printStackTrace()}")
                 }
                 override fun onResponse(
                     call: Call<NotificationReadResponse>,
                     response: retrofit2.Response<NotificationReadResponse>) {
-                    var res=response.body()
-                    Log.e("Wishlist","addToWishlist:"+res?.valid)
-                    if(response.body()?.valid!!){
-                        Log.e("Wishlist","addToWishlist if :"+res?.data)
+                    Log.e("Wishlist","onResponse :"+response.code())
+                    Log.e("Wishlist","onResponse :"+response.isSuccessful)
+                    Log.e("Wishlist","onResponse :"+call.request().url)
+                    if(response.isSuccessful){
+                        Log.e("Wishlist","addToWishlist :"+response.body())
+                        WishlistPredicates.updateProductWishlisting(productId,1L,0L)
                     }else{
-                        Log.e("Wishlist","addToWishlist else :"+res?.data)
+                        Log.e("Wishlist","addToWishlist "+response.body())
                     }
                 }
 

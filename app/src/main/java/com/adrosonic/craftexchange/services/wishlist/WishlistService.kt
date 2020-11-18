@@ -45,7 +45,7 @@ class WishlistService: JobIntentService() {
 
         CraftExchangeRepository
             .getWishlistService()
-            .addToWishlist(token,productId.toInt())
+            .addToWishlist(token,productId)
             .enqueue(object: Callback, retrofit2.Callback<NotificationReadResponse> {
                 override fun onFailure(call: Call<NotificationReadResponse>, t: Throwable) {
                     t.printStackTrace()

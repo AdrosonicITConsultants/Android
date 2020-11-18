@@ -797,15 +797,13 @@ EnquiryViewModel.FetchEnquiryInterface,
 
     private fun setChatIConVisibility(){
         if(enquiryDetails?.enquiryStageID!=null){
-            if(enquiryDetails?.isBlue == null && enquiryDetails?.enquiryStageID!! >= 4L){
-//                mBinding?.btnChat?.visibility = View.VISIBLE
-//                mBinding?.btnMenu?.visibility = View.GONE
-                mBinding?.closeEnquiry?.visibility=View.GONE
+//            if(enquiryDetails?.isBlue == null && enquiryDetails?.enquiryStageID!! <= 8L){
+            if(enquiryDetails?.enquiryStageID!! <= 8L){
+                mBinding?.closeEnquiry?.visibility=View.VISIBLE
             }else{
-//                mBinding?.btnChat?.visibility = View.GONE
-//                mBinding?.btnMenu?.visibility = View.VISIBLE
-                mBinding?.closeEnquiry?.visibility = View.VISIBLE
+                mBinding?.closeEnquiry?.visibility = View.GONE
             }
+
             if(enquiryDetails?.enquiryStageID!!>=2){
                 mBinding?.chat?.visibility=View.VISIBLE
             }
