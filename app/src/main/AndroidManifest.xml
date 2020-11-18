@@ -18,7 +18,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.modules.chat.ChatEscalationActivity"></activity>
+        <activity android:name=".ui.modules.chat.ChatEscalationActivity"
+            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".ui.modules.order.revisePi.ViewOldPiActivity"
             android:screenOrientation="portrait" />

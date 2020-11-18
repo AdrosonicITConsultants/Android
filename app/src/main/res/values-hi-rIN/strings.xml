@@ -558,7 +558,8 @@
     <string name="new_escalation">New Escalation</string>
     <string name="note_confirm_escalation">इस escalation को हल करने की समय सीमा आपके बढ़ने के बाद 48 घंटे है। इसके अलावा इसे टाटा ट्रस्ट्स मैनेजमेंट टीम को हाइलाइट किया जाएगा.</string>
     <string name="raise_escalation">Raise escalation</string>
-    <string name="sign_in_google">Google के साथ साइन इन करें</string>
+    <string name="sign_in_google">गूगल से साइन इन करें</string>
+    <string name="login_with_facebook">फेसबुक से लॉगिन करें</string>
     <string name="mark_as_resolved">सुलझा हुआ चिन्हित करना</string>
     <string name="resolved">Resolved</string>
     <string name="awaiting_response">प्रतिक्रिया की प्रतीक्षा</string>

@@ -31,6 +31,8 @@ import com.adrosonic.craftexchange.repository.data.response.transaction.Transact
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import com.pixplicity.easyprefs.library.Prefs
 import io.realm.RealmResults
@@ -70,6 +72,7 @@ class LandingViewModel(application: Application) : AndroidViewModel(application)
         editor.commit()
         editor.apply()
         calllogoutUser()
+        Firebase.auth.signOut()
     }
 
     fun getProductsOfArtisan(context : Context){

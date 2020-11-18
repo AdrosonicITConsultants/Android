@@ -23,13 +23,16 @@ import com.adrosonic.craftexchange.database.predicates.UserPredicates
 import com.adrosonic.craftexchange.databinding.FragmentBuyerLoginUsernameBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.loginResponse.LoginValidationResponse
+import com.adrosonic.craftexchange.repository.data.response.artisan.login.ArtisanResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.login.BuyerResponse
+import com.adrosonic.craftexchange.services.notification.MessagingService.Companion.TAG
 import com.adrosonic.craftexchange.ui.modules.pdfViewer.PdfViewerActivity
 import com.adrosonic.craftexchange.ui.modules.authentication.register.RegisterActivity
 import com.adrosonic.craftexchange.ui.modules.cx_demovideo.CXVideoActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
+import com.facebook.AccessToken
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
@@ -39,6 +42,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.pixplicity.easyprefs.library.Prefs
@@ -104,6 +108,7 @@ class BuyerLoginUsernameFragment : Fragment() {
                 ds.isUnderlineText = false
             }
         }
+
         clickSpan.setSpan(clickableSpan, 10, 21, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
         mBinding?.textViewClickHere?.text = clickSpan
@@ -197,19 +202,16 @@ class BuyerLoginUsernameFragment : Fragment() {
             LoginManager.getInstance().logOut();
         }
 
-        mBinding?.facebookLoginBtn?.setOnClickListener(View.OnClickListener {
+        mBinding?.facebookLoginBtn?.setOnClickListener {
             // Login
             callbackManager = CallbackManager.Factory.create()
-            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email"))
+            LoginManager.getInstance().logInWithReadPermissions(this, listOf("public_profile", "email"))
             LoginManager.getInstance().registerCallback(callbackManager,
                 object : FacebookCallback<LoginResult> {
                     override fun onSuccess(loginResult: LoginResult) {
                         Log.d("MainActivity", "Facebook token: " + loginResult.accessToken.token)
-                        // startActivity(Intent(context, ArtisanFacebookLogin::class.java))
-
 
                         if(Utility.checkIfInternetConnected(requireContext())) {
-
                             CraftExchangeRepository
                                 .getLoginService()
                                 .authSocialBuyer("facebook", loginResult.accessToken.token, "android")
@@ -220,8 +222,8 @@ class BuyerLoginUsernameFragment : Fragment() {
                                         context?.let { it1 -> Utility.deleteImageCache(it1) }
                                         Toast.makeText(
                                             activity,
-                                            //"${t.printStackTrace()}",
-                                            "Your ID has already been registered as Artisan",
+                                            // "${t.printStackTrace()}",
+                                            "Your ID has already been registered as Buyer",
                                             Toast.LENGTH_SHORT
                                         ).show()
                                     }
@@ -229,14 +231,13 @@ class BuyerLoginUsernameFragment : Fragment() {
                                     override fun onResponse(
                                         call: Call<BuyerResponse>, response: Response<BuyerResponse>
                                     ) {
-                                        if (response.body()?.valid == true) {
+                                        if (response.body()?.valid == true ) {
 
                                             Prefs.putBoolean(ConstantsDirectory.IS_LOGGED_IN, true)
                                             UserPredicates.insertBuyer(response.body()!!)
                                             AddressPredicates.insertBuyerAddress(response.body()!!)
 
-
-                                            mUserConfig.deviceName = "Android"
+                                            mUserConfig?.deviceName = "Android"
 
 
                                             Prefs.putBoolean(ConstantsDirectory.IS_LOGGED_IN, true)
@@ -261,8 +262,8 @@ class BuyerLoginUsernameFragment : Fragment() {
                                         }else {
                                             Toast.makeText(
                                                 activity,
-                                                "Email ID is not registered",
-                                                Toast.LENGTH_SHORT
+                                                "Please first register your facebook ID as Artisan",
+                                                Toast.LENGTH_LONG
                                             ).show()
                                         }
                                     }
@@ -272,8 +273,6 @@ class BuyerLoginUsernameFragment : Fragment() {
                         }else{
                             Utility.displayMessage(requireActivity().getString(R.string.no_internet_connection),requireContext())
                         }
-
-                        //startActivity(Intent(activity, CXVideoActivity::class.java))
                     }
 
                     override fun onCancel() {
@@ -283,12 +282,17 @@ class BuyerLoginUsernameFragment : Fragment() {
 
                     override fun onError(error: FacebookException) {
                         Log.d("MainActivity", "Facebook onError.")
+                        Toast.makeText(
+                            activity,
+                            "Please register as Artisan using facebook ID",
+                            Toast.LENGTH_LONG
+                        ).show()
 
                     }
                 })
-        })
-
+        }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 

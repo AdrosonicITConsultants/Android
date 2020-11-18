@@ -16,7 +16,7 @@ object CraftExchangeRepository {
 
 
         return Retrofit.Builder()
-            .baseUrl(ConstantsDirectory.BASE_URL_UAT)
+            .baseUrl(ConstantsDirectory.BASE_URL_DEV)
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
             .client(OkHttpClient.Builder()
                 .addInterceptor(HttpLoggingInterceptor()
