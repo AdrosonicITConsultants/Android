@@ -14,7 +14,6 @@ import com.adrosonic.craftexchangemarketing.R
 import com.adrosonic.craftexchangemarketing.databinding.FragmentArtisanSearchResultsBinding
 import com.adrosonic.craftexchangemarketing.ui.modules.artisan.search.adapter.ArtisanSearchAdapter
 import com.adrosonic.craftexchangemarketing.ui.modules.search.FilterCollectionAdapter
-import com.adrosonic.craftexchangemarketing.utils.Utility
 import com.adrosonic.craftexchangemarketing.viewModels.ArtisanProductsViewModel
 import com.adrosonic.craftexchangemarketing.viewModels.SearchViewModel
 
@@ -71,7 +70,7 @@ class ArtisanSearchResultsFragment : Fragment(),
         setFilterRecycler(filterList)
         filterAdapter.fListener = this
 
-        var search = activity?.findViewById<SearchView>(R.id.search_artisan)
+        var search = activity?.findViewById<SearchView>(R.id.searchByEnq)
         search?.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query:String):Boolean {
                 return false

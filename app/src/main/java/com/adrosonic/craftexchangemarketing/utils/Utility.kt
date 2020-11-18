@@ -31,6 +31,8 @@ import com.adrosonic.craftexchangemarketing.database.predicates.UserPredicates
 import com.adrosonic.craftexchangemarketing.repository.data.response.artisan.productTemplate.uploadData.ProductUploadData
 import com.adrosonic.craftexchangemarketing.repository.data.response.enquiry.EnquiryAvaProdStageData
 import com.adrosonic.craftexchangemarketing.repository.data.response.enquiry.EnquiryStageData
+import com.adrosonic.craftexchangemarketing.repository.data.response.moq.Datum
+import com.adrosonic.craftexchangemarketing.repository.data.response.moq.MoqDeliveryTimesResponse
 import com.adrosonic.craftexchangemarketing.ui.modules.enquiry.enquiryDetails
 import com.bumptech.glide.Glide
 import com.google.gson.GsonBuilder
@@ -122,7 +124,12 @@ class Utility {
                 }
             })
         }
-
+        fun getDeliveryTimeList():List<Datum>?{
+            val moqDeliveryJson = UserConfig.shared.moqDeliveryDates
+            val gson = GsonBuilder().create()
+            val moqDeliveryTime = gson.fromJson(moqDeliveryJson, MoqDeliveryTimesResponse::class.java)
+            return moqDeliveryTime.data
+        }
 
         fun getRealPathFromFileURI(context: Context, contentUri: Uri): String {
             var filePath = ""

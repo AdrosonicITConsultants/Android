@@ -137,6 +137,10 @@ dependencies {
 
     //seekbar
     implementation 'com.github.warkiz.widget:indicatorseekbar:2.1.2'
+
+    //chat
+    implementation 'com.github.bassaer:chatmessageview:2.0.0'
+
 }
 
 apply plugin: 'com.google.gms.google-services'

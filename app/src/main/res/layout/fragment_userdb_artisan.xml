@@ -23,7 +23,7 @@
         app:layout_constraintTop_toBottomOf="@+id/your_enquiries_text" />
 
     <EditText
-        android:id="@+id/search_artisan"
+        android:id="@+id/searchArtisan"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginStart="4dp"
@@ -58,7 +58,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_artisan"
+        app:layout_constraintTop_toBottomOf="@+id/searchArtisan"
         app:layout_constraintVertical_bias="0.018">
 
         <RelativeLayout

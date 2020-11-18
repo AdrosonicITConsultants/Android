@@ -81,6 +81,7 @@ class ArtisanDatabaseFragment() :Fragment(),
         val spRatingAdapter = ArrayAdapter<String>(requireContext(), R.layout.spinner_item,ratingList)
         spRatingAdapter.setDropDownViewResource(R.layout.spinner_item)
         mBinding?.spRating?.adapter = spRatingAdapter
+
         mBinding?.btnApply?.setOnClickListener {
         val searchStr= if(mBinding?.searchArtisan?.text.toString().isNullOrEmpty()) null else  mBinding?.searchArtisan?.text.toString()
         var clusterId=-1

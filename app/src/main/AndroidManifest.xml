@@ -43,6 +43,16 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_dashboard" />
         <activity
+            android:name=".ui.modules.admin.enqOrd.EnquiriesDatabaseActivity"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="stateAlwaysHidden"
+             />
+        <activity
+            android:name=".ui.modules.admin.enqOrd.EnquiryDetailsActivity"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            />
+        <activity
             android:name=".ui.modules.admin.individualProfile.BuyerProfileActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_individual_buyer_profile" />

@@ -69,6 +69,8 @@ const val NOTI_BADGE_COUNT = "noti_badge_count"
 ///////////////////ProductTemplateParams///////////////////////
 const val PRODUCT_UPLOAD_JSON = "product_upload_json"
 const val IND_USER_DATA = "ind_user_data"
+const val IND_ENQ_DATA = "ind_user_data"
+
 const val ENQUIRY_ORDER_COUNTS = "enquiry_order_count"
 
 const val WARP_DYE_ID = "warpDyeId"
@@ -464,6 +466,13 @@ class UserConfig {
         get() = Prefs.getString(ENQUIRY_ORDER_COUNTS,"")
         set(value) {
             Prefs.putString(ENQUIRY_ORDER_COUNTS, value)
+            field = value
+        }
+
+    var enquiryData: String? = ""
+        get() = Prefs.getString(IND_ENQ_DATA,"")
+        set(value) {
+            Prefs.putString(IND_ENQ_DATA, value)
             field = value
         }
     //Admin end
