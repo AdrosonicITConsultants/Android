@@ -48,7 +48,7 @@ SearchViewModel.FetchArtisanSuggestions{
         mViewModel.artSugListener = this
 
 
-        var search = activity?.findViewById<SearchView>(R.id.search_artisan)
+        var search = activity?.findViewById<SearchView>(R.id.searchByEnq)
         search?.requestFocus()
 
         search?.setOnQueryTextListener(object : SearchView.OnQueryTextListener{

@@ -1,4 +1,4 @@
-package com.adrosonic.craftexchangemarketing.ui.modules.artisan.productTemplate
+package com.adrosonic.craftexchangemarketing.ui.modules.admin.productCatalog.addProduct
 
 import android.app.Dialog
 import android.content.Context
@@ -35,6 +35,9 @@ import com.adrosonic.craftexchangemarketing.repository.data.response.artisan.pro
 import com.adrosonic.craftexchangemarketing.repository.data.response.artisan.productTemplate.uploadData.ProductType
 
 import com.adrosonic.craftexchangemarketing.syncManager.SyncCoordinator
+import com.adrosonic.craftexchangemarketing.ui.modules.artisan.productTemplate.CareInstructionsSelectionAdapter
+import com.adrosonic.craftexchangemarketing.ui.modules.artisan.productTemplate.ProdImageListAdapter
+import com.adrosonic.craftexchangemarketing.ui.modules.artisan.productTemplate.WeaveSelectionAdapter
 import com.adrosonic.craftexchangemarketing.ui.modules.artisan.productTemplate.yarnFrgamnets.YarnFrgamentAdapter
 import com.adrosonic.craftexchangemarketing.utils.*
 import com.adrosonic.craftexchangemarketing.viewModels.DownLoadProdImagesViewModel
@@ -44,19 +47,19 @@ import kotlinx.android.synthetic.main.activity_artisan_add_product_template.*
 import java.io.File
 
 
-fun Context.addProductIntent(): Intent {
-    return Intent(this, ArtisanAddProductTemplateActivity::class.java).apply {
+fun Context.addAdminProductIntent(): Intent {
+    return Intent(this, AdminAddProductTemplateActivity::class.java).apply {
     }
 }
 
-fun Context.addProductIntent(id: Long): Intent {
-    val intent = Intent(this, ArtisanAddProductTemplateActivity::class.java)
+fun Context.addAdminProductIntent(id: Long): Intent {
+    val intent = Intent(this, AdminAddProductTemplateActivity::class.java)
     intent.putExtra("productId", id)
     return intent.apply { }
 //    return Intent(this, ArtisanAddProductTemplateActivity::class.java).apply {
 }
 
-class ArtisanAddProductTemplateActivity : AppCompatActivity(),
+class AdminAddProductTemplateActivity : AppCompatActivity(),
     View.OnClickListener,
     ProdImageListAdapter.ProdUpdateListener,
     WeaveSelectionAdapter.selectionListener,
@@ -145,11 +148,14 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
             Log.e("Offline", "template activity prodId :" + productId)
             if (productId > 0) {
                 img_delete.visibility = View.VISIBLE
+//                mBinding?.txtSelectBrand?.text="Update"
                 productEntry=ProductPredicates.getArtisanProductsByRemoteId(productId)
             } else {
+//                mBinding?.txtSelectBrand?.text="Save"
                 img_delete.visibility = View.GONE
             }
         } else {
+//            txt_save_upload.text="Save"
             img_delete.visibility = View.GONE
         }
         parent_step1.setOnClickListener(this)
@@ -172,6 +178,8 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
         }
         loadData()
         /////////////////////////Save and Upload///////////////////////////
+        mBinding?.txtSelectBrand?.setOnClickListener { saveUploadProduct() }
+//        txt_reset.setOnClickListener { resetAll() }
         ///////////////////////////////////////////////////////////////////
         mBinding?.etProdName?.addTextChangedListener(generalTextWatcher)
         mBinding?.etProdCode?.addTextChangedListener(generalTextWatcher)

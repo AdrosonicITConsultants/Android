@@ -9,24 +9,16 @@ import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.viewpager.widget.ViewPager
 import com.adrosonic.craftexchangemarketing.R
 import com.adrosonic.craftexchangemarketing.databinding.ActivityIndArtisanProfileBinding
 //import com.adrosonic.craftexchangemarketing.databinding.ActivityIndArtisanProfile1Binding
 //import com.adrosonic.craftexchangemarketing.databinding.ActivityIndArtisanProfileBinding
-import com.adrosonic.craftexchangemarketing.databinding.ActivityIndBuyerProfileBinding
 import com.adrosonic.craftexchangemarketing.repository.data.response.admin.userDatabase.UserProfileResponse
-import com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.adapter.AdminDatabaseAdapter
-import com.adrosonic.craftexchangemarketing.ui.modules.dashboard.OpenEnquirySummaryActivity
 import com.adrosonic.craftexchangemarketing.utils.ImageSetter
 import com.adrosonic.craftexchangemarketing.utils.UserConfig
 import com.adrosonic.craftexchangemarketing.utils.Utility
 import com.adrosonic.craftexchangemarketing.viewModels.UserProfileViewModal
-import com.google.android.material.tabs.TabLayout
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import kotlinx.android.synthetic.main.activity_ind_artisan_profile.view.*
-import java.util.*
 
 
 fun Context.ArtisanProfileIntent(artisanId : Long): Intent {

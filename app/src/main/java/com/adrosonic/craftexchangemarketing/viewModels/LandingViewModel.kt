@@ -317,4 +317,6 @@ class LandingViewModel(application: Application) : AndroidViewModel(application)
                 }
             })
     }
+
+
 }

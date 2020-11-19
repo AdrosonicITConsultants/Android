@@ -8,13 +8,14 @@
         android:layout_height="match_parent"
         android:background="@color/colorSplash"
         android:orientation="vertical"
+        android:backgroundTint="@color/black_text"
         tools:context=".ui.modules.artisan.productTemplate.ArtisanAddProductTemplateActivity">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/add_product_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorSplash"
+            android:background="@color/black_text"
             android:theme="@style/AppTheme.Toolbar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -37,18 +38,7 @@
                 android:layout_marginLeft="40dp"
                 android:src="@drawable/ic_add_prod_icon" />
 
-            <TextView
-                android:id="@+id/txt_save_upload_top"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:background="@drawable/rect_round_grad_blue_solid"
-                android:drawableRight="@drawable/ic_save_upload"
-                android:fontFamily="@font/lato_regular"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:text=" Save "
-                android:textColor="@color/white_text" />
+
         </androidx.appcompat.widget.Toolbar>
         <RelativeLayout
             android:layout_width="match_parent"
@@ -89,7 +79,7 @@
                         android:layout_weight="8"
                         android:fontFamily="@font/lato_regular"
                         android:text="Step 1 : Add Photo"
-                        android:textColor="@color/black_text" />
+                        android:textColor="@color/lighter_gray" />
 
                     <ImageView
                         android:id="@+id/ic_step1_arr"
@@ -142,7 +132,7 @@
                         android:paddingRight="8dp"
                         android:text="   Next  >   "
                         android:textAlignment="center"
-                        android:textColor="@color/white_text"
+                        android:textColor="@color/lighter_gray"
                         android:textSize="@dimen/edit_text"
                         android:textStyle="bold"
                         android:visibility="gone" />
@@ -250,7 +240,7 @@
                         android:paddingRight="8dp"
                         android:text="   Next  >   "
                         android:textAlignment="center"
-                        android:textColor="@color/white_text"
+                        android:textColor="@color/lighter_gray"
                         android:textSize="@dimen/edit_text"
                         android:textStyle="bold"
                         android:visibility="gone" />
@@ -322,7 +312,7 @@
                         android:paddingRight="8dp"
                         android:text="   Next  >   "
                         android:textAlignment="center"
-                        android:textColor="@color/white_text"
+                        android:textColor="@color/lighter_gray"
                         android:textSize="@dimen/edit_text"
                         android:textStyle="bold"
                         android:visibility="gone" />
@@ -394,7 +384,7 @@
                         android:paddingRight="8dp"
                         android:text="   Next  >   "
                         android:textAlignment="center"
-                        android:textColor="@color/white_text"
+                        android:textColor="@color/lighter_gray"
                         android:textSize="@dimen/edit_text"
                         android:textStyle="bold"
                         android:visibility="gone"
@@ -473,7 +463,7 @@
                         android:paddingRight="8dp"
                         android:text="   Next  >   "
                         android:textAlignment="center"
-                        android:textColor="@color/white_text"
+                        android:textColor="@color/lighter_gray"
                         android:textSize="@dimen/edit_text"
                         android:textStyle="bold"
                         android:visibility="gone" />
@@ -662,7 +652,7 @@
                         android:paddingRight="8dp"
                         android:text="   Next  >   "
                         android:textAlignment="center"
-                        android:textColor="@color/white_text"
+                        android:textColor="@color/lighter_gray"
                         android:textSize="@dimen/edit_text"
                         android:textStyle="bold"
                         android:visibility="gone"
@@ -835,7 +825,7 @@
                         android:paddingRight="8dp"
                         android:text="   Next  >   "
                         android:textAlignment="center"
-                        android:textColor="@color/white_text"
+                        android:textColor="@color/lighter_gray"
                         android:textSize="@dimen/edit_text"
                         android:textStyle="bold"
                         android:visibility="gone" />
@@ -920,7 +910,7 @@
                         android:paddingRight="8dp"
                         android:text="   Next  >   "
                         android:textAlignment="center"
-                        android:textColor="@color/white_text"
+                        android:textColor="@color/lighter_gray"
                         android:textSize="@dimen/edit_text"
                         android:textStyle="bold"
                         android:visibility="gone" />
@@ -995,7 +985,7 @@
                         android:paddingRight="8dp"
                         android:text="   Next  >   "
                         android:textAlignment="center"
-                        android:textColor="@color/white_text"
+                        android:textColor="@color/lighter_gray"
                         android:textSize="@dimen/edit_text"
                         android:textStyle="bold"
                         android:visibility="gone" />
@@ -1079,32 +1069,20 @@
                         android:visibility="gone" />
 
                     <TextView
-                        android:id="@+id/txt_save_upload"
+                        android:id="@+id/txt_select_brand"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginRight="32dp"
-                        android:background="@drawable/rect_round_grad_blue_solid"
-                        android:drawableRight="@drawable/ic_save_upload"
+                        android:background="@drawable/rect_round_gray_solid"
                         android:fontFamily="@font/lato_regular"
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
-                        android:text="  Save  "
+                        android:text=" Select artisan brand "
                         android:textAlignment="center"
                         android:textColor="@color/white_text" />
 
-                    <TextView
-                        android:id="@+id/txt_reset"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:background="@drawable/rectangle_round_grad"
-                        android:fontFamily="@font/lato_regular"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
-                        android:text=" Reset All "
-                        android:textAlignment="center"
-                        android:textColor="@color/clickable_text_color" />
+
                 </LinearLayout>
             </LinearLayout>
 

@@ -8,7 +8,7 @@
     android:background="@color/black_text">
 
     <TextView
-        android:id="@+id/totalUserCount"
+        android:id="@+id/totalProdCount"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -38,13 +38,13 @@
         android:drawablePadding="8dp"
         android:drawableTint="@color/white_text"
         android:textColorHint="@color/white_text"
-        android:hint="Search by brand email Id, mobile, name"
+        android:hint="Search by product code, artisan brand, category, product name"
         android:drawableLeft="@drawable/ic_search_black_36dp"
         app:iconifiedByDefault="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/totalUserCount"
+        app:layout_constraintTop_toBottomOf="@+id/totalProdCount"
         app:queryHint="@string/user_search_hint"
         app:submitBackground="@color/darker_gray" />
 
@@ -70,7 +70,7 @@
             android:background="@drawable/search_background">
 
             <Spinner
-                android:id="@+id/sp_cluster"
+                android:id="@+id/sp_category"
                 style="@style/Widget.AppCompat.DropDownItem.Spinner"
                 android:popupBackground="@color/table_corner_layout_color"
                 android:layout_width="match_parent"
@@ -88,7 +88,7 @@
             android:background="@drawable/search_background">
 
             <Spinner
-                android:id="@+id/sp_rating"
+                android:id="@+id/sp_availability"
                 style="@style/Widget.AppCompat.DropDownItem.Spinner"
                 android:popupBackground="@color/table_corner_layout_color"
                 android:layout_width="match_parent"

@@ -11,7 +11,7 @@ data class Data(
     var totalOrders: Long,
     var totalEnquiries: Long,
     var ongoingEnquiries: Long,
-    var  enquiriesConverted: Long,
+    var enquiriesConverted: Long,
     var incompleteAndClosedEnquiries: Long,
     var orderCompletedSuccessfully: Long,
     var incompleteAndClosedOrders: Long,

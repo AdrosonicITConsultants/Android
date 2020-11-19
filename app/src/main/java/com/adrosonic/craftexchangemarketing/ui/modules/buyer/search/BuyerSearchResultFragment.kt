@@ -1,7 +1,6 @@
 package com.adrosonic.craftexchangemarketing.ui.modules.buyer.search
 
 import android.app.Dialog
-import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -27,7 +26,6 @@ import com.adrosonic.craftexchangemarketing.ui.modules.search.FilterCollectionAd
 import com.adrosonic.craftexchangemarketing.utils.Utility
 import com.adrosonic.craftexchangemarketing.viewModels.EnquiryViewModel
 import com.adrosonic.craftexchangemarketing.viewModels.SearchViewModel
-import kotlinx.android.synthetic.main.dialog_gen_enquiry_update_or_new.*
 
 
 private const val ARG_PARAM1 = "param1"
@@ -125,7 +123,7 @@ class BuyerSearchResultFragment : Fragment(),
         }
 
 
-        var search = activity?.findViewById<SearchView>(R.id.search_artisan)
+        var search = activity?.findViewById<SearchView>(R.id.searchByEnq)
         search?.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query:String):Boolean {
                 return false

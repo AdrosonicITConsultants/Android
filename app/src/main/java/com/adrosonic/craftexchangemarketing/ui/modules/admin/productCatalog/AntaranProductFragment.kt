@@ -1,4 +1,4 @@
-package com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database
+package com.adrosonic.craftexchangemarketing.ui.modules.admin.productCatalog
 
 import android.os.Bundle
 import android.os.Handler
@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import com.adrosonic.craftexchangemarketing.R
 import com.adrosonic.craftexchangemarketing.database.entities.realmEntities.ClusterList
 import com.adrosonic.craftexchangemarketing.database.predicates.ClusterPredicates
+import com.adrosonic.craftexchangemarketing.databinding.FragmentProdArtisanBinding
 import com.adrosonic.craftexchangemarketing.databinding.FragmentUserdbArtisanBinding
 import com.adrosonic.craftexchangemarketing.repository.data.response.admin.userDatabase.User
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.tableview.MyTableAdapter
@@ -27,12 +28,12 @@ import io.realm.RealmResults
 
 private const val ARG_PARAM1 = "roleId"
 
-class ArtisanDatabaseFragment() :Fragment(),
+class AntaranProductFragment() :Fragment(),
     DatabaseViewModel.DbInterface,
     TableListenrs{
 
     private var roleId: Int = 1
-    var mBinding : FragmentUserdbArtisanBinding?= null
+    var mBinding : FragmentProdArtisanBinding?= null
     val mViewModel: DatabaseViewModel by viewModels()
     var userList= ArrayList<User>()
     private var mTableAdapter: MyTableAdapter? = null
@@ -56,7 +57,7 @@ class ArtisanDatabaseFragment() :Fragment(),
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_userdb_artisan, container, false)
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_prod_artisan, container, false)
         return mBinding?.root
     }
 
@@ -71,7 +72,7 @@ class ArtisanDatabaseFragment() :Fragment(),
 
         val spClusterAdapter = ArrayAdapter<String>(requireContext(), R.layout.spinner_item,clusterList)
         spClusterAdapter.setDropDownViewResource(R.layout.spinner_item)
-        mBinding?.spCluster?.adapter = spClusterAdapter
+        mBinding?.spAvailability?.adapter = spClusterAdapter
 
         ratingList.clear()
         ratingList.add("Select Rating")
@@ -80,25 +81,25 @@ class ArtisanDatabaseFragment() :Fragment(),
         ratingList.add("Greater than 8")
         val spRatingAdapter = ArrayAdapter<String>(requireContext(), R.layout.spinner_item,ratingList)
         spRatingAdapter.setDropDownViewResource(R.layout.spinner_item)
-        mBinding?.spRating?.adapter = spRatingAdapter
+        mBinding?.spCategory?.adapter = spRatingAdapter
 
         mBinding?.btnApply?.setOnClickListener {
         val searchStr= if(mBinding?.searchArtisan?.text.toString().isNullOrEmpty()) null else  mBinding?.searchArtisan?.text.toString()
-        var clusterId=-1
-            clusterDetailsList?.
-            forEach {
-                if(it?.cluster.equals(mBinding?.spCluster?.selectedItem.toString())){
-                    clusterId=it.clusterid!!.toInt()
-                }
-            }
-        val rating= when(mBinding?.spRating?.selectedItemPosition){
-             1->  3
-             2->  6
-             3->  8
-            else->  -1
-         }
-         if(clusterId.equals(-1) && rating.equals(-1) && searchStr.isNullOrEmpty()) apiCall(false,-1,1,-1,roleId,null,"desc","date")
-         else apiCall(true,clusterId,1,rating,roleId,searchStr,"asc","date")
+//        var clusterId=-1
+//            clusterDetailsList?.
+//            forEach {
+//                if(it?.cluster.equals(mBinding?.spAvailability?.selectedItem.toString())){
+//                    clusterId=it.clusterid!!.toInt()
+//                }
+//            }
+//        val rating= when(mBinding?.spRating?.selectedItemPosition){
+//             1->  3
+//             2->  6
+//             3->  8
+//            else->  -1
+//         }
+//         if(clusterId.equals(-1) && rating.equals(-1) && searchStr.isNullOrEmpty()) apiCall(false,-1,1,-1,roleId,null,"desc","date")
+//         else apiCall(true,clusterId,1,rating,roleId,searchStr,"asc","date")
         }
     }
     private fun initializeTableView() {
@@ -117,7 +118,6 @@ class ArtisanDatabaseFragment() :Fragment(),
     override fun onSuccess(userList: List<User>) {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
-                Log.e(CommonUserFragment.TAG, "onSuccess")
                 this.userList.clear()
                 this.userList.addAll(userList)
                 mBinding?.pbLoader?.visibility=View.GONE
@@ -225,20 +225,12 @@ class ArtisanDatabaseFragment() :Fragment(),
         }
     }
     fun setCount(count:String){
-        when(roleId){
-            1->{
-                mBinding?.totalUserCount?.text="Total artisans: $count"
-            }
-            2->{
-                mBinding?.totalUserCount?.text="Total buyers: $count"
-            }
-        }
+                mBinding?.totalProdCount?.text="Total Products: $count"
     }
     companion object {
-
         @JvmStatic
         fun newInstance(roleId: Int) =
-            ArtisanDatabaseFragment().apply {
+            AntaranProductFragment().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_PARAM1, roleId)
                 }

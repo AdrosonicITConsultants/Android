@@ -19,13 +19,15 @@ import com.adrosonic.craftexchangemarketing.databinding.ActivityAdminLandingBind
 import com.adrosonic.craftexchangemarketing.repository.craftexchangemarketingRepository
 import com.adrosonic.craftexchangemarketing.repository.data.response.Notification.SaveUserTokenResponse
 import com.adrosonic.craftexchangemarketing.ui.modules.Notification.NotifcationFragment
-import com.adrosonic.craftexchangemarketing.ui.modules.admin.enquiriesOrders.EnquiriesAndOrdersFragment
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.enqOrd.EnquiriesAndOrdersFragment
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.productCatalog.CommonProdCatFragment
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.CommonUserFragment
 import com.adrosonic.craftexchangemarketing.ui.modules.buyer.landing.BuyerLandingActivity
 import com.adrosonic.craftexchangemarketing.utils.ConstantsDirectory
 import com.adrosonic.craftexchangemarketing.utils.UserConfig
 import com.adrosonic.craftexchangemarketing.utils.Utility
 import com.adrosonic.craftexchangemarketing.viewModels.ClusterViewModel
+import com.adrosonic.craftexchangemarketing.viewModels.LandingViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.iid.FirebaseInstanceId
 import com.pixplicity.easyprefs.library.Prefs
@@ -56,10 +58,7 @@ NotifcationFragment.Companion.notifcationsInterface{
 
     private var mBinding : ActivityAdminLandingBinding?= null
     val mViewModel:ClusterViewModel by viewModels()
-//    var adminUser : MutableLiveData<CraftAdmin>?= null
-//    val mProVM : ProfileViewModel by viewModels()
-//    var profileImage : String ?= ""
-//    var urlPro : String ?= ""
+    val mViewModel2:LandingViewModel by viewModels()
     var noti_badge: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,19 +75,10 @@ NotifcationFragment.Companion.notifcationsInterface{
         }).execute()
         mViewModel?.noficationlistener=this
         mViewModel?.getAllNotifications()
-//        mViewModel?.getMoqDeliveryTimes()
-//        ArtisanLandingActivity.DeviceRegistration(object :
-//            ArtisanLandingActivity.DeviceTokenCallback {
-//            override fun registeredToken(token: String) {
-//                addUserDevice(true, token)
-//            }
-//        }).execute()
-//        mProVM.listener = this
-//        refreshProfile()
-//        mProVM.getUserMutableData()
-//            .observe(this, Observer<CraftAdmin> {
-//                craftAdmin = MutableLiveData(it)
-//            })
+        mViewModel2?.getMoqDeliveryTimes()
+        mViewModel2?.getProductUploadData()
+
+
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.title = ""
@@ -162,7 +152,11 @@ NotifcationFragment.Companion.notifcationsInterface{
                     }
 
                     R.id.product_catelog -> {
-
+                        if (savedInstanceState == null) {
+                            supportFragmentManager.beginTransaction() .add(R.id.admin_home_container, CommonProdCatFragment.newInstance())
+                                .addToBackStack(null)
+                                .commit()
+                        }
                         return true
 
                     }

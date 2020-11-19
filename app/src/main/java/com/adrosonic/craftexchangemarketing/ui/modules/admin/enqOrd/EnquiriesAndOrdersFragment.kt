@@ -1,30 +1,21 @@
-package com.adrosonic.craftexchangemarketing.ui.modules.admin.enquiriesOrders
+package com.adrosonic.craftexchangemarketing.ui.modules.admin.enqOrd
 
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.adrosonic.craftexchangemarketing.R
 import com.adrosonic.craftexchangemarketing.databinding.EnquiriesAndOrderAdminFragmentBinding
-import com.adrosonic.craftexchangemarketing.databinding.FragmentAdminHomeBinding
-import com.adrosonic.craftexchangemarketing.repository.data.response.admin.userDatabase.UserProfileResponse
 import com.adrosonic.craftexchangemarketing.repository.data.response.enquiryOrderDatabase.EnquiryOrderCountResponse
-import com.adrosonic.craftexchangemarketing.ui.modules.admin.enquiriesOrders.adapter.EnquiryOrderAdapter
-import com.adrosonic.craftexchangemarketing.ui.modules.admin.individualProfile.ArtisanProfileAdapter
-import com.adrosonic.craftexchangemarketing.ui.modules.admin.landing.AdminHomeFragment
-import com.adrosonic.craftexchangemarketing.utils.ConstantsDirectory
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.enqOrd.adapter.EnquiryOrderAdapter
 import com.adrosonic.craftexchangemarketing.utils.UserConfig
 import com.adrosonic.craftexchangemarketing.utils.Utility
 import com.adrosonic.craftexchangemarketing.viewModels.EnquiryOrderViewModel
-import com.adrosonic.craftexchangemarketing.viewModels.UserProfileViewModal
 import com.google.gson.GsonBuilder
-import com.pixplicity.easyprefs.library.Prefs
-import kotlin.math.log
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -45,6 +36,7 @@ EnquiryOrderViewModel.EnquiryOrderCountsInterface{
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        mBinding?.pbLoader?.visibility=View.VISIBLE
 
         mEOVM.countsListener =this
         if(Utility.checkIfInternetConnected(requireContext())){
@@ -73,6 +65,8 @@ EnquiryOrderViewModel.EnquiryOrderCountsInterface{
         mBinding?.EnquiryOrdertabLayout?.setupWithViewPager(mBinding?.EnquiryOrderViewPager)
         mBinding?.escalationsNo?.text = enquiryOrderCountResponse?.data!![0]?.escaltions.toString()
         mBinding?.redirectEnquiriesNo?.text = enquiryOrderCountResponse?.data!![0]?.awaitingMoq.toString()
+        mBinding?.pbLoader?.visibility=View.GONE
+
 
     }
     companion object {

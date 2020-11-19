@@ -1,14 +1,11 @@
-package com.adrosonic.craftexchangemarketing.ui.modules.admin.enquiriesOrders.adapter
+package com.adrosonic.craftexchangemarketing.ui.modules.admin.enqOrd.adapter
 
 import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import com.adrosonic.craftexchangemarketing.ui.modules.admin.enquiriesOrders.EnquiriesCountFragment
-import com.adrosonic.craftexchangemarketing.ui.modules.admin.enquiriesOrders.OrderCountFragment
-import com.adrosonic.craftexchangemarketing.ui.modules.admin.individualProfile.ArtisanAccountFragment
-import com.adrosonic.craftexchangemarketing.ui.modules.admin.individualProfile.ArtisanBrandFragment
-import com.adrosonic.craftexchangemarketing.ui.modules.admin.individualProfile.ArtisanProfileFragment
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.enqOrd.EnquiriesCountFragment
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.enqOrd.OrderCountFragment
 
 
 class EnquiryOrderAdapter  (var context: Context, fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager , BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
