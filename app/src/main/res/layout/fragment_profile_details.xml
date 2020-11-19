@@ -70,7 +70,7 @@
                         android:fontFamily="@font/lato_bold"
                         android:gravity="start"
                         android:textColor="@color/teams_profile_details_color"
-                        android:textSize="@dimen/Ques_text" />
+                        android:textSize="@dimen/product_title_text" />
 
                     <TextView
                         android:id="@+id/role"
@@ -83,7 +83,7 @@
                         android:fontFamily="@font/lato_regular"
                         android:gravity="start"
                         android:textColor="@color/white_text"
-                        android:textSize="@dimen/product_title_text"
+                        android:textSize="@dimen/product_description_text"
                         android:textStyle="italic" />
 
                     <View
@@ -107,7 +107,7 @@
                         android:gravity="start"
                         android:text="@string/member_since"
                         android:textColor="@color/teams_profile_details_color"
-                        android:textSize="@dimen/product_title_text"
+                        android:textSize="@dimen/product_description_text"
                         android:textStyle="italic" />
 
                     <TextView
@@ -121,7 +121,7 @@
                         android:fontFamily="@font/lato_regular"
                         android:gravity="start"
                         android:textColor="@color/white_text"
-                        android:textSize="@dimen/product_title_text" />
+                        android:textSize="@dimen/product_description_text" />
 
                     <TextView
                         android:id="@+id/txt_email"
@@ -135,7 +135,7 @@
                         android:gravity="start"
                         android:text="@string/email"
                         android:textColor="@color/teams_profile_details_color"
-                        android:textSize="@dimen/product_title_text"
+                        android:textSize="@dimen/product_description_text"
                         android:textStyle="italic" />
 
                     <TextView
@@ -149,7 +149,7 @@
                         android:fontFamily="@font/lato_regular"
                         android:gravity="start"
                         android:textColor="@color/white_text"
-                        android:textSize="@dimen/product_title_text" />
+                        android:textSize="@dimen/product_description_text" />
 
                     <TextView
                         android:id="@+id/txt_mobile_no"
@@ -163,7 +163,7 @@
                         android:gravity="start"
                         android:text="@string/mobile_number"
                         android:textColor="@color/teams_profile_details_color"
-                        android:textSize="@dimen/product_title_text"
+                        android:textSize="@dimen/product_description_text"
                         android:textStyle="italic" />
 
                     <TextView
@@ -177,7 +177,7 @@
                         android:fontFamily="@font/lato_regular"
                         android:gravity="start"
                         android:textColor="@color/white_text"
-                        android:textSize="@dimen/product_title_text" />
+                        android:textSize="@dimen/product_description_text" />
 
                     <TextView
                         android:id="@+id/status"
@@ -191,7 +191,7 @@
                         android:text="@string/status"
                         android:drawablePadding="@dimen/margin_regular"
                         android:textColor="@color/teams_profile_details_color"
-                        android:textSize="@dimen/product_title_text"
+                        android:textSize="@dimen/product_description_text"
                         android:textStyle="italic" />
 
                 </LinearLayout>

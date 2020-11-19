@@ -75,6 +75,7 @@ TeamViewModel.AdminDetailsInterface{
 
         //set spinner list
         var adRole = Utility.getAdminRoleDetails()
+        mSpinner?.clear()
         mSpinner.add("Select Role Category")
         mSpinner.add("All")
         adRole?.forEach {
@@ -101,7 +102,11 @@ TeamViewModel.AdminDetailsInterface{
                         mBinding?.swipeTeamList?.isRefreshing = true
                         adReq.pageNo = pageNo!!
                         adReq.refRoleId = refRoleId!!
-                        adReq.searchStr = searchStr.toString()
+                        if(refRoleId == -1){
+                            adReq.searchStr = null
+                        }else{
+                            adReq.searchStr = searchStr.toString()
+                        }
                         mTeamVM?.getTeamList(adReq)
                     }else{
                         Utility.displayMessage(getString(R.string.no_internet_connection),requireContext())
