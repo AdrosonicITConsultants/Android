@@ -69,26 +69,28 @@ TeamViewModel.AdminDetailsInterface{
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mTeamVM?.adminListener = this
+
         setRecyclerAdapter()
         mBinding?.swipeTeamList?.isEnabled = false
 
         //set spinner list
         var adRole = Utility.getAdminRoleDetails()
+        mSpinner.add("Select Role Category")
         mSpinner.add("All")
         adRole?.forEach {
             mSpinner?.add(it.desc)
         }
         setRoleSpinner(mSpinner)
 
-        if(Utility.checkIfInternetConnected(requireContext())){
-            mBinding?.swipeTeamList?.isRefreshing = true
-            adReq.pageNo = pageNo!!
-            adReq.refRoleId = refRoleId!!
-            adReq.searchStr = searchStr.toString()
-            mTeamVM?.getTeamList(adReq)
-        }else{
-            Utility.displayMessage(getString(R.string.no_internet_connection),requireContext())
-        }
+//        if(Utility.checkIfInternetConnected(requireContext())){
+//            mBinding?.swipeTeamList?.isRefreshing = true
+//            adReq.pageNo = pageNo!!
+//            adReq.refRoleId = refRoleId!!
+//            adReq.searchStr = searchStr.toString()
+//            mTeamVM?.getTeamList(adReq)
+//        }else{
+//            Utility.displayMessage(getString(R.string.no_internet_connection),requireContext())
+//        }
 
         mBinding?.teamRecyclerList?.addOnScrollListener(object: RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState:Int) {
@@ -153,37 +155,39 @@ TeamViewModel.AdminDetailsInterface{
                 position: Int,
                 id: Long
             ) {
-                if(position == 0){
-                    if(Utility.checkIfInternetConnected(requireContext())){
-                        mBinding?.swipeTeamList?.isRefreshing = true
-                        teamList?.clear()
+                if(position > 0){
+                    if(position == 1){
+                        if(Utility.checkIfInternetConnected(requireContext())){
+                            mBinding?.swipeTeamList?.isRefreshing = true
+                            teamList?.clear()
 
-                        pageNo = 1
-                        refRoleId = -1
-                        searchStr = ""
+                            pageNo = 1
+                            refRoleId = -1
+                            searchStr = null
 
-                        adReq.pageNo = pageNo
-                        adReq.refRoleId = refRoleId
-                        adReq.searchStr = searchStr
-                        mTeamVM?.getTeamList(adReq)
+                            adReq.pageNo = pageNo
+                            adReq.refRoleId = refRoleId
+                            adReq.searchStr = searchStr
+                            mTeamVM?.getTeamList(adReq)
+                        }else{
+                            Utility.displayMessage(getString(R.string.no_internet_connection),requireContext())
+                        }
                     }else{
-                        Utility.displayMessage(getString(R.string.no_internet_connection),requireContext())
-                    }
-                }else{
-                    if(Utility.checkIfInternetConnected(requireContext())){
-                        mBinding?.swipeTeamList?.isRefreshing = true
-                        teamList?.clear()
+                        if(Utility.checkIfInternetConnected(requireContext())){
+                            mBinding?.swipeTeamList?.isRefreshing = true
+                            teamList?.clear()
 
-                        pageNo = 1
-                        refRoleId = position
-                        searchStr = ""
+                            pageNo = 1
+                            refRoleId = position.minus(1)
+                            searchStr = null
 
-                        adReq.pageNo = pageNo
-                        adReq.refRoleId = refRoleId
-                        adReq.searchStr = searchStr
-                        mTeamVM?.getTeamList(adReq)
-                    }else{
-                        Utility.displayMessage(getString(R.string.no_internet_connection),requireContext())
+                            adReq.pageNo = pageNo
+                            adReq.refRoleId = refRoleId
+                            adReq.searchStr = searchStr
+                            mTeamVM?.getTeamList(adReq)
+                        }else{
+                            Utility.displayMessage(getString(R.string.no_internet_connection),requireContext())
+                        }
                     }
                 }
             }
@@ -194,6 +198,7 @@ TeamViewModel.AdminDetailsInterface{
         super.onResume()
         if(Utility.checkIfInternetConnected(requireContext())){
             mBinding?.swipeTeamList?.isRefreshing = true
+            mBinding?.searchTeammate?.text?.clear()
             teamList?.clear()
             pageNo = 1
             refRoleId = -1
@@ -209,6 +214,7 @@ TeamViewModel.AdminDetailsInterface{
     }
 
     fun setRecyclerAdapter(){
+        teamList?.clear()
         mBinding?.teamRecyclerList?.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         mAdapter = TeamRecyclerAdapter(requireContext(),teamList )
         mBinding?.teamRecyclerList?.adapter = mAdapter
