@@ -31,7 +31,6 @@ import com.adrosonic.craftexchangemarketing.ui.modules.buyer.enquiry.CommonEnqui
 import com.adrosonic.craftexchangemarketing.ui.modules.buyer.ownDesign.OwnProductListFragment
 import com.adrosonic.craftexchangemarketing.ui.modules.buyer.profile.buyerProfileIntent
 import com.adrosonic.craftexchangemarketing.ui.modules.buyer.wishList.wishlistFragment
-import com.adrosonic.craftexchangemarketing.ui.modules.dashboard.dashboardIntent
 import com.adrosonic.craftexchangemarketing.ui.modules.role.roleselectIntent
 import com.adrosonic.craftexchangemarketing.utils.ConstantsDirectory
 import com.adrosonic.craftexchangemarketing.utils.ImageSetter
@@ -160,7 +159,7 @@ class BuyerLandingActivity : AppCompatActivity(),
                         return true
                     }
 
-                    R.id.artisan_database -> {
+                    R.id.user_database -> {
                         if (savedInstanceState == null) {
                             supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container, CommonEnquiryFragment.newInstance())
                                 .addToBackStack(null)
@@ -254,7 +253,7 @@ class BuyerLandingActivity : AppCompatActivity(),
                         .commit()
             }
             R.id.nav_my_dashboard -> {
-                startActivity(dashboardIntent())
+//                startActivity(dashboardIntent())
             }
             R.id.nav_support -> {}
             R.id.nav_logout -> {

@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import com.adrosonic.craftexchangemarketing.R
-import com.adrosonic.craftexchangemarketing.databinding.FragmentCommonEnquiryBinding
-import com.adrosonic.craftexchangemarketing.ui.modules.artisan.enquiry.ArtisanEnqVPAdapter
+//import com.adrosonic.craftexchangemarketing.databinding.FragmentCommonEnquiryBinding
+//import com.adrosonic.craftexchangemarketing.ui.modules.artisan.enquiry.ArtisanEnqVPAdapter
 import com.adrosonic.craftexchangemarketing.ui.modules.buyer.enquiry.adapter.BuyerEnqVPAdapter
 import com.adrosonic.craftexchangemarketing.utils.ConstantsDirectory
 import com.pixplicity.easyprefs.library.Prefs
@@ -22,7 +22,7 @@ class CommonEnquiryFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    var mBinding : FragmentCommonEnquiryBinding?= null
+//    var mBinding : FragmentCommonEnquiryBinding?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,8 +37,8 @@ class CommonEnquiryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_common_enquiry, container, false)
-        return mBinding?.root
+//        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_common_enquiry, container, false)
+        return null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -46,20 +46,20 @@ class CommonEnquiryFragment : Fragment() {
 
 //        mBinding?.viewPagerViewEnquiries?.setOnTouchListener { v, event -> true } //disables viewpager swipe
         var profile = Prefs.getString(ConstantsDirectory.PROFILE,"")
-        when(profile){
-            "Artisan" -> {
-                childFragmentManager.let{
-                    mBinding?.viewPagerViewEnquiries?.adapter = ArtisanEnqVPAdapter(it)
-                    mBinding?.viewEnquiriesTab?.setupWithViewPager(mBinding?.viewPagerViewEnquiries)
-                }
-            }
-            "Buyer" -> {
-                childFragmentManager.let{
-                    mBinding?.viewPagerViewEnquiries?.adapter = BuyerEnqVPAdapter(it)
-                    mBinding?.viewEnquiriesTab?.setupWithViewPager(mBinding?.viewPagerViewEnquiries)
-                }
-            }
-        }
+//        when(profile){
+//            "Artisan" -> {
+//                childFragmentManager.let{
+//                    mBinding?.viewPagerViewEnquiries?.adapter = ArtisanEnqVPAdapter(it)
+//                    mBinding?.viewEnquiriesTab?.setupWithViewPager(mBinding?.viewPagerViewEnquiries)
+//                }
+//            }
+//            "Buyer" -> {
+//                childFragmentManager.let{
+//                    mBinding?.viewPagerViewEnquiries?.adapter = BuyerEnqVPAdapter(it)
+//                    mBinding?.viewEnquiriesTab?.setupWithViewPager(mBinding?.viewPagerViewEnquiries)
+//                }
+//            }
+//        }
     }
 
     companion object {

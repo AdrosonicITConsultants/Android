@@ -5,6 +5,9 @@ enum class Instances{
 }
 object ConstantsDirectory {
     //////////////////////////////////////////////////////////////////////
+    const val DASHBOARD = "dashboard"
+
+    //////////////////////////////////////////////////////////////////////
     const val BASE_URL_DEV = "http://101.53.153.96:8090/"
     const val BASE_URL_UAT = "http://164.52.192.15:8090/"//"http://164.52.192.98:8090/"
     const val IMAGE_LOAD_BASE_URL_DEV = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/"
@@ -12,6 +15,9 @@ object ConstantsDirectory {
     const val BUYER_DASHBOARD_URL = "https://datastudio.google.com/embed/reporting/0ede1d26-5dbf-4564-a7c4-4f850493a89f/page/i56cB?params="
     const val ARTISAN_DASHBOARD_URL = "https://datastudio.google.com/embed/reporting/cef7a3b2-e37f-48a2-9f28-0c3f45a07585/page/RJ8dB?params="
     const val VIEW_PI_URL = "http://101.53.153.96:8090/enquiry/getPreviewPiHTML?enquiryId="
+    const val ADMIN_OPEN_ENQUIRIES_SUMMARY_URL = "https://datastudio.google.com/embed/reporting/c66a317a-4b2d-4442-a326-3f0a6b4cd947/page/u7NhBparams="
+    const val ADMIN_MICRO_ENTERPRISE_REVENUE_URL = "https://datastudio.google.com/embed/reporting/00758bf8-9835-4bc1-aa7d-c2fb328332ab/page/wVxhB?params="
+    const val ADMIN_MICRO_ENTERPRISE_SUMMARY_URL = "https://datastudio.google.com/embed/reporting/324a5edd-e197-40bc-99f7-77a37a525710/page/jj0gB?params="
 
     //////////////////////////////////////////////////////////////////////
     const val PI_PDF_PATH: String = "PiPdfs/"

@@ -7,7 +7,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.adrosonic.craftexchangemarketing.databinding.ActivityMainBinding
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.landing.adminLandingIntent
-import com.adrosonic.craftexchangemarketing.ui.modules.artisan.landing.artisanLandingIntent
+//import com.adrosonic.craftexchangemarketing.ui.modules.artisan.landing.artisanLandingIntent
 import com.adrosonic.craftexchangemarketing.ui.modules.authentication.login.LoginActivity
 import com.adrosonic.craftexchangemarketing.ui.modules.authentication.login.loginIntent
 import com.adrosonic.craftexchangemarketing.ui.modules.buyer.landing.buyerLandingIntent
@@ -51,22 +51,10 @@ class MainActivity : AppCompatActivity() {
 //            if(title.isNotEmpty())isNotification=true
             Log.e(  "notificationManager", "title: $title" )
             startActivity(adminLandingIntent())
-//            when(profile){
-//                ConstantsDirectory.ARTISAN -> {
-//                   if(title.isNotEmpty()) startActivity(artisanLandingIntent(true))
-//                    else startActivity(artisanLandingIntent())
-//                }
-//                ConstantsDirectory.BUYER -> {
-//                    if(title.isNotEmpty()) startActivity(buyerLandingIntent(true))
-//                    else startActivity(buyerLandingIntent())
-//                }
-//            }
+
         } else {
             startActivity(loginIntent())
             Prefs.putString(ConstantsDirectory.PROFILE,"Admin")
-
-//            startActivity(Intent(activity, LoginActivity::class.java))
-
         }
     }
 }

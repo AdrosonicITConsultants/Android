@@ -123,7 +123,7 @@
     <string name="edit_profile">Edit profile</string>
     <string name="artisan_rating_text">Avg. rating by artisans</string>
     <string name="general">General</string>
-    <string name="brand">Brand</string>
+<!--    <string name="brand">Brand</string>-->
     <string name="delivery">Delivery</string>
     <string name="reg_addr">Registered address</string>
     <string name="delivery_addr">Delivery address</string>
@@ -249,6 +249,7 @@
     -->
     <string name="make_it_amp_take_it"><![CDATA[Make it & take it!]]></string>
     <string name="search_hint">Search products, codes, product types, weaves</string>
+    <string name="user_search_hint">Search by brand,email id,phone number,name</string>
     <string name="empty_suggestion_text">No suggestions for this keyword. Try searching\n\"saree\",\"fabric\",\"ikat\".</string>
     <string name="filter_items_collection">Filter items\nby collection</string>
     <string name="show_both">Show both</string>
@@ -293,6 +294,8 @@
     <string name="accept_moq_from_this_list">Accept MOQ from this list which suits your needs the best</string>
     <string name="you_can_find_this_moq">You can find this MOQ in ongoing enquiry, under enquirues tab to track your enquiry</string>
     <string name="title_activity_dashboard">DashboardActivity</string>
+    <string name="title_individual_buyer_profile">Buyer Profile</string>
+
     <!--
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.
@@ -334,5 +337,43 @@
     <string name="MER">Micro enterprise revenue</string>
     <string name="OES">Open enquiry summary</string>
     <string name="ORO">Other reports for order</string>
+    <string name="user_database">User Database</string>
+    <string name="rating">Rating</string>
+    <string name="userDeactivated">User Deactivated</string>
+    <string name="pointOfContact">Point of contact</string>
+    <string name="contactDetails">Contact Details</string>
+    <string name="primary">(primary)</string>
+    <string name="alternate">(alternate)</string>
+    <string name="deliveryDetails">Delivery Details</string>
+    <string name="addressDelivery">Address Address Address Address Address Address Address Address</string>
+    <string name="profile">Profile</string>
+    <string name="brand">Brand</string>
+    <string name="accountTab">Account</string>
+    <string name="editRating">Edit Rating</string>
+    <string name="enterRating">Enter Your Rating</string>
+    <string name="cancelEdit">Cancel Edit</string>
+    <string name="saveEdit">Save Edit</string>
+    <string name="descriptionText">Description</string>
+    <string name="rateDetails">Rate starts below from !st being poor to 5th as best</string>
+    <string name="thanksForHelp"><![CDATA[Thankyou for helping a buyer bring some confidence & smile !]]></string>
+    <string name="buyerResponsiveness">Buyer\'s Responsiveness</string>
+    <string name="buyerFriendliness">Buyer\'s Friendliness</string>
+    <string name="buyerability">Buyer\'s ability to adjust to changes</string>
+    <string name="overallExperience">Overall Experience</string>
+    <string name="buyerpayment">Buyer\'s timely payment and updates</string>
+    <string name="overallRating" />
+    <string name="overallRatings">Overall Rating</string>
+    <string name="becauseyourWordMatter">Because your word matter !!</string>
+    <string name="reviewtext">If you like it or you feel that you want to share. We would like to hear from you1</string>
+    <string name="topHeadingEnquiries"><![CDATA[Enquiries, orders & escalations]]></string>
+    <string name="redirectEnquiries">Redirect Enquiries</string>
+    <string name="escalations">Escalations</string>
+    <string name="ongoingEnquiries">Ongoing Enquiries</string>
+    <string name="incmpleteClosed"><![CDATA[Incomplete & Closed]]></string>
+    <string name="enquiriesConverted">Enquiries Converted</string>
+    <string name="AwaitingMoq">Awaiting response over MOQ from Buyer</string>
+    <string name="ongoingOrders">Ongoing Orders</string>
+    <string name="completedSuccessfully">Completed Successfully</string>
+    <string name="faultyInResolution">Faulty - In resolution</string>
 
 </resources>

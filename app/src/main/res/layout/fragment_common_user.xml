@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/common_enquiry_home"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black_text"
+        tools:context=".ui.modules.buyer.enquiry.CommonEnquiryFragment">
+
+        <TextView
+            android:id="@+id/your_enquiries_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_regular"
+            android:layout_marginTop="65dp"
+            android:fontFamily="@font/lato_regular"
+            android:text="@string/user_database"
+            android:textColor="@color/colorBackground"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/textView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="Total artisans : 3000"
+            android:textColor="@color/colorBackground"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/your_enquiries_text" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/view_user_tab"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView7"
+            app:tabIndicatorColor="@color/colorBackground"
+            app:tabSelectedTextColor="@color/colorBackground"
+            app:tabTextAppearance="@style/artisan_viewprod_tab_text"
+            app:tabTextColor="@color/darker_gray">
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/artisanTab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorBackground"
+                android:text="@string/artisan" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/buyerTab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/buyer" />
+
+        </com.google.android.material.tabs.TabLayout>
+
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewPager_view_database"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="2dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view_user_tab"
+            app:layout_constraintVertical_bias="0.58">
+
+        </androidx.viewpager.widget.ViewPager>
+
+        <ImageView
+            android:id="@+id/DatabaseImage"
+            android:layout_width="116dp"
+            android:layout_height="87dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/view_user_tab"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.983"
+            app:layout_constraintStart_toEndOf="@+id/textView7"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            tools:srcCompat="@drawable/ic_bgownproduct" />
+
+        <ProgressBar
+            android:id="@+id/pbLoader"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="168dp"
+            android:layout_marginEnd="69dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toStartOf="@+id/DatabaseImage"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

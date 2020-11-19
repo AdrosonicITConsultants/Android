@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/artisanDetailsTop"
+                android:layout_width="0dp"
+                android:layout_height="277dp"
+                android:background="@drawable/black_red_vertical_gradient"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/profileImage"
+                    android:layout_width="71dp"
+                    android:layout_height="61dp"
+                    android:layout_marginTop="60dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/artisan_logo_placeholder" />
+
+                <ImageView
+                    android:id="@+id/desginartisanTop"
+                    android:layout_width="123dp"
+                    android:layout_height="92dp"
+                    android:layout_marginTop="72dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_bgownproduct" />
+
+                <TextView
+                    android:id="@+id/artisanName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorSplash"
+                    android:textSize="24sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/profileImage" />
+
+                <TextView
+                    android:id="@+id/artisanWeaverId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorBackground"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/artisanName" />
+
+                <TextView
+                    android:id="@+id/artisanRating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/yellow"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.498"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/artisanWeaverId" />
+
+                <ImageView
+                    android:id="@+id/imageView7"
+                    android:layout_width="83dp"
+                    android:layout_height="59dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_logo_main_foreground" />
+
+                <TextView
+                    android:id="@+id/disabledUserText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/userDeactivated"
+                    android:textColor="@color/colorBackground"
+                    android:textSize="18sp"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.498"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/artisanRating" />
+
+                <ImageView
+                    android:id="@+id/menuartisanProfileIcon"
+                    android:layout_width="62dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="2dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_enquiry_menu" />
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/profileTabLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="12dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/disabledUserText"
+                    app:layout_constraintVertical_bias="1.0"
+                    app:tabIndicatorColor="@color/colorBackground">
+
+                    <com.google.android.material.tabs.TabItem
+                        android:id="@+id/profileTab"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/profile" />
+
+                    <com.google.android.material.tabs.TabItem
+                        android:id="@+id/brandTab"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/brand" />
+
+                    <com.google.android.material.tabs.TabItem
+                        android:id="@+id/accountTab"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/accountTab" />
+                </com.google.android.material.tabs.TabLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/artisanDetailsPager"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/artisanDetailsTop">
+
+            </androidx.viewpager.widget.ViewPager>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutForMenuArtisan"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:elevation="10dp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/artisanDetailsTop"
+                tools:visibility="visible">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/giveRating"
+                    android:layout_width="278dp"
+                    android:layout_height="236dp"
+                    android:background="@color/filter_list_background"
+                    android:elevation="45dp"
+                    android:padding="10dp"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/textView10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="@string/enterRating"
+                        android:textColor="@color/black_text"
+                        android:textSize="20sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.497"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/closeEdit"
+                        android:layout_width="21dp"
+                        android:layout_height="20dp"
+                        android:contentDescription="close button"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
+                    <TextView
+                        android:id="@+id/cancelEditRating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="@string/cancelEdit"
+                        android:textColor="@color/black_text"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <TextView
+                        android:id="@+id/saveRating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:text="@string/save"
+                        android:textColor="@color/accept_green"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <com.warkiz.widget.IndicatorSeekBar
+                        android:id="@+id/ratingBar"
+                        android:layout_width="258dp"
+                        android:layout_height="41dp"
+                        app:isb_max="10"
+                        app:isb_min="0"
+                        app:isb_progress="2.5"
+                        app:isb_progress_value_float="true"
+                        app:isb_show_indicator="none"
+                        app:isb_show_thumb_text="true"
+                        app:isb_show_tick_texts="true"
+                        app:isb_ticks_count="2"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/menuArtisanProfile"
+                    android:layout_width="183dp"
+                    android:layout_height="62dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="60dp"
+                    android:background="@color/colorBackground"
+                    android:elevation="30dp"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/statusArtisan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="Active"
+                        android:textColor="@color/black_text"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/statusArtisanSwitch"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/statusArtisanSwitch" />
+
+                    <Switch
+                        android:id="@+id/statusArtisanSwitch"
+                        android:layout_width="84dp"
+                        android:layout_height="0dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="2dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toEndOf="@+id/statusArtisan"
+                        tools:checked="true" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/editRating"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:elevation="35dp"
+                        app:layout_constraintBottom_toTopOf="@+id/statusArtisanSwitch"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="1.0">
+
+                        <TextView
+                            android:id="@+id/editRatingText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:text="@string/editRating"
+                            android:textColor="@color/black_text"
+                            android:textSize="18sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/editRatingImage"
+                            android:layout_width="21dp"
+                            android:layout_height="23dp"
+                            android:layout_marginEnd="10dp"
+                            app:layout_constraintBottom_toBottomOf="@+id/editRatingText"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.9"
+                            app:layout_constraintStart_toEndOf="@+id/editRatingText"
+                            app:layout_constraintTop_toTopOf="@+id/editRatingText"
+                            app:srcCompat="@drawable/ic_edit" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--                    <FrameLayout-->
+<!--                        android:id="@+id/progress_layout"-->
+<!--                        android:layout_width="194dp"-->
+<!--                        android:layout_height="296dp"-->
+<!--                        android:contextClickable="false"-->
+<!--                        android:elevation="10dp"-->
+<!--                        android:visibility="@{sendOtpLoader ? View.VISIBLE : View.GONE}"-->
+<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        app:layout_constraintHorizontal_bias="0.497"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                        app:layout_constraintTop_toTopOf="parent"-->
+<!--                        app:layout_constraintVertical_bias="0.473">-->
+
+<!--                        <ProgressBar-->
+<!--                            android:id="@+id/progressBar"-->
+<!--                            style="?android:attr/progressBarStyle"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:elevation="10dp" />-->
+<!--                    </FrameLayout>-->
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                android:id="@+id/layoutForGivingRating"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:background="#94000000"-->
+<!--                android:elevation="40dp"-->
+<!--                android:visibility="invisible"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/nestedScrollView2"-->
+<!--                app:layout_constraintEnd_toEndOf="@+id/layoutForMenuArtisan"-->
+<!--                app:layout_constraintStart_toStartOf="@+id/layoutForMenuArtisan"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/artisanDetailsTop">-->
+
+<!--            -->
+<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
+
+</layout>

@@ -39,13 +39,7 @@ class LoginActivity : AppCompatActivity() {
                         .commitNow()
                 }
             }
-//            ConstantsDirectory.BUYER -> {
-//                if (savedInstanceState == null) {
-//                    supportFragmentManager.beginTransaction()
-//                        .replace(R.id.login_container, BuyerLoginUsernameFragment.newInstance(profile))
-//                        .commitNow()
-//                }
-//            }
+//
         }
     }
 }

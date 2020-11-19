@@ -1,0 +1,542 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black_text">
+
+        <ProgressBar
+            android:id="@+id/pbLoader"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="20dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/backButtonEnqOr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_keyboard_backspace_black_24dp" />
+
+            <TextView
+                android:id="@+id/textView32"
+                android:layout_width="255dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:textColor="@color/colorBackground"
+                android:textSize="30sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/backButtonEnqOr"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/EnquiryCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="10dp"
+                android:textColor="#EFA993"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/textView31"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:background="@drawable/bluegradient"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout3" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/search_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView31">
+
+            <EditText
+                android:id="@+id/searchByEnq"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/rectangle_round_grad_black_solid"
+                android:drawableLeft="@drawable/ic_search_black_36dp"
+                android:drawablePadding="8dp"
+                android:drawableTint="@color/white_text"
+                android:hint="Search by enquiry number"
+                android:inputType="text"
+                android:paddingLeft="8dp"
+                android:textColor="@color/white_text"
+                android:textColorHint="@color/white_text"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/SearchBtn"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/SearchBtn"
+                android:layout_width="80dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="15dp"
+                android:background="#AFFFD1"
+                android:text="Search"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/filterLayoutToggle"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/filterLayoutToggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_icon_material_tune" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/filterLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
+
+            <TextView
+                android:id="@+id/textView34"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Filters"
+                android:textColor="#91CF50"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/filterBtn"
+                android:layout_width="80dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:background="#AFFFD1"
+                android:text="Apply"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView35"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/lato_light"
+                android:text="Cluster"
+                android:textColor="@color/colorBackground"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/filterBtn" />
+
+            <RelativeLayout
+                android:id="@+id/clusterParent"
+                android:layout_width="150dp"
+                android:layout_height="33dp"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="4"
+                android:background="@drawable/search_background"
+                app:layout_constraintBottom_toBottomOf="@+id/textView35"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textView35">
+
+                <Spinner
+                    android:id="@+id/sp_cluster"
+                    style="@style/Widget.AppCompat.DropDownItem.Spinner"
+                    android:layout_width="150dp"
+                    android:layout_height="33dp"
+                    android:autofillHints="Select product category"
+                    android:backgroundTint="@color/white_text"
+                    android:popupBackground="@color/table_corner_layout_color" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/textView36"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/lato_light"
+                android:text="Artisan Brand"
+                android:textColor="@color/colorBackground"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/clusterParent" />
+
+            <EditText
+                android:id="@+id/editArtisanBrand"
+                android:layout_width="150dp"
+                android:layout_height="33dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/search_background"
+                android:ems="10"
+                android:hint="Enter Artisan Brand"
+                android:inputType="textPersonName"
+                android:padding="2dp"
+                android:paddingStart="10dp"
+                android:textColor="@color/colorBackground"
+                android:textColorHint="@color/colorBackground"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/textView36"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textView36" />
+
+            <TextView
+                android:id="@+id/textView37"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/lato_light"
+                android:text="Buyer Brand"
+                android:textColor="@color/colorBackground"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editArtisanBrand" />
+
+            <EditText
+                android:id="@+id/editBuyerBrand"
+                android:layout_width="150dp"
+                android:layout_height="33dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/search_background"
+                android:ems="10"
+                android:hint="Enter Buyer Brand"
+                android:inputType="textPersonName"
+                android:padding="2dp"
+                android:paddingStart="10dp"
+                android:textColor="@color/colorBackground"
+                android:textColorHint="@color/colorBackground"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/textView37"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textView37" />
+
+            <TextView
+                android:id="@+id/textView38"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/lato_light"
+                android:text="Availability"
+                android:textColor="@color/colorBackground"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editBuyerBrand" />
+
+
+            <RelativeLayout
+                android:id="@+id/clusterParent1"
+                android:layout_width="150dp"
+                android:layout_height="33dp"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="4"
+                android:background="@drawable/search_background"
+                app:layout_constraintBottom_toBottomOf="@+id/textView38"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textView38">
+
+                <Spinner
+                    android:id="@+id/sp_cluster1"
+                    style="@style/Widget.AppCompat.DropDownItem.Spinner"
+                    android:layout_width="150dp"
+                    android:layout_height="33dp"
+                    android:autofillHints="Select product category"
+                    android:backgroundTint="@color/white_text"
+                    android:popupBackground="@color/table_corner_layout_color" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/textView39"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/lato_light"
+                android:text="Product Category"
+                android:textColor="@color/colorBackground"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/clusterParent1" />
+
+            <RelativeLayout
+                android:id="@+id/clusterParent11"
+                android:layout_width="150dp"
+                android:layout_height="33dp"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="4"
+                android:background="@drawable/search_background"
+                app:layout_constraintBottom_toBottomOf="@+id/textView39"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textView39">
+
+                <Spinner
+                    android:id="@+id/sp_cluster11"
+                    style="@style/Widget.AppCompat.DropDownItem.Spinner"
+                    android:layout_width="150dp"
+                    android:layout_height="33dp"
+                    android:autofillHints="Select product category"
+                    android:backgroundTint="@color/white_text"
+                    android:popupBackground="@color/table_corner_layout_color" />
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/days30"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_textbox"
+                android:text="30 Days"
+                android:textColor="@color/colorBackground"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toStartOf="@+id/days60"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/clusterParent11" />
+
+            <Button
+                android:id="@+id/days60"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bd_underline"
+                android:text="60 Days"
+                android:textColor="@color/colorBackground"
+                app:layout_constraintEnd_toStartOf="@+id/days90"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/days30"
+                app:layout_constraintTop_toBottomOf="@+id/clusterParent11" />
+
+            <Button
+                android:id="@+id/days90"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bd_underline"
+                android:text="90 Days"
+                android:textColor="@color/colorBackground"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/days60"
+                app:layout_constraintTop_toBottomOf="@+id/clusterParent11" />
+
+            <RadioGroup
+                android:id="@+id/radioGroup2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/db_view_bg"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fromDate">
+
+                <RadioButton
+                    android:id="@+id/radioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="#FFFFFF"
+                    android:text="Antaran Co Design"
+                    android:textColor="@color/colorBackground"
+                    android:textSize="12sp" />
+
+                <RadioButton
+                    android:id="@+id/radioButton2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="#FFFFFF"
+                    android:text="Artisan Self Design"
+                    android:textColor="@color/colorBackground"
+                    android:textSize="12sp" />
+
+                <RadioButton
+                    android:id="@+id/radioButton3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:buttonTint="#FFFFFF"
+                    android:checked="true"
+                    android:text="Both"
+                    android:textColor="@color/colorBackground"
+                    android:textSize="12sp" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/textView41"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:text="Range"
+                android:textColor="@color/colorBackground"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/days60" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/fromDate"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/search_background"
+                app:layout_constraintEnd_toStartOf="@+id/toDate"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView41">
+
+                <ImageView
+                    android:id="@+id/imageView12"
+                    android:layout_width="30dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_calender_white" />
+
+                <TextView
+                    android:id="@+id/fromDateText"
+                    android:layout_width="120dp"
+                    android:layout_height="0dp"
+                    android:hint="YYYY-MM-DD"
+                    android:padding="10dp"
+                    android:textColor="@color/colorBackground"
+                    android:textColorHint="@color/colorBackground"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/imageView12"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/toDate"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/search_background"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/fromDate"
+                app:layout_constraintTop_toBottomOf="@+id/textView41">
+
+                <ImageView
+                    android:id="@+id/imageView17"
+                    android:layout_width="30dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_calender_white" />
+
+                <TextView
+                    android:id="@+id/toDateText"
+                    android:layout_width="120dp"
+                    android:layout_height="0dp"
+                    android:hint="YYYY-MM-DD"
+                    android:padding="10dp"
+                    android:text="YYYY-MM-DD"
+                    android:textColor="@color/colorBackground"
+                    android:textColorHint="@color/colorBackground"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/imageView17"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_enquiry_details"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/FilterTextLayout">
+
+<!--            <androidx.core.widget.NestedScrollView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:fillViewport="true">-->
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/EnquiryListRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+<!--            </androidx.core.widget.NestedScrollView>-->
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/FilterTextLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/filterLayout">
+
+            <TextView
+                android:id="@+id/filtersApplied"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="2dp"
+                android:textColor="@color/colorBackground"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

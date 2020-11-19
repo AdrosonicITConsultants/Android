@@ -1,0 +1,56 @@
+package com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.tableview.holder;
+
+import android.view.View;
+import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
+
+import com.adrosonic.craftexchangemarketing.R;
+import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder;
+//import com.evrencoskun.tableviewsample2.R;
+
+/**
+ * Created by evrencoskun on 1.12.2017.
+ */
+
+public class RowHeaderViewHolder extends AbstractViewHolder {
+    public final TextView row_header_textview;
+    public final TextView txt_status;
+
+    public RowHeaderViewHolder(View p_jItemView) {
+        super(p_jItemView);
+        row_header_textview = p_jItemView.findViewById(R.id.row_header_textview);
+        txt_status = p_jItemView.findViewById(R.id.txt_status);
+    }
+
+    @Override
+    public void setSelected(SelectionState p_nSelectionState) {
+        super.setSelected(p_nSelectionState);
+
+        int nBackgroundColorId;
+        int nForegroundColorId;
+
+        nBackgroundColorId = R.color.table_corner_layout_color;
+        nForegroundColorId = R.color.table_corner_text_color;
+
+//        if (p_nSelectionState == SelectionState.SELECTED) {
+//            nBackgroundColorId = R.color.darker_gray;
+//            nForegroundColorId = R.color.selected_text_color;
+
+//        }
+//        else if (p_nSelectionState == SelectionState.UNSELECTED) {
+//            nBackgroundColorId = R.color.table_corner_layout_color;
+//            nForegroundColorId = R.color.table_corner_text_color;
+////            nBackgroundColorId = R.color.unselected_header_background_color;
+////            nForegroundColorId = R.color.unselected_text_color;
+//
+//        } else { // SelectionState.SHADOWED
+//
+//            nBackgroundColorId = R.color.shadow_background_color;
+//            nForegroundColorId = R.color.unselected_text_color;
+//        }
+
+        itemView.setBackgroundColor(ContextCompat.getColor(itemView.getContext(), nBackgroundColorId));
+        row_header_textview.setTextColor(ContextCompat.getColor(row_header_textview.getContext(), nForegroundColorId));
+    }
+}

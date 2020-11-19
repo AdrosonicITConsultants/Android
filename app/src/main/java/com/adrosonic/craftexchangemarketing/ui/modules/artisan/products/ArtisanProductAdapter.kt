@@ -8,16 +8,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchangemarketing.R
 import com.adrosonic.craftexchangemarketing.database.entities.realmEntities.ArtisanProducts
-import com.adrosonic.craftexchangemarketing.database.entities.realmEntities.ProductCard
-import com.adrosonic.craftexchangemarketing.database.entities.realmEntities.ProductCatalogue
 import com.adrosonic.craftexchangemarketing.databinding.ItemArtisanProductCategoryBinding
 import com.adrosonic.craftexchangemarketing.ui.interfaces.ArtisanProductClick
-import com.adrosonic.craftexchangemarketing.ui.modules.artisan.landing.ArtisanLandingActivity
-import com.adrosonic.craftexchangemarketing.ui.modules.buyer.landing.BuyerLandingActivity
-import com.adrosonic.craftexchangemarketing.ui.modules.buyer.viewProducts.productlists.RegionProdListFragment
+//import com.adrosonic.craftexchangemarketing.ui.modules.artisan.landing.ArtisanLandingActivity
 import com.adrosonic.craftexchangemarketing.utils.ConstantsDirectory
-import com.adrosonic.craftexchangemarketing.utils.Utility
-import com.google.gson.Gson
 import io.realm.RealmResults
 
 class ArtisanProductAdapter(var context: Context?, private var artisanProducts: RealmResults<ArtisanProducts>?) : RecyclerView.Adapter<ArtisanProductAdapter.ViewHolder>(),
@@ -61,11 +55,11 @@ class ArtisanProductAdapter(var context: Context?, private var artisanProducts: 
         list.productCategoryId?.let { bundle.putLong(ConstantsDirectory.PRODUCT_CATEGORY_ID, it) }
         var frag2 = ArtisanUploadedProductsFragment()
         frag2.arguments = bundle
-        var activity = context as ArtisanLandingActivity
-        activity.supportFragmentManager.beginTransaction()
-            .replace(R.id.artisan_home_container, frag2)
-            .addToBackStack(null)
-            .commit()
+//        var activity = context as ArtisanLandingActivity
+//        activity.supportFragmentManager.beginTransaction()
+//            .replace(R.id.admin_home_container, frag2)
+//            .addToBackStack(null)
+//            .commit()
     }
 
 }

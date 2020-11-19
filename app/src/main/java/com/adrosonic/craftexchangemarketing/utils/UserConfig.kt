@@ -56,6 +56,7 @@ const val VIEW_PROD_OF = "viewproductof"
 const val CATEGORY_PRODUCTS = "CategoryProducts"
 const val CLUSTER_PRODUCTS = "ClusterProducts"
 const val BRAND_PRODUCTS = "BrandProducts"
+
 const val AVAILABLE_IN_STOCK = "Available In Stock"
 const val MADE_TO_ORDER = "Made To Order"
 const val IMAGE_URL = "imageurl"
@@ -67,6 +68,11 @@ const val KEY_DEVICE_REGISTRATION_TOKEN = "device_registration_token"
 const val NOTI_BADGE_COUNT = "noti_badge_count"
 ///////////////////ProductTemplateParams///////////////////////
 const val PRODUCT_UPLOAD_JSON = "product_upload_json"
+const val IND_USER_DATA = "ind_user_data"
+const val IND_ENQ_DATA = "ind_user_data"
+
+const val ENQUIRY_ORDER_COUNTS = "enquiry_order_count"
+
 const val WARP_DYE_ID = "warpDyeId"
 const val WARP_YARN_COUNT = "warpYarnCount"
 const val WARP_YARN_ID = "warpYarnId"
@@ -81,6 +87,11 @@ const val EXTRA_WEFT_YARN_ID = "extraWeftYarnId"
 const val MOQ_DELIVERY_DATES = "moq_delivery_dates"
 const val ENQUIRY_STAGE_DATA = "enquiry_stage_data"
 const val ENQUIRY_AVAI_PROD_STAGE_DATA = "enquiry_available_product_stage_data"
+
+const val ARTISAN_DB_PAGE_COUNT = "artisan_db_page_count"
+const val BUYER_DB_PAGE_COUNT = "buyer_db_page_count"
+
+
 
 
 class UserConfig {
@@ -443,7 +454,28 @@ class UserConfig {
             Prefs.putString(PRODUCT_UPLOAD_JSON, value)
             field = value
         }
+    //Admim start
+    var indUserDataJson: String? = ""
+        get() = Prefs.getString(IND_USER_DATA,"")
+        set(value) {
+            Prefs.putString(IND_USER_DATA, value)
+            field = value
+        }
 
+    var CountsResponse : String? = ""
+        get() = Prefs.getString(ENQUIRY_ORDER_COUNTS,"")
+        set(value) {
+            Prefs.putString(ENQUIRY_ORDER_COUNTS, value)
+            field = value
+        }
+
+    var enquiryData: String? = ""
+        get() = Prefs.getString(IND_ENQ_DATA,"")
+        set(value) {
+            Prefs.putString(IND_ENQ_DATA, value)
+            field = value
+        }
+    //Admin end
     var imageUrlList : String? = ""
         get() = Prefs.getString(IMAGE_URL,"")
         set(value) {
@@ -523,6 +555,19 @@ class UserConfig {
         get() = Prefs.getString(ENQUIRY_AVAI_PROD_STAGE_DATA,"")
         set(value) {
             Prefs.putString(ENQUIRY_AVAI_PROD_STAGE_DATA, value)
+            field = value
+        }
+
+    var artisanDbPageCount : Int = 1
+        get() = Prefs.getInt(ARTISAN_DB_PAGE_COUNT,1)
+        set(value) {
+            Prefs.putInt(ARTISAN_DB_PAGE_COUNT, value)
+            field = value
+        }
+    var buyerDbPageCount : Int = 1
+        get() = Prefs.getInt(BUYER_DB_PAGE_COUNT,1)
+        set(value) {
+            Prefs.putInt(BUYER_DB_PAGE_COUNT, value)
             field = value
         }
 }

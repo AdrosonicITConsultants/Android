@@ -57,7 +57,6 @@ private const val ARG_PARAM2 = "param2"
 class BuyerOnGoEnqDetailsFragment : Fragment(),
 EnquiryViewModel.FetchEnquiryInterface,
     EnquiryViewModel.BuyersMoqInterface,
-    MoqAdapter.MoqListener,
 EnquiryViewModel.singlePiInterface{
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -90,7 +89,7 @@ EnquiryViewModel.singlePiInterface{
 
     var moqDeliveryJson=""
     var moqDeliveryTimeList=ArrayList<Datum>()
-    private lateinit var moqAdapter: MoqAdapter
+//    private lateinit var moqAdapter: MoqAdapter
     private lateinit var confirmDialog: Dialog
     var dialogMoq : String ?= ""
     var dialogPpu : String ?= ""
@@ -456,9 +455,9 @@ EnquiryViewModel.singlePiInterface{
                                         LinearLayoutManager.VERTICAL,
                                         false
                                     )
-                                    moqAdapter =  MoqAdapter(requireContext(), moq, moqDeliveryTimeList)
-                                    mBinding?.moqList?.adapter = moqAdapter
-                                    moqAdapter.listener = this
+//                                    moqAdapter =  MoqAdapter(requireContext(), moq, moqDeliveryTimeList)
+//                                    mBinding?.moqList?.adapter = moqAdapter
+//                                    moqAdapter.listener = this
                                 }
 
                         }
@@ -495,9 +494,9 @@ EnquiryViewModel.singlePiInterface{
                                 mBinding?.moqDetails?.visibility = View.GONE
                                 mBinding?.moqListLayout?.visibility = View.VISIBLE
                                 mBinding?.moqList?.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false )
-                                moqAdapter = MoqAdapter(requireContext(), moq, moqDeliveryTimeList)
-                                mBinding?.moqList?.adapter = moqAdapter
-                                moqAdapter.listener = this
+//                                moqAdapter = MoqAdapter(requireContext(), moq, moqDeliveryTimeList)
+//                                mBinding?.moqList?.adapter = moqAdapter
+//                                moqAdapter.listener = this
                             }
                         }
                     }
@@ -794,52 +793,52 @@ EnquiryViewModel.singlePiInterface{
         }
     }
 
-    override fun onAccepted(artisanId: Long, moqId: Long) {
-        confirmDialog = Dialog(requireContext())
-        confirmDialog.setContentView(R.layout.dialog_moq_confirmation)
-        confirmDialog.show()
-        val tvCancel = confirmDialog.findViewById(R.id.txt_cancel) as TextView
-        val txt_accept = confirmDialog.findViewById(R.id.txt_accept) as TextView
-        val brand_cluster = confirmDialog.findViewById(R.id.brand_cluster) as TextView
-        val moq_order_qty = confirmDialog.findViewById(R.id.moq_order_qty) as TextView
-        val moq_order_amount = confirmDialog.findViewById(R.id.moq_order_amount) as TextView
-        val moq_order_eta = confirmDialog.findViewById(R.id.moq_order_eta) as TextView
-        val moq= MoqsPredicates.getSingleMoqByMoqId(moqId)
-        moq?.let {
-            dialogEta =moq?.deliveryTimeId?:0
-            brand_cluster.text="${moq.brand} from ${moq.clusterName}"
-            dialogBrand="${moq.brand} from ${moq.clusterName}"
-            moq_order_qty.text="${moq.moq} pcs"
-            dialogMoq="${moq.moq} pcs"
-            moq_order_amount.text="₹ ${moq.ppu}"
-            dialogPpu="₹ ${moq.ppu}"
-                moqDeliveryTimeList?.forEach {
-                    if (it.id.equals(moq?.deliveryTimeId)) {
-                        moq_order_eta.text= if(it?.days.equals(0L)){"Immediate"} else "${it?.days} Days"
-                    }
-                }
-        }
-        tvCancel.setOnClickListener {
-            confirmDialog.dismiss()
-        }
-        txt_accept.setOnClickListener {
-            if(Utility.checkIfInternetConnected(requireActivity())){
-                viewLoader()
-                confirmDialog.dismiss()
-                mEnqVM.sendCustomMoqs(enqID?:0,moqId?:0,artisanId)
-            }else{
-                Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
-            }
-
-        }
-    }
-
-    override fun viewArtisanProfile(id: Long) {
-        activity?.supportFragmentManager?.beginTransaction()
-            ?.replace(R.id.enquiry_details_container,ArtEnqDetailsFragment.newInstance("","",id))
-            ?.addToBackStack(null)
-            ?.commit()
-    }
+//    override fun onAccepted(artisanId: Long, moqId: Long) {
+//        confirmDialog = Dialog(requireContext())
+//        confirmDialog.setContentView(R.layout.dialog_moq_confirmation)
+//        confirmDialog.show()
+//        val tvCancel = confirmDialog.findViewById(R.id.txt_cancel) as TextView
+//        val txt_accept = confirmDialog.findViewById(R.id.txt_accept) as TextView
+//        val brand_cluster = confirmDialog.findViewById(R.id.brand_cluster) as TextView
+//        val moq_order_qty = confirmDialog.findViewById(R.id.moq_order_qty) as TextView
+//        val moq_order_amount = confirmDialog.findViewById(R.id.moq_order_amount) as TextView
+//        val moq_order_eta = confirmDialog.findViewById(R.id.moq_order_eta) as TextView
+//        val moq= MoqsPredicates.getSingleMoqByMoqId(moqId)
+//        moq?.let {
+//            dialogEta =moq?.deliveryTimeId?:0
+//            brand_cluster.text="${moq.brand} from ${moq.clusterName}"
+//            dialogBrand="${moq.brand} from ${moq.clusterName}"
+//            moq_order_qty.text="${moq.moq} pcs"
+//            dialogMoq="${moq.moq} pcs"
+//            moq_order_amount.text="₹ ${moq.ppu}"
+//            dialogPpu="₹ ${moq.ppu}"
+//                moqDeliveryTimeList?.forEach {
+//                    if (it.id.equals(moq?.deliveryTimeId)) {
+//                        moq_order_eta.text= if(it?.days.equals(0L)){"Immediate"} else "${it?.days} Days"
+//                    }
+//                }
+//        }
+//        tvCancel.setOnClickListener {
+//            confirmDialog.dismiss()
+//        }
+//        txt_accept.setOnClickListener {
+//            if(Utility.checkIfInternetConnected(requireActivity())){
+//                viewLoader()
+//                confirmDialog.dismiss()
+//                mEnqVM.sendCustomMoqs(enqID?:0,moqId?:0,artisanId)
+//            }else{
+//                Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
+//            }
+//
+//        }
+//    }
+//
+//    override fun viewArtisanProfile(id: Long) {
+//        activity?.supportFragmentManager?.beginTransaction()
+//            ?.replace(R.id.enquiry_details_container,ArtEnqDetailsFragment.newInstance("","",id))
+//            ?.addToBackStack(null)
+//            ?.commit()
+//    }
 
     fun showSendMoqSuccesDialog(moqId:Long){
         confirmDialog = Dialog(requireContext())

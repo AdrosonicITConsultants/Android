@@ -1,4 +1,4 @@
-package com.adrosonic.craftexchangemarketing.ui.modules.buyer.enquiry.adapter
+package com.adrosonic.craftexchange.ui.modules.buyer.enquiry.adapter
 
 
 import android.content.Context
@@ -10,10 +10,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.adrosonic.craftexchangemarketing.repository.data.response.moq.Datum
 import com.adrosonic.craftexchangemarketing.R
 import com.adrosonic.craftexchangemarketing.database.entities.realmEntities.Moqs
 import com.adrosonic.craftexchangemarketing.database.predicates.MoqsPredicates
-import com.adrosonic.craftexchangemarketing.repository.data.response.moq.Datum
 import com.adrosonic.craftexchangemarketing.utils.ImageSetter
 import com.adrosonic.craftexchangemarketing.utils.Utility
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter
@@ -75,7 +75,7 @@ class MoqAdapter(
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         var moq = moqItems?.get(position)
 //        val minPpu=MoqsPredicates.getMinPpu(moq?.enquiryId?:0)
-        val minQty=MoqsPredicates.getMinQty(moq?.enquiryId?:0)
+        val minQty= MoqsPredicates.getMinQty(moq?.enquiryId?:0)
         val minEta=MoqsPredicates.getMinEta(moq?.enquiryId?:0)
 //        if(moq?.ppu?.toInt()==minPpu)holder?.txtPrice.setTypeface(Typeface.DEFAULT_BOLD)
         if(moq?.moq?.toInt()==minQty)holder?.txtQty.setTypeface(Typeface.DEFAULT_BOLD)
@@ -99,7 +99,7 @@ class MoqAdapter(
         ImageSetter.setImage(context,url,holder?.imageArtisan ,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder,R.drawable.artisan_logo_placeholder)
 
         holder?.txtAccept.setOnClickListener {
-        acceptMoq(moq?.artisanId?:0,moq?.moqId?:0)
+            acceptMoq(moq?.artisanId?:0,moq?.moqId?:0)
         }
         holder?.imgExpand.setOnClickListener {
             if(holder?.detailsLayout.visibility==View.VISIBLE)holder?.detailsLayout.visibility=View.GONE
@@ -116,8 +116,8 @@ class MoqAdapter(
 
     fun acceptMoq(artisanId:Long, moqId:Long){
 //            notifyItemRangeChanged(pos, notificationItems?.size?:0)
-            notifyDataSetChanged()
-            listener?.onAccepted(artisanId, moqId)
+        notifyDataSetChanged()
+        listener?.onAccepted(artisanId, moqId)
     }
 
     override fun getSwipeLayoutResourceId(position: Int): Int {
