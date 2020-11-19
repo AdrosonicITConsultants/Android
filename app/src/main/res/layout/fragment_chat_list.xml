@@ -50,6 +50,7 @@
             android:paddingLeft="8dp"
             android:textColorHint="@color/darker_gray"
             android:textSize="@dimen/product_availability_text" />
+
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh_layout"
             android:layout_width="match_parent"

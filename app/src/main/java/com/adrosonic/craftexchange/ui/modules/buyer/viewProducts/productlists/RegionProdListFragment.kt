@@ -54,8 +54,7 @@ class RegionProdListFragment : Fragment(),
     private var mClusProductList : RealmResults<ProductCatalogue>?= null
     private var mFilteredList : RealmResults<ProductCatalogue>?= null
 
-    private var mSpinner = mutableListOf<String>()
-
+a
     val mClusVM : ClusterViewModel by viewModels()
     val mEnqVM : EnquiryViewModel by viewModels()
 
