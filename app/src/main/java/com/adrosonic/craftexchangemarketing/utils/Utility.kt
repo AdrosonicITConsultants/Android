@@ -33,6 +33,7 @@ import com.adrosonic.craftexchangemarketing.repository.data.response.enquiry.Enq
 import com.adrosonic.craftexchangemarketing.repository.data.response.enquiry.EnquiryStageData
 import com.adrosonic.craftexchangemarketing.repository.data.response.moq.Datum
 import com.adrosonic.craftexchangemarketing.repository.data.response.moq.MoqDeliveryTimesResponse
+import com.adrosonic.craftexchangemarketing.repository.data.response.team.*
 import com.adrosonic.craftexchangemarketing.ui.modules.enquiry.enquiryDetails
 import com.bumptech.glide.Glide
 import com.google.gson.GsonBuilder
@@ -124,6 +125,28 @@ class Utility {
                 }
             })
         }
+
+        fun getAdminRoleDetails() : List<AdminRoleData>?{
+            var details = UserConfig.shared.adminRoles
+            val gson = GsonBuilder().create()
+            val adminData = gson.fromJson(details, AdminRolesResponse::class.java)
+            return adminData?.data
+        }
+
+        fun getAdminDetails() : List<AdminProfileData>?{
+           var details = UserConfig.shared.adminProfile
+            val gson = GsonBuilder().create()
+            val adminData = gson.fromJson(details, AdminResponse::class.java)
+            return adminData?.data
+        }
+
+        fun getAdminTeam() : List<AdminsData>? {
+            var details = UserConfig.shared.adminTeam
+            val gson = GsonBuilder().create()
+            val adminData = gson.fromJson(details, AdminsResponse::class.java)
+            return adminData?.data
+        }
+
         fun getDeliveryTimeList():List<Datum>?{
             val moqDeliveryJson = UserConfig.shared.moqDeliveryDates
             val gson = GsonBuilder().create()

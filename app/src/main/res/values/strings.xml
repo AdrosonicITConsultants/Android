@@ -123,7 +123,7 @@
     <string name="edit_profile">Edit profile</string>
     <string name="artisan_rating_text">Avg. rating by artisans</string>
     <string name="general">General</string>
-<!--    <string name="brand">Brand</string>-->
+    <!--    <string name="brand">Brand</string>-->
     <string name="delivery">Delivery</string>
     <string name="reg_addr">Registered address</string>
     <string name="delivery_addr">Delivery address</string>
@@ -375,5 +375,12 @@
     <string name="ongoingOrders">Ongoing Orders</string>
     <string name="completedSuccessfully">Completed Successfully</string>
     <string name="faultyInResolution">Faulty - In resolution</string>
+    <string name="search_teammate">Search Teammate</string>
+    <string name="select_role">Select Role</string>
+    <string name="total_count">"Total Count : "</string>
+    <string name="search_by_name_email">Search by name, email</string>
+    <string name="information">Information</string>
+    <string name="member_since">Member Since</string>
+    <string name="mobile_number">Mobile Number</string>
 
 </resources>

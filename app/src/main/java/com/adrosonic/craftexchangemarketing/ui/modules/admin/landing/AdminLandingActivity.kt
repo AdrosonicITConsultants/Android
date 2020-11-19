@@ -20,6 +20,7 @@ import com.adrosonic.craftexchangemarketing.repository.data.response.Notificatio
 import com.adrosonic.craftexchangemarketing.ui.modules.Notification.NotifcationFragment
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.enqOrd.EnquiriesAndOrdersFragment
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.CommonUserFragment
+import com.adrosonic.craftexchangemarketing.ui.modules.teamManagement.TeamListFragment
 import com.adrosonic.craftexchangemarketing.utils.ConstantsDirectory
 import com.adrosonic.craftexchangemarketing.utils.UserConfig
 import com.adrosonic.craftexchangemarketing.utils.Utility
@@ -73,6 +74,7 @@ class AdminLandingActivity : AppCompatActivity(){
 //        mViewModel?.noficationlistener=this
 //        mViewModel?.getAllNotifications()
         mViewModel2?.getMoqDeliveryTimes()
+        mViewModel2?.getAdminRole()
 //        ArtisanLandingActivity.DeviceRegistration(object :
 //            ArtisanLandingActivity.DeviceTokenCallback {
 //            override fun registeredToken(token: String) {
@@ -88,9 +90,9 @@ class AdminLandingActivity : AppCompatActivity(){
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.title = ""
-        getSupportActionBar()?.setDisplayShowHomeEnabled(true);
-        getSupportActionBar()?.setLogo(R.mipmap.ic_logo_main_round)
-        getSupportActionBar()?.setDisplayUseLogoEnabled(true);
+        supportActionBar?.setDisplayShowHomeEnabled(true);
+        supportActionBar?.setLogo(R.mipmap.ic_logo_main_round)
+        supportActionBar?.setDisplayUseLogoEnabled(true);
 //        val toggle = ActionBarDrawerToggle(
 //            this, drawer_layout, toolbar,
 //            R.string.navigation_drawer_open,
@@ -163,20 +165,24 @@ class AdminLandingActivity : AppCompatActivity(){
                     R.id.product_catelog -> {
 
                         return true
-
                     }
 
                     R.id.enquiries -> {
-                        //                        initTab(BranchesFragment.newInstance(), BranchesFragment.TAG)
                         if (savedInstanceState == null) {
-                            supportFragmentManager.beginTransaction() .add(R.id.admin_home_container, EnquiriesAndOrdersFragment.newInstance())
+                            supportFragmentManager.beginTransaction()
+                                .add(R.id.admin_home_container, EnquiriesAndOrdersFragment.newInstance())
                                 .addToBackStack(null)
                                 .commit()
                         }
                         return true
                     }
-                    R.id.escalations -> {
-                        //                        initTab(BranchesFragment.newInstance(), BranchesFragment.TAG)
+                    R.id.team -> {
+                        if (savedInstanceState == null) {
+                            supportFragmentManager.beginTransaction()
+                                .add(R.id.admin_home_container, TeamListFragment.newInstance())
+                                .addToBackStack(null)
+                                .commit()
+                        }
                         return true
                     }
 
@@ -278,6 +284,15 @@ class AdminLandingActivity : AppCompatActivity(){
         setupBadge()
         actionView.setOnClickListener { onOptionsItemSelected(menuItem) }
         return true
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(Utility.checkIfInternetConnected(this)){
+            mViewModel2?.getAdminRole()
+        }else{
+            Utility.displayMessage(getString(R.string.no_internet_connection),this)
+        }
     }
 
     override fun onBackPressed() {

@@ -21,6 +21,7 @@ import com.adrosonic.craftexchangemarketing.repository.data.response.enquiry.Enq
 import com.adrosonic.craftexchangemarketing.repository.data.response.enquiry.EnquiryStageData
 import com.adrosonic.craftexchangemarketing.repository.data.response.logout.LogoutResponse
 import com.adrosonic.craftexchangemarketing.repository.data.response.moq.MoqDeliveryTimesResponse
+import com.adrosonic.craftexchangemarketing.repository.data.response.team.AdminRolesResponse
 import com.adrosonic.craftexchangemarketing.utils.ConstantsDirectory
 import com.adrosonic.craftexchangemarketing.utils.UserConfig
 import com.adrosonic.craftexchangemarketing.utils.Utility
@@ -317,4 +318,22 @@ class LandingViewModel(application: Application) : AndroidViewModel(application)
                 }
             })
     }
+
+    fun getAdminRole(){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        craftexchangemarketingRepository
+            .getTeamService()
+            .getAdminRoles(token)
+            .enqueue(object : Callback, retrofit2.Callback<AdminRolesResponse> {
+                override fun onFailure(call: Call<AdminRolesResponse>, t: Throwable) {
+                    t.printStackTrace()
+                }
+                override fun onResponse(call: Call<AdminRolesResponse>, response: Response<AdminRolesResponse>) {
+                    if (response?.body()?.valid == true){
+                        UserConfig.shared.adminRoles=Gson().toJson(response.body())
+                    }
+                }
+            })
+    }
+
 }

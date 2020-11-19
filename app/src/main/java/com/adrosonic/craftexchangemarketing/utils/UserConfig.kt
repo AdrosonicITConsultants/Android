@@ -91,6 +91,10 @@ const val ENQUIRY_AVAI_PROD_STAGE_DATA = "enquiry_available_product_stage_data"
 const val ARTISAN_DB_PAGE_COUNT = "artisan_db_page_count"
 const val BUYER_DB_PAGE_COUNT = "buyer_db_page_count"
 
+/////////////////////////TeamMArketing/////////////////////////////
+const val ADMIN_ROLES = "admin_roles"
+const val ADMIN_TEAM = "admin_team"
+const val ADMIN_PROFILE = "admin_profile"
 
 
 
@@ -107,6 +111,31 @@ class UserConfig {
         editor.clear()
         editor.commit()
     }
+
+
+
+    var adminRoles = ""
+        get() = Prefs.getString(ADMIN_ROLES, "")
+        set(value) {
+            Prefs.putString(ADMIN_ROLES, value)
+            field = value
+        }
+
+    var adminTeam = ""
+        get() = Prefs.getString(ADMIN_TEAM, "")
+        set(value) {
+            Prefs.putString(ADMIN_TEAM, value)
+            field = value
+        }
+
+    var adminProfile = ""
+        get() = Prefs.getString(ADMIN_PROFILE, "")
+        set(value) {
+            Prefs.putString(ADMIN_PROFILE, value)
+            field = value
+        }
+
+
     var moqDeliveryDates = ""
         get() = Prefs.getString(MOQ_DELIVERY_DATES, "")
         set(value) {

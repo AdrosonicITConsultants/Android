@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/teams_bg_color"
+        tools:context=".ui.modules.teamManagement.TeamListFragment">
+
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="@dimen/margin_regular"
+            android:layout_marginTop="@dimen/margin_regular"
+            android:background="?selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_keyboard_backspace_black_24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txt_searchTeammate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_regular"
+            android:fontFamily="@font/lato_regular"
+            android:text="@string/search_teammate"
+            android:textColor="@color/colorBackground"
+            android:textSize="@dimen/title_text"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_back"
+            app:layout_constraintStart_toEndOf="@+id/btn_back"
+            app:layout_constraintTop_toTopOf="@+id/btn_back" />
+
+        <TextView
+            android:id="@+id/txt_select_role"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_regular"
+            android:fontFamily="@font/lato_regular"
+            android:text="@string/select_role"
+            android:textColor="@color/white_text"
+            android:textSize="@dimen/product_description_text"
+            app:layout_constraintStart_toStartOf="@+id/btn_back"
+            app:layout_constraintTop_toBottomOf="@+id/txt_searchTeammate" />
+
+        <TextView
+            android:id="@+id/txt_total_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_regular"
+            android:fontFamily="@font/lato_regular"
+            android:gravity="start"
+            android:textColor="@color/white_text"
+            android:textSize="@dimen/product_description_text"
+            app:layout_constraintEnd_toEndOf="@+id/sp_layout"
+            app:layout_constraintTop_toBottomOf="@+id/txt_searchTeammate" />
+
+        <FrameLayout
+            android:id="@+id/sp_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_regular"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/margin_regular"
+            android:background="@color/teams_widget_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_select_role">
+
+            <Spinner
+                android:id="@+id/sp_role"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:backgroundTint="@color/white_text"
+                android:popupBackground="@color/teams_widget_color"
+                android:spinnerMode="dropdown" />
+
+        </FrameLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bottom_part"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="@dimen/margin_regular"
+            android:background="@color/teams_list_color"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sp_layout">
+
+            <EditText
+                android:id="@+id/search_teammate"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="@dimen/margin_regular"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/search_background"
+                android:drawableStart="@drawable/ic_search_black_36dp"
+                android:drawablePadding="8dp"
+                android:drawableTint="@color/white_text"
+                android:focusable="true"
+                android:hint="@string/search_by_name_email"
+                android:inputType="text"
+                android:paddingEnd="8dp"
+                android:paddingStart="8dp"
+                android:textColorHint="@color/white_text"
+                android:textSize="@dimen/product_note_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_team_list"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/search_teammate">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/team_recycler_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible" />
+
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
+
+
+

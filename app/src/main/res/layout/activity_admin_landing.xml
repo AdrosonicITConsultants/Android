@@ -13,9 +13,10 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#4F000000"
+            android:background="@color/black_text"
             android:elevation="10dp"
-            android:paddingTop="5dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
             android:theme="@style/AppTheme.Toolbar"
             app:collapseIcon="@drawable/ic_logo_main_foreground"
             app:layout_constraintEnd_toEndOf="parent"
@@ -33,7 +34,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
