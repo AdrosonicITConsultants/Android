@@ -75,9 +75,7 @@
                 android:id="@+id/sp_role"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
-                android:backgroundTint="@color/white_text"
-                android:popupBackground="@color/teams_widget_color"
-                android:spinnerMode="dropdown" />
+                android:backgroundTint="@color/white_text" />
 
         </FrameLayout>
 
