@@ -73,16 +73,6 @@ TeamViewModel.AdminDetailsInterface{
         setRecyclerAdapter()
         mBinding?.swipeTeamList?.isEnabled = false
 
-        //set spinner list
-        var adRole = Utility.getAdminRoleDetails()
-        mSpinner?.clear()
-        mSpinner.add("Select Role Category")
-        mSpinner.add("All")
-        adRole?.forEach {
-            mSpinner?.add(it.desc)
-        }
-        setRoleSpinner(mSpinner)
-
 //        if(Utility.checkIfInternetConnected(requireContext())){
 //            mBinding?.swipeTeamList?.isRefreshing = true
 //            adReq.pageNo = pageNo!!
@@ -102,7 +92,7 @@ TeamViewModel.AdminDetailsInterface{
                         mBinding?.swipeTeamList?.isRefreshing = true
                         adReq.pageNo = pageNo!!
                         adReq.refRoleId = refRoleId!!
-                        if(refRoleId == -1){
+                        if(refRoleId == -1 && searchStr == ""){
                             adReq.searchStr = null
                         }else{
                             adReq.searchStr = searchStr.toString()
@@ -115,30 +105,23 @@ TeamViewModel.AdminDetailsInterface{
             }
         })
 
-        mBinding?.searchTeammate?.addTextChangedListener(object : TextWatcher {
-            override fun onTextChanged(expr: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-            override fun afterTextChanged(p0: Editable?) {
-                var searchExpression = p0?.toString() ?: ""
-                if(Utility.checkIfInternetConnected(requireContext())){
-                    mBinding?.swipeTeamList?.isRefreshing = true
-                    teamList?.clear()
+        mBinding?.btnSearch?.setOnClickListener {
+            if(Utility.checkIfInternetConnected(requireContext())){
+                mBinding?.swipeTeamList?.isRefreshing = true
+                teamList?.clear()
 
-                    pageNo = 1
-                    refRoleId = -1
-                    searchStr = searchExpression
+                pageNo = 1
+                refRoleId = -1
+                searchStr = mBinding?.searchTeammate?.text.toString()
 
-                    adReq.pageNo = pageNo
-                    adReq.refRoleId = refRoleId
-                    adReq.searchStr = searchStr
-                    mTeamVM?.getTeamList(adReq)
-                }else{
-                    Utility.displayMessage(getString(R.string.no_internet_connection),requireContext())
-                }
+                adReq.pageNo = pageNo
+                adReq.refRoleId = refRoleId
+                adReq.searchStr = searchStr
+                mTeamVM?.getTeamList(adReq)
+            }else{
+                Utility.displayMessage(getString(R.string.no_internet_connection),requireContext())
             }
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-        })
+        }
 
         mBinding?.btnBack?.setOnClickListener {
             activity?.onBackPressed()
@@ -204,7 +187,20 @@ TeamViewModel.AdminDetailsInterface{
         if(Utility.checkIfInternetConnected(requireContext())){
             mBinding?.swipeTeamList?.isRefreshing = true
             mBinding?.searchTeammate?.text?.clear()
+
             teamList?.clear()
+            mBinding?.txtTotalCount?.text = "Total Count : ${teamList.size}"
+
+            //set spinner list
+            var adRole = Utility.getAdminRoleDetails()
+            mSpinner?.clear()
+            mSpinner.add("Select Role Category")
+            mSpinner.add("All")
+            adRole?.forEach {
+                mSpinner?.add(it.desc)
+            }
+            setRoleSpinner(mSpinner)
+
             pageNo = 1
             refRoleId = -1
             searchStr = ""
