@@ -90,6 +90,7 @@ const val ENQUIRY_AVAI_PROD_STAGE_DATA = "enquiry_available_product_stage_data"
 
 const val ARTISAN_DB_PAGE_COUNT = "artisan_db_page_count"
 const val BUYER_DB_PAGE_COUNT = "buyer_db_page_count"
+const val ESCALATION_DATA ="escalation_data"
 
 
 
@@ -209,7 +210,12 @@ class UserConfig {
             Prefs.putString(LAST_NAME, value)
             field = value
         }
-
+    var escalationData : String? = ""
+        get() = Prefs.getString(ESCALATION_DATA,"")
+        set(value) {
+            Prefs.putString(ESCALATION_DATA, value)
+            field = value
+        }
     var primaryMobile: String? = ""
         get() = Prefs.getString(MOBILE,"")
         set(value) {

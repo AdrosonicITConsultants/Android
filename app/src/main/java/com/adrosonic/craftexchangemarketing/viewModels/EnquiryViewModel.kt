@@ -2,14 +2,12 @@ package com.adrosonic.craftexchangemarketing.viewModels
 
 import android.app.Application
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.adrosonic.craftexchangemarketing.database.entities.realmEntities.CompletedEnquiries
 import com.adrosonic.craftexchangemarketing.database.entities.realmEntities.OngoingEnquiries
 import com.adrosonic.craftexchangemarketing.database.predicates.EnquiryPredicates
 import com.adrosonic.craftexchangemarketing.database.predicates.MoqsPredicates
-import com.adrosonic.craftexchangemarketing.database.predicates.PiPredicates
 import com.adrosonic.craftexchangemarketing.repository.craftexchangemarketingRepository
 import com.adrosonic.craftexchangemarketing.repository.data.request.enquiry.BuyerPayment
 import com.adrosonic.craftexchangemarketing.repository.data.request.moq.SendMoqRequest
@@ -23,18 +21,14 @@ import com.adrosonic.craftexchangemarketing.repository.data.response.moq.SendMoq
 import com.adrosonic.craftexchangemarketing.repository.data.response.moq.SendSelectedMoqResponse
 import com.adrosonic.craftexchangemarketing.repository.data.response.pi.SendPiResponse
 import com.adrosonic.craftexchangemarketing.utils.ConstantsDirectory
-import com.adrosonic.craftexchangemarketing.utils.UserConfig
 import com.adrosonic.craftexchangemarketing.utils.Utility
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.pixplicity.easyprefs.library.Prefs
 import io.realm.RealmResults
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody
-import org.json.JSONException
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Response
 import java.util.*
@@ -69,12 +63,7 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
     interface ArtisanDetailsInterface{
         fun onFetch(data:ArtisanDetailsResponse?)
     }
-    interface piInterface{
-        fun onPiFailure()
-        fun onPiSuccess()
-        fun onPiDownloadSuccess()
-        fun onPiDownloadFailure()
-    }
+
 
     interface singlePiInterface{
         fun onPiFailure()
@@ -84,6 +73,14 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
     interface UploadPaymentInterface{
         fun onFailure()
         fun onSuccess()
+    }
+    interface piInterface{
+        fun onPiFailure()
+        fun onPiSuccess()
+        fun onPiDownloadSuccess()
+        fun onPiDownloadFailure()
+        fun onPiHTMLSuccess(data:String)
+        fun onPiHTMLFailure()
     }
 
     val ongoingEnqList : MutableLiveData<RealmResults<OngoingEnquiries>> by lazy { MutableLiveData<RealmResults<OngoingEnquiries>>() }
@@ -550,12 +547,12 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
             })
     }
 
-    fun downloadPi(enquiryId:Long){
+    fun downloadPi(enquiryId:Long,isOld:String){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         Log.e(TAG,"downloadPi :${enquiryId}")
         craftexchangemarketingRepository
             .getPiService()
-            .getPreviewPiPDF(token,enquiryId.toInt()).enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
+            .getPreviewPiPDF(token,enquiryId.toInt(),isOld).enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     Log.e(TAG,"downloadPi :${t.message}")
                     t.printStackTrace()
@@ -568,10 +565,10 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
                     val body=response.body()
                     if(body!=null) {
                         body?.let {
-                            //todo
                             Utility.writeResponseBodyToDisk(
                                 it,
                                 enquiryId.toString(),
+                                if(isOld.equals("true")) "Old"  else "",
                                 getApplication()
                             )
                             Timer().schedule(object : TimerTask() {
@@ -586,6 +583,34 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
             })
     }
 
+    fun previewPi(enquiryId:Long,isOld:String){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        Log.e(TAG,"previewPi :${enquiryId}")
+        craftexchangemarketingRepository
+            .getPiService()
+            .getPreviewPiHTML(token,enquiryId.toInt(),isOld).enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Log.e(TAG,"previewPi :${t.message}")
+                    t.printStackTrace()
+                    piLisener?.onPiHTMLFailure()
+                }
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    val body=response.body()
+                    if(body!=null) {
+                        Log.e(TAG,"previewPi :${body}")
+                        body?.let {
+                            piLisener?.onPiHTMLSuccess(it.string())
+                        }
+                    }else  {
+                        Log.e(TAG,"previewPi :${body}")
+                        piLisener?.onPiHTMLFailure()
+                    }
+                }
+            })
+    }
 
     fun getSinglePi(enquiryId : Long){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"

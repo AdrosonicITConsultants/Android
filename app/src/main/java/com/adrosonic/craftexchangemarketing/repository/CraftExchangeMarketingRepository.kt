@@ -99,4 +99,7 @@ object craftexchangemarketingRepository {
     fun getEnquiryOrderService() : EnquiryOrderDao{
         return builder(EnquiryOrderDao::class.java)
     }
+    fun getChatService(): ChatListDao {
+        return builder(ChatListDao::class.java)
+    }
 }

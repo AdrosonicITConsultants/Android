@@ -50,7 +50,7 @@
 
         <TextView
             android:id="@+id/dateStarted"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:textColor="@color/colorBackground"
@@ -70,7 +70,7 @@
 
         <TextView
             android:id="@+id/lastUpdated"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:textColor="@color/colorBackground"
@@ -91,12 +91,12 @@
 
         <TextView
             android:id="@+id/ETA"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="63dp"
             android:textColor="@color/colorBackground"
             app:layout_constraintBottom_toBottomOf="@+id/textView46"
-            app:layout_constraintStart_toEndOf="@+id/textView46"
+            app:layout_constraintEnd_toEndOf="@+id/lastUpdated"
+            app:layout_constraintStart_toStartOf="@+id/lastUpdated"
             app:layout_constraintTop_toTopOf="@+id/textView46"
             app:layout_constraintVertical_bias="0.0" />
 
@@ -134,16 +134,18 @@
 
             <TextView
                 android:id="@+id/textView49"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="8dp"
                 android:text="Steps Completed"
                 android:textAlignment="center"
                 android:textColor="#AFFED1"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView

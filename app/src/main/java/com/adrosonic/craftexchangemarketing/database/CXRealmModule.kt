@@ -9,7 +9,6 @@ import io.realm.annotations.RealmModule
 @RealmModule(classes = [
     UserAddress::class,
     CraftUser::class,
-    CraftAdmin::class,
     PaymentAccount::class,
     ArtisanProducts::class,
     BrandList::class,
@@ -30,6 +29,16 @@ import io.realm.annotations.RealmModule
     Notifications::class,
     Moqs::class,
     PiDetails::class,
-    EnquiryProductDetails::class
+//    Orders::class,
+    EnquiryProductDetails::class,
+//    Transactions::class,
+//    QcDetails::class,
+//    ChangeRequests::class,
+//    Transactions::class,
+//    TaxInvDetails::class,
+//    OrderProgressDetails::class,
+    ChatUser::class,
+    ChatLogUserData::class,
+    Escalations::class
 ])
 class CXRealmModule

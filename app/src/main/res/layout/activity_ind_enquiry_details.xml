@@ -146,8 +146,10 @@
 
                     <TextView
                         android:id="@+id/textView49"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
                         android:layout_marginBottom="5dp"
                         android:text="Steps Completed"
                         android:textAlignment="center"
@@ -470,6 +472,389 @@
 <!--                    app:username_font_size="12sp"></com.github.bassaer.chatmessageview.view.ChatView>-->
 
 <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
+            <LinearLayout
+                android:id="@+id/pi_Details_layer"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@color/lighter_gray"
+                android:orientation="horizontal"
+                android:weightSum="10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/moq_details">
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="2"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center|start"
+                    android:text="PI"
+                    android:textColor="@color/black_text"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/pi_details_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center"
+                    android:maxLines="2"
+                    android:textColor="#7F8D54"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/order_amount111"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="3"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center"
+                    android:maxLines="2"
+                    android:textColor="#7F8D54"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/order_time111"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center"
+                    android:maxLines="2"
+                    android:text="Not Available"
+                    android:textColor="@color/black_text"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_arrow_down_olive"
+                    app:srcCompat="@drawable/ic_right_arrow_brown" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/buyer_Details_layer"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@color/shadow_background_color"
+                android:orientation="horizontal"
+                android:weightSum="10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/pi_Details_layer">
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="2"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center|start"
+                    android:text="Buyer Details"
+                    android:textColor="@color/colorBackground"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/buyer_details_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center"
+                    android:maxLines="2"
+                    android:textColor="#7F8D54"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/order_amount1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="3"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center"
+                    android:maxLines="2"
+                    android:textColor="#7F8D54"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/order_time1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center"
+                    android:maxLines="2"
+                    android:text="Not Available"
+                    android:textColor="@color/colorBackground"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_arrow_down_olive"
+                    app:srcCompat="@drawable/ic_right_arrow_brown" />
+
+            </LinearLayout>
+
+            <LinearLayout
+            android:id="@+id/artisan_Details_layer"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@color/table_row_text"
+            android:orientation="horizontal"
+            android:weightSum="10"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buyer_Details_layer">
+
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="8dp"
+                android:layout_weight="2"
+                android:fontFamily="@font/lato_regular"
+                android:gravity="center|start"
+                android:text="Artisan Details"
+                android:textColor="@color/colorBackground"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/artisan_details_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:ellipsize="end"
+                android:fontFamily="@font/lato_regular"
+                android:gravity="center"
+                android:maxLines="2"
+                android:textColor="#7F8D54"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/order_amount11"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="3"
+                android:ellipsize="end"
+                android:fontFamily="@font/lato_regular"
+                android:gravity="center"
+                android:maxLines="2"
+                android:textColor="#7F8D54"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/order_time11"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:ellipsize="end"
+                android:fontFamily="@font/lato_regular"
+                android:gravity="center"
+                android:maxLines="2"
+                android:text="Not Available"
+                android:textColor="@color/colorBackground"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_arrow_down_olive"
+                    app:srcCompat="@drawable/ic_right_arrow_brown" />
+
+        </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/chat_Details_layer"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@color/notification_lavender"
+                android:orientation="horizontal"
+                android:weightSum="10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/artisan_Details_layer">
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="2"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center|start"
+                    android:text="Chat"
+                    android:textColor="@color/colorBackground"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/chat_details_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center"
+                    android:maxLines="2"
+                    android:textColor="#7F8D54"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/order_amount113"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="3"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center"
+                    android:maxLines="2"
+                    android:textColor="#7F8D54"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/order_time113"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center"
+                    android:maxLines="2"
+                    android:textColor="@color/colorBackground"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_arrow_down_olive"
+                    app:srcCompat="@drawable/ic_right_arrow_brown" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/escalation_Details_layer"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@color/orchid"
+                android:orientation="horizontal"
+                android:weightSum="10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/chat_Details_layer">
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="2"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center|start"
+                    android:text="Escalations"
+                    android:textColor="@color/colorBackground"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/escalations_details_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center"
+                    android:maxLines="2"
+                    android:textColor="#7F8D54"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/order_amount112"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="3"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center"
+                    android:maxLines="2"
+                    android:textColor="#7F8D54"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/order_time112"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center"
+                    android:maxLines="2"
+                    android:textColor="@color/colorBackground"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_arrow_down_olive"
+                    app:srcCompat="@drawable/ic_right_arrow_brown" />
+
+            </LinearLayout>
+
+
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

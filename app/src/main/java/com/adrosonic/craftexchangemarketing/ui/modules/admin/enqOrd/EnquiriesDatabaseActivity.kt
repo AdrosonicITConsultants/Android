@@ -39,6 +39,7 @@ fun Context.enquiriesDatabaseIntent(enquiryCount: Long, type: Long): Intent {
 }
 class EnquiriesDatabaseActivity: AppCompatActivity(),
 EnquiryOrderViewModel.EnquiryListInterface{
+    var scrollcall = 0
     var type : Long?=1
     var availability : Int?=null
     var buyerBrand : String??=null
@@ -321,8 +322,12 @@ EnquiryOrderViewModel.EnquiryListInterface{
                 if (!recyclerView.canScrollVertically(1)) {
 //                    Toast.makeText(this@YourActivity, "Last", Toast.LENGTH_LONG).show()
                     Log.d("-----", "end")
-                    pageNo = pageNo?.plus(1)
-                    callAPi()
+                    if(scrollcall == 0)
+                    {
+                        pageNo = pageNo?.plus(1)
+                        callAPi()
+                    }
+
                 }
             }
         })
@@ -344,6 +349,7 @@ EnquiryOrderViewModel.EnquiryListInterface{
         }
     }
     private fun callAPi(){
+        scrollcall = 1
         when(type)
         {
             1.toLong() -> {
@@ -522,6 +528,7 @@ EnquiryOrderViewModel.EnquiryListInterface{
             }
             setRecyclerList(dataResponse?.data)
             mBinding?.EnquiryListRecyclerView?.smoothScrollToPosition(0)
+
         }
         else{
             dataResponse?.data.forEach{
@@ -530,6 +537,7 @@ EnquiryOrderViewModel.EnquiryListInterface{
             mEnquiryListAdapter?.updateProductList(enquiryList)
         }
         mBinding?.pbLoader?.visibility=View.GONE
+        scrollcall = 0
 
 
     }

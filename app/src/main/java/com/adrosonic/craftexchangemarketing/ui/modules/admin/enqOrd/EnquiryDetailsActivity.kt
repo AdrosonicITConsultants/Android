@@ -18,9 +18,13 @@ import com.adrosonic.craftexchangemarketing.database.predicates.EnquiryPredicate
 import com.adrosonic.craftexchangemarketing.database.predicates.MoqsPredicates
 import com.adrosonic.craftexchangemarketing.databinding.ActivityIndEnquiryDetailsBinding
 import com.adrosonic.craftexchangemarketing.databinding.EnquiryDatabaseActivityBinding
+import com.adrosonic.craftexchangemarketing.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchangemarketing.repository.data.response.admin.userDatabase.UserProfileResponse
 import com.adrosonic.craftexchangemarketing.repository.data.response.enquiryOrderDatabase.EnquiryData
 import com.adrosonic.craftexchangemarketing.repository.data.response.moq.Datum
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.enqOrd.chat.chatLogDetailsIntent
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.enqOrd.escalations.chatEscalationIntent
+import com.adrosonic.craftexchangemarketing.ui.modules.artisan.enquiry.pi.raisePiContext
 import com.adrosonic.craftexchangemarketing.ui.modules.buyer.productDetails.catalogueProductDetailsIntent
 import com.adrosonic.craftexchangemarketing.utils.UserConfig
 import com.adrosonic.craftexchangemarketing.utils.Utility
@@ -88,6 +92,25 @@ class EnquiryDetailsActivity: AppCompatActivity(),
             mBinding?.currentStage?.text = enquiryRes?.innerCurrenStage
 
         }
+        if(enquiryRes?.currenStageId!! < 3){
+            mBinding?.orderTime111?.text = "Not Available"
+        }
+        else{
+            mBinding?.orderTime111?.text = ""
+         }
+        mBinding?.chatDetailsLayer?.setOnClickListener {
+            startActivity(enquiry?.let { it1 -> this.chatLogDetailsIntent(it1) })
+        }
+        mBinding?.escalationDetailsLayer?.setOnClickListener {
+            startActivity(enquiry?.let { it1 -> this.chatEscalationIntent(it1) })
+        }
+        mBinding?.piDetailsLayer?.setOnClickListener {
+            if(enquiryRes?.currenStageId!! < 3){
+            }
+            else{
+                enquiry?.let {  startActivity(this.raisePiContext(it,true, SendPiRequest(),false)) }
+            }
+        }
         mBinding?.moqDetailsLayer?.setOnClickListener {
             handleMoqVisiblities()
         }
@@ -145,7 +168,7 @@ class EnquiryDetailsActivity: AppCompatActivity(),
 
                 }
                 1 ->{
-                    mBinding?.typeProduct?.text = "Made ro Order"
+                    mBinding?.typeProduct?.text = "Made to Order"
                     mBinding?.totalSteps?.text = "/10"
                     mBinding?.stepsCompleted?.text = enquiryRes?.currenStageId.toString()
 

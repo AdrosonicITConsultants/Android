@@ -7,7 +7,6 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -15,12 +14,12 @@ import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Build
-import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.View
+import android.webkit.MimeTypeMap
 import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ShareCompat
@@ -29,11 +28,11 @@ import androidx.core.content.FileProvider
 import com.adrosonic.craftexchangemarketing.database.entities.realmEntities.CraftUser
 import com.adrosonic.craftexchangemarketing.database.predicates.UserPredicates
 import com.adrosonic.craftexchangemarketing.repository.data.response.artisan.productTemplate.uploadData.ProductUploadData
+import com.adrosonic.craftexchangemarketing.repository.data.response.chat.escalations.EscalationCategoryResponse
 import com.adrosonic.craftexchangemarketing.repository.data.response.enquiry.EnquiryAvaProdStageData
 import com.adrosonic.craftexchangemarketing.repository.data.response.enquiry.EnquiryStageData
 import com.adrosonic.craftexchangemarketing.repository.data.response.moq.Datum
 import com.adrosonic.craftexchangemarketing.repository.data.response.moq.MoqDeliveryTimesResponse
-import com.adrosonic.craftexchangemarketing.ui.modules.enquiry.enquiryDetails
 import com.bumptech.glide.Glide
 import com.google.gson.GsonBuilder
 import com.pixplicity.easyprefs.library.Prefs
@@ -398,6 +397,11 @@ class Utility {
             if(files.isEmpty()) return Pair(true,files)
             else return Pair(false,files)
         }
+        fun getEscalationData() : EscalationCategoryResponse? {
+            val gson = GsonBuilder().create()
+            var escObj = gson.fromJson(UserConfig.shared.escalationData.toString(), EscalationCategoryResponse::class.java)
+            return  escObj
+        }
         fun requestPermission(activity: Activity) {
             ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), ConstantsDirectory.PERMISSION_REQUEST_CODE)
         }
@@ -493,10 +497,87 @@ class Utility {
             }
             return list
         }
+        fun getFileType(filename: String): String? {
+            var type: String? = ""
+            val extension = MimeTypeMap.getFileExtensionFromUrl(filename)
+            if (extension != null) {
+                type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.toLowerCase())
+            } else type = ""
+            Log.e("getFileType", "type:   ${type}")
+            return type
+        }
+        fun getRealPathFromFileUriForChat(context: Context, contentUri: Uri): String {
+            var filePath = ""
+            val myDir: File
+            try {
+                if (!File(context.cacheDir, ConstantsDirectory.CHAT_MEDIA).exists()) File(context.cacheDir, ConstantsDirectory.CHAT_MEDIA).mkdir()
+                if (contentUri.path!!.contains(".")) {
+                    if(contentUri.lastPathSegment!!.contains("/")) {
+                        myDir = File(context.cacheDir, ConstantsDirectory.CHAT_MEDIA + "/" + contentUri.lastPathSegment!!.substring(contentUri.lastPathSegment!!.lastIndexOf("/")+1))
+                    } else myDir = File(context.cacheDir, ConstantsDirectory.CHAT_MEDIA + "/" + contentUri.lastPathSegment + "")
+                }
+                else myDir = File(context.cacheDir, ConstantsDirectory.CHAT_MEDIA + "/" + contentUri.lastPathSegment + "")
+                Log.e("FileName","1111 ${myDir.name} : ${myDir.name.length}")
+                if(myDir.name!!.length>42){
+                    val renamed = File(context.cacheDir, BROWSING_IMGS + "/" + System.currentTimeMillis()+ "")
+                    Log.e("FileName","33333  ${renamed.name}")
+                    myDir.renameTo( renamed)
+                }
+                Log.e("FileName","4444  ${myDir.name}")
+                var inputStream: InputStream? = context.contentResolver.openInputStream(contentUri)
+                var outputStream: OutputStream = FileOutputStream(myDir)
+                try {
+                    var fileReader = ByteArray(4096)
+                    var fileSizeDownloaded = 0
+                    while (true) {
+                        var read = inputStream?.read(fileReader)
+                        if (read == -1) {
+                            break
+                        }
+                        read?.let { outputStream.write(fileReader, 0, it) }
+                        if (read != null) {
+                            fileSizeDownloaded += read
+                        }
+                    }
+                    outputStream.flush()
+                    filePath = myDir.path
+                    return filePath
+                } catch (e: IOException) {
+                    return filePath
+                } finally {
+                    inputStream?.close()
+                    outputStream.close()
+                }
+            } catch (e: IOException) {
+                Log.e("ShareIntent", "IOException : $e")
+                return filePath
+            }
+        }
+
+        fun openChatMedia(context: Activity,enquiryId:Long,imageName:String){
+//            File(context.cacheDir,  Utility.CHAT_MEDIA).exists()) File(context.cacheDir, Utility.CHAT_MEDIA).mkdir()
+            val cacheFile = File(context.cacheDir, ConstantsDirectory.CHAT_MEDIA +imageName)
+            try {
+                val uri = FileProvider.getUriForFile(context, "com.adrosonic.craftexchange.provider", cacheFile)
+                val myIntent = Intent(Intent.ACTION_VIEW)
+                myIntent.putExtra(ShareCompat.EXTRA_CALLING_PACKAGE, context.getPackageName())
+                val componentName = context.componentName
+                myIntent.putExtra(ShareCompat.EXTRA_CALLING_ACTIVITY, componentName)
+                myIntent.setDataAndType(uri, getFileType(imageName))
+                myIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(Intent.createChooser(myIntent, "Open with"))
+
+            } catch (e: Exception) {
+                displayMessage("  Application not installed " + e, context)
+            }
+        }
+
 
         fun writeResponseBodyToDisk(
             body: ResponseBody,
             enquiryId: String,
+            isOld:String,
             context: Context
         ): Boolean {
             try {
@@ -536,16 +617,17 @@ class Utility {
             }
         }
 
-        fun openFile(context: Context,enquiryId:Long){
-            val cacheFile = File(context.cacheDir, ConstantsDirectory.PI_PDF_PATH + "Pi${enquiryId}.pdf")
+        fun openFile(context: Activity,enquiryId:Long,old:String){
+            val cacheFile = File(context.cacheDir, ConstantsDirectory.PI_PDF_PATH +old+"Pi${enquiryId}.pdf")
             try {
-                val uri = FileProvider.getUriForFile(context, "com.adrosonic.craftexchangemarketing.provider", cacheFile)
+                val uri = FileProvider.getUriForFile(context, "com.adrosonic.craftexchange.provider", cacheFile)
                 val myIntent = Intent(Intent.ACTION_VIEW)
                 myIntent.putExtra(ShareCompat.EXTRA_CALLING_PACKAGE, context.getPackageName())
-//                val componentName = (context as Activity).componentName
-//                myIntent.putExtra(ShareCompat.EXTRA_CALLING_ACTIVITY, componentName)
+                val componentName = context.componentName
+                myIntent.putExtra(ShareCompat.EXTRA_CALLING_ACTIVITY, componentName)
                 myIntent.setDataAndType(uri, "application/pdf")
                 myIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 context.startActivity(Intent.createChooser(myIntent, "Open with"))
 
             } catch (e: Exception) {

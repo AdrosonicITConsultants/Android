@@ -239,6 +239,21 @@
     <string name="enquiry_id">Enquiry Id\t</string>
     <string name="refer_to_ongoing_enquiries">Please refer \"Ongoing Enquiry\" tab\nto track your enquiry.</string>
     <string name="view_enquiry">View Enquiry</string>
+    <string name="mark_resolved">Mark Resolved</string>
+    <string name="resolved">Resolved</string>
+    <string name="auto_escalated">Auto Escalated</string>
+    <string name="awaiting_response">Awaiting Response</string>
+
+    <string name="date_started">Date started</string>
+    <string name="date_converted">Converted to order on</string>
+    <string name="date_last_updated">Last updated on</string>
+    <string name="order_amount">Order amount</string>
+    <string name="type_your_msg">Type your message here</string>
+    <string name="please_wait">Please wait...</string>
+    <string name="swipe_up_to_close">Click up to close</string>
+
+    <string name="view_details">View Details</string>
+    <string name="go_to_enquiry">\tGo to enquiry</string>
 
     <string name="title_activity_buyer_add_own_product_design">BuyerAddOwnProductDesign</string>
     <!-- Strings used for fragments for navigation -->

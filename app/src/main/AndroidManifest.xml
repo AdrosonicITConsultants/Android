@@ -29,15 +29,18 @@
         <!-- <meta-data -->
         <!-- android:name="com.google.android.wearable.standalone" -->
         <!-- android:value="true" /> -->
-<!--        <activity android:name=".ui.modules.artisan.enquiry.pi.RaisePiActivity"-->
-<!--            android:configChanges="orientation|screenSize"/>-->
+        <activity android:name=".ui.modules.artisan.enquiry.pi.RaisePiActivity"
+            android:configChanges="orientation|screenSize"/>
 <!--        <activity android:name=".ui.modules.artisan.enquiry.pi.PiActivity"-->
 <!--            android:configChanges="orientation|screenSize"/>-->
-<!--        <activity-->
-<!--            android:name=".ui.modules.dashboard.DashboardActivity"-->
-<!--            android:configChanges="orientation|screenSize"-->
-<!--            android:label="@string/title_activity_dashboard" />-->
-
+        <activity
+            android:name=".ui.modules.admin.enqOrd.escalations.ChatEscalationActivity"
+            android:configChanges="orientation|screenSize"
+       />
+        <activity
+            android:name=".ui.modules.admin.enqOrd.chat.ChatLogDetailsActivity"
+            android:configChanges="orientation|screenSize"
+            />
         <activity
             android:name=".ui.modules.dashboard.OpenEnquirySummaryActivity"
             android:configChanges="orientation|screenSize"
