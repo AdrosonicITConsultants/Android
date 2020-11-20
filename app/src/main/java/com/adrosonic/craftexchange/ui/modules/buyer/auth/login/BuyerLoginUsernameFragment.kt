@@ -223,12 +223,7 @@ class BuyerLoginUsernameFragment : Fragment() {
                                         t.printStackTrace()
                                         context?.let { it1 -> Utility.deleteCache(it1) }
                                         context?.let { it1 -> Utility.deleteImageCache(it1) }
-                                        Toast.makeText(
-                                            activity,
-                                            // "${t.printStackTrace()}",
-                                            "Your ID has already been registered as Buyer",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
+                                        Toast.makeText(activity, "${t.printStackTrace()}", Toast.LENGTH_SHORT).show()
                                     }
 
                                     override fun onResponse(
@@ -263,11 +258,7 @@ class BuyerLoginUsernameFragment : Fragment() {
 
                                             startActivity(Intent(activity, CXVideoActivity::class.java))
                                         }else {
-                                            Toast.makeText(
-                                                activity,
-                                                "Please first register your facebook ID as Artisan",
-                                                Toast.LENGTH_LONG
-                                            ).show()
+                                            Toast.makeText(activity, getString(R.string.reg_as_buyer_fb), Toast.LENGTH_LONG).show()
                                         }
                                     }
 
@@ -280,14 +271,13 @@ class BuyerLoginUsernameFragment : Fragment() {
 
                     override fun onCancel() {
                         Log.d("MainActivity", "Facebook onCancel.")
-
                     }
 
                     override fun onError(error: FacebookException) {
                         Log.d("MainActivity", "Facebook onError.")
                         Toast.makeText(
                             activity,
-                            "Please register as Artisan using facebook ID",
+                            error.toString(),
                             Toast.LENGTH_LONG
                         ).show()
 

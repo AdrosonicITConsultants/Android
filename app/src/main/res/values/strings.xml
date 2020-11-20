@@ -598,4 +598,6 @@
     <string name="plz_Wait">Please wait while we are downloading the document</string>
     <string name="for_any_query_reach_us">For any query reach us @</string>
     <string name="login_with_facebook">Login with Facebook</string>
+    <string name="reg_as_buyer_fb">Please first register your facebook ID as Buyer</string>
+    <string name="reg_fb_artisan">Please first register your facebook ID as Artisan</string>
 </resources>
