@@ -70,7 +70,7 @@
             android:background="@drawable/search_background">
 
             <Spinner
-                android:id="@+id/sp_category"
+                android:id="@+id/sp_cluster"
                 style="@style/Widget.AppCompat.DropDownItem.Spinner"
                 android:popupBackground="@color/table_corner_layout_color"
                 android:layout_width="match_parent"
@@ -111,41 +111,31 @@
             android:textColor="@color/black_text" />
     </LinearLayout>
 
-    <com.evrencoskun.tableview.TableView
-        android:id="@+id/tableview"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/product_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
-        app:allow_click_inside_cell="true"
-        app:allow_click_inside_column_header="true"
-        app:allow_click_inside_row_header="true"
-        app:separator_color="@color/darker_gray"
-        app:show_horizontal_separator="false"
-        app:column_header_height="40dp"
+        android:background="@color/black_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/filters_layout"
-        app:layout_constraintVertical_bias="0.0"
-        app:row_header_width="80dp"
-        app:selected_color="@color/darker_gray"
-        app:unselected_color="@color/black_text" >
+        app:layout_constraintVertical_bias="0.0" >
+    </androidx.recyclerview.widget.RecyclerView>
 
-        <ProgressBar
-            android:id="@+id/pbLoader"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_marginStart="176dp"
-            android:layout_marginLeft="176dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginEnd="179dp"
-            android:layout_marginRight="179dp"
-            android:visibility="visible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </com.evrencoskun.tableview.TableView>
-
+    <ProgressBar
+        android:id="@+id/pbLoader"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="176dp"
+        android:layout_marginTop="388dp"
+        android:layout_marginEnd="179dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

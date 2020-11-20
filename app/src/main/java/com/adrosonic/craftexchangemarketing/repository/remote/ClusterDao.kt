@@ -12,7 +12,7 @@ import retrofit2.http.Path
 interface ClusterDao {
 
     @Headers("Accept: application/json")
-    @GET("cluster/getAllClusters")
+    @GET("api/cluster/getAllClusters")
     fun getAllClusters() : Call<CLusterResponse>
 
 //    @Headers("Accept: application/json")

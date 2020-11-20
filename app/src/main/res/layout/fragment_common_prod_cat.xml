@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_regular"
-            android:layout_marginTop="65dp"
+            android:layout_marginTop="24dp"
             android:layout_marginBottom="8dp"
             android:fontFamily="@font/lato_regular"
             android:text="Product Catalogue"
@@ -79,28 +79,27 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="2dp"
-            android:visibility="visible"
+            android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view_user_tab"
+            app:layout_constraintTop_toBottomOf="@+id/prod_tab"
             app:layout_constraintVertical_bias="0.58">
 
         </androidx.viewpager.widget.ViewPager>
 
         <ImageView
             android:id="@+id/add_product"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
+            android:src="@drawable/ic_add_product_button"
             app:layout_constraintBottom_toTopOf="@+id/prod_tab"
             app:layout_constraintEnd_toEndOf="@+id/prod_tab"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/your_enquiries_text"
             app:layout_constraintTop_toTopOf="@+id/your_enquiries_text"
-            app:layout_constraintVertical_bias="1.0"
-            android:src="@drawable/ic_add_product_button" />
+            app:layout_constraintVertical_bias="1.0" />
 
         <ProgressBar
             android:id="@+id/pbLoader"
@@ -112,6 +111,7 @@
             app:layout_constraintEnd_toStartOf="@+id/DatabaseImage"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

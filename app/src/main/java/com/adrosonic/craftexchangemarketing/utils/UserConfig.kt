@@ -89,10 +89,6 @@ const val ENQUIRY_STAGE_DATA = "enquiry_stage_data"
 const val ENQUIRY_AVAI_PROD_STAGE_DATA = "enquiry_available_product_stage_data"
 
 const val ARTISAN_DB_PAGE_COUNT = "artisan_db_page_count"
-const val BUYER_DB_PAGE_COUNT = "buyer_db_page_count"
-
-
-
 
 class UserConfig {
 
@@ -564,11 +560,6 @@ class UserConfig {
             Prefs.putInt(ARTISAN_DB_PAGE_COUNT, value)
             field = value
         }
-    var buyerDbPageCount : Int = 1
-        get() = Prefs.getInt(BUYER_DB_PAGE_COUNT,1)
-        set(value) {
-            Prefs.putInt(BUYER_DB_PAGE_COUNT, value)
-            field = value
-        }
+
 }
 

@@ -10,23 +10,23 @@ import retrofit2.http.*
 interface SearchDao {
 
     @Headers("Accept: application/json")
-    @GET("search/getArtisanSuggestions")
+    @GET("api/search/getArtisanSuggestions")
        fun getArtisanSuggestions(@Header("Authorization") token:String,
                               @Query("str") str : String) : Call<SuggestionResponse>
 
     @Headers("Accept: application/json")
-    @GET("search/getSuggestions")
+    @GET("api/search/getSuggestions")
     fun getSuggestions(@Header("Authorization") token:String,
                               @Query("str") str : String) : Call<SuggestionResponse>
 
 
     @Headers("Accept: application/json")
-    @POST("search/searchArtisanProducts")
+    @POST("api/search/searchArtisanProducts")
     fun searchArtisanProducts(@Header("Authorization") token:String,
                        @Body searchProduct : SearchProduct) : Call<SearchProductResponse>
 
     @Headers("Accept: application/json")
-    @POST("search/searchProducts")
+    @POST("api/search/searchProducts")
     fun searchProducts(@Header("Authorization") token:String,
                         @Body searchProduct : SearchProduct) : Call<SearchProductResponse>
 }

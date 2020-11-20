@@ -11,25 +11,25 @@ import retrofit2.http.*
 interface IndividualUserDao {
 
     @Headers("Accept: application/json")
-    @GET("/marketingTeam/userProfile/{userId}")
+    @GET("api/marketingTeam/userProfile/{userId}")
     fun getUserData(@Header("Authorization") token:String,
                     @Path("userId") userId : Long
     ) : Call<UserProfileResponse>
 
     @Headers("Accept: application/json")
-    @POST("/marketingTeam/activateUser/{userId}")
+    @POST("api/marketingTeam/activateUser/{userId}")
     fun activateUser(@Header("Authorization") token:String,
                     @Path("userId") userId : Long
     ) : Call<UserStatusResponse>
 
     @Headers("Accept: application/json")
-    @POST("/marketingTeam/deactivateUser/{userId}")
+    @POST("api/marketingTeam/deactivateUser/{userId}")
     fun deactivateUser(@Header("Authorization") token:String,
                      @Path("userId") userId : Long
     ) : Call<UserStatusResponse>
 
     @Headers("Accept: application/json")
-    @POST("/marketingTeam/editRating/{userId}/{rating}")
+    @POST("api/marketingTeam/editRating/{userId}/{rating}")
     fun setRating(@Header("Authorization") token:String,
                        @Path("userId") userId : Long,
                   @Path("rating") rating : Float?

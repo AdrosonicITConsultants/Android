@@ -3,6 +3,7 @@ package com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.adap
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.productCatalog.AntaranProductFragment
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.productCatalog.ArtisanProductFragment
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.ArtisanDatabaseFragment
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.BuyerDatabaseFragment
@@ -16,7 +17,7 @@ class ProductCatalogueAdapter (fragmentManager: FragmentManager) : FragmentPager
             {
                 ArtisanProductFragment()
             }
-            else-> BuyerDatabaseFragment()
+            else-> AntaranProductFragment()
         }
     }
 

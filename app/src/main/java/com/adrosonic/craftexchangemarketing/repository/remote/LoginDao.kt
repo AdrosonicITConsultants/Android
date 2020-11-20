@@ -30,7 +30,7 @@ interface LoginDao {
     @Query("roleId") roleId : Long) : Call<LoginValidationResponse>
 
     @Headers("Accept: application/json")
-    @POST("/login/authenticateMarketing")
+    @POST("api/login/authenticateMarketing")
     fun authenticateAdmin(@Header("Content-Type") headerValue:String,
                           @Body userAuthenticate : AdminAuthModel
     ) : Call<AdminResponse>

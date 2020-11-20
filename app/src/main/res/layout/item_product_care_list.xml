@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
 <!--    <data>-->
 
@@ -9,8 +10,7 @@
 <!--            type="com.adrosonic.craftexchangemarketing.repository.data.response.artisan.productTemplate.uploadData.ProductUploadData.productCare" />-->
 <!--    </data>-->
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp">
@@ -30,14 +30,15 @@
             android:id="@+id/care_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/product_availability_text"
-            android:fontFamily="@font/lato_regular"
             android:layout_marginStart="@dimen/margin_regular"
             android:layout_marginEnd="8dp"
-            app:layout_constraintStart_toEndOf="@+id/care_icon"
+            android:fontFamily="@font/lato_regular"
+            android:textColor="@color/darker_gray"
+            android:textSize="@dimen/product_availability_text"
+            app:layout_constraintBottom_toBottomOf="@+id/care_icon"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/care_icon"
-            app:layout_constraintBottom_toBottomOf="@+id/care_icon"/>
+            app:layout_constraintStart_toEndOf="@+id/care_icon"
+            app:layout_constraintTop_toTopOf="@+id/care_icon" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
