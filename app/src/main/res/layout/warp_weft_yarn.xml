@@ -85,12 +85,13 @@
         <EditText
             android:id="@+id/et_yarn_count"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_marginBottom="@dimen/expandable_layout_std_padding"
             android:background="@drawable/rectangle_edittext_bg"
             android:hint="Enter the count of yarn"
             android:textColorHint="@color/lighter_gray"
             android:maxLength="40"
+            android:textColor="@color/lighter_gray"
             android:maxLines="1"
             android:textSize="@dimen/edit_text"
             android:visibility="gone" />
