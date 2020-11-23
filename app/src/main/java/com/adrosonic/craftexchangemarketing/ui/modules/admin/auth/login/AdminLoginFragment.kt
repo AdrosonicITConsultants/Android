@@ -2,6 +2,7 @@ package com.adrosonic.craftexchangemarketing.ui.modules.admin.auth.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -63,8 +64,6 @@ class AdminLoginFragment :Fragment(){
 
             if(Utility.checkIfInternetConnected(requireContext())) {
                 if (mBinding?.textBoxPassword?.text.toString() != "" && mBinding?.textBoxUsername?.text.toString() != "") {
-
-
                     craftexchangemarketingRepository
                         .getLoginService()
                         .authenticateAdmin(
@@ -79,13 +78,19 @@ class AdminLoginFragment :Fragment(){
                                 t.printStackTrace()
                                 Toast.makeText(
                                     activity,
-                                    "${t.printStackTrace()}",
+                                    "Login failure ${t.printStackTrace()}",
                                     Toast.LENGTH_SHORT
                                 ).show()
+                                Log.e("Login","onFailure :${t.message}")
+                                Log.e("Login","onFailure :${t.localizedMessage}")
                             }
                             override fun onResponse(
                                 call: Call<AdminResponse>, response: Response<AdminResponse>
                             ) {
+                                Log.e("Login","onResponse :${call.request().url}")
+                                Log.e("Login","onResponse :${response.message()}")
+                                Log.e("Login","onResponse :${response.body()?.errorMessage}")
+                                Log.e("Login","onResponse :${response.body()?.errorCode}")
                                 if (response.body()?.valid == true) {
                                     Prefs.putString(
                                         ConstantsDirectory.USER_PWD,
@@ -112,8 +117,7 @@ class AdminLoginFragment :Fragment(){
                                     Toast.makeText(
                                         activity,
                                         "${response.body()?.errorMessage}",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                        Toast.LENGTH_SHORT ).show()
                                 }
                             }
 

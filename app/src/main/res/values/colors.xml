@@ -49,6 +49,9 @@
     <color name="selected_text_color">#ffffff</color>
     <color name="separator_color">#273e5b</color>
     <color name="apply_bg_color">#B0FFD1</color>
+    <color name="marketing_bg">#020202</color>
+    <color name="marketing_noti_bg">#3C3C3C</color>
+    <color name="marketing_noti_title">#4496B0</color>
 
     <color name="teams_bg_color">#12342C</color>
     <color name="teams_widget_color">#194F3B</color>

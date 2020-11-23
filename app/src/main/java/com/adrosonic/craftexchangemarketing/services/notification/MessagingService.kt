@@ -9,6 +9,7 @@ import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.adrosonic.craftexchangemarketing.R
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.landing.adminLandingIntent
 //import com.adrosonic.craftexchangemarketing.ui.modules.artisan.landing.artisanLandingIntent
 import com.adrosonic.craftexchangemarketing.ui.modules.buyer.landing.buyerLandingIntent
 import com.adrosonic.craftexchangemarketing.utils.ConstantsDirectory
@@ -21,8 +22,7 @@ class MessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(p0: RemoteMessage) {
         // when App is in foreground, notification message:
         Log.e(TAG, "onMessageReceived: " + p0.notification?.title)
-        var profile = Prefs.getString(ConstantsDirectory.PROFILE,null)
-        val intent = if(profile.equals(ConstantsDirectory.ARTISAN))buyerLandingIntent(true) else buyerLandingIntent(true)
+        val intent = adminLandingIntent(true)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT)
         val channelId =ConstantsDirectory.CHANNEL_ID

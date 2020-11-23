@@ -12,12 +12,12 @@ import retrofit2.http.*
 interface UserDatabaseDao {
 
     @Headers("Accept: application/json")
-    @POST("/marketingTeam/getUsers")
+    @POST("api/marketingTeam/getUsers")
     fun getUserData(@Header("Authorization") token:String,
                               @Body userDataRequest : UserDataRequest) : Call<DatabaseResponse>
 
     @Headers("Accept: application/json")
-    @POST("/marketingTeam/getUserCount")
+    @POST("api/marketingTeam/getUserCount")
     fun getUserDataCount(@Header("Authorization") token:String,
                     @Body userDataRequest : UserDataRequest) : Call<DatabaseCountResponse>
 

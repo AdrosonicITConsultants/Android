@@ -13,13 +13,16 @@ data class Data (
 )
 
 data class GetAllNotification (
+
+
+    val code: String,
     val productDesc: String,
     val createdOn: String,
-    val notificationTypeId: Long,
-    val seen: Long,
-    val companyName: String,
-    val code: String,
-    val customProduct: String,
-    val notificationId: Long,
-    val type: String
+    val notificationType: String,
+    val notificationId: Long
 )
+//"code": "E-W-D-SAR-2011",
+//"productDesc": "Saree",
+//"createdOn": "2020-11-06T00:30:01.000+0000",
+//"notificationType": "Auto Escalation",
+//"notificationId": 26852

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black_text">
+
+    <TextView
+        android:id="@+id/totalProdCount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:text="Total products : NA"
+        android:textColor="@color/colorBackground"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/your_enquiries_text" />
+
+    <EditText
+        android:id="@+id/searchArtisan"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
+        android:paddingLeft="8dp"
+        android:background="@drawable/search_background_others"
+        android:focusable="true"
+        android:inputType="text"
+        android:textSize="@dimen/product_availability_text"
+        android:textColor="@color/white_text"
+        android:drawablePadding="8dp"
+        android:drawableTint="@color/white_text"
+        android:textColorHint="@color/white_text"
+        android:hint="Search by product code, artisan brand, category, product name"
+        android:drawableLeft="@drawable/ic_search_black_36dp"
+        app:iconifiedByDefault="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/totalProdCount"
+        app:queryHint="@string/user_search_hint"
+        app:submitBackground="@color/darker_gray" />
+
+    <LinearLayout
+        android:id="@+id/filters_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchArtisan"
+        app:layout_constraintVertical_bias="0.018">
+
+        <RelativeLayout
+            android:id="@+id/clusterParent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_weight="4"
+            android:background="@drawable/search_background_others">
+
+            <Spinner
+                android:id="@+id/sp_cluster"
+                style="@style/Widget.AppCompat.DropDownItem.Spinner"
+                android:popupBackground="@color/table_corner_layout_color"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:backgroundTint="@color/white_text"
+                android:layout_centerInParent="true"
+                android:autofillHints="Select product category" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_weight="4"
+            android:background="@drawable/search_background_others">
+
+            <Spinner
+                android:id="@+id/sp_availability"
+                style="@style/Widget.AppCompat.DropDownItem.Spinner"
+                android:popupBackground="@color/table_corner_layout_color"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:backgroundTint="@color/white_text"
+                android:layout_centerInParent="true"
+                android:autofillHints="Select product category" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/btnApply"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_weight="2"
+            android:background="@color/apply_bg_color"
+            android:text="Apply"
+            android:textAllCaps="false"
+            android:textColor="@color/black_text" />
+    </LinearLayout>
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/filters_layout"
+        app:layout_constraintVertical_bias="0.0" >
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/product_list"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/black_text"
+           >
+        </androidx.recyclerview.widget.RecyclerView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

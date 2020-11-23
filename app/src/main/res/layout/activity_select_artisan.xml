@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorSplash"
+            android:backgroundTint="@color/black_text"
+            android:orientation="vertical"
+            tools:context=".ui.modules.artisan.productTemplate.ArtisanAddProductTemplateActivity">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/add_product_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/black_text"
+                android:theme="@style/AppTheme.Toolbar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:popupTheme="@style/AppTheme.PopupOverlay">
+
+                <ImageView
+                    android:id="@+id/btn_back"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="start"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_keyboard_backspace_black_24dp" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="40dp"
+                    android:text="Select Artisan"
+                    android:textColor="@color/lighter_gray" />
+
+
+                <Button
+                    android:id="@+id/btnSave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_gravity="end"
+                    android:layout_marginRight="4dp"
+                    android:layout_weight="2"
+                    android:background="@color/apply_bg_color"
+                    android:text="Save"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black_text" />
+            </androidx.appcompat.widget.Toolbar>
+
+            <View
+                android:id="@+id/div"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/apply_bg_color"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tabLayout_art_enq_details" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/expandable_layout_std_padding">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_gravity="center"
+                    android:layout_weight="8"
+                    android:fontFamily="@font/lato_regular"
+                    android:text="Product Category"
+                    android:textColor="@color/lighter_gray" />
+
+                <TextView
+                    android:id="@+id/txtProdCat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="center"
+                    android:layout_weight="8"
+                    android:fontFamily="@font/lato_regular"
+                    android:text="Saree"
+                    android:textColor="@color/lighter_gray"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <EditText
+                android:id="@+id/searchArtisan"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="4dp"
+                android:background="@drawable/search_background_others"
+                android:drawableLeft="@drawable/ic_search_black_36dp"
+                android:drawablePadding="8dp"
+                android:drawableTint="@color/white_text"
+                android:focusable="true"
+                android:hint="Search by product code, artisan brand, category, product name"
+                android:inputType="text"
+                android:paddingLeft="8dp"
+                android:textColor="@color/white_text"
+                android:textColorHint="@color/white_text"
+                android:textSize="@dimen/product_availability_text"
+                app:iconifiedByDefault="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/totalProdCount"
+                app:queryHint="@string/user_search_hint"
+                app:submitBackground="@color/darker_gray" />
+
+            <LinearLayout
+                android:id="@+id/filters_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/searchArtisan"
+                app:layout_constraintVertical_bias="0.018">
+
+                <RelativeLayout
+                    android:id="@+id/clusterParent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_weight="4"
+                    android:background="@drawable/search_background_others">
+
+                    <Spinner
+                        android:id="@+id/sp_cluster"
+                        style="@style/Widget.AppCompat.DropDownItem.Spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_centerInParent="true"
+                        android:autofillHints="Select product category"
+                        android:backgroundTint="@color/white_text"
+                        android:popupBackground="@color/table_corner_layout_color" />
+                </RelativeLayout>
+
+                <Button
+                    android:id="@+id/btnApply"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_weight="2"
+                    android:background="@color/apply_bg_color"
+                    android:text="Apply"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black_text"
+                    android:visibility="visible" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_margin="@dimen/expandable_layout_std_padding"
+                android:id="@+id/txtArtisanBeandCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_gravity="left"
+                android:fontFamily="@font/lato_regular"
+                android:text="Product Category"
+                android:textColor="@color/lighter_gray" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="10"
+                android:background="@color/table_corner_layout_color"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <View
+                    android:id="@+id/placeHolder"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center"
+                    android:text="Artisan/W ID"
+                    android:textColor="@color/lighter_gray" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center"
+                    android:text="Artisan Brand"
+                    android:textColor="@color/lighter_gray" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center"
+                    android:text="Cluster"
+                    android:textColor="@color/lighter_gray" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/artisan_brand_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/pbLoader"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+
+</layout>

@@ -101,4 +101,7 @@ object craftexchangemarketingRepository {
     fun getTeamService() : TeamDao{
         return builder(TeamDao::class.java)
     }
+    fun getProductCatService() : ProductCatalogueDao{
+        return builder(ProductCatalogueDao::class.java)
+    }
 }

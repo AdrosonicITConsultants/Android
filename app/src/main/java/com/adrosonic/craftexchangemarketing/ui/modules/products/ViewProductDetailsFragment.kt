@@ -24,10 +24,12 @@ import com.adrosonic.craftexchangemarketing.database.predicates.ProductPredicate
 import com.adrosonic.craftexchangemarketing.databinding.FragmentViewProductDetailsBinding
 import com.adrosonic.craftexchangemarketing.repository.data.response.artisan.productTemplate.uploadData.ProductCare
 import com.adrosonic.craftexchangemarketing.repository.data.response.artisan.productTemplate.uploadData.ProductUploadData
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.productCatalog.addProduct.addAdminProductIntent
 import com.adrosonic.craftexchangemarketing.ui.modules.buyer.productDetails.*
 import com.adrosonic.craftexchangemarketing.utils.ImageSetter
 import com.adrosonic.craftexchangemarketing.utils.UserConfig
 import com.adrosonic.craftexchangemarketing.utils.Utility
+import com.adrosonic.craftexchangemarketing.viewModels.ProductCatViewModal
 import com.adrosonic.craftexchangemarketing.viewModels.ViewProductsViewModel
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -38,11 +40,11 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 class ViewProductDetailsFragment : Fragment(),
-ViewProductsViewModel.ViewProductsInterface{
+ProductCatViewModal.ProductDetailsInterface{
      var mBinding : FragmentViewProductDetailsBinding?= null
 
     var productID : Long ?= 0
-    var isCustomProduct : Boolean ?= false
+    var isAntran : Boolean ?= false
     var jsonProductData : String ?=""
     var productUploadData : ProductUploadData?= null
     private var mUserConfig = UserConfig()
@@ -55,7 +57,7 @@ ViewProductsViewModel.ViewProductsInterface{
 
     private var productDetails : EnquiryProductDetails?= null
 
-    val mViewModel : ViewProductsViewModel by viewModels()
+    val mViewModel : ProductCatViewModal by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,60 +67,54 @@ ViewProductsViewModel.ViewProductsInterface{
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_view_product_details, container, false)
         arguments?.let {
             productID = it.getLong(ARG_PARAM1)
-            isCustomProduct = it.getBoolean(ARG_PARAM2)
+            isAntran = it.getBoolean(ARG_PARAM2)
         }
 
         jsonProductData = mUserConfig.productUploadJson.toString()
         val gson = GsonBuilder().create()
         productUploadData = gson.fromJson(jsonProductData, ProductUploadData::class.java)
-
         return mBinding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mViewModel?.listener = this
-        when(isCustomProduct){
-            true -> {
-                if(Utility.checkIfInternetConnected(requireActivity())){
-                    productID?.let { mViewModel?.getBuyerCustomProduct(it) }
-                    viewLoader()
-                }else{
-                    Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
-                }
-            }
-            false -> {
-                if(Utility.checkIfInternetConnected(requireActivity())){
-                    productID?.let { mViewModel?.getArtisanProduct(it) }
-                    viewLoader()
-                }else{
-                    Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
-                }
-            }
-        }
+        mViewModel?.prodListener = this
 
-
-
+         if(Utility.checkIfInternetConnected(requireActivity())){
+               productID?.let { mViewModel?.getArtisanProduct(it) }
+               viewLoader()
+         }else{
+              Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
+         }
         mBinding?.btnBack?.setOnClickListener {
             activity?.onBackPressed()
         }
+        mBinding?.imgEditProduct?.setOnClickListener {
+            productDetails?.productId?.let {  context?.startActivity(context?.addAdminProductIntent(it))}
+        }
+        if(isAntran!!)mBinding?.imgEditProduct?.visibility=View.VISIBLE
+        else mBinding?.imgEditProduct?.visibility=View.GONE
     }
 
     fun viewLoader(){
-        mBinding?.productDetails?.visibility = View.GONE
-//        mBinding?.swipeEnquiryDetails?.isRefreshing = true
+//        mBinding?.productDetails?.visibility = View.GONE
+        mBinding?.progressLayout?.visibility = View.VISIBLE
     }
 
     fun hideLoader(){
-        mBinding?.productDetails?.visibility = View.VISIBLE
-//        mBinding?.swipeEnquiryDetails?.isRefreshing = false
+//        mBinding?.productDetails?.visibility = View.VISIBLE
+        mBinding?.progressLayout?.visibility = View.GONE
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//        isCustomProduct?.let { productID?.let { it1 -> mViewModel.getEnqProductDetails(it1, it) } }
-//        setDetails()
-//    }
+    override fun onResume() {
+        super.onResume()
+        if(Utility.checkIfInternetConnected(requireActivity())){
+            productID?.let { mViewModel?.getArtisanProduct(it) }
+            viewLoader()
+        }else{
+            Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
+        }
+    }
 
     override fun onFailure() {
         try {
@@ -137,7 +133,7 @@ ViewProductsViewModel.ViewProductsInterface{
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("Product Details", "onSuccess")
-                productDetails = isCustomProduct?.let { productID?.let { it1 -> mViewModel.getEnqProductDetails(it1, it) } }?.value
+                productDetails =  productID?.let { it1 -> mViewModel.getEnqProductDetails(it1) } ?.value
                 setDetails()
                 hideLoader()
 
@@ -193,14 +189,11 @@ ViewProductsViewModel.ViewProductsInterface{
             for (size in imageList){
                 Log.i("Stat","$size")
                 var imagename = size?.imageName
-                if(isCustomProduct == true){
-//            holder?.brandName?.text = "Custom Design"
-                    url = Utility.getCustomProductImagesUrl(productDetails?.productId, imagename)
-                }else{
-//            holder?.brandName?.text = ""
+//                if(isAntran == true){
+//                    url = Utility.getCustomProductImagesUrl(productDetails?.productId, imagename)
+//                }else{
                     url = Utility.getProductsImagesUrl(productDetails?.productId, imagename)
-                }
-//                var url = Utility.getProductsImagesUrl(productId,imagename)
+//                }
                 imageUrlList.add(url!!)
             }
             if(imageUrlList !=null) {

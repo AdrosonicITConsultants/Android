@@ -2,8 +2,9 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle"
     >
+    <solid android:color="@color/marketing_noti_bg" />
     <stroke
-        android:width="1dp"
+        android:width="0.05dp"
         android:color="@color/lighter_gray" />
 
 </shape>

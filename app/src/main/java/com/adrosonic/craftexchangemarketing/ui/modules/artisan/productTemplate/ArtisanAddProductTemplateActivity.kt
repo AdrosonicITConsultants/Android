@@ -28,7 +28,7 @@ import com.adrosonic.craftexchangemarketing.database.entities.realmEntities.Rela
 import com.adrosonic.craftexchangemarketing.database.predicates.*
 import com.adrosonic.craftexchangemarketing.databinding.ActivityArtisanAddProductTemplateBinding
 import com.adrosonic.craftexchangemarketing.repository.data.request.artisan.productTemplate.ArtisanAddProductRequest
-import com.adrosonic.craftexchangemarketing.repository.data.request.artisan.productTemplate.RelProduct
+//import com.adrosonic.craftexchangemarketing.repository.data.request.artisan.productTemplate.RelProduct
 import com.adrosonic.craftexchangemarketing.repository.data.request.artisan.productTemplate.RelatedProduct
 import com.adrosonic.craftexchangemarketing.repository.data.request.artisan.productTemplate.UpdateProductTemplateRequest
 import com.adrosonic.craftexchangemarketing.repository.data.response.artisan.productTemplate.uploadData.*
@@ -145,17 +145,11 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
             Log.e("Offline", "template activity prodId :" + productId)
             if (productId > 0) {
                 img_delete.visibility = View.VISIBLE
-                txt_save_upload_top.text="Update"
-                txt_save_upload.text="Update"
                 productEntry=ProductPredicates.getArtisanProductsByRemoteId(productId)
             } else {
-                txt_save_upload_top.text="Save"
-                txt_save_upload.text="Save"
                 img_delete.visibility = View.GONE
             }
         } else {
-            txt_save_upload_top.text="Save"
-            txt_save_upload.text="Save"
             img_delete.visibility = View.GONE
         }
         parent_step1.setOnClickListener(this)
@@ -178,9 +172,6 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
         }
         loadData()
         /////////////////////////Save and Upload///////////////////////////
-        txt_save_upload.setOnClickListener { saveUploadProduct() }
-        txt_save_upload_top.setOnClickListener { saveUploadProduct() }
-        txt_reset.setOnClickListener { resetAll() }
         ///////////////////////////////////////////////////////////////////
         mBinding?.etProdName?.addTextChangedListener(generalTextWatcher)
         mBinding?.etProdCode?.addTextChangedListener(generalTextWatcher)
@@ -952,57 +943,57 @@ class ArtisanAddProductTemplateActivity : AppCompatActivity(),
     }
 
     fun callUpdate(width:String,length:String){
-        var carelist=ArrayList<com.adrosonic.craftexchangemarketing.repository.data.request.artisan.productTemplate.ProductCare>()
-        careIdList.forEach { carelist.add(com.adrosonic.craftexchangemarketing.repository.data.request.artisan.productTemplate.ProductCare(System.currentTimeMillis(),it,productId)) }
-
-        var weavelist=ArrayList<com.adrosonic.craftexchangemarketing.repository.data.request.artisan.productTemplate.ProductWeaf>()
-        weaveIdList.forEach { weavelist.add(com.adrosonic.craftexchangemarketing.repository.data.request.artisan.productTemplate.ProductWeaf(System.currentTimeMillis(),productId,it)) }
-
-        var relProdList=ArrayList<com.adrosonic.craftexchangemarketing.repository.data.request.artisan.productTemplate.RelProduct>()
-        if (arrRelatedProdType!!.size > 0) {
-           var relprod=RelProduct(arrRelatedProdType?.get(0)?.id ?: 0,sp_sub_prod_width?.selectedItem.toString(),sp_sub_prod_length?.selectedItem.toString())
-           relProdList.add(relprod)
-        }
-
-        var template = UpdateProductTemplateRequest(et_prod_code.text.toString(),extraWeftDyeId,extraWeftYarnCount,extraWeftYarnId,et_gsm.text.toString(),productId,
-        length,carelist.toList(),prodCatId?:0,status,prodTypeId?:0,weavelist,et_dscrp.text.toString(),reedCountId,relProdList,
-        et_prod_name.text.toString(),warpDyeId,warpYarnCount,warpYarnId,weftDyeId,weftYarnCount,weftYarnId,et_prod_weight.text.toString(),width)
-
-        val dialogCompresion = CompressionProgressDialog()
-        dialogCompresion.show(
-            supportFragmentManager,
-            resources.getString(R.string.compressing)
-        )
-        dialogCompresion.isCancelable = false
-        var list=ArrayList<String>()
-        pairList.forEach {
-           if(!it.first) list.add(it.third)
-        }
-        CompressImageTask(cacheDir.absolutePath, list, object : CompressTaskResult {
-            override fun performFinalTask(result: ArrayList<String>) {
-                dialogCompresion.dismiss()
-                val pair = Utility.validTotalFileSize(result)
-                val status = pair.first
-                if (status) {
-                    ProductPredicates.updateArtisanProductOffline(
-                        template,
-                        list,
-                        deletedPaths,
-                        relatedProduct
-                    )
-                    if (Utility.checkIfInternetConnected(applicationContext)) {
-                        val coordinator = SyncCoordinator(applicationContext)
-                        coordinator?.performLocallyAvailableActions()
-                    }
-
-                    finish()
-                } else
-                    Utility.displayMessage(
-                        "One of image size exceeds 1MB limit, kindly remove the it to continue",
-                        applicationContext
-                    )
-            }
-        }).execute()
+//        var carelist=ArrayList<com.adrosonic.craftexchangemarketing.repository.data.request.artisan.productTemplate.ProductCare>()
+//        careIdList.forEach { carelist.add(com.adrosonic.craftexchangemarketing.repository.data.request.artisan.productTemplate.ProductCare(System.currentTimeMillis(),it,productId)) }
+//
+//        var weavelist=ArrayList<com.adrosonic.craftexchangemarketing.repository.data.request.artisan.productTemplate.ProductWeaf>()
+//        weaveIdList.forEach { weavelist.add(com.adrosonic.craftexchangemarketing.repository.data.request.artisan.productTemplate.ProductWeaf(System.currentTimeMillis(),productId,it)) }
+//
+//        var relProdList=ArrayList<com.adrosonic.craftexchangemarketing.repository.data.request.artisan.productTemplate.RelProduct>()
+//        if (arrRelatedProdType!!.size > 0) {
+//           var relprod=RelProduct(arrRelatedProdType?.get(0)?.id ?: 0,sp_sub_prod_width?.selectedItem.toString(),sp_sub_prod_length?.selectedItem.toString())
+//           relProdList.add(relprod)
+//        }
+//
+//        var template = UpdateProductTemplateRequest(et_prod_code.text.toString(),extraWeftDyeId,extraWeftYarnCount,extraWeftYarnId,et_gsm.text.toString(),productId,
+//        length,carelist.toList(),prodCatId?:0,status,prodTypeId?:0,weavelist,et_dscrp.text.toString(),reedCountId,relProdList,
+//        et_prod_name.text.toString(),warpDyeId,warpYarnCount,warpYarnId,weftDyeId,weftYarnCount,weftYarnId,et_prod_weight.text.toString(),width)
+//
+//        val dialogCompresion = CompressionProgressDialog()
+//        dialogCompresion.show(
+//            supportFragmentManager,
+//            resources.getString(R.string.compressing)
+//        )
+//        dialogCompresion.isCancelable = false
+//        var list=ArrayList<String>()
+//        pairList.forEach {
+//           if(!it.first) list.add(it.third)
+//        }
+//        CompressImageTask(cacheDir.absolutePath, list, object : CompressTaskResult {
+//            override fun performFinalTask(result: ArrayList<String>) {
+//                dialogCompresion.dismiss()
+//                val pair = Utility.validTotalFileSize(result)
+//                val status = pair.first
+//                if (status) {
+//                    ProductPredicates.updateArtisanProductOffline(
+//                        template,
+//                        list,
+//                        deletedPaths,
+//                        relatedProduct
+//                    )
+//                    if (Utility.checkIfInternetConnected(applicationContext)) {
+//                        val coordinator = SyncCoordinator(applicationContext)
+//                        coordinator?.performLocallyAvailableActions()
+//                    }
+//
+//                    finish()
+//                } else
+//                    Utility.displayMessage(
+//                        "One of image size exceeds 1MB limit, kindly remove the it to continue",
+//                        applicationContext
+//                    )
+//            }
+//        }).execute()
 
     }
 

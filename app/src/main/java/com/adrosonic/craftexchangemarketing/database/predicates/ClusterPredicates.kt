@@ -60,5 +60,9 @@ class ClusterPredicates {
             val realm = CXRealmManager.getRealmInstance()
             return realm.where(ClusterList::class.java).findAll()
         }
+        fun getClusterId(cluster:String): Long {
+            val realm = CXRealmManager.getRealmInstance()
+            return realm.where(ClusterList::class.java).equalTo("cluster",cluster).findFirst()?.clusterid?:0
+        }
     }
 }

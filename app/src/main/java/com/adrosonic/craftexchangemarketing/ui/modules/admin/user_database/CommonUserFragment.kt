@@ -2,9 +2,6 @@ package com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database
 
 //import com.adrosonic.craftexchangemarketing.databinding.FragmentCommonEnquiryBinding
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,9 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.adrosonic.craftexchangemarketing.R
 import com.adrosonic.craftexchangemarketing.databinding.FragmentCommonUserBinding
-import com.adrosonic.craftexchangemarketing.repository.data.response.admin.userDatabase.User
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.adapter.AdminDatabaseAdapter
-import com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.tableview.MyTableAdapter
 import com.adrosonic.craftexchangemarketing.viewModels.DatabaseViewModel
 
 private const val ARG_PARAM1 = "param1"

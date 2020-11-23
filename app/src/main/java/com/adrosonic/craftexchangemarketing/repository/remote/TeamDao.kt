@@ -10,17 +10,17 @@ import retrofit2.http.*
 interface TeamDao {
 
     @Headers("Accept: application/json")
-    @POST("/marketingTeam/getAdmins")
+    @POST("api/marketingTeam/getAdmins")
     fun getAdmins(@Header("Authorization") token:String,
                   @Body adminRequest : AdminsRequest) : Call<AdminsResponse>
 
     @Headers("Accept: application/json")
-    @GET("marketingTeam/getAdmin")
+    @GET("api/marketingTeam/getAdmin")
     fun getAdmin(@Header("Authorization") token:String,
                  @Query("id") id : Int) : Call<AdminResponse>
 
     @Headers("Accept: application/json")
-    @GET("marketingTeam/getAdminRoles")
+    @GET("api/marketingTeam/getAdminRoles")
     fun getAdminRoles(@Header("Authorization") token:String) : Call<AdminRolesResponse>
 
 }

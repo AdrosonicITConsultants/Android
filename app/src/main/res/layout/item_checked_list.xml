@@ -17,11 +17,11 @@
         android:id="@+id/txt_dscrp"
         android:layout_width="0dp"
         android:layout_height="@dimen/edit_text"
-        android:layout_weight="9"
-        android:layout_marginLeft="@dimen/margin_regular"
         android:layout_gravity="center_vertical"
-        android:textColor="@color/black_text"
-        android:text="Gental hand wash with soft liquid detergent" />
+        android:layout_marginLeft="@dimen/margin_regular"
+        android:layout_weight="9"
+        android:text="Gental hand wash with soft liquid detergent"
+        android:textColor="@color/lighter_gray" />
 </LinearLayout>
 
 

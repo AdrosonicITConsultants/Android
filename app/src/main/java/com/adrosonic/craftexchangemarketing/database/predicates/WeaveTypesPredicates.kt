@@ -64,7 +64,7 @@ class WeaveTypesPredicates {
                             WeaveTypes::class.java,
                             nextID
                         )
-                        weaveObj.productId = id.productId
+//                        weaveObj.productId = id.pr/
                         weaveObj.weaveId = id.weaveId
                         weaveObj.productWeaveId = 0
                         Log.e("insertWeaveIds", "222222222 "+  weaveObj.weaveId)

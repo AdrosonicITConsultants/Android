@@ -593,11 +593,6 @@ class UserConfig {
             Prefs.putInt(ARTISAN_DB_PAGE_COUNT, value)
             field = value
         }
-    var buyerDbPageCount : Int = 1
-        get() = Prefs.getInt(BUYER_DB_PAGE_COUNT,1)
-        set(value) {
-            Prefs.putInt(BUYER_DB_PAGE_COUNT, value)
-            field = value
-        }
+
 }
 

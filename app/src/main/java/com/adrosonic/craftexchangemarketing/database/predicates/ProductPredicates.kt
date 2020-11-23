@@ -1182,7 +1182,7 @@ class ProductPredicates {
             val realm = CXRealmManager.getRealmInstance()
             try {
                 realm.executeTransaction {
-                    var prodEntry=realm.where(ArtisanProducts::class.java).equalTo(ArtisanProducts.COLUMN_PRODUCT_ID,product.id).limit(1).findFirst()
+                    var prodEntry=realm.where(ArtisanProducts::class.java).equalTo(ArtisanProducts.COLUMN_PRODUCT_ID,product.productTypeId).limit(1).findFirst()
                     nextID=prodEntry?._id
                     prodEntry?.actionUpdate = 1
 
@@ -1194,7 +1194,7 @@ class ProductPredicates {
 
                     prodEntry?.reedCountId = product.reedCountId.toLong()
                     prodEntry?.gsm = product.gsm
-                    prodEntry?.productStatusId = product.productStatusId
+//                    prodEntry?.productStatusId = product.productStatusId
                     prodEntry?.productWidth = product.width
                     prodEntry?.productLength = product.length
                     prodEntry?.weight = product.weight
@@ -1207,30 +1207,30 @@ class ProductPredicates {
                     prodEntry?.weftYarnCount = product.weftYarnCount
                     prodEntry?.weftYarnId = product.weftYarnId
 
-                    prodEntry?.extraWeftDyeId = product.extraWeftDyeId
-                    prodEntry?.extraWeftYarnCount = product.extraWeftYarnCount
-                    prodEntry?.extraWeftYarnId = product.extraWeftYarnId
+//                    prodEntry?.extraWeftDyeId = product.extraWeftDyeId
+//                    prodEntry?.extraWeftYarnCount = product.extraWeftYarnCount
+//                    prodEntry?.extraWeftYarnId = product.extraWeftYarnId
 
                     realm.copyToRealmOrUpdate(prodEntry)
                     //todo add related products, image paths,weave ids, was care instructions
 
                 }
-                Log.e("ArtisanProdLog","${product.productWeaves.size}")
-                Log.e("ArtisanProdLog","${product.productCares?.size}")
+//                Log.e("ArtisanProdLog","${product.productWeaves.size}")
+//                Log.e("ArtisanProdLog","${product.productCares?.size}")
                 Log.e("ArtisanProdLog","${imageList?.joinToString()}")
                 if(relatedProdList.size>0)RelateProductPredicates.insertRelatedProduct(nextID,relatedProdList.get(0).productTypeID,relatedProdList.get(0).width,relatedProdList.get(0).length)
                 if(imageList.size>0) {
-                    ProductImagePredicates.deleteProdImages(product?.id)
-                    ProductImagePredicates.insertProductImages(product?.id, imageList)
+//                    ProductImagePredicates.deleteProdImages(product?.id)
+//                    ProductImagePredicates.insertProductImages(product?.id, imageList)
                 }
-                if(product.productWeaves!=null){
-                    WeaveTypesPredicates.deleteWeaveIds(product?.id)
-                    WeaveTypesPredicates.insertWeaveIds(product.productWeaves)
-                }
-                if(product.productCares!=null) {
-                    ProductCaresPredicates.deleteCareIds(product?.id)
-                    ProductCaresPredicates.insertCareIds(product.productCares)
-                }
+//                if(product.productWeaves!=null){
+//                    WeaveTypesPredicates.deleteWeaveIds(product?.id)
+//                    WeaveTypesPredicates.insertWeaveIds(product.productWeaves)
+//                }
+//                if(product.productCares!=null) {
+//                    ProductCaresPredicates.deleteCareIds(product?.id)
+//                    ProductCaresPredicates.insertCareIds(product.productCares)
+//                }
             }catch (e:Exception){
                 Log.e("ArtisanProdLog","${e.message}")
             }

@@ -45,7 +45,7 @@ class NotificationViewModel(application: Application) : AndroidViewModel(applica
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         craftexchangemarketingRepository
             .getNotificationService()
-            .getAllNotifications(token)
+            .getAllAdminNotifications(token)
             .enqueue(object: Callback, retrofit2.Callback<NotificationResponse> {
                 override fun onFailure(call: Call<NotificationResponse>, t: Throwable) {
                     t.printStackTrace()
@@ -56,7 +56,7 @@ class NotificationViewModel(application: Application) : AndroidViewModel(applica
                     call: Call<NotificationResponse>,
                     response: retrofit2.Response<NotificationResponse>) {
                     if(response.body()?.valid == true){
-                        Log.e(TAG,"getProductUploadData :"+response.body()?.data?.getAllNotifications?.size)
+                        Log.e(TAG,"getProductUploadData :"+response.body()?.data?.count)
                         NotificationPredicates.insertNotification(response.body()?.data?.getAllNotifications)
                         UserConfig.shared?.notiBadgeCount=response.body()?.data?.count?:0
                         listener?.onSuccess()

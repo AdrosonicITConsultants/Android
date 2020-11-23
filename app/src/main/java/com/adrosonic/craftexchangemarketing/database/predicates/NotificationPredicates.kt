@@ -14,6 +14,7 @@ import com.adrosonic.craftexchangemarketing.repository.data.response.artisan.pro
 import com.adrosonic.craftexchangemarketing.repository.data.response.buyer.login.BuyerResponse
 import io.realm.Realm
 import io.realm.RealmResults
+import io.realm.Sort
 import java.lang.Exception
 
 class NotificationPredicates {
@@ -40,14 +41,14 @@ class NotificationPredicates {
                             if(notificationid.equals(notification.notificationId)){
                                 Log.e("Notifications", "333333 Update: ${notification.notificationId}")
                                 notificationObj?.code = notification.code?:""
-                                notificationObj?.companyName = notification.companyName?:""
                                 notificationObj?.createdOn = notification.createdOn?:""
-                                notificationObj?.customProduct = notification.customProduct?:""
+//                                notificationObj?.customProduct = notification.customProduct?:""
                                 notificationObj?.notificationId = notification.notificationId?:0
-                                notificationObj?.notificationTypeId = notification.notificationTypeId?:0
+//                                notificationObj?.notificationTypeId = notification.notificationTypeId?:0
                                 notificationObj?.productDesc = notification.productDesc?:""
-                                notificationObj?.seen = notification.seen?:0
-                                notificationObj?.type = notification.type?:""
+                                notificationObj?.notificationType = notification.notificationType
+//                                notificationObj?.seen = notification.seen?:0
+//                                notificationObj?.type = notification.type?:""
                                 realm.copyToRealmOrUpdate(notificationObj)
                             }
                             else{
@@ -59,15 +60,11 @@ class NotificationPredicates {
                                     nextID = primId.toLong() + 1
                                 }
                                 var noti = it.createObject(Notifications::class.java, nextID)
-                                noti.code = notification.code?:""
-                                noti.companyName = notification.companyName?:""
+                                notificationObj?.notificationType = notification.notificationType
+                                noti?.code = notification.code?:""
                                 noti?.createdOn = notification.createdOn?:""
-                                noti.customProduct = notification.customProduct?:""
                                 noti.notificationId = notification.notificationId?:0
-                                noti.notificationTypeId = notification.notificationTypeId?:0
                                 noti.productDesc = notification.productDesc?:""
-                                noti.seen = notification.seen?:0
-                                noti.type = notification.type?:""
                                 realm.copyToRealmOrUpdate(noti)
                             }
                         }
@@ -111,7 +108,7 @@ class NotificationPredicates {
             var notifications: RealmResults<Notifications>? = null
             try {
                 realm?.executeTransaction {
-                    notifications = realm.where(Notifications::class.java).notEqualTo(Notifications.COLUMN_ACTION_MARK_READ,1L).findAll()
+                    notifications = realm.where(Notifications::class.java).notEqualTo(Notifications.COLUMN_ACTION_MARK_READ,1L).sort(Notifications.COLUMN_CREATED_ON,Sort.DESCENDING).findAll()
                 }
             } catch (e: Exception) {
                 Log.e("Notifications", " Exception: ${e}")
