@@ -109,14 +109,17 @@ class ProductCataloguePredicates {
             realm.executeTransaction {
                 allProducts = if(search.isNullOrEmpty()&& cluster.isEmpty() && availability.isEmpty()){
                     realm.where(AdminProductCatalogue::class.java).equalTo(AdminProductCatalogue.COLUMN_IS_ARTISAN, isArtisan).findAll()
-                }else {
+                }
+                else {
+                   val available= if(availability.equals("All"))"" else availability
                     realm.where(AdminProductCatalogue::class.java).equalTo(AdminProductCatalogue.COLUMN_IS_ARTISAN, isArtisan)
-                        .and().contains(AdminProductCatalogue.COLUMN_CODE,search, Case.INSENSITIVE).or()
+                        .findAll().where()
+                        .contains(AdminProductCatalogue.COLUMN_CODE,search, Case.INSENSITIVE).or()
                         .contains(AdminProductCatalogue.COLUMN_NAME,search,Case.INSENSITIVE).or()
                         .contains(AdminProductCatalogue.COLUMN_BRAND,search,Case.INSENSITIVE).or()
                         .contains(AdminProductCatalogue.COLUMN_CATEGORY,search,Case.INSENSITIVE)
                         .findAll().where()
-                        .contains(AdminProductCatalogue.COLUMN_AVAILABILITY,availability,Case.INSENSITIVE)
+                        .contains(AdminProductCatalogue.COLUMN_AVAILABILITY,available,Case.INSENSITIVE)
                         .findAll()
                 }
             }
@@ -437,6 +440,19 @@ class ProductCataloguePredicates {
             }catch (e:Exception){
                 Log.e("EnquiryProduct","$e")
             }
+        }
+        fun deleteProductEntry(id:Long){
+            val realm = CXRealmManager.getRealmInstance()
+            realm?.executeTransaction {
+                val artisonProd = it.where(EnquiryProductDetails::class.java).equalTo(EnquiryProductDetails.COLUMN_PRODUCT_ID, id).findAll()
+                artisonProd.deleteAllFromRealm()
+
+                val cat = it.where(AdminProductCatalogue::class.java).equalTo(AdminProductCatalogue.COLUMN_PRODUCT_ID, id).
+                or().equalTo(AdminProductCatalogue.COLUMN_ID,id).findAll()
+                cat.deleteAllFromRealm()
+
+            }
+
         }
 
     }

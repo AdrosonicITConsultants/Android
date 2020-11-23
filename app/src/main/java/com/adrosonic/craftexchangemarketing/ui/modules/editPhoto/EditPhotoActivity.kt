@@ -1,6 +1,5 @@
 package com.adrosonic.craftexchangemarketing.ui.modules.editPhoto
 
-import android.R.attr.src
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -16,7 +15,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.adrosonic.craftexchangemarketing.R
 import com.adrosonic.craftexchangemarketing.utils.ConstantsDirectory
-import com.adrosonic.craftexchangemarketing.utils.ImageSetter
 import com.adrosonic.craftexchangemarketing.utils.Utility
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView

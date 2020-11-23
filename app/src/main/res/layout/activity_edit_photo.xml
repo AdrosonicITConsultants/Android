@@ -7,8 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorSplash"
-        android:orientation="vertical"
-        tools:context=".ui.modules.artisan.productTemplate.ArtisanAddProductTemplateActivity">
+        android:orientation="vertical">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/add_product_toolbar"

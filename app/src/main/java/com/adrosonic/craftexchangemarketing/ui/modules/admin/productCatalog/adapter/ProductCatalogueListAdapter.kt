@@ -32,7 +32,8 @@ import java.util.*
 
 class ProductCatalogueListAdapter(
     private val context: Context,
-    private var productCatalogue: RealmResults<AdminProductCatalogue>?
+    private var productCatalogue: RealmResults<AdminProductCatalogue>?,
+val isAntran:Boolean
 ) : RecyclerView.Adapter<ProductCatalogueListAdapter.MyViewHolder>() {
 
     private var productList=productCatalogue
@@ -95,7 +96,7 @@ class ProductCatalogueListAdapter(
         else Utility.setImageResource(context, holder.img_availabilty, R.drawable.ic_in_stock)
         holder.itemView.setOnClickListener {
                     (context as AppCompatActivity)?.supportFragmentManager?.beginTransaction()
-                        ?.replace(R.id.admin_home_container, ViewProductDetailsFragment.newInstance(product?.id?:0,  false ) )
+                        ?.replace(R.id.admin_home_container, ViewProductDetailsFragment.newInstance(product?.id?:0,  isAntran ) )
                         ?.addToBackStack(null)
                         ?.commit()
         }

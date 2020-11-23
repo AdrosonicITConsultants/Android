@@ -24,23 +24,25 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.adrosonic.craftexchangemarketing.R
 import com.adrosonic.craftexchangemarketing.database.entities.realmEntities.ArtisanProducts
+import com.adrosonic.craftexchangemarketing.database.entities.realmEntities.EnquiryProductDetails
 import com.adrosonic.craftexchangemarketing.database.entities.realmEntities.RelatedProducts
 import com.adrosonic.craftexchangemarketing.database.predicates.*
 import com.adrosonic.craftexchangemarketing.databinding.ActivityArtisanAddProductTemplateBinding
-import com.adrosonic.craftexchangemarketing.repository.data.request.artisan.productTemplate.ArtisanAddProductRequest
-import com.adrosonic.craftexchangemarketing.repository.data.request.artisan.productTemplate.RelProduct
-import com.adrosonic.craftexchangemarketing.repository.data.request.artisan.productTemplate.RelatedProduct
-import com.adrosonic.craftexchangemarketing.repository.data.request.artisan.productTemplate.UpdateProductTemplateRequest
+import com.adrosonic.craftexchangemarketing.repository.data.request.artisan.productTemplate.*
 import com.adrosonic.craftexchangemarketing.repository.data.response.artisan.productTemplate.uploadData.*
+import com.adrosonic.craftexchangemarketing.repository.data.response.artisan.productTemplate.uploadData.ProductCare
 import com.adrosonic.craftexchangemarketing.repository.data.response.artisan.productTemplate.uploadData.ProductType
 
 import com.adrosonic.craftexchangemarketing.syncManager.SyncCoordinator
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.selectArtisan.selectArtisanActivityIntent
 import com.adrosonic.craftexchangemarketing.ui.modules.artisan.productTemplate.CareInstructionsSelectionAdapter
 import com.adrosonic.craftexchangemarketing.ui.modules.artisan.productTemplate.ProdImageListAdapter
 import com.adrosonic.craftexchangemarketing.ui.modules.artisan.productTemplate.WeaveSelectionAdapter
 import com.adrosonic.craftexchangemarketing.ui.modules.artisan.productTemplate.yarnFrgamnets.YarnFrgamentAdapter
 import com.adrosonic.craftexchangemarketing.utils.*
 import com.adrosonic.craftexchangemarketing.viewModels.DownLoadProdImagesViewModel
+import com.adrosonic.craftexchangemarketing.viewModels.ProductCatViewModal
+import com.adrosonic.craftexchangemarketing.viewModels.ProductCatalogueViewModel
 import com.google.gson.GsonBuilder
 import com.wajahatkarim3.easyvalidation.core.view_ktx.contains
 import kotlinx.android.synthetic.main.activity_artisan_add_product_template.*
@@ -64,9 +66,12 @@ class AdminAddProductTemplateActivity : AppCompatActivity(),
     ProdImageListAdapter.ProdUpdateListener,
     WeaveSelectionAdapter.selectionListener,
     CareInstructionsSelectionAdapter.selectionListener,
-    DownLoadProdImagesViewModel.DownloadImagesCallback
+    DownLoadProdImagesViewModel.DownloadImagesCallback,
+    ProductCatViewModal.UploadProdInterface,
+    ProductCatViewModal.DeleteProdInterface
 {
     val mViewModel: DownLoadProdImagesViewModel by viewModels()
+    val mProdVm: ProductCatViewModal by viewModels()
     private var mBinding: ActivityArtisanAddProductTemplateBinding? = null
     private lateinit var prodImgListAdapter: ProdImageListAdapter
     private var pairList = ArrayList<Triple<Boolean,Long, String>>()
@@ -118,7 +123,7 @@ class AdminAddProductTemplateActivity : AppCompatActivity(),
     var reedCountId = 1L
     private var dots = ArrayList<TextView>()
     var productId = 0L
-    var productEntry:ArtisanProducts?=null
+    var productEntry: EnquiryProductDetails?=null
     var weaveIdStored:ArrayList<Long>?=null
     var careIdsStored:ArrayList<Long>?=null
     var relatedProdStored:RelatedProducts?=null
@@ -127,7 +132,7 @@ class AdminAddProductTemplateActivity : AppCompatActivity(),
         mBinding = ActivityArtisanAddProductTemplateBinding.inflate(layoutInflater)
         val view = mBinding?.root
         setContentView(view)
-
+        mProdVm?.uploadProdListener=this
         jsonProductData = mUserConfig.productUploadJson.toString()
         val gson = GsonBuilder().create()
         productUploadData = gson.fromJson(jsonProductData, ProductUploadData::class.java)
@@ -148,8 +153,10 @@ class AdminAddProductTemplateActivity : AppCompatActivity(),
             Log.e("Offline", "template activity prodId :" + productId)
             if (productId > 0) {
                 img_delete.visibility = View.VISIBLE
-//                mBinding?.txtSelectBrand?.text="Update"
-                productEntry=ProductPredicates.getArtisanProductsByRemoteId(productId)
+                mBinding?.txtSelectBrand?.text="Update Product"
+//                productEntry=ProductPredicates.getArtisanProductsByRemoteId(productId)
+                productEntry=mProdVm.getEnqProductDetails(productId).value
+
             } else {
 //                mBinding?.txtSelectBrand?.text="Save"
                 img_delete.visibility = View.GONE
@@ -227,8 +234,8 @@ class AdminAddProductTemplateActivity : AppCompatActivity(),
             arrProdCategoryStr.clear()
             arrProdCategoryStr.add("Select product category")
             arrProductCategory?.forEach { arrProdCategoryStr.add(it.productDesc) }
-            val spProdCataAdapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrProdCategoryStr)
-            spProdCataAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
+            val spProdCataAdapter = ArrayAdapter<String>(this, R.layout.spinner_item, arrProdCategoryStr)
+            spProdCataAdapter.setDropDownViewResource(R.layout.spinner_item)
             sp_prod_category.setAdapter(spProdCataAdapter)
             sp_prod_category.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -247,8 +254,8 @@ class AdminAddProductTemplateActivity : AppCompatActivity(),
                             category.productTypes.forEach { arrProdTypeStr?.add(it.productDesc) }
                         }
                     }
-                    val spProdTypeAdapter = ArrayAdapter<String>( applicationContext,  android.R.layout.simple_spinner_item,  arrProdTypeStr)
-                    spProdTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    val spProdTypeAdapter = ArrayAdapter<String>( applicationContext,  R.layout.spinner_item,  arrProdTypeStr)
+                    spProdTypeAdapter.setDropDownViewResource(R.layout.spinner_item)
                     sp_prod_type.setAdapter(spProdTypeAdapter)
                     setStatusResource()
                     if(productId>0){
@@ -324,14 +331,11 @@ class AdminAddProductTemplateActivity : AppCompatActivity(),
                     setDotsColor(position)
                 }
             })
-
-
-
             /////////////////reed count/////////////////////
             arrReedCountStr.add("Select reed count")
             arrReedCount?.forEach { arrReedCountStr.add(it.count) }
-            val spReedCountAdapter =ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrReedCountStr)
-            spReedCountAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            val spReedCountAdapter =ArrayAdapter<String>(this, R.layout.spinner_item, arrReedCountStr)
+            spReedCountAdapter.setDropDownViewResource(R.layout.spinner_item)
             sp_reed_count.setAdapter(spReedCountAdapter)
             sp_reed_count.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -380,9 +384,9 @@ class AdminAddProductTemplateActivity : AppCompatActivity(),
             }
             et_prod_name.setText(productEntry?.productTag?:"", TextView.BufferType.EDITABLE)
             et_prod_code.setText(productEntry?.productCode?:"", TextView.BufferType.EDITABLE)
-            sp_prod_category.setSelection(arrProdCategoryStr.indexOf(productEntry?.productCategoryDesc?:""))
+            sp_prod_category.setSelection(arrProdCategoryStr.indexOf(productEntry?.productCategoryName?:""))
             arrProductCategory?.forEach {
-                if(it.productDesc.equals(productEntry?.productCategoryDesc)){
+                if(it.productDesc.equals(productEntry?.productCategoryName)){
                     arrProdTypeStr.clear()
                     arrProdTypeStr.add("Select product type")
                     it.productTypes?.forEach { arrProdTypeStr.add(it.productDesc) }
@@ -392,14 +396,11 @@ class AdminAddProductTemplateActivity : AppCompatActivity(),
             Log.e("Offline", "activity arrProdTypeStr :" +arrProdTypeStr?.size)
             Log.e("Offline", "activity productTypeDesc :" +productEntry?.productTypeDesc?:"")
             Log.e("Offline", "activity idex :" +arrProdTypeStr.indexOf(productEntry?.productTypeDesc?:""))
-//            val spProdTypeAdapter = ArrayAdapter<String>( applicationContext,  android.R.layout.simple_spinner_item,  arrProdTypeStr)
-//            spProdTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-//            sp_prod_type.setAdapter(spProdTypeAdapter)
             sp_prod_type.setSelection(arrProdTypeStr.indexOf(productEntry?.productTypeDesc?:""))
 
 //            for (category in arrProductCategory!!)
                 arrProductCategory?.forEach{
-                if (it.productDesc.equals(productEntry?.productCategoryDesc?:"", true)) {
+                if (it.productDesc.equals(productEntry?.productCategoryName?:"", true)) {
                     arrProductType = it.productTypes
                     it.productTypes.forEach { arrProdTypeStr?.add(it.productDesc) }
                 }
@@ -452,7 +453,7 @@ class AdminAddProductTemplateActivity : AppCompatActivity(),
 
             et_gsm.setText(productEntry?.gsm?:"", TextView.BufferType.EDITABLE)
             et_prod_weight.setText(productEntry?.weight?:"", TextView.BufferType.EDITABLE)
-            et_dscrp.setText(productEntry?.productSpecs?:"", TextView.BufferType.EDITABLE)
+            et_dscrp.setText(productEntry?.product_spe?:"", TextView.BufferType.EDITABLE)
 
             mUserConfig.warpYarnId=productEntry?.warpYarnId
             mUserConfig.warpYarnCount=productEntry?.warpYarnCount
@@ -634,11 +635,12 @@ class AdminAddProductTemplateActivity : AppCompatActivity(),
         tvDelete.setOnClickListener {
             ProductPredicates.updateProductForDeletion(productId)
             if (Utility.checkIfInternetConnected(applicationContext)) {
-                val coordinator = SyncCoordinator(applicationContext)
-                coordinator?.performLocallyAvailableActions()
+              pbLoader?.visibility=View.VISIBLE
+              mProdVm?.deletedProdListener=this
+              mProdVm.deleteProduct(productId)
             }
+            else Utility.displayMessage(getString(R.string.no_internet_connection),this)
             dialog.cancel()
-            finish()
         }
     }
 
@@ -681,8 +683,8 @@ class AdminAddProductTemplateActivity : AppCompatActivity(),
         } else {
             sp_prod_width.visibility = View.VISIBLE
             et_prod_width.visibility = View.GONE
-            val spwidthAdapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrProdWidthStr)
-            spwidthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            val spwidthAdapter = ArrayAdapter<String>(this, R.layout.spinner_item, arrProdWidthStr)
+            spwidthAdapter.setDropDownViewResource(R.layout.spinner_item)
             sp_prod_width.setAdapter(spwidthAdapter)
             if(productId>0)sp_prod_width.setSelection(arrProdWidthStr.indexOf(productEntry?.productWidth?:""))
         }
@@ -693,8 +695,8 @@ class AdminAddProductTemplateActivity : AppCompatActivity(),
         } else {
             sp_prod_length.visibility = View.VISIBLE
             et_prod_length.visibility = View.GONE
-            val spLenghtAdapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrProdLengthStr)
-            spLenghtAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            val spLenghtAdapter = ArrayAdapter<String>(this, R.layout.spinner_item, arrProdLengthStr)
+            spLenghtAdapter.setDropDownViewResource(R.layout.spinner_item)
             sp_prod_length.setAdapter(spLenghtAdapter)
             if(productId>0)sp_prod_length.setSelection(arrProdLengthStr.indexOf(productEntry?.productLength?:""))
         }
@@ -717,13 +719,13 @@ class AdminAddProductTemplateActivity : AppCompatActivity(),
                 txt_related_prod_type.text = arrRelatedProdType.get(0).productDesc
 
                 arrRelatedProdType.get(0).productLengths.forEach { arrSubProdLengthStr.add(it.length) }
-                val splengthAdapter = ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, arrSubProdLengthStr)
-                splengthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                val splengthAdapter = ArrayAdapter<String>(this,R.layout.spinner_item, arrSubProdLengthStr)
+                splengthAdapter.setDropDownViewResource(R.layout.spinner_item)
                 sp_sub_prod_length.setAdapter(splengthAdapter)
 
                 arrRelatedProdType.get(0).productWidths.forEach { arrSubProdWidthStr.add(it.width) }
-                val spwidthAdapter =ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, arrSubProdWidthStr)
-                spwidthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                val spwidthAdapter =ArrayAdapter<String>(this,R.layout.spinner_item, arrSubProdWidthStr)
+                spwidthAdapter.setDropDownViewResource(R.layout.spinner_item)
                 sp_sub_prod_width.setAdapter(spwidthAdapter)
                 if(productId>0){
                     sp_sub_prod_length.setSelection(arrSubProdLengthStr.indexOf(relatedProdStored?.productLength))
@@ -747,12 +749,12 @@ class AdminAddProductTemplateActivity : AppCompatActivity(),
             img_made_to_order.setBackgroundResource(R.drawable.bg_availability_unselected)
             img_in_stock.setBackgroundResource(R.drawable.bg_availability_selected)
             txt_made_to_order.setTextColor(this.resources.getColor(R.color.clickable_text_color))
-            txt_available.setTextColor(this.resources.getColor(R.color.black_text))
+            txt_available.setTextColor(this.resources.getColor(R.color.lighter_gray))
         } else {
             status = 2
             img_made_to_order.setBackgroundResource(R.drawable.bg_availability_selected)
             img_in_stock.setBackgroundResource(R.drawable.bg_availability_unselected)
-            txt_made_to_order.setTextColor(this.resources.getColor(R.color.black_text))
+            txt_made_to_order.setTextColor(this.resources.getColor(R.color.lighter_gray))
             txt_available.setTextColor(this.resources.getColor(R.color.clickable_text_color))
         }
         setStatusResource()
@@ -862,19 +864,8 @@ class AdminAddProductTemplateActivity : AppCompatActivity(),
                 applicationContext
             )
             else {
-                var dialog = Dialog(this)
-                dialog?.setContentView(R.layout.dialog_save_upload)
-                dialog?.show()
-                val tvCancel = dialog?.findViewById(R.id.cancel) as TextView
-                val tvSave = dialog?.findViewById(R.id.save) as TextView
-                tvCancel.setOnClickListener {
-                    dialog.cancel()
-                }
-                tvSave.setOnClickListener {
-                   dialog.dismiss()
                    if(productId>0) callUpdate(width, length)
                    else callSave(width,length)
-                }
             }
         } catch (e: Exception) {
             Utility.displayMessage("Please fill all details", applicationContext)
@@ -929,16 +920,7 @@ class AdminAddProductTemplateActivity : AppCompatActivity(),
                 val pair = Utility.validTotalFileSize(result)
                 val status = pair.first
                 if (status) {
-                    ProductPredicates.insertArtisanProductOffline(
-                        template,
-                        list,
-                        relatedProduct
-                    )
-                    if (Utility.checkIfInternetConnected(applicationContext)) {
-                        val coordinator = SyncCoordinator(applicationContext)
-                        coordinator?.performLocallyAvailableActions()
-                    }
-
+                    startActivity(selectArtisanActivityIntent(template.toString(),list.joinToString (";")))
                     finish()
                 } else
                     Utility.displayMessage(
@@ -951,21 +933,63 @@ class AdminAddProductTemplateActivity : AppCompatActivity(),
     }
 
     fun callUpdate(width:String,length:String){
-        var carelist=ArrayList<com.adrosonic.craftexchangemarketing.repository.data.request.artisan.productTemplate.ProductCare>()
-        careIdList.forEach { carelist.add(com.adrosonic.craftexchangemarketing.repository.data.request.artisan.productTemplate.ProductCare(System.currentTimeMillis(),it,productId)) }
+        var carelist=ArrayList<String>()
+        careIdList.forEach {
+            var pc=com.adrosonic.craftexchangemarketing.repository.data.request.artisan.productTemplate.ProductCare()
+            pc.id=0L
+            pc.productCareId=it
+            pc.productId=prodCatId.toString()
+            carelist.add(pc.toString()) }
 
-        var weavelist=ArrayList<com.adrosonic.craftexchangemarketing.repository.data.request.artisan.productTemplate.ProductWeaf>()
-        weaveIdList.forEach { weavelist.add(com.adrosonic.craftexchangemarketing.repository.data.request.artisan.productTemplate.ProductWeaf(System.currentTimeMillis(),productId,it)) }
-
-        var relProdList=ArrayList<com.adrosonic.craftexchangemarketing.repository.data.request.artisan.productTemplate.RelProduct>()
-        if (arrRelatedProdType!!.size > 0) {
-           var relprod=RelProduct(arrRelatedProdType?.get(0)?.id ?: 0,sp_sub_prod_width?.selectedItem.toString(),sp_sub_prod_length?.selectedItem.toString())
-           relProdList.add(relprod)
+        var weavelist=ArrayList<String>()
+        weaveIdList.forEach {
+            var weave=com.adrosonic.craftexchangemarketing.repository.data.request.artisan.productTemplate.ProductWeaf()
+            weave.id=productId
+            weave.weaveId=it
+            weavelist.add(weave.toString())
         }
 
-        var template = UpdateProductTemplateRequest(et_prod_code.text.toString(),extraWeftDyeId,extraWeftYarnCount,extraWeftYarnId,et_gsm.text.toString(),productId,
-        length,carelist.toList(),prodCatId?:0,status,prodTypeId?:0,weavelist,et_dscrp.text.toString(),reedCountId,relProdList,
-        et_prod_name.text.toString(),warpDyeId,warpYarnCount,warpYarnId,weftDyeId,weftYarnCount,weftYarnId,et_prod_weight.text.toString(),width)
+//        var relProdList=ArrayList<com.adrosonic.craftexchangemarketing.repository.data.request.artisan.productTemplate.Re>()
+//        if (arrRelatedProdType!!.size > 0) {
+//           var relprod=RelProduct(arrRelatedProdType?.get(0)?.id ?: 0,sp_sub_prod_width?.selectedItem.toString(),sp_sub_prod_length?.selectedItem.toString())
+//           relProdList.add(relprod)
+//        }
+        if (arrRelatedProdType!!.size > 0) {
+            var relatedProductObj = RelatedProduct()
+            relatedProductObj.length = sp_sub_prod_length?.selectedItem.toString()
+            relatedProductObj.width = sp_sub_prod_width?.selectedItem.toString()
+            relatedProductObj.productTypeID = arrRelatedProdType?.get(0)?.id ?: 0
+            relatedProduct.add(relatedProductObj)
+        }
+//        var template = UpdateProductTemplateRequest(et_prod_code.text.toString(),extraWeftDyeId,extraWeftYarnCount,extraWeftYarnId,et_gsm.text.toString(),productId,
+//        length,carelist.toList(),prodCatId?:0,status,prodTypeId?:0,weavelist,et_dscrp.text.toString(),reedCountId,relProdList,
+//        et_prod_name.text.toString(),warpDyeId,warpYarnCount,warpYarnId,weftDyeId,weftYarnCount,weftYarnId,et_prod_weight.text.toString(),width)
+
+        var template = UpdateProductTemplateRequest()
+        template.id = productId.toString()
+        template.tag = et_prod_name.text.toString()
+        template.code = et_prod_code.text.toString()
+        template.productCategoryId = prodCatId ?: 0
+        template.productTypeId = prodTypeId ?: 0
+        template.productSpec = et_dscrp.text.toString().replace("\n"," ")
+        template.weight = et_prod_weight.text.toString()
+        template.productCares = "["+carelist.joinToString(",")+"]"
+        template.productWeaves ="["+weavelist.joinToString (",")+"]"
+        template.statusId = status
+        template.gsm = et_gsm.text.toString()
+        template.warpDyeId = warpDyeId
+        template.warpYarnCount = warpYarnCount
+        template.warpYarnId = warpYarnId
+        template.weftDyeId = weftDyeId
+        template.weftYarnCount = weftYarnCount
+        template.weftYarnId = weftYarnId
+        template.extraWeftYarnId = extraWeftYarnId.toString()
+        template.extraWeftYarnCount = extraWeftYarnCount
+        template.extraWeftDyeId = extraWeftDyeId.toString()
+        template.width = width
+        template.length = length
+        template.reedCountId = reedCountId
+        if (relatedProduct.size > 0) template.relatedProduct = relatedProduct.get(0).toString()
 
         val dialogCompresion = CompressionProgressDialog()
         dialogCompresion.show(
@@ -983,18 +1007,11 @@ class AdminAddProductTemplateActivity : AppCompatActivity(),
                 val pair = Utility.validTotalFileSize(result)
                 val status = pair.first
                 if (status) {
-                    ProductPredicates.updateArtisanProductOffline(
-                        template,
-                        list,
-                        deletedPaths,
-                        relatedProduct
-                    )
                     if (Utility.checkIfInternetConnected(applicationContext)) {
-                        val coordinator = SyncCoordinator(applicationContext)
-                        coordinator?.performLocallyAvailableActions()
-                    }
+                        pbLoader?.visibility=View.VISIBLE
+                        mProdVm?.editProduct(template.toString(),list)
+                    }else  Utility.displayMessage(getString(R.string.no_internet_connection),  applicationContext )
 
-                    finish()
                 } else
                     Utility.displayMessage(
                         "One of image size exceeds 1MB limit, kindly remove the it to continue",
@@ -1113,6 +1130,39 @@ class AdminAddProductTemplateActivity : AppCompatActivity(),
             Handler(Looper.getMainLooper()).post(Runnable {
                 pbLoader?.visibility=View.GONE
                 Utility.displayMessage("Unable to download product images",this)
+            }
+            )
+        } catch (e: Exception) {
+            Log.e("ArtisanProduct", "Exception onSuccess " + e.message)
+        }
+    }
+
+    override fun onUploadSuccess() {
+        finish()
+    }
+
+    override fun onUploadFailure() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                pbLoader?.visibility=View.GONE
+                Log.e("Offline", "onUploadFailure")
+                Utility.displayMessage("Unable to edit product",this)
+            }
+            )
+        } catch (e: Exception) {
+            Log.e("ArtisanProduct", "Exception onSuccess " + e.message)
+        }
+    }
+
+    override fun onDeleteSuccess() {
+        finish()
+    }
+
+    override fun onDeleteFailure() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                pbLoader?.visibility=View.GONE
+                Utility.displayMessage("Unable to delete product",this)
             }
             )
         } catch (e: Exception) {

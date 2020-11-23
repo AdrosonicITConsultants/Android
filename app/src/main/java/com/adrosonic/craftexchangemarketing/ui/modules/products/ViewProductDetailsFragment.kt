@@ -44,7 +44,7 @@ ProductCatViewModal.ProductDetailsInterface{
      var mBinding : FragmentViewProductDetailsBinding?= null
 
     var productID : Long ?= 0
-    var isCustomProduct : Boolean ?= false
+    var isAntran : Boolean ?= false
     var jsonProductData : String ?=""
     var productUploadData : ProductUploadData?= null
     private var mUserConfig = UserConfig()
@@ -67,7 +67,7 @@ ProductCatViewModal.ProductDetailsInterface{
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_view_product_details, container, false)
         arguments?.let {
             productID = it.getLong(ARG_PARAM1)
-            isCustomProduct = it.getBoolean(ARG_PARAM2)
+            isAntran = it.getBoolean(ARG_PARAM2)
         }
 
         jsonProductData = mUserConfig.productUploadJson.toString()
@@ -92,6 +92,8 @@ ProductCatViewModal.ProductDetailsInterface{
         mBinding?.imgEditProduct?.setOnClickListener {
             productDetails?.productId?.let {  context?.startActivity(context?.addAdminProductIntent(it))}
         }
+        if(isAntran!!)mBinding?.imgEditProduct?.visibility=View.VISIBLE
+        else mBinding?.imgEditProduct?.visibility=View.GONE
     }
 
     fun viewLoader(){
@@ -104,11 +106,15 @@ ProductCatViewModal.ProductDetailsInterface{
         mBinding?.progressLayout?.visibility = View.GONE
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//        isCustomProduct?.let { productID?.let { it1 -> mViewModel.getEnqProductDetails(it1, it) } }
-//        setDetails()
-//    }
+    override fun onResume() {
+        super.onResume()
+        if(Utility.checkIfInternetConnected(requireActivity())){
+            productID?.let { mViewModel?.getArtisanProduct(it) }
+            viewLoader()
+        }else{
+            Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
+        }
+    }
 
     override fun onFailure() {
         try {
@@ -183,11 +189,11 @@ ProductCatViewModal.ProductDetailsInterface{
             for (size in imageList){
                 Log.i("Stat","$size")
                 var imagename = size?.imageName
-                if(isCustomProduct == true){
-                    url = Utility.getCustomProductImagesUrl(productDetails?.productId, imagename)
-                }else{
+//                if(isAntran == true){
+//                    url = Utility.getCustomProductImagesUrl(productDetails?.productId, imagename)
+//                }else{
                     url = Utility.getProductsImagesUrl(productDetails?.productId, imagename)
-                }
+//                }
                 imageUrlList.add(url!!)
             }
             if(imageUrlList !=null) {

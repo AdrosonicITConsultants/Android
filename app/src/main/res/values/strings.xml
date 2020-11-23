@@ -123,7 +123,7 @@
     <string name="edit_profile">Edit profile</string>
     <string name="artisan_rating_text">Avg. rating by artisans</string>
     <string name="general">General</string>
-<!--    <string name="brand">Brand</string>-->
+    <!--    <string name="brand">Brand</string>-->
     <string name="delivery">Delivery</string>
     <string name="reg_addr">Registered address</string>
     <string name="delivery_addr">Delivery address</string>

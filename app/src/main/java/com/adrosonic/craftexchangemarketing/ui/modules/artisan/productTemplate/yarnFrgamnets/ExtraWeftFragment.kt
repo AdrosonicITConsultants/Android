@@ -12,7 +12,9 @@ import android.widget.*
 import com.adrosonic.craftexchangemarketing.R
 import com.adrosonic.craftexchangemarketing.database.entities.realmEntities.ArtisanProducts
 import com.adrosonic.craftexchangemarketing.database.entities.realmEntities.BuyerCustomProduct
+import com.adrosonic.craftexchangemarketing.database.entities.realmEntities.EnquiryProductDetails
 import com.adrosonic.craftexchangemarketing.database.predicates.BuyerCustomProductPredicates
+import com.adrosonic.craftexchangemarketing.database.predicates.EnquiryPredicates
 import com.adrosonic.craftexchangemarketing.database.predicates.ProductPredicates
 import com.adrosonic.craftexchangemarketing.repository.data.response.artisan.productTemplate.uploadData.Dye
 import com.adrosonic.craftexchangemarketing.repository.data.response.artisan.productTemplate.uploadData.ProductUploadData
@@ -58,7 +60,7 @@ class ExtraWeftFragment : Fragment() {
     lateinit var etYarnCount: EditText
     lateinit var spYarnDye : Spinner
 
-    var artisanProductEntry: ArtisanProducts?=null
+    var artisanProductEntry: EnquiryProductDetails?=null
     var buyerProductEntry: BuyerCustomProduct?=null
 
     var typeSelection=""
@@ -99,12 +101,12 @@ class ExtraWeftFragment : Fragment() {
         arrYarnCountStr.clear()
         arrYarnCountStr.add("Select count")
         arrYarn?.forEach { arrYarneStr.add(it.yarnDesc) }
-        val spYarnAdapter = ArrayAdapter<String>(this.requireContext(), android.R.layout.simple_spinner_item, arrYarneStr)
-        spYarnAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
+        val spYarnAdapter = ArrayAdapter<String>(this.requireContext(), R.layout.spinner_item, arrYarneStr)
+        spYarnAdapter.setDropDownViewResource(R.layout.spinner_item)
         spYarnType.adapter = spYarnAdapter
 
-        val spCountAdapter = ArrayAdapter<String>(this.requireContext(), android.R.layout.simple_spinner_item, arrYarnCountStr)
-        spCountAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        val spCountAdapter = ArrayAdapter<String>(this.requireContext(), R.layout.spinner_item, arrYarnCountStr)
+        spCountAdapter.setDropDownViewResource(R.layout.spinner_item)
         spYarnCount.adapter = spCountAdapter
 
         spYarnType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -160,8 +162,8 @@ class ExtraWeftFragment : Fragment() {
         arrDyeStr.clear()
         arrDyeStr.add("Select dye")
         arrDye?.forEach { arrDyeStr.add(it.dyeDesc) }
-        val spDyeAdapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, arrDyeStr)
-        spDyeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        val spDyeAdapter = ArrayAdapter<String>(requireContext(), R.layout.spinner_item, arrDyeStr)
+        spDyeAdapter.setDropDownViewResource(R.layout.spinner_item)
         spYarnDye.adapter = spDyeAdapter
         spYarnDye.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -185,7 +187,7 @@ class ExtraWeftFragment : Fragment() {
 
         if(productId!!>0) {
             if (isTemplate!!) {
-                artisanProductEntry = ProductPredicates.getArtisanProductsByRemoteId(productId)
+                artisanProductEntry =  EnquiryPredicates.getEnqProduct(productId,false)//ProductPredicates.getArtisanProductsByRemoteId(productId)
                 yarnType = artisanProductEntry?.extraWeftYarnId ?: 0
                 yarnCount = artisanProductEntry?.extraWeftYarnCount ?: ""
                 dyeId = artisanProductEntry?.extraWeftDyeId ?: 0

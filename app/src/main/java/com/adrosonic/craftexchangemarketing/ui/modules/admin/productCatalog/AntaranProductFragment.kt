@@ -67,17 +67,21 @@ class AntaranProductFragment() :Fragment(),
         super.onViewCreated(view, savedInstanceState)
         mViewModel?.listener=this
         getClusters()
+        setCount()
         if (!Utility.checkIfInternetConnected(requireContext())) {
             Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
         } else {
-            mBinding?.pbLoader?.visibility=View.VISIBLE
+            mBinding?.swipeRefreshLayout?.isRefreshing=true
             mViewModel.getArtisanProducts()
         }
         mBinding?.productList?.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        prodAdapter = ProductCatalogueListAdapter(requireContext(), mViewModel.getProductsMutableData(roleId,"","","").value)
+        prodAdapter = ProductCatalogueListAdapter(requireContext(), mViewModel.getProductsMutableData(roleId,"","","").value,true)
         mBinding?.productList?.adapter = prodAdapter
         Log.e("Wishlist", "Size :" + mViewModel.getProductsMutableData(roleId,"","","").value?.size)
-
+        mBinding?.swipeRefreshLayout?.setOnRefreshListener {
+            mBinding?.swipeRefreshLayout?.isRefreshing=true
+            mViewModel.getArtisanProducts()
+        }
         mViewModel.getProductsMutableData(roleId,"","","").observe(viewLifecycleOwner, Observer<RealmResults<AdminProductCatalogue>> {
             prodAdapter.updateProducts(it)
         })
@@ -102,7 +106,7 @@ class AntaranProductFragment() :Fragment(),
     override fun onSuccess() {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
-                mBinding?.pbLoader?.visibility=View.GONE
+                mBinding?.swipeRefreshLayout?.isRefreshing=false
                 mViewModel.getProductsMutableData(roleId,"","","")
             }
             )
@@ -114,7 +118,7 @@ class AntaranProductFragment() :Fragment(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("ArtisanDatabaseFragment", "onFailure")
-                mBinding?.pbLoader?.visibility=View.GONE
+                mBinding?.swipeRefreshLayout?.isRefreshing=false
             }
             )
         } catch (e: Exception) {
@@ -137,7 +141,7 @@ class AntaranProductFragment() :Fragment(),
     private fun apiCall(availability: Long, clusterID: Long, madeWithAntaran: Long, pageNo: Long,
                         searchStr: String,sortBy: String,sortType: String){
         if(Utility.checkIfInternetConnected(requireContext())){
-            mBinding?.pbLoader?.visibility=View.VISIBLE
+            mBinding?.swipeRefreshLayout?.isRefreshing=false
             mViewModel.getArtisanProducts()
         } else Utility.displayMessage(requireContext().getString(R.string.no_internet_connection),requireContext())
     }
@@ -150,8 +154,6 @@ class AntaranProductFragment() :Fragment(),
         }
 
     }
-
-
         fun setCount(){
             mBinding?.totalProdCount?.text="Total Products: ${mViewModel.getProductsMutableData(roleId,"","","").value?.size}"
         }

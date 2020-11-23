@@ -49,8 +49,8 @@ class ProductCaresPredicates {
                         else  nextID = primId.toLong() + 1
 
                         var weaveObj = it.createObject(ProductCares::class.java, nextID)
-                        weaveObj.productId = id.productId
-                        weaveObj.careId = id.productCareId
+                        weaveObj.productId = id.productId.toLong()
+//                        weaveObj.careId = id.productCareId
                         weaveObj.productCareId = 0
                     }
                 }

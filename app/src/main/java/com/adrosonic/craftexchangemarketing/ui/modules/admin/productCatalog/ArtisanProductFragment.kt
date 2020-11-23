@@ -68,14 +68,17 @@ class ArtisanProductFragment() :Fragment(),
         if (!Utility.checkIfInternetConnected(requireContext())) {
             Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
         } else {
-            mBinding?.pbLoader?.visibility=View.VISIBLE
+            mBinding?.swipeRefreshLayout?.isRefreshing=true
             mViewModel.getArtisanProducts()
         }
         mBinding?.productList?.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        prodAdapter = ProductCatalogueListAdapter(requireContext(), mViewModel.getProductsMutableData(roleId,"","","").value)
+        prodAdapter = ProductCatalogueListAdapter(requireContext(), mViewModel.getProductsMutableData(roleId,"","","").value,false)
         mBinding?.productList?.adapter = prodAdapter
         Log.e("ArtisanProduct", "Size :" + mViewModel.getProductsMutableData(roleId,"","","").value?.size)
-
+        mBinding?.swipeRefreshLayout?.setOnRefreshListener {
+            mBinding?.swipeRefreshLayout?.isRefreshing=true
+            mViewModel.getArtisanProducts()
+        }
         mViewModel.getProductsMutableData(roleId,"","","").observe(viewLifecycleOwner, Observer<RealmResults<AdminProductCatalogue>> {
             prodAdapter.updateProducts(it)
         })
@@ -94,12 +97,12 @@ class ArtisanProductFragment() :Fragment(),
         mBinding?.btnApply?.setOnClickListener {
             val searchStr= if(mBinding?.searchArtisan?.text.toString().isNullOrEmpty()) "" else  mBinding?.searchArtisan?.text.toString()
 
-            if (!Utility.checkIfInternetConnected(requireContext())) {
-                Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
-            } else {
-                mBinding?.pbLoader?.visibility=View.VISIBLE
-                mViewModel.getArtisanProducts()
-            }
+//            if (!Utility.checkIfInternetConnected(requireContext())) {
+//                Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
+//            } else {
+//                mBinding?.pbLoader?.visibility=View.VISIBLE
+//                mViewModel.getArtisanProducts()
+//            }
             mViewModel?.getProductsMutableData(roleId,searchStr,mBinding?.spCluster?.selectedItem.toString(),mBinding?.spAvailability?.selectedItem.toString())
         }
 
@@ -107,7 +110,7 @@ class ArtisanProductFragment() :Fragment(),
     override fun onSuccess() {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
-                mBinding?.pbLoader?.visibility=View.GONE
+                mBinding?.swipeRefreshLayout?.isRefreshing=false
                 mViewModel.getProductsMutableData(roleId,"","","")
             }
             )
@@ -119,7 +122,7 @@ class ArtisanProductFragment() :Fragment(),
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("ArtisanDatabaseFragment", "onFailure")
-                mBinding?.pbLoader?.visibility=View.GONE
+                mBinding?.swipeRefreshLayout?.isRefreshing=false
             }
             )
         } catch (e: Exception) {
