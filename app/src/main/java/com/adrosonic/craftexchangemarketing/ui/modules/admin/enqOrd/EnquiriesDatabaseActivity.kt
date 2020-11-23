@@ -114,7 +114,7 @@ EnquiryOrderViewModel.EnquiryListInterface{
                 mBinding?.textView32?.text = "Incomplete and Closed Orders"
             }
             5.toLong() -> {
-                mBinding?.textView32?.text = "Closed           Orders"
+                mBinding?.textView32?.text = "Completed           Orders"
 
             }
 

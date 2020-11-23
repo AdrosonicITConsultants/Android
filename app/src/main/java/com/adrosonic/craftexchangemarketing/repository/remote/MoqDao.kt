@@ -10,26 +10,26 @@ import retrofit2.http.*
 
 interface MoqDao {
     @Headers("Accept: application/json")
-    @POST("/enquiry/sendMoq/{enquiryId}")
+    @POST("api/enquiry/sendMoq/{enquiryId}")
     fun sendMoq(@Header("Authorization") token:String,
                         @Path("enquiryId") enquiryId : Int,
                         @Body moq: SendMoqRequest
     ) : Call<SendMoqResponse>
 
     @Headers("Accept: application/json")
-    @GET("/enquiry/getMoqDeliveryTimes")
+    @GET("api/enquiry/getMoqDeliveryTimes")
     fun getMoqDeliveryTimes(@Header("Authorization") token:String) : Call<MoqDeliveryTimesResponse>
 
     @Headers("Accept: application/json")
-    @GET("/enquiry/getMoq/{enquiryId}")
+    @GET("api/enquiry/getMoq/{enquiryId}")
     fun getMoq(@Header("Authorization") token:String, @Path("enquiryId") enquiryId : Int) : Call<SendMoqResponse>
 
     @Headers("Accept: application/json")
-    @GET("/enquiry/getMoqs/{enquiryId}")
+    @GET("api/enquiry/getMoqs/{enquiryId}")
     fun getMoqs(@Header("Authorization") token:String, @Path("enquiryId") enquiryId : Int) : Call<GetMoqsResponse>
 
     @Headers("Accept: application/json")
-    @POST("/enquiry/MoqSelected/{enquiryId}/{moqId}/{artisanId}")
+    @POST("api/enquiry/MoqSelected/{enquiryId}/{moqId}/{artisanId}")
     fun moqSelected(@Header("Authorization") token:String,
                     @Path("enquiryId") enquiryId : Int,
                     @Path("moqId") moqId : Int,

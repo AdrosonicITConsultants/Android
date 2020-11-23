@@ -12,15 +12,15 @@ import retrofit2.http.*
 interface NotificationDao {
 
     @Headers("Accept: application/json")
-    @GET("/notification/getAllNotifications")
+    @GET("api/notification/getAllNotifications")
     fun getAllNotifications(@Header("Authorization") token: String): Call<NotificationResponse>
 
     @Headers("Accept: application/json")
-    @POST("/notification/markAsRead/{notificationId}")
+    @POST("api/notification/markAsRead/{notificationId}")
     fun markSingleNotificationAsRead(@Header("Authorization") token: String,@Path("notificationId")notificationId:Long): Call<NotificationReadResponse>
 
     @Headers("Accept: application/json")
-    @POST("/notification/markAllAsRead")
+    @POST("api/notification/markAllAsRead")
     fun markAllNotificationsAsRead(@Header("Authorization") token:String) : Call<NotificationReadResponse>
 
 }

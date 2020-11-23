@@ -251,9 +251,15 @@
     <string name="type_your_msg">Type your message here</string>
     <string name="please_wait">Please wait...</string>
     <string name="swipe_up_to_close">Click up to close</string>
-
+    <string name="view_receipt">View Receipt</string>
+    <string name="title_activity_transaction">TransactionActivity</string>
+    <string name="search_transac_by_enquiryId">Search by Enquiry ID</string>
+    <string name="your_transactions">Your Transactions</string>
+    <string name="view_invoice">View Invoice</string>
+    <string name="filter_transac_by">Filter transactions by :</string>
     <string name="view_details">View Details</string>
     <string name="go_to_enquiry">\tGo to enquiry</string>
+    <string name="unable_download_pdf">Unable to download PDF, pleas try again later</string>
 
     <string name="title_activity_buyer_add_own_product_design">BuyerAddOwnProductDesign</string>
     <!-- Strings used for fragments for navigation -->
@@ -291,6 +297,8 @@
     <string name="upload_trans_receipt">Select amount &amp; upload receipt</string>
     <string name="previous">Previous</string>
     <string name="current">Current</string>
+    <string name="tax_invoice">Tax invoice</string>
+
     <string name="requested_custom_design">Requested Custom Design</string>
     <string name="awaiting_payment_receipt">Awaiting Payment Receipt</string>
     <string name="check_details">Check Details</string>

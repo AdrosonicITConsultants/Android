@@ -10,7 +10,7 @@ import retrofit2.http.*
 interface WishlistDao {
 
     @Headers("Accept: application/json")
-    @POST("product/addToWishlist/{productId}")
+    @POST("api/product/addToWishlist/{productId}")
     fun addToWishlist(@Header("Authorization") token:String,
                       @Path("productId") productId : Long
     ) : Call<ResponseBody>
@@ -28,14 +28,14 @@ interface WishlistDao {
 
     //////////////////////////////////////WishlistedProducts////////////////////////////////////////
     @Headers("Accept: application/json")
-    @GET("product/getProductIdsInWishlist")
+    @GET("api/product/getProductIdsInWishlist")
     fun getWishlistedProductIds(@Header("Authorization") token: String): Call<WishListedIds>
 
     @Headers("Accept: application/json")
-    @GET("product/getProduct/{productId}")
+    @GET("api/product/getProduct/{productId}")
     fun getSingleProductDetails(@Header("Authorization") token: String,@Path("productId")productId:Int): Call<SingleProductDetails>
 
     @Headers("Accept: application/json")
-    @GET("product/getProduct/{productId}")
+    @GET("api/product/getProduct/{productId}")
     fun searchProductDetails(@Header("Authorization") token: String,@Path("productId")productId:Int): Call<SearchProdData>
 }

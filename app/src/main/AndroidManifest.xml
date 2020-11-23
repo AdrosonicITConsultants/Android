@@ -109,7 +109,13 @@
             android:name=".ui.modules.buyer.profile.BuyerProfileActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.modules.cx_demovideo.CXVideoActivity"
+        android:name=".ui.modules.cx_demovideo.CXVideoActivity"
+        android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.modules.admin.enqOrd.transaction.ViewDocumentActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.modules.admin.enqOrd.transaction.RaiseTaxInvActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.modules.buyer.landing.BuyerLandingActivity"

@@ -9,29 +9,29 @@ import retrofit2.http.*
 interface EnquiryOrderDao {
 
     @Headers("Accept: application/json")
-    @GET("/marketingTeam/getAdminEnquiryAndOrder")
+    @GET("api/marketingTeam/getAdminEnquiryAndOrder")
     fun getEnquiryOrderHomeCounts(@Header("Authorization") token: String): Call<EnquiryOrderCountResponse>
 
     @Headers("Accept: application/json")
-    @POST("/marketingTeam/getAdminEnquiries")
+    @POST("api/marketingTeam/getAdminEnquiries")
     fun getEnquiryList(@Header("Authorization") token: String,
                        @Body adminEnquiriesRequest : EnquiryDataRequest
                         ): Call<EnqiuiryListResponse>
 
     @Headers("Accept: application/json")
-    @POST("/marketingTeam/getAdminIncompletedAndClosedEnquiries")
+    @POST("api/marketingTeam/getAdminIncompletedAndClosedEnquiries")
     fun getEnquiryCompletedList(@Header("Authorization") token: String,
                                 @Body adminEnquiriesRequest : EnquiryDataRequest
     ): Call<EnqiuiryListResponse>
 
     @Headers("Accept: application/json")
-    @POST("/marketingTeam/getAdminOrders")
+    @POST("api/marketingTeam/getAdminOrders")
     fun getOrderList(@Header("Authorization") token: String,
                                 @Body adminEnquiriesRequest : EnquiryDataRequest
     ): Call<EnqiuiryListResponse>
 
     @Headers("Accept: application/json")
-    @POST("/marketingTeam/getAdminIncompletedAndClosedOrders")
+    @POST("api/marketingTeam/getAdminIncompletedAndClosedOrders")
     fun getOrderIncompletedList(@Header("Authorization") token: String,
                                 @Body adminEnquiriesRequest : EnquiryDataRequest
     ): Call<EnqiuiryListResponse>

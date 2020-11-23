@@ -29,7 +29,50 @@ object ImageSetter {
      * This method will set image into ImageView without using placeholder.
      * it will handel caching.
      * */
+    fun setFullImage(context: Context, imagePath:String, imageView: ImageView,mProgress: ProgressBar) {
+        try
+        {
+            Glide.with(context)
+                .load(imagePath)
+                .signature(ObjectKey((System.currentTimeMillis()).div(24*60*60*1000).toString())) //periodically refreshes the image for new
+                .apply(
+                    RequestOptions()
+                        .skipMemoryCache(false)
+                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                        .override(Target.SIZE_ORIGINAL))
+                .priority(Priority.IMMEDIATE)
+                .dontAnimate()
+                .listener(object:RequestListener<Drawable> {
 
+                    override fun onResourceReady(
+                        resource: Drawable?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        dataSource: DataSource?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        mProgress.visibility = View.GONE
+                        return false
+                    }
+
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        mProgress.visibility = View.GONE
+                        Log.e("Glide","Image loading exception "+e?.printStackTrace().toString())
+                        return false
+                    }
+                })
+                .into(imageView)
+
+        }
+        catch (ex:Exception) {
+            ex.printStackTrace()
+        }
+    }
     fun setImage(context: Context, imagePath:String, imageView: ImageView) {
         try
         {

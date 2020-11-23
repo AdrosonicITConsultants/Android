@@ -21,6 +21,7 @@ import com.adrosonic.craftexchangemarketing.repository.data.response.enquiry.Enq
 import com.adrosonic.craftexchangemarketing.repository.data.response.enquiry.EnquiryStageData
 import com.adrosonic.craftexchangemarketing.repository.data.response.logout.LogoutResponse
 import com.adrosonic.craftexchangemarketing.repository.data.response.moq.MoqDeliveryTimesResponse
+import com.adrosonic.craftexchangemarketing.repository.data.response.transaction.TransactionStatusData
 import com.adrosonic.craftexchangemarketing.utils.ConstantsDirectory
 import com.adrosonic.craftexchangemarketing.utils.UserConfig
 import com.adrosonic.craftexchangemarketing.utils.Utility
@@ -86,7 +87,25 @@ class LandingViewModel(application: Application) : AndroidViewModel(application)
 
             })
     }
+    fun getTransactionStatus(){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
 
+        craftexchangemarketingRepository
+            .getTransactionService()
+            .getTransactionStatus(token).enqueue(object : Callback, retrofit2.Callback<TransactionStatusData> {
+                override fun onFailure(call: Call<TransactionStatusData>, t: Throwable) {
+                    t.printStackTrace()
+                }
+                override fun onResponse(
+                    call: Call<TransactionStatusData>,
+                    data: Response<TransactionStatusData>
+                ) {
+                    if(data.body()?.valid == true){
+                        UserConfig.shared.transactionStatusData= Gson().toJson(data.body())
+                    }
+                }
+            })
+    }
     fun getProductUploadData(){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         craftexchangemarketingRepository

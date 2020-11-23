@@ -13,24 +13,24 @@ import retrofit2.http.*
 interface LoginDao {
 
     @Headers("Accept: application/json")
-    @POST("login/authenticate")
+    @POST("api/login/authenticate")
     fun authenticateBuyer(@Header("Content-Type") headerValue:String,
                           @Body userAuthenticate : UserAuthModel
     ) : Call<BuyerResponse>
 
     @Headers("Accept: application/json")
-    @POST("login/authenticate")
+    @POST("api/login/authenticate")
     fun authenticateArtisan(@Header("Content-Type") headerValue:String,
                           @Body userAuthenticate : UserAuthModel
     ) : Call<ArtisanResponse>
 
     @Headers("Accept: application/json")
-    @GET("login/validateusername")
+    @GET("api/login/validateusername")
     fun validateUserName(@Query("emailOrMobile") emailOrMobile : String,
     @Query("roleId") roleId : Long) : Call<LoginValidationResponse>
 
     @Headers("Accept: application/json")
-    @POST("/login/authenticateMarketing")
+    @POST("api/login/authenticateMarketing")
     fun authenticateAdmin(@Header("Content-Type") headerValue:String,
                           @Body userAuthenticate : AdminAuthModel
     ) : Call<AdminResponse>

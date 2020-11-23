@@ -14,7 +14,7 @@ import retrofit2.http.*
 interface BuyerOwnDesignDao {
 
     @Headers("Accept: application/json")
-    @POST("/buyerCustomProduct/uploadProduct")
+    @POST("api/buyerCustomProduct/uploadProduct")
     fun uploadOwnProduct(
         @Header("Authorization") token: String,
         @Header("Content-Type") headerValue: String,
@@ -24,7 +24,7 @@ interface BuyerOwnDesignDao {
     ): Call<AddOwnDesignResponse>
 
     @Headers("Accept: application/json")
-    @PUT("/buyerCustomProduct/edit/product")
+    @PUT("api/buyerCustomProduct/edit/product")
     fun updateOwnProduct(
         @Header("Authorization") token: String,
         @Header("Content-Type") headerValue:String,
@@ -34,20 +34,20 @@ interface BuyerOwnDesignDao {
     ): Call<AddOwnDesignResponse>
 
     @Headers("Accept: application/json")
-    @GET("/buyerCustomProduct/getAllProducts")
+    @GET("api/buyerCustomProduct/getAllProducts")
     fun getAllOwnDesignProducts(
         @Header("Authorization") token: String
     ): Call<GetAllOwnDesignResponse>
 
     @Headers("Accept: application/json")
-    @GET("/buyerCustomProduct/getProduct/{productId}")
+    @GET("api/buyerCustomProduct/getProduct/{productId}")
     fun getSingleOwnDesignProduct(
         @Header("Authorization") token: String,
         @Path("productId") productId : Long
     ): Call<EnquiryProductResponse>
 
     @Headers("Accept: application/json")
-    @GET("/CustomProduct/{productId}/{imagename}")
+    @GET("api/CustomProduct/{productId}/{imagename}")
     fun getProductImage(
         @Path("productId") productId: Long,
         @Path("imagename") imagename: String

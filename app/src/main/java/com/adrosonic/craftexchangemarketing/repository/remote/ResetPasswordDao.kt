@@ -10,18 +10,18 @@ import retrofit2.http.*
 interface ResetPasswordDao {
 
     @Headers("Accept: application/json")
-    @POST("/forgotpassword/resetMarketingPassword")
+    @POST("api/forgotpassword/resetMarketingPassword")
     fun resetPassword(@Header("Content-Type") headerValue:String,
                      @Body userAuthenticate : AdminAuthModel
     ) : Call<ResetResponse>
 
     @Headers("Accept: application/json")
-    @GET("/forgotpassword/sendOtpToMarketingTeam")
+    @GET("api/forgotpassword/sendOtpToMarketingTeam")
     fun sendOtp(@Query("username") username : String
     ) : Call<ResetResponse>
 
     @Headers("Accept: application/json")
-    @POST("forgotpassword/verifyEmailOtp")
+    @POST("api/forgotpassword/verifyEmailOtp")
     fun verifyEmailOtp(@Header("Content-Type") headerValue:String,
                        @Body otpVerify : OtpVerifyModel
     ) : Call<ResetResponse>

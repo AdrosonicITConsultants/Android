@@ -448,30 +448,6 @@
 
             </LinearLayout>
 
-
-<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--                android:id="@+id/chatLayout"-->
-<!--                android:layout_width="409dp"-->
-<!--                android:layout_height="600dp"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/moq_details_layer">-->
-
-<!--                <com.github.bassaer.chatmessageview.view.ChatView-->
-<!--                    android:id="@+id/chat_view"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    app:date_separator_font_size="16sp"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="parent"-->
-<!--                    app:message_font_size="12sp"-->
-<!--                    app:message_max_width="200dp"-->
-<!--                    app:option_button_enable="true"-->
-<!--                    app:time_label_font_size="10sp"-->
-<!--                    app:username_font_size="12sp"></com.github.bassaer.chatmessageview.view.ChatView>-->
-
-<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
             <LinearLayout
                 android:id="@+id/pi_Details_layer"
                 android:layout_width="match_parent"
@@ -544,10 +520,11 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_arrow_down_olive"
-                    app:srcCompat="@drawable/ic_right_arrow_brown" />
+                    android:background="?attr/selectableItemBackground"
+                    android:src="@drawable/ic_right_arrow_purple"  />
 
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/buyer_Details_layer"
                 android:layout_width="match_parent"
@@ -620,8 +597,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_arrow_down_olive"
-                    app:srcCompat="@drawable/ic_right_arrow_brown" />
+                    android:background="?attr/selectableItemBackground"
+                    android:src="@drawable/ic_right_arrow_purple"  />
 
             </LinearLayout>
 
@@ -697,8 +674,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_arrow_down_olive"
-                    app:srcCompat="@drawable/ic_right_arrow_brown" />
+                    android:background="?attr/selectableItemBackground"
+                    android:src="@drawable/ic_right_arrow_purple"  />
 
         </LinearLayout>
 
@@ -773,8 +750,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_arrow_down_olive"
-                    app:srcCompat="@drawable/ic_right_arrow_brown" />
+                    android:background="?attr/selectableItemBackground"
+                    android:src="@drawable/ic_right_arrow_purple"  />
 
             </LinearLayout>
 
@@ -849,14 +826,215 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_arrow_down_olive"
-                    app:srcCompat="@drawable/ic_right_arrow_brown" />
+                    android:background="?attr/selectableItemBackground"
+                    android:src="@drawable/ic_right_arrow_purple"  />
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/view_payment_layer"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="#FFDDF3"
+                android:orientation="horizontal"
+                android:visibility="visible"
+                android:weightSum="10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/escalation_Details_layer">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="6"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center|start"
+                    android:text="Your Transactions"
+                    android:textColor="#D43A9E"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/view_transaction"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="3"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center|end"
+                    android:textColor="#D43A9E"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="?attr/selectableItemBackground"
+                    android:src="@drawable/ic_right_arrow_purple" />
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/transaction_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorBackground"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view_payment_layer" />
 
 
+            <LinearLayout
+                android:id="@+id/change_request_layer"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="#EDF0FF"
+                android:orientation="horizontal"
+                android:visibility="visible"
 
+                android:weightSum="10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/transaction_list">
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="3"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center|start"
+                    android:text="Change Request"
+                    android:textColor="#7793FF"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/txtCrDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="6"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center|end"
+                    android:textColor="#7793FF"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="?attr/selectableItemBackground"
+                    android:src="@drawable/ic_right_arrow_purple"
+                    android:tint="#7793FF" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/quality_check_layer"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="#7EDCFAAF"
+                android:orientation="horizontal"
+                android:visibility="visible"
+                android:weightSum="10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/change_request_layer">
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="2"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center|start"
+                    android:text="Quality Check"
+                    android:textColor="#7F8D54"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="7"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center|end"
+                    android:textColor="#7793FF"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="?attr/selectableItemBackground"
+                    android:src="@drawable/ic_right_arrow_purple"
+                    android:tint="@color/dark_green" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/tax_invoice_layer"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="#FFF5ED"
+                android:orientation="horizontal"
+                android:visibility="visible"
+                android:weightSum="10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/quality_check_layer">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="4"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center|start"
+                    android:text="Tax invoice"
+                    android:textColor="#BA7742"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/taxInvoiceAvail"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="5"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center|end"
+                    android:textColor="#BA7742"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="?attr/selectableItemBackground"
+                    android:src="@drawable/ic_right_arrow_brown" />
+
+            </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.core.widget.NestedScrollView>
 </layout>

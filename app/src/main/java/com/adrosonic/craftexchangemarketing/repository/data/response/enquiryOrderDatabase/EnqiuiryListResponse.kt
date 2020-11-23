@@ -28,5 +28,7 @@ data class EnquiryData(
     val productHistoryId: Int?,
     val customProductHistoryId: Long?,
     val historyTag: String?,
-    val productHistoryStatus : Int?
+    val productHistoryStatus : Int?,
+    val buyerId : Long?,
+    val artisanId : Long?
 )

@@ -56,6 +56,7 @@ const val VIEW_PROD_OF = "viewproductof"
 const val CATEGORY_PRODUCTS = "CategoryProducts"
 const val CLUSTER_PRODUCTS = "ClusterProducts"
 const val BRAND_PRODUCTS = "BrandProducts"
+const val TRANSACTION_STATUS_DATA ="transaction_status_data"
 
 const val AVAILABLE_IN_STOCK = "Available In Stock"
 const val MADE_TO_ORDER = "Made To Order"
@@ -91,7 +92,8 @@ const val ENQUIRY_AVAI_PROD_STAGE_DATA = "enquiry_available_product_stage_data"
 const val ARTISAN_DB_PAGE_COUNT = "artisan_db_page_count"
 const val BUYER_DB_PAGE_COUNT = "buyer_db_page_count"
 const val ESCALATION_DATA ="escalation_data"
-
+const val QC_STAGE_DATA ="qc_stage_data"
+const val QC_QUESTION_DATA ="qc_question_data"
 
 
 
@@ -197,6 +199,13 @@ class UserConfig {
             field = value
         }
 
+    var qcStageData : String? = ""
+        get() = Prefs.getString(QC_STAGE_DATA,"")
+        set(value) {
+            Prefs.putString(QC_STAGE_DATA, value)
+            field = value
+        }
+
     var firstname: String? = ""
         get() = Prefs.getString(FIRST_NAME,"")
         set(value) {
@@ -222,7 +231,12 @@ class UserConfig {
             Prefs.putString(MOBILE, value)
             field = value
         }
-
+    var qcQuestionData : String? = ""
+        get() = Prefs.getString(QC_QUESTION_DATA,"")
+        set(value) {
+            Prefs.putString(QC_QUESTION_DATA, value)
+            field = value
+        }
     var alternateMobile: String? = ""
         get() = Prefs.getString(ALT_MOBILE,"")
         set(value) {
@@ -278,7 +292,12 @@ class UserConfig {
             Prefs.putString(POC_EMAIL, value)
             field = value
         }
-
+    var transactionStatusData : String? = ""
+        get() = Prefs.getString(TRANSACTION_STATUS_DATA,"")
+        set(value) {
+            Prefs.putString(TRANSACTION_STATUS_DATA, value)
+            field = value
+        }
     var poccontact: String? = ""
         get() = Prefs.getString(POC_CONTACT,"")
         set(value) {

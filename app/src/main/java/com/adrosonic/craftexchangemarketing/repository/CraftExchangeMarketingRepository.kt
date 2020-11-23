@@ -51,6 +51,9 @@ object craftexchangemarketingRepository {
         return builder(ResetPasswordDao::class.java)
     }
 
+    fun getOrderService(): OrderDao {
+        return builder(OrderDao::class.java)
+    }
     fun getClusterService(): ClusterDao {
         return builder(ClusterDao::class.java)
     }
@@ -74,7 +77,9 @@ object craftexchangemarketingRepository {
     fun getBuyerOwnDesignService(): BuyerOwnDesignDao {
         return builder(BuyerOwnDesignDao::class.java)
     }
-
+    fun getQCService(): QCDao {
+        return builder(QCDao::class.java)
+    }
     fun getSearchService(): SearchDao {
         return builder(SearchDao::class.java)
     }
@@ -101,5 +106,8 @@ object craftexchangemarketingRepository {
     }
     fun getChatService(): ChatListDao {
         return builder(ChatListDao::class.java)
+    }
+    fun getTiService(): TIDao {
+        return builder(TIDao::class.java)
     }
 }

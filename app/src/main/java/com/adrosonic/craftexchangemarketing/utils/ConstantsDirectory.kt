@@ -14,7 +14,7 @@ object ConstantsDirectory {
     const val IMAGE_LOAD_BASE_URL_UAT = "https://tatacrftexchangeuat.objectstore.e2enetworks.net/"
     const val BUYER_DASHBOARD_URL = "https://datastudio.google.com/embed/reporting/0ede1d26-5dbf-4564-a7c4-4f850493a89f/page/i56cB?params="
     const val ARTISAN_DASHBOARD_URL = "https://datastudio.google.com/embed/reporting/cef7a3b2-e37f-48a2-9f28-0c3f45a07585/page/RJ8dB?params="
-    const val VIEW_PI_URL = "http://101.53.153.96:8090/enquiry/getPreviewPiHTML?enquiryId="
+    const val VIEW_PI_URL = "http://101.53.153.96:8090/api/enquiry/getPreviewPiHTML?enquiryId="
     const val ADMIN_OPEN_ENQUIRIES_SUMMARY_URL = "https://datastudio.google.com/embed/reporting/c66a317a-4b2d-4442-a326-3f0a6b4cd947/page/u7NhBparams="
     const val ADMIN_MICRO_ENTERPRISE_REVENUE_URL = "https://datastudio.google.com/embed/reporting/00758bf8-9835-4bc1-aa7d-c2fb328332ab/page/wVxhB?params="
     const val ADMIN_MICRO_ENTERPRISE_SUMMARY_URL = "https://datastudio.google.com/embed/reporting/324a5edd-e197-40bc-99f7-77a37a525710/page/jj0gB?params="
@@ -37,6 +37,7 @@ object ConstantsDirectory {
     const val REF_ROLE_ID = "roleId"
     const val ACC_TOKEN = "accesstoken"
     const val ADMIN = "Admin"
+    const val TI_PDF_PATH: String = "TiPdfs/"
 
     const val USER_ID = "userid"
 
@@ -63,6 +64,7 @@ object ConstantsDirectory {
     //    const val POC_LNAME = "poclname"
     const val POC_CONTACT = "poccontact"
     const val POC_EMAIL = "pocemail"
+    const val RESULT_TI = 1333
 
     const val ADDR_LINE1 = "addrline1"
     const val ADDR_LINE2 = "addrline2"
@@ -114,7 +116,10 @@ object ConstantsDirectory {
 
     const val ENQUIRY_STATUS_FLAG = "enquiry_status_flag"
 
+    const val ORDER_STATUS_FLAG = "order_status_flag"
 
     const val CHAT_MEDIA: String = "ChatMedia/"
+    const val TAX_INV_WEB_STRING = "tax_inv_web_string"
+
 
 }

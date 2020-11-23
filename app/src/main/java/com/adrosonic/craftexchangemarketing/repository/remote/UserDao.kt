@@ -15,11 +15,11 @@ import retrofit2.http.*
 interface UserDao {
 
     @Headers("Accept: application/json")
-    @GET("user/myprofile")
+    @GET("api/user/myprofile")
     fun viewMyProfile(@Header("Authorization") token:String) : Call<ProfileResponse>
 
     @Headers("Accept: application/json")
-    @PUT("user/edit/buyerProfile")
+    @PUT("api/user/edit/buyerProfile")
     fun editBuyerDetailsPhoto(@Header("Content-Type") headerValue:String,
                               @Header("Authorization") token:String,
                               @Query("profileDetails") profileDetails : String,
@@ -27,12 +27,12 @@ interface UserDao {
     ): Call<EditProfileResponse>
 
     @Headers("Accept: application/json")
-    @PUT("user/edit/buyerProfile")
+    @PUT("api/user/edit/buyerProfile")
     fun editBuyerDetails(@Header("Authorization") token:String,
                          @Query("profileDetails", encoded = false) profileDetails : String): Call<EditProfileResponse>
 
     @Headers("Accept: application/json")
-    @PUT("user/edit/artistProfile")
+    @PUT("api/user/edit/artistProfile")
     fun editArtisanProfileDetailsPhoto(@Header("Content-Type") headerValue:String,
                                        @Header("Authorization") token:String,
                                        @Query("address") address : String,
@@ -40,12 +40,12 @@ interface UserDao {
     ): Call<EditDetailsResponse>
 
     @Headers("Accept: application/json")
-    @PUT("user/edit/artistProfile")
+    @PUT("api/user/edit/artistProfile")
     fun editArtisanProfileDetails(@Header("Authorization") token:String,
                                   @Query("address", encoded = false) address : String): Call<EditDetailsResponse>
 
     @Headers("Accept: application/json")
-    @PUT("user/edit/artistBrandDetails")
+    @PUT("api/user/edit/artistBrandDetails")
     fun editArtisanBrandDetailsPhoto(@Header("Content-Type") headerValue:String,
                                 @Header("Authorization") token:String,
                                 @Query("editBrandDetails") editBrandDetails : String,
@@ -53,18 +53,18 @@ interface UserDao {
     ): Call<EditDetailsResponse>
 
     @Headers("Accept: application/json")
-    @PUT("user/edit/artistBrandDetails")
+    @PUT("api/user/edit/artistBrandDetails")
     fun editArtisanBrandDetails(@Header("Authorization") token:String,
                            @Query("editBrandDetails", encoded = false) editBrandDetails : String): Call<EditDetailsResponse>
 
 
     @Headers("Accept: application/json")
-    @PUT("user/edit/bankDetails")
+    @PUT("api/user/edit/bankDetails")
     fun editArtisanBankDetails(@Header("Authorization") token:String,
                             @Body paymentAccountDetails : ArrayList<PaymentAccountDetails>) : Call<EditBankDetailsResponse>
 
     @Headers("Accept: application/json")
-    @POST("/user/logoutMobile")
+    @POST("api/user/logoutMobile")
     fun logoutUser(@Header("Authorization") token : String,@Query("deviceId") deviceId:String): Call<LogoutResponse>
 
 }

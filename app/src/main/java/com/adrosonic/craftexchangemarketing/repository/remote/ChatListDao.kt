@@ -17,32 +17,32 @@ import retrofit2.http.*
 interface ChatListDao {
 
     @Headers("Accept: application/json")
-    @GET("/enquiry/getEnquiryMessageChatList")
+    @GET("api/enquiry/getEnquiryMessageChatList")
     fun getInitiatedChatList(@Header("Authorization") token:String,
                              @Query("searchedString") searchedString:String?) : Call<ChatListResponse>
 
     @Headers("Accept: application/json")
-    @GET("/enquiry/getNewEnquiryMessageChatList")
+    @GET("api/enquiry/getNewEnquiryMessageChatList")
     fun getUninitiatedChatList(@Header("Authorization") token:String,
                                @Query("searchedString") searchedString:String?) : Call<ChatListResponse>
 
     @Headers("Accept: application/json")
-    @POST("/enquiry/goToEnquiryChat/")
+    @POST("api/enquiry/goToEnquiryChat/")
     fun initiateChat(@Header("Authorization") token:String,
                      @Query("enquiryId") enquiryId : Long) : Call<ResponseBody>
 
     @Headers("Accept: application/json")
-    @GET("/marketingTeam/getChatMessages")
+    @GET("api/marketingTeam/getChatMessages")
     fun openChatLog(@Header("Authorization") token:String,
                     @Query("enquiryId") enquiryId : Long)  : Call<ChatLogListData>
 
     @Headers("Accept: application/json")
-    @POST("/enquiry/sendChatboxMessage/")
+    @POST("api/enquiry/sendChatboxMessage/")
     fun sendChatboxMessage(@Header("Authorization") token:String,
                            @Query("messageJson") messageJson : String) : Call<NotificationReadResponse>
 
     @Headers("Accept: application/json")
-    @POST("/enquiry/sendChatboxMessage/")
+    @POST("api/enquiry/sendChatboxMessage/")
     fun sendChatboxMessageWithMedia(@Header("Authorization") token:String,
                            @Header("Content-Type") headerValue:String,
                            @Header("Content-Length") length: Long,
@@ -50,7 +50,7 @@ interface ChatListDao {
                            @Body file: MultipartBody?) : Call<NotificationReadResponse>
 
     @Headers("Accept: application/json")
-    @GET("ChatBoxMedia/{enquiryId}/{imagename}")
+    @GET("api/ChatBoxMedia/{enquiryId}/{imagename}")
     fun getChatMedia(
         @Path("enquiryId") enquiryId: Long,
         @Path("imagename") imagename: String
@@ -58,7 +58,7 @@ interface ChatListDao {
 
 
     @Headers("Accept: application/json")
-    @GET("User/{artisanId}/CompanyDetails/Logo/{imagename}")
+    @GET("api/User/{artisanId}/CompanyDetails/Logo/{imagename}")
     fun getBuyerLogo(
         @Path("artisanId") artisanId: Long,
         @Path("imagename") imagename: String
@@ -66,21 +66,21 @@ interface ChatListDao {
 
 
     @Headers("Accept: application/json")
-    @GET("enquiry/getEscalations")
+    @GET("api/enquiry/getEscalations")
     fun getEscalationData(@Header("Authorization") token:String) : Call<EscalationCategoryResponse>
 
     @Headers("Accept: application/json")
-    @GET("enquiry/getEscalationSummaryForEnquiry")
+    @GET("api/enquiry/getEscalationSummaryForEnquiry")
     fun getEscalationSummary(@Header("Authorization") token:String,
                              @Query("enquiryId")enquiryId:Long) : Call<EscalationSummResponse>
 
     @Headers("Accept: application/json")
-    @POST("enquiry/resolveEscalation")
+    @POST("api/enquiry/resolveEscalation")
     fun resolveEscalation(@Header("Authorization") token:String,
                           @Query("escalationId")escalationId:Long) : Call<ResponseBody>
 
     @Headers("Accept: application/json")
-    @POST("enquiry/raiseEscalaton")
+    @POST("api/enquiry/raiseEscalaton")
     fun raiseEscalation(@Header("Authorization") token:String,
                           @Body escalation:RaiseEscalationRequest) : Call<ResponseBody>
 }

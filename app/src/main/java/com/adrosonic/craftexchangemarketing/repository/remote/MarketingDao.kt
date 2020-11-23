@@ -12,6 +12,6 @@ import retrofit2.http.*
 interface MarketingDao {
 
     @Headers("Accept: application/json")
-    @GET("/marketingTeam/userProfile/{userId}")
+    @GET("api/marketingTeam/userProfile/{userId}")
     fun getArtisanDao(@Header("Authorization") token:String, @Path("userId")userId:Long) : Call<ArtisanDetailsResponse>
 }

@@ -49,6 +49,8 @@
     <color name="selected_text_color">#ffffff</color>
     <color name="separator_color">#273e5b</color>
     <color name="apply_bg_color">#B0FFD1</color>
+    <color name="view_receipt">#003884</color>
+    <color name="view_invoice">#ef8181</color>
 
     <color name="mark_resolve">#369BEB</color>
     <color name="resolved">#2fc183</color>

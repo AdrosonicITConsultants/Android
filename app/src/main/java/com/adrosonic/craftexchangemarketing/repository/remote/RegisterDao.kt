@@ -16,46 +16,46 @@ import java.io.File
 interface RegisterDao {
 
     @Headers("Accept: application/json")
-    @POST("/user/saveDeviceToken/{deviceId}/AND/{token}")
+    @POST("api/user/saveDeviceToken/{deviceId}/AND/{token}")
     fun saveDeviceToken(@Header("Authorization") authtoken: String,@Path("deviceId") deviceToken : String,@Path("token") token : String) : Call<SaveUserTokenResponse>
 
     @Headers("Accept: application/json")
-    @GET("register/sendVerifyEmailOtp")
+    @GET("api/register/sendVerifyEmailOtp")
     fun sendVerifyEmailOtp(@Query("email") email : String) : Call<RegisterResponse>
 
     @Headers("Accept: application/json")
-    @POST("register/verifyEmailOtp")
+    @POST("api/register/verifyEmailOtp")
     fun verifyEmailOtp(@Header("Content-Type") headerValue:String,
                         @Body otpVerify : OtpVerifyModel
     ) : Call<RegisterResponse>
 
     @Headers("Accept: application/json")
-    @GET("register/getAllCountries")
+    @GET("api/register/getAllCountries")
     fun getAllCountries() : Call<CountryResponse>
 
     @Headers("Accept: application/json")
-    @POST("register/user")
+    @POST("api/register/user")
     fun registerUserPhoto(@Header("Content-Type") headerValue:String,
                           @Query("registerRequest") registerRequest : String,
                           @Body brandLogo : MultipartBody): Call<RegisterResponse>
 
     @Headers("Accept: application/json")
-    @POST("register/user/")
+    @POST("api/register/user/")
     fun registerUser(@Query("registerRequest", encoded = false) registerRequest : String): Call<RegisterResponse>
 
 //    @Headers("Accept: application/json")
-//    @POST("register/user")
+//    @POST("api/register/user")
 //    fun registerArtisanPhoto(@Header("Content-Type") headerValue:String,
 //                           @Query("registerRequest") registerRequest : String,
 //                           @Body brandLogo : MultipartBody): Call<RegisterResponse>
 //
 //    @Headers("Accept: application/json")
-//    @POST("register/user/")
+//    @POST("api/register/user/")
 //    fun registerArtisan(@Query("registerRequest", encoded = false) registerRequest : String): Call<RegisterResponse>
 
 
     @Headers("Accept: application/json")
-    @POST("register/verifyWeaverDetails")
+    @POST("api/register/verifyWeaverDetails")
     fun verifyArtisanDetails(@Header("Content-Type") headerValue:String,
                              @Body weaverDetails : ArtisanidModel
     ) : Call<RegisterResponse>

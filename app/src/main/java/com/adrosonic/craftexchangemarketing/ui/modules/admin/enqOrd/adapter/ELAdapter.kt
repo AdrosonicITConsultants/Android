@@ -66,7 +66,7 @@ class ELAdapter (var context: Context?, private var enquiries: ArrayList<Enquiry
             val myIntent = Intent(context, EnquiryDetailsActivity::class.java)
             Log.d("moqcheck", "onBindViewHolder: "+ enquiries[position].eId)
             myIntent.putExtra("enquiryID",enquiries[position].eId)
-            myIntent.putExtra("type", 2.toLong())
+            myIntent.putExtra("type", type)
             context?.startActivity(myIntent)
         }
         holder?.ProductName?.setOnClickListener {
@@ -123,7 +123,7 @@ class ELAdapter (var context: Context?, private var enquiries: ArrayList<Enquiry
 
                 }
                 1 ->{
-                    holder?.typeProduct?.text = "Made ro Order"
+                    holder?.typeProduct?.text = "Made to Order"
                     holder?.totalSteps?.text = "/10"
                     holder?.stepsCompleted?.text = enquiries[position]?.currenStageId.toString()
 
@@ -154,7 +154,7 @@ class ELAdapter (var context: Context?, private var enquiries: ArrayList<Enquiry
 
                 }
                 1 ->{
-                    holder?.typeProduct?.text = "Made ro Order"
+                    holder?.typeProduct?.text = "Made to Order"
                     holder?.totalSteps?.text = "/10"
                     holder?.stepsCompleted?.text = enquiries[position]?.currenStageId.toString()
 

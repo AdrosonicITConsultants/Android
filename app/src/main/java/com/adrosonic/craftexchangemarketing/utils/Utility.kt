@@ -31,8 +31,13 @@ import com.adrosonic.craftexchangemarketing.repository.data.response.artisan.pro
 import com.adrosonic.craftexchangemarketing.repository.data.response.chat.escalations.EscalationCategoryResponse
 import com.adrosonic.craftexchangemarketing.repository.data.response.enquiry.EnquiryAvaProdStageData
 import com.adrosonic.craftexchangemarketing.repository.data.response.enquiry.EnquiryStageData
+import com.adrosonic.craftexchangemarketing.repository.data.response.enquiry.InnerStageData
 import com.adrosonic.craftexchangemarketing.repository.data.response.moq.Datum
 import com.adrosonic.craftexchangemarketing.repository.data.response.moq.MoqDeliveryTimesResponse
+import com.adrosonic.craftexchangemarketing.repository.data.response.qc.QCData
+import com.adrosonic.craftexchangemarketing.repository.data.response.qc.QCQuestionData
+import com.adrosonic.craftexchangemarketing.repository.data.response.transaction.TranStatData
+import com.adrosonic.craftexchangemarketing.repository.data.response.transaction.TransactionStatusData
 import com.bumptech.glide.Glide
 import com.google.gson.GsonBuilder
 import com.pixplicity.easyprefs.library.Prefs
@@ -130,6 +135,64 @@ class Utility {
             return moqDeliveryTime.data
         }
 
+        fun getQcQuesData() : QCQuestionData? {
+            val gson = GsonBuilder().create()
+            var qcObj = gson.fromJson(UserConfig.shared.qcQuestionData.toString(), QCQuestionData::class.java)
+            return  qcObj
+        }
+
+
+        fun getQcStageData() : InnerStageData? {
+            val gson = GsonBuilder().create()
+            var qcObj = gson.fromJson(UserConfig.shared.qcStageData.toString(), InnerStageData::class.java)
+            return  qcObj
+        }
+
+        fun writeTIResponseBodyToDisk(
+            body: ResponseBody,
+            enquiryId: String,
+            isOld:String,
+            context: Context
+        ): Boolean {
+            try {
+                if (!File(context.cacheDir, ConstantsDirectory.TI_PDF_PATH).exists()) File(context.cacheDir,ConstantsDirectory.TI_PDF_PATH).mkdir()
+//                if (!File(context.cacheDir, Utility.PI_PDF_PATH+ enquiryId).exists()) File(context.cacheDir,Utility.MANAGED_DOC_PATH+ enquiryId).mkdir()
+                val myDir = File(context.cacheDir, "/"+ConstantsDirectory.TI_PDF_PATH + isOld+"Ti${enquiryId}.pdf")
+                var inputStream: InputStream = body.byteStream()
+                var outputStream: OutputStream = FileOutputStream(myDir)
+                try {
+                    var fileReader = ByteArray(4096)
+                    var fileSize = body.contentLength()
+                    var fileSizeDownloaded = 0
+                    while (true) {
+                        var read = inputStream.read(fileReader)
+                        if (read == -1) {
+                            break
+                        }
+                        outputStream.write(fileReader, 0, read)
+                        fileSizeDownloaded += read
+                    }
+                    outputStream.flush()
+                    return true
+                } catch (e: IOException) {
+                    Log.e("SaveTiPdf", "Exception : "+e.printStackTrace())
+                    return false
+                } finally {
+                    if (inputStream != null) {
+                        inputStream.close()
+                    }
+                    if (outputStream != null) {
+                        outputStream.close()
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("SaveTiPdf", "Exception : "+e.printStackTrace())
+                return false
+            }
+        }
+
+
+
         fun getRealPathFromFileURI(context: Context, contentUri: Uri): String {
             var filePath = ""
             val myDir: File
@@ -180,6 +243,41 @@ class Utility {
             }
         }
 
+        fun getArtisanQcResponse(respString : String) : QCData? {
+            val gson = GsonBuilder().create()
+            var qcResp = gson.fromJson(respString,QCData::class.java)
+            return qcResp
+        }
+        fun openTaxInvFile(context: Activity,enquiryId:Long){
+            val cacheFile = File(context.cacheDir, ConstantsDirectory.TI_PDF_PATH + "Ti${enquiryId}.pdf")
+            try {
+                val uri = FileProvider.getUriForFile(context, "com.adrosonic.craftexchange.provider", cacheFile)
+                val myIntent = Intent(Intent.ACTION_VIEW)
+                myIntent.putExtra(ShareCompat.EXTRA_CALLING_PACKAGE, context.packageName)
+                val componentName = context.componentName
+                myIntent.putExtra(ShareCompat.EXTRA_CALLING_ACTIVITY, componentName)
+                myIntent.setDataAndType(uri, "application/pdf")
+                myIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(Intent.createChooser(myIntent, "Open with"))
+
+            } catch (e: Exception) {
+                displayMessage(" Application not installed $e", context)
+            }
+        }
+        fun getDeliveryChallanReceiptUrl(enquiryId : Long?,imagename : String?) : String{
+            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_UAT}deliveryChallanReceipt/${enquiryId}/${imagename}"
+        }
+
+        fun getAdvancePaymentImageUrl(receiptId : Long?,imagename : String?) : String{
+            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_UAT}AdvancedPayment/${receiptId}/${imagename}"
+        }
+
+        fun getFinalPaymentImageUrl(receiptId : Long?,imagename : String?) : String{
+            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_UAT}FinalPayment/${receiptId}/${imagename}"
+        }
+
+
         fun overrideFileFromUri(context: Context, bitmap: Bitmap, filename:String) {
             var filePath = ""
             if (!File(context.cacheDir, BROWSING_IMGS).exists()) File(context.cacheDir, BROWSING_IMGS).mkdir()
@@ -204,7 +302,12 @@ class Utility {
                 Log.e("overrideFileFromUri", "Error accessing file: " + e.message)
             }
         }
+        fun getTransactionStatusData() : List<TranStatData>? {
+            val gson = GsonBuilder().create()
+            var tranObj = gson.fromJson(UserConfig.shared.transactionStatusData.toString(), TransactionStatusData::class.java)
 
+            return  tranObj?.data
+        }
         fun isValidPan(pan:String):Boolean {
             val mPattern = Pattern.compile("[A-Z]{5}[0-9]{4}[A-Z]{1}")
             val mMatcher = mPattern.matcher(pan)
