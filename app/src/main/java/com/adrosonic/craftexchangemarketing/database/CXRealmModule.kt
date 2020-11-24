@@ -34,7 +34,7 @@ import io.realm.annotations.RealmModule
     EnquiryProductDetails::class,
     Transactions::class,
     QcDetails::class,
-//    ChangeRequests::class,
+    ChangeRequests::class,
     TaxInvDetails::class,
     OrderProgressDetails::class,
     ChatUser::class,

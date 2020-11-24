@@ -16,11 +16,14 @@ import com.adrosonic.craftexchangemarketing.repository.data.response.artisan.pro
 import com.adrosonic.craftexchangemarketing.repository.data.response.buyer.viewProducts.BrandListResponse
 import com.adrosonic.craftexchangemarketing.repository.data.response.buyer.viewProducts.singleProduct.SingleProductDetails
 import com.adrosonic.craftexchangemarketing.repository.data.response.buyer.wishList.WishListedIds
+import com.adrosonic.craftexchangemarketing.repository.data.response.changeReequest.CrOptionsResponse
 import com.adrosonic.craftexchangemarketing.ui.modules.buyer.profile.BrandFragment
 import com.adrosonic.craftexchangemarketing.repository.data.response.enquiry.EnquiryAvaProdStageData
 import com.adrosonic.craftexchangemarketing.repository.data.response.enquiry.EnquiryStageData
+import com.adrosonic.craftexchangemarketing.repository.data.response.enquiry.InnerStageData
 import com.adrosonic.craftexchangemarketing.repository.data.response.logout.LogoutResponse
 import com.adrosonic.craftexchangemarketing.repository.data.response.moq.MoqDeliveryTimesResponse
+import com.adrosonic.craftexchangemarketing.repository.data.response.qc.QCQuestionData
 import com.adrosonic.craftexchangemarketing.repository.data.response.transaction.TransactionStatusData
 import com.adrosonic.craftexchangemarketing.utils.ConstantsDirectory
 import com.adrosonic.craftexchangemarketing.utils.UserConfig
@@ -102,6 +105,26 @@ class LandingViewModel(application: Application) : AndroidViewModel(application)
                 ) {
                     if(data.body()?.valid == true){
                         UserConfig.shared.transactionStatusData= Gson().toJson(data.body())
+                    }
+                }
+            })
+    }
+
+    fun getChangeRequestStatuses(){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+
+    craftexchangemarketingRepository
+         .getCrService()
+            .getChangeRequestItemTable(token).enqueue(object : Callback, retrofit2.Callback<CrOptionsResponse> {
+                override fun onFailure(call: Call<CrOptionsResponse>, t: Throwable) {
+                    t.printStackTrace()
+                }
+                override fun onResponse(
+                    call: Call<CrOptionsResponse>,
+                    data: Response<CrOptionsResponse>
+                ) {
+                    if(data.body()?.valid == true){
+                        UserConfig.shared.crStatusData= Gson().toJson(data.body())
                     }
                 }
             })
@@ -336,4 +359,53 @@ class LandingViewModel(application: Application) : AndroidViewModel(application)
                 }
             })
     }
+
+    fun getQCStageData(){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        craftexchangemarketingRepository
+            .getQCService()
+            .getQCStages(token)
+            .enqueue(object: Callback, retrofit2.Callback<InnerStageData> {
+                override fun onFailure(call: Call<InnerStageData>, t: Throwable) {
+                    t.printStackTrace()
+                    Log.e("LandingViewModel","getAllQCStages onFailure: "+t.message)
+                }
+                override fun onResponse(
+                    call: Call<InnerStageData>,
+                    response: retrofit2.Response<InnerStageData>) {
+                    if(response.body()?.valid == true){
+                        UserConfig.shared.qcStageData= Gson().toJson(response.body())
+                    }else{
+                        Log.e("LandingViewModel","getAllQCStages onFailure: "+response.body()?.errorCode)
+
+                    }
+                }
+
+            })
+    }
+
+    fun getQCQuestionData(){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        craftexchangemarketingRepository
+            .getQCService()
+            .getQCQuestionData(token)
+            .enqueue(object: Callback, retrofit2.Callback<QCQuestionData> {
+                override fun onFailure(call: Call<QCQuestionData>, t: Throwable) {
+                    t.printStackTrace()
+                    Log.e("LandingViewModel","getAllQCStages onFailure: "+t.message)
+                }
+                override fun onResponse(
+                    call: Call<QCQuestionData>,
+                    response: retrofit2.Response<QCQuestionData>) {
+                    if(response.body()?.valid == true){
+                        UserConfig.shared.qcQuestionData= Gson().toJson(response.body())
+                    }else{
+                        Log.e("LandingViewModel","getAllQCStages onFailure: "+response.body()?.errorCode)
+
+                    }
+                }
+
+            })
+    }
+
 }

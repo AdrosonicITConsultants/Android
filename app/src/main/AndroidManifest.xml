@@ -75,6 +75,13 @@
         <activity
             android:name=".ui.modules.editPhoto.EditPhotoActivity"
             android:label="@string/title_activity_edit_photo" />
+
+        <activity
+            android:name=".ui.modules.admin.enqOrd.qC.QCActivity"
+            android:label="@string/title_activity_edit_photo" />
+        <activity
+            android:name=".ui.modules.admin.enqOrd.cr.CrActivity"
+            android:label="@string/title_activity_edit_photo" />
         <activity
             android:name=".ui.modules.buyer.ownDesign.BuyerAddOwnProductDesignActivity"
             android:label="@string/title_activity_buyer_add_own_product_design"

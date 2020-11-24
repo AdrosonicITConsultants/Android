@@ -10,16 +10,22 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.adrosonic.craftexchangemarketing.R
+import com.adrosonic.craftexchangemarketing.database.entities.realmEntities.Orders
 import com.adrosonic.craftexchangemarketing.database.predicates.MoqsPredicates
 import com.adrosonic.craftexchangemarketing.database.predicates.TransactionPredicates
 import com.adrosonic.craftexchangemarketing.databinding.ActivityIndEnquiryDetailsBinding
+import com.adrosonic.craftexchangemarketing.enums.AvailableStatus
+import com.adrosonic.craftexchangemarketing.enums.getId
 import com.adrosonic.craftexchangemarketing.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchangemarketing.repository.data.request.taxInv.SendTiRequest
 import com.adrosonic.craftexchangemarketing.repository.data.response.enquiryOrderDatabase.EnquiryData
 import com.adrosonic.craftexchangemarketing.repository.data.response.moq.Datum
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.enqOrd.chat.chatLogDetailsIntent
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.enqOrd.cr.crContext
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.enqOrd.escalations.chatEscalationIntent
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.enqOrd.qC.qcFormIntent
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.enqOrd.transaction.adapter.OnGoingTransactionRecyclerAdapter
@@ -44,7 +50,8 @@ fun Context.enquiryDetailsIntent(enquiryID: Long, type: Long): Intent {
 }
 class EnquiryDetailsActivity: AppCompatActivity(),
     EnquiryViewModel.BuyersMoqInterface ,
-    TransactionViewModel.TransactionInterface{
+    TransactionViewModel.TransactionInterface,
+OrdersViewModel.FetchOrderInterface{
     private var mBinding : ActivityIndEnquiryDetailsBinding?= null
     private var mUserConfig = UserConfig()
     var enquiryData :String?=null
@@ -55,15 +62,17 @@ class EnquiryDetailsActivity: AppCompatActivity(),
     val mEnqVM : EnquiryViewModel by viewModels()
     val mTranVM : TransactionViewModel by viewModels()
     val mOrderVm : OrdersViewModel by viewModels()
-
+    var orderDetails : Orders?= null
+    var changeRequestOn : Long? = null
+    var changeRequestStatus : Long? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
 
-        Utility.getDeliveryTimeList()?.let {moqDeliveryTimeList.addAll(it)  }
+        Utility.getDeliveryTimeList()?.let { moqDeliveryTimeList.addAll(it) }
 
-        if(intent.extras!=null){
+        if (intent.extras != null) {
             enquiry = intent.getLongExtra("enquiryID", 0)
             type = intent.getLongExtra("type", 1)
             Log.d("type", "onCreate: " + type)
@@ -72,28 +81,30 @@ class EnquiryDetailsActivity: AppCompatActivity(),
         Log.d("type", "onCreate: " + type)
 
 
-        if(Utility.checkIfInternetConnected(this)){
+        if (Utility.checkIfInternetConnected(this)) {
 
             mEnqVM.getMoqs(enquiry!!)
-            if(type!! == 3L){
+            if (type!! == 3L) {
                 mOrderVm.getSingleOngoingOrder(enquiry!!)
                 mTranVM.getSingleOngoingTransactions(enquiry!!)
-                Log.d("type", "onCreate: "+type )
+                mOrderVm.getChangeRequestDetails(enquiry!!)
+                Log.d("type", "onCreate: " + type)
 
-            }
-            else if(type!! == 4L || type!! == 5L){
+            } else if (type!! == 4L || type!! == 5L) {
                 mOrderVm.getSingleCompletedOrder(enquiry!!)
                 mTranVM.getSingleCompletedTransactions(enquiry!!)
-                Log.d("type", "onCreate: "+type )
+                mOrderVm.getChangeRequestDetails(enquiry!!)
+                Log.d("type", "onCreate: " + type)
 
             }
 
 
-        }else{
+        } else {
             Utility.displayMessage(getString(R.string.no_internet_connection), this)
 //            }
         }
         mEnqVM.buyerMoqListener = this
+        mOrderVm.fetchEnqListener = this
 
         enquiryData = mUserConfig.enquiryData.toString()
         val gson = GsonBuilder().create()
@@ -102,56 +113,55 @@ class EnquiryDetailsActivity: AppCompatActivity(),
         mBinding = ActivityIndEnquiryDetailsBinding.inflate(layoutInflater)
         val view = mBinding?.root
         setContentView(view)
-        if(enquiryRes?.buyerId == null)
+        if (enquiryRes?.buyerId == null)
             mBinding?.orderTime1?.text = "Not available"
         else
             mBinding?.orderTime1?.text = ""
-        if(enquiryRes?.artisanId == null)
+        if (enquiryRes?.artisanId == null)
             mBinding?.orderTime11?.text = "Not available"
         else
             mBinding?.orderTime11?.text = ""
 
+
+
         mBinding?.buyerDetailsLayer?.setOnClickListener {
-            if(enquiryRes?.buyerId != null)
-            {
+            if (enquiryRes?.buyerId != null) {
                 val myIntent = Intent(this, BuyerProfileActivity::class.java)
                 myIntent.putExtra("buyerId", enquiryRes?.buyerId!!)
                 startActivity(myIntent)
             }
         }
         mBinding?.artisanDetailsLayer?.setOnClickListener {
-            if(enquiryRes?.artisanId != null)
-            {
+            if (enquiryRes?.artisanId != null) {
                 val myIntent = Intent(this, ArtisanProfileActivity::class.java)
                 myIntent.putExtra("artisanId", enquiryRes?.artisanId!!)
                 startActivity(myIntent)
             }
         }
-        if(enquiryRes?.currenStageId!! > 7 ){
+        if (enquiryRes?.currenStageId!! > 7) {
             mBinding?.taxInvoiceAvail?.text = "View"
 
-        }else{
+        } else {
             mBinding?.taxInvoiceAvail?.text = "Not Available"
         }
         mBinding?.taxInvoiceLayer?.setOnClickListener {
-            if(enquiryRes?.currenStageId!! > 7 ){
-                enquiry?.let {  startActivity(this.raiseTaxInvIntent(it,true, SendTiRequest())) }
+            if (enquiryRes?.currenStageId!! > 7) {
+                enquiry?.let { startActivity(this.raiseTaxInvIntent(it, true, SendTiRequest())) }
 
             }
         }
-        if(enquiryRes?.innerCurrenStage == null)
-        {
+        if (enquiryRes?.innerCurrenStage == null) {
             mBinding?.currentStage?.text = enquiryRes?.currenStage
-        }
-        else{
+        } else {
             mBinding?.currentStage?.text = enquiryRes?.innerCurrenStage
         }
-        if(enquiryRes?.currenStageId!! < 3){
+
+        if (enquiryRes?.currenStageId!! < 3) {
             mBinding?.orderTime111?.text = "Not Available"
-        }
-        else{
+        } else {
             mBinding?.orderTime111?.text = ""
-         }
+        }
+
         mBinding?.chatDetailsLayer?.setOnClickListener {
             startActivity(enquiry?.let { it1 -> this.chatLogDetailsIntent(it1) })
         }
@@ -159,51 +169,59 @@ class EnquiryDetailsActivity: AppCompatActivity(),
             startActivity(enquiry?.let { it1 -> this.chatEscalationIntent(it1) })
         }
         mBinding?.piDetailsLayer?.setOnClickListener {
-            if(enquiryRes?.currenStageId!! < 3){
-            }
-            else{
-                enquiry?.let {  startActivity(this.raisePiContext(it, true, SendPiRequest(), false)) }
+            if (enquiryRes?.currenStageId!! < 3) {
+            } else {
+                enquiry?.let {
+                    startActivity(
+                        this.raisePiContext(
+                            it,
+                            true,
+                            SendPiRequest(),
+                            false
+                        )
+                    )
+                }
             }
         }
 
-        if(type!! == 3L){
+        if (type!! == 3L) {
             mBinding?.qualityCheckLayer?.setOnClickListener {
-                startActivity(this?.qcFormIntent()
-                    ?.putExtra(ConstantsDirectory.ENQUIRY_ID,enquiry)
-                    ?.putExtra(ConstantsDirectory.ORDER_STATUS_FLAG, 0L))
+                if(enquiryRes?.currenStageId!!>6)
+                {
+                    startActivity(
+                        this?.qcFormIntent()
+                            ?.putExtra(ConstantsDirectory.ENQUIRY_ID, enquiry!!)
+                            ?.putExtra(ConstantsDirectory.ORDER_STATUS_FLAG, 0L)
+                    )
+                }
+                else{
+                    Utility.displayMessage(
+                        "Quality Check not done by artisan yet.",
+                        this
+                    )
+                }
+
             }
-        }
-        else if(type!! == 4L || type!! == 5L){
+        } else if (type!! == 4L || type!! == 5L) {
             mBinding?.qualityCheckLayer?.setOnClickListener {
-                startActivity(this?.qcFormIntent()
-                    ?.putExtra(ConstantsDirectory.ENQUIRY_ID,enquiry)
-                    ?.putExtra(ConstantsDirectory.ORDER_STATUS_FLAG, 1L))
+                if(enquiryRes?.currenStageId!!>6)
+                {
+                    startActivity(
+                        this?.qcFormIntent()
+                            ?.putExtra(ConstantsDirectory.ENQUIRY_ID, enquiry!!)
+                            ?.putExtra(ConstantsDirectory.ORDER_STATUS_FLAG, 1L)
+                    )
+                }
+                else{
+                    Utility.displayMessage(
+                        "Quality Check not done by artisan yet.",
+                        this
+                    )
+                }
             }
 
         }
 
-
-//        mBinding?.changeRequestLayer?.setOnClickListener {
-//            if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType.equals(ConstantsDirectory.CUSTOM_PRODUCT)) {
-//                if (orderDetails?.changeRequestOn == 1L) {
-//                    when (orderDetails?.changeRequestStatus) {
-//                        0L -> {
-//                            //waiting for ack
-//                            enqID?.let { startActivity(requireActivity().crContext(it, 0L)) }
-//                        }
-//                        1L -> enqID?.let { startActivity(requireActivity().crContext(it, 1L)) }
-//                        2L -> enqID?.let { startActivity(requireActivity().crContext(it, 2L)) }
-//                        3L -> enqID?.let { startActivity(requireActivity().crContext(it, 3L)) }
-//                        else -> {
-//                            val days = Utility.getDateDiffInDays(Utility.returnDisplayDate( orderDetails?.orderCreatedOn ?: "" ))
-//                            if (days >10) Utility.displayMessage("Last date to raise Change Request passed.", this)
-//                            else enqID?.let { startActivity(this.crContext(it, 4L)) }
-//                        }
-//                    }
-//                }
-//                else Utility.displayMessage("Change request disabled by artisan.", requireContext())
-//            } else Utility.displayMessage(getString(R.string.cr_not_applicable), requireContext())
-//        }
 
 
 
@@ -216,121 +234,239 @@ class EnquiryDetailsActivity: AppCompatActivity(),
         mBinding?.EnquiryCode?.text = enquiryRes?.code
         mBinding?.ArtisanBrand?.text = enquiryRes?.artisanBrand
         mBinding?.BuyerBrand?.text = enquiryRes?.buyerBrand
-        if(enquiryRes?.amount == null)
-        {
+        if (enquiryRes?.amount == null) {
             mBinding?.Amount?.text = "NA"
-        }
-        else{
+        } else {
             mBinding?.Amount?.text = enquiryRes?.amount.toString()
         }
         val date = enquiryRes?.dateStarted?.split("T")?.get(0)
         mBinding?.dateStarted?.text = date
-        if(enquiryRes?.lastUpdated == null )
-        {
+        if (enquiryRes?.lastUpdated == null) {
             mBinding?.lastUpdated?.text = "NA"
-        }
-        else{
+        } else {
             val date = enquiryRes?.lastUpdated?.split("T")?.get(0)
             mBinding?.lastUpdated?.text = date
         }
-        if(enquiryRes?.eta == null )
-        {
+        if (enquiryRes?.eta == null) {
             mBinding?.ETA?.text = "NA"
-        }
-        else{
+        } else {
             val date = enquiryRes?.eta?.split("T")?.get(0)
             mBinding?.ETA?.text = date
         }
-        //Transactions
-        mBinding?.viewPaymentLayer?.setOnClickListener {
-            Log.d("Transaction", "onCreate:  clicked")
-            if(mBinding?.transactionList!!.visibility==View.VISIBLE) mBinding?.transactionList!!.visibility=View.GONE
-            else mBinding?.transactionList!!.visibility=View.VISIBLE
-        }
 
 
-        //TransactionsEnd
-        when(enquiryRes?.madeWithAntharan){
-            null -> {
 
+        mBinding?.changeRequestLayer?.setOnClickListener {
+            if(changeRequestStatus == null)
+            {
+                changeRequestStatus = 4L
             }
-            0 -> {
-                mBinding?.ProductTypeImage?.setImageResource(R.drawable.ic_artisan_self_design_icon)
+            if(changeRequestOn == null)
+            {
+                changeRequestOn = 1L
             }
-            1 -> {
-                mBinding?.ProductTypeImage?.setImageResource(R.drawable.ic_antaran_co_design_icon)
-            }
+            Log.d("changeRequest", "onCreate: " + changeRequestOn +""+ changeRequestStatus)
+            Log.d("changeRequest", "onCreate: " + AvailableStatus.MADE_TO_ORDER.getId())
+            if (enquiryRes?.productHistoryId != null) {
+                when (enquiryRes?.productHistoryStatus) {
+                    0 -> {
+                        mBinding?.typeProduct?.text = "Buyer Custom Product"
+                        if (changeRequestOn!!.toLong() == 1L) {
+                            when (changeRequestStatus!!.toLong()) {
+                                0L -> {
+                                    //waiting for ack
+                                    enquiry?.let { startActivity(this.crContext(it, 0L)) }
+                                }
+                                1L -> enquiry?.let { startActivity(this.crContext(it, 1L)) }
+                                2L -> enquiry?.let { startActivity(this.crContext(it, 2L)) }
+                                3L -> enquiry?.let { startActivity(this.crContext(it, 3L)) }
+                                else -> {
+                                    Utility.displayMessage(
+                                        "Change request not raised by buyer.",
+                                        this
+                                    )
+//
+                                }
+                            }
+                        } else Utility.displayMessage("Change request disabled by artisan.", this)
 
-        }
-        if(enquiryRes?.productHistoryId != null)
-        {
-            mBinding?.ProductName?.text = enquiryRes?.historyTag
-            when(enquiryRes?.productHistoryStatus){
-                0 -> {
-                    mBinding?.typeProduct?.text = "Buyer Custom Product"
-                    mBinding?.totalSteps?.text = "/10"
-                    mBinding?.stepsCompleted?.text = enquiryRes?.currenStageId.toString()
 
+                    }
+                    1 -> {
+                        mBinding?.typeProduct?.text = "Made to Order"
+                        if (changeRequestOn!!.toLong() == 1L) {
+                            when (changeRequestStatus!!.toLong()) {
+                                0L -> {
+                                    //waiting for ack
+                                    enquiry?.let { startActivity(this.crContext(it, 0L)) }
+                                }
+                                1L -> enquiry?.let { startActivity(this.crContext(it, 1L)) }
+                                2L -> enquiry?.let { startActivity(this.crContext(it, 2L)) }
+                                3L -> enquiry?.let { startActivity(this.crContext(it, 3L)) }
+                                else -> {
+                                    Utility.displayMessage(
+                                        "Change request not raised by buyer.",
+                                        this
+                                    )
+//
+                                }
+                            }
+                        } else Utility.displayMessage("Change request disabled by artisan.", this)
+
+
+                    }
+                    2 -> {
+                        mBinding?.typeProduct?.text = "Available in Stock"
+                        Utility.displayMessage("Change request not applicable for in stock products.", this)
+                    }
                 }
-                1 -> {
-                    mBinding?.typeProduct?.text = "Made to Order"
-                    mBinding?.totalSteps?.text = "/10"
-                    mBinding?.stepsCompleted?.text = enquiryRes?.currenStageId.toString()
 
-                }
-                2 -> {
-                    mBinding?.typeProduct?.text = "Available in Stock"
-                    mBinding?.totalSteps?.text = "/7"
-                    if (enquiryRes?.currenStageId!! > 4) {
-                        mBinding?.stepsCompleted?.text =
-                            (enquiryRes?.currenStageId!! - 3).toString()
-
-                    } else {
-                        mBinding?.stepsCompleted?.text = enquiryRes?.currenStageId.toString()
+            } else {
+                mBinding?.ProductName?.text = enquiryRes?.tag
+                when (enquiryRes?.productStatus) {
+                    0 -> {
+                        mBinding?.typeProduct?.text = "Buyer Custom Product"
+                        if (changeRequestOn!!.toLong() == 1L) {
+                            when (changeRequestStatus!!.toLong()) {
+                                0L -> {
+                                    //waiting for ack
+                                    enquiry?.let { startActivity(this.crContext(it, 0L)) }
+                                }
+                                1L -> enquiry?.let { startActivity(this.crContext(it, 1L)) }
+                                2L -> enquiry?.let { startActivity(this.crContext(it, 2L)) }
+                                3L -> enquiry?.let { startActivity(this.crContext(it, 3L)) }
+                                else -> {
+                                    Utility.displayMessage(
+                                        "Change request not raised by buyer.",
+                                        this
+                                    )
+//
+                                }
+                            }
+                        } else Utility.displayMessage("Change request disabled by artisan.", this)
                     }
 
+                    1 -> {
+                        mBinding?.typeProduct?.text = "Made to Order"
+                        if (changeRequestOn!!.toLong() == 1L) {
+                            when (changeRequestStatus!!.toLong()) {
+                                0L -> {
+                                    //waiting for ack
+                                    enquiry?.let { startActivity(this.crContext(it, 0L)) }
+                                }
+                                1L -> enquiry?.let { startActivity(this.crContext(it, 1L)) }
+                                2L -> enquiry?.let { startActivity(this.crContext(it, 2L)) }
+                                3L -> enquiry?.let { startActivity(this.crContext(it, 3L)) }
+                                else -> {
+                                    Utility.displayMessage(
+                                        "Change request not raised by buyer.",
+                                        this
+                                    )
+//
+                                }
+                            }
+                        } else Utility.displayMessage("Change request disabled by artisan.", this)
+
+                    }
+                    2 -> {
+                        mBinding?.typeProduct?.text = "Available in Stock"
+                        Utility.displayMessage("Change request not applicable for in stock products.", this)
+
+                    }
                 }
+
+
+            }
+        }
+            //Transactions
+            mBinding?.viewPaymentLayer?.setOnClickListener {
+                Log.d("Transaction", "onCreate:  clicked")
+                if (mBinding?.transactionList!!.visibility == View.VISIBLE) mBinding?.transactionList!!.visibility =
+                    View.GONE
+                else mBinding?.transactionList!!.visibility = View.VISIBLE
             }
 
-        }
-        else{
-            mBinding?.ProductName?.text = enquiryRes?.tag
-            when(enquiryRes?.productStatus){
-                0 -> {
-                    mBinding?.typeProduct?.text = "Buyer Custom Product"
-                    mBinding?.totalSteps?.text = "/10"
-                    mBinding?.stepsCompleted?.text = enquiryRes?.currenStageId.toString()
 
+            //TransactionsEnd
+            when (enquiryRes?.madeWithAntharan) {
+                null -> {
+
+                }
+                0 -> {
+                    mBinding?.ProductTypeImage?.setImageResource(R.drawable.ic_artisan_self_design_icon)
                 }
                 1 -> {
-                    mBinding?.typeProduct?.text = "Made to Order"
-                    mBinding?.totalSteps?.text = "/10"
-                    mBinding?.stepsCompleted?.text = enquiryRes?.currenStageId.toString()
-
+                    mBinding?.ProductTypeImage?.setImageResource(R.drawable.ic_antaran_co_design_icon)
                 }
-                2 -> {
-                    mBinding?.typeProduct?.text = "Available in Stock"
-                    mBinding?.totalSteps?.text = "/7"
-                    if (enquiryRes?.currenStageId!! > 4) {
-                        mBinding?.stepsCompleted?.text =
-                            (enquiryRes?.currenStageId!! - 3).toString()
 
-                    } else {
+            }
+            if (enquiryRes?.productHistoryId != null) {
+                mBinding?.ProductName?.text = enquiryRes?.historyTag
+                when (enquiryRes?.productHistoryStatus) {
+                    0 -> {
+                        mBinding?.typeProduct?.text = "Buyer Custom Product"
+                        mBinding?.totalSteps?.text = "/10"
                         mBinding?.stepsCompleted?.text = enquiryRes?.currenStageId.toString()
-                    }
 
+                    }
+                    1 -> {
+                        mBinding?.typeProduct?.text = "Made to Order"
+                        mBinding?.totalSteps?.text = "/10"
+                        mBinding?.stepsCompleted?.text = enquiryRes?.currenStageId.toString()
+
+                    }
+                    2 -> {
+                        mBinding?.typeProduct?.text = "Available in Stock"
+                        mBinding?.totalSteps?.text = "/7"
+                        if (enquiryRes?.currenStageId!! > 4) {
+                            mBinding?.stepsCompleted?.text =
+                                (enquiryRes?.currenStageId!! - 3).toString()
+
+                        } else {
+                            mBinding?.stepsCompleted?.text = enquiryRes?.currenStageId.toString()
+                        }
+
+                    }
+                }
+
+            } else {
+                mBinding?.ProductName?.text = enquiryRes?.tag
+                when (enquiryRes?.productStatus) {
+                    0 -> {
+                        mBinding?.typeProduct?.text = "Buyer Custom Product"
+                        mBinding?.totalSteps?.text = "/10"
+                        mBinding?.stepsCompleted?.text = enquiryRes?.currenStageId.toString()
+
+                    }
+                    1 -> {
+                        mBinding?.typeProduct?.text = "Made to Order"
+                        mBinding?.totalSteps?.text = "/10"
+                        mBinding?.stepsCompleted?.text = enquiryRes?.currenStageId.toString()
+
+                    }
+                    2 -> {
+                        mBinding?.typeProduct?.text = "Available in Stock"
+                        mBinding?.totalSteps?.text = "/7"
+                        if (enquiryRes?.currenStageId!! > 4) {
+                            mBinding?.stepsCompleted?.text =
+                                (enquiryRes?.currenStageId!! - 3).toString()
+
+                        } else {
+                            mBinding?.stepsCompleted?.text = enquiryRes?.currenStageId.toString()
+                        }
+
+                    }
                 }
             }
-        }
-        if(type!! < 3){
-            Log.d("type", "onCreate: enter if")
-            mBinding?.changeRequestLayer?.visibility = View.GONE
-            mBinding?.qualityCheckLayer?.visibility = View.GONE
-            mBinding?.taxInvoiceLayer?.visibility =View.GONE
-            mBinding?.viewPaymentLayer?.visibility = View.GONE
-        }
+            if (type!! < 3) {
+                Log.d("type", "onCreate: enter if")
+                mBinding?.changeRequestLayer?.visibility = View.GONE
+                mBinding?.qualityCheckLayer?.visibility = View.GONE
+                mBinding?.taxInvoiceLayer?.visibility = View.GONE
+                mBinding?.viewPaymentLayer?.visibility = View.GONE
+            }
 
-    }
+        }
 
     override fun onGetMoqCall() {
         try {
@@ -437,6 +573,16 @@ class EnquiryDetailsActivity: AppCompatActivity(),
         } catch (e: Exception) {
             Log.e("Transaction", "Exception onStatusChangeFailure " + e.message)
         }
+    }
+    override fun onFailure(){
+        Utility.displayMessage("something went Wrong", this)
+
+    }
+    override fun onSuccess(){
+        orderDetails = mOrderVm.loadSingleOrderDetails(enquiry!!,0)
+        Log.d("changeRequest", "onCreate: "+orderDetails)
+        changeRequestOn = orderDetails?.changeRequestOn
+        changeRequestStatus = orderDetails?.changeRequestStatus
     }
 
     override fun onGetTransactionsFailure() {

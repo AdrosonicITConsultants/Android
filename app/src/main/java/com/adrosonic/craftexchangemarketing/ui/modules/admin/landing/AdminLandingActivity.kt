@@ -74,6 +74,11 @@ class AdminLandingActivity : AppCompatActivity(){
 //        mViewModel?.getAllNotifications()
         mViewModel2?.getMoqDeliveryTimes()
         mViewModel2?.getTransactionStatus()
+//        mViewModel2?.getInnerEnquiryStageData()
+        mViewModel2?.getQCStageData()
+        mViewModel2?.getQCQuestionData()
+        mViewModel2?.getChangeRequestStatuses()
+
 //        ArtisanLandingActivity.DeviceRegistration(object :
 //            ArtisanLandingActivity.DeviceTokenCallback {
 //            override fun registeredToken(token: String) {

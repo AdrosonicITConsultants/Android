@@ -15,6 +15,7 @@ import com.adrosonic.craftexchangemarketing.repository.data.response.Notificatio
 //import com.adrosonic.craftexchangemarketing.repository.data.response.Rating.RatingEnquiryUserResponse
 //import com.adrosonic.craftexchangemarketing.repository.data.response.Rating.RatingQuestionsResponse
 import com.adrosonic.craftexchangemarketing.repository.data.response.buyer.ownDesign.DeleteOwnProductRespons
+import com.adrosonic.craftexchangemarketing.repository.data.response.changeReequest.CrDetailsResponse
 //import com.adrosonic.craftexchangemarketing.repository.data.response.changeReequest.CrDetailsResponse
 //import com.adrosonic.craftexchangemarketing.repository.data.response.orders.OrderProgressResponse
 import com.adrosonic.craftexchangemarketing.repository.data.response.orders.OrderResponse
@@ -357,37 +358,37 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
 //            })
 //    }
 //
-//    fun getChangeRequestDetails(enquiryId: Long){
-//        Log.e("CrDetails","enquiryId: "+enquiryId)
-//        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
-//        craftexchangemarketingRepository
-//            .getCrService()
-//            .getChangeRequestDetails(token,enquiryId.toInt())
-//            .enqueue(object : Callback, retrofit2.Callback<CrDetailsResponse> {
-//                override fun onFailure(call: Call<CrDetailsResponse>, t: Throwable) {
-//                    t.printStackTrace()
-//                    Log.e("CrDetails","isSuccessful false")
-//                    fetcCrListener?.onFetchCrFailure()
-//                }
-//                override fun onResponse(
-//                    call: Call<CrDetailsResponse>,
-//                    response: Response<CrDetailsResponse>
-//                ) {
-//                    Log.e("CrDetails","onResponse : ${response?.body()?.data}")
-//                    if(response?.body()?.valid!!){
-//                        Log.e("CrDetails","isSuccessful ")
-//                        if(response?.body()!!.data!!.changeRequestItemList!!.size>0){
-//                            CrPredicates.insertChangeReq(response?.body())
-//                            fetcCrListener?.onFetchCrSuccess()
-//                        }else  fetcCrListener?.onFetchCrFailure()
-//                    }else{
-//                        Log.e("CrDetails","isSuccessful false")
-//                        fetcCrListener?.onFetchCrFailure()
-//                    }
-//                }
-//            })
-//    }
-//
+    fun getChangeRequestDetails(enquiryId: Long){
+        Log.e("CrDetails","enquiryId: "+enquiryId)
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        craftexchangemarketingRepository
+            .getCrService()
+            .getChangeRequestDetails(token,enquiryId.toInt())
+            .enqueue(object : Callback, retrofit2.Callback<CrDetailsResponse> {
+                override fun onFailure(call: Call<CrDetailsResponse>, t: Throwable) {
+                    t.printStackTrace()
+                    Log.e("CrDetails","isSuccessful false")
+                    fetcCrListener?.onFetchCrFailure()
+                }
+                override fun onResponse(
+                    call: Call<CrDetailsResponse>,
+                    response: Response<CrDetailsResponse>
+                ) {
+                    Log.e("CrDetails","onResponse : ${response?.body()?.data}")
+                    if(response?.body()?.valid!!){
+                        Log.e("CrDetails","isSuccessful ")
+                        if(response?.body()!!.data!!.changeRequestItemList!!.size>0){
+                            CrPredicates.insertChangeReq(response?.body())
+                            fetcCrListener?.onFetchCrSuccess()
+                        }else  fetcCrListener?.onFetchCrFailure()
+                    }else{
+                        Log.e("CrDetails","isSuccessful false")
+                        fetcCrListener?.onFetchCrFailure()
+                    }
+                }
+            })
+    }
+
 //    fun raiseChangeRequest(enquiryId: Long,changeRequestParameters : RaiseCrInput){
 //        Log.e("RaiseCr","enquiryId: "+enquiryId)
 //        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"

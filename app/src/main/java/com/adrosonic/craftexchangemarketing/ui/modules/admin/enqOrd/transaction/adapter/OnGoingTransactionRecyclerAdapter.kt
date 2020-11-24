@@ -44,7 +44,7 @@ class OnGoingTransactionRecyclerAdapter(var context: Context?, private var trans
         var amount : TextView = view.findViewById(R.id.transaction_amount)
         var time : TextView = view.findViewById(R.id.transaction_time)
         var btnDoc : TextView = view.findViewById(R.id.btn_view_doc)
-        var btn_enquiry : ImageView = view.findViewById(R.id.btn_enquiry)
+
 
         var bottomlayout : LinearLayout = view.findViewById(R.id.transac_bottom_part)
     }

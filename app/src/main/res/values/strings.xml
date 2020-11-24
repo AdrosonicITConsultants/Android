@@ -91,6 +91,17 @@
     <string name="wishlist">Wishlist</string>
     <string name="chat">Chat</string>
 
+
+    <string name="unable_to_update_cr_stus">Unable to update CR status, please try again later</string>
+    <string name="unable_to_raise_cr">Unable to raise CR, please try again later</string>
+    <string name="cr_status_updated">CR status updated successfully</string>
+    <string name="cr_pleas_note">Please Note:\nChange request may be accepted or rejected subjective to the feasibility of the change by artisan.If accepted, there may be a change in final amount and hence the pro forma invoice.</string>
+    <string name="cr_note">You can only submit this change request once.Be sure about the change requested before submitting.\n\n</string>
+    <string name="cr_confirm_note">This change request may or may not be accepted. You can raise change request if rejected by first discussing with artisan in advance to avoid any rejection.</string>
+    <string name="cr_disabled">Change request disabled.</string>
+    <string name="cr_pleas_note_artisan">Please Note:\nChange request is only one time facility to buyer for their ongoing order with you.\nDo consider with checking box if able to accept the request.</string>
+    <string name="cr_note_artisan">If you accept this change request, the buyer shall not be able to raise another change request.\n\n</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 

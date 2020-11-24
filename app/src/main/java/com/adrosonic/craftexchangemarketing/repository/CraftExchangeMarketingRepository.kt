@@ -51,6 +51,11 @@ object craftexchangemarketingRepository {
         return builder(ResetPasswordDao::class.java)
     }
 
+
+    fun getCrService(): ChangeRequestDao {
+        return builder(ChangeRequestDao::class.java)
+    }
+
     fun getOrderService(): OrderDao {
         return builder(OrderDao::class.java)
     }

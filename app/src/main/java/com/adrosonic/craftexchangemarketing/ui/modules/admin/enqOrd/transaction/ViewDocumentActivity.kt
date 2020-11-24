@@ -105,11 +105,17 @@ class ViewDocumentActivity : AppCompatActivity(), TransactionViewModel.PaymentRe
                 when(docType){
                     DocumentType.ADVANCEPAY.getId() -> {
                         url = Utility.getAdvancePaymentImageUrl(receiptId,imgName)
+                        Log.e("PaymentReceipt", "ADVANCEPAY")
+
                     }
                     DocumentType.FINALPAY.getId() -> {
                         url = Utility.getFinalPaymentImageUrl(receiptId,imgName)
+                        Log.e("PaymentReceipt", "FINALPAY")
+
                     }
                  }
+                Log.e("PaymentReceipt", "FINALPAY"+url)
+
                 mBinding?.loader?.let { mBinding?.documentView?.let { it1 -> url?.let { it2 ->
                     ImageSetter.setFullImage(this,
                         it2, it1, it)

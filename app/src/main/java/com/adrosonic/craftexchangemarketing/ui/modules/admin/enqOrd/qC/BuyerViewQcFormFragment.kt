@@ -106,13 +106,20 @@ class BuyerViewQcFormFragment : Fragment(),
         qcStages = Utility?.getQcStageData()
         qcQues = Utility?.getQcQuesData()
         mQcVM?.getQcListener = this
+        Log.d("qccheck", "onViewCreated: "+qcStages)
+        Log.d("qccheck", "onViewCreated: "+qcQues)
+
+
 
         orderDetails = enqID?.toLong()?.let { orderStatus?.toLong()?.let { it1 ->
             mOrdVM?.getSingleOnOrderData(it,
                 it1
             )
         } }?.value
+        Log.d("qccheck", "onViewCreated: "+orderDetails)
+
         if (orderDetails != null) {
+            Log.d("qccheck", "onViewCreated: not null")
             setDetails()
         }
 

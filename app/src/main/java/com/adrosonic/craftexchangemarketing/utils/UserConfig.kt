@@ -95,6 +95,9 @@ const val ESCALATION_DATA ="escalation_data"
 const val QC_STAGE_DATA ="qc_stage_data"
 const val QC_QUESTION_DATA ="qc_question_data"
 
+const val CR_STATUS_DATA ="cr_status_data"
+
+
 
 
 class UserConfig {
@@ -203,6 +206,12 @@ class UserConfig {
         get() = Prefs.getString(QC_STAGE_DATA,"")
         set(value) {
             Prefs.putString(QC_STAGE_DATA, value)
+            field = value
+        }
+    var crStatusData : String? = ""
+        get() = Prefs.getString(CR_STATUS_DATA,"")
+        set(value) {
+            Prefs.putString(CR_STATUS_DATA, value)
             field = value
         }
 

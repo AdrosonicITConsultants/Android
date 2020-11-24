@@ -118,7 +118,7 @@
                     android:gravity="start"
                     android:paddingStart="10dp"
                     android:textColor="@color/black_text"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/transaction_time"
@@ -143,15 +143,6 @@
                     android:gravity="center_vertical"
                     android:textColor="#EF8181"
                     android:textSize="12sp" />
-
-                <ImageView
-                    android:id="@+id/btn_enquiry"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="1dp"
-                    android:layout_weight="1"
-                    android:background="?selectableItemBackgroundBorderless"
-                    android:src="@drawable/ic_enquiry_red" />
 
             </LinearLayout>
 
