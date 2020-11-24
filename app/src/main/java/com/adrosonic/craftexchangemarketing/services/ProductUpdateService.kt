@@ -62,31 +62,31 @@ class ProductUpdateService: JobIntentService() {
 
         Log.e("Offline","createProductTemplateString 1111111111:"+ weaveIds.size)
 
-        var relList=ArrayList<RelProduct>()
-        var careList=ArrayList<ProductCare>()
-        var weafList=ArrayList<ProductWeaf>()
-        if(realatedEntry!=null)  {
-            var relatedProductObj= RelProduct(realatedEntry.productTypeId?:0,realatedEntry.productWidth?:"",realatedEntry.productLength?:"")
-            relList.add(relatedProductObj)
-        }
+//        var relList=ArrayList<RelProduct>()
+//        var careList=ArrayList<ProductCare>()
+//        var weafList=ArrayList<ProductWeaf>()
+//        if(realatedEntry!=null)  {
+//            var relatedProductObj= RelProduct(realatedEntry.productTypeId?:0,realatedEntry.productWidth?:"",realatedEntry.productLength?:"")
+//            relList.add(relatedProductObj)
+//        }
         weaveIds.forEach {
-            var productWeaf=ProductWeaf(it,productEntry?.productId?:0,it)
-            weafList.add(productWeaf)
+//            var productWeaf=ProductWeaf(it,productEntry?.productId?:0,it)
+//            weafList.add(productWeaf)
         }
         careIdList.forEach {
-            var productCare=ProductCare(it,it,productEntry?.productId?:0)
-            careList.add(productCare)
+//            var productCare=ProductCare(it,it,productEntry?.productId?:0)
+//            careList.add(productCare)
         }
 
-        var template= UpdateProductTemplateRequest(productEntry?.productCode?:"",productEntry?.extraWeftDyeId?:0,productEntry?.extraWeftYarnCount?:"",
-            productEntry?.extraWeftYarnId?:0,productEntry?.gsm?:"",productEntry?.productId?:0,productEntry?.productLength?:"",careList,
-            productEntry?.productCategoryId?:0,productEntry?.productStatusId?:0,productEntry?.productTypeId?:0,weafList,
-            productEntry?.productSpecs?:"",productEntry?.reedCountId?:0,relList,productEntry?.productTag?:"",productEntry?.warpDyeId?:0,
-            productEntry?.warpYarnCount?:"",productEntry?.warpYarnId?:0,productEntry?.weftDyeId?:0,productEntry?.weftYarnCount?:"",
-            productEntry?.weftYarnId?:0,productEntry?.weight?:"",productEntry?.productWidth?:"")
-
-        Log.e("Offline","template :"+ Gson().toJson(template))
-        return Gson().toJson(template)
+//        var template= UpdateProductTemplateRequest(productEntry?.productCode?:"",productEntry?.extraWeftDyeId?:0,productEntry?.extraWeftYarnCount?:"",
+//            productEntry?.extraWeftYarnId?:0,productEntry?.gsm?:"",productEntry?.productId?:0,productEntry?.productLength?:"",careList,
+//            productEntry?.productCategoryId?:0,productEntry?.productStatusId?:0,productEntry?.productTypeId?:0,weafList,
+//            productEntry?.productSpecs?:"",productEntry?.reedCountId?:0,relList,productEntry?.productTag?:"",productEntry?.warpDyeId?:0,
+//            productEntry?.warpYarnCount?:"",productEntry?.warpYarnId?:0,productEntry?.weftDyeId?:0,productEntry?.weftYarnCount?:"",
+//            productEntry?.weftYarnId?:0,productEntry?.weight?:"",productEntry?.productWidth?:"")
+//
+//        Log.e("Offline","template :"+ Gson().toJson(template))
+        return Gson().toJson("template")
     }
 
 

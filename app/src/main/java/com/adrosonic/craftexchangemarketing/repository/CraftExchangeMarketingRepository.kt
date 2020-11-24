@@ -105,9 +105,14 @@ object craftexchangemarketingRepository {
     fun getTransactionService(): TransactionDao {
         return builder(TransactionDao::class.java)
     }
-
     fun getEnquiryOrderService() : EnquiryOrderDao{
         return builder(EnquiryOrderDao::class.java)
+    }
+    fun getTeamService() : TeamDao{
+        return builder(TeamDao::class.java)
+    }
+    fun getProductCatService() : ProductCatalogueDao{
+        return builder(ProductCatalogueDao::class.java)
     }
     fun getChatService(): ChatListDao {
         return builder(ChatListDao::class.java)

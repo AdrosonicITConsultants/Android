@@ -306,7 +306,8 @@ class OnGoingTransactionRecyclerAdapter(var context: Context?, private var trans
                 }
                 //Delivery Challan
                 20L,22L -> {
-                    val intent = Intent(transaction?.enquiryID?.let { it1 -> context?.viewDocument(it1,DocumentType.FINALPAY.getId()) })
+                    val intent = Intent(transaction?.enquiryID?.let { it1 -> context?.viewDocument(it1,DocumentType.DELIVERY_CHALLAN.getId()) })
+//                    val intent = Intent(transaction?.enquiryID?.let { it1 -> context?.viewDocument(it1,DocumentType.FINALPAY.getId()) })
                     context?.startActivity(intent)
                 }
             }

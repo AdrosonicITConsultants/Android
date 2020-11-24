@@ -84,14 +84,14 @@ interface ProductDao {
     ): Call<ArtisanProductTemplateRespons>
 
     @Headers("Accept: application/json")
-    @GET("api/Product/{productId}/{imagename}")
+    @GET("Product/{productId}/{imagename}")
     fun getProductImage(
         @Path("productId") productId: Long,
         @Path("imagename") imagename: String
     ):Call<ResponseBody>
 
     @Headers("Accept: application/json")
-    @DELETE("/product/deleteProduct/{productId}")
+    @DELETE("api/product/deleteProduct/{productId}")
     fun deleteProductsTemplate(
         @Header("Authorization") token: String,
         @Path("productId") productId: Int

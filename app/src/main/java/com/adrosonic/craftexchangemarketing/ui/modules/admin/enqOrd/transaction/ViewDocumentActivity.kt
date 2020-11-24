@@ -113,6 +113,10 @@ class ViewDocumentActivity : AppCompatActivity(), TransactionViewModel.PaymentRe
                         Log.e("PaymentReceipt", "FINALPAY")
 
                     }
+                    DocumentType.DELIVERY_CHALLAN.getId() -> {
+                        url = Utility.getDeliveryChallanReceiptUrl(receiptId,imgName)
+                        Log.e("PaymentReceipt", "FINALPAY")
+                    }
                  }
                 Log.e("PaymentReceipt", "FINALPAY"+url)
 

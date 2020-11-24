@@ -589,17 +589,15 @@ class EnquiryPredicates {
 
         fun insertEnquiryProduct(details: EnquiryProductResponse?,isCustom : Boolean?){
             nextID = 0L
-//            var productId=0L
+            Log.e("EnquiryProduct","details ${details?.data?.artistName}")
             val realm = CXRealmManager.getRealmInstance()
             val prod = details?.data
             try {
                 realm.executeTransaction {
-
                     var productObj = realm.where(EnquiryProductDetails::class.java)
                         .equalTo(EnquiryProductDetails.COLUMN_PRODUCT_ID,prod?.id)
                         .limit(1)
                         .findFirst()
-
                     if (productObj == null){
                         var primId = it.where(EnquiryProductDetails::class.java).max("_id")
                         if (primId == null) {
@@ -607,15 +605,14 @@ class EnquiryPredicates {
                         } else {
                             nextID = primId.toLong() + 1
                         }
-                        var exprod = it.createObject(
-                            EnquiryProductDetails::class.java,
-                            nextID
-                        )
+                        var exprod = it.createObject(EnquiryProductDetails::class.java,nextID )
+                        Log.e("EnquiryProduct","1111111 ${prod?.artitionId}")
                         exprod.isCustom = isCustom
                         exprod.artisanId = prod?.artitionId
                         exprod.artisanName = prod?.artistName
                         exprod.clusterId = prod?.clusterId
                         exprod.clusterName = prod?.clusterName
+                        Log.e("EnquiryProduct","22222222 ${prod?.id}")
 //                        exprod.brandName = catalogueProduct?.brand
 //                        productId= catalogueProduct?.id
                         exprod.productId = prod?.id
@@ -625,39 +622,40 @@ class EnquiryPredicates {
                         exprod.productCategoryId = prod?.productCategory?.id
                         exprod.productCategoryName = prod?.productCategory?.productDesc
                         exprod.productCategoryCode = prod?.productCategory?.code
-
+                        Log.e("EnquiryProduct","333333333333 ${prod?.id}")
                         exprod.productTypeId = prod?.productType?.id
                         exprod.productTypeDesc = prod?.productType?.productDesc
                         exprod.inProductCategory = prod?.productType?.productCategoryId
-
+                        Log.e("EnquiryProduct","444444444444 ${prod?.id}")
                         exprod.warpYarnId = prod?.warpYarn?.id
                         exprod.warpYarnDesc = prod?.warpYarn?.yarnDesc
                         exprod.warpYarnCount = prod?.warpYarnCount
-//                                exprod.warpYarnTypeId = catalogueProduct?.warpYarn?.yarnType?.id TODO : to be used later if required
+
+                        Log.e("EnquiryProduct","55555555 ${prod?.id}")
                         exprod.warpDyeId = prod?.warpYarn?.id
                         exprod.warpDyeId = prod?.warpDye?.id
                         exprod.warpDyeDesc = prod?.warpDye?.dyeDesc
-
+                        Log.e("EnquiryProduct","666666666 ${prod?.id}")
                         exprod.weftYarnId = prod?.weftYarn?.id
                         exprod.weftYarnDesc = prod?.weftYarn?.yarnDesc
                         exprod.weftYarnCount = prod?.weftYarnCount
 //                                exprod.weftYarnTypeId = catalogueProduct?.weftYarn?.yarnType?.id TODO : to be used later if required
                         exprod.weftDyeId = prod?.weftDye?.id
                         exprod.weftDyeDesc = prod?.weftDye?.dyeDesc
-
+                        Log.e("EnquiryProduct","77777777 ${prod?.id}")
                         exprod.extraWeftYarnId = prod?.extraWeftYarn?.id
                         exprod.extraWeftYarnDesc = prod?.extraWeftYarn?.yarnDesc
                         exprod.extraWeftYarnCount = prod?.extraWeftYarnCount
 //                                exprod.extraWeftYarnTypeId = catalogueProduct?.extraWeftYarn?.yarnType?.id TODO : to be used later if required
                         exprod.extraWeftDyeId = prod?.extraWeftDye?.id
                         exprod.extraWeftDyeDesc = prod?.extraWeftDye?.dyeDesc
-
+                        Log.e("EnquiryProduct","88888888888 ${prod?.id}")
                         exprod.productLength = prod?.length
                         exprod.productWidth = prod?.width
 
                         exprod.reedCountId = prod?.reedCount?.id
                         exprod.reedCount = prod?.reedCount?.count
-
+                        Log.e("EnquiryProduct","99999999999 ${prod?.id}")
                         exprod.productStatusId = prod?.productStatusId
 
                         //TODO : ProductCares, ProductImages and ProductWeaves...different table
@@ -666,12 +664,12 @@ class EnquiryPredicates {
                         exprod.gsm = prod?.gsm
                         exprod.weight = prod?.weight
                         exprod.product_spe = prod?.product_spe
-
+                        Log.e("EnquiryProduct","aaaaaaaaaaa ${prod?.id}")
 //                        exprod.createdOn = catalogueProduct?.createdOn
 //                        exprod.modifiedOn = catalogueProduct?.modifiedOn
 //                        exprod.madeWithAntaran = catalogueProduct?.madeWithAnthran
                         exprod.isDeleted = prod?.isDeleted
-
+                        Log.e("EnquiryProduct","bbbbbbbbbbb ${prod?.id}")
                         realm.copyToRealmOrUpdate(exprod)
                     }
                     else{

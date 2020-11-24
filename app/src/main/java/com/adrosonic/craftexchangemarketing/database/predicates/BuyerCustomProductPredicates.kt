@@ -132,8 +132,9 @@ class BuyerCustomProductPredicates {
                             Log.e("ProdImage", "555555555555555 ${product.productImages.size}")
                             product.productWeaves.forEach {
                                 Log.e("ProdImage", "Weave Ids : ${it?.weaveId}")
-                                var weaveType=ProductWeaf(it?.id?:0,product.id,it?.weaveId?:0)
-                                arrProdWeaves.add(weaveType)
+//                                var weaveType=ProductWeaf(it?.id?:0,product.id,
+//                                    it?.weaveId?:0)
+//                                arrProdWeaves.add(weaveType)
                             }
                             realm?.copyToRealmOrUpdate(dbProdObj)
                         }
@@ -184,8 +185,8 @@ class BuyerCustomProductPredicates {
                             Log.e("ProdImage", "44444444444 ${product.productImages.size}")
                             product.productWeaves.forEach {
                                 Log.e("ProdImage", "Weave Ids : ${it?.weaveId}")
-                                var weaveType=ProductWeaf(it?.id?:0,product.id,it?.weaveId?:0)
-                                arrProdWeaves.add(weaveType)
+//                                var weaveType=ProductWeaf(it?.id?:0,product.id,it?.weaveId?:0)
+//                                arrProdWeaves.add(weaveType)
                             }
                         }
                     }
@@ -198,7 +199,7 @@ class BuyerCustomProductPredicates {
                 }
                 if(arrProdWeaves.size>0){
                     arrProdWeaves?.forEach {
-                        WeaveTypesPredicates.deleteWeaveIds(it.productId)
+//                        WeaveTypesPredicates.deleteWeaveIds(it.productId)
                     }
                     WeaveTypesPredicates.insertWeaveIds(arrProdWeaves)
                 }

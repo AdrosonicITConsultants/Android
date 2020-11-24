@@ -30,9 +30,9 @@
         android:title="Enquiries"
         app:showAsAction="ifRoom|withText" />
     <item
-        android:id="@+id/escalations"
+        android:id="@+id/team"
         android:icon="@drawable/ic_team_infomangmt"
-        android:title="Escalations"
+        android:title="Team"
         android:visible="true" />
 
 </menu>

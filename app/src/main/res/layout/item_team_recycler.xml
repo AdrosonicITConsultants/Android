@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/teams_list_color"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:id="@+id/team_item"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:orientation="horizontal"
+        android:weightSum="20">
+
+        <TextView
+            android:id="@+id/admin_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="7"
+            android:text="Officer Name"
+            android:gravity="start"
+            android:layout_gravity="center"
+            android:textSize="@dimen/product_availability_text"
+            android:fontFamily="@font/lato_bold"
+            android:textColor="@color/teams_profile_details_color"/>
+
+        <TextView
+            android:id="@+id/admin_designation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:text="Officer"
+            android:gravity="start"
+            android:layout_gravity="center"
+            android:textSize="@dimen/product_availability_text"
+            android:fontFamily="@font/lato_regular"
+            android:textColor="@color/teams_profile_details_color"/>
+
+        <TextView
+            android:id="@+id/admin_email"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="9"
+            android:text="officer@gmail.com"
+            android:layout_gravity="center"
+            android:gravity="end"
+            android:textSize="@dimen/product_availability_text"
+            android:fontFamily="@font/lato_bold"
+            android:textColor="@color/teams_profile_details_color"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="2dp"
+        android:background="@color/darker_gray"/>
+
+</LinearLayout>

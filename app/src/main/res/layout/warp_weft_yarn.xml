@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/black_text"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <LinearLayout
+        android:background="@color/black_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -29,7 +31,7 @@
                 android:layout_gravity="center_vertical"
                 android:fontFamily="@font/playfair_regular"
                 android:text="Warp"
-                android:textColor="@color/black_text"
+                android:textColor="@color/lighter_gray"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -56,8 +58,11 @@
             <Spinner
                 android:id="@+id/sp_yarn_type"
                 style="@style/Widget.AppCompat.DropDownItem.Spinner"
+                android:popupBackground="@color/table_corner_layout_color"
+                android:backgroundTint="@color/white_text"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
+
                 android:autofillHints="Select product category" />
         </RelativeLayout>
 
@@ -72,18 +77,21 @@
                 style="@style/Widget.AppCompat.DropDownItem.Spinner"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
+                android:popupBackground="@color/table_corner_layout_color"
+                android:backgroundTint="@color/white_text"
                 android:autofillHints="Product type" />
         </RelativeLayout>
 
         <EditText
             android:id="@+id/et_yarn_count"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_marginBottom="@dimen/expandable_layout_std_padding"
             android:background="@drawable/rectangle_edittext_bg"
-            android:fontFamily="@font/playfair_regular"
             android:hint="Enter the count of yarn"
+            android:textColorHint="@color/lighter_gray"
             android:maxLength="40"
+            android:textColor="@color/lighter_gray"
             android:maxLines="1"
             android:textSize="@dimen/edit_text"
             android:visibility="gone" />
@@ -98,6 +106,8 @@
                 style="@style/Widget.AppCompat.DropDownItem.Spinner"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
+                android:popupBackground="@color/table_corner_layout_color"
+                android:backgroundTint="@color/white_text"
                 android:autofillHints="Product type" />
         </RelativeLayout>
     </LinearLayout>

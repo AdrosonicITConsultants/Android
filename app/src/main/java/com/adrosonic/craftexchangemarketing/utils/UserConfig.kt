@@ -97,6 +97,10 @@ const val QC_QUESTION_DATA ="qc_question_data"
 
 const val CR_STATUS_DATA ="cr_status_data"
 
+/////////////////////////TeamMArketing/////////////////////////////
+const val ADMIN_ROLES = "admin_roles"
+const val ADMIN_TEAM = "admin_team"
+const val ADMIN_PROFILE = "admin_profile"
 
 
 
@@ -113,6 +117,31 @@ class UserConfig {
         editor.clear()
         editor.commit()
     }
+
+
+
+    var adminRoles = ""
+        get() = Prefs.getString(ADMIN_ROLES, "")
+        set(value) {
+            Prefs.putString(ADMIN_ROLES, value)
+            field = value
+        }
+
+    var adminTeam = ""
+        get() = Prefs.getString(ADMIN_TEAM, "")
+        set(value) {
+            Prefs.putString(ADMIN_TEAM, value)
+            field = value
+        }
+
+    var adminProfile = ""
+        get() = Prefs.getString(ADMIN_PROFILE, "")
+        set(value) {
+            Prefs.putString(ADMIN_PROFILE, value)
+            field = value
+        }
+
+
     var moqDeliveryDates = ""
         get() = Prefs.getString(MOQ_DELIVERY_DATES, "")
         set(value) {
@@ -598,11 +627,6 @@ class UserConfig {
             Prefs.putInt(ARTISAN_DB_PAGE_COUNT, value)
             field = value
         }
-    var buyerDbPageCount : Int = 1
-        get() = Prefs.getInt(BUYER_DB_PAGE_COUNT,1)
-        set(value) {
-            Prefs.putInt(BUYER_DB_PAGE_COUNT, value)
-            field = value
-        }
+
 }
 

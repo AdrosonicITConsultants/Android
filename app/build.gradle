@@ -15,11 +15,11 @@ android {
 
     defaultConfig {
         applicationId "com.adrosonic.craftexchangemarketing"
+
         minSdkVersion 23
         targetSdkVersion 29
         versionCode 6
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

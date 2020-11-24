@@ -34,10 +34,13 @@ import com.adrosonic.craftexchangemarketing.repository.data.response.enquiry.Enq
 import com.adrosonic.craftexchangemarketing.repository.data.response.enquiry.InnerStageData
 import com.adrosonic.craftexchangemarketing.repository.data.response.moq.Datum
 import com.adrosonic.craftexchangemarketing.repository.data.response.moq.MoqDeliveryTimesResponse
+import com.adrosonic.craftexchangemarketing.repository.data.response.team.*
+import com.adrosonic.craftexchangemarketing.ui.modules.enquiry.enquiryDetails
 import com.adrosonic.craftexchangemarketing.repository.data.response.qc.QCData
 import com.adrosonic.craftexchangemarketing.repository.data.response.qc.QCQuestionData
 import com.adrosonic.craftexchangemarketing.repository.data.response.transaction.TranStatData
 import com.adrosonic.craftexchangemarketing.repository.data.response.transaction.TransactionStatusData
+
 import com.bumptech.glide.Glide
 import com.google.gson.GsonBuilder
 import com.pixplicity.easyprefs.library.Prefs
@@ -128,6 +131,28 @@ class Utility {
                 }
             })
         }
+
+        fun getAdminRoleDetails() : List<AdminRoleData>?{
+            var details = UserConfig.shared.adminRoles
+            val gson = GsonBuilder().create()
+            val adminData = gson.fromJson(details, AdminRolesResponse::class.java)
+            return adminData?.data
+        }
+
+        fun getAdminDetails() : List<AdminProfileData>?{
+           var details = UserConfig.shared.adminProfile
+            val gson = GsonBuilder().create()
+            val adminData = gson.fromJson(details, AdminResponse::class.java)
+            return adminData?.data
+        }
+
+        fun getAdminTeam() : List<AdminsData>? {
+            var details = UserConfig.shared.adminTeam
+            val gson = GsonBuilder().create()
+            val adminData = gson.fromJson(details, AdminsResponse::class.java)
+            return adminData?.data
+        }
+
         fun getDeliveryTimeList():List<Datum>?{
             val moqDeliveryJson = UserConfig.shared.moqDeliveryDates
             val gson = GsonBuilder().create()
@@ -266,11 +291,11 @@ class Utility {
             }
         }
         fun getDeliveryChallanReceiptUrl(enquiryId : Long?,imagename : String?) : String{
-            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_UAT}deliveryChallanReceipt/${enquiryId}/${imagename}"
+            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV}deliveryChallanReceipt/${enquiryId}/${imagename}"
         }
 
         fun getAdvancePaymentImageUrl(receiptId : Long?,imagename : String?) : String{
-            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_UAT}AdvancedPayment/${receiptId}/${imagename}"
+            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV}AdvancedPayment/${receiptId}/${imagename}"
         }
 
         fun getFinalPaymentImageUrl(receiptId : Long?,imagename : String?) : String{

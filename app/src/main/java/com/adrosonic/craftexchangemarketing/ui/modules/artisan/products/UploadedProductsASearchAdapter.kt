@@ -25,7 +25,6 @@ class UploadedProductsASearchAdapter(var context: Context?, private var artisanP
     inner class ViewHolder(var binding: ItemArtisanProductBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(artisanProduct: ArtisanProducts){
             binding.itemArtisanProduct = artisanProduct
-//            binding.event = this@ArtisanProductAdapter
             binding.executePendingBindings()
         }
     }

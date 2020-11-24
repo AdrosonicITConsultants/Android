@@ -17,13 +17,13 @@ import com.adrosonic.craftexchangemarketing.repository.data.response.buyer.viewP
 import com.adrosonic.craftexchangemarketing.repository.data.response.buyer.viewProducts.singleProduct.SingleProductDetails
 import com.adrosonic.craftexchangemarketing.repository.data.response.buyer.wishList.WishListedIds
 import com.adrosonic.craftexchangemarketing.repository.data.response.changeReequest.CrOptionsResponse
-import com.adrosonic.craftexchangemarketing.ui.modules.buyer.profile.BrandFragment
 import com.adrosonic.craftexchangemarketing.repository.data.response.enquiry.EnquiryAvaProdStageData
 import com.adrosonic.craftexchangemarketing.repository.data.response.enquiry.EnquiryStageData
 import com.adrosonic.craftexchangemarketing.repository.data.response.enquiry.InnerStageData
 import com.adrosonic.craftexchangemarketing.repository.data.response.logout.LogoutResponse
 import com.adrosonic.craftexchangemarketing.repository.data.response.moq.MoqDeliveryTimesResponse
 import com.adrosonic.craftexchangemarketing.repository.data.response.qc.QCQuestionData
+import com.adrosonic.craftexchangemarketing.repository.data.response.team.AdminRolesResponse
 import com.adrosonic.craftexchangemarketing.repository.data.response.transaction.TransactionStatusData
 import com.adrosonic.craftexchangemarketing.utils.ConstantsDirectory
 import com.adrosonic.craftexchangemarketing.utils.UserConfig
@@ -296,7 +296,7 @@ class LandingViewModel(application: Application) : AndroidViewModel(application)
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         craftexchangemarketingRepository
             .getNotificationService()
-            .getAllNotifications(token)
+            .getAllAdminNotifications(token)
             .enqueue(object: Callback, retrofit2.Callback<NotificationResponse> {
                 override fun onFailure(call: Call<NotificationResponse>, t: Throwable) {
                     t.printStackTrace()
@@ -355,6 +355,23 @@ class LandingViewModel(application: Application) : AndroidViewModel(application)
                         Log.e(TAG,"getMoqDeliveryTimes :${Gson().toJson(response.body())}")
                         UserConfig.shared.moqDeliveryDates=Gson().toJson(response.body())
                         Log.e(TAG,"getMoqDeliveryTimes after:${UserConfig.shared.moqDeliveryDates}")
+                    }
+                }
+            })
+    }
+
+    fun getAdminRole(){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        craftexchangemarketingRepository
+            .getTeamService()
+            .getAdminRoles(token)
+            .enqueue(object : Callback, retrofit2.Callback<AdminRolesResponse> {
+                override fun onFailure(call: Call<AdminRolesResponse>, t: Throwable) {
+                    t.printStackTrace()
+                }
+                override fun onResponse(call: Call<AdminRolesResponse>, response: Response<AdminRolesResponse>) {
+                    if (response?.body()?.valid == true){
+                        UserConfig.shared.adminRoles=Gson().toJson(response.body())
                     }
                 }
             })

@@ -49,10 +49,21 @@
     <color name="selected_text_color">#ffffff</color>
     <color name="separator_color">#273e5b</color>
     <color name="apply_bg_color">#B0FFD1</color>
+    <color name="marketing_bg">#020202</color>
+    <color name="marketing_noti_bg">#3C3C3C</color>
+    <color name="marketing_noti_title">#4496B0</color>
+
+    <color name="teams_bg_color">#12342C</color>
+    <color name="teams_widget_color">#194F3B</color>
+    <color name="teams_list_color">#020D0A</color>
+    <color name="teams_profile_details_color">#B1EDCE</color>
     <color name="view_receipt">#003884</color>
     <color name="view_invoice">#ef8181</color>
 
     <color name="mark_resolve">#369BEB</color>
     <color name="resolved">#2fc183</color>
+
+
+
 
 </resources>
