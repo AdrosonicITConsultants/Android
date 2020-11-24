@@ -20,6 +20,7 @@ data class ProductCatalogueRes (
     val brand: String?=null,
     val noOfOrdersGenerated: Long? = null,
     val orderGenerated: Long,
-    val count: Long
+    val count: Long,
+    val clusterName: String
 )
 

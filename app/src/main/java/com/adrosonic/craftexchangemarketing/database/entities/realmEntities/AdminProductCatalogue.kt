@@ -20,7 +20,7 @@ open class AdminProductCatalogue : RealmObject() {
     var orderGenerated: Long? = 0
     var count: Long? = 0
     var isArtisan: Long? = 0
-
+    var clusterName: String? = ""
 
     companion object {
         const val COLUMN_TABLE = "AdminProductCatalogue"
@@ -33,6 +33,7 @@ open class AdminProductCatalogue : RealmObject() {
         const val COLUMN_BRAND = "brand"
         const val COLUMN_AVAILABILITY = "availability"
         const val COLUMN_PRODUCT_ID = "productID"
+        const val COLUMN_CLUSTER = "clusterName"
     }
 
 }

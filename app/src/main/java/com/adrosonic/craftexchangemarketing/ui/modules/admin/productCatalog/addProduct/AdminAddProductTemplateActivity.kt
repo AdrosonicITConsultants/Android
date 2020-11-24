@@ -183,7 +183,7 @@ class AdminAddProductTemplateActivity : AppCompatActivity(),
         img_delete.setOnClickListener {
             showDeleteDialog(productId)
         }
-        loadData()
+        productEntry?.let { loadData() }
         /////////////////////////Save and Upload///////////////////////////
         mBinding?.txtSelectBrand?.setOnClickListener { saveUploadProduct() }
 //        txt_reset.setOnClickListener { resetAll() }

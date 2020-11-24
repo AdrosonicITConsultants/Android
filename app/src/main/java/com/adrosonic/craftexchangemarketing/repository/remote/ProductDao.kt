@@ -16,37 +16,37 @@ import retrofit2.http.*
 interface ProductDao {
 
     @Headers("Accept: application/json")
-    @GET("product/getAllProducts")
+    @GET("api/product/getAllProducts")
     fun getAllProducts(): Call<AllProductsResponse>
 
     @Headers("Accept: application/json")
-    @GET("product/getProduct/{productId}")
+    @GET("api/product/getProduct/{productId}")
     fun getSingleProduct(
         @Header("Authorization") token: String,
         @Path("productId") productId : Long
     ): Call<EnquiryProductResponse>
 
     @Headers("Accept: application/json")
-    @GET("filter/getFilteredArtisans")
+    @GET("api/filter/getFilteredArtisans")
     fun getFilteredArtisans(@Header("Authorization") token: String): Call<BrandListResponse>
 
     ////////////////////////////////Catalogue APIs//////////////////////////////////////
     @Headers("Accept: application/json")
-    @GET("product/getProductByArtisan/{artisanId}")
+    @GET("api/product/getProductByArtisan/{artisanId}")
     fun getProductsByArtisan(
         @Header("Authorization") token: String,
         @Path("artisanId") artisanId: Long
     ): Call<CatalogueProductsResponse>
 
     @Headers("Accept: application/json")
-    @GET("product/getClusterProducts/{clusterId}")
+    @GET("api/product/getClusterProducts/{clusterId}")
     fun getProductByCluster(
         @Header("Authorization") token: String,
         @Path("clusterId") clusterId: Long
     ): Call<CatalogueProductsResponse>
 
     @Headers("Accept: application/json")
-    @GET("product/getProductCategoryProducts/{productCategoryId}")
+    @GET("api/product/getProductCategoryProducts/{productCategoryId}")
     fun getProductByCategory(
         @Header("Authorization") token: String,
         @Path("productCategoryId") productCategoryId: Long
@@ -55,16 +55,16 @@ interface ProductDao {
     ////////////////////////////////////////////////////////////////////////////////////
     //Artisan Landing Screen
     @Headers("Accept: application/json")
-    @GET("product/getArtitionProducts")
+    @GET("api/product/getArtitionProducts")
     fun getArtisanProducts(@Header("Authorization") token: String): Call<ArtisanProductDetailsResponse>
 
     //////////////////////////////////////////product template artisan///////////////////////////////////////////////////
     @Headers("Accept: application/json")
-    @GET("product/getProductUploadData")
+    @GET("api/product/getProductUploadData")
     fun getProductUploadData(@Header("Authorization") token: String): Call<ProductUploadData>
 
     @Headers("Accept: application/json")
-    @POST("product/uploadProduct")
+    @POST("api/product/uploadProduct")
     fun uploadProductTemplate(
         @Header("Authorization") token: String,
         @Header("Content-Type") headerValue:String,
@@ -74,7 +74,7 @@ interface ProductDao {
     ): Call<ArtisanProductTemplateRespons>
 
     @Headers("Accept: application/json")
-    @PUT("/product/edit/product")
+    @PUT("api/product/edit/product")
     fun updateProductTemplate(
         @Header("Authorization") token: String,
         @Header("Content-Type") headerValue:String,
@@ -84,14 +84,14 @@ interface ProductDao {
     ): Call<ArtisanProductTemplateRespons>
 
     @Headers("Accept: application/json")
-    @GET("/Product/{productId}/{imagename}")
+    @GET("api/Product/{productId}/{imagename}")
     fun getProductImage(
         @Path("productId") productId: Long,
         @Path("imagename") imagename: String
     ):Call<ResponseBody>
 
     @Headers("Accept: application/json")
-    @DELETE("/product/deleteProduct/{productId}")
+    @DELETE("api/product/deleteProduct/{productId}")
     fun deleteProductsTemplate(
         @Header("Authorization") token: String,
         @Path("productId") productId: Int

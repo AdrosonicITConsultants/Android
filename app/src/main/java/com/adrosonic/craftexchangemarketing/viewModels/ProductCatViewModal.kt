@@ -114,6 +114,7 @@ class ProductCatViewModal(application: Application) : AndroidViewModel(applicati
                                     }
                                 }, 1000)
                                 ProductCataloguePredicates.insertProductCatalogue(response?.body()?.data!!,0)//dbcall
+//                                response?.body()?.data!!.forEach { getArtisanProduct(it.id) }
 //                            }
                         }else{
                         Log.e("ArtisanProduct","Failure")
@@ -167,6 +168,7 @@ class ProductCatViewModal(application: Application) : AndroidViewModel(applicati
                     if(response.body()?.valid == true){
                         Log.e("ArtisanProduct","onSuccess: ${response?.body()}")
                         ProductCataloguePredicates.insertProductDetails(response.body())
+//                        ProductCataloguePredicates.updateCluster(response.body())
 
                         Timer().schedule(object : TimerTask() {
                             override fun run() {

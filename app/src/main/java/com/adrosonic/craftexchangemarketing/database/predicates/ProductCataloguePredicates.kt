@@ -25,9 +25,10 @@ class ProductCataloguePredicates {
     companion object {
         private val TAG="ArtisanProduct"
         private var nextID : Long? = 0
-
+        var deletedList=ArrayList<Long>()
         fun insertProductCatalogue(data: List<ProductCatalogueRes>, isArtisan:Long) {
             nextID = 0L
+           deletedList.clear()
             val realm = CXRealmManager.getRealmInstance()
             try {
                 realm.executeTransaction {
@@ -41,6 +42,7 @@ class ProductCataloguePredicates {
                                 .findFirst()
                             val prodId = prodObj?.id ?: 0
                             Log.e(TAG, "222222222222222 : $prodId")
+                            deletedList.add(prod.id)
                             if (prodId.equals(prod.id)) {
                                 Log.e(TAG, "333333 Update: ${prod.id}")
                                 prodObj?.availability = prod.availability
@@ -57,6 +59,7 @@ class ProductCataloguePredicates {
                                 prodObj?.orderGenerated = prod.orderGenerated
                                 prodObj?.count = prod.count
                                 prodObj?.isArtisan =isArtisan
+                                prodObj?.clusterName =prod.clusterName
 
                                 realm.copyToRealmOrUpdate(prodObj)
                             } else {
@@ -82,6 +85,7 @@ class ProductCataloguePredicates {
                                 prodObj?.orderGenerated = prod.orderGenerated
                                 prodObj?.count = prod.count
                                 prodObj?.isArtisan =isArtisan
+                                prodObj?.clusterName =prod.clusterName
                                 realm.copyToRealmOrUpdate(prodObj)
                             }
                         }
@@ -92,8 +96,21 @@ class ProductCataloguePredicates {
             } finally {
 //                realm.close()
             }
+            if(deletedList.size>0){
+                deleteProdCatElement(deletedList)
+            }
         }
+        fun deleteProdCatElement(deletedList:ArrayList<Long>){
 
+            var realm = CXRealmManager.getRealmInstance()
+            var allProducts: RealmResults<AdminProductCatalogue>? =null
+            realm.executeTransaction {
+                allProducts = realm.where(AdminProductCatalogue::class.java).findAll()
+                allProducts?.forEach {
+                    if(!deletedList.contains(it.id)) it.deleteFromRealm()
+                }
+            }
+        }
 //        fun getAllProducts(isArtisan: Long?): RealmResults<AdminProductCatalogue>? {
 //            var realm = CXRealmManager.getRealmInstance()
 //            var allProducts: RealmResults<AdminProductCatalogue>? =null
@@ -117,9 +134,12 @@ class ProductCataloguePredicates {
                         .contains(AdminProductCatalogue.COLUMN_CODE,search, Case.INSENSITIVE).or()
                         .contains(AdminProductCatalogue.COLUMN_NAME,search,Case.INSENSITIVE).or()
                         .contains(AdminProductCatalogue.COLUMN_BRAND,search,Case.INSENSITIVE).or()
+                        .contains(AdminProductCatalogue.COLUMN_CLUSTER,search,Case.INSENSITIVE).or()
                         .contains(AdminProductCatalogue.COLUMN_CATEGORY,search,Case.INSENSITIVE)
                         .findAll().where()
                         .contains(AdminProductCatalogue.COLUMN_AVAILABILITY,available,Case.INSENSITIVE)
+                        .findAll().where()
+                        .contains(AdminProductCatalogue.COLUMN_CLUSTER,cluster,Case.INSENSITIVE)
                         .findAll()
                 }
             }
@@ -441,6 +461,7 @@ class ProductCataloguePredicates {
                 Log.e("EnquiryProduct","$e")
             }
         }
+
         fun deleteProductEntry(id:Long){
             val realm = CXRealmManager.getRealmInstance()
             realm?.executeTransaction {
