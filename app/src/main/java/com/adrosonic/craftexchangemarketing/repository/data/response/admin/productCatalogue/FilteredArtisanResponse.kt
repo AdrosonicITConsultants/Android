@@ -1,5 +1,7 @@
 package com.adrosonic.craftexchangemarketing.repository.data.response.admin.productCatalogue
 
+import io.realm.annotations.Ignore
+
 data class FilteredArtisanResponse (
     val data: List<FilteredArtisans>,
     val valid: Boolean,
@@ -16,5 +18,7 @@ data class FilteredArtisans (
     val email: String,
     val contact: String,
     val id: Long,
-    val state: String
+    val state: String,
+    @Ignore
+    var selectionStatus:Boolean=false
 )

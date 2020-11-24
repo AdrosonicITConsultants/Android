@@ -6,30 +6,40 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="10"
         android:background="@drawable/bd_underline"
         android:gravity="center"
+        android:orientation="horizontal"
         android:padding="@dimen/expandable_layout_std_padding"
-        android:orientation="horizontal">
+        android:weightSum="10">
+
+        <CheckBox
+            android:id="@+id/imgStatus"
+            android:text=""
+            android:layout_width="0dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:buttonTint="@color/lighter_gray"
+            android:layout_weight="1" />
 
         <ImageView
-            android:id="@+id/imgStatus"
+            android:id="@+id/imgStatus1"
             android:layout_width="0dp"
             android:layout_height="24dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="0.5"
-            android:src="@drawable/ic_cr_unchecked" />
+            android:src="@drawable/ic_cr_unchecked"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/txtArtisanId"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"
+            android:ellipsize="end"
             android:fontFamily="@font/lato_regular"
             android:gravity="center"
-            android:text="Artisan/W ID"
             android:maxLines="2"
-            android:ellipsize="end"
+            android:text="Artisan/W ID"
             android:textColor="@color/apply_bg_color" />
 
         <TextView
@@ -37,23 +47,23 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"
+            android:ellipsize="end"
             android:fontFamily="@font/lato_regular"
             android:gravity="center"
-            android:text="Artisan Brand"
             android:maxLines="2"
-            android:ellipsize="end"
-            android:textColor="@color/apply_bg_color"  />
+            android:text="Artisan Brand"
+            android:textColor="@color/apply_bg_color" />
 
         <TextView
             android:id="@+id/txtCluster"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"
+            android:ellipsize="end"
             android:fontFamily="@font/lato_regular"
             android:gravity="center"
-            android:text="Cluster"
             android:maxLines="2"
-            android:ellipsize="end"
+            android:text="Cluster"
             android:textColor="@color/lighter_gray" />
     </LinearLayout>
 

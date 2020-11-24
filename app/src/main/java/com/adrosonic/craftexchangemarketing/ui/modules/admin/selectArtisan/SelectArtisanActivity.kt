@@ -3,6 +3,7 @@ package com.adrosonic.craftexchangemarketing.ui.modules.admin.selectArtisan
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.database.Cursor
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -44,7 +45,7 @@ ProductCatViewModal.FilteredArtisanInterface,
 ProductCatViewModal.UploadProdInterface{
     private var mBinding:ActivitySelectArtisanBinding?=null
     val mViewModel: ProductCatViewModal by viewModels()
-    var filteredList= ArrayList<Pair<FilteredArtisans,Boolean>>()
+    var filteredList= ArrayList<FilteredArtisans>()
     private lateinit var artisanSelectionAdapter: ArtisanSelectionAdapter
     var clusterList=ArrayList<String>()
     var imagePath=ArrayList<String>()
@@ -85,38 +86,15 @@ ProductCatViewModal.UploadProdInterface{
 
     }
 
-    override fun onArtisanItemSelected(pairList: ArrayList<Pair<FilteredArtisans, Boolean>>)
+    override fun onArtisanItemSelected(id:Long)
     {
-        pairList.forEach {
-           if(it.second) artisanId=it.first.id.toInt()
-        }
-        filteredList=pairList
+//        pairList.forEach {
+//           if(it.second) artisanId=it.first.id.toInt()
+//        }
+//        filteredList=pairList
 
-//        filteredList.clear()
-//        pairList?.forEach {
-//           if(it.first.id.equals(artisanId)) filteredList.add(Pair(it.first,true))
-//            else  filteredList.add(Pair(it.first,false))
-//        }
-//        artisanSelectionAdapter.updateProducts(filteredList)
-//        setRecyclerList()
-//        var dialog = Dialog(this)
-//        dialog.setContentView(R.layout.dialog_are_you_sure)
-//        dialog.create()
-//        dialog.show()
-//        dialog.txt_dscrp.text="Are you sure that you want to select artisan $artisanId"
-//        dialog.btn_no?.setOnClickListener {
-//            dialog.cancel()
-//        }
-//
-//        dialog.btn_yes?.setOnClickListener {
-//            if(Utility.checkIfInternetConnected(this)) {
-//                if(artisanId>0) {
-//                    mBinding?.pbLoader?.visibility = View.VISIBLE
-//                    mViewModel?.uploadProdListener = this
-//                    mViewModel.uploadProduct(productData, imagePath, artisanId)
-//                }else Utility.displayMessage("Please select artisan",this)
-//            }else Utility.displayMessage(getString(R.string.no_internet_connection),this)
-//        }
+        artisanId=id.toInt()
+        Log.e("Selection","artisanId: $artisanId")
     }
 
     override fun onSuccess(list: List<FilteredArtisans>?) {
@@ -124,7 +102,7 @@ ProductCatViewModal.UploadProdInterface{
             Handler(Looper.getMainLooper()).post(Runnable {
                 mBinding?.pbLoader?.visibility=View.GONE
                 filteredList.clear()
-                list?.forEach { filteredList.add(Pair(it,false)) }
+                list?.forEach { filteredList.add(it) }
                 setRecyclerList()
             }
             )
@@ -150,6 +128,12 @@ ProductCatViewModal.UploadProdInterface{
         artisanSelectionAdapter = ArtisanSelectionAdapter(this,filteredList)
         mBinding?.artisanBrandList?.adapter = artisanSelectionAdapter
         artisanSelectionAdapter.listener=this
+//        mBinding?.artisanBrandList?.setOnScrollChangeListener { view, i, i2, i3, i4 ->
+//            var v1=artisanSelectionAdapter.getItemId(i)
+//            if (v1!=artisanId.toLong()) {
+//                artisanSelectionAdapter.notifyDataSetChanged()
+//            }
+//        }
     }
     private fun getClusters(){
         clusterList.clear()
