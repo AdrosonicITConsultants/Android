@@ -19,29 +19,29 @@ import retrofit2.http.*
 interface ChangeRequestDao {
 
     @Headers("Accept: application/json")
-    @POST("/enquiry/toggleChangeRequestFromArtisan")
+    @POST("enquiry/toggleChangeRequestFromArtisan")
     fun toggleChangeRequestFromArtisan(@Header("Authorization") token:String,
                                        @Query("enquiryId") enquiryId : Int,
                                        @Query("status") status : Int) : Call<DeleteOwnProductRespons>
 
     @Headers("Accept: application/json")
-    @GET("/enquiry/getChangeRequestItemTable")
+    @GET("enquiry/getChangeRequestItemTable")
     fun getChangeRequestItemTable(@Header("Authorization") token:String) : Call<CrOptionsResponse>
 
 
     @Headers("Accept: application/json")
-    @GET("/enquiry/getChangeRequestForArtisan")
+    @GET("enquiry/getChangeRequestForArtisan")
     fun getChangeRequestDetails(@Header("Authorization") token:String, @Query("enquiryId") enquiryId : Int) : Call<CrDetailsResponse>
 
     @Headers("Accept: application/json")
-    @POST("/enquiry/changeRequest")
+    @POST("enquiry/changeRequest")
     fun raiseChangeRequest(@Header("Authorization") token:String,
                                        @Query("enquiryId") enquiryId : Int,
                                        @Body changeRequestParameters : RaiseCrInput
     ) : Call<NotificationReadResponse>//data field should be Change Request Updated
 
     @Headers("Accept: application/json")
-    @POST("/enquiry/changeRequestStatusUpdate")
+    @POST("enquiry/changeRequestStatusUpdate")
     fun changeRequestStatusUpdate(@Header("Authorization") token:String,
                                   @Body parameters : RaiseCrInput,
                                   @Query("status") status : Int
@@ -49,7 +49,7 @@ interface ChangeRequestDao {
 
 
     @Headers("Accept: application/json")
-    @GET("/enquiry/getEnquiryMessageChatList")
+    @GET("enquiry/getEnquiryMessageChatList")
     fun getEnquiryMessageChatList(@Header("Authorization") token:String,
                                    @Query("searchedString") searchedString:String?) : Call<ChatListResponse>
 

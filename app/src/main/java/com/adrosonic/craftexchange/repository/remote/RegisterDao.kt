@@ -16,7 +16,7 @@ import java.io.File
 interface RegisterDao {
 
     @Headers("Accept: application/json")
-    @POST("/user/saveDeviceToken/{deviceId}/AND/{token}")
+    @POST("user/saveDeviceToken/{deviceId}/AND/{token}")
     fun saveDeviceToken(@Header("Authorization") authtoken: String,@Path("deviceId") deviceToken : String,@Path("token") token : String) : Call<SaveUserTokenResponse>
 
     @Headers("Accept: application/json")

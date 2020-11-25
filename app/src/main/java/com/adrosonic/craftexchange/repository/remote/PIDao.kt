@@ -15,7 +15,7 @@ import retrofit2.http.*
 interface PIDao {
 
     @Headers("Accept: application/json")
-    @POST("/enquiry/revisedPI")
+    @POST("enquiry/revisedPI")
     fun revisedPI(@Header("Authorization") token:String,
                   @Query("enquiryId") enquiryId : Int,
                   @Body pi: SendPiRequest
@@ -23,25 +23,25 @@ interface PIDao {
 
 
     @Headers("Accept: application/json")
-    @POST("/enquiry/sendPi/{enquiryId}")
+    @POST("enquiry/sendPi/{enquiryId}")
     fun sendPI(@Header("Authorization") token:String,
                         @Path("enquiryId") enquiryId : Int,
                         @Body pi: SendPiRequest
     ) : Call<SendPiResponse>
 
     @Headers("Accept: application/json")
-    @POST("/enquiry/savePi/{enquiryId}")
+    @POST("enquiry/savePi/{enquiryId}")
     fun savePI(@Header("Authorization") token:String,
                @Path("enquiryId") enquiryId : Int,
                @Body pi: SendPiRequest
     ) : Call<SendPiResponse>
 
     @Headers("Accept: application/pdf")
-    @GET("/enquiry/getPreviewPiPDF")
+    @GET("enquiry/getPreviewPiPDF")
     fun getPreviewPiPDF(@Header("Authorization") token:String, @Query("enquiryId") enquiryId : Int, @Query("isOld") isOld : String) : Call<ResponseBody>
 
     @Headers("Accept: text/html")
-    @GET("/enquiry/getPreviewPiHTML")
+    @GET("enquiry/getPreviewPiHTML")
     fun getPreviewPiHTML(@Header("Authorization") token:String, @Query("enquiryId") enquiryId : Int, @Query("isOld") isOld : String) : Call<ResponseBody>
 
     @Headers("Accept: application/json")
@@ -49,7 +49,7 @@ interface PIDao {
     fun getSinglePi(@Header("Authorization") token:String, @Path("enquiryId") enquiryId : Long) : Call<SendPiResponse>
 
     @Headers("Accept: application/json")
-    @GET("/enquiry/getOldPIData")
+    @GET("enquiry/getOldPIData")
     fun getOldPiData(@Header("Authorization") token:String, @Query("enquiryId") enquiryId : Int) : Call<ResponseBody>
 
 

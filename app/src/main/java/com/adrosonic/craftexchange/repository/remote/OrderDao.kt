@@ -28,26 +28,26 @@ interface OrderDao {
                          @Path("orderId")orderId:Long) : Call<OrderProgressResponse>
 
     @Headers("Accept: application/json")
-    @GET("/order/getOpenOrders")
+    @GET("order/getOpenOrders")
     fun getAllOpenOrders(@Header("Authorization") token:String) : Call<OrderResponse>
 
     @Headers("Accept: application/json")
-    @GET("/order/getOrder/{enquiryId}")
+    @GET("order/getOrder/{enquiryId}")
     fun getSingleOngoingOrder(@Header("Authorization") token:String,
                               @Query("enquiryId") enquiryId : Int) : Call<OrderResponse>
 
 
     @Headers("Accept: application/json")
-    @GET("/order/getClosedOrders")
+    @GET("order/getClosedOrders")
     fun getAllClosedOrders(@Header("Authorization") token:String) : Call<OrderResponse>
 
     @Headers("Accept: application/json")
-    @GET("/order/getClosedOrder/{enquiryId}")
+    @GET("order/getClosedOrder/{enquiryId}")
     fun getSingleClosedOrder(@Header("Authorization") token:String,
                                 @Query("enquiryId") enquiryId : Int) : Call<OrderResponse>
 
     @Headers("Accept: application/json")
-    @POST("/enquiry/markOrderAsRecieved/{orderId}/{orderRecieveDate}/{isAutoCompleted}")
+    @POST("enquiry/markOrderAsRecieved/{orderId}/{orderRecieveDate}/{isAutoCompleted}")
     fun markOrderAsReceived(@Header("Authorization") token:String,
                              @Path("orderId") orderId : Int,
                              @Path("orderRecieveDate") orderRecieveDate : String,
@@ -73,7 +73,7 @@ interface OrderDao {
     ) : Call<ResponseBody>
 
     @Headers("Accept: application/json")
-    @POST("/order/initializePartialRefund")
+    @POST("order/initializePartialRefund")
     fun initializePartialRefund(@Header("Authorization") token:String,
                              @Query("orderId") orderId : Long
     ) : Call<NotificationReadResponse>
