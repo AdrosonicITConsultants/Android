@@ -174,6 +174,7 @@ EscalationViewModel.EscalationResolve{
         }    }
 
     override fun escalationResolved(m: String) {
+
         Utility.displayMessage(m, requireContext())
         mBinding?.updatesdialogLayout?.visibility = View.GONE
         mBinding?.updatesDialog?.visibility = View.GONE

@@ -360,6 +360,39 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
                 }
             })
     }
+    fun getTransactions(enquiryId : Long){
+        Log.e("Transaction","getSingleTransactions :$enquiryId")
+        craftexchangemarketingRepository
+            .getTransactionService()
+            .getSingleTransaction(token,enquiryId.toInt()).enqueue(object : Callback, retrofit2.Callback<SingleTransactionResponse> {
+                override fun onFailure(call: Call<SingleTransactionResponse>, t: Throwable) {
+                    transactionListener?.onGetTransactionsFailure()
+                    Log.e("Transaction","getSingleTransactions :$t")
+                }
+                override fun onResponse(
+                    call: Call<SingleTransactionResponse>,
+                    response: Response<SingleTransactionResponse>
+                ) {
+                    if(response.body()?.valid == true){
+                        if(response?.body()?.data?.completedTransactionResponses?.size == 0)
+                        {
+                            TransactionPredicates.insertSingleOngoingTransaction(response?.body()?.data?.ongoingTransactionResponses)//Transaction(response?.body()!!,false)
+
+                        }
+                        else{
+                        TransactionPredicates.insertSingleCompletedTransaction(response?.body()?.data?.completedTransactionResponses)//Transaction(response?.body()!!,false)
+                        }
+//                        TransactionPredicates.insertSingleOngoingTransaction(response?.body()?.data?.ongoingTransactionResponses)//Transaction(response?.body()!!,false)
+//                        Log.e("Transaction","getSingleTransactions :${response?.body()?.data?.completedTransactionResponses?.size}")
+                        transactionListener?.onGetTransactionsSuccess()
+
+                    }else{
+                        Log.e("Transaction","getSingleTransactions :${response?.body()?.valid}")
+                        transactionListener?.onGetTransactionsFailure()
+                    }
+                }
+            })
+    }
 
 
 }

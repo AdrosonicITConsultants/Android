@@ -106,6 +106,9 @@
             android:name=".ui.modules.buyer.profile.editProfile.BuyerEditProfileActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.modules.admin.enqOrd.transaction.ShowTransactionActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.modules.buyer.profile.BuyerProfileActivity"
             android:screenOrientation="portrait" />
         <activity
