@@ -1,5 +1,6 @@
 package com.adrosonic.craftexchangemarketing.ui.modules.admin.escalations
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,7 +19,9 @@ import com.adrosonic.craftexchangemarketing.databinding.EscalationPaymentFragmen
 import com.adrosonic.craftexchangemarketing.databinding.EscalationUpdatesFragmentBinding
 import com.adrosonic.craftexchangemarketing.repository.data.response.escalation.EscalationData
 import com.adrosonic.craftexchangemarketing.repository.data.response.escalation.userData
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.enqOrd.EnquiryDetailsActivity
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.enqOrd.chat.chatLogDetailsIntent
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.enqOrd.transaction.ShowTransactionActivity
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.escalations.adapter.ChatRecyclerAdapter
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.escalations.adapter.PaymentRecyclerAdapter
 import com.adrosonic.craftexchangemarketing.utils.Utility
@@ -71,7 +74,9 @@ class EscalationPaymentFragment:Fragment(),
             mBinding?.contactDetailsLayout?.visibility = View.GONE
         }
         mBinding?.viewTransaction?.setOnClickListener {
-
+            val myIntent = Intent(context, ShowTransactionActivity::class.java)
+            myIntent.putExtra("enquiryID",id)
+            context?.startActivity(myIntent)
         }
         mBinding?.closeUpdateDialog?.setOnClickListener {
             mBinding?.updatesdialogLayout?.visibility = View.GONE

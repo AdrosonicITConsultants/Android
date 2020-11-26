@@ -213,10 +213,9 @@
 
             <TextView
                 android:id="@+id/EscalationCount"
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:text="12997"
                 android:textColor="@color/colorBackground"
                 app:layout_constraintBottom_toBottomOf="@+id/SearchBtn"
                 app:layout_constraintEnd_toEndOf="parent"
