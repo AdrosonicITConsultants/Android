@@ -1,5 +1,6 @@
 package com.adrosonic.craftexchangemarketing.ui.modules.admin.enqOrd
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,6 +13,8 @@ import com.adrosonic.craftexchangemarketing.R
 import com.adrosonic.craftexchangemarketing.databinding.EnquiriesAndOrderAdminFragmentBinding
 import com.adrosonic.craftexchangemarketing.repository.data.response.enquiryOrderDatabase.EnquiryOrderCountResponse
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.enqOrd.adapter.EnquiryOrderAdapter
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.escalations.EscalationActivity
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.escalations.escalationIntent
 import com.adrosonic.craftexchangemarketing.utils.UserConfig
 import com.adrosonic.craftexchangemarketing.utils.Utility
 import com.adrosonic.craftexchangemarketing.viewModels.EnquiryOrderViewModel
@@ -27,7 +30,7 @@ EnquiryOrderViewModel.EnquiryOrderCountsInterface{
     private var mUserConfig = UserConfig()
     var countsData : String ?=""
     var enquiryOrderCountResponse : EnquiryOrderCountResponse?= null
-
+    var escalation : Long? = null
     private var param1: String? = null
     private var param2: String? = null
 
@@ -36,15 +39,7 @@ EnquiryOrderViewModel.EnquiryOrderCountsInterface{
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mBinding?.pbLoader?.visibility=View.VISIBLE
 
-        mEOVM.countsListener =this
-        if(Utility.checkIfInternetConnected(requireContext())){
-            mEOVM?.getEnquiryOrderCounts()
-        }else{
-            Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
-
-        }
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.enquiries_and_order_admin_fragment, container, false)
 //        artisanId = Prefs.getString(ConstantsDirectory.USER_ID,"").toLong()
@@ -52,6 +47,19 @@ EnquiryOrderViewModel.EnquiryOrderCountsInterface{
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mBinding?.pbLoader?.visibility=View.VISIBLE
+        mEOVM.countsListener =this
+        if(Utility.checkIfInternetConnected(requireContext())){
+            mEOVM?.getEnquiryOrderCounts()
+        }else{
+            Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
+        }
+        mBinding?.escalationsLayout?.setOnClickListener {
+            val myIntent = Intent(context, EscalationActivity::class.java)
+            myIntent.putExtra("total", escalation)
+            Log.d("escalation", "onViewCreated: "+escalation)
+            context?.startActivity(myIntent)
+        }
 
 
     }
@@ -66,7 +74,7 @@ EnquiryOrderViewModel.EnquiryOrderCountsInterface{
         mBinding?.escalationsNo?.text = enquiryOrderCountResponse?.data!![0]?.escaltions.toString()
         mBinding?.redirectEnquiriesNo?.text = enquiryOrderCountResponse?.data!![0]?.awaitingMoq.toString()
         mBinding?.pbLoader?.visibility=View.GONE
-
+        escalation = enquiryOrderCountResponse?.data!![0]?.escaltions
 
     }
     companion object {

@@ -63,6 +63,8 @@
     <color name="mark_resolve">#369BEB</color>
     <color name="resolved">#2fc183</color>
 
+    <color name="selectedTab">#E9303D</color>
+    <color name="unselectedTab">#722040</color>
 
 
 

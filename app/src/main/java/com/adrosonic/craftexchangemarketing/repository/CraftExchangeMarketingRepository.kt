@@ -120,4 +120,7 @@ object craftexchangemarketingRepository {
     fun getTiService(): TIDao {
         return builder(TIDao::class.java)
     }
+    fun getEscalationDataService(): EscalationDao {
+        return builder(EscalationDao::class.java)
+    }
 }
