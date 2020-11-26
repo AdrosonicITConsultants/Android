@@ -16,6 +16,7 @@ import com.adrosonic.craftexchangemarketing.R
 import com.adrosonic.craftexchangemarketing.databinding.EscalationFaultyFragmentBinding
 import com.adrosonic.craftexchangemarketing.databinding.EscalationPaymentFragmentBinding
 import com.adrosonic.craftexchangemarketing.repository.data.response.escalation.EscalationData
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.enqOrd.chat.chatLogDetailsIntent
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.escalations.adapter.FaultyRecyclerAdapter
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.escalations.adapter.PaymentRecyclerAdapter
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.escalations.adapter.UpdatesRecyclerAdapter
@@ -24,7 +25,8 @@ import com.adrosonic.craftexchangemarketing.viewModels.EscalationViewModel
 
 class EscalationFaultyFragment :Fragment(),
     EscalationViewModel.EscFaulty,
-    EscalationViewModel.EscalationCount{
+    EscalationViewModel.EscalationCount,
+EscalationViewModel.EscalationResolve{
     private var mBinding: EscalationFaultyFragmentBinding?= null
     var mChatListAdapter : FaultyRecyclerAdapter?=null
     val mEVM : EscalationViewModel by viewModels()
@@ -33,7 +35,7 @@ class EscalationFaultyFragment :Fragment(),
     var enqSearch : String?=null
     var escalationList : ArrayList<EscalationData> = arrayListOf()
     var id:Long?=null
-
+    var escId : Long?=null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,6 +54,7 @@ class EscalationFaultyFragment :Fragment(),
 
         mEVM.faultyListener = this
         mEVM.countlistener =this
+        mEVM.resolvedListener =this
 
 
         if (!Utility.checkIfInternetConnected(requireContext())) {
@@ -70,12 +73,18 @@ class EscalationFaultyFragment :Fragment(),
             mBinding?.updatesdialogLayout?.visibility = View.GONE
             mBinding?.updatesDialog?.visibility = View.GONE
         }
-        mBinding?.markResoved?.setOnClickListener { 
-            
+        mBinding?.markResoved?.setOnClickListener {
+            escId?.let { it1 -> mEVM.markResolved(it1) }
+            mBinding?.pbLoader?.visibility=View.VISIBLE
+
+        }
+        mBinding?.viewChat?.setOnClickListener {
+            Log.d("chatEsc", "onViewCreated: "+id)
+            startActivity(id?.let { it1 -> context?.chatLogDetailsIntent(it1) })
         }
         
         mBinding?.generateNew?.setOnClickListener {
-            // TODO: 26-11-2020 enquiryId is in global id variable 
+            // TODO: 26-11-2020 enquiryId is in global id variable
         }
         mBinding?.SearchBtn?.setOnClickListener {
             val enquiryId1 =  mBinding?.searchByEnq?.text
@@ -126,6 +135,7 @@ class EscalationFaultyFragment :Fragment(),
             mBinding?.updatesDialog?.visibility = View.VISIBLE
             mBinding?.updatesdialogLayout?.visibility = View.VISIBLE
             id = esc.enquiryId
+            escId = esc.escalationId
         };
         mBinding?.UpdatesRecyclerView?.adapter = mChatListAdapter
     }
@@ -162,4 +172,14 @@ class EscalationFaultyFragment :Fragment(),
         if(c == 0L){
             mBinding?.noResuts?.text = "No Results Found"
         }    }
+
+    override fun escalationResolved(m: String) {
+        Utility.displayMessage(m, requireContext())
+        mBinding?.updatesdialogLayout?.visibility = View.GONE
+        mBinding?.updatesDialog?.visibility = View.GONE
+        pageNo = 1L
+        enqSearch = null
+        mEVM?.FaultyUpdates(pageNo!!,enqSearch)
+        mEVM?.escUpdatesCount("2,3,7",enqSearch)
+    }
 }

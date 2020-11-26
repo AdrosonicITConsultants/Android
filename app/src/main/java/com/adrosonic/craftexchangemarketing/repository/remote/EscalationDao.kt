@@ -2,10 +2,12 @@ package com.adrosonic.craftexchangemarketing.repository.remote
 
 import com.adrosonic.craftexchangemarketing.repository.data.response.escalation.EscalationCountResponse
 import com.adrosonic.craftexchangemarketing.repository.data.response.escalation.EscalationResponse
+import com.adrosonic.craftexchangemarketing.repository.data.response.escalation.ResolvedEscalationResponse
 import com.adrosonic.craftexchangemarketing.repository.data.response.escalation.UserDataResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface EscalationDao {
@@ -34,4 +36,10 @@ interface EscalationDao {
         @Header("Authorization") token: String,
         @Query("enquiryId") enquiryId: Long
     ): Call<UserDataResponse>
+
+    @POST("api/enquiry/resolveEscalation")
+    fun markResolved(
+        @Header("Authorization") token: String,
+        @Query("escalationId") escalationId: Long
+    ): Call<ResolvedEscalationResponse>
 }

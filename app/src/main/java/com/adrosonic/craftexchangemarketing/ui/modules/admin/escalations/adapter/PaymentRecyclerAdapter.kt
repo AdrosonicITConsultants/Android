@@ -7,11 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchangemarketing.R
 import com.adrosonic.craftexchangemarketing.repository.data.response.escalation.EscalationData
 
-class PaymentRecyclerAdapter(var context: Context?, var escalationList: ArrayList<EscalationData> ) : RecyclerView.Adapter<PaymentRecyclerAdapter.MyViewHolder>(){
+class PaymentRecyclerAdapter(var context: Context?, var escalationList: ArrayList<EscalationData> , val listener :(EscalationData) -> Unit) : RecyclerView.Adapter<PaymentRecyclerAdapter.MyViewHolder>(){
 
 
     inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -19,6 +20,7 @@ class PaymentRecyclerAdapter(var context: Context?, var escalationList: ArrayLis
         var escalationConcern: TextView = view.findViewById(R.id.escalationConcern)
         var date: TextView = view.findViewById(R.id.EscalationDate)
         var img : ImageView = view.findViewById(R.id.raisedby)
+        var layout : ConstraintLayout = view.findViewById(R.id.paymentEscalationLayout)
 
 //        var daysago: TextView = view.findViewById(R.id.DaysAgo)
 
@@ -38,6 +40,11 @@ class PaymentRecyclerAdapter(var context: Context?, var escalationList: ArrayLis
         var escalation = escalationList[position]
         holder?.enquiryCode?.text = escalation?.enquiryCode.toString()
         holder?.escalationConcern?.text = escalation?.concern
+        holder?.layout?.setOnClickListener {
+            listener(escalation)
+            Log.d("updatesClick", "onBindViewHolder: clicked" )
+//            layoutlistener?.layoutclicked(escalation)
+        }
         when (escalation?.raisedBy) {
 
             1L -> {

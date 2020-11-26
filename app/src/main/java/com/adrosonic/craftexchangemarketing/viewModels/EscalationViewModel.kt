@@ -16,6 +16,9 @@ class EscalationViewModel(application: Application) : AndroidViewModel(applicati
     companion object {
         const val TAG = "EscalationViewModel"
     }
+    interface EscalationResolve{
+        fun escalationResolved(m :String)
+    }
     interface EscalationCount{
         fun updateCount(c :Long)
     }
@@ -36,7 +39,7 @@ class EscalationViewModel(application: Application) : AndroidViewModel(applicati
     }
     var userListener : UserData?=null
     var countlistener : EscalationCount?=null
-
+    var resolvedListener : EscalationResolve?=null
     var updateListener : EscUpdates?=null
     var chatListener : EscChat?=null
     var paymentListener : EscPayment?=null
@@ -234,6 +237,40 @@ class EscalationViewModel(application: Application) : AndroidViewModel(applicati
                         Log.e("EscalationVM","UPdate: "+response.body()?.data)
 //                        response.body()?.data?.let { updateListener?.EscUpdateSuccess(it) }
                         response.body()?.data?.let { userListener?.contacdetails(it) }
+//
+                    }else{
+                        Log.e("EscalationVM","false ")
+
+//                        listener?.onFailedEnquiryGeneration()
+//                        Log.e("Enquiry Generation","Failure: "+response.body()?.errorMessage)
+                    }
+                }
+
+            })
+    }
+
+    fun markResolved(escalationId: Long){
+        Log.e("EscalationVM","fn called ")
+
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        craftexchangemarketingRepository
+            .getEscalationDataService()
+            .markResolved(token,escalationId)
+            .enqueue(object: Callback, retrofit2.Callback<ResolvedEscalationResponse> {
+                override fun onFailure(call: Call<ResolvedEscalationResponse>, t: Throwable) {
+                    t.printStackTrace()
+//                    listener?.onFailedEnquiryGeneration()
+//                    Log.e("Enquiry Generation","Failure: "+t.message)
+                    Log.e("EscalationVM","fail: ")
+
+                }
+                override fun onResponse(
+                    call: Call<ResolvedEscalationResponse>,
+                    response: retrofit2.Response<ResolvedEscalationResponse>) {
+                    if(response.body()?.valid == true){
+                        Log.e("EscalationVM","UPdate: "+response.body()?.data)
+//                        response.body()?.data?.let { updateListener?.EscUpdateSuccess(it) }
+                        response.body()?.data?.let { resolvedListener?.escalationResolved(it) }
 //
                     }else{
                         Log.e("EscalationVM","false ")

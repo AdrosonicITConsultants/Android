@@ -52,14 +52,14 @@ fun Context.chatLogDetailsIntent(enquiryId:Long): Intent {
     intent.putExtra(ConstantsDirectory.ENQUIRY_ID, enquiryId)
     return intent
 }
-fun Context.chatLogDetailsIntent(enquiryId:Long,toId:Long): Intent {
-    val intent= Intent(this, ChatLogDetailsActivity::class.java) .apply {
-        flags = Intent.FLAG_ACTIVITY_NEW_TASK
-    }
-    intent.putExtra(ConstantsDirectory.ENQUIRY_ID, enquiryId)
-    intent.putExtra("toId", toId)
-    return intent
-}
+//fun Context.chatLogDetailsIntent(enquiryId:Long,toId:Long): Intent {
+//    val intent= Intent(this, ChatLogDetailsActivity::class.java) .apply {
+//        flags = Intent.FLAG_ACTIVITY_NEW_TASK
+//    }
+//    intent.putExtra(ConstantsDirectory.ENQUIRY_ID, enquiryId)
+//    intent.putExtra("toId", toId)
+//    return intent
+//}
 class  ChatLogDetailsActivity : AppCompatActivity(),
     ChatListViewModel.OpenChatLogInterface,
     ChatListViewModel.GetChatMediaInterface,

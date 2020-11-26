@@ -7,11 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchangemarketing.R
 import com.adrosonic.craftexchangemarketing.repository.data.response.escalation.EscalationData
 
-class ChatRecyclerAdapter(var context: Context?, var escalationList: ArrayList<EscalationData> ) : RecyclerView.Adapter<ChatRecyclerAdapter.MyViewHolder>(){
+class ChatRecyclerAdapter(var context: Context?, var escalationList: ArrayList<EscalationData>, val listener :(EscalationData) -> Unit ) : RecyclerView.Adapter<ChatRecyclerAdapter.MyViewHolder>(){
 
 
     inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -19,6 +20,7 @@ class ChatRecyclerAdapter(var context: Context?, var escalationList: ArrayList<E
         var escalationConcern: TextView = view.findViewById(R.id.escalationConcern)
         var date: TextView = view.findViewById(R.id.EscalationDate)
         var img : ImageView = view.findViewById(R.id.raisedby)
+        var layout : ConstraintLayout = view.findViewById(R.id.chatEscLayout)
 
 //        var daysago: TextView = view.findViewById(R.id.DaysAgo)
 
@@ -38,6 +40,11 @@ class ChatRecyclerAdapter(var context: Context?, var escalationList: ArrayList<E
         var escalation = escalationList[position]
         holder?.enquiryCode?.text = escalation?.enquiryCode.toString()
         holder?.escalationConcern?.text = escalation?.concern
+        holder?.layout?.setOnClickListener {
+            listener(escalation)
+            Log.d("updatesClick", "onBindViewHolder: clicked" )
+//            layoutlistener?.layoutclicked(escalation)
+        }
 
         when (escalation?.raisedBy) {
 
