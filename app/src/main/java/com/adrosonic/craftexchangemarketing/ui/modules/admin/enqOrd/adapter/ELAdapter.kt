@@ -174,12 +174,6 @@ class ELAdapter (var context: Context?, private var enquiries: ArrayList<Enquiry
                 }
             }
         }
-
-
-
-
-
-
     }
 
 

@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -12,6 +13,8 @@ import com.adrosonic.craftexchangemarketing.R
 import com.adrosonic.craftexchangemarketing.databinding.EnquiriesAndOrderAdminFragmentBinding
 import com.adrosonic.craftexchangemarketing.repository.data.response.enquiryOrderDatabase.EnquiryOrderCountResponse
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.enqOrd.adapter.EnquiryOrderAdapter
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.landing.AdminHomeFragment
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.redirectEnquiries.RedirectEnquiriesFragment
 import com.adrosonic.craftexchangemarketing.utils.UserConfig
 import com.adrosonic.craftexchangemarketing.utils.Utility
 import com.adrosonic.craftexchangemarketing.viewModels.EnquiryOrderViewModel
@@ -53,7 +56,18 @@ EnquiryOrderViewModel.EnquiryOrderCountsInterface{
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
+    mBinding?.textView26?.setOnClickListener {
+//    if (savedInstanceState == null) {
+//         activity?.supportFragmentManager?.beginTransaction()?.add(R.id.admin_home_container, RedirectEnquiriesFragment.newInstance())!!
+//            .addToBackStack(null)
+//            .commit()
+//    }
+        if (savedInstanceState == null) {
+            activity?.supportFragmentManager?.beginTransaction()!!
+                .replace(R.id.admin_home_container, RedirectEnquiriesFragment.newInstance())
+                .commitNow()
+        }
+}
     }
 
     override fun onCountsSuccess() {

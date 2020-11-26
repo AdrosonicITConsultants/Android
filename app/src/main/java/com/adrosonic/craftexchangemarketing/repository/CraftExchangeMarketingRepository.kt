@@ -120,4 +120,7 @@ object craftexchangemarketingRepository {
     fun getTiService(): TIDao {
         return builder(TIDao::class.java)
     }
+    fun getRedirectEnquiryService(): RedirectedEnquiryeDao {
+        return builder(RedirectedEnquiryeDao::class.java)
+    }
 }

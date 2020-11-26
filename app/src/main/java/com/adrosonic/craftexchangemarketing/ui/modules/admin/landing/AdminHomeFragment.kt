@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 
@@ -17,6 +18,9 @@ import com.adrosonic.craftexchangemarketing.database.predicates.AdminPredicates
 import com.adrosonic.craftexchangemarketing.databinding.FragmentAdminHomeBinding
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.individualProfile.ArtisanProfileActivity
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.individualProfile.BuyerProfileActivity
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.productCatalog.CommonProdCatFragment
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.productCatalog.addProduct.addAdminProductIntent
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.redirectEnquiries.RedirectEnquiriesFragment
 import com.adrosonic.craftexchangemarketing.ui.modules.dashboard.OpenEnquirySummaryActivity
 import com.adrosonic.craftexchangemarketing.ui.modules.main.MainActivity
 import com.adrosonic.craftexchangemarketing.utils.ConstantsDirectory
@@ -105,6 +109,16 @@ class AdminHomeFragment : Fragment(){
                     builder.create().show()
                 }else{
                     Utility.displayMessage(getString(R.string.message_operation_not_supported_offline),requireContext().getApplicationContext())
+                }
+            }
+            mBinding?.addProductPane?.setOnClickListener {
+                context?.startActivity(context?.addAdminProductIntent())
+            }
+            mBinding?.customEnquiriesPane?.setOnClickListener {
+                if (savedInstanceState == null) {
+                    activity?. supportFragmentManager?.beginTransaction()?.add(R.id.admin_home_container, RedirectEnquiriesFragment.newInstance())!!
+                        .addToBackStack(null)
+                        .commit()
                 }
             }
 //        mBinding?.btnAddProd?.setOnClickListener {

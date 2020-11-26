@@ -3,6 +3,6 @@ package com.adrosonic.craftexchangemarketing.repository.data.response.Notificati
 data class NotificationReadResponse (
     val data: String,
     val valid: Boolean,
-    val errorMessage: Any? = null,
+    val errorMessage: String? = null,
     val errorCode: Long
 )

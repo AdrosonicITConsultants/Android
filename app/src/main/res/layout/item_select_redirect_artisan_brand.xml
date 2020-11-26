@@ -7,7 +7,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bd_underline"
-        android:gravity="center"
         android:orientation="horizontal"
         android:padding="@dimen/expandable_layout_std_padding"
         android:weightSum="10">
@@ -18,32 +17,21 @@
             android:layout_width="0dp"
             android:layout_height="24dp"
             android:layout_gravity="center_vertical"
-            android:layout_weight="0.5"
+            android:layout_weight="1"
+            android:gravity="center"
             android:src="@drawable/ic_cr_unchecked"
             android:visibility="visible" />
 
         <TextView
-            android:id="@+id/txtArtisanId"
+            android:id="@+id/txtArtisanBrand"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"
             android:ellipsize="end"
             android:fontFamily="@font/lato_regular"
-            android:gravity="center"
             android:maxLines="2"
-            android:text="Artisan/W ID"
-            android:textColor="@color/apply_bg_color" />
-
-        <TextView
-            android:id="@+id/txtBrand"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:ellipsize="end"
-            android:fontFamily="@font/lato_regular"
+            android:text=""
             android:gravity="center"
-            android:maxLines="2"
-            android:text="Artisan Brand"
             android:textColor="@color/apply_bg_color" />
 
         <TextView
@@ -53,10 +41,31 @@
             android:layout_weight="3"
             android:ellipsize="end"
             android:fontFamily="@font/lato_regular"
-            android:gravity="center"
             android:maxLines="2"
-            android:text="Cluster"
+            android:text=""
+            android:gravity="center"
+            android:textColor="@color/apply_bg_color" />
+
+        <TextView
+            android:id="@+id/txtRating"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:ellipsize="end"
+            android:fontFamily="@font/lato_regular"
+            android:text=""
+            android:gravity="center"
             android:textColor="@color/lighter_gray" />
+
+        <ImageView
+            android:id="@+id/imgEye"
+            android:layout_width="0dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="0.5"
+            android:gravity="right"
+            android:src="@drawable/ic_eye_white"
+            android:visibility="visible" />
     </LinearLayout>
 
 </LinearLayout>

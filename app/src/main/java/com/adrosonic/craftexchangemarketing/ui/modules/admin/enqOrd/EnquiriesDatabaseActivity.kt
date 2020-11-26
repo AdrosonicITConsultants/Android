@@ -86,7 +86,6 @@ EnquiryOrderViewModel.EnquiryListInterface{
         mBinding?.swipeEnquiryDetails?.setOnRefreshListener {
             mBinding?.swipeEnquiryDetails?.isRefreshing = false
             if (!Utility.checkIfInternetConnected(this)) {
-
                 Utility.displayMessage(getString(R.string.no_internet_connection), this)
             } else {
                 Log.d("swipe called", "onCreate: here ")
@@ -538,7 +537,6 @@ EnquiryOrderViewModel.EnquiryListInterface{
         }
         mBinding?.pbLoader?.visibility=View.GONE
         scrollcall = 0
-
 
     }
 

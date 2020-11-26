@@ -52,7 +52,7 @@
                     android:layout_marginRight="4dp"
                     android:layout_weight="2"
                     android:background="@color/apply_bg_color"
-                    android:text="Save"
+                    android:text="Redirect"
                     android:textAllCaps="false"
                     android:textColor="@color/black_text" />
             </androidx.appcompat.widget.Toolbar>
@@ -66,35 +66,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tabLayout_art_enq_details" />
 
-            <RelativeLayout
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/expandable_layout_std_padding">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_gravity="center"
-                    android:layout_weight="8"
-                    android:fontFamily="@font/lato_regular"
-                    android:text="Product Category"
-                    android:textColor="@color/lighter_gray" />
-
-                <TextView
-                    android:id="@+id/txtProdCat"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_gravity="center"
-                    android:layout_weight="8"
-                    android:fontFamily="@font/lato_regular"
-                    android:text="Saree"
-                    android:textColor="@color/lighter_gray"
-                    android:textStyle="bold" />
-
-            </RelativeLayout>
 
             <EditText
                 android:id="@+id/searchArtisan"
@@ -169,29 +140,30 @@
             </LinearLayout>
 
             <TextView
-                android:layout_margin="@dimen/expandable_layout_std_padding"
                 android:id="@+id/txtArtisanBeandCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_gravity="left"
+                android:layout_margin="@dimen/expandable_layout_std_padding"
                 android:fontFamily="@font/lato_regular"
-                android:text="Product Category"
+                android:text=""
                 android:textColor="@color/lighter_gray" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:weightSum="10"
                 android:background="@color/table_corner_layout_color"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <View
-                    android:id="@+id/placeHolder"
+                android:orientation="horizontal"
+                android:padding="@dimen/expandable_layout_std_padding"
+                android:weightSum="10">
+                <CheckBox
+                    android:id="@+id/chb_select_all"
                     android:layout_width="0dp"
-                    android:layout_height="48dp"
-                    android:layout_weight="1" />
+                    android:layout_height="24dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:buttonTint="@color/white_text" />
 
                 <TextView
 
@@ -199,17 +171,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
                     android:fontFamily="@font/lato_regular"
-                    android:gravity="center"
-                    android:text="Artisan/W ID"
-                    android:textColor="@color/lighter_gray" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:fontFamily="@font/lato_regular"
-                    android:gravity="center"
                     android:text="Artisan Brand"
+                    android:gravity="center"
                     android:textColor="@color/lighter_gray" />
 
                 <TextView
@@ -217,9 +180,27 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
                     android:fontFamily="@font/lato_regular"
-                    android:gravity="center"
                     android:text="Cluster"
+                    android:gravity="center"
                     android:textColor="@color/lighter_gray" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center"
+                    android:text="Rating"
+                    android:textColor="@color/lighter_gray" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/lato_regular"
+                    android:gravity="center"
+                    android:textColor="@color/lighter_gray" />
+
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView

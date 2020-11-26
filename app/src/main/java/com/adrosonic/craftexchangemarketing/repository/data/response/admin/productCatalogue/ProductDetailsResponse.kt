@@ -1,5 +1,6 @@
 package com.adrosonic.craftexchangemarketing.repository.data.response.admin.productCatalogue
 
+import com.adrosonic.craftexchangemarketing.repository.data.request.buyer.RelProduct
 
 
 data class ProductDetailsResponse (
@@ -10,13 +11,40 @@ data class ProductDetailsResponse (
 )
 
 data class Data (
-    val buyerCustomProduct: Any? = null,
+    val buyerCustomProduct: BuyerCustomProduct? = null,
     val product: Product,
     val logo: Any? = null,
     val brand: String,
     val cluster: String
 )
-
+data class BuyerCustomProduct (
+    val id: Long,
+    val productCategory: ProductCategory,
+    val productType: ProductType,
+    val warpYarn: Yarn,
+    val weftYarn: Yarn,
+    val extraWeftYarn: Yarn,
+    val warpYarnCount: String,
+    val weftYarnCount: String,
+    val extraWeftYarnCount: String,
+    val warpDye: Dye,
+    val weftDye: Dye,
+    val extraWeftDye: Dye,
+    val length: String,
+    val width: String,
+    val reedCount: ReedCount,
+    val gsm: String,
+    val weight: String,
+    val productSpec: String,
+    val productWeaves: List<ProductWeaf>,
+    val createdOn: String,
+    val modifiedOn: String,
+    val relProduct: List<RelProduct1>,
+    val productImages: List<ProductImage>,
+    val buyerID: Long,
+    val isDeleted: Long,
+    val hibernateLazyInitializer: HibernateLazyInitializer
+)
 data class Product (
     val id: Long,
     val code: String? = null,
@@ -71,6 +99,35 @@ data class ProductCare (
     val productId: Long,
     val productCareId: Long
 )
+
+data class RelProduct1 (
+    val id: Long,
+    val productCategory: ProductCategory? = null,
+    val productType: ProductType,
+    val warpYarn: Yarn? = null,
+    val weftYarn: Yarn? = null,
+    val extraWeftYarn: Yarn? = null,
+    val warpYarnCount: Any? = null,
+    val weftYarnCount: Any? = null,
+    val extraWeftYarnCount: Any? = null,
+    val warpDye: Any? = null,
+    val weftDye: Any? = null,
+    val extraWeftDye: Any? = null,
+    val length: String,
+    val width: String,
+    val reedCount: ReedCount? = null,
+    val gsm: String? = null,
+    val weight: String? = null,
+    val productSpec: String? = null,
+    val productWeaves: List<ProductWeaf?>,
+    val createdOn: String? = null,
+    val modifiedOn: String? = null,
+    val relProduct: List<RelProduct?>,
+    val productImages: List<ProductImage?>,
+    val buyerID: Long,
+    val isDeleted: Long? = null
+)
+
 
 data class ProductCategory (
     val id: Long,

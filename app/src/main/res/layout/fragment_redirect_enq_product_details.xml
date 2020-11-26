@@ -30,6 +30,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/carousel_view_products">
 
                 <RelativeLayout
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -46,14 +47,6 @@
                         android:focusable="true"
                         android:src="@drawable/ic_keyboard_backspace_black_24dp" />
 
-                    <ImageView
-                        android:id="@+id/img_edit_product"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_marginEnd="@dimen/margin_regular"
-                        android:layout_marginTop="8dp"
-                        android:layout_alignParentRight="true"
-                        android:src="@drawable/ic_edit_product" />
                 </RelativeLayout>
 
                 <com.synnapps.carouselview.CarouselView
@@ -712,6 +705,18 @@
                     android:layout_marginStart="@dimen/margin_regular"
                     android:layout_marginTop="@dimen/margin_regular" />
 
+                <Button
+                    android:id="@+id/btnRedirectEnq"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@color/darker_gray"
+                    android:layout_margin="@dimen/expandable_layout_std_padding"
+                    android:padding="4dp"
+                    android:drawableRight="@drawable/ic_redirect_enquiry_icon"
+                    android:text="Redirect Enquiry"
+                    android:textColor="@color/white_text" />
+
+
             </LinearLayout>
         </ScrollView>
 
@@ -734,7 +739,6 @@
                 android:layout_gravity="center"
                 android:elevation="10dp" />
         </FrameLayout>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

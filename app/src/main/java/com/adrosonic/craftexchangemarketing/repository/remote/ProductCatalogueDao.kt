@@ -34,8 +34,16 @@ interface ProductCatalogueDao {
     fun getArtisanProduct(
         @Header("Authorization") token: String,
         @Path("productId") productId : Long
-    ): Call<ProductDetailsResponse>    @Headers("Accept: application/json")
+    ): Call<ProductDetailsResponse>
 
+    @Headers("Accept: application/json")
+    @GET("api/marketingTeam/getCustomProduct/{productId}")
+    fun getCustomProduct(
+        @Header("Authorization") token: String,
+        @Path("productId") productId : Long
+    ): Call<ProductDetailsResponse>
+
+    @Headers("Accept: application/json")
     @GET("api/marketingTeam/getFilteredArtisans")
     fun getFilteredArtisans(
         @Header("Authorization") token: String,
@@ -55,7 +63,6 @@ interface ProductCatalogueDao {
     ): Call<ArtisanProductTemplateRespons>
 
     @Headers("Accept: application/json")
-//    @PUT("api/marketingTeam/edit/product")
     @PUT("api/product/edit/product")
     fun editProductTemplate(
         @Header("Authorization") token: String,
