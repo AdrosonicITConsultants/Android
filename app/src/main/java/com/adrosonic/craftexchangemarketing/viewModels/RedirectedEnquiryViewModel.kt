@@ -258,8 +258,8 @@ class RedirectedEnquiryViewModel(application: Application) : AndroidViewModel(ap
 
     fun sendCustomEnquiry(userIds:String,enqId:Int){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
-        Log.e(TAG,"userIds: $userIds")
-        Log.e(TAG,"enqId: $enqId")
+        Log.e("SendCutEnq","userIds: $userIds")
+        Log.e("SendCutEnq","enqId: $enqId")
         craftexchangemarketingRepository
             .getRedirectEnquiryService()
             .sendCustomEnquiry(token,userIds,enqId)
@@ -274,10 +274,10 @@ class RedirectedEnquiryViewModel(application: Application) : AndroidViewModel(ap
                     response: retrofit2.Response<NotificationReadResponse>) {
                     if(response.body()?.valid == true){
                         prodListener?.onSuccess()
-                        Log.e(TAG,"onsucces iff: "+response.body()?.errorCode)
+                        Log.e("SendCutEnq","onsucces iff: "+response.body()?.data)
                     }else{
                         prodListener?.onFailure()
-                        Log.e(TAG,"onsucces else: "+response.body()?.errorMessage)
+                        Log.e("SendCutEnq","onsucces else: "+response.body()?.errorMessage)
                     }
                 }
 

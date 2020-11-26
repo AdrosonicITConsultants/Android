@@ -16,6 +16,7 @@ import com.adrosonic.craftexchangemarketing.R
 import com.adrosonic.craftexchangemarketing.database.entities.realmEntities.ProductCard
 import com.adrosonic.craftexchangemarketing.database.predicates.AdminPredicates
 import com.adrosonic.craftexchangemarketing.databinding.FragmentAdminHomeBinding
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.escalations.SelectArtisanForEnqActivity
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.individualProfile.ArtisanProfileActivity
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.individualProfile.BuyerProfileActivity
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.productCatalog.CommonProdCatFragment
@@ -81,6 +82,7 @@ class AdminHomeFragment : Fragment(){
             mBinding?.microEnterpriseBusinessSummaryBtn?.setOnClickListener {
                 Prefs.putString(ConstantsDirectory.DASHBOARD,"MEBS")
                 startActivity(Intent(activity, OpenEnquirySummaryActivity::class.java))
+//                context?.startActivity(context?.SelectArtisanForEnqActivity(1771))
             }
             mBinding?.microEnterpriseRevenueBtn?.setOnClickListener {
                 Prefs.putString(ConstantsDirectory.DASHBOARD,"MER")

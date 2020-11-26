@@ -114,6 +114,7 @@
                 android:textColor="@android:color/holo_blue_bright"
                 android:textColorLink="#FFFFFF"
                 android:textSize="10sp"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />

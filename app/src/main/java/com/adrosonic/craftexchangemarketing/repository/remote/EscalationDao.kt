@@ -1,14 +1,11 @@
 package com.adrosonic.craftexchangemarketing.repository.remote
 
-import com.adrosonic.craftexchangemarketing.repository.data.response.escalation.EscalationCountResponse
-import com.adrosonic.craftexchangemarketing.repository.data.response.escalation.EscalationResponse
-import com.adrosonic.craftexchangemarketing.repository.data.response.escalation.ResolvedEscalationResponse
-import com.adrosonic.craftexchangemarketing.repository.data.response.escalation.UserDataResponse
+import com.adrosonic.craftexchangemarketing.repository.data.request.escalation.GetNewArtisanEnqRequest
+import com.adrosonic.craftexchangemarketing.repository.data.response.escalation.*
+import com.adrosonic.craftexchangemarketing.repository.data.response.escalationa.GetNewArtisanEnqResponse
+import com.adrosonic.craftexchangemarketing.repository.data.response.redirectedEnquiries.ArtisanLT8Response
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface EscalationDao {
 
@@ -42,4 +39,17 @@ interface EscalationDao {
         @Header("Authorization") token: String,
         @Query("escalationId") escalationId: Long
     ): Call<ResolvedEscalationResponse>
+
+    @POST("api/marketingTeam/createNewEnquiry")
+    fun createNewEnquiry(
+        @Header("Authorization") token: String,
+        @Query("enquiryId") enquiryId: Long,
+        @Query("deviceName") deviceName: String
+    ): Call<GenerateEnqResponse>
+
+    @POST("api/marketingTeam/getArtisansForNewEnquiry")
+    fun getArtisansForNewEnquiry(
+        @Header("Authorization") token: String,
+        @Body artisansForNewEnquiry: GetNewArtisanEnqRequest
+    ): Call<GetNewArtisanEnqResponse>
 }

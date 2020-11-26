@@ -1,11 +1,15 @@
 package com.adrosonic.craftexchangemarketing.ui.modules.admin.escalations
 
+import android.app.Dialog
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -16,16 +20,20 @@ import com.adrosonic.craftexchangemarketing.R
 import com.adrosonic.craftexchangemarketing.databinding.EscalationFaultyFragmentBinding
 import com.adrosonic.craftexchangemarketing.databinding.EscalationPaymentFragmentBinding
 import com.adrosonic.craftexchangemarketing.repository.data.response.escalation.EscalationData
+import com.adrosonic.craftexchangemarketing.repository.data.response.escalation.GenerateEnqResponse
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.enqOrd.chat.chatLogDetailsIntent
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.escalations.adapter.FaultyRecyclerAdapter
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.escalations.adapter.PaymentRecyclerAdapter
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.escalations.adapter.UpdatesRecyclerAdapter
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.redirectEnquiries.selectLessThan8ArtisanActivityIntent
 import com.adrosonic.craftexchangemarketing.utils.Utility
 import com.adrosonic.craftexchangemarketing.viewModels.EscalationViewModel
+import kotlinx.android.synthetic.main.fragment_notifcation.*
 
 class EscalationFaultyFragment :Fragment(),
     EscalationViewModel.EscFaulty,
     EscalationViewModel.EscalationCount,
+    EscalationViewModel.GenEnqInterface,
 EscalationViewModel.EscalationResolve{
     private var mBinding: EscalationFaultyFragmentBinding?= null
     var mChatListAdapter : FaultyRecyclerAdapter?=null
@@ -36,7 +44,10 @@ EscalationViewModel.EscalationResolve{
     var escalationList : ArrayList<EscalationData> = arrayListOf()
     var id:Long?=null
     var escId : Long?=null
-
+    var price=0L
+    var artistBrand : String?=""
+    var buyerBrand : String?=""
+    var enquiryCode : String?=""
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -84,7 +95,7 @@ EscalationViewModel.EscalationResolve{
         }
         
         mBinding?.generateNew?.setOnClickListener {
-            // TODO: 26-11-2020 enquiryId is in global id variable
+            showRedirectDialog()
         }
         mBinding?.SearchBtn?.setOnClickListener {
             val enquiryId1 =  mBinding?.searchByEnq?.text
@@ -136,6 +147,10 @@ EscalationViewModel.EscalationResolve{
             mBinding?.updatesdialogLayout?.visibility = View.VISIBLE
             id = esc.enquiryId
             escId = esc.escalationId
+            enquiryCode=esc.enquiryCode
+            price=esc.price
+            artistBrand=esc.artistBrand
+            buyerBrand=esc.buyerBrand
         };
         mBinding?.UpdatesRecyclerView?.adapter = mChatListAdapter
     }
@@ -181,5 +196,69 @@ EscalationViewModel.EscalationResolve{
         enqSearch = null
         mEVM?.FaultyUpdates(pageNo!!,enqSearch)
         mEVM?.escUpdatesCount("2,3,7",enqSearch)
+    }
+
+    override fun genEnqSuccess(ed: GenerateEnqResponse) {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                Log.e("SendCutEnq","genEnqSuccess")
+                showNewEnqDetDialog()
+                mBinding?.pbLoader?.visibility=View.GONE
+            }
+            )
+        } catch (e: Exception) {
+        }
+    }
+
+    override fun genEnqFailure() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                mBinding?.pbLoader?.visibility=View.GONE
+             Utility.displayMessage("Unable to generate enquiry",requireContext())
+            }
+            )
+        } catch (e: Exception) {
+        }
+    }
+
+    fun showRedirectDialog() {
+        var dialog = Dialog(requireContext())
+        dialog?.setContentView(R.layout.dialog_unresolved_redirect_enq)
+        dialog?.show()
+        dialog.setCanceledOnTouchOutside(true)
+        val txt_enq_code = dialog?.findViewById(R.id.txt_enq_code) as TextView
+        val txt_art_details = dialog?.findViewById(R.id.txt_art_details) as TextView
+        val txt_buyer_details = dialog?.findViewById(R.id.txt_buyer_details) as TextView
+        val txt_gen_new_enq = dialog?.findViewById(R.id.txt_gen_new_enq) as TextView
+        txt_enq_code.text=enquiryCode
+        txt_art_details.text="₹ $price\n $artistBrand"
+        txt_buyer_details.text=buyerBrand
+        txt_gen_new_enq.setOnClickListener {
+            if(Utility.checkIfInternetConnected(requireContext())) {
+                mEVM?.genEnqListener = this
+                mBinding?.pbLoader?.visibility = View.VISIBLE
+                mEVM?.createNewEnquiry(id ?: 0)
+                dialog.dismiss()
+            }else Utility.displayMessage(requireContext().getString(R.string.no_internet_connection),requireContext())
+        }
+    }
+
+    fun showNewEnqDetDialog() {
+        var dialog = Dialog(requireContext())
+        dialog?.setContentView(R.layout.dialog_new_enq_details)
+        dialog?.show()
+        dialog.setCanceledOnTouchOutside(true)
+        val txt_enq_code = dialog?.findViewById(R.id.txt_enq_code) as TextView
+        val txt_click_here = dialog?.findViewById(R.id.txt_click_here) as TextView
+        val txt_choose_artisans = dialog?.findViewById(R.id.txt_choose_artisans) as TextView
+        txt_enq_code.text=enquiryCode
+        txt_click_here.setOnClickListener {
+//            if(enquiryCode!!.contains("c"))
+//            else
+        }
+        txt_choose_artisans.setOnClickListener {
+            dialog.cancel()
+            context?.startActivity(context?.SelectArtisanForEnqActivity(id?:0))
+        }
     }
 }

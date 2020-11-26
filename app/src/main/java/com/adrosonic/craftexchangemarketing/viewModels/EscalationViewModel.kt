@@ -4,8 +4,13 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import com.adrosonic.craftexchangemarketing.repository.craftexchangemarketingRepository
-import com.adrosonic.craftexchangemarketing.repository.data.response.admin.userDatabase.DatabaseCountResponse
+import com.adrosonic.craftexchangemarketing.repository.data.request.escalation.GetNewArtisanEnqRequest
+import com.adrosonic.craftexchangemarketing.repository.data.response.admin.productCatalogue.FilteredArtisanResponse
+import com.adrosonic.craftexchangemarketing.repository.data.response.admin.productCatalogue.FilteredArtisans
 import com.adrosonic.craftexchangemarketing.repository.data.response.escalation.*
+import com.adrosonic.craftexchangemarketing.repository.data.response.escalationa.ArtisanData1
+import com.adrosonic.craftexchangemarketing.repository.data.response.escalationa.GetNewArtisanEnqResponse
+import com.adrosonic.craftexchangemarketing.repository.data.response.redirectedEnquiries.ArtisanData
 import com.adrosonic.craftexchangemarketing.utils.ConstantsDirectory
 import com.pixplicity.easyprefs.library.Prefs
 import retrofit2.Call
@@ -37,6 +42,20 @@ class EscalationViewModel(application: Application) : AndroidViewModel(applicati
     interface EscFaulty{
         fun EscFaultySuccess(ed : ArrayList<EscalationData>)
     }
+
+    interface GenEnqInterface{
+        fun genEnqSuccess(ed : GenerateEnqResponse)
+        fun genEnqFailure()
+    }
+
+    interface FetchArtisanInterface{
+        fun onFetchArtisanFailure()
+        fun onFetchArtisanSuccess(list:List<ArtisanData1>?)
+    }
+    interface FetchFilteredArtisansInterface{
+        fun onFilteredArtisanshArtisanFailure()
+        fun onFilteredArtisansArtisanSuccess(list:List<FilteredArtisans>?)
+    }
     var userListener : UserData?=null
     var countlistener : EscalationCount?=null
     var resolvedListener : EscalationResolve?=null
@@ -44,7 +63,9 @@ class EscalationViewModel(application: Application) : AndroidViewModel(applicati
     var chatListener : EscChat?=null
     var paymentListener : EscPayment?=null
     var faultyListener : EscFaulty?=null
-
+    var genEnqListener : GenEnqInterface?=null
+    var artisanListener: FetchArtisanInterface? = null
+    var filteredArtisanListener: FetchFilteredArtisansInterface? = null
 
     fun escUpdates(pageNo: Long, searchStr: String?){
         Log.e("EscalationVM","fn called ")
@@ -283,4 +304,88 @@ class EscalationViewModel(application: Application) : AndroidViewModel(applicati
             })
     }
 
+    fun createNewEnquiry(enquiryId: Long){
+        Log.e("EscalationVM","fn called ")
+
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        craftexchangemarketingRepository
+            .getEscalationDataService()
+            .createNewEnquiry(token,enquiryId,"android")
+            .enqueue(object: Callback, retrofit2.Callback<GenerateEnqResponse> {
+                override fun onFailure(call: Call<GenerateEnqResponse>, t: Throwable) {
+                    t.printStackTrace()
+                    Log.e("EscalationVM","fail: ")
+                    genEnqListener?.genEnqFailure()
+                }
+                override fun onResponse(
+                    call: Call<GenerateEnqResponse>,
+                    response: retrofit2.Response<GenerateEnqResponse>) {
+                    if(response.body()?.valid == true){
+                        Log.e("EscalationVM","UPdate: "+response.body()?.data)
+                        genEnqListener?.genEnqSuccess(response.body()!!)
+                    }else{
+                        Log.e("EscalationVM","false ")
+                        genEnqListener?.genEnqFailure()
+                    }
+                }
+
+            })
+    }
+
+    fun getArtisansLessThan8Rating(clusterId: Long,searchStr:String,enqId:Long){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        Log.e(TAG,"clusterId: $clusterId")
+        Log.e(TAG,"searchStr: $searchStr")
+        Log.e(TAG,"enqId: $enqId")
+        Log.e(TAG,"GetNewArtisanEnqRequest: ${GetNewArtisanEnqRequest(clusterId.toInt(),enqId.toInt(),searchStr)}")
+        craftexchangemarketingRepository
+            .getEscalationDataService()
+            .getArtisansForNewEnquiry(token, GetNewArtisanEnqRequest(clusterId.toInt(),enqId.toInt(),searchStr))
+            .enqueue(object: Callback, retrofit2.Callback<GetNewArtisanEnqResponse> {
+                override fun onFailure(call: Call<GetNewArtisanEnqResponse>, t: Throwable) {
+                    t.printStackTrace()
+                    artisanListener?.onFetchArtisanFailure()
+                    Log.e(TAG,"onFailure: "+t.message)
+                }
+                override fun onResponse(
+                    call: Call<GetNewArtisanEnqResponse>,
+                    response: retrofit2.Response<GetNewArtisanEnqResponse>) {
+                    if(response.body()?.valid!!){
+                        Log.e(TAG,"onResponse if : ${response.body()?.data?.size}")
+                        artisanListener?.onFetchArtisanSuccess(response?.body()?.data)
+                    }else{
+                        artisanListener?.onFetchArtisanFailure()
+                        Log.e(TAG,"onResponse else : ${response.body()?.valid}")
+                    }
+                }
+
+            })
+    }
+
+    fun getFilteredArtisans(clusterId: Int,searchStr:String){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        craftexchangemarketingRepository
+            .getProductCatService()
+            .getFilteredArtisans(token,clusterId,searchStr)
+            .enqueue(object: Callback, retrofit2.Callback<FilteredArtisanResponse> {
+                override fun onFailure(call: Call<FilteredArtisanResponse>, t: Throwable) {
+                    t.printStackTrace()
+                    filteredArtisanListener?.onFilteredArtisanshArtisanFailure()
+                    Log.e("getFilteredArtisans","onFailure: "+t.message)
+                }
+                override fun onResponse(
+                    call: Call<FilteredArtisanResponse>,
+                    response: retrofit2.Response<FilteredArtisanResponse>) {
+                    if(response.body()?.valid == true){
+                        Log.e("getFilteredArtisans","onSuccess: ${response?.body()}")
+                        filteredArtisanListener?.onFilteredArtisansArtisanSuccess(response.body()?.data)
+
+                    }else{
+                        filteredArtisanListener?.onFilteredArtisanshArtisanFailure()
+                        Log.e("ArtisanProduct","onFailure: "+response.body()?.errorCode)
+                    }
+                }
+
+            })
+    }
 }

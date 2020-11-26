@@ -12,7 +12,7 @@ data class FilteredArtisanResponse (
 data class FilteredArtisans (
     val cluster: String,
     val brand: String? = null,
-    val rating: Any? = null,
+    val rating: Long? = null,
     val weaverID: String,
     val status: Long,
     val email: String,
