@@ -123,4 +123,7 @@ object craftexchangemarketingRepository {
     fun getRedirectEnquiryService(): RedirectedEnquiryeDao {
         return builder(RedirectedEnquiryeDao::class.java)
     }
+    fun getEscalationDataService(): EscalationDao {
+        return builder(EscalationDao::class.java)
+    }
 }
