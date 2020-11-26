@@ -60,7 +60,7 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
             e.printStackTrace();
         }
         dashUrl += mQuery
-        Log.e("Dashboard","Url : $dashUrl")
+        Log.e("Dashboard","UrlOES : $dashUrl")
         return dashUrl
     }
     fun getMicroEnterpriseRevenueDashboard() : String? {
@@ -75,7 +75,7 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
             e.printStackTrace();
         }
         dashUrl += mQuery
-        Log.e("Dashboard","Url : $dashUrl")
+        Log.e("Dashboard","UrlMER : $dashUrl")
         return dashUrl
     }
     fun getMicroEnterpriseBusinessSummaryDashboard() : String? {
@@ -96,7 +96,7 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
             e.printStackTrace();
         }
         dashUrl += mQuery
-        Log.e("Dashboard","Url : $dashUrl")
+        Log.e("Dashboard","UrlMEBS : $dashUrl")
         return dashUrl
     }
 //    fun getBuyerDashboard() : String? {

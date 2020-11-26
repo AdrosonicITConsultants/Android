@@ -34,9 +34,16 @@ class EscalationActivity :AppCompatActivity(){
             Log.d("type", "onCreate: " + total)
 
         }
+        mBinding?.backButton?.setOnClickListener {
+            this.onBackPressed()
+        }
         mBinding?.escalationCount?.text = total.toString()
 
         mBinding?.EscalationsViewPager?.adapter = EscalationAdapter(this,supportFragmentManager)
         mBinding?.EscalationsTab?.setupWithViewPager(mBinding?.EscalationsViewPager)
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
     }
 }
