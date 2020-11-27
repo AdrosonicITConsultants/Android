@@ -66,7 +66,7 @@ class BuyerDatabaseFragment :Fragment(),
             mBinding?.pbLoader?.visibility=View.VISIBLE
             mBinding?.clusterParent?.visibility=View.GONE
             mViewModel.getDatabaseCountForAdmin(-1,1,-1,roleId,null,"desc","date")
-
+            mBinding?.searchArtisan?.hint="Search by name, brand, email Id or phone no."
             val spClusterAdapter = ArrayAdapter<String>(requireContext(), R.layout.spinner_item,clusterList)
             spClusterAdapter.setDropDownViewResource(R.layout.spinner_item)
             mBinding?.spCluster?.adapter = spClusterAdapter

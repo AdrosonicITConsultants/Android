@@ -38,7 +38,7 @@
         android:drawablePadding="8dp"
         android:drawableTint="@color/white_text"
         android:textColorHint="@color/white_text"
-        android:hint="Search by brand email Id, mobile, name"
+        android:hint="Search by name, brand, email Id or artisan id"
         android:drawableLeft="@drawable/ic_search_black_36dp"
         app:iconifiedByDefault="false"
         app:layout_constraintEnd_toEndOf="parent"
