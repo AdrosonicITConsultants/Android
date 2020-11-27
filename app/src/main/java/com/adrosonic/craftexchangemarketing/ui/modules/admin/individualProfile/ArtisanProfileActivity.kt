@@ -74,13 +74,22 @@ UserProfileViewModal.setRatinginterface{
         val view = mBinding?.root
         setContentView(view)
 
-        mBinding?.menuartisanProfileIcon?.setOnClickListener {
-            mBinding?.layoutForMenuArtisan?.visibility = View.VISIBLE
-            mBinding?.menuArtisanProfile?.visibility = View.VISIBLE
-            mBinding?.giveRating?.visibility = View.GONE
-            initialData = false
-
+        if(mUserConfig?.adminUserRoles?.equals(1L)) {
+            mBinding?.statusArtisan?.visibility=View.VISIBLE
+            mBinding?.statusArtisanSwitch?.visibility=View.VISIBLE
         }
+        else {
+            mBinding?.statusArtisan?.visibility=View.GONE
+            mBinding?.statusArtisanSwitch?.visibility=View.GONE
+        }
+            mBinding?.menuartisanProfileIcon?.setOnClickListener {
+                mBinding?.layoutForMenuArtisan?.visibility = View.VISIBLE
+                mBinding?.menuArtisanProfile?.visibility = View.VISIBLE
+                mBinding?.giveRating?.visibility = View.GONE
+                initialData = false
+
+            }
+
         mBinding?.layoutForMenuArtisan?.setOnClickListener {
             mBinding?.layoutForMenuArtisan?.visibility = View.GONE
             mBinding?.ratingBar?.setProgress(userProfileResponse?.data?.rating!!.toFloat())
@@ -88,6 +97,7 @@ UserProfileViewModal.setRatinginterface{
         }
         mBinding?.menuArtisanProfile?.setOnClickListener {
         }
+
         mBinding?.editRating?.setOnClickListener {
             mBinding?.menuArtisanProfile?.visibility = View.GONE
             mBinding?.giveRating?.visibility = View.VISIBLE

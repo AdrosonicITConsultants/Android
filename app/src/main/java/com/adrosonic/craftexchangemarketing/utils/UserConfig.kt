@@ -101,6 +101,7 @@ const val CR_STATUS_DATA ="cr_status_data"
 const val ADMIN_ROLES = "admin_roles"
 const val ADMIN_TEAM = "admin_team"
 const val ADMIN_PROFILE = "admin_profile"
+const val ADMIN_USER_ROLES = "admin_user_rolese"
 
 
 
@@ -628,5 +629,11 @@ class UserConfig {
             field = value
         }
 
+    var adminUserRoles = 0L
+        get() = Prefs.getLong(ADMIN_USER_ROLES, 0L)
+        set(value) {
+            Prefs.putLong(ADMIN_USER_ROLES, value)
+            field = value
+        }
 }
 

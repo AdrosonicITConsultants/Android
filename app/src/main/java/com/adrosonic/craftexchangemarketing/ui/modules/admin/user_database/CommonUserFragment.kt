@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import com.adrosonic.craftexchangemarketing.R
 import com.adrosonic.craftexchangemarketing.databinding.FragmentCommonUserBinding
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.adapter.AdminDatabaseAdapter
+import com.adrosonic.craftexchangemarketing.utils.UserConfig
 import com.adrosonic.craftexchangemarketing.viewModels.DatabaseViewModel
 
 private const val ARG_PARAM1 = "param1"
@@ -19,6 +20,7 @@ private const val ARG_PARAM2 = "param2"
 
 class CommonUserFragment : Fragment()
 {
+    private var mUserConfig = UserConfig()
     private var param1: String? = null
     private var param2: String? = null
     val mViewModel:DatabaseViewModel by viewModels()
@@ -45,6 +47,7 @@ class CommonUserFragment : Fragment()
         childFragmentManager.let {
             mBinding?.viewPagerViewDatabase?.adapter = AdminDatabaseAdapter(it)
             mBinding?.viewUserTab?.setupWithViewPager(mBinding?.viewPagerViewDatabase)
+
         }
     }
 

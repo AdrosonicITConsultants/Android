@@ -111,7 +111,7 @@ class AdminLoginFragment :Fragment(){
                                         ConstantsDirectory.ACC_TOKEN,
                                         response.body()?.data?.acctoken
                                     )
-//                                    mUserConfig
+                                    mUserConfig.adminUserRoles=response.body()?.data?.user?.refMarketingRoleId?:0
                                       startActivity(context?.adminLandingIntent())
 //                                      startActivity(Intent(activity, AdminLandingActivity::class.java))
                                 } else {
