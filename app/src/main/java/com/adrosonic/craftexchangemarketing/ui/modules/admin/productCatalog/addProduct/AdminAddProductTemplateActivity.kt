@@ -998,9 +998,13 @@ class AdminAddProductTemplateActivity : AppCompatActivity(),
         )
         dialogCompresion.isCancelable = false
         var list=ArrayList<String>()
+        Log.e("Imagepath","pairList: ${pairList.size}")
         pairList.forEach {
-           if(!it.first) list.add(it.third)
+           if(!it.first) {
+               if(list.contains(it.third)==false)  list.add(it.third)
+           }
         }
+        Log.e("Imagepath","list: ${list.size}")
         CompressImageTask(cacheDir.absolutePath, list, object : CompressTaskResult {
             override fun performFinalTask(result: ArrayList<String>) {
                 dialogCompresion.dismiss()
@@ -1009,6 +1013,7 @@ class AdminAddProductTemplateActivity : AppCompatActivity(),
                 if (status) {
                     if (Utility.checkIfInternetConnected(applicationContext)) {
                         pbLoader?.visibility=View.VISIBLE
+                        Log.e("Imagepath","inside list: ${list.size}")
                         mProdVm?.editProduct(template.toString(),list)
                     }else  Utility.displayMessage(getString(R.string.no_internet_connection),  applicationContext )
 
@@ -1119,6 +1124,7 @@ class AdminAddProductTemplateActivity : AppCompatActivity(),
                 }
                 setStatusResource()
                 prodImgListAdapter.notifyDataSetChanged()
+                Log.e("Imagepath","DownLoadProdImages imageList: ${pairList?.size}")
             }
             )
         } catch (e: Exception) {

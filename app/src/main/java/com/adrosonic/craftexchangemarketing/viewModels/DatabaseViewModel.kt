@@ -56,6 +56,7 @@ class DatabaseViewModel(application: Application) : AndroidViewModel(application
                                 listener?.onSuccess(userList)
                             }
                             else {
+                                if(page==2)userList.clear()
                                 userList.addAll(response?.body()?.data!!)
                                 getDatabaseForAdmin(isFilter,clusterId, page, rating, roleId,searchStr, sortBy,sortType)
                             }

@@ -297,6 +297,7 @@ class ProductCatViewModal(application: Application) : AndroidViewModel(applicati
 
     fun editProduct(productData:String,imageList:ArrayList<String>?){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        Log.e("Imagepath","editProduct imageList: ${imageList?.size}")
         Log.e("Offline","productData :"+productData)
         var dataLength=0L
         imageList?.forEach {
@@ -333,6 +334,7 @@ class ProductCatViewModal(application: Application) : AndroidViewModel(applicati
                     Log.e("Offline", "onResponse prod template : ${response.body()?.valid}")
                     if (response.body()?.valid == true) {
                         uploadProdListener?.onUploadSuccess()
+
                         Log.e("Offline", "iff  : ${response.body()?.data?.brand}")
                         Log.e("Offline", "iff  : ${response.body()?.data?.clusterName}")
                     } else

@@ -44,6 +44,7 @@ class ArtisanDatabaseFragment() :Fragment(),
     var ratingOrder="asc"
     var dategOrder="asc"
     var brandOrder="asc"
+    var isSearch=false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -97,6 +98,7 @@ class ArtisanDatabaseFragment() :Fragment(),
              3->  8
             else->  -1
          }
+            isSearch=true
          if(clusterId.equals(-1) && rating.equals(-1) && searchStr.isNullOrEmpty()) apiCall(false,-1,1,-1,roleId,null,"desc","date")
          else apiCall(true,clusterId,1,rating,roleId,searchStr,"asc","date")
         }
@@ -121,6 +123,10 @@ class ArtisanDatabaseFragment() :Fragment(),
                 this.userList.clear()
                 this.userList.addAll(userList)
                 mBinding?.pbLoader?.visibility=View.GONE
+                if(isSearch){if(this.userList.size==0){
+                    isSearch=false
+                    Utility.displayMessage("No results found",requireContext())
+                }}
                 initializeTableView()
 
             }
@@ -233,6 +239,28 @@ class ArtisanDatabaseFragment() :Fragment(),
                 mBinding?.totalUserCount?.text="Total buyers: $count"
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val searchStr= if(mBinding?.searchArtisan?.text.toString().isNullOrEmpty()) null else  mBinding?.searchArtisan?.text.toString()
+        var clusterId=-1
+        clusterDetailsList?.
+        forEach {
+            if(it?.cluster.equals(mBinding?.spCluster?.selectedItem.toString())){
+                clusterId=it.clusterid!!.toInt()
+            }
+        }
+        val rating= when(mBinding?.spRating?.selectedItemPosition){
+            1->  3
+            2->  6
+            3->  8
+            else->  -1
+        }
+        isSearch=true
+        if(clusterId.equals(-1) && rating.equals(-1) && searchStr.isNullOrEmpty()) apiCall(false,-1,1,-1,roleId,null,"desc","date")
+        else apiCall(true,clusterId,1,rating,roleId,searchStr,"asc","date")
+
     }
     companion object {
 

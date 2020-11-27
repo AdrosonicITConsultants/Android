@@ -183,11 +183,11 @@ ProductCatViewModal.ProductDetailsInterface{
 
     fun getProductImages(productId : Long?){
         var imageList = ProductPredicates.getAllImagesOfProduct(productId)
-        var size = imageList
+        var size = imageList?.size
+
         imageUrlList.clear()
         if (imageList != null) {
             for (size in imageList){
-                Log.i("Stat","$size")
                 var imagename = size?.imageName
 //                if(isAntran == true){
 //                    url = Utility.getCustomProductImagesUrl(productDetails?.productId, imagename)

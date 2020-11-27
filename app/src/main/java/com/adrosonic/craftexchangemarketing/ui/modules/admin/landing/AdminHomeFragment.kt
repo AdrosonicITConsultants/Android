@@ -127,7 +127,6 @@ class AdminHomeFragment : Fragment(),
                             Utility.deleteImageCache(requireContext())
                             startActivity(Intent(activity, MainActivity::class.java))
 
-
                         }
                     builder.create().show()
                 }else{

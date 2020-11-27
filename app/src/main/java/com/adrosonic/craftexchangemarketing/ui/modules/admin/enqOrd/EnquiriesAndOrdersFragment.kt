@@ -64,7 +64,7 @@ EnquiryOrderViewModel.EnquiryOrderCountsInterface{
             context?.startActivity(myIntent)
         }
 
-    mBinding?.textView26?.setOnClickListener {
+    mBinding?.redirectEnquiriesLayout?.setOnClickListener {
 //    if (savedInstanceState == null) {
 //         activity?.supportFragmentManager?.beginTransaction()?.add(R.id.admin_home_container, RedirectEnquiriesFragment.newInstance())!!
 //            .addToBackStack(null)

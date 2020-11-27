@@ -108,7 +108,7 @@ UserProfileViewModal.ActivateInterface{
                     val builder = AlertDialog.Builder( this, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar)
                     builder.setCancelable(false);
 
-                    builder.setMessage("Are u sure you want to Activate the user ?")
+                    builder.setMessage("Are you sure you want to Activate the user ?")
                         .setPositiveButton("Yes"){ dialog, id ->
                             dialog.cancel()
                             mUPVM.activateUser(userId!!)
@@ -127,7 +127,7 @@ UserProfileViewModal.ActivateInterface{
                 } else {
                     val builder = AlertDialog.Builder( this, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar)
                     builder.setCancelable(false);
-                    builder.setMessage("Are u sure you want to Deactivate the user? ")
+                    builder.setMessage("Are you sure you want to Deactivate the user? ")
                         .setPositiveButton("Yes"){ dialog, id ->
                             dialog.cancel()
                             mUPVM?.deactivateUser(userId!!)
