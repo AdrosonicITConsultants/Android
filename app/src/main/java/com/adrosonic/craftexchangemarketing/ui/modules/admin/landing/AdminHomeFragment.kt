@@ -16,6 +16,8 @@ import com.adrosonic.craftexchangemarketing.R
 import com.adrosonic.craftexchangemarketing.database.entities.realmEntities.ProductCard
 import com.adrosonic.craftexchangemarketing.database.predicates.AdminPredicates
 import com.adrosonic.craftexchangemarketing.databinding.FragmentAdminHomeBinding
+import com.adrosonic.craftexchangemarketing.repository.data.response.enquiryOrderDatabase.EnquiryOrderCountResponse
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.escalations.EscalationActivity
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.escalations.SelectArtisanForEnqActivity
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.individualProfile.ArtisanProfileActivity
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.individualProfile.BuyerProfileActivity
@@ -25,19 +27,29 @@ import com.adrosonic.craftexchangemarketing.ui.modules.admin.redirectEnquiries.R
 import com.adrosonic.craftexchangemarketing.ui.modules.dashboard.OpenEnquirySummaryActivity
 import com.adrosonic.craftexchangemarketing.ui.modules.main.MainActivity
 import com.adrosonic.craftexchangemarketing.utils.ConstantsDirectory
+import com.adrosonic.craftexchangemarketing.utils.UserConfig
 import com.adrosonic.craftexchangemarketing.utils.Utility
 import com.adrosonic.craftexchangemarketing.viewModels.ArtisanProductsViewModel
+import com.adrosonic.craftexchangemarketing.viewModels.EnquiryOrderViewModel
+import com.google.gson.GsonBuilder
 import com.pixplicity.easyprefs.library.Prefs
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class AdminHomeFragment : Fragment(){
+class AdminHomeFragment : Fragment(),
+    EnquiryOrderViewModel.EnquiryOrderCountsInterface{
 //    ArtisanProductsViewModel.productsFetchInterface,
 ////    ProfileViewModel.FetchUserDetailsInterface {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+
+    private var mUserConfig = UserConfig()
+    var countsData : String ?=""
+    var enquiryOrderCountResponse : EnquiryOrderCountResponse?= null
+    val mEOVM : EnquiryOrderViewModel by viewModels()
 
     private var mBinding: FragmentAdminHomeBinding?= null
     private var mProduct = mutableListOf<ProductCard>()
@@ -61,6 +73,9 @@ class AdminHomeFragment : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        mEOVM.countsListener =this
+        mEOVM.getEnquiryOrderCounts()
 //        mViewModel.listener = this
 //        mProVM.listener = this
 //        refreshProfile()
@@ -79,16 +94,22 @@ class AdminHomeFragment : Fragment(){
 //        var welcomeText = "${activity?.getString(R.string.hello)} ${Prefs.getString(ConstantsDirectory.FIRST_NAME,"User")}"
 //        mBinding?.welcomeText?.text = welcomeText
 //        setBrandImage()
-            mBinding?.microEnterpriseBusinessSummaryBtn?.setOnClickListener {
+
+        mBinding?.FaultPane?.setOnClickListener {
+            val myIntent = Intent(context, EscalationActivity::class.java)
+            myIntent.putExtra("total", enquiryOrderCountResponse?.data!![0]?.escaltions)
+            context?.startActivity(myIntent)
+        }
+            mBinding?.microEnterpriseSummary?.setOnClickListener {
                 Prefs.putString(ConstantsDirectory.DASHBOARD,"MEBS")
                 startActivity(Intent(activity, OpenEnquirySummaryActivity::class.java))
 //                context?.startActivity(context?.SelectArtisanForEnqActivity(1771))
             }
-            mBinding?.microEnterpriseRevenueBtn?.setOnClickListener {
+            mBinding?.microEnterpriseRevenue?.setOnClickListener {
                 Prefs.putString(ConstantsDirectory.DASHBOARD,"MER")
                 startActivity(Intent(activity, OpenEnquirySummaryActivity::class.java))
             }
-            mBinding?.enquirySummaryBtn?.setOnClickListener {
+            mBinding?.enquirySumary?.setOnClickListener {
                 Prefs.putString(ConstantsDirectory.DASHBOARD,"ES")
                 startActivity(Intent(activity, OpenEnquirySummaryActivity::class.java))
             }
@@ -230,7 +251,15 @@ class AdminHomeFragment : Fragment(){
         super.onResume()
         refreshProfile()
     }
-
+    override fun onCountsSuccess() {
+        countsData = mUserConfig.CountsResponse.toString()
+        val gson = GsonBuilder().create()
+        enquiryOrderCountResponse = gson.fromJson(countsData, EnquiryOrderCountResponse::class.java)
+        Log.d(TAG, "onCountsSuccess: " + enquiryOrderCountResponse)
+        mBinding?.escalationCount?.text = enquiryOrderCountResponse?.data!![0]?.escaltions.toString()
+        mBinding?.OngoingEnquiriesCount?.text = enquiryOrderCountResponse?.data!![0]?.ongoingEnquiries.toString()
+        mBinding?.CompletedEnquiriesCount?.text = enquiryOrderCountResponse?.data!![0]?.incompleteAndClosedEnquiries.toString()
+    }
 
     companion object {
         fun newInstance() = AdminHomeFragment()

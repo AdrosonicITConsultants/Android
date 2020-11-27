@@ -6,8 +6,9 @@
 
     <item>
         <bitmap
-            android:gravity="center"
-            android:src="@drawable/logo_bottom_text"/>
+            android:gravity="fill_horizontal"
+
+            android:src="@drawable/loginlogo2"/>
     </item>
 
 </layer-list>

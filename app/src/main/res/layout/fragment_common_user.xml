@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_regular"
-            android:layout_marginTop="65dp"
+            android:layout_marginTop="15dp"
             android:fontFamily="@font/lato_regular"
             android:text="@string/user_database"
             android:textColor="@color/colorBackground"
@@ -88,27 +88,12 @@
 
         </androidx.viewpager.widget.ViewPager>
 
-        <ImageView
-            android:id="@+id/DatabaseImage"
-            android:layout_width="116dp"
-            android:layout_height="87dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/view_user_tab"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.983"
-            app:layout_constraintStart_toEndOf="@+id/textView7"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0"
-            tools:srcCompat="@drawable/ic_bgownproduct" />
-
         <ProgressBar
             android:id="@+id/pbLoader"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_marginStart="168dp"
-            android:layout_marginEnd="69dp"
             android:visibility="gone"
-            app:layout_constraintEnd_toStartOf="@+id/DatabaseImage"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

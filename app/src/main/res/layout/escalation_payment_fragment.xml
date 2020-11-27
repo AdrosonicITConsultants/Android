@@ -265,7 +265,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/enquiry_swipe_background"
                 android:elevation="5dp"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -339,7 +339,7 @@
                     app:layout_constraintBottom_toBottomOf="@+id/viewChat"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/viewChat"
-                    app:srcCompat="@drawable/ic_chat_outline" />
+                    app:srcCompat="@drawable/ic_icon_ionic_ios_chatbubbles" />
 
                 <TextView
                     android:id="@+id/viewChat"
@@ -387,7 +387,7 @@
                     app:layout_constraintBottom_toBottomOf="@+id/viewTransaction"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/viewTransaction"
-                    app:srcCompat="@drawable/ic_enq_mgmt" />
+                    app:srcCompat="@drawable/ic_transactions_icon" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

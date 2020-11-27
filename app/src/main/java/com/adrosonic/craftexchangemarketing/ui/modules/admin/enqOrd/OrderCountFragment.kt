@@ -38,19 +38,19 @@ class OrderCountFragment :Fragment(){
         mBinding?.ClosedOrderCount?.text = enquiryOrderCountResponse?.data!![0]?.incompleteAndClosedOrders.toString()
         mBinding?.CompletedOrder?.text = enquiryOrderCountResponse?.data!![0]?.orderCompletedSuccessfully.toString()
         mBinding?.FaultyOrder?.text = enquiryOrderCountResponse?.data!![0]?.faultyInResolution.toString()
-        mBinding?.OngoingOrderNav?.setOnClickListener {
+        mBinding?.OngoingOrd?.setOnClickListener {
             val myIntent = Intent(context, EnquiriesDatabaseActivity::class.java)
             myIntent.putExtra("enquiryCount", enquiryOrderCountResponse?.data!![0]?.ongoingOrders)
             myIntent.putExtra("type", 3.toLong())
             startActivity(myIntent)
         }
-        mBinding?.IncompleteOrderNav?.setOnClickListener {
+        mBinding?.IncompleteOrd?.setOnClickListener {
             val myIntent = Intent(context, EnquiriesDatabaseActivity::class.java)
             myIntent.putExtra("enquiryCount", enquiryOrderCountResponse?.data!![0]?.incompleteAndClosedOrders)
             myIntent.putExtra("type", 4.toLong())
             startActivity(myIntent)
         }
-        mBinding?.CompletedOrdersNav?.setOnClickListener {
+        mBinding?.ClosedOrd?.setOnClickListener {
             val myIntent = Intent(context, EnquiriesDatabaseActivity::class.java)
             myIntent.putExtra("enquiryCount", enquiryOrderCountResponse?.data!![0]?.orderCompletedSuccessfully)
             myIntent.putExtra("type", 5.toLong())

@@ -47,6 +47,5 @@ class ArtisanProfileFragment : Fragment(){
         mBinding?.artisanEmail?.text = userProfileResponse?.data?.email
         mBinding?.artisanMobileNumber?.text = userProfileResponse?.data?.mobile
         mBinding?.artisanAddress?.text = userProfileResponse?.data?.registeredAddress?.line1 + " "+ userProfileResponse?.data?.registeredAddress?.district + " " + userProfileResponse?.data?.registeredAddress?.state + " " + userProfileResponse?.data?.registeredAddress?.pincode
-        mBinding?.artisanDescription?.text = userProfileResponse?.data?.companyDetails?.desc
         }
 }
