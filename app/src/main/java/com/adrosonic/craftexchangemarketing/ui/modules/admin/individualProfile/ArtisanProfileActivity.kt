@@ -8,12 +8,15 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.adrosonic.craftexchangemarketing.R
+import com.adrosonic.craftexchangemarketing.database.predicates.AdminPredicates
 import com.adrosonic.craftexchangemarketing.databinding.ActivityIndArtisanProfileBinding
 //import com.adrosonic.craftexchangemarketing.databinding.ActivityIndArtisanProfile1Binding
 //import com.adrosonic.craftexchangemarketing.databinding.ActivityIndArtisanProfileBinding
 import com.adrosonic.craftexchangemarketing.repository.data.response.admin.userDatabase.UserProfileResponse
+import com.adrosonic.craftexchangemarketing.ui.modules.main.MainActivity
 import com.adrosonic.craftexchangemarketing.utils.ImageSetter
 import com.adrosonic.craftexchangemarketing.utils.UserConfig
 import com.adrosonic.craftexchangemarketing.utils.Utility
@@ -116,13 +119,46 @@ UserProfileViewModal.setRatinginterface{
             }else {
 
                 if (isChecked) {
-                    mUPVM.activateUser(userId!!)
-                    mBinding?.layoutForMenuArtisan?.visibility = View.GONE
+                    val builder = AlertDialog.Builder( this, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar)
+                    builder.setCancelable(false);
+                    builder.setMessage("Are u sure you want to Activate the user? ")
+                        .setPositiveButton("Yes"){ dialog, id ->
+                            dialog.cancel()
+                            mUPVM.activateUser(userId!!)
+                            mBinding?.layoutForMenuArtisan?.visibility = View.GONE
+                            mBinding?.pbLoader?.visibility=View.VISIBLE
+                        }
+                        .setNegativeButton("Cancel"){ dialog, id ->
+                            initialData= true
+                            mBinding?.statusArtisanSwitch?.isChecked = false
+                            mBinding?.layoutForMenuArtisan?.visibility = View.GONE
+
+
+                        }
+                    builder.create().show()
+
 //                Utility.displayMessage("Activating User..", applicationContext)
 
                 } else {
-                    mUPVM?.deactivateUser(userId!!)
-                    mBinding?.layoutForMenuArtisan?.visibility = View.GONE
+                    val builder = AlertDialog.Builder( this, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar)
+                    builder.setCancelable(false);
+                    builder.setMessage("Are u sure you want to Deactivate the user? ")
+                        .setPositiveButton("Yes"){ dialog, id ->
+                            dialog.cancel()
+                            mUPVM?.deactivateUser(userId!!)
+                            mBinding?.layoutForMenuArtisan?.visibility = View.GONE
+                            mBinding?.pbLoader?.visibility=View.VISIBLE
+                        }
+                        .setNegativeButton("Cancel"){ dialog, id ->
+                            initialData= true
+                            mBinding?.statusArtisanSwitch?.isChecked = true
+                            mBinding?.layoutForMenuArtisan?.visibility = View.GONE
+
+
+                        }
+                    builder.create().show()
+
+
 //                Utility.displayMessage("Deactivating User..", applicationContext)
 
                 }
@@ -213,6 +249,8 @@ UserProfileViewModal.setRatinginterface{
                     R.drawable.buyer_logo_placeholder
                 )
                 mBinding?.ratingBar?.setProgress(userProfileResponse?.data?.rating!!.toFloat())
+                mBinding?.pbLoader?.visibility=View.GONE
+
 
             }
             )
@@ -244,6 +282,8 @@ UserProfileViewModal.setRatinginterface{
                 Utility.displayMessage("User Activated", applicationContext)
                 mBinding?.statusArtisan?.text = "Active"
                 mBinding?.disabledUserText?.visibility = View.GONE
+                mBinding?.pbLoader?.visibility=View.GONE
+
 //                mBinding?.artisanRating?.text = "Rating : " + userProfileResponse?.data?.rating
             }
             )
@@ -276,6 +316,8 @@ UserProfileViewModal.setRatinginterface{
                 mBinding?.statusArtisan?.text = "Deactive"
                 mBinding?.disabledUserText?.visibility = View.VISIBLE
 //                mBinding?.layoutForMenuBuyer?.visibility = View.GONE
+                mBinding?.pbLoader?.visibility=View.GONE
+
 
             }
             )

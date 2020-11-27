@@ -37,13 +37,13 @@ class EnquiriesCountFragment : Fragment(){
         mBinding?.ClosedEnquiryCount1?.text = enquiryOrderCountResponse?.data!![0]?.incompleteAndClosedEnquiries.toString()
         mBinding?.enquiriesConvertedCount?.text = enquiryOrderCountResponse?.data!![0]?.enquiriesConverted.toString()
         mBinding?.AwaitingMoqsResponseCount?.text = enquiryOrderCountResponse?.data!![0]?.awaitingMoqResponse.toString()
-        mBinding?.OngoinEnquiriesNav?.setOnClickListener {
+        mBinding?.ongoingEnq?.setOnClickListener {
             val myIntent = Intent(context, EnquiriesDatabaseActivity::class.java)
             myIntent.putExtra("enquiryCount", enquiryOrderCountResponse?.data!![0]?.ongoingEnquiries)
             myIntent.putExtra("type", 1.toLong())
             startActivity(myIntent)
         }
-        mBinding?.CompletedEnquiriesNav?.setOnClickListener {
+        mBinding?.closedEnq?.setOnClickListener {
             val myIntent = Intent(context, EnquiriesDatabaseActivity::class.java)
             myIntent.putExtra("enquiryCount", enquiryOrderCountResponse?.data!![0]?.incompleteAndClosedEnquiries)
             myIntent.putExtra("type", 2.toLong())

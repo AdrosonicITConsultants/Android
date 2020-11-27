@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.View
 import android.widget.CompoundButton
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.adrosonic.craftexchangemarketing.R
 import com.adrosonic.craftexchangemarketing.databinding.ActivityIndBuyerProfileBinding
@@ -93,6 +94,7 @@ UserProfileViewModal.ActivateInterface{
 //                Utility.displayMessage("Activating User..", applicationContext)
 
                 } else {
+
                     mBinding?.statusBuyer?.text = "Deactive"
                     mBinding?.disabledUserText?.visibility = View.VISIBLE
                     mBinding?.layoutForMenuBuyer?.visibility = View.GONE
@@ -102,13 +104,42 @@ UserProfileViewModal.ActivateInterface{
 
             }else {
                 if (isChecked) {
-                    mUPVM.activateUser(userId!!)
-                    mBinding?.layoutForMenuBuyer?.visibility = View.GONE
+
+                    val builder = AlertDialog.Builder( this, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar)
+                    builder.setCancelable(false);
+
+                    builder.setMessage("Are u sure you want to Activate the user ?")
+                        .setPositiveButton("Yes"){ dialog, id ->
+                            dialog.cancel()
+                            mUPVM.activateUser(userId!!)
+                            mBinding?.layoutForMenuBuyer?.visibility = View.GONE
+                            mBinding?.pbLoader?.visibility=View.VISIBLE
+                        }
+                        .setNegativeButton("Cancel"){ dialog, id ->
+                            initialData= true
+                            mBinding?.statusBuyerSwitch?.isChecked = false
+
+                        }
+                    builder.create().show()
+
 //                Utility.displayMessage("Activating User..", applicationContext)
 
                 } else {
-                    mUPVM?.deactivateUser(userId!!)
-                    mBinding?.layoutForMenuBuyer?.visibility = View.GONE
+                    val builder = AlertDialog.Builder( this, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar)
+                    builder.setCancelable(false);
+                    builder.setMessage("Are u sure you want to Deactivate the user? ")
+                        .setPositiveButton("Yes"){ dialog, id ->
+                            dialog.cancel()
+                            mUPVM?.deactivateUser(userId!!)
+                            mBinding?.layoutForMenuBuyer?.visibility = View.GONE
+                            mBinding?.pbLoader?.visibility=View.VISIBLE
+                        }
+                        .setNegativeButton("Cancel"){ dialog, id ->
+                            initialData= true
+                            mBinding?.statusBuyerSwitch?.isChecked = true
+
+                        }
+                    builder.create().show()
 //                Utility.displayMessage("Deactivating User..", applicationContext)
 
                 }
@@ -170,6 +201,8 @@ UserProfileViewModal.ActivateInterface{
                         R.drawable.buyer_logo_placeholder
                     )
                 }
+                mBinding?.pbLoader?.visibility=View.GONE
+
 
 
 
@@ -203,6 +236,8 @@ UserProfileViewModal.ActivateInterface{
                 Utility.displayMessage("User Activated", applicationContext)
                 mBinding?.statusBuyer?.text = "Active"
                 mBinding?.disabledUserText?.visibility = View.GONE
+                mBinding?.pbLoader?.visibility=View.GONE
+
 
 
 
@@ -236,6 +271,8 @@ UserProfileViewModal.ActivateInterface{
                 Utility.displayMessage("User Deactivated", applicationContext)
                 mBinding?.statusBuyer?.text = "Deactive"
                 mBinding?.disabledUserText?.visibility = View.VISIBLE
+                mBinding?.pbLoader?.visibility=View.GONE
+
 //                mBinding?.layoutForMenuBuyer?.visibility = View.GONE
 
             }

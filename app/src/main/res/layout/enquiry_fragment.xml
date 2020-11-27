@@ -23,7 +23,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout2"
+        android:id="@+id/ongoingEnq"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -86,10 +86,10 @@
         android:background="@drawable/redgradient"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
+        app:layout_constraintTop_toBottomOf="@+id/ongoingEnq" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout5"
+        android:id="@+id/closedEnq"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -153,7 +153,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/constraintLayout6"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout5">
+        app:layout_constraintTop_toBottomOf="@+id/closedEnq">
 
         <TextView
             android:id="@+id/textView30"
@@ -192,7 +192,7 @@
         app:layout_constraintEnd_toStartOf="@+id/AwatingMoqLayout"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/ConvertedEnquiriesLayout"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout5">
+        app:layout_constraintTop_toBottomOf="@+id/closedEnq">
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -206,7 +206,7 @@
         app:layout_constraintEnd_toStartOf="@+id/constraintLayout6"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout5">
+        app:layout_constraintTop_toBottomOf="@+id/closedEnq">
 
         <TextView
             android:id="@+id/textView29"

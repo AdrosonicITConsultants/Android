@@ -86,10 +86,13 @@ NotifcationFragment.Companion.notifcationsInterface{
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+//        supportActionBar?.setDisplayShowHomeEnabled(true);
         supportActionBar?.title = ""
-        supportActionBar?.setDisplayShowHomeEnabled(true);
-        supportActionBar?.setLogo(R.mipmap.ic_logo_main_round)
-        supportActionBar?.setDisplayUseLogoEnabled(true);
+
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_logo_main_foreground);// set drawable icon
+        supportActionBar?.setDisplayHomeAsUpEnabled(true);
+//        supportActionBar?.setLogo(R.drawable.ic_logo_main_foreground)
+//        supportActionBar?.setDisplayUseLogoEnabled(true);
 //        val toggle = ActionBarDrawerToggle(
 //            this, drawer_layout, toolbar,
 //            R.string.navigation_drawer_open,

@@ -62,9 +62,10 @@ class ArtisanBrandFragment: Fragment() {
         }
         var str1 = str.substring(0, (str.length - 1).coerceAtLeast(0))
         mBinding?.artisanProductCategory?.text = str1
+        mBinding?.artisanDescription?.text = userProfileResponse?.data?.companyDetails?.desc
 
         var image = userProfileResponse?.data?.companyDetails?.logo
-                var url = Utility.getBrandLogoUrl(userProfileResponse?.data?.id?.toLong() , image)
+        var url = Utility.getBrandLogoUrl(userProfileResponse?.data?.id?.toLong() , image)
                 ImageSetter.setImage(
                     requireActivity(),
                     url!!,

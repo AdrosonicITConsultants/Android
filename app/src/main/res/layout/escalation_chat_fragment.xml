@@ -327,7 +327,7 @@
                     app:layout_constraintBottom_toBottomOf="@+id/viewChat"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/viewChat"
-                    app:srcCompat="@drawable/ic_chat_outline" />
+                    app:srcCompat="@drawable/ic_icon_ionic_ios_chatbubbles" />
 
                 <TextView
                     android:id="@+id/viewChat"

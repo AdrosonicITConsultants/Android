@@ -11,11 +11,11 @@
 
         <ImageView
             android:id="@+id/role_select_logo"
-            android:layout_width="417dp"
-            android:layout_height="153dp"
+            android:layout_width="400dp"
+            android:layout_height="300dp"
             android:layout_margin="@dimen/margin_small"
             android:adjustViewBounds="true"
-            android:background="@drawable/logo_side_text"
+            android:background="@drawable/loginlogo2"
             android:contentDescription="@string/logo"
             android:scaleType="centerInside"
             app:layout_constraintBottom_toBottomOf="parent"
