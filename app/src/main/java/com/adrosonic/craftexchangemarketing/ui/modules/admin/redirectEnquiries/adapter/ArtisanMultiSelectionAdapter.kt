@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchangemarketing.R
 import com.adrosonic.craftexchangemarketing.repository.data.response.admin.productCatalogue.FilteredArtisans
@@ -61,19 +62,29 @@ class ArtisanMultiSelectionAdapter(
 
         if (item!!.second) {
             Utility.setImageResource(context, holder.imgStatus, R.drawable.ic_cr_checked)
+            holder.imgStatus?.setColorFilter(ContextCompat.getColor(context, R.color.white_text), android.graphics.PorterDuff.Mode.MULTIPLY);
         } else {
             Utility.setImageResource(context, holder.imgStatus, R.drawable.ic_cr_unchecked)
+            holder.imgStatus?.setColorFilter(ContextCompat.getColor(context, R.color.white_text), android.graphics.PorterDuff.Mode.MULTIPLY);
         }
+
         Log.e("Status","${item?.first?.artisan?.status}")
-        when(item?.first?.artisan?.status){
-            0L->Utility.setImageResource(context, holder.imgEye, R.drawable.ic_eye_white)
-            1L->{
-                if(item?.first?.isMailSent!!.equals(1L))  Utility.setImageResource(context, holder.imgEye, R.drawable.ic_eye_white)
-            }
-            2L->Utility.setImageResource(context, holder.imgEye, R.drawable.ic_eye_pink)
-        }
-        if(item?.first?.isMailSent!!.equals(1L) && item?.first?.artisan?.status!!.equals(2L))holder?.imgStatus?.visibility=View.INVISIBLE
-        else holder?.imgStatus?.visibility=View.VISIBLE
+       if(item!!.first!!.isMailSent!!.equals(1L)){
+           Utility.setImageResource(context, holder.imgEye, R.drawable.ic_eye_grey)
+           holder.imgStatus?.setColorFilter(ContextCompat.getColor(context, R.color.dark_green), android.graphics.PorterDuff.Mode.MULTIPLY);
+           Utility.setImageResource(context, holder.imgStatus, R.drawable.ic_cr_checked)
+           holder.imgStatus?.isEnabled=false
+       } else if(item!!.first!!.artisan?.status.equals(2L)){
+           Utility.setImageResource(context, holder.imgEye, R.drawable.ic_eye_pink)
+           Utility.setImageResource(context, holder.imgStatus, R.drawable.ic_cr_checked)
+           holder.imgStatus?.setColorFilter(ContextCompat.getColor(context, R.color.red_logo), android.graphics.PorterDuff.Mode.MULTIPLY);
+           holder.imgStatus?.isEnabled=false
+       }else{
+           Utility.setImageResource(context, holder.imgEye, R.drawable.ic_eye_white)
+           holder.imgStatus?.setColorFilter(ContextCompat.getColor(context, R.color.white_text), android.graphics.PorterDuff.Mode.MULTIPLY);
+           holder.imgStatus?.isEnabled=true
+       }
+
         holder?.imgStatus?.setOnClickListener {
             selectDeselect(position,item.first!!,item.second)
         }

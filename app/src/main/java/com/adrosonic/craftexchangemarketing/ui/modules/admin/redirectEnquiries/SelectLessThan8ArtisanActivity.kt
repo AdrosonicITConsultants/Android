@@ -91,6 +91,7 @@ class SelectLessThan8ArtisanActivity : AppCompatActivity(),
                 var i=0
                 while (i<filteredList.size){
                     val obj=filteredList.get(i).first
+
                     if(b) filteredList?.set(i, Pair(obj,true))
                     else filteredList?.set(i, Pair(obj,false))
 //                    pairList?.set(position, Pair(dscrp, true))
