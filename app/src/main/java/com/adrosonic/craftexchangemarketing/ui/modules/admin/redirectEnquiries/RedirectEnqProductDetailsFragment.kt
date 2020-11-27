@@ -142,7 +142,7 @@ RedirectedEnquiryViewModel.ProductDetailsInterface{
         try {
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("Product Details", "onFailure")
-                Utility.displayMessage("Unable to fetch product details",requireContext())
+//                Utility.displayMessage("Unable to fetch product details",requireContext())
                 hideLoader()
             })
         } catch (e: Exception) {
@@ -209,7 +209,7 @@ RedirectedEnquiryViewModel.ProductDetailsInterface{
             for (size in imageList){
                 Log.i("Stat","$size")
                 var imagename = size?.imageName
-                if(roleId!!.equals(0L) && roleId!!.equals(1L)){
+                if(roleId!!.equals(0L) || roleId!!.equals(1L)){
                     url = Utility.getCustomProductImagesUrl(productDetails?.productId, imagename)
                 }else{
                     url = Utility.getProductsImagesUrl(productDetails?.productId, imagename)

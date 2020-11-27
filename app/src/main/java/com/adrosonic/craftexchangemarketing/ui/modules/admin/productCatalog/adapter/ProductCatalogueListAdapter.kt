@@ -80,13 +80,15 @@ val isAntran:Boolean
         val cal: Calendar = Calendar.getInstance()
         val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.ENGLISH)
         cal.setTime(sdf.parse(product?.dateAdded))
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            holder.txt_date.setText(Html.fromHtml("<b>Date Added:</b><br>"+"${cal.get(Calendar.DAY_OF_MONTH)}-"+ cal.get(Calendar.MONTH)+"-"+ cal.get( Calendar.YEAR), Html.FROM_HTML_MODE_COMPACT));
-            holder.txt_total_orders.setText(Html.fromHtml("<b>Total<br>Orders:</b><br>"+product?.count, Html.FROM_HTML_MODE_COMPACT));
-        } else {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
             holder.txt_date.setText(Html.fromHtml("<b>Date Added:</b><br>"+"${cal.get(Calendar.DAY_OF_MONTH)}-"+ cal.get(Calendar.MONTH)+"-"+ cal.get( Calendar.YEAR)));
-            holder.txt_total_orders.setText(Html.fromHtml("<b>Total<br>Orders:</b><br>"+product?.count));
+            holder.txt_total_orders.setText(Html.fromHtml("<b>Total<br>Orders:</b><br>"+(product?.orderGenerated?:0).toString()))
+        } else {
+            holder.txt_date.setText(Html.fromHtml("<b>Date Added:</b><br>"+"${cal.get(Calendar.DAY_OF_MONTH)}-"+ cal.get(Calendar.MONTH)+"-"+ cal.get( Calendar.YEAR), Html.FROM_HTML_MODE_COMPACT));
+            holder.txt_total_orders.setText(Html.fromHtml("<b>Total<br>Orders:</b><br>"+(product?.orderGenerated?:0).toString(), Html.FROM_HTML_MODE_COMPACT));
         }
+        Log.e("ArtisanProduct", "count :${product?.orderGenerated}" )
+//        holder.txt_total_orders.text="Total\nOrders:\n${product?.count}"
         var url = Utility.getProductsImagesUrl(product?.id,product?.images)
         Log.e("ArtisanProduct", "url :$url" )
 

@@ -195,7 +195,7 @@ class RedirectedEnquiryViewModel(application: Application) : AndroidViewModel(ap
 
     fun getCustomProduct(productId: Long){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
-        Log.e("ProductDetails","onSuccess: ${productId}")
+        Log.e("ProductDetails","getCustomProduct : ${productId}")
         craftexchangemarketingRepository
             .getProductCatService()
             .getCustomProduct(token,productId)
@@ -210,9 +210,7 @@ class RedirectedEnquiryViewModel(application: Application) : AndroidViewModel(ap
                     response: retrofit2.Response<ProductDetailsResponse>) {
                     if(response.body()?.valid == true){
                         Log.e("ProductDetails","onSuccess: ${response?.body()}")
-                        Log.e("ProductDetails","onSuccess: ${response?.body()}")
                         ProductCataloguePredicates.insertCustomProductDetails(response.body())
-
                         Timer().schedule(object : TimerTask() {
                             override fun run() {
                                 prodListener?.onSuccess()
