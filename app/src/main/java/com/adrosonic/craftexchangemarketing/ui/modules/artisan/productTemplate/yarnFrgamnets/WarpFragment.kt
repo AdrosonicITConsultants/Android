@@ -31,11 +31,11 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 
+
+class WarpFragment : Fragment() {
 interface WarpFragmentListner {
     fun sendWarpData( yarnType: Long, yarnCount: String, dye: Long)
 }
-class WarpFragment : Fragment() {
-
     private var productId: Long? = 0
     private var isTemplate: Boolean? = true
 
@@ -225,9 +225,9 @@ class WarpFragment : Fragment() {
         arrDye?.forEach { if (it.dyeDesc.equals(dye)) dyeId = it.id }
         if(!count.equals("Select count"))yarnCnt=count
         Log.e("Viewpager", "Warp Type: $yarnTypeId, count: $yarnCnt , dye: $dyeId")
-        UserConfig.shared.warpDyeId=yarnTypeId
+        UserConfig.shared.warpDyeId=dyeId
         UserConfig.shared.warpYarnCount=yarnCnt
-        UserConfig.shared.warpYarnId=dyeId
+        UserConfig.shared.warpYarnId=yarnTypeId
     }
 
     companion object {
