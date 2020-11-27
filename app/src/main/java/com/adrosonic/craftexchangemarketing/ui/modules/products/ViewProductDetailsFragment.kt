@@ -144,6 +144,7 @@ ProductCatViewModal.ProductDetailsInterface{
     }
 
     fun setDetails(){
+        Handler(Looper.getMainLooper()).post(Runnable {
         Log.e("ViewEnqProd","Product : $productDetails")
 
         //ProductImage
@@ -179,6 +180,7 @@ ProductCatViewModal.ProductDetailsInterface{
         mBinding?.weightValue?.text = "$productTypeName\t\t$productWeight"
 
         setDimensions(productDetails)
+        })
     }
 
     fun getProductImages(productId : Long?){

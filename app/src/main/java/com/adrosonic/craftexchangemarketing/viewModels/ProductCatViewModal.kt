@@ -10,6 +10,7 @@ import com.adrosonic.craftexchangemarketing.database.entities.realmEntities.Noti
 import com.adrosonic.craftexchangemarketing.database.predicates.EnquiryPredicates
 import com.adrosonic.craftexchangemarketing.database.predicates.NotificationPredicates
 import com.adrosonic.craftexchangemarketing.database.predicates.ProductCataloguePredicates
+import com.adrosonic.craftexchangemarketing.database.predicates.ProductImagePredicates
 import com.adrosonic.craftexchangemarketing.repository.craftexchangemarketingRepository
 import com.adrosonic.craftexchangemarketing.repository.data.request.admin.database.CalogueRequest
 import com.adrosonic.craftexchangemarketing.repository.data.request.admin.database.UserDataRequest
@@ -295,7 +296,7 @@ class ProductCatViewModal(application: Application) : AndroidViewModel(applicati
         return body
     }
 
-    fun editProduct(productData:String,imageList:ArrayList<String>?){
+    fun editProduct(productData:String,imageList:ArrayList<String>?,productId: Long){
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         Log.e("Imagepath","editProduct imageList: ${imageList?.size}")
         Log.e("Offline","productData :"+productData)
@@ -334,7 +335,7 @@ class ProductCatViewModal(application: Application) : AndroidViewModel(applicati
                     Log.e("Offline", "onResponse prod template : ${response.body()?.valid}")
                     if (response.body()?.valid == true) {
                         uploadProdListener?.onUploadSuccess()
-
+                        ProductImagePredicates.deleteProdImageForUpdate(productId)
                         Log.e("Offline", "iff  : ${response.body()?.data?.brand}")
                         Log.e("Offline", "iff  : ${response.body()?.data?.clusterName}")
                     } else

@@ -1014,7 +1014,7 @@ class AdminAddProductTemplateActivity : AppCompatActivity(),
                     if (Utility.checkIfInternetConnected(applicationContext)) {
                         pbLoader?.visibility=View.VISIBLE
                         Log.e("Imagepath","inside list: ${list.size}")
-                        mProdVm?.editProduct(template.toString(),list)
+                        mProdVm?.editProduct(template.toString(),list,productId)
                     }else  Utility.displayMessage(getString(R.string.no_internet_connection),  applicationContext )
 
                 } else
