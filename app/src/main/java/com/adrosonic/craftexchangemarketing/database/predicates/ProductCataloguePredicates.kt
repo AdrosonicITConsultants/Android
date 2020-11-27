@@ -120,26 +120,44 @@ class ProductCataloguePredicates {
 //            return allProducts
 //        }
 
-        fun getAllProducts(isArtisan: Long?,search:String,cluster: String,availability:String): RealmResults<AdminProductCatalogue>? {
+        fun getAllProducts(isArtisan: Long?,search:String,clusterstr: String,availability:String): RealmResults<AdminProductCatalogue>? {
+
             var realm = CXRealmManager.getRealmInstance()
             var allProducts: RealmResults<AdminProductCatalogue>? =null
             realm.executeTransaction {
-                allProducts = if(search.isNullOrEmpty()&& cluster.isEmpty() && availability.isEmpty()){
+                allProducts = if(search.isNullOrEmpty()&& clusterstr.isEmpty() && availability.isEmpty()){
                     realm.where(AdminProductCatalogue::class.java).equalTo(AdminProductCatalogue.COLUMN_IS_ARTISAN, isArtisan).findAll()
                 }
                 else {
-                   val available= if(availability.equals("All"))"" else availability
-                    realm.where(AdminProductCatalogue::class.java).equalTo(AdminProductCatalogue.COLUMN_IS_ARTISAN, isArtisan)
+
+                   val available= if(availability.equals("All"))" " else availability
+                   val cluster= if(clusterstr.equals("Select Cluster"))"" else clusterstr
+                    Log.e("products","Search search :"+search)
+                    Log.e("products","Search cluster :"+cluster)
+                    Log.e("products","Search availability :"+available)
+                    if(cluster.isEmpty()){
+                        realm.where(AdminProductCatalogue::class.java).equalTo(AdminProductCatalogue.COLUMN_IS_ARTISAN, isArtisan)
+                            .and()
+                            .contains(AdminProductCatalogue.COLUMN_AVAILABILITY,available,Case.INSENSITIVE)
+                            .findAll().where()
+                            .contains(AdminProductCatalogue.COLUMN_CODE,search, Case.INSENSITIVE).or()
+                            .contains(AdminProductCatalogue.COLUMN_NAME,search,Case.INSENSITIVE).or()
+                            .contains(AdminProductCatalogue.COLUMN_BRAND,search,Case.INSENSITIVE).or()
+                            .contains(AdminProductCatalogue.COLUMN_CLUSTER,search,Case.INSENSITIVE).or()
+                            .contains(AdminProductCatalogue.COLUMN_CATEGORY,search,Case.INSENSITIVE).or()
+                            .findAll()
+                    }
+                    else realm.where(AdminProductCatalogue::class.java).equalTo(AdminProductCatalogue.COLUMN_IS_ARTISAN, isArtisan)
+                        .and()
+                        .contains(AdminProductCatalogue.COLUMN_AVAILABILITY,available,Case.INSENSITIVE)
+                        .and()
+                        .equalTo(AdminProductCatalogue.COLUMN_CLUSTER,cluster,Case.INSENSITIVE)
                         .findAll().where()
                         .contains(AdminProductCatalogue.COLUMN_CODE,search, Case.INSENSITIVE).or()
                         .contains(AdminProductCatalogue.COLUMN_NAME,search,Case.INSENSITIVE).or()
                         .contains(AdminProductCatalogue.COLUMN_BRAND,search,Case.INSENSITIVE).or()
                         .contains(AdminProductCatalogue.COLUMN_CLUSTER,search,Case.INSENSITIVE).or()
-                        .contains(AdminProductCatalogue.COLUMN_CATEGORY,search,Case.INSENSITIVE)
-                        .findAll().where()
-                        .contains(AdminProductCatalogue.COLUMN_AVAILABILITY,available,Case.INSENSITIVE)
-                        .findAll().where()
-                        .contains(AdminProductCatalogue.COLUMN_CLUSTER,cluster,Case.INSENSITIVE)
+                        .contains(AdminProductCatalogue.COLUMN_CATEGORY,search,Case.INSENSITIVE).or()
                         .findAll()
                 }
             }
