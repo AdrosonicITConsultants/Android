@@ -102,9 +102,9 @@ class BuyerDatabaseFragment :Fragment(),
             // Create TableView Adapter
             mTableAdapter = MyTableAdapter(roleId)
             mBinding?.tableview?.setAdapter(mTableAdapter)
-            if (userList != null && userList.size > 0) {
+//            if (userList != null && userList.size > 0) {
                 mTableAdapter?.setUserList(userList)
-            }
+//            }
 //            MyTableViewListener.tableListenrs=this
             // Create listener
             val tableLister=MyTableViewListener(mBinding?.tableview,userList,roleId)

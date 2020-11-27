@@ -57,6 +57,12 @@ class SelectLessThan8ArtisanActivity : AppCompatActivity(),
         setContentView(view)
         setRecyclerList()
         getClusters()
+        if(Utility.checkIfInternetConnected(this)) {
+            mBinding?.pbLoader?.visibility=View.VISIBLE
+            mViewModel?.artisanListener = this
+            mViewModel.getArtisansLessThan8Rating(0, mBinding?.searchArtisan?.text.toString(),enquiryId.toInt())
+        }else Utility.displayMessage(getString(R.string.no_internet_connection),this)
+
         val spClusterAdapter = ArrayAdapter<String>(this, R.layout.spinner_item,clusterList)
         spClusterAdapter.setDropDownViewResource(R.layout.spinner_item)
         mBinding?.spCluster?.adapter = spClusterAdapter

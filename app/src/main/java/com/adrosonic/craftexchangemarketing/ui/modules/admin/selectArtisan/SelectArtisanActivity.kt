@@ -63,6 +63,10 @@ ProductCatViewModal.UploadProdInterface{
         setContentView(view)
         setRecyclerList()
         getClusters()
+        if(Utility.checkIfInternetConnected(this)) {
+            mBinding?.pbLoader?.visibility=View.VISIBLE
+            mViewModel.getFilteredArtisans(0, mBinding?.searchArtisan?.text.toString())
+        }else Utility.displayMessage(getString(R.string.no_internet_connection),this)
         val spClusterAdapter = ArrayAdapter<String>(this, R.layout.spinner_item,clusterList)
         spClusterAdapter.setDropDownViewResource(R.layout.spinner_item)
         mBinding?.spCluster?.adapter = spClusterAdapter
