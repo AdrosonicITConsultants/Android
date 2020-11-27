@@ -111,6 +111,7 @@ class AdminLoginFragment :Fragment(){
                                         ConstantsDirectory.ACC_TOKEN,
                                         response.body()?.data?.acctoken
                                     )
+//                                    mUserConfig
                                       startActivity(context?.adminLandingIntent())
 //                                      startActivity(Intent(activity, AdminLandingActivity::class.java))
                                 } else {

@@ -12,15 +12,23 @@
         android:padding="@dimen/expandable_layout_std_padding"
         android:weightSum="10">
 
+        <CheckBox
+            android:id="@+id/imgStatus"
+            android:text=""
+            android:layout_width="0dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:buttonTint="@color/lighter_gray"
+            android:layout_weight="1" />
 
         <ImageView
-            android:id="@+id/imgStatus"
+            android:id="@+id/imgStatus1"
             android:layout_width="0dp"
             android:layout_height="24dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="0.5"
             android:src="@drawable/ic_cr_unchecked"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/txtArtisanId"

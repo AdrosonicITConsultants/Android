@@ -48,6 +48,12 @@ class SelectLessThan8ArtisanActivity : AppCompatActivity(),
             productId = intent.getLongExtra("productId",0L)
             enquiryId = intent.getLongExtra("enquiryId",0L)
         }
+        if(Utility.checkIfInternetConnected(this)) {
+            mBinding?.pbLoader?.visibility=View.VISIBLE
+            mViewModel?.artisanListener = this
+            mViewModel.getArtisansLessThan8Rating(0, "",enquiryId.toInt())
+        }else Utility.displayMessage(getString(R.string.no_internet_connection),this)
+
         setContentView(view)
         setRecyclerList()
         getClusters()
