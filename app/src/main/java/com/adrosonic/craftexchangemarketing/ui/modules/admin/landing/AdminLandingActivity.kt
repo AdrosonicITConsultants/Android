@@ -13,6 +13,7 @@ import androidx.activity.viewModels
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
 import com.adrosonic.craftexchangemarketing.R
 import com.adrosonic.craftexchangemarketing.database.predicates.NotificationPredicates
 import com.adrosonic.craftexchangemarketing.databinding.ActivityAdminLandingBinding
@@ -49,10 +50,15 @@ fun Context.adminLandingIntent(isNotification:Boolean): Intent {
     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
     return intent
 }
+
+
 class AdminLandingActivity : AppCompatActivity(),
 ClusterViewModel.notificationInterface,
 NotifcationFragment.Companion.notifcationsInterface{
 
+    fun AppCompatActivity.replaceContainerFragment(fragment: Fragment,name:String) {
+        supportFragmentManager.beginTransaction().replace(R.id.admin_home_container, fragment, name).addToBackStack(name).commit()
+    }
     companion object{
         const val TAG = "AdminLandingActivity"
     }
@@ -138,48 +144,54 @@ NotifcationFragment.Companion.notifcationsInterface{
                 when (item.itemId) {
                     R.id.action_home -> {
                         if (savedInstanceState == null) {
-                            supportFragmentManager.beginTransaction()
-                                .replace(R.id.admin_home_container, AdminHomeFragment.newInstance())
-                                .detach(AdminHomeFragment())
-                                .attach(AdminHomeFragment())
-                                .commitNow()
+                            replaceContainerFragment(AdminHomeFragment.newInstance(),"AdminHomeFragment")
+//                            supportFragmentManager.beginTransaction()
+//                                .replace(R.id.admin_home_container, AdminHomeFragment.newInstance())
+//                                .addToBackStack(null)
+//                                .commitNow()
                         }
                         return true
                     }
 
                     R.id.user_database -> {
                         if (savedInstanceState == null) {
-                            supportFragmentManager.beginTransaction() .add(R.id.admin_home_container, CommonUserFragment.newInstance())
-                                .addToBackStack(null)
-                                .commit()
+                            replaceContainerFragment(CommonUserFragment.newInstance(),"CommonUserFragment")
+//                            supportFragmentManager.beginTransaction()
+//                                .replace(R.id.admin_home_container, CommonUserFragment.newInstance())
+//                                .addToBackStack(null)
+//                                .commit()
                         }
                         return true
                     }
 
                     R.id.product_catelog -> {
                         if (savedInstanceState == null) {
-                            supportFragmentManager.beginTransaction() .add(R.id.admin_home_container, CommonProdCatFragment.newInstance())
-                                .addToBackStack(null)
-                                .commit()
+                            replaceContainerFragment(CommonProdCatFragment.newInstance(),"CommonProdCatFragment")
+//                            supportFragmentManager.beginTransaction()
+//                                .replace(R.id.admin_home_container, CommonProdCatFragment.newInstance())
+//                                .addToBackStack(null)
+//                                .commit()
                         }
                         return true
                     }
 
                     R.id.enquiries -> {
                         if (savedInstanceState == null) {
-                            supportFragmentManager.beginTransaction()
-                                .add(R.id.admin_home_container, EnquiriesAndOrdersFragment.newInstance())
-                                .addToBackStack(null)
-                                .commit()
+                            replaceContainerFragment(EnquiriesAndOrdersFragment.newInstance(),"EnquiriesAndOrdersFragment")
+//                            supportFragmentManager.beginTransaction()
+//                                .add(R.id.admin_home_container, EnquiriesAndOrdersFragment.newInstance())
+//                                .addToBackStack(null)
+//                                .commit()
                         }
                         return true
                     }
                     R.id.team -> {
                         if (savedInstanceState == null) {
-                            supportFragmentManager.beginTransaction()
-                                .add(R.id.admin_home_container, TeamListFragment.newInstance())
-                                .addToBackStack(null)
-                                .commit()
+                            replaceContainerFragment(TeamListFragment.newInstance(),"TeamListFragment")
+//                            supportFragmentManager.beginTransaction()
+//                                .add(R.id.admin_home_container, TeamListFragment.newInstance())
+//                                .addToBackStack(null)
+//                                .commit()
                         }
                         return true
                     }

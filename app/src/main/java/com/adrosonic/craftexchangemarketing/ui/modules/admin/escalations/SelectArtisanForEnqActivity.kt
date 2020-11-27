@@ -1,5 +1,6 @@
 package com.adrosonic.craftexchangemarketing.ui.modules.admin.escalations
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -51,6 +52,12 @@ class SelectArtisanForEnqActivity : AppCompatActivity(),
         if (intent.extras != null) {
             enquiryId = intent.getLongExtra("enquiryId",0L)
         }
+        if(Utility.checkIfInternetConnected(this)) {
+            val clusterId=ClusterPredicates.getClusterId(mBinding?.spCluster?.selectedItem?.toString()?:"")
+            mBinding?.pbLoader?.visibility=View.VISIBLE
+            mViewModel?.filteredArtisanListener = this
+            mViewModel.getFilteredArtisans(clusterId.toInt(), mBinding?.searchArtisan?.text.toString())
+        }else Utility.displayMessage(getString(R.string.no_internet_connection),this)
         Log.e("SendCutEnq","SelectArtisanForENACT: $enquiryId")
         setContentView(view)
         setRecyclerList()
@@ -161,6 +168,7 @@ class SelectArtisanForEnqActivity : AppCompatActivity(),
                 Log.e("Notifications", "Onsucces")
                 mBinding?.pbLoader?.visibility=View.GONE
                 Utility.displayMessage("Enquiry generated succesfully!",this)
+                setResult(Activity.RESULT_OK)
                 finish()
             }
             )

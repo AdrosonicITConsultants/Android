@@ -1,6 +1,8 @@
 package com.adrosonic.craftexchangemarketing.ui.modules.admin.escalations
 
+import android.app.Activity
 import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -26,6 +28,7 @@ import com.adrosonic.craftexchangemarketing.ui.modules.admin.escalations.adapter
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.escalations.adapter.PaymentRecyclerAdapter
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.escalations.adapter.UpdatesRecyclerAdapter
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.redirectEnquiries.selectLessThan8ArtisanActivityIntent
+import com.adrosonic.craftexchangemarketing.utils.ConstantsDirectory
 import com.adrosonic.craftexchangemarketing.utils.Utility
 import com.adrosonic.craftexchangemarketing.viewModels.EscalationViewModel
 import kotlinx.android.synthetic.main.fragment_notifcation.*
@@ -259,7 +262,26 @@ EscalationViewModel.EscalationResolve{
         }
         txt_choose_artisans.setOnClickListener {
             dialog.cancel()
-            context?.startActivity(context?.SelectArtisanForEnqActivity(id?:0))
+//            context?.startActivity(context?.SelectArtisanForEnqActivity(id?:0))
+            startActivityForResult(requireContext().SelectArtisanForEnqActivity(id?:0), ConstantsDirectory.RESULT_FAULTY)
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == ConstantsDirectory.RESULT_FAULTY) { // Please, use a final int instead of hardcoded int value
+            if (resultCode == Activity.RESULT_OK) {
+                try {
+                    mBinding?.updatesdialogLayout?.visibility = View.GONE
+                    mBinding?.updatesDialog?.visibility = View.GONE
+                    pageNo = 1L
+                    enqSearch = null
+                    mEVM?.FaultyUpdates(pageNo!!,enqSearch)
+                    mEVM?.escUpdatesCount("2,3,7",enqSearch)
+                }catch (e:Exception){}
+            }
+        }
+
+
     }
 }
