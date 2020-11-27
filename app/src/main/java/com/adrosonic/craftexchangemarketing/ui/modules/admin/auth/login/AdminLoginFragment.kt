@@ -117,7 +117,7 @@ class AdminLoginFragment :Fragment(){
                                 } else {
                                     Toast.makeText(
                                         activity,
-                                        "${response.body()?.errorMessage}",
+                                        "Invalid user name or password",
                                         Toast.LENGTH_SHORT ).show()
                                 }
                             }
