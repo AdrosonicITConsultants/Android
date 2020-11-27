@@ -19,6 +19,7 @@ import com.adrosonic.craftexchangemarketing.repository.data.response.moq.Moq
 import io.realm.Case
 import io.realm.Realm
 import io.realm.RealmResults
+import io.realm.Sort
 import java.lang.Exception
 
 class ProductCataloguePredicates {
@@ -126,7 +127,9 @@ class ProductCataloguePredicates {
             var allProducts: RealmResults<AdminProductCatalogue>? =null
             realm.executeTransaction {
                 allProducts = if(search.isNullOrEmpty()&& clusterstr.isEmpty() && availability.isEmpty()){
-                    realm.where(AdminProductCatalogue::class.java).equalTo(AdminProductCatalogue.COLUMN_IS_ARTISAN, isArtisan).findAll()
+                    realm.where(AdminProductCatalogue::class.java).equalTo(AdminProductCatalogue.COLUMN_IS_ARTISAN, isArtisan)
+                        .sort(AdminProductCatalogue.COLUMN_DATE_ADDED, Sort.DESCENDING)
+                        .findAll()
                 }
                 else {
 
@@ -139,6 +142,7 @@ class ProductCataloguePredicates {
                         realm.where(AdminProductCatalogue::class.java).equalTo(AdminProductCatalogue.COLUMN_IS_ARTISAN, isArtisan)
                             .and()
                             .contains(AdminProductCatalogue.COLUMN_AVAILABILITY,available,Case.INSENSITIVE)
+                            .sort(AdminProductCatalogue.COLUMN_DATE_ADDED, Sort.DESCENDING)
                             .findAll().where()
                             .contains(AdminProductCatalogue.COLUMN_CODE,search, Case.INSENSITIVE).or()
                             .contains(AdminProductCatalogue.COLUMN_NAME,search,Case.INSENSITIVE).or()
@@ -152,6 +156,7 @@ class ProductCataloguePredicates {
                         .contains(AdminProductCatalogue.COLUMN_AVAILABILITY,available,Case.INSENSITIVE)
                         .and()
                         .equalTo(AdminProductCatalogue.COLUMN_CLUSTER,cluster,Case.INSENSITIVE)
+                        .sort(AdminProductCatalogue.COLUMN_DATE_ADDED, Sort.DESCENDING)
                         .findAll().where()
                         .contains(AdminProductCatalogue.COLUMN_CODE,search, Case.INSENSITIVE).or()
                         .contains(AdminProductCatalogue.COLUMN_NAME,search,Case.INSENSITIVE).or()

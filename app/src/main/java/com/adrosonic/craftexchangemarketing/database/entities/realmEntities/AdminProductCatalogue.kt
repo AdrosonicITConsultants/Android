@@ -34,6 +34,7 @@ open class AdminProductCatalogue : RealmObject() {
         const val COLUMN_AVAILABILITY = "availability"
         const val COLUMN_PRODUCT_ID = "productID"
         const val COLUMN_CLUSTER = "clusterName"
+        const val COLUMN_DATE_ADDED = "dateAdded"
     }
 
 }

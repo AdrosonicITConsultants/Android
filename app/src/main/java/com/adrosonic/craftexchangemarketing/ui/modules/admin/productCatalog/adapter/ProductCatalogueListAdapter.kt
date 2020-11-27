@@ -26,6 +26,7 @@ import com.adrosonic.craftexchangemarketing.utils.Utility
 import com.wajahatkarim3.easyvalidation.core.collection_ktx.containsList
 import io.realm.RealmResults
 import kotlinx.android.synthetic.main.activity_artisan_add_product_template.*
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -77,14 +78,15 @@ val isAntran:Boolean
         holder.txt_prod_code.text = product?.code
         holder.txt_brand.text = product?.brand
         holder.txt_cluster.text = product?.category
-        val cal: Calendar = Calendar.getInstance()
-        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.ENGLISH)
-        cal.setTime(sdf.parse(product?.dateAdded))
+        holder.txt_date.text="Date Added:\n"+try{product?.dateAdded?.substring(0, 10)}catch (e:Exception){"NA"}
+//        val cal: Calendar = Calendar.getInstance()
+//        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.ENGLISH)
+//        cal.setTime(sdf.parse(product?.dateAdded))
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-            holder.txt_date.setText(Html.fromHtml("<b>Date Added:</b><br>"+"${cal.get(Calendar.DAY_OF_MONTH)}-"+ cal.get(Calendar.MONTH)+"-"+ cal.get( Calendar.YEAR)));
+//            holder.txt_date.setText(Html.fromHtml("<b>Date Added:</b><br>"+"${cal.get(Calendar.DAY_OF_MONTH)}-"+ cal.get(Calendar.MONTH)+"-"+ cal.get( Calendar.YEAR)));
             holder.txt_total_orders.setText(Html.fromHtml("<b>Total<br>Orders:</b><br>"+(product?.orderGenerated?:0).toString()))
         } else {
-            holder.txt_date.setText(Html.fromHtml("<b>Date Added:</b><br>"+"${cal.get(Calendar.DAY_OF_MONTH)}-"+ cal.get(Calendar.MONTH)+"-"+ cal.get( Calendar.YEAR), Html.FROM_HTML_MODE_COMPACT));
+//            holder.txt_date.setText(Html.fromHtml("<b>Date Added:</b><br>"+"${cal.get(Calendar.DAY_OF_MONTH)}-"+ cal.get(Calendar.MONTH)+"-"+ cal.get( Calendar.YEAR), Html.FROM_HTML_MODE_COMPACT));
             holder.txt_total_orders.setText(Html.fromHtml("<b>Total<br>Orders:</b><br>"+(product?.orderGenerated?:0).toString(), Html.FROM_HTML_MODE_COMPACT));
         }
         Log.e("ArtisanProduct", "count :${product?.orderGenerated}" )

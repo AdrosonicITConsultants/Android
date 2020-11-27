@@ -294,11 +294,11 @@ class Utility {
             }
         }
         fun getDeliveryChallanReceiptUrl(enquiryId : Long?,imagename : String?) : String{
-            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV}deliveryChallanReceipt/${enquiryId}/${imagename}"
+            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_UAT}deliveryChallanReceipt/${enquiryId}/${imagename}"
         }
 
         fun getAdvancePaymentImageUrl(receiptId : Long?,imagename : String?) : String{
-            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV}AdvancedPayment/${receiptId}/${imagename}"
+            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_UAT}AdvancedPayment/${receiptId}/${imagename}"
         }
 
         fun getFinalPaymentImageUrl(receiptId : Long?,imagename : String?) : String{
@@ -482,18 +482,18 @@ class Utility {
         }
 
         fun getBrandLogoUrl(userId : Long?, imagename : String?) : String{
-            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV}User/${userId}/CompanyDetails/Logo/${imagename}"
+            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_UAT}User/${userId}/CompanyDetails/Logo/${imagename}"
         }
 
         fun getProfilePhotoUrl(artisanId : Long?, imagename : String?) : String{
-            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV}User/${artisanId}/ProfilePics/${imagename}"
+            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_UAT}User/${artisanId}/ProfilePics/${imagename}"
         }
 
         fun getProductsImagesUrl(productId : Long?,imagename : String?) : String{
-            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV}Product/${productId}/${imagename}"
+            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_UAT}Product/${productId}/${imagename}"
         }
         fun getCustomProductImagesUrl(productId : Long?,imagename : String?) : String{
-            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV}CustomProduct/${productId}/${imagename}"
+            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_UAT}CustomProduct/${productId}/${imagename}"
         }
         fun setImageResource(context: Context?,imageView:ImageView?,imageId:Int){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

@@ -1,5 +1,7 @@
 package com.adrosonic.craftexchangemarketing.ui.modules.products
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -24,8 +26,10 @@ import com.adrosonic.craftexchangemarketing.database.predicates.ProductPredicate
 import com.adrosonic.craftexchangemarketing.databinding.FragmentViewProductDetailsBinding
 import com.adrosonic.craftexchangemarketing.repository.data.response.artisan.productTemplate.uploadData.ProductCare
 import com.adrosonic.craftexchangemarketing.repository.data.response.artisan.productTemplate.uploadData.ProductUploadData
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.escalations.SelectArtisanForEnqActivity
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.productCatalog.addProduct.addAdminProductIntent
 import com.adrosonic.craftexchangemarketing.ui.modules.buyer.productDetails.*
+import com.adrosonic.craftexchangemarketing.utils.ConstantsDirectory
 import com.adrosonic.craftexchangemarketing.utils.ImageSetter
 import com.adrosonic.craftexchangemarketing.utils.UserConfig
 import com.adrosonic.craftexchangemarketing.utils.Utility
@@ -90,10 +94,22 @@ ProductCatViewModal.ProductDetailsInterface{
             activity?.onBackPressed()
         }
         mBinding?.imgEditProduct?.setOnClickListener {
-            productDetails?.productId?.let {  context?.startActivity(context?.addAdminProductIntent(it))}
+            productDetails?.productId?.let {
+//                requireContext()?.startActivity(context?.addAdminProductIntent(it))
+            startActivityForResult(requireContext().addAdminProductIntent(it), ConstantsDirectory.RESULT_FAULTY)}
         }
         if(isAntran!!)mBinding?.imgEditProduct?.visibility=View.VISIBLE
         else mBinding?.imgEditProduct?.visibility=View.GONE
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == ConstantsDirectory.RESULT_FAULTY) { // Please, use a final int instead of hardcoded int value
+            if (resultCode == Activity.RESULT_OK) {
+                try {
+                    activity?.supportFragmentManager?.popBackStack()
+                }catch (e:Exception){}
+            }
+        }
     }
 
     fun viewLoader(){

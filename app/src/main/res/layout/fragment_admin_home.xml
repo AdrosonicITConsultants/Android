@@ -194,6 +194,15 @@
                             android:textAllCaps="false"
                             android:textColor="@color/colorBackground"
                             android:textSize="@dimen/edit_text" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="@dimen/margin_regular"
+                            android:text="27-11-2020 V1.0"
+                            android:textColor="@color/white_text"
+                            android:textSize="@dimen/edit_text" />
                     </LinearLayout>
 
                     <LinearLayout

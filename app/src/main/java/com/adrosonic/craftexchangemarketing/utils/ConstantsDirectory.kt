@@ -16,9 +16,12 @@ object ConstantsDirectory {
     const val BUYER_DASHBOARD_URL = "https://datastudio.google.com/embed/reporting/0ede1d26-5dbf-4564-a7c4-4f850493a89f/page/i56cB?params="
     const val ARTISAN_DASHBOARD_URL = "https://datastudio.google.com/embed/reporting/cef7a3b2-e37f-48a2-9f28-0c3f45a07585/page/RJ8dB?params="
     const val VIEW_PI_URL = "http://101.53.153.96:8090/api/enquiry/getPreviewPiHTML?enquiryId="
-    const val ADMIN_OPEN_ENQUIRIES_SUMMARY_URL = "https://datastudio.google.com/embed/reporting/eb79b078-f612-48d2-877b-11f1ae8dff59/page/y2VoB?params="
-    const val ADMIN_MICRO_ENTERPRISE_REVENUE_URL = "https://datastudio.google.com/embed/reporting/a6280307-c9d1-4a70-a7b2-593b3ea9e30c/page/3qVoB?params="
-    const val ADMIN_MICRO_ENTERPRISE_SUMMARY_URL = "https://datastudio.google.com/embed/reporting/133984b5-f5c7-4b86-a1a5-89da5e85182c/page/beNoB?params="
+//    const val ADMIN_OPEN_ENQUIRIES_SUMMARY_URL = "https://datastudio.google.com/embed/reporting/eb79b078-f612-48d2-877b-11f1ae8dff59/page/y2VoB?params="
+    const val ADMIN_OPEN_ENQUIRIES_SUMMARY_URL = "https://datastudio.google.com/embed/reporting/c66a317a-4b2d-4442-a326-3f0a6b4cd947/page/u7NhB?params="//uat
+//    const val ADMIN_MICRO_ENTERPRISE_REVENUE_URL = "https://datastudio.google.com/embed/reporting/a6280307-c9d1-4a70-a7b2-593b3ea9e30c/page/3qVoB?params="
+    const val ADMIN_MICRO_ENTERPRISE_REVENUE_URL = "https://datastudio.google.com/embed/reporting/00758bf8-9835-4bc1-aa7d-c2fb328332ab/page/wVxhB?params="//uat
+//    const val ADMIN_MICRO_ENTERPRISE_SUMMARY_URL = "https://datastudio.google.com/embed/reporting/133984b5-f5c7-4b86-a1a5-89da5e85182c/page/beNoB?params="
+    const val ADMIN_MICRO_ENTERPRISE_SUMMARY_URL = "https://datastudio.google.com/embed/reporting/324a5edd-e197-40bc-99f7-77a37a525710/page/jj0gB?params="//uat
 
     //////////////////////////////////////////////////////////////////////
     const val PI_PDF_PATH: String = "PiPdfs/"

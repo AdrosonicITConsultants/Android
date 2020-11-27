@@ -1,5 +1,6 @@
 package com.adrosonic.craftexchangemarketing.ui.modules.admin.productCatalog.addProduct
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -1145,7 +1146,18 @@ class AdminAddProductTemplateActivity : AppCompatActivity(),
     }
 
     override fun onUploadSuccess() {
-        finish()
+
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                pbLoader?.visibility=View.GONE
+                Log.e("Offline", "onUploadFailure")
+                Utility.displayMessage("Product updated successfully",this)
+                finish()
+            }
+            )
+        } catch (e: Exception) {
+            Log.e("ArtisanProduct", "Exception onSuccess " + e.message)
+        }
     }
 
     override fun onUploadFailure() {
@@ -1162,7 +1174,16 @@ class AdminAddProductTemplateActivity : AppCompatActivity(),
     }
 
     override fun onDeleteSuccess() {
-        finish()
+       try {
+           Handler(Looper.getMainLooper()).post(Runnable {
+               Utility.displayMessage("Product deleted succesfully",this)
+               setResult(Activity.RESULT_OK)
+               finish()
+
+            } )
+       } catch (e: Exception) {
+                    Log.e("ArtisanProduct", "Exception onSuccess " + e.message)
+                }
     }
 
     override fun onDeleteFailure() {

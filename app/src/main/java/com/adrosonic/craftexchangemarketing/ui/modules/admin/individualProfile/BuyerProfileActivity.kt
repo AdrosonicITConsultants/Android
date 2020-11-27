@@ -70,7 +70,12 @@ UserProfileViewModal.ActivateInterface{
         mBinding = ActivityIndBuyerProfileBinding.inflate(layoutInflater)
         val view = mBinding?.root
         setContentView(view)
-
+        if(mUserConfig?.adminUserRoles?.equals(1L)) {
+            mBinding?.menuBuyerProfileIcon?.visibility=View.VISIBLE
+        }
+        else {
+            mBinding?.menuBuyerProfileIcon?.visibility=View.GONE
+        }
         mBinding?.menuBuyerProfileIcon?.setOnClickListener {
             mBinding?.layoutForMenuBuyer?.visibility = View.VISIBLE
             initialData = false
