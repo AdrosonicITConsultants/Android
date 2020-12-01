@@ -77,7 +77,7 @@ interface TransactionDao {
     @GET("transaction/getTransactionStatus")
     fun getTransactionStatus(@Header("Authorization") token:String) : Call<TransactionStatusData>
 
-    @GET("/transaction/getTransactions/{enquiryId}")
+    @GET("transaction/getTransactions/{enquiryId}")
     fun getSingleTransaction(@Header("Authorization") token:String,
                                @Path("enquiryId") enquiryId : Int) : Call<SingleTransactionResponse>
 

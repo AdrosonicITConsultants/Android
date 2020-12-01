@@ -74,7 +74,7 @@ interface ProductDao {
     ): Call<ArtisanProductTemplateRespons>
 
     @Headers("Accept: application/json")
-    @PUT("/product/edit/product")
+    @PUT("product/edit/product")
     fun updateProductTemplate(
         @Header("Authorization") token: String,
         @Header("Content-Type") headerValue:String,
@@ -84,14 +84,14 @@ interface ProductDao {
     ): Call<ArtisanProductTemplateRespons>
 
     @Headers("Accept: application/json")
-    @GET("/Product/{productId}/{imagename}")
+    @GET("Product/{productId}/{imagename}")
     fun getProductImage(
         @Path("productId") productId: Long,
         @Path("imagename") imagename: String
     ):Call<ResponseBody>
 
     @Headers("Accept: application/json")
-    @DELETE("/product/deleteProduct/{productId}")
+    @DELETE("product/deleteProduct/{productId}")
     fun deleteProductsTemplate(
         @Header("Authorization") token: String,
         @Path("productId") productId: Int

@@ -17,32 +17,32 @@ import retrofit2.http.*
 interface ChatListDao {
 
     @Headers("Accept: application/json")
-    @GET("/enquiry/getEnquiryMessageChatList")
+    @GET("enquiry/getEnquiryMessageChatList")
     fun getInitiatedChatList(@Header("Authorization") token:String,
                              @Query("searchedString") searchedString:String?) : Call<ChatListResponse>
 
     @Headers("Accept: application/json")
-    @GET("/enquiry/getNewEnquiryMessageChatList")
+    @GET("enquiry/getNewEnquiryMessageChatList")
     fun getUninitiatedChatList(@Header("Authorization") token:String,
                                @Query("searchedString") searchedString:String?) : Call<ChatListResponse>
 
     @Headers("Accept: application/json")
-    @POST("/enquiry/goToEnquiryChat/")
+    @POST("enquiry/goToEnquiryChat/")
     fun initiateChat(@Header("Authorization") token:String,
                      @Query("enquiryId") enquiryId : Long) : Call<ResponseBody>
 
     @Headers("Accept: application/json")
-    @GET(" /enquiry/getAndReadChatMessageForEnquiry")
+    @GET("enquiry/getAndReadChatMessageForEnquiry")
     fun openChatLog(@Header("Authorization") token:String,
                     @Query("enquiryId") enquiryId : Long)  : Call<ChatLogListData>
 
     @Headers("Accept: application/json")
-    @POST("/enquiry/sendChatboxMessage/")
+    @POST("enquiry/sendChatboxMessage/")
     fun sendChatboxMessage(@Header("Authorization") token:String,
                            @Query("messageJson") messageJson : String) : Call<NotificationReadResponse>
 
     @Headers("Accept: application/json")
-    @POST("/enquiry/sendChatboxMessage/")
+    @POST("enquiry/sendChatboxMessage/")
     fun sendChatboxMessageWithMedia(@Header("Authorization") token:String,
                            @Header("Content-Type") headerValue:String,
                            @Header("Content-Length") length: Long,

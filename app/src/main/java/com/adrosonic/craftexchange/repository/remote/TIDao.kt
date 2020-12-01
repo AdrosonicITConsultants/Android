@@ -23,13 +23,13 @@ interface TIDao {
                            @Body invoicerequest: SendTiPreviewRequest) : Call<TaxInvPreviewResponse>
 
     @Headers("Accept: application/pdf")
-    @GET("/enquiry/getTaxInvoicePDF")
+    @GET("enquiry/getTaxInvoicePDF")
     fun getPreviewTaxInvPDF(@Header("Authorization") token:String,
                             @Query("enquiryId") enquiryId : Int,
                             @Query("isOld") isOld : String) : Call<ResponseBody>
 
     @Headers("Accept: text/html")
-    @GET("/enquiry/getTaxInvoicePreviewHTML")
+    @GET("enquiry/getTaxInvoicePreviewHTML")
     fun getPreviewTaxInvHTML(@Header("Authorization") token:String,
                              @Query("enquiryId") enquiryId : Int,
                              @Query("isOld") isOld : String) : Call<ResponseBody>

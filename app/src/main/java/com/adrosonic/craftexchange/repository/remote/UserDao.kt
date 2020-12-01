@@ -62,7 +62,7 @@ interface UserDao {
                             @Body paymentAccountDetails : ArrayList<PaymentAccountDetails>) : Call<EditBankDetailsResponse>
 
     @Headers("Accept: application/json")
-    @POST("/user/logoutMobile")
+    @POST("user/logoutMobile")
     fun logoutUser(@Header("Authorization") token : String,@Query("deviceId") deviceId:String): Call<LogoutResponse>
 
 }

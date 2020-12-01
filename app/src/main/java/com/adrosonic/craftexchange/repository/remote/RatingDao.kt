@@ -12,19 +12,19 @@ import retrofit2.http.*
 interface RatingDao {
 
     @Headers("Accept: application/json")
-    @GET("/user/getRatingsForUser")
+    @GET("user/getRatingsForUser")
     fun getRatingEnquiryUser(@Header("Authorization") token:String,
                              @Query("enquiryId") enquiryId : Long,
                              @Query("userId") userId : Long
     ) : Call<RatingEnquiryUserResponse>
 
     @Headers("Accept: application/json")
-    @GET("/user/getRatingQuestions")
+    @GET("user/getRatingQuestions")
     fun getRatingQuestions(@Header("Authorization") token:String
     ) : Call<RatingQuestionsResponse>
 
     @Headers("Accept: application/json")
-    @POST("/user/submitRatingToUser")
+    @POST("user/submitRatingToUser")
     fun sendRatings(@Header("Authorization") token:String,
                                @Body rating : ArrayList<RatingRequest>) : Call<SendRatingResponse>
 
