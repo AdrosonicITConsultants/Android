@@ -106,19 +106,19 @@ class BuyerCustomProductPredicates {
                             dbProdObj?.weftYarnId = try{product.weftYarn?.id} catch (e:Exception){0}
                             dbProdObj?.extraWeftYarnId = try{product.extraWeftYarn?.id} catch (e:Exception){0}
                             Log.e("ProdImage", "333333333333333333333")
-                            dbProdObj?.warpYarnCount=product.warpYarnCount
-                            dbProdObj?.weftYarnCount=product.weftYarnCount
-                            dbProdObj?.extraWeftYarnCount=product.extraWeftYarnCount
-                            Log.e("ProdImage", "444444444444444444444 "+product.warpDye.id)
-                            dbProdObj?.warpDyeId=product.warpDye.id
-                            dbProdObj?.weftDyeId=product.weftDye.id
-                            dbProdObj?.extraWeftDyeId=product.extraWeftDye.id
+                            dbProdObj?.warpYarnCount=try{product.warpYarnCount}catch (e:Exception){""}
+                            dbProdObj?.weftYarnCount=try{product.weftYarnCount}catch (e:Exception){""}
+                            dbProdObj?.extraWeftYarnCount=try{product.extraWeftYarnCount}catch (e:Exception){""}
+                            Log.e("ProdImage", "444444444444444444444")
+                            dbProdObj?.warpDyeId=try{product.warpDye.id}catch (e:Exception){0}
+                            dbProdObj?.weftDyeId=try{product.weftDye.id}catch (e:Exception){0}
+                            dbProdObj?.extraWeftDyeId=try{product.extraWeftDye.id}catch (e:Exception){0}
                             dbProdObj?.dyeDsrcp="${product.warpYarn.yarnDesc} X ${product.weftYarn.yarnDesc} X ${product.extraWeftYarn.yarnDesc}"
-                            dbProdObj?.length=product.length
-                            dbProdObj?.width=product.width
-                            dbProdObj?.reedCountId=product.reedCount.id
-                            dbProdObj?.gsm=product.gsm
-                            dbProdObj?.weight=product.weight
+                            dbProdObj?.length=try{product.length}catch (e:Exception){""}
+                            dbProdObj?.width=try{product.width}catch (e:Exception){""}
+                            dbProdObj?.reedCountId=try{product.reedCount.id}catch (e:Exception){0}
+                            dbProdObj?.gsm=try{product.gsm}catch (e:Exception){""}
+                            dbProdObj?.weight=try{product.weight}catch (e:Exception){""}
                             dbProdObj?.productSpe=product.product_spec
                             dbProdObj?.createdOn=product.createdOn
                             dbProdObj?.modifiedOn=product.modifiedOn
@@ -129,9 +129,9 @@ class BuyerCustomProductPredicates {
                             product.productImages.forEach {
                                 arrProdImages.add(it)
                             }
-                            Log.e("ProdImage", "555555555555555 ${product.productImages.size}")
+                            Log.e("ProdImage", "555555555555555 ")
                             product.productWeaves.forEach {
-                                Log.e("ProdImage", "Weave Ids : ${it?.weaveId}")
+                                Log.e("ProdImage", "Weave Ids")
                                 var weaveType=ProductWeaf(it?.id?:0,product.id,it?.weaveId?:0)
                                 arrProdWeaves.add(weaveType)
                             }
@@ -150,14 +150,14 @@ class BuyerCustomProductPredicates {
                             prodEntry.productCategoryId = product.productCategory.id
                             prodEntry.productCategoryDscrp = product.productCategory.productDesc
                             prodEntry.productTypeId = product.productType.id
-                            prodEntry.warpYarnCount=product.warpYarnCount
-                            prodEntry.weftYarnCount=product.weftYarnCount
-                            prodEntry.extraWeftYarnCount=product.extraWeftYarnCount
+                            prodEntry.warpYarnCount=try{product.warpYarnCount}catch (e:Exception){""}
+                            prodEntry.weftYarnCount=try{product.weftYarnCount}catch (e:Exception){""}
+                            prodEntry.extraWeftYarnCount=try{product.extraWeftYarnCount}catch (e:Exception){""}
                             Log.e("ProdImage", "22222222222222222222222222")
                             prodEntry?.warpYarnId = try{ product.warpYarn?.id} catch (e:Exception){0}
                             prodEntry?.weftYarnId = try{product.weftYarn?.id} catch (e:Exception){0}
                             prodEntry?.extraWeftYarnId = try{product.extraWeftYarn?.id} catch (e:Exception){0}
-                            Log.e("ProdImage", "33333333333333333333333333 "+product.warpDye.id)
+                            Log.e("ProdImage", "33333333333333333333333333 ")
                             prodEntry.warpDyeId= try{ product.warpDye?.id} catch (e:Exception){0}
                             prodEntry.weftDyeId= try{ product.weftDye?.id} catch (e:Exception){0}
                             prodEntry.extraWeftDyeId= try{ product.extraWeftDye?.id} catch (e:Exception){0}
@@ -166,11 +166,11 @@ class BuyerCustomProductPredicates {
                             var eweftdscrp=try{" X "+product.extraWeftYarn.yarnDesc}catch(e:Exception){""}
 
                             prodEntry.dyeDsrcp=try{warpdscrp+weftdscrp+eweftdscrp}catch (e:Exception){""}
-                            prodEntry.length=product.length
-                            prodEntry.width=product.width
-                            prodEntry.reedCountId=product.reedCount.id
-                            prodEntry.gsm=product.gsm
-                            prodEntry.weight=product.weight
+                            prodEntry.length=try{product.length}catch (e:Exception){""}
+                            prodEntry.width=try{product.width}catch (e:Exception){""}
+                            prodEntry.reedCountId=try{product.reedCount.id}catch (e:Exception){0}
+                            prodEntry.gsm=try{product.gsm}catch (e:Exception){""}
+                            prodEntry.weight=try{product.weight}catch (e:Exception){""}
                             prodEntry.productSpe=product.product_spec
                             prodEntry.createdOn=product.createdOn
                             prodEntry.modifiedOn=product.modifiedOn
@@ -181,9 +181,9 @@ class BuyerCustomProductPredicates {
                             product.productImages.forEach {
                                 arrProdImages.add(it)
                             }
-                            Log.e("ProdImage", "44444444444 ${product.productImages.size}")
+                            Log.e("ProdImage", "4444444444")
                             product.productWeaves.forEach {
-                                Log.e("ProdImage", "Weave Ids : ${it?.weaveId}")
+                                Log.e("ProdImage", "Weave Ids")
                                 var weaveType=ProductWeaf(it?.id?:0,product.id,it?.weaveId?:0)
                                 arrProdWeaves.add(weaveType)
                             }

@@ -90,6 +90,7 @@
                             android:layout_gravity="center"
                             android:layout_weight="8"
                             android:fontFamily="@font/lato_regular"
+                            android:id="@+id/txtStep1"
                             android:text="Step 1 : Add Photo"
                             android:textColor="@color/black_text" />
 
@@ -165,6 +166,7 @@
                             android:src="@drawable/ic_add_prod_status" />
 
                         <TextView
+                            android:id="@+id/txtStep2"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -250,6 +252,7 @@
                             android:src="@drawable/ic_add_prod_status" />
 
                         <TextView
+                            android:id="@+id/txtStep3"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
