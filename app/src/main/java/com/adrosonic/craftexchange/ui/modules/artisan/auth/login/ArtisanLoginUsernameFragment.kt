@@ -217,8 +217,7 @@ class ArtisanLoginUsernameFragment : Fragment() {
             LoginManager.getInstance().registerCallback(callbackManager,
                 object : FacebookCallback<LoginResult> {
                     override fun onSuccess(loginResult: LoginResult) {
-                        Log.d("MainActivity", "Facebook token: " + loginResult.accessToken.token)
-
+                        Log.e("MainActivity", "Facebook token: " + loginResult.accessToken.token)
                         if(Utility.checkIfInternetConnected(requireContext())) {
                             CraftExchangeRepository
                                 .getLoginService()
@@ -228,27 +227,18 @@ class ArtisanLoginUsernameFragment : Fragment() {
                                         t.printStackTrace()
                                         context?.let { it1 -> Utility.deleteCache(it1) }
                                         context?.let { it1 -> Utility.deleteImageCache(it1) }
-                                        Toast.makeText(
-                                            activity,
-                                             "${t.printStackTrace()}",
-//                                            "Your ID has already been registered as Buyer",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
+                                        context?.let { it1 ->Utility.displayMessage(getString(R.string.invalid_userid),it1)}
+                                        Log.e("MainActivity", "onFailure: " + t.printStackTrace())
                                     }
 
                                     override fun onResponse(
                                         call: Call<ArtisanResponse>, response: Response<ArtisanResponse>
                                     ) {
                                         if (response.body()?.valid == true ) {
-
                                             Prefs.putBoolean(ConstantsDirectory.IS_LOGGED_IN, true)
                                             UserPredicates.insertArtisan(response.body()!!)
                                             AddressPredicates.insertArtisanAddress(response.body()!!)
-
-
                                             mUserConfig?.deviceName = "Android"
-
-
                                             Prefs.putBoolean(ConstantsDirectory.IS_LOGGED_IN, true)
                                             Prefs.putString(
                                                 ConstantsDirectory.USER_ID,
@@ -283,12 +273,12 @@ class ArtisanLoginUsernameFragment : Fragment() {
                     }
 
                     override fun onCancel() {
-                        Log.d("MainActivity", "Facebook onCancel.")
+                        Log.e("MainActivity", "Facebook onCancel.")
 
                     }
 
                     override fun onError(error: FacebookException) {
-                        Log.d("MainActivity", "Facebook onError.")
+                        Log.e("MainActivity", "Facebook onError.")
                         Toast.makeText(
                             activity,
                             error.toString(),
@@ -312,7 +302,7 @@ class ArtisanLoginUsernameFragment : Fragment() {
                 try {
                     // Google Sign In was successful, authenticate with Firebase
                     val account = task.getResult(ApiException::class.java)!!
-                    Log.d("SignInActivity", "firebaseAuthWithGoogle:" + account.id)
+                    Log.e("SignInActivity", "firebaseAuthWithGoogle:" + account.id)
                     firebaseAuthWithGoogle(account.idToken!!)
                 } catch (e: ApiException) {
                     // Google Sign In failed, update UI appropriately
@@ -336,7 +326,7 @@ class ArtisanLoginUsernameFragment : Fragment() {
                 .addOnCompleteListener(it) { task ->
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
-                        Log.d("SignInActivity", "signInWithCredential:success")
+                        Log.e("SignInActivity", "signInWithCredential:success")
                         if(Utility.checkIfInternetConnected(requireContext())) {
 
                             CraftExchangeRepository

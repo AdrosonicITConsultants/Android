@@ -212,7 +212,7 @@ class BuyerLoginUsernameFragment : Fragment() {
             LoginManager.getInstance().registerCallback(callbackManager,
                 object : FacebookCallback<LoginResult> {
                     override fun onSuccess(loginResult: LoginResult) {
-                        Log.d("MainActivity", "Facebook token: " + loginResult.accessToken.token)
+                        Log.e("MainActivity", "Facebook token: " + loginResult.accessToken.token)
 
                         if(Utility.checkIfInternetConnected(requireContext())) {
                             CraftExchangeRepository
@@ -223,21 +223,18 @@ class BuyerLoginUsernameFragment : Fragment() {
                                         t.printStackTrace()
                                         context?.let { it1 -> Utility.deleteCache(it1) }
                                         context?.let { it1 -> Utility.deleteImageCache(it1) }
-                                        Toast.makeText(activity, "${t.printStackTrace()}", Toast.LENGTH_SHORT).show()
+                                        context?.let { it1 ->Utility.displayMessage(getString(R.string.invalid_userid),it1)}
                                     }
 
                                     override fun onResponse(
                                         call: Call<BuyerResponse>, response: Response<BuyerResponse>
                                     ) {
                                         if (response.body()?.valid == true ) {
-
                                             Prefs.putBoolean(ConstantsDirectory.IS_LOGGED_IN, true)
                                             UserPredicates.insertBuyer(response.body()!!)
                                             AddressPredicates.insertBuyerAddress(response.body()!!)
 
                                             mUserConfig?.deviceName = "Android"
-
-
                                             Prefs.putBoolean(ConstantsDirectory.IS_LOGGED_IN, true)
                                             Prefs.putString(
                                                 ConstantsDirectory.USER_ID,
@@ -270,11 +267,11 @@ class BuyerLoginUsernameFragment : Fragment() {
                     }
 
                     override fun onCancel() {
-                        Log.d("MainActivity", "Facebook onCancel.")
+                        Log.e("MainActivity", "Facebook onCancel.")
                     }
 
                     override fun onError(error: FacebookException) {
-                        Log.d("MainActivity", "Facebook onError.")
+                        Log.e("MainActivity", "Facebook onError.")
                         Toast.makeText(
                             activity,
                             error.toString(),
@@ -289,7 +286,8 @@ class BuyerLoginUsernameFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        // Result
+        // returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             val exception = task.exception
@@ -297,16 +295,12 @@ class BuyerLoginUsernameFragment : Fragment() {
                 try {
                     // Google Sign In was successful, authenticate with Firebase
                     val account = task.getResult(ApiException::class.java)!!
-                    Log.d("SignInActivity", "firebaseAuthWithGoogle:" + account.id)
                     firebaseAuthWithGoogle(account.idToken!!)
                 } catch (e: ApiException) {
                     // Google Sign In failed, update UI appropriately
-                    Log.w("SignInActivity", "Google sign in failed", e)
-                    // ...
                 }
 
             }else{
-                Log.w("SignInActivity", exception.toString())
             }
 
         }else{
@@ -321,7 +315,7 @@ class BuyerLoginUsernameFragment : Fragment() {
                 .addOnCompleteListener(it) { task ->
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
-                        Log.d("SignInActivity", "signInWithCredential:success")
+                        Log.e("SignInActivity", "success")
 
                         if(Utility.checkIfInternetConnected(requireContext())) {
 
@@ -339,6 +333,7 @@ class BuyerLoginUsernameFragment : Fragment() {
                                             "Your ID has already been registered as Artisan",
                                             Toast.LENGTH_SHORT
                                         ).show()
+                                        Log.e("SignInActivity", "111111111 onfailure")
                                     }
 
                                     override fun onResponse(
@@ -351,10 +346,9 @@ class BuyerLoginUsernameFragment : Fragment() {
                                             UserPredicates.insertBuyer(response.body()!!)
                                             AddressPredicates.insertBuyerAddress(response.body()!!)
 
-
+                                            Log.e("SignInActivity", "22222222 success")
                                             mUserConfig?.deviceName = "Android"
-
-
+                                            
                                             Prefs.putBoolean(ConstantsDirectory.IS_LOGGED_IN, true)
                                             Prefs.putString(
                                                 ConstantsDirectory.USER_ID,
@@ -375,6 +369,7 @@ class BuyerLoginUsernameFragment : Fragment() {
 
                                             startActivity(Intent(activity, CXVideoActivity::class.java))
                                         }else {
+                                            Log.e("SignInActivity", "333333 Register your Google Id & Try Again")
                                             Toast.makeText(
                                                 activity,
                                                 "Register your Google Id & Try Again",
@@ -391,7 +386,6 @@ class BuyerLoginUsernameFragment : Fragment() {
 
                     } else {
                         // If sign in fails, display a message to the user.
-                        Log.w("SignInActivity", "signInWithCredential:failure", task.exception)
                     }
                 }
         }

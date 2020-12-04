@@ -481,7 +481,7 @@
     <string name="completing_order">Completing Order</string>
     <string name="enter_receiving_date">Enter date of receiving</string>
     <string name="confirm_delivery_check_text_note">Just in case you find your order to be faulty,\nyou can always raise a concern within\n10 days from date received.</string>
-    <string name="confirm_delivery">Confirm Delivery</string>
+    <string name="confirm_delivery">Found order as per requirement</string>
     <string name="name_of_the_product_40_characters">Name of the product (40 characters)</string>
     <string name="product_code">Product code(Eg. NAG09_89)</string>
     <string name="select_prod_cat">Select product category</string>
@@ -600,4 +600,5 @@
     <string name="login_with_facebook">Login with Facebook</string>
     <string name="reg_as_buyer_fb">Please first register your facebook ID as Buyer</string>
     <string name="reg_fb_artisan">Please first register your facebook ID as Artisan</string>
+    <string name="invalid_userid">User does not exist</string>
 </resources>

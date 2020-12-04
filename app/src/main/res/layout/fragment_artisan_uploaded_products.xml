@@ -44,7 +44,8 @@
                     android:id="@+id/filter_category"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="4"/>
+                    android:layout_weight="4"
+                    android:backgroundTint="@color/white_text"/>
 
             </LinearLayout>
 
