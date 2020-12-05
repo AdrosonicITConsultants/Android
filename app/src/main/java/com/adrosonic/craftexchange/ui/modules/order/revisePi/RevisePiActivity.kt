@@ -5,9 +5,11 @@ import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Html
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -159,6 +161,17 @@ class RevisePiActivity : LocaleBaseActivity(),
     }
 
     fun setDetails(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            mBinding?.txtQty?.text = Html.fromHtml("<font color=#A9A9A9>Quantity</font> <font color=#FF0000> *</font>", Html.FROM_HTML_MODE_COMPACT)
+            mBinding?.txtPpu?.text = Html.fromHtml("<font color=#A9A9A9>Price per unit</font> <font color=#FF0000> *</font>", Html.FROM_HTML_MODE_COMPACT)
+            mBinding?.txtEta?.text = Html.fromHtml("<font color=#A9A9A9>Expected date of delivery</font> <font color=#FF0000> *</font>", Html.FROM_HTML_MODE_COMPACT)
+            mBinding?.txtHsn?.text = Html.fromHtml("<font color=#A9A9A9>HSN code</font> <font color=#FF0000> *</font>", Html.FROM_HTML_MODE_COMPACT)
+        } else {
+            mBinding?.txtQty?.text = Html.fromHtml("<font color=#A9A9A9>Quantity</font> <font color=#FF0000> *</font>")
+            mBinding?.txtPpu?.text = Html.fromHtml("<font color=#A9A9A9>Price per unit</font> <font color=#FF0000> *</font>")
+            mBinding?.txtEta?.text = Html.fromHtml("<font color=#A9A9A9>Expected date of delivery</font> <font color=#FF0000> *</font>")
+            mBinding?.txtHsn?.text = Html.fromHtml("<font color=#A9A9A9>HSN code</font> <font color=#FF0000> *</font>")
+        }
         mBinding?.enquiryCode?.text=getString(R.string.proforma_invoice)+": ${enquiryDetails?.enquiryCode}"
         mBinding?.enquiryStartDate?.text = getString(R.string.date_accepted)+": ${enquiryDetails?.startedOn?.split("T")?.get(0)}"
         val image = enquiryDetails?.productImages?.split((",").toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()?.get(0)

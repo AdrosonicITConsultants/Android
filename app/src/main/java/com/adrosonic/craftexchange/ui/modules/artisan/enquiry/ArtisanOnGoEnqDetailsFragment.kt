@@ -3,9 +3,11 @@ package com.adrosonic.craftexchange.ui.modules.artisan.enquiry
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Html
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -304,6 +306,16 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
     }
 
     fun setDetails(){
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            mBinding?.txtMinQty?.text = Html.fromHtml("<font color=#A9A9A9>Minimum Quantity</font> <font color=#FF0000> *</font>", Html.FROM_HTML_MODE_COMPACT)
+            mBinding?.txtPpu?.text = Html.fromHtml("<font color=#A9A9A9>Price per unit</font> <font color=#FF0000> *</font>", Html.FROM_HTML_MODE_COMPACT)
+            mBinding?.txtDelEta?.text = Html.fromHtml("<font color=#A9A9A9>Estimated Days</font> <font color=#FF0000> *</font>", Html.FROM_HTML_MODE_COMPACT)
+        } else {
+            mBinding?.txtMinQty?.text = Html.fromHtml("<font color=#A9A9A9>Minimum Quantity</font> <font color=#FF0000> *</font>")
+            mBinding?.txtPpu?.text = Html.fromHtml("<font color=#A9A9A9>Price per unit</font> <font color=#FF0000> *</font>")
+            mBinding?.txtDelEta?.text = Html.fromHtml("<font color=#A9A9A9>Estimated Days</font> <font color=#FF0000> *</font>")
+        }
 
         setTabVisibilities()
         //stage wise button visiblities

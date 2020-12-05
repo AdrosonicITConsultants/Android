@@ -159,7 +159,7 @@ class OrdersPredicates {
                                 orderObj?.excpectedDate = order?.openEnquiriesResponse?.excpectedDate
                                 orderObj?.changeRequestModifiedOn = order?.openEnquiriesResponse?.changeRequestModifiedOn
                                 orderObj?.innerEnquiryStageId = order?.openEnquiriesResponse?.innerEnquiryStageId
-                                orderObj?.enquiryStageId = order?.openEnquiriesResponse?.enquiryStageId
+                                orderObj?.enquiryStageId = order?.openEnquiriesResponse?.enquiryStageId?:0
                                 orderObj?.startedOn = order?.openEnquiriesResponse?.startedOn
                                 orderObj?.changeRequestStatus = order?.openEnquiriesResponse?.changeRequestStatus
                                 orderObj?.pocFirstName = order?.openEnquiriesResponse?.pocFirstName

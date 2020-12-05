@@ -5,12 +5,12 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.icu.text.MessageFormat.format
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.text.Spannable
-import android.text.SpannableString
+import android.text.*
 import android.text.format.DateFormat
 import android.text.style.ForegroundColorSpan
 import android.util.Log
@@ -139,9 +139,9 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
                 else if (cgst.isEmpty()) Utility.displayMessage(getString(R.string.plz_add_cgst), applicationContext)
                 else if (prevTotAmt.isEmpty()) Utility.displayMessage(getString(R.string.plz_add_prev_total), applicationContext)
                 else if (advPay.isEmpty()) Utility.displayMessage(getString(R.string.plz_add_paid_adv), applicationContext)
-                else if (finAmt.isEmpty()) Utility.displayMessage(getString(R.string.plz_add_final_amt), applicationContext)
-                else if (amtToPay.isEmpty()) Utility.displayMessage(getString(R.string.plz_add_amt_tobe_paid), applicationContext)
-                else if (delCharge.isEmpty()) Utility.displayMessage(getString(R.string.plz_add_del_charges), applicationContext)
+//                else if (finAmt.isEmpty()) Utility.displayMessage(getString(R.string.plz_add_final_amt), applicationContext)
+//                else if (amtToPay.isEmpty()) Utility.displayMessage(getString(R.string.plz_add_amt_tobe_paid), applicationContext)
+//                else if (delCharge.isEmpty()) Utility.displayMessage(getString(R.string.plz_add_del_charges), applicationContext)
                 else if (currency!!.isEmpty()) Utility.displayMessage(getString(R.string.plz_add_currency), applicationContext)
                 else if (!mBinding?.chbTnc?.isChecked!!) Utility.displayMessage(getString(R.string.plz_accept_tnc), applicationContext)
                 else {
@@ -221,18 +221,32 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
                 }
             }
         }
-
+        mBinding?.orderQuantity?.addTextChangedListener(generalTextWatcher)
+        mBinding?.etRate?.addTextChangedListener(generalTextWatcher)
+        mBinding?.etPrevTotalAmt?.addTextChangedListener(generalTextWatcher)
+        mBinding?.etAdvPay?.addTextChangedListener(generalTextWatcher)
         mBinding?.txtTnc?.setOnClickListener {
             val intent = Intent(this, PdfViewerActivity::class.java)
             intent.putExtra("ViewType", "Terms_conditions")
             startActivity(intent)
 //            startActivity(this?.pdfViewerIntent()?.putExtra("ViewType", "Terms_conditions"))
         }
+
         mBinding?.btnChat?.setOnClickListener {
             enquiryId?.let { startActivity(Intent(this?.chatLogDetailsIntent(it)))}
         }
     }
-
+    private val generalTextWatcher: TextWatcher = object : TextWatcher {
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) { }
+        override fun beforeTextChanged( s: CharSequence, start: Int, count: Int, after: Int ) { }
+        override fun afterTextChanged(s: Editable) {
+            calCulateAmounts()
+        }
+    }
+    fun calCulateAmounts(){
+        mBinding?.etFinalAmt?.setText("")
+        mBinding?.etAmtToPay?.setText("")
+    }
     fun viewLoader(){
         mBinding?.taxInvoiceScreen?.visibility= View.GONE
         mBinding?.swipeTaxInvoice?.isRefreshing = true
@@ -253,6 +267,22 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
     }
 
     fun setDetails(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            mBinding?.txtQty?.text = Html.fromHtml("<font color=#A9A9A9>Quantity</font> <font color=#FF0000> *</font>", Html.FROM_HTML_MODE_COMPACT)
+            mBinding?.txtRatePerUnit?.text = Html.fromHtml("<font color=#A9A9A9>Rate per unit</font> <font color=#FF0000> *</font>", Html.FROM_HTML_MODE_COMPACT)
+            mBinding?.txtPrevTotAmt?.text = Html.fromHtml("<font color=#A9A9A9>Previous Total amount<br>(as per PI)</font> <font color=#FF0000> *</font>", Html.FROM_HTML_MODE_COMPACT)
+            mBinding?.txtAdvPayRecvd?.text = Html.fromHtml("<font color=#A9A9A9>Advance payment received<br>(Previously as per PI)</font> <font color=#FF0000> *</font>", Html.FROM_HTML_MODE_COMPACT)
+            mBinding?.txtSgst?.text = Html.fromHtml("<font color=#A9A9A9>SGST @</font> <font color=#FF0000> *</font>", Html.FROM_HTML_MODE_COMPACT)
+            mBinding?.txtCgst?.text = Html.fromHtml("<font color=#A9A9A9>CGST @</font> <font color=#FF0000> *</font>", Html.FROM_HTML_MODE_COMPACT)
+        } else {
+            mBinding?.txtQty?.text = Html.fromHtml("<font color=#A9A9A9>Quantity</font> <font color=#FF0000> *</font>")
+            mBinding?.txtRatePerUnit?.text = Html.fromHtml("<font color=#A9A9A9>Rate per unit</font> <font color=#FF0000> *</font>")
+            mBinding?.txtPrevTotAmt?.text = Html.fromHtml("<font color=#A9A9A9>Previous Total amount<br>(as per PI)</font> <font color=#FF0000> *</font>")
+            mBinding?.txtAdvPayRecvd?.text = Html.fromHtml("<font color=#A9A9A9>Advance payment received<br>(Previously as per PI)</font> <font color=#FF0000> *</font>")
+            mBinding?.txtSgst?.text = Html.fromHtml("<font color=#A9A9A9>SGST @</font> <font color=#FF0000> *</font>")
+            mBinding?.txtCgst?.text = Html.fromHtml("<font color=#A9A9A9>CGST @</font> <font color=#FF0000> *</font>")
+        }
+
         mBinding?.orderCode?.text=getString(R.string.tax_invoice)+": ${orderDetails?.orderCode}"
         mBinding?.orderStartDate?.text = orderDetails?.startedOn?.split("T")?.get(0)
         val image = orderDetails?.productImages?.split((",").toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()?.get(0)

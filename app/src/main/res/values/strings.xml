@@ -602,4 +602,5 @@
     <string name="reg_as_buyer_fb">Please first register your facebook ID as Buyer</string>
     <string name="reg_fb_artisan">Please first register your facebook ID as Artisan</string>
     <string name="invalid_userid">User does not exist</string>
+    <string name="previouse_total_amount">Previouse total amount</string>
 </resources>
