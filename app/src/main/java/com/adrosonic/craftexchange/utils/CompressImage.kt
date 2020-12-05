@@ -66,7 +66,7 @@ class CompressImageTask(var cacheDir: String,  pairList: ArrayList<String>,
                             val compressFile = File(directory.absolutePath, imageName)
                             compressFile.createNewFile()
                             out = FileOutputStream(compressFile)
-                            bitmap?.compress(Bitmap.CompressFormat.JPEG, 45, out)
+                            bitmap?.compress(Bitmap.CompressFormat.JPEG, 25, out)
                         } catch (e: Exception) {
                             Log.e("Unable to Compress", "${file.nameWithoutExtension}$counter.jpeg")
                             Log.e("Unable to Compress", e.message)

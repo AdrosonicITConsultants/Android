@@ -33,6 +33,7 @@ import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
 import com.adrosonic.craftexchange.ui.modules.artisan.qcForm.qcFormIntent
 import com.adrosonic.craftexchange.ui.modules.enquiry.ArtEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
+import com.adrosonic.craftexchange.ui.modules.enquiry.enquiryDetails
 import com.adrosonic.craftexchange.ui.modules.order.cr.crContext
 import com.adrosonic.craftexchange.ui.modules.order.taxInv.raiseTaxInvIntent
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
@@ -287,7 +288,17 @@ class CompletedOrderDetailsFragment : Fragment(),
             if(mBinding?.transactionList!!.visibility==View.VISIBLE) mBinding?.transactionList!!.visibility=View.GONE
             else mBinding?.transactionList!!.visibility=View.VISIBLE
         }
-
+        mBinding?.viewEnqLayer?.setOnClickListener {
+            enqID?.let {
+                val intent = Intent(context?.enquiryDetails())
+                var bundle = Bundle()
+                Prefs.putString(ConstantsDirectory.ENQUIRY_ID, it.toString()) //TODO change later
+                bundle.putString(ConstantsDirectory.ENQUIRY_ID, it.toString())
+                bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG, "1")
+                intent.putExtras(bundle)
+                context?.startActivity(intent)
+            }
+        }
     }
 
     fun setDetails(){

@@ -34,6 +34,7 @@ import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
 import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.advPay.enquiryPayment
 import com.adrosonic.craftexchange.ui.modules.chat.chatLogDetailsIntent
 import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
+import com.adrosonic.craftexchange.ui.modules.order.orderDetails
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
@@ -41,6 +42,7 @@ import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
 import com.agik.swipe_button.Controller.OnSwipeCompleteListener
 import com.agik.swipe_button.View.Swipe_Button_View
+import com.pixplicity.easyprefs.library.Prefs
 
 
 private const val ARG_PARAM1 = "param1"
@@ -288,6 +290,17 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
                 startActivity(Intent(requireContext()?.chatLogDetailsIntent(it)))
             }
         }
+        mBinding?.viewEnqLayer?.setOnClickListener {
+            enqID?.let {
+                val intent = Intent(context?.orderDetails())
+                var bundle = Bundle()
+                Prefs.putString(ConstantsDirectory.ENQUIRY_ID, it.toString()) //TODO change later
+                bundle.putString(ConstantsDirectory.ENQUIRY_ID, it.toString())
+                bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG, "2")
+                intent.putExtras(bundle)
+                context?.startActivity(intent)
+            }
+        }
     }
 
     fun setDetails(){
@@ -494,7 +507,16 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         }
 
         if(enquiryDetails?.enquiryStageID!!>=2)mBinding?.btnChat?.visibility=View.VISIBLE
+
         else mBinding?.btnChat?.visibility=View.GONE
+
+        if(enquiryDetails?.productType == "Custom Product" || enquiryDetails?.productStatusID == AvailableStatus.MADE_TO_ORDER.getId()){
+            if(enquiryDetails?.enquiryStageID!!>=4L) mBinding?.viewEnqLayer?.visibility=View.VISIBLE
+            else mBinding?.viewEnqLayer?.visibility=View.GONE
+        }else{
+            if(enquiryDetails?.enquiryStageID!!>=3L) mBinding?.viewEnqLayer?.visibility=View.VISIBLE
+            else mBinding?.viewEnqLayer?.visibility=View.GONE
+        }
     }
 
     private fun setProgressTimeline(){

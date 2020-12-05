@@ -240,6 +240,7 @@
     <string name="enquiry_id">Enquiry Id\t</string>
     <string name="refer_to_ongoing_enquiries">Please refer \"Ongoing Enquiry\" tab\nto track your enquiry.</string>
     <string name="view_enquiry">View Enquiry</string>
+    <string name="view_order">View Order</string>
 
     <string name="title_activity_buyer_add_own_product_design">BuyerAddOwnProductDesign</string>
     <!-- Strings used for fragments for navigation -->

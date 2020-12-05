@@ -230,6 +230,7 @@
     <string name="enquiry_generated_success">जांच उत्पन्न हुई!</string>
     <string name="refer_to_ongoing_enquiries">कृपया अपनी जांच को ट्रैक करने के लिए \"Ongoing Enquiry\" टैब देखें.</string>
     <string name="view_enquiry">जांच देखें</string>
+    <string name="view_order">आदेश देखें</string>
     <string name="make_it_amp_take_it"><![CDATA[बना लो और ले लो!]]></string>
     <string name="search_hint">खोज उत्पाद, कोड, उत्पाद प्रकार, बुनाई</string>
     <string name="empty_suggestion_text">\"saree\",\"fabric\",\"ikat\" इस कीवर्ड के लिए कोई सुझाव नहीं। खोज का प्रयास करें.</string>
