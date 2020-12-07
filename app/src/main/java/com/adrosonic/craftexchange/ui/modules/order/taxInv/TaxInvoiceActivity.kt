@@ -225,6 +225,8 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
         mBinding?.etRate?.addTextChangedListener(generalTextWatcher)
         mBinding?.etPrevTotalAmt?.addTextChangedListener(generalTextWatcher)
         mBinding?.etAdvPay?.addTextChangedListener(generalTextWatcher)
+        mBinding?.etSgst?.addTextChangedListener(generalTextWatcher)
+        mBinding?.etCgst?.addTextChangedListener(generalTextWatcher)
         mBinding?.txtTnc?.setOnClickListener {
             val intent = Intent(this, PdfViewerActivity::class.java)
             intent.putExtra("ViewType", "Terms_conditions")
@@ -244,8 +246,20 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
         }
     }
     fun calCulateAmounts(){
-        mBinding?.etFinalAmt?.setText("")
-        mBinding?.etAmtToPay?.setText("")
+    try {
+        val quantity=try{(mBinding?.orderQuantity?.text.toString()).toLong()}catch (e:Exception){0L}
+        val price=try{(mBinding?.etRate?.text.toString()).toLong()}catch (e:Exception){0L}
+        val sgst=try{(mBinding?.etSgst?.text.toString()).toDouble()}catch (e:Exception){0.0}
+        val cgst=try{(mBinding?.etCgst?.text.toString()).toDouble()}catch (e:Exception){0.0}
+        val deliveryCharges=try{(mBinding?.etDeliveryCharge?.text.toString()).toLong()}catch (e:Exception){0L}
+        var finalAmount = ((quantity * price) * (1 + (sgst + cgst)/100)) + deliveryCharges
+        Log.e("CalcAmount","finalAmount: $finalAmount")
+        var amtTobePaid=finalAmount-(mBinding?.etAdvPay?.text.toString()).toLong()
+        mBinding?.etFinalAmt?.setText(finalAmount.toString(),TextView.BufferType.NORMAL)
+        mBinding?.etAmtToPay?.setText(amtTobePaid.toString(),TextView.BufferType.NORMAL)
+    }catch (e:Exception){
+
+    }
     }
     fun viewLoader(){
         mBinding?.taxInvoiceScreen?.visibility= View.GONE

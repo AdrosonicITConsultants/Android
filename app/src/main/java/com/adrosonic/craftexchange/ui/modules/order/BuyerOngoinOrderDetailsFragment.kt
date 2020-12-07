@@ -40,6 +40,7 @@ import com.adrosonic.craftexchange.ui.modules.artisan.qcForm.qcFormIntent
 import com.adrosonic.craftexchange.ui.modules.chat.chatLogDetailsIntent
 import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.enquiry.enquiryDetails
+import com.adrosonic.craftexchange.ui.modules.enquiry.viewEnqDetails
 import com.adrosonic.craftexchange.ui.modules.order.confirmDelivery.confirmDeliveryContext
 import com.adrosonic.craftexchange.ui.modules.order.cr.crContext
 import com.adrosonic.craftexchange.ui.modules.order.finalPay.orderPaymentIntent
@@ -260,13 +261,14 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
         }
         mBinding?.viewEnqLayer?.setOnClickListener {
             enqID?.let {
-                val intent = Intent(context?.enquiryDetails())
-                var bundle = Bundle()
+//                val intent = Intent(context?.enquiryDetails())
+//                var bundle = Bundle()
                 Prefs.putString(ConstantsDirectory.ENQUIRY_ID, it.toString()) //TODO change later
-                bundle.putString(ConstantsDirectory.ENQUIRY_ID, it.toString())
-                bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG, "2")
-                intent.putExtras(bundle)
-                context?.startActivity(intent)
+//                bundle.putString(ConstantsDirectory.ENQUIRY_ID, it.toString())
+//                bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG, "2")
+//                intent.putExtras(bundle)
+//                context?.startActivity(intent)
+                startActivity(Intent(requireContext()?.viewEnqDetails( requireContext(),it.toString(),"2")))
             }
         }
     }

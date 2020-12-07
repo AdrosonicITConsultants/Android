@@ -43,9 +43,7 @@ import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
-import com.adrosonic.craftexchange.viewModels.CMSViewModel
-import com.adrosonic.craftexchange.viewModels.LandingViewModel
-import com.adrosonic.craftexchange.viewModels.ProfileViewModel
+import com.adrosonic.craftexchange.viewModels.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.iid.FirebaseInstanceId
@@ -88,6 +86,8 @@ class BuyerLandingActivity : LocaleBaseActivity(),
     var imageName : String ?= ""
     var url : String ?= ""
     var noti_badge:TextView? = null
+    val mEnqVm: EnquiryViewModel by viewModels()
+    val mOrderVm: OrdersViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -409,6 +409,10 @@ class BuyerLandingActivity : LocaleBaseActivity(),
             mViewModel?.getBuyerFaultReviewData()
             mCMSViewModel?.getRegionData()
             mCMSViewModel?.getCategoriesData()
+            mEnqVm?.getAllOngoingEnquiries()
+            mEnqVm?.getAllCompletedEnquiries() 
+            mOrderVm?.getAllOngoingOrders()
+            mOrderVm?.getAllCompletedOrders()
         }
     }
 

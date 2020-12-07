@@ -38,10 +38,12 @@ import com.adrosonic.craftexchange.syncManager.SyncCoordinator
 import com.adrosonic.craftexchange.ui.modules.artisan.deliveryReceipt.uploadDeliveryReceiptIntent
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.piContext
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
+import com.adrosonic.craftexchange.ui.modules.artisan.landing.artisanLandingIntent
 import com.adrosonic.craftexchange.ui.modules.artisan.qcForm.qcFormIntent
 import com.adrosonic.craftexchange.ui.modules.chat.chatLogDetailsIntent
 import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.enquiry.enquiryDetails
+import com.adrosonic.craftexchange.ui.modules.enquiry.viewEnqDetails
 import com.adrosonic.craftexchange.ui.modules.order.cr.crContext
 import com.adrosonic.craftexchange.ui.modules.order.finalPay.orderPaymentIntent
 import com.adrosonic.craftexchange.ui.modules.order.revisePi.viewPiContextPostCr
@@ -356,13 +358,14 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         }
         mBinding?.viewEnqLayer?.setOnClickListener {
             enqID?.let {
-                val intent = Intent(context?.enquiryDetails())
-                var bundle = Bundle()
-                Prefs.putString(ConstantsDirectory.ENQUIRY_ID, it.toString()) //TODO change later
-                bundle.putString(ConstantsDirectory.ENQUIRY_ID, it.toString())
-                bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG, "2")
-                intent.putExtras(bundle)
-                context?.startActivity(intent)
+//                val intent = Intent(context?.enquiryDetails())
+//                var bundle = Bundle()
+//                Prefs.putString(ConstantsDirectory.ENQUIRY_ID, it.toString()) //TODO change later
+//                bundle.putString(ConstantsDirectory.ENQUIRY_ID, it.toString())
+//                bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG, "2")
+//                intent.flags =Intent.FLAG_ACTIVITY_SINGLE_TOP
+//                intent.putExtras(bundle)
+                startActivity(Intent(requireContext()?.viewEnqDetails( requireContext(),it.toString(),"2")))
             }
         }
     }
@@ -1005,15 +1008,6 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
                 }else{
                     Utility.displayMessage("Order Stage In Progress!",requireActivity())
                 }
-
-//                activity?.onBackPressed()
-//                val intent = Intent(context?.orderDetails())
-//                var bundle = Bundle()
-//                bundle.putString(ConstantsDirectory.ENQUIRY_ID, enqID?.toString())
-//                bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG, "2")
-//                intent.putExtras(bundle)
-//                context?.startActivity(intent)
-
             })
         } catch (e: Exception) {
             Log.e("OrderDetails", "Exception onStatusChangeSuccess " + e.message)

@@ -47,7 +47,9 @@ import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
+import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
 import com.adrosonic.craftexchange.viewModels.LandingViewModel
+import com.adrosonic.craftexchange.viewModels.OrdersViewModel
 import com.adrosonic.craftexchange.viewModels.ProfileViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
@@ -82,16 +84,15 @@ class ArtisanLandingActivity : LocaleBaseActivity(),
     companion object{
         const val TAG = "ArtisanLanding"
     }
-
     private var mBinding : ActivityArtisanLandingBinding ?= null
     val mViewModel:LandingViewModel by viewModels()
-//    val mCMSViewModel : CMSViewModel by viewModels()
     var craftUser : MutableLiveData<CraftUser>?= null
     val mProVM : ProfileViewModel by viewModels()
     var profileImage : String ?= ""
     var urlPro : String ?= ""
     var noti_badge:TextView? = null
-
+    val mEnqVm:EnquiryViewModel by viewModels()
+    val mOrderVm:OrdersViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityArtisanLandingBinding.inflate(layoutInflater)
@@ -442,7 +443,10 @@ class ArtisanLandingActivity : LocaleBaseActivity(),
             setProfileImage()
             mViewModel?.getArtisanFaultReviewData()
             mViewModel?.getBuyerFaultReviewData()
-
+            mEnqVm?.getAllOngoingEnquiries()
+            mEnqVm?.getAllCompletedEnquiries()
+            mOrderVm?.getAllOngoingOrders()
+            mOrderVm?.getAllCompletedOrders()
 //            mCMSViewModel?.getCategoriesData()
 
         }

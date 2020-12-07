@@ -81,11 +81,11 @@
             android:label="@string/title_activity_dashboard" />
         <activity
             android:name=".ui.modules.enquiry.EnquiryDetailsActivity"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.modules.order.OrderDetailsActivity"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.modules.search.SearchSuggestionActivity"
