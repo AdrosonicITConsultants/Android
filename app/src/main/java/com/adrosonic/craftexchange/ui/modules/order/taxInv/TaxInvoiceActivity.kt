@@ -258,7 +258,6 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
         mBinding?.etFinalAmt?.setText(finalAmount.toString(),TextView.BufferType.NORMAL)
         mBinding?.etAmtToPay?.setText(amtTobePaid.toString(),TextView.BufferType.NORMAL)
     }catch (e:Exception){
-
     }
     }
     fun viewLoader(){

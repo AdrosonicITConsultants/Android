@@ -85,6 +85,7 @@ class ArtisanRegisterProductsFragment : Fragment() {
         productArray.add("Fabric")
         productArray.add("Home Accessories")
         productArray.add("Fashion Accessories")
+        productArray.add("Mekhla Chadar")
         mBinding?.listProducts?.setItems(productArray)
         return mBinding?.root
     }
