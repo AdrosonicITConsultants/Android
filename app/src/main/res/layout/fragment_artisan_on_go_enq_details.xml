@@ -526,8 +526,8 @@
 
                         <ImageView
                             android:id="@+id/pi_thumbnail"
-                            android:layout_width="60dp"
-                            android:layout_height="80dp"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
                             android:layout_marginTop="@dimen/margin_regular"
                             android:layout_marginBottom="8dp"
                             android:background="@drawable/layout_red_border"

@@ -468,8 +468,8 @@
 
                         <ImageView
                             android:id="@+id/pi_thumbnail"
-                            android:layout_width="60dp"
-                            android:layout_height="80dp"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
                             android:background="@drawable/layout_red_border"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
