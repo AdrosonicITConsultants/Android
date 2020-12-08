@@ -579,5 +579,6 @@
     <string name="no_ongoing_orders_present">कोई चल रहे आदेश मौजूद नहीं हैं</string>
     <string name="no_ongoing_enquiries_present">कोई चल रही पूछताछ मौजूद नहीं हैं</string>
     <string name="no_completed_enquiries_present">कोई पूर्ण पूछताछ मौजूद नहीं है</string>
+    <string name="you_have_accepted">You have accepted the MOQ. For further discussion and negotiation use Chat box option in the app.</string>
 
 </resources>
