@@ -104,13 +104,13 @@ class NotifcationFragment : Fragment(),
         val txt_dscrp = dialog.findViewById(R.id.txt_dscrp) as TextView
         val tvCancel = dialog.findViewById(R.id.txt_cancel) as TextView
         val tvDelete = dialog.findViewById(R.id.txt_back) as TextView
+        tvDelete.setText("Mark all as read", TextView.BufferType.NORMAL)
         txt_dscrp.setText(getString(R.string.mark_all_noti_confirmation), TextView.BufferType.NORMAL)
         tvCancel.setOnClickListener {
             dialog.cancel()
         }
         tvDelete.setOnClickListener {
             //todo get all noti id
-
             setVisiblities()
             if(Utility.checkIfInternetConnected(requireContext())) {
                 mViewModel.markAllNotificationsAsRead()
