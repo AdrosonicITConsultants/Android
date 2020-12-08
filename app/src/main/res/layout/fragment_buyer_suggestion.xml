@@ -60,6 +60,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginTop="@dimen/margin_regular"
             android:layout_marginBottom="8dp"
+            android:visibility="invisible"
             android:text="CRAFT EXCHANGE. An initiative by TATA TRUSTS"
             android:textSize="12sp"
             android:textColor="@color/darker_gray"/>

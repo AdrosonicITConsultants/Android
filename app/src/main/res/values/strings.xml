@@ -119,7 +119,7 @@
     <string name="profile_update_success">Profile updated successfully!</string>
     <string name="artisan_self_design">Artisan self\ndesign</string>
     <string name="explore">Explore</string>
-    <string name="antaran_design_collec">Antaran co-design\ncollection</string>
+    <string name="antaran_design_collec">Antaran co-design\n</string>
     <string name="user">User</string>
     <string name="edit_profile">Edit profile</string>
     <string name="artisan_rating_text">Avg. rating by artisans</string>

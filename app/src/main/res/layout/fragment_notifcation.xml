@@ -71,7 +71,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:text="\n\n It's a timeless story!"
+                android:text="\n\n It's a timeless tale!"
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentBottom="true"
                 android:layout_width="wrap_content"

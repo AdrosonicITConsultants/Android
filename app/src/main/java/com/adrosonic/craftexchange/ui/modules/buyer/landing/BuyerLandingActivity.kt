@@ -106,14 +106,10 @@ class BuyerLandingActivity : LocaleBaseActivity(),
         refreshProfile()
         mProVM.listener = this
         mViewModel?.noficationlistener=this
-
-
         mProVM.getUserMutableData()
             .observe(this, Observer<CraftUser> {
                 craftUser = it
             })
-
-
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.title = ""
@@ -193,8 +189,6 @@ class BuyerLandingActivity : LocaleBaseActivity(),
             }
         }
         NotifcationFragment.badgeCountListener=this
-
-
     }
 
     override fun onOptionsItemSelected(item:MenuItem):Boolean {
