@@ -104,9 +104,10 @@ class ArtisanRegisterArtisanidFragment : Fragment() {
         }
         mBinding?.changeLanguage?.setOnClickListener { showLanguageSelectionDialog() }
         mBinding?.textViewHelp?.setOnClickListener {
-            val intent = Intent(context, PdfViewerActivity::class.java)
-            intent.putExtra("ViewType", "HELP")
-            startActivity(intent)
+//            val intent = Intent(context, PdfViewerActivity::class.java)
+//            intent.putExtra("ViewType", "HELP")
+//            startActivity(intent)
+            Utility.supportDialog(requireContext())
         }
     }
     fun showLanguageSelectionDialog() {

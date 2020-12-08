@@ -839,6 +839,15 @@ class Utility {
             dialog.show()
             return dialog
         }
+        fun supportDialog(context: Context):Dialog{
+            var dialog = Dialog(context)
+            dialog.setContentView(com.adrosonic.craftexchange.R.layout.dialog_support)
+            dialog.setCanceledOnTouchOutside(true) // disables outside the box touch
+            dialog.setCancelable(true) // disables backbtn click when popup visible//
+            dialog.create()
+            dialog.show()
+            return dialog
+        }
     }
 
 }

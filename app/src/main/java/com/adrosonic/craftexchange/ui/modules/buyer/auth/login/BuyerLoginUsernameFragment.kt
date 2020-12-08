@@ -189,9 +189,10 @@ class BuyerLoginUsernameFragment : Fragment() {
             startActivity(intent)
         }
         mBinding?.needHelp?.setOnClickListener {
-            val intent = Intent(context, PdfViewerActivity::class.java)
-            intent.putExtra("ViewType", "HELP")
-            startActivity(intent)
+//            val intent = Intent(context, PdfViewerActivity::class.java)
+//            intent.putExtra("ViewType", "HELP")
+//            startActivity(intent)
+            Utility.supportDialog(requireContext())
         }
 
         mBinding?.googleLoginBtn?.setOnClickListener {
