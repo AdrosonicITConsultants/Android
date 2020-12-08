@@ -66,6 +66,7 @@ class CompletedEnquiryFragment : Fragment(),
 //        setVisiblities()
 
         if (!Utility.checkIfInternetConnected(requireContext())) {
+            setVisiblities()
             Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
         } else {
             mEnqVM.getAllCompletedEnquiries()
@@ -97,10 +98,15 @@ class CompletedEnquiryFragment : Fragment(),
     }
 
     fun setVisiblities() {
-        if (mEnqVM.getCompEnqListMutableData().value?.size!! > 0) {
-            mBinding?.completedEnqRecyclerList?.visibility = View.VISIBLE
-            mBinding?.emptyView?.visibility = View.GONE
-        } else {
+        try {
+            if (mEnqVM.getCompEnqListMutableData().value?.size!! > 0) {
+                mBinding?.completedEnqRecyclerList?.visibility = View.VISIBLE
+                mBinding?.emptyView?.visibility = View.GONE
+            } else {
+                mBinding?.completedEnqRecyclerList?.visibility = View.GONE
+                mBinding?.emptyView?.visibility = View.VISIBLE
+            }
+        } catch (e: Exception) {
             mBinding?.completedEnqRecyclerList?.visibility = View.GONE
             mBinding?.emptyView?.visibility = View.VISIBLE
         }

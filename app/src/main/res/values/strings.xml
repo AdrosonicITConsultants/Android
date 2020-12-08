@@ -603,4 +603,7 @@
     <string name="reg_fb_artisan">Please first register your facebook ID as Artisan</string>
     <string name="invalid_userid">User does not exist</string>
     <string name="previouse_total_amount">Previouse total amount</string>
+    <string name="no_ongoing_orders_present">No ongoing orders present</string>
+    <string name="no_ongoing_enquiries_present">No ongoing enquiries present</string>
+    <string name="no_completed_enquiries_present">No completed enquiries present</string>
 </resources>

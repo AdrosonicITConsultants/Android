@@ -568,13 +568,16 @@
     <string name="auto_escalated">Auto Escalated</string>
     <string name="select_one_issue">किसी भी 1 अंक का चयन करें</string>
     <string name="esc_updated_shortly">Escalation Status शीघ्र ही अद्यतन किया जाएगा!</string>
-    <string name="error_raise_escalation">Error while raising Escalation</string>
+    <string name="error_raise_escalation">वृद्धि करते समय त्रुटि</string>
     <string name="no_products_uploaded">कोई भी उत्पाद अपलोड नहीं हुआ!</string>
     <string name="you">आप</string>
 
     //facebook sdk
     <string name="facebook_app_id">717798432467327</string>
     <string name="fb_login_protocol_scheme">fb717798432467327</string>
-    <string name="previouse_total_amount">Previouse total amount</string>
+    <string name="previouse_total_amount">पिछला कुल राशि</string>
+    <string name="no_ongoing_orders_present">कोई चल रहे आदेश मौजूद नहीं हैं</string>
+    <string name="no_ongoing_enquiries_present">कोई चल रही पूछताछ मौजूद नहीं हैं</string>
+    <string name="no_completed_enquiries_present">कोई पूर्ण पूछताछ मौजूद नहीं है</string>
 
 </resources>
