@@ -96,8 +96,8 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
         mBinding = ActivityTaxInvoiceBinding.inflate(layoutInflater)
         val view = mBinding?.root
         setContentView(view)
-        mEnqVM?.payDetailsListener = this
-        mOrdVM?.taxInvGenListener = this
+        mEnqVM.payDetailsListener = this
+        mOrdVM.taxInvGenListener = this
 
         mBinding?.swipeTaxInvoice?.isEnabled = false
 
@@ -105,11 +105,11 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
             enquiryId = intent.getLongExtra("enquiryId",0)
         }
 
-        orderDetails = mOrdVM?.loadSingleOrderDetails(enquiryId,0)
+        orderDetails = mOrdVM.loadSingleOrderDetails(enquiryId,0)
         setDetails()
 
         if(Utility.checkIfInternetConnected(applicationContext)){
-            mEnqVM?.fetchPayEnqInvDetails(enquiryId)
+            mEnqVM.fetchPayEnqInvDetails(enquiryId)
             viewFormLoader()
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),this)
@@ -118,7 +118,7 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
         mBinding?.btnBack?.setOnClickListener {
             finish()
         }
-        loadingDialog = Utility?.loadingDialog(this)
+        loadingDialog = Utility.loadingDialog(this)
 
         mBinding?.btnSwipeTi?.setOnClickListener {
             val qty = mBinding?.orderQuantity?.text.toString()
@@ -146,32 +146,32 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
                 else if (!mBinding?.chbTnc?.isChecked!!) Utility.displayMessage(getString(R.string.plz_accept_tnc), applicationContext)
                 else {
                     //Tax Invoice Preview
-                    taxInvPrev?.cgst=cgst?.toLong()
-                    taxInvPrev?.ppu=ppu.toLong()
-                    taxInvPrev?.quantity=qty.toLong()
-                    taxInvPrev?.sgst=sgst.toLong()
-                    taxInvPrev?.hsn = rrHSN
-                    taxInvPrev?.enquiryId = enquiryId
-                    taxInvPrev?.advancePaidAmt = advPay.toLong()
-                    taxInvPrev?.deliveryCharges = delCharge.toLong()
-                    taxInvPrev?.finalTotalAmt = finAmt.toLong()
+                    taxInvPrev.cgst = cgst.toLong()
+                    taxInvPrev.ppu =ppu.toLong()
+                    taxInvPrev.quantity =qty.toLong()
+                    taxInvPrev.sgst =sgst.toLong()
+                    taxInvPrev.hsn = rrHSN
+                    taxInvPrev.enquiryId = enquiryId
+                    taxInvPrev.advancePaidAmt = advPay.toLong()
+                    taxInvPrev.deliveryCharges = delCharge.toLong()
+                    taxInvPrev.finalTotalAmt = finAmt.toLong()
 
                     //Generate Tax Invoice
-                    taxInv?.cgst=cgst
-                    taxInv?.ppu=ppu.toLong()
-                    taxInv?.quantity=qty.toLong()
-                    taxInv?.sgst=sgst
-                    taxInv?.enquiryId = enquiryId?.toString()
-                    taxInv?.advancePaidAmt = advPay
-                    taxInv?.deliveryCharges = delCharge
-                    taxInv?.finalTotalAmt = finAmt.toLong()
+                    taxInv.cgst =cgst
+                    taxInv.ppu =ppu.toLong()
+                    taxInv.quantity =qty.toLong()
+                    taxInv.sgst =sgst
+                    taxInv.enquiryId = enquiryId.toString()
+                    taxInv.advancePaidAmt = advPay
+                    taxInv.deliveryCharges = delCharge
+                    taxInv.finalTotalAmt = finAmt.toLong()
 
                     if (Utility.checkIfInternetConnected(applicationContext)) {
                         mBinding?.btnSwipeTi?.text = getString(R.string.tax_invoic_gen)
                         mBinding?.btnSwipeTi?.isEnabled=false
 //                        viewLoader()
                         loadingDialog?.show()
-                        taxInvPrev?.let { it1 -> mOrdVM?.generateTaxInvoicePreview(it1) }
+                        taxInvPrev.let { it1 -> mOrdVM.generateTaxInvoicePreview(it1) }
                     } else {
                         Utility.displayMessage(getString(R.string.no_internet_connection),this)
                     }
@@ -189,32 +189,32 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
                 else {
 
                     //tax invoice preview
-                    taxInvPrev?.cgst=cgst.toLong()
-                    taxInvPrev?.ppu=ppu.toLong()
-                    taxInvPrev?.quantity=qty.toLong()
-                    taxInvPrev?.sgst=sgst.toLong()
-                    taxInvPrev?.hsn = rrHSN
-                    taxInvPrev?.advancePaidAmt = 0
-                    taxInvPrev?.enquiryId = enquiryId
-                    taxInvPrev?.deliveryCharges = delCharge.toLong()
-                    taxInvPrev?.finalTotalAmt = finAmt.toLong()
+                    taxInvPrev.cgst =cgst.toLong()
+                    taxInvPrev.ppu =ppu.toLong()
+                    taxInvPrev.quantity =qty.toLong()
+                    taxInvPrev.sgst =sgst.toLong()
+                    taxInvPrev.hsn = rrHSN
+                    taxInvPrev.advancePaidAmt = 0
+                    taxInvPrev.enquiryId = enquiryId
+                    taxInvPrev.deliveryCharges = delCharge.toLong()
+                    taxInvPrev.finalTotalAmt = finAmt.toLong()
 
                     //Generate Tax Invoice
-                    taxInv?.cgst=cgst
-                    taxInv?.ppu=ppu.toLong()
-                    taxInv?.quantity=qty.toLong()
-                    taxInv?.sgst=sgst
-                    taxInv?.advancePaidAmt = "0"
-                    taxInv?.enquiryId = enquiryId?.toString()
-                    taxInv?.deliveryCharges = delCharge
-                    taxInv?.finalTotalAmt = finAmt.toLong()
+                    taxInv.cgst =cgst
+                    taxInv.ppu =ppu.toLong()
+                    taxInv.quantity =qty.toLong()
+                    taxInv.sgst =sgst
+                    taxInv.advancePaidAmt = "0"
+                    taxInv.enquiryId = enquiryId.toString()
+                    taxInv.deliveryCharges = delCharge
+                    taxInv.finalTotalAmt = finAmt.toLong()
 
                     if (Utility.checkIfInternetConnected(applicationContext)) {
                         mBinding?.btnSwipeTi?.text = getString(R.string.tax_invoic_gen)
                         mBinding?.btnSwipeTi?.isEnabled=false
 //                        viewLoader()
                         loadingDialog?.show()
-                        taxInvPrev?.let { it1 -> mOrdVM?.generateTaxInvoicePreview(it1) }
+                        taxInvPrev.let { it1 -> mOrdVM.generateTaxInvoicePreview(it1) }
                     } else {
                         Utility.displayMessage(getString(R.string.no_internet_connection),this)
                     }
@@ -235,7 +235,7 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
         }
 
         mBinding?.btnChat?.setOnClickListener {
-            enquiryId?.let { startActivity(Intent(this?.chatLogDetailsIntent(it)))}
+            enquiryId.let { startActivity(Intent(this.chatLogDetailsIntent(it)))}
         }
     }
     private val generalTextWatcher: TextWatcher = object : TextWatcher {
@@ -280,18 +280,22 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
     }
 
     fun setDetails(){
+        var strQty="<font color=#A9A9A9>"+getString(R.string.quantity)+"</font> <font color=#FF0000> *</font>"
+        var strRpu="<font color=#A9A9A9>"+getString(R.string.rate_per_unit)+"</font> <font color=#FF0000> *</font>"
+        var strPrevtotAmt="<font color=#A9A9A9>"+getString(R.string.prev_total_amt)+"</font> <font color=#FF0000> *</font>"
+        var strAdvPayRcvd="<font color=#A9A9A9>"+getString(R.string.adv_pay_rec_as_pi)+"</font> <font color=#FF0000> *</font>"
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            mBinding?.txtQty?.text = Html.fromHtml("<font color=#A9A9A9>Quantity</font> <font color=#FF0000> *</font>", Html.FROM_HTML_MODE_COMPACT)
-            mBinding?.txtRatePerUnit?.text = Html.fromHtml("<font color=#A9A9A9>Rate per unit</font> <font color=#FF0000> *</font>", Html.FROM_HTML_MODE_COMPACT)
-            mBinding?.txtPrevTotAmt?.text = Html.fromHtml("<font color=#A9A9A9>Previous Total amount<br>(as per PI)</font> <font color=#FF0000> *</font>", Html.FROM_HTML_MODE_COMPACT)
-            mBinding?.txtAdvPayRecvd?.text = Html.fromHtml("<font color=#A9A9A9>Advance payment received<br>(Previously as per PI)</font> <font color=#FF0000> *</font>", Html.FROM_HTML_MODE_COMPACT)
+            mBinding?.txtQty?.text = Html.fromHtml(strQty, Html.FROM_HTML_MODE_COMPACT)
+            mBinding?.txtRatePerUnit?.text = Html.fromHtml(strRpu, Html.FROM_HTML_MODE_COMPACT)
+            mBinding?.txtPrevTotAmt?.text = Html.fromHtml(strPrevtotAmt, Html.FROM_HTML_MODE_COMPACT)
+            mBinding?.txtAdvPayRecvd?.text = Html.fromHtml(strAdvPayRcvd, Html.FROM_HTML_MODE_COMPACT)
             mBinding?.txtSgst?.text = Html.fromHtml("<font color=#A9A9A9>SGST @</font> <font color=#FF0000> *</font>", Html.FROM_HTML_MODE_COMPACT)
             mBinding?.txtCgst?.text = Html.fromHtml("<font color=#A9A9A9>CGST @</font> <font color=#FF0000> *</font>", Html.FROM_HTML_MODE_COMPACT)
         } else {
-            mBinding?.txtQty?.text = Html.fromHtml("<font color=#A9A9A9>Quantity</font> <font color=#FF0000> *</font>")
-            mBinding?.txtRatePerUnit?.text = Html.fromHtml("<font color=#A9A9A9>Rate per unit</font> <font color=#FF0000> *</font>")
-            mBinding?.txtPrevTotAmt?.text = Html.fromHtml("<font color=#A9A9A9>Previous Total amount<br>(as per PI)</font> <font color=#FF0000> *</font>")
-            mBinding?.txtAdvPayRecvd?.text = Html.fromHtml("<font color=#A9A9A9>Advance payment received<br>(Previously as per PI)</font> <font color=#FF0000> *</font>")
+            mBinding?.txtQty?.text = Html.fromHtml(strQty)
+            mBinding?.txtRatePerUnit?.text = Html.fromHtml(strRpu)
+            mBinding?.txtPrevTotAmt?.text = Html.fromHtml(strPrevtotAmt)
+            mBinding?.txtAdvPayRecvd?.text = Html.fromHtml(strAdvPayRcvd)
             mBinding?.txtSgst?.text = Html.fromHtml("<font color=#A9A9A9>SGST @</font> <font color=#FF0000> *</font>")
             mBinding?.txtCgst?.text = Html.fromHtml("<font color=#A9A9A9>CGST @</font> <font color=#FF0000> *</font>")
         }
@@ -339,10 +343,10 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
             mBinding?.productName?.text = orderDetails?.productName
         }else{
             //TODO : set text as prod cat / werft / warn / extraweft
-            var weaveList = Utility?.getWeaveType()
-            var catList = Utility?.getProductCategory()
+            var weaveList = Utility.getWeaveType()
+            var catList = Utility.getProductCategory()
 
-            weaveList?.forEach {
+            weaveList.forEach {
                 if(it.first == orderDetails?.weftYarnId){
                     weft = it.second
                 }
@@ -353,7 +357,7 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
                     extraweft = it.second
                 }
             }
-            catList?.forEach {
+            catList.forEach {
                 if(it.first == orderDetails?.productCategoryId){
                     prodCategory = it.second
                 }
@@ -383,9 +387,9 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
     fun setEnquiryStage(){
         //enquiry stage with color
         var enquiryStage : String ?= ""
-        var stagList = Utility?.getEnquiryStagesData()
+        var stagList = Utility.getEnquiryStagesData()
         Log.e("enqDataStages", "List : $stagList")
-        stagList?.forEach {
+        stagList.forEach {
             if(it.first == orderDetails?.enquiryStageId){
                 enquiryStage = it.second
             }
@@ -395,7 +399,7 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
                 this?.let {
                     ContextCompat.getColor(
                         it, R.color.black_text)
-                }?.let { mBinding?.orderStatusText?.setTextColor(it) }
+                }.let { mBinding?.orderStatusText?.setTextColor(it) }
 
             }
 
@@ -403,14 +407,14 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
                 this?.let {
                     ContextCompat.getColor(
                         it, R.color.tab_details_selected_text)
-                }?.let { mBinding?.orderStatusText?.setTextColor(it) }
+                }.let { mBinding?.orderStatusText?.setTextColor(it) }
             }
 
             6L,7L,8L,9L,10L -> {
                 this?.let {
                     ContextCompat.getColor(
                         it, R.color.dark_green)
-                }?.let { mBinding?.orderStatusText?.setTextColor(it) }
+                }.let { mBinding?.orderStatusText?.setTextColor(it) }
 
             }
         }
@@ -433,15 +437,15 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
 
         setFormFieldsVisibility()
 
-        var quantity = details?.pi?.quantity
-        var prevTotAmt = details?.pi?.totalAmount
-        var ppu = details?.pi?.ppu
-        var cgst = details?.pi?.cgst
-        var sgst = details?.pi?.sgst
-        var finAmt = details?.pi?.totalAmount
+        var quantity = details.pi.quantity
+        var prevTotAmt = details.pi.totalAmount
+        var ppu = details.pi.ppu
+        var cgst = details.pi.cgst
+        var sgst = details.pi.sgst
+        var finAmt = details.pi.totalAmount
 
         if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
-            var advPayRec = details?.payment?.paidAmount
+            var advPayRec = details.payment.paidAmount
             mBinding?.etAdvPay?.setText(advPayRec.toString(), TextView.BufferType.EDITABLE)
             var amtToPay = finAmt.minus(advPayRec)
             mBinding?.etAmtToPay?.setText(amtToPay.toString(), TextView.BufferType.EDITABLE)
@@ -455,14 +459,14 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
         mBinding?.etSgst?.setText(sgst.toString(), TextView.BufferType.EDITABLE)
         mBinding?.etFinalAmt?.setText(finAmt.toString(), TextView.BufferType.EDITABLE)
 
-        rrIsActive = details?.invoice?.isactive
+        rrIsActive = details.invoice.isactive
 //        rrModifiedon = DateeFormat(date = getDate(details?.invoice?.modifiedon.toLong())?.toLong())
 //        rrCreatedon = DateeFormat(date = getDate(details?.invoice?.createdon.toLong())?.toLong())
-        rrPiAmt = details?.pi?.totalAmount
-        rrInvoiceNo = details?.invoice?.invoiceNo
-        rrId = details?.invoice?.id
-        rrHSN = details?.pi?.hsn
-        rrArtisanId = details?.pi?.artisanId
+        rrPiAmt = details.pi.totalAmount
+        rrInvoiceNo = details.invoice.invoiceNo
+        rrId = details.invoice.id
+        rrHSN = details.pi.hsn
+        rrArtisanId = details.pi.artisanId
 
     }
 
