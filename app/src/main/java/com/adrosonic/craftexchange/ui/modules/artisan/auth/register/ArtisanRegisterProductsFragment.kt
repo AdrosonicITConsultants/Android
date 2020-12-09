@@ -85,6 +85,7 @@ class ArtisanRegisterProductsFragment : Fragment() {
         productArray.add("Fabric")
         productArray.add("Home Accessories")
         productArray.add("Fashion Accessories")
+        productArray.add("Mekhla Chadar")
         mBinding?.listProducts?.setItems(productArray)
         return mBinding?.root
     }
@@ -209,9 +210,10 @@ class ArtisanRegisterProductsFragment : Fragment() {
             }
         }
         mBinding?.textViewHelp?.setOnClickListener {
-            val intent = Intent(context, PdfViewerActivity::class.java)
-            intent.putExtra("ViewType", "HELP")
-            startActivity(intent)
+//            val intent = Intent(context, PdfViewerActivity::class.java)
+//            intent.putExtra("ViewType", "HELP")
+//            startActivity(intent)
+            Utility.supportDialog(requireContext())
         }
         mBinding?.textTnct?.setOnClickListener {
             val intent = Intent(context, PdfViewerActivity::class.java)

@@ -42,6 +42,8 @@ import com.adrosonic.craftexchange.ui.modules.buyer.ownDesign.ownDesignIntent
 import com.adrosonic.craftexchange.ui.modules.buyer.productDetails.catalogueProductDetailsIntent
 import com.adrosonic.craftexchange.ui.modules.chat.chatLogDetailsIntent
 import com.adrosonic.craftexchange.ui.modules.enquiry.ArtEnqDetailsFragment
+import com.adrosonic.craftexchange.ui.modules.order.orderDetails
+import com.adrosonic.craftexchange.ui.modules.order.viewOrderDetails
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
@@ -225,7 +227,18 @@ EnquiryViewModel.FetchEnquiryInterface,
         mBinding?.viewPi?.setOnClickListener {
             enqID?.let {  startActivity(requireContext().raisePiContext(it,true, SendPiRequest(),false)) }
         }
-
+        mBinding?.viewEnqLayer?.setOnClickListener {
+            enqID?.let {
+//                val intent = Intent(context?.orderDetails())
+//                var bundle = Bundle()
+                Prefs.putString(ConstantsDirectory.ENQUIRY_ID, it.toString()) //TODO change later
+//                bundle.putString(ConstantsDirectory.ENQUIRY_ID, it.toString())
+//                bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG, "2")
+//                intent.putExtras(bundle)
+//                context?.startActivity(intent)
+                startActivity(Intent(requireContext()?.viewOrderDetails( requireContext(),it.toString(),"2")))
+            }
+        }
     }
 
     fun showDialog(enquiryId : Long){
@@ -518,8 +531,13 @@ EnquiryViewModel.FetchEnquiryInterface,
                         }
                     }
                 }
-//                if(enquiryDetails?.enquiryStageID!!>=2)mBinding?.btnChat?.visibility=View.VISIBLE
-//                else mBinding?.btnChat?.visibility=View.GONE
+                if(enquiryDetails?.productType == "Custom Product" || enquiryDetails?.productStatusID == AvailableStatus.MADE_TO_ORDER.getId()){
+                    if(enquiryDetails?.enquiryStageID!!>=4L) mBinding?.viewEnqLayer?.visibility=View.VISIBLE
+                    else mBinding?.viewEnqLayer?.visibility=View.GONE
+                }else{
+                    if(enquiryDetails?.enquiryStageID!!>=3L) mBinding?.viewEnqLayer?.visibility=View.VISIBLE
+                    else mBinding?.viewEnqLayer?.visibility=View.GONE
+                }
             })
         }catch (e:Exception){
             Log.e("EnquiryDetailsTryCatch","Details : "+e.printStackTrace())

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/artisan_enquiry_ongoing"
@@ -30,9 +30,9 @@
 
         <RelativeLayout
             android:id="@+id/empty_view"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -40,20 +40,29 @@
             app:layout_constraintTop_toBottomOf="@+id/text_recent"
             app:layout_constraintVertical_bias="1.0">
 
-            <ImageView
+            <TextView
                 android:id="@+id/empty_enq_list"
-                android:layout_centerInParent="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/zero_ong_enq_back"/>
+                android:layout_centerInParent="true"
+                android:text="@string/no_ongoing_enquiries_present"
+                android:textColor="@color/red_logo"
+                android:fontFamily="@font/lato_regular"
+                android:textSize="@dimen/product_title_text" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/zero_ong_enq_back"
+                android:visibility="gone" />
 
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/empty_view_orders"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -61,14 +70,23 @@
             app:layout_constraintTop_toBottomOf="@+id/text_recent"
             app:layout_constraintVertical_bias="1.0">
 
-            <ImageView
-                android:id="@+id/empty_order_list"
+            <TextView
                 android:layout_centerInParent="true"
+                android:id="@+id/empty_order_list"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/empty_ongoing_orders"/>
+                android:fontFamily="@font/lato_regular"
+                android:text="@string/no_ongoing_orders_present"
+                android:textColor="@color/red_logo"
+                android:textSize="@dimen/product_title_text" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/empty_ongoing_orders"
+                android:visibility="gone" />
 
         </RelativeLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

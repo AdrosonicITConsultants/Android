@@ -3,9 +3,11 @@ package com.adrosonic.craftexchange.ui.modules.artisan.enquiry
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Html
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -34,6 +36,9 @@ import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
 import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.advPay.enquiryPayment
 import com.adrosonic.craftexchange.ui.modules.chat.chatLogDetailsIntent
 import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
+import com.adrosonic.craftexchange.ui.modules.enquiry.viewEnqDetails
+import com.adrosonic.craftexchange.ui.modules.order.orderDetails
+import com.adrosonic.craftexchange.ui.modules.order.viewOrderDetails
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
@@ -41,6 +46,7 @@ import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
 import com.agik.swipe_button.Controller.OnSwipeCompleteListener
 import com.agik.swipe_button.View.Swipe_Button_View
+import com.pixplicity.easyprefs.library.Prefs
 
 
 private const val ARG_PARAM1 = "param1"
@@ -105,9 +111,9 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Utility.getDeliveryTimeList()?.let {moqDeliveryTimeList.addAll(it)  }
-        mEnqVM?.moqListener=this
-        mEnqVM?.fetchEnqListener = this
-        mEnqVM?.changeEnqListener = this
+        mEnqVM.moqListener =this
+        mEnqVM.fetchEnqListener = this
+        mEnqVM.changeEnqListener = this
 
         mBinding?.swipeEnquiryDetails?.isEnabled = false
         if(Utility.checkIfInternetConnected(requireActivity())){
@@ -206,7 +212,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
                         if (Utility.checkIfInternetConnected(requireContext())) {
                             mBinding?.txtBidMoq?.setText(getString(R.string.sending_moq))
                             viewLoader()
-                            mEnqVM?.sendMoq(it, additionalInfo, estId, moq.toLong(), ppu)
+                            mEnqVM.sendMoq(it, additionalInfo, estId, moq.toLong(), ppu)
                         }else {
                             MoqsPredicates.insertMoqForOffline(it, additionalInfo, estId, moq.toLong(), ppu)
                             setDetails()
@@ -247,7 +253,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         mBinding?.btnStartEnqStage?.setOnClickListener {
             if(Utility.checkIfInternetConnected(requireActivity())){
                 dialog?.show()
-                enquiryDetails?.enquiryID?.let { it1 -> mEnqVM?.setEnquiryStage(it1,EnquiryStages.PRODUCTION_COMPLETED.getId(),InnerEnquiryStages.YARN_PROCURED.getId()) }
+                enquiryDetails?.enquiryID?.let { it1 -> mEnqVM.setEnquiryStage(it1,EnquiryStages.PRODUCTION_COMPLETED.getId(),InnerEnquiryStages.YARN_PROCURED.getId()) }
             }else{
                 Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
             }
@@ -258,7 +264,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
                 dialog?.show()
                 enquiryDetails?.enquiryID?.let { it1 ->
                     enquiryDetails?.innerEnquiryStageID?.let { it2 ->
-                        mEnqVM?.setEnquiryStage(it1,EnquiryStages.PRODUCTION_COMPLETED.getId(),
+                        mEnqVM.setEnquiryStage(it1,EnquiryStages.PRODUCTION_COMPLETED.getId(),
                             it2
                         )
                     }
@@ -273,10 +279,10 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
                 dialog?.show()
                 when(enquiryDetails?.innerEnquiryStageID){
                     InnerEnquiryStages.POST_LOOM_PROCESS.getId() -> {
-                        enquiryDetails?.enquiryID?.let { it1 -> mEnqVM?.setCompleteOrderStage(it1,EnquiryStages.COMPLETION_OF_ORDER.getId()) }
+                        enquiryDetails?.enquiryID?.let { it1 -> mEnqVM.setCompleteOrderStage(it1,EnquiryStages.COMPLETION_OF_ORDER.getId()) }
                     }
                     else -> {
-                        enquiryDetails?.enquiryID?.let { it1 -> mEnqVM?.setEnquiryStage(it1,EnquiryStages.PRODUCTION_COMPLETED.getId(),enquiryDetails?.innerEnquiryStageID?.plus(1)) }
+                        enquiryDetails?.enquiryID?.let { it1 -> mEnqVM.setEnquiryStage(it1,EnquiryStages.PRODUCTION_COMPLETED.getId(),enquiryDetails?.innerEnquiryStageID?.plus(1)) }
                     }
                 }
             }else{
@@ -285,12 +291,33 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         }
         mBinding?.btnChat?.setOnClickListener {
             enqID?.let {
-                startActivity(Intent(requireContext()?.chatLogDetailsIntent(it)))
+                startActivity(Intent(requireContext().chatLogDetailsIntent(it)))
+            }
+        }
+        mBinding?.viewEnqLayer?.setOnClickListener {
+            enqID?.let {
+//                val intent = Intent(context?.orderDetails())
+//                var bundle = Bundle()
+                Prefs.putString(ConstantsDirectory.ENQUIRY_ID, it.toString()) //TODO change later
+//                bundle.putString(ConstantsDirectory.ENQUIRY_ID, it.toString())
+//                bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG, "2")
+//                intent.putExtras(bundle)
+//                context?.startActivity(intent)
+                startActivity(Intent(requireContext().viewOrderDetails( requireContext(),it.toString(),"2")))
             }
         }
     }
 
     fun setDetails(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            mBinding?.txtMinQty?.text = Html.fromHtml("<font color=#A9A9A9>Minimum Quantity</font> <font color=#FF0000> *</font>", Html.FROM_HTML_MODE_COMPACT)
+            mBinding?.txtPpu?.text = Html.fromHtml("<font color=#A9A9A9>Price per unit</font> <font color=#FF0000> *</font>", Html.FROM_HTML_MODE_COMPACT)
+            mBinding?.txtDelEta?.text = Html.fromHtml("<font color=#A9A9A9>Estimated Days</font> <font color=#FF0000> *</font>", Html.FROM_HTML_MODE_COMPACT)
+        } else {
+            mBinding?.txtMinQty?.text = Html.fromHtml("<font color=#A9A9A9>Minimum Quantity</font> <font color=#FF0000> *</font>")
+            mBinding?.txtPpu?.text = Html.fromHtml("<font color=#A9A9A9>Price per unit</font> <font color=#FF0000> *</font>")
+            mBinding?.txtDelEta?.text = Html.fromHtml("<font color=#A9A9A9>Estimated Days</font> <font color=#FF0000> *</font>")
+        }
 
         setTabVisibilities()
         //stage wise button visiblities
@@ -349,10 +376,10 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         }
         else{
             //TODO : set text as prod cat / werft / warn / extraweft
-            var weaveList = Utility?.getWeaveType()
-            var catList = Utility?.getProductCategory()
+            var weaveList = Utility.getWeaveType()
+            var catList = Utility.getProductCategory()
 
-            weaveList?.forEach {
+            weaveList.forEach {
                 if(it.first == enquiryDetails?.weftYarnID){
                     weft = it.second
                 }
@@ -363,7 +390,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
                     extraweft = it.second
                 }
             }
-            catList?.forEach {
+            catList.forEach {
                 if(it.first == enquiryDetails?.productCategoryID){
                     prodCategory = it.second
                 }
@@ -385,9 +412,9 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
 
         //enquiry stage with color
         var enquiryStage : String ?= ""
-        var stagList = Utility?.getEnquiryStagesData()
+        var stagList = Utility.getEnquiryStagesData()
         Log.e("enqDataStages", "List : $stagList")
-        stagList?.forEach {
+        stagList.forEach {
             if(it.first == enquiryDetails?.enquiryStageID){
                 enquiryStage = it.second
             }
@@ -466,17 +493,17 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         }
         arrayDeliveryDscrp.clear()
         arrayDeliveryDscrp.add("Select")
-        moqDeliveryTimeList?.forEach { arrayDeliveryDscrp.add(it.deliveryDesc) }
+        moqDeliveryTimeList.forEach { arrayDeliveryDscrp.add(it.deliveryDesc) }
         val spEstDaysAdapter =ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item,arrayDeliveryDscrp)
         spEstDaysAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         mBinding?.spEstDays?.adapter = spEstDaysAdapter
 
         val moq=MoqsPredicates.getSingleMoq(enqID)
         if(moq!=null){
-            mBinding?.etMoq?.setText("${moq?.moq?:""}", TextView.BufferType.EDITABLE)
-            mBinding?.etPrice?.setText("${moq?.ppu?:""}", TextView.BufferType.EDITABLE)
-            mBinding?.etAddNote?.setText("${moq?.additionalInfo?:""}", TextView.BufferType.EDITABLE)
-            mBinding?.spEstDays?.setSelection((moq?.deliveryTimeId?:0).toInt())
+            mBinding?.etMoq?.setText("${moq.moq ?:""}", TextView.BufferType.EDITABLE)
+            mBinding?.etPrice?.setText("${moq.ppu ?:""}", TextView.BufferType.EDITABLE)
+            mBinding?.etAddNote?.setText("${moq.additionalInfo ?:""}", TextView.BufferType.EDITABLE)
+            mBinding?.spEstDays?.setSelection((moq.deliveryTimeId ?:0).toInt())
             mBinding?.txtFillDetails?.text=getString(R.string.moq_detaila)
             mBinding?.txtBidMoq?.visibility=View.GONE
             mBinding?.etMoq?.isEnabled=false
@@ -494,7 +521,16 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
         }
 
         if(enquiryDetails?.enquiryStageID!!>=2)mBinding?.btnChat?.visibility=View.VISIBLE
+
         else mBinding?.btnChat?.visibility=View.GONE
+
+        if(enquiryDetails?.productType == "Custom Product" || enquiryDetails?.productStatusID == AvailableStatus.MADE_TO_ORDER.getId()){
+            if(enquiryDetails?.enquiryStageID!!>=4L) mBinding?.viewEnqLayer?.visibility=View.VISIBLE
+            else mBinding?.viewEnqLayer?.visibility=View.GONE
+        }else{
+            if(enquiryDetails?.enquiryStageID!!>=3L) mBinding?.viewEnqLayer?.visibility=View.VISIBLE
+            else mBinding?.viewEnqLayer?.visibility=View.GONE
+        }
     }
 
     private fun setProgressTimeline(){

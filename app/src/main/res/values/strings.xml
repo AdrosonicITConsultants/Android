@@ -109,7 +109,7 @@
     <string name="browse_text">Browse the latest collection of</string>
     <string name="choose_from">Choose from</string>
     <string name="unique_in_mind">Have something unique in mind?</string>
-    <string name="customize_your_design">Customise your own design</string>
+    <string name="customize_your_design">Share your design</string>
     <string name="skip">Skip</string>
 
     <string name="message_operation_not_supported_offline">Operation not supported in offline</string>
@@ -119,7 +119,7 @@
     <string name="profile_update_success">Profile updated successfully!</string>
     <string name="artisan_self_design">Artisan self\ndesign</string>
     <string name="explore">Explore</string>
-    <string name="antaran_design_collec">Antaran co-design\ncollection</string>
+    <string name="antaran_design_collec">Antaran co-design\n</string>
     <string name="user">User</string>
     <string name="edit_profile">Edit profile</string>
     <string name="artisan_rating_text">Avg. rating by artisans</string>
@@ -171,11 +171,11 @@
     <string name="phonepe_field">PhonePe UPI Id</string>
     <string name="remove_photo">Remove Photo</string>
     <string name="change_profile_text">Change Profile Photo</string>
-    <string name="artisan_self_design_collection">Artisan Self Design Collection</string>
+    <string name="artisan_self_design_collection">Artisan Self Design</string>
     <string name="regions">Regions</string>
     <string name="categories">Categories</string>
     <string name="artisan_brands">Artisan Brands</string>
-    <string name="antaran_co_design_collection">Antaran Co Design Collection</string>
+    <string name="antaran_co_design_collection">Antaran Co Design</string>
     <string name="view_more">View More</string>
     <string name="generate_enquiry">Generate Enquiry</string>
     <string name="available_in_stock">Avalaible in stock</string>
@@ -240,6 +240,7 @@
     <string name="enquiry_id">Enquiry Id\t</string>
     <string name="refer_to_ongoing_enquiries">Please refer \"Ongoing Enquiry\" tab\nto track your enquiry.</string>
     <string name="view_enquiry">View Enquiry</string>
+    <string name="view_order">View Order</string>
 
     <string name="title_activity_buyer_add_own_product_design">BuyerAddOwnProductDesign</string>
     <!-- Strings used for fragments for navigation -->
@@ -272,7 +273,7 @@
     <string name="close_enquiry">Close Enquiry</string>
     <string name="status">Status</string>
     <string name="specialist_in">Specialist in</string>
-    <string name="view_pi">View\npro forma\ninvoice</string>
+    <string name="view_pi">View pro forma\ninvoice</string>
     <string name="upload_trans_receipt">Select amount &amp; upload receipt</string>
     <string name="previous">Previous</string>
     <string name="current">Current</string>
@@ -601,4 +602,9 @@
     <string name="reg_as_buyer_fb">Please first register your facebook ID as Buyer</string>
     <string name="reg_fb_artisan">Please first register your facebook ID as Artisan</string>
     <string name="invalid_userid">User does not exist</string>
+    <string name="previouse_total_amount">Previouse total amount</string>
+    <string name="no_ongoing_orders_present">No ongoing orders present</string>
+    <string name="no_ongoing_enquiries_present">No ongoing enquiries present</string>
+    <string name="no_completed_enquiries_present">No completed enquiries present</string>
+    <string name="you_have_accepted">You have accepted the MOQ. For further discussion and negotiation use Chat box option in the app.</string>
 </resources>

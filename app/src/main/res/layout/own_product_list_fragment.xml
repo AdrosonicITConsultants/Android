@@ -92,7 +92,7 @@
                 android:layout_marginTop="48dp"
                 android:fontFamily="@font/lato_regular"
                 android:paddingStart="@dimen/margin_regular"
-                android:text="@string/customize_your_design"
+                android:text="Customised your design"
                 android:textSize="15sp" />
 
             <TextView

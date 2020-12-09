@@ -9,12 +9,24 @@ import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityEnquiryDetailsBinding
 import com.adrosonic.craftexchange.enums.EnquiryStatus
 import com.adrosonic.craftexchange.enums.getId
+import com.adrosonic.craftexchange.ui.modules.artisan.landing.ArtisanLandingActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.pixplicity.easyprefs.library.Prefs
 
 fun Context.orderDetails(): Intent {
     return Intent(this, OrderDetailsActivity::class.java).apply {}
 }
+
+fun Context.viewOrderDetails(context: Context,enqId:String, statusFlag : String): Intent {
+    return Intent(context, OrderDetailsActivity::class.java).apply {
+        var bundle = Bundle()
+        bundle.putString(ConstantsDirectory.ENQUIRY_ID, enqId)
+        bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG, statusFlag)
+        putExtras(bundle)
+        flags =Intent.FLAG_ACTIVITY_SINGLE_TOP
+    }
+}
+
 class OrderDetailsActivity : LocaleBaseActivity() {
 
     private var mBinding: ActivityEnquiryDetailsBinding? = null

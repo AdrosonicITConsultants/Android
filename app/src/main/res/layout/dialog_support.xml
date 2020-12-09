@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:fontFamily="@font/playfair_regular"
-        android:text="@string/for_any_query_reach_us"
+        android:text="For any support please write to us at"
         android:textColor="@color/black_text"
         android:textSize="@dimen/edit_text"
         android:textAlignment="center"/>

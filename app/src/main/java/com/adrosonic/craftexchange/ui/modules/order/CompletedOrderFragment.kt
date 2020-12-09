@@ -73,7 +73,6 @@ class CompletedOrderFragment : Fragment(),
             mOrderVm.ratingQuestions()
             mBinding?.swipeCompletedEnquiries?.isRefreshing = true
         }
-
         mOrderVm.getCompOrderListMutableData() .observe(viewLifecycleOwner, Observer<RealmResults<Orders>> {
                 mOrderList = it
                 mOrderListAdapter?.updateProductList(mOrderList)
@@ -97,12 +96,19 @@ class CompletedOrderFragment : Fragment(),
     }
 
     fun setVisiblities() {
-        if (mOrderVm.getCompOrderListMutableData().value?.size!! > 0) {
-            mBinding?.completedEnqRecyclerList?.visibility = View.VISIBLE
-            mBinding?.emptyView?.visibility = View.GONE
-        } else {
+        try {
+            if (mOrderVm.getCompOrderListMutableData().value?.size!! > 0) {
+                mBinding?.completedEnqRecyclerList?.visibility = View.VISIBLE
+                mBinding?.emptyView?.visibility = View.GONE
+            } else {
+                mBinding?.completedEnqRecyclerList?.visibility = View.GONE
+                mBinding?.emptyView?.visibility = View.VISIBLE
+                mBinding?.emptyEnqList?.setText("No completed orders present")
+            }
+        } catch (e: Exception) {
             mBinding?.completedEnqRecyclerList?.visibility = View.GONE
             mBinding?.emptyView?.visibility = View.VISIBLE
+            mBinding?.emptyEnqList?.setText("No completed orders present")
         }
     }
 

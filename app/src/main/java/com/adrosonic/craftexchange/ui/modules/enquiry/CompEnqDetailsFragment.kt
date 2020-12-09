@@ -1,5 +1,6 @@
 package com.adrosonic.craftexchange.ui.modules.enquiry
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -26,6 +27,8 @@ import com.adrosonic.craftexchange.repository.data.request.pi.SendPiRequest
 import com.adrosonic.craftexchange.repository.data.response.moq.Datum
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
 import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.advPay.enquiryPayment
+import com.adrosonic.craftexchange.ui.modules.order.orderDetails
+import com.adrosonic.craftexchange.ui.modules.order.viewOrderDetails
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
@@ -192,7 +195,18 @@ class CompEnqDetailsFragment : Fragment(),
                 ?.putExtra(ConstantsDirectory.PI_ID,0))
 
         }
-
+        mBinding?.viewEnqLayer?.setOnClickListener {
+            enqID?.let {
+//                val intent = Intent(context?.orderDetails())
+//                var bundle = Bundle()
+                Prefs.putString(ConstantsDirectory.ENQUIRY_ID, it.toString()) //TODO change later
+//                bundle.putString(ConstantsDirectory.ENQUIRY_ID, it.toString())
+//                bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG, "1")
+//                intent.putExtras(bundle)
+//                context?.startActivity(intent)
+                startActivity(Intent(requireContext()?.viewOrderDetails( requireContext(),it.toString(),"2")))
+            }
+        }
     }
 
     fun setDetails(){
@@ -390,12 +404,18 @@ class CompEnqDetailsFragment : Fragment(),
             mBinding?.moqDetails?.visibility=View.GONE
             mBinding?.imgDownArr?.visibility=View.GONE
             mBinding?.orderTime?.text=getString(R.string.no_moqs)
-
         }
         if(enquiryDetails?.isPiSend!!.equals(1L)){
             mBinding?.viewPiLayout?.visibility=View.VISIBLE
         }else  mBinding?.viewPiLayout?.visibility=View.GONE
 
+        if(enquiryDetails?.productType == "Custom Product" || enquiryDetails?.productStatusID == AvailableStatus.MADE_TO_ORDER.getId()){
+            if(enquiryDetails?.enquiryStageID!!>=4L) mBinding?.viewEnqLayer?.visibility=View.VISIBLE
+            else mBinding?.viewEnqLayer?.visibility=View.GONE
+        }else{
+            if(enquiryDetails?.enquiryStageID!!>=3L) mBinding?.viewEnqLayer?.visibility=View.VISIBLE
+            else mBinding?.viewEnqLayer?.visibility=View.GONE
+        }
     }
 
     fun viewLoader(){

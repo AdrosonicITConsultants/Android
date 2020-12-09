@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -17,9 +16,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
                 android:id="@+id/product_type_details_layout"
@@ -40,22 +39,22 @@
                     android:background="?selectableItemBackgroundBorderless"
                     android:clickable="true"
                     android:focusable="true"
-                    android:src="@drawable/ic_keyboard_backspace_black_24dp"/>
+                    android:src="@drawable/ic_keyboard_backspace_black_24dp" />
 
                 <com.synnapps.carouselview.CarouselView
                     android:id="@+id/carousel_view_products"
                     android:layout_width="210dp"
                     android:layout_height="260dp"
+                    android:layout_gravity="center"
                     android:layout_marginTop="@dimen/margin_small"
+                    app:animateOnBoundary="false"
+                    app:autoPlay="false"
+                    app:disableAutoPlayOnUserInteraction="true"
                     app:fillColor="@color/carousel_dot_color"
                     app:pageColor="@color/colorSplash"
                     app:radius="3dp"
-                    app:strokeWidth="1dp"
-                    app:autoPlay="false"
-                    app:disableAutoPlayOnUserInteraction="true"
                     app:strokeColor="@color/white_text"
-                    app:animateOnBoundary="false"
-                    android:layout_gravity="center"/>
+                    app:strokeWidth="1dp" />
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -634,9 +633,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="0dp"
                             android:layout_gravity="center_vertical|start"
-                            android:gravity="start"
                             android:layout_weight="1"
                             android:fontFamily="@font/lato_regular"
+                            android:gravity="start"
                             android:text="@string/dimensions"
                             android:textAllCaps="false"
                             android:textColor="@color/black_text"
@@ -647,12 +646,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="0dp"
                             android:layout_gravity="start"
+                            android:layout_marginTop="4dp"
                             android:layout_weight="1"
                             android:fontFamily="@font/lato_regular"
                             android:text="@string/dimensions"
                             android:textAllCaps="false"
-                            android:textSize="@dimen/product_note_text"
-                            android:layout_marginTop="4dp"/>
+                            android:textSize="@dimen/product_note_text" />
 
                     </LinearLayout>
 
@@ -676,8 +675,8 @@
                             android:id="@+id/divider_dimens"
                             android:layout_width="0dp"
                             android:layout_height="1dp"
-                            android:background="@color/lighter_gray"
-                            android:layout_gravity="center"/>
+                            android:layout_gravity="center"
+                            android:background="@color/lighter_gray" />
 
                         <TextView
                             android:id="@+id/relProd_dimens_value"
@@ -694,12 +693,12 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:visibility="gone"
                     android:id="@+id/gsm_details"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_semimedium"
                     android:orientation="horizontal"
+                    android:visibility="gone"
                     android:weightSum="10">
 
                     <ImageView
@@ -763,41 +762,48 @@
                     android:layout_marginStart="@dimen/margin_regular"
                     android:layout_marginTop="@dimen/margin_regular" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <RelativeLayout
                     android:id="@+id/like_it_layer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_semimedium">
-
-                    <ImageView
-                        android:id="@+id/like_it_icon"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_likeit_icon"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"/>
+                    android:layout_marginTop="@dimen/margin_semimedium"
+                    android:padding="@dimen/margin_regular">
 
                     <TextView
                         android:id="@+id/like_it_text"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:text="@string/like_it"
-                        android:textSize="30sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="4dp"
                         android:fontFamily="@font/lato_regular"
-                        android:textStyle="bold"
-                        android:textColor="@color/white_text"
-                        android:textAllCaps="false"
                         android:gravity="center"
-                        android:elevation="2dp"
-                        app:layout_constraintTop_toTopOf="@+id/like_it_icon"
-                        app:layout_constraintBottom_toBottomOf="@+id/like_it_icon"
-                        app:layout_constraintStart_toStartOf="@+id/like_it_icon"
-                        app:layout_constraintEnd_toEndOf="@+id/like_it_icon"/>
+                        android:text="@string/like_it"
+                        android:textAllCaps="false"
+                        android:textColor="#23527c"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
+                    <Button
+                        android:id="@+id/btn_generate_enquiry"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_below="@+id/like_it_text"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/ic_like_it_web"
+                        android:drawableEnd="@drawable/ic_right_arrow_white"
+                        android:fontFamily="@font/lato_regular"
+                        android:paddingEnd="8dp"
+                        android:text="@string/generate_enquiry"
+                        android:textAlignment="center"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white_text"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/like_it_text"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/like_it_text"
+                        app:layout_constraintTop_toTopOf="parent" />" />
+                </RelativeLayout>
 
 
                 <TextView
@@ -815,34 +821,35 @@
                     android:id="@+id/more_product_images"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
+                    android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/margin_regular"
-                    android:layout_marginBottom="120dp"
+                    android:layout_marginBottom="10dp"
                     android:orientation="horizontal"
                     android:paddingStart="@dimen/margin_regular"
-                    android:paddingEnd="@dimen/margin_regular"
-                    android:layout_gravity="center_horizontal"/>
+                    android:paddingEnd="@dimen/margin_regular" />
 
             </LinearLayout>
 
         </ScrollView>
 
         <Button
-            android:id="@+id/btn_generate_enquiry"
+            android:id="@+id/btn_generate_enquiry1"
             android:layout_width="250dp"
             android:layout_height="50dp"
-            android:textSize="20sp"
-            android:text="@string/generate_enquiry"
-            android:textColor="@color/white_text"
-            android:textAllCaps="false"
-            android:fontFamily="@font/lato_regular"
-            android:textAlignment="center"
-            android:drawableEnd="@drawable/ic_right_arrow_white"
-            android:paddingEnd="8dp"
-            android:background="@color/black_text"
-            android:elevation="8dp"
             android:layout_marginBottom="@dimen/margin_semimedium"
+            android:background="@color/black_text"
+            android:drawableEnd="@drawable/ic_right_arrow_white"
+            android:elevation="8dp"
+            android:fontFamily="@font/lato_regular"
+            android:paddingEnd="8dp"
+            android:text="@string/generate_enquiry"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/white_text"
+            android:textSize="20sp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

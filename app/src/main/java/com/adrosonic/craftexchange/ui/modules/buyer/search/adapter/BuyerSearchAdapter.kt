@@ -13,14 +13,10 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
-import com.adrosonic.craftexchange.database.entities.realmEntities.ClusterList
-import com.adrosonic.craftexchange.database.predicates.SearchPredicates
 import com.adrosonic.craftexchange.database.predicates.WishlistPredicates
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.singleProduct.SingleProductDetails
-import com.adrosonic.craftexchange.repository.data.response.search.SearchProdData
 import com.adrosonic.craftexchange.repository.data.response.search.SearchProductData
-import com.adrosonic.craftexchange.syncManager.SyncCoordinator
 import com.adrosonic.craftexchange.ui.modules.buyer.productDetails.catalogueProductDetailsIntent
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
@@ -28,7 +24,6 @@ import com.adrosonic.craftexchange.utils.Utility
 import com.like.LikeButton
 import com.like.OnLikeListener
 import com.pixplicity.easyprefs.library.Prefs
-import io.realm.RealmResults
 import retrofit2.Call
 import retrofit2.Response
 import javax.security.auth.callback.Callback

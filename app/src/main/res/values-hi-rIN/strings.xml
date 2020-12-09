@@ -107,7 +107,7 @@
     <string name="browse_text">नवीनतम संग्रह को ब्राउज़ करें</string>
     <string name="choose_from">से चुनें</string>
     <string name="unique_in_mind">मन में कुछ अनोखा है?</string>
-    <string name="customize_your_design">अपने खुद के डिजाइन को अनुकूलित करें</string>
+    <string name="customize_your_design">अपने डिजाइन साझा करेंं</string>
     <string name="skip">मुख पृष्ठ पर छोड़ें</string>
 
     <string name="message_operation_not_supported_offline">ऑपरेशन ऑफ़लाइन में समर्थित नहीं है</string>
@@ -175,7 +175,7 @@
     <string name="phonepe_field">फोनपे यूपीआई आईडी</string>
     <string name="remove_photo">फोटो निकाल दे</string>
     <string name="change_profile_text">प्रोफाइल फोटो बदलें</string>
-    <string name="artisan_self_design_collection">कारीगर स्वयं डिजाइन संग्रह</string>
+    <string name="artisan_self_design_collection">कारीगर स्वयं डिजाइन</string>
     <string name="regions">क्षेत्र</string>
     <string name="categories">श्रेणियाँ</string>
     <string name="artisan_brands">कारीगर ब्रांड</string>
@@ -230,6 +230,7 @@
     <string name="enquiry_generated_success">जांच उत्पन्न हुई!</string>
     <string name="refer_to_ongoing_enquiries">कृपया अपनी जांच को ट्रैक करने के लिए \"Ongoing Enquiry\" टैब देखें.</string>
     <string name="view_enquiry">जांच देखें</string>
+    <string name="view_order">आदेश देखें</string>
     <string name="make_it_amp_take_it"><![CDATA[बना लो और ले लो!]]></string>
     <string name="search_hint">खोज उत्पाद, कोड, उत्पाद प्रकार, बुनाई</string>
     <string name="empty_suggestion_text">\"saree\",\"fabric\",\"ikat\" इस कीवर्ड के लिए कोई सुझाव नहीं। खोज का प्रयास करें.</string>
@@ -567,12 +568,17 @@
     <string name="auto_escalated">Auto Escalated</string>
     <string name="select_one_issue">किसी भी 1 अंक का चयन करें</string>
     <string name="esc_updated_shortly">Escalation Status शीघ्र ही अद्यतन किया जाएगा!</string>
-    <string name="error_raise_escalation">Error while raising Escalation</string>
+    <string name="error_raise_escalation">वृद्धि करते समय त्रुटि</string>
     <string name="no_products_uploaded">कोई भी उत्पाद अपलोड नहीं हुआ!</string>
     <string name="you">आप</string>
 
     //facebook sdk
     <string name="facebook_app_id">717798432467327</string>
     <string name="fb_login_protocol_scheme">fb717798432467327</string>
+    <string name="previouse_total_amount">पिछला कुल राशि</string>
+    <string name="no_ongoing_orders_present">कोई चल रहे आदेश मौजूद नहीं हैं</string>
+    <string name="no_ongoing_enquiries_present">कोई चल रही पूछताछ मौजूद नहीं हैं</string>
+    <string name="no_completed_enquiries_present">कोई पूर्ण पूछताछ मौजूद नहीं है</string>
+    <string name="you_have_accepted">You have accepted the MOQ. For further discussion and negotiation use Chat box option in the app.</string>
 
 </resources>

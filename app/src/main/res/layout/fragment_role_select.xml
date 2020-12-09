@@ -22,29 +22,25 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textView_description"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_semimedium"
-                android:layout_marginTop="@dimen/margin_regular"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="@dimen/margin_semimedium"
                 android:fontFamily="@font/playfair_regular"
                 android:text="@string/description"
                 android:textAlignment="center"
                 android:textColor="#000"
                 android:textSize="@dimen/Ques_text"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/logo_part"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintTop_toBottomOf="@+id/logo_part" />
 
             <ImageView
                 android:id="@+id/role_artisan"
@@ -122,18 +118,19 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/role_buyer" />
+
             <TextView
                 android:id="@+id/textView_help"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_regular"
+                android:layout_marginTop="32dp"
                 android:fontFamily="@font/lato_regular"
                 android:text="@string/need_help"
                 android:textColor="@android:color/holo_blue_light"
                 android:textSize="@dimen/product_description_text"
-                app:layout_constraintBottom_toTopOf="@+id/change_language"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/buyer" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/change_language"
@@ -147,8 +144,8 @@
 
                 <TextView
                     android:id="@+id/change_language_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_height="7dp"
                     android:layout_marginStart="2dp"
                     android:gravity="center"
                     android:text="@string/change_language"
@@ -157,33 +154,33 @@
                     app:layout_constraintStart_toEndOf="@+id/language_icon"
                     app:layout_constraintTop_toTopOf="@+id/language_icon" />
 
-                <ImageView
-                    android:id="@+id/language_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/change_lang_desc"
-                    android:src="@drawable/ic_change_language"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             <TextView
+                android:id="@+id/privacy_policy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/lato_regular"
+                android:text="@string/privacy_policy"
+                android:textSize="@dimen/product_note_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/div_line"
+                app:layout_constraintTop_toTopOf="@+id/div_line" />
+
+            <TextView
                 android:id="@+id/legal_disclaimer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:fontFamily="@font/lato_regular"
                 android:text="@string/legal_disclaimer"
-                android:layout_marginEnd="8dp"
                 android:textSize="@dimen/product_note_text"
-                app:layout_constraintBottom_toBottomOf="@+id/div_line"
                 app:layout_constraintEnd_toStartOf="@+id/div_line"
-                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintHorizontal_bias="0.987"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/div_line" />
 
@@ -191,25 +188,41 @@
                 android:id="@+id/div_line"
                 android:layout_width="1dp"
                 android:layout_height="@dimen/product_description_text"
-                android:layout_marginBottom="@dimen/margin_regular"
+                android:layout_marginTop="16dp"
                 android:background="@color/darker_gray"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintHorizontal_bias="0.502"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_help" />
 
             <TextView
-                android:id="@+id/privacy_policy"
+                android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/privacy_policy"
-                android:textSize="@dimen/product_note_text"
-                android:layout_marginStart="8dp"
-                android:fontFamily="@font/lato_regular"
-                app:layout_constraintBottom_toBottomOf="@+id/div_line"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/div_line"
-                app:layout_constraintTop_toTopOf="@+id/div_line" />
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center"
+                android:padding="@dimen/expandable_layout_std_padding"
+                android:text="Any commercial activity between the buyer and the artisan is solely between the two entities. Antaran (An Initiative of Tata Trusts) does not take responsibility for any transactions whatsoever. "
+                android:textStyle="italic"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/logo_part"
+                app:layout_constraintHorizontal_bias="0.037"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/change_language"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <ImageView
+                android:id="@+id/language_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/change_lang_desc"
+                android:src="@drawable/ic_change_language"
+                android:visibility="gone"
+                tools:layout_editor_absoluteX="196dp"
+                tools:layout_editor_absoluteY="671dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

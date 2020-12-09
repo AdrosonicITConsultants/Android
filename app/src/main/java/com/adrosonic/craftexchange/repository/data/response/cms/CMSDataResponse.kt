@@ -45,6 +45,7 @@ data class Acf (
     val card_header: String? = null,
     val card_title: String? = null,
     val card_para: String? = null,
+    val card_para2: String? = null,
     val artisan_background: String? = null,
     val antaran_background: String? = null,
     val quoteMessage: String? = null,

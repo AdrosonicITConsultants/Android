@@ -3,6 +3,8 @@ package com.adrosonic.craftexchange.ui.modules.order
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
+import android.graphics.PorterDuff
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -36,9 +38,12 @@ import com.adrosonic.craftexchange.syncManager.SyncCoordinator
 import com.adrosonic.craftexchange.ui.modules.artisan.deliveryReceipt.uploadDeliveryReceiptIntent
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.piContext
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.pi.raisePiContext
+import com.adrosonic.craftexchange.ui.modules.artisan.landing.artisanLandingIntent
 import com.adrosonic.craftexchange.ui.modules.artisan.qcForm.qcFormIntent
 import com.adrosonic.craftexchange.ui.modules.chat.chatLogDetailsIntent
 import com.adrosonic.craftexchange.ui.modules.enquiry.BuyEnqDetailsFragment
+import com.adrosonic.craftexchange.ui.modules.enquiry.enquiryDetails
+import com.adrosonic.craftexchange.ui.modules.enquiry.viewEnqDetails
 import com.adrosonic.craftexchange.ui.modules.order.cr.crContext
 import com.adrosonic.craftexchange.ui.modules.order.finalPay.orderPaymentIntent
 import com.adrosonic.craftexchange.ui.modules.order.revisePi.viewPiContextPostCr
@@ -55,6 +60,7 @@ import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.OrdersViewModel
 import com.adrosonic.craftexchange.viewModels.QCViewModel
 import com.adrosonic.craftexchange.viewModels.TransactionViewModel
+import com.pixplicity.easyprefs.library.Prefs
 import kotlinx.android.synthetic.main.dialog_cr_toggle_confirm.*
 
 
@@ -350,6 +356,18 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         mBinding?.chat?.setOnClickListener {
             enqID?.let {  startActivity(Intent(requireContext()?.chatLogDetailsIntent(it)))}
         }
+        mBinding?.viewEnqLayer?.setOnClickListener {
+            enqID?.let {
+//                val intent = Intent(context?.enquiryDetails())
+//                var bundle = Bundle()
+//                Prefs.putString(ConstantsDirectory.ENQUIRY_ID, it.toString()) //TODO change later
+//                bundle.putString(ConstantsDirectory.ENQUIRY_ID, it.toString())
+//                bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG, "2")
+//                intent.flags =Intent.FLAG_ACTIVITY_SINGLE_TOP
+//                intent.putExtras(bundle)
+                startActivity(Intent(requireContext()?.viewEnqDetails( requireContext(),it.toString(),"2")))
+            }
+        }
     }
 
     fun showConfirmDialog() {
@@ -565,9 +583,17 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
             mBinding?.txtCrLayerStatus?.text=getString(R.string.cr_not_applicable)
         }
 
-        if(orderDetails?.enquiryStageId!!>5L)  mBinding?.toogleCr?.isClickable=false
-        else mBinding?.toogleCr?.isEnabled=true
-
+        if(orderDetails?.enquiryStageId!!>5L) {
+            Log.e("ToggleCr","5555555555555")
+            mBinding?.toogleCr?.isClickable=false
+            mBinding?.toogleCr?.isEnabled=false
+            mBinding?.toogleCr?.isChecked=false
+            mBinding?.toogleCr?.text="Change request"
+         }
+        else{
+            Log.e("ToggleCr","6666666666666666")
+            mBinding?.toogleCr?.isEnabled=true
+        }
         } catch (e: Exception) {
             Log.e("setDetails", "Exception " + e.message)
         }
@@ -753,19 +779,34 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
 
     private  fun setToggleVisiblity(){
         if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
+            Log.e("ToggleCr","111111111111111111")
             mBinding?.toogleCr?.visibility=View.VISIBLE
             if(orderDetails?.changeRequestOn!!>0 && orderDetails?.actionMarkCr!!<1L){
+                Log.e("ToggleCr","22222222222")
                 mBinding?.toogleCr?.isEnabled=true
                 mBinding?.toogleCr?.isChecked=true
                 mBinding?.toogleCr?.text=getString(R.string.cr_enabled)
+                if(orderDetails?.enquiryStageId!!>5L) {
+                    Log.e("ToggleCr","3333333")
+                    mBinding?.toogleCr?.isClickable=false
+                    mBinding?.toogleCr?.isEnabled=false
+                    mBinding?.toogleCr?.isChecked=false
+                    mBinding?.toogleCr?.text="Change request"
+                    mBinding?.toogleCr?.setTextColor(requireContext().getColor(R.color.darker_gray))
+                }
             }
             else{
+                Log.e("ToggleCr","3333333333333")
                 mBinding?.toogleCr?.isEnabled=false
                 mBinding?.toogleCr?.isChecked=false
                 mBinding?.toogleCr?.text=getString(R.string.cr_disabled)
             }
         }
-        else  mBinding?.toogleCr?.visibility=View.GONE
+        else {
+            Log.e("ToggleCr","4444444444444444")
+            mBinding?.toogleCr?.visibility=View.GONE
+        }
+
     }
 
     private fun setTabVisibilities(){
@@ -967,15 +1008,6 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
                 }else{
                     Utility.displayMessage("Order Stage In Progress!",requireActivity())
                 }
-
-//                activity?.onBackPressed()
-//                val intent = Intent(context?.orderDetails())
-//                var bundle = Bundle()
-//                bundle.putString(ConstantsDirectory.ENQUIRY_ID, enqID?.toString())
-//                bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG, "2")
-//                intent.putExtras(bundle)
-//                context?.startActivity(intent)
-
             })
         } catch (e: Exception) {
             Log.e("OrderDetails", "Exception onStatusChangeSuccess " + e.message)

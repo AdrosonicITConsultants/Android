@@ -370,6 +370,50 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <LinearLayout
+                    android:id="@+id/view_enq_layer"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:background="#EDF0FF"
+                    android:orientation="horizontal"
+                    android:weightSum="10"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/middle_part">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="2"
+                        android:fontFamily="@font/lato_regular"
+                        android:gravity="center|start"
+                        android:text="@string/view_order"
+                        android:textColor="#7793FF"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="7"
+                        android:fontFamily="@font/lato_regular"
+                        android:gravity="center|end"
+                        android:textColor="#7793FF"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="?attr/selectableItemBackground"
+                        android:src="@drawable/ic_right_arrow_violet" />
+
+                </LinearLayout>
+                <LinearLayout
                     android:id="@+id/brand_details_layer"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
@@ -378,7 +422,7 @@
                     android:background="#DEF7FF"
                     android:clickable="true"
                     android:focusable="true"
-                    app:layout_constraintTop_toBottomOf="@+id/view_pi_layout"
+                    app:layout_constraintTop_toBottomOf="@+id/view_enq_layer"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent">
 

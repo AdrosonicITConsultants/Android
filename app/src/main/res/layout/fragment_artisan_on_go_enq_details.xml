@@ -526,8 +526,8 @@
 
                         <ImageView
                             android:id="@+id/pi_thumbnail"
-                            android:layout_width="60dp"
-                            android:layout_height="80dp"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
                             android:layout_marginTop="@dimen/margin_regular"
                             android:layout_marginBottom="8dp"
                             android:background="@drawable/layout_red_border"
@@ -716,7 +716,50 @@
                         app:layout_constraintTop_toBottomOf="@+id/view_pi_layout" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
+                <LinearLayout
+                    android:id="@+id/view_enq_layer"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:background="#EDF0FF"
+                    android:orientation="horizontal"
+                    android:weightSum="10"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/middle_part">
 
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="2"
+                        android:fontFamily="@font/lato_regular"
+                        android:gravity="center|start"
+                        android:text="@string/view_order"
+                        android:textColor="#7793FF"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="7"
+                        android:fontFamily="@font/lato_regular"
+                        android:gravity="center|end"
+                        android:textColor="#7793FF"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:background="?attr/selectableItemBackground"
+                        android:src="@drawable/ic_right_arrow_violet" />
+
+                </LinearLayout>
                 <LinearLayout
                     android:id="@+id/brand_details_layer"
                     android:layout_width="match_parent"
@@ -728,7 +771,7 @@
                     android:weightSum="10"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/middle_part">
+                    app:layout_constraintTop_toBottomOf="@+id/view_enq_layer">
 
                     <TextView
                         android:layout_width="0dp"
@@ -882,6 +925,7 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:id="@+id/txtMinQty"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
@@ -910,6 +954,7 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:id="@+id/txtPpu"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
@@ -938,6 +983,7 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:id="@+id/txtDelEta"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"

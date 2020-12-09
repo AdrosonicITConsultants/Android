@@ -4,8 +4,10 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
+import android.text.Html
 import android.text.TextWatcher
 import android.util.Log
 import android.view.KeyEvent
@@ -167,6 +169,16 @@ class BuyerAddOwnProductDesignActivity : LocaleBaseActivity(),
     }
 
     fun loadData(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            mBinding?.txtStep1?.text = Html.fromHtml("<font color=#000000>Step 1 : Add Photo</font> <font color=#FF0000> *</font>", Html.FROM_HTML_MODE_COMPACT)
+            mBinding?.txtStep2?.text = Html.fromHtml("<font color=#000000>Step 2 : Add general details</font> <font color=#FF0000> *</font>", Html.FROM_HTML_MODE_COMPACT)
+            mBinding?.txtStep8?.text = Html.fromHtml("<font color=#000000>Step 7 : Enter description</font> <font color=#FF0000> *</font>", Html.FROM_HTML_MODE_COMPACT)
+        } else {
+            mBinding?.txtStep1?.text = Html.fromHtml("<font color=#000000>Step 1 : Add Photo</font> <font color=#FF0000> *</font>")
+            mBinding?.txtStep2?.text = Html.fromHtml("<font color=#000000>Step 2 : Add general details</font> <font color=#FF0000> *</font>")
+            mBinding?.txtStep8?.text = Html.fromHtml("<font color=#000000>Step 7 : Enter description</font> <font color=#FF0000> *</font>")
+        }
+
         ///////////////////////Add Photo////////////////////////
         mBinding?.addPhotoRecycler?.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         prodImgListAdapter = ProdImageListAdapter(this, false,pairList)
@@ -551,10 +563,20 @@ class BuyerAddOwnProductDesignActivity : LocaleBaseActivity(),
             mBinding?.parentStep7?.visibility = View.VISIBLE
 //            child_step7.visibility = View.VISIBLE
             txt_step_8.text = "Step 8 : Enter description"
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                mBinding?.txtStep8?.text = Html.fromHtml("<font color=#000000>Step 8 : Enter description</font> <font color=#FF0000> *</font>", Html.FROM_HTML_MODE_COMPACT)
+            } else {
+                mBinding?.txtStep8?.text = Html.fromHtml("<font color=#000000>Step 8 : Enter description</font> <font color=#FF0000> *</font>")
+            }
         } else {
             mBinding?.parentStep7?.visibility = View.GONE
             mBinding?.childStep7?.visibility = View.GONE
             txt_step_8.text = "Step 7 : Enter description"
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                mBinding?.txtStep8?.text = Html.fromHtml("<font color=#000000>Step 7 : Enter description</font> <font color=#FF0000> *</font>", Html.FROM_HTML_MODE_COMPACT)
+            } else {
+                mBinding?.txtStep8?.text = Html.fromHtml("<font color=#000000>Step 7 : Enter description</font> <font color=#FF0000> *</font>")
+            }
         }
         if(arrRelatedProdType!=null) {
         if (arrRelatedProdType.size>0) {
@@ -646,16 +668,16 @@ class BuyerAddOwnProductDesignActivity : LocaleBaseActivity(),
             if(pairList.isEmpty()) Utility.displayMessage("Please add atleast 1 product image",applicationContext)
             else if(mBinding?.spProdCategory?.selectedItemPosition==0) Utility.displayMessage("Please select product category at step 2",applicationContext)
             else if(mBinding?.spProdType?.selectedItemPosition==0) Utility.displayMessage("Please select product type at step 2",applicationContext)
-            else if(weaveIdList.isEmpty()) Utility.displayMessage("Please select weave type at step 3",applicationContext)
-            else if(warpDyeId<=0) Utility.displayMessage("Please select warp details at step 4",applicationContext)
-            else if(warpYarnCount.isBlank()) Utility.displayMessage("Please select warp details at step 4",applicationContext)
-            else if(warpYarnId<=0) Utility.displayMessage("Please select warp details at step 4",applicationContext)
-            else if(weftDyeId<=0) Utility.displayMessage("Please select weft details at step 4",applicationContext)
-            else if(weftYarnCount.isBlank()) Utility.displayMessage("Please select weft details at step 4",applicationContext)
-            else if(weftYarnId<=0) Utility.displayMessage("Please select weft details at step 4",applicationContext)
-            else if(mBinding?.spReedCount?.selectedItemPosition==0) Utility.displayMessage("Please select reed count at setp 5",applicationContext)
-            else if(width.isBlank()) Utility.displayMessage("Please enter width at step 6",applicationContext)
-            else if(length.isBlank()) Utility.displayMessage("Please enter length at step 6",applicationContext)
+//            else if(weaveIdList.isEmpty()) Utility.displayMessage("Please select weave type at step 3",applicationContext)
+//            else if(warpDyeId<=0) Utility.displayMessage("Please select warp details at step 4",applicationContext)
+//            else if(warpYarnCount.isBlank()) Utility.displayMessage("Please select warp details at step 4",applicationContext)
+//            else if(warpYarnId<=0) Utility.displayMessage("Please select warp details at step 4",applicationContext)
+//            else if(weftDyeId<=0) Utility.displayMessage("Please select weft details at step 4",applicationContext)
+//            else if(weftYarnCount.isBlank()) Utility.displayMessage("Please select weft details at step 4",applicationContext)
+//            else if(weftYarnId<=0) Utility.displayMessage("Please select weft details at step 4",applicationContext)
+//            else if(mBinding?.spReedCount?.selectedItemPosition==0) Utility.displayMessage("Please select reed count at setp 5",applicationContext)
+//            else if(width.isBlank()) Utility.displayMessage("Please enter width at step 6",applicationContext)
+//            else if(length.isBlank()) Utility.displayMessage("Please enter length at step 6",applicationContext)
             //todo add step 6 validations for related items
             else if(mBinding?.etDscrp?.text!!.isBlank()) Utility.displayMessage("Please enter description",applicationContext)
             else{

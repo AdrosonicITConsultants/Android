@@ -9,10 +9,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import android.widget.TextView
+import android.widget.*
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,6 +24,7 @@ import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.ChatListViewModel
 import com.pixplicity.easyprefs.library.Prefs
+import com.wajahatkarim3.easyvalidation.core.collection_ktx.textEqualToList
 import com.wajahatkarim3.easyvalidation.core.view_ktx.nonEmpty
 import io.realm.RealmResults
 
@@ -54,7 +52,8 @@ class ChatEscalationActivity : AppCompatActivity(),
 
 
     val mChatVM : ChatListViewModel by viewModels()
-
+    var escalationTYpeTxt=""
+    var escalationDscrpTxt=""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityChatEscalationBinding.inflate(layoutInflater)
@@ -107,12 +106,7 @@ class ChatEscalationActivity : AppCompatActivity(),
             this.onBackPressed()
         }
         mBinding?.btnSendEscalation?.setOnClickListener {
-            if(mBinding?.txtDescription?.nonEmpty() == true){
-                view?.clearFocus() //to close the keyboard before displaying the dialogbox
-                showEscCatDialog(this)
-            }else{
-                mBinding?.txtDescription?.nonEmpty{ mBinding?.txtDescription?.error = it }
-            }
+            showEscCatDialog(this)
         }
     }
 
@@ -155,6 +149,7 @@ class ChatEscalationActivity : AppCompatActivity(),
         radioGroup.setOnCheckedChangeListener { group, checkedId ->
             val rb = (group.findViewById(checkedId) as RadioButton).text
             Log.e("EscalationCatSel","$rb")
+            escalationTYpeTxt=rb.toString()
             var catId = checkedId%5 //to counter adding ov multiple radiobuttons
             when(catId){
                 0 -> {
@@ -172,7 +167,7 @@ class ChatEscalationActivity : AppCompatActivity(),
         raiseEsc.setOnClickListener {
             if(escSelectedCat != 0){
                 rDialog.cancel()
-                showConfirmEscalaltionDialog()
+                showAddEscalationPopUp()
             }else{
                 Utility?.displayMessage(this.getString(R.string.select_one_issue),this)
             }
@@ -199,8 +194,7 @@ class ChatEscalationActivity : AppCompatActivity(),
                 escRequest?.enquiryId = enqID
                 escRequest?.escalationFrom = Prefs.getString(ConstantsDirectory.USER_ID,"0").toLong()
                 escRequest?.escalationTo = chatUserDetails?.buyerId
-                escRequest?.text = mBinding?.txtDescription?.text.toString()
-
+                escRequest?.text = escalationDscrpTxt//mBinding?.txtDescription?.text.toString()
                 mChatVM.raiseEscalation(escRequest)
             }else{
                 Utility.displayMessage(getString(R.string.no_internet_connection),this)
@@ -208,6 +202,32 @@ class ChatEscalationActivity : AppCompatActivity(),
         }
     }
 
+    fun showAddEscalationPopUp(){
+        var cDialog = Dialog(this)
+        cDialog?.setContentView(R.layout.dialog_escalation_popup)
+        cDialog?.show()
+        val txt_escalations_type = cDialog?.findViewById(R.id.txt_escalations_type) as TextView
+        val et_dscrp = cDialog?.findViewById(R.id.et_dscrp) as EditText
+        val btn_raise_escalation = cDialog?.findViewById(R.id.btn_raise_escalation) as Button
+        val btn_cancel = cDialog?.findViewById(R.id.btn_cancel) as Button
+        txt_escalations_type.text=escalationTYpeTxt
+        btn_cancel.setOnClickListener {
+            cDialog.cancel()
+        }
+
+        btn_raise_escalation.setOnClickListener {
+
+            if(Utility.checkIfInternetConnected(this)){
+                if(et_dscrp.text.toString().isNotEmpty()) {
+                    cDialog.cancel()
+                    escalationDscrpTxt=et_dscrp.text.toString()
+                    showConfirmEscalaltionDialog()
+                }else Utility.displayMessage("Please add text",this)
+            }else{
+                Utility.displayMessage(getString(R.string.no_internet_connection),this)
+            }
+        }
+    }
     override fun onESCActionSuccess() {
         try {
             Handler(Looper.getMainLooper()).post(Runnable {

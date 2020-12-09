@@ -174,9 +174,10 @@ class BuyerLoginPasswordFragment : Fragment() {
             }
         }
         mBinding?.needHelp?.setOnClickListener {
-            val intent = Intent(context, PdfViewerActivity::class.java)
-            intent.putExtra("ViewType", "HELP")
-            startActivity(intent)
+//            val intent = Intent(context, PdfViewerActivity::class.java)
+//            intent.putExtra("ViewType", "HELP")
+//            startActivity(intent)
+            Utility.supportDialog(requireContext())
         }
         mBinding?.privacyPolicy?.setOnClickListener {
             val intent = Intent(context, PdfViewerActivity::class.java)

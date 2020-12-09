@@ -12,11 +12,21 @@ import com.adrosonic.craftexchange.enums.EnquiryStatus
 import com.adrosonic.craftexchange.enums.getId
 import com.adrosonic.craftexchange.ui.modules.artisan.enquiry.ArtisanOnGoEnqDetailsFragment
 import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.adapter.BuyerOnGoEnqDetailsFragment
+import com.adrosonic.craftexchange.ui.modules.order.OrderDetailsActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.pixplicity.easyprefs.library.Prefs
 
 fun Context.enquiryDetails(): Intent {
     return Intent(this, EnquiryDetailsActivity::class.java).apply {}
+}
+fun Context.viewEnqDetails(context: Context,enqId:String, statusFlag : String): Intent {
+    return Intent(context, EnquiryDetailsActivity::class.java).apply {
+        var bundle = Bundle()
+        bundle.putString(ConstantsDirectory.ENQUIRY_ID, enqId)
+        bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG, statusFlag)
+        putExtras(bundle)
+        flags =Intent.FLAG_ACTIVITY_SINGLE_TOP
+    }
 }
 class EnquiryDetailsActivity : LocaleBaseActivity() {
 

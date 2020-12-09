@@ -394,6 +394,7 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:id="@+id/txtQty"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
@@ -422,6 +423,7 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:id="@+id/txtEta"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
@@ -484,6 +486,7 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:id="@+id/txtPpu"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
@@ -512,6 +515,7 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:id="@+id/txtHsn"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
