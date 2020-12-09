@@ -154,7 +154,7 @@ CMSViewModel.CMSDataInterface{
 
                             mBinding?.titleText?.text = acfObj?.getString("card_title")
 
-                            var desc = acfObj?.getString("card_para")
+                            var desc = acfObj?.getString("card_para2")
                             @RequiresApi(Build.VERSION_CODES.N)
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                 mBinding?.descriptionText?.text = Html.fromHtml(desc, Html.FROM_HTML_MODE_COMPACT)
