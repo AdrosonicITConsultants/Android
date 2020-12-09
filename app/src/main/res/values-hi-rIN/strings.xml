@@ -115,9 +115,9 @@
     <string name="enter_email_mobile">अपना ईमेल / मोबाइल नंबर दर्ज करें</string>
     <string name="logout_text">क्या आप वाकई लॉगआउट करना चाहते हैं?</string>
     <string name="profile_update_success">प्रोफाइल को सफलतापूर्वक अपडेट किया गया!</string>
-    <string name="artisan_self_design">कारीगर self\nडिजाइन</string>
+    <string name="artisan_self_design">कारीगर self डिजाइन</string>
     <string name="explore">अन्वेषण</string>
-    <string name="antaran_design_collec">अंतरण सह-डिज़ाइन\nसंग्रह</string>
+    <string name="antaran_design_collec">अंतरण सह-डिज़ाइन</string>
     <string name="user">उपयोगकर्ता</string>
     <string name="edit_profile">प्रोफ़ाइल संपादित करें</string>
     <string name="artisan_rating_text">कारीगरों द्वारा औसत रेटिंग</string>

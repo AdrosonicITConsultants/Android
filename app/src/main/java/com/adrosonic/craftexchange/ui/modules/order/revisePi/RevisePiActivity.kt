@@ -71,13 +71,13 @@ class RevisePiActivity : LocaleBaseActivity(),
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_pi)
         val view = mBinding?.root
         setContentView(view)
-        mEnqVM.singlePiListener =this
-        mEnqVM.revisePiInterface =this
+        mEnqVM?.singlePiListener=this
+        mEnqVM?.revisePiInterface=this
         if (intent.extras != null) {
             enquiryId = intent.getLongExtra("enquiryId",0)
-            enquiryDetails = mEnqVM.loadSingleEnqDetails(enquiryId)
+            enquiryDetails = mEnqVM?.loadSingleEnqDetails(enquiryId)
             Utility.getDeliveryTimeList()?.let {moqDeliveryTimeList.addAll(it)  }
-            mEnqVM.getSinglePi(enquiryId)
+            mEnqVM?.getSinglePi(enquiryId)
             setDetails()
         }
 
@@ -95,7 +95,7 @@ class RevisePiActivity : LocaleBaseActivity(),
                 OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                     mBinding?.etDeliveryDate?.setText( year.toString() + "-" + (monthOfYear + 1) + "-" +dayOfMonth.toString() , TextView.BufferType.EDITABLE )
                 }, mYear, mMonth, mDay)
-            datePickerDialog.datePicker.minDate = System.currentTimeMillis() - 1000
+            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000)
             datePickerDialog.show()
         }
         mBinding?.imgDate?.setOnClickListener {
@@ -108,7 +108,7 @@ class RevisePiActivity : LocaleBaseActivity(),
                 OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                     mBinding?.etDeliveryDate?.setText( year.toString() + "-" + (monthOfYear + 1) + "-" +dayOfMonth.toString() , TextView.BufferType.EDITABLE )
                 }, mYear, mMonth, mDay)
-            datePickerDialog.datePicker.minDate = System.currentTimeMillis() - 1000
+            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000)
             datePickerDialog.show()
         }
         mBinding?.txtPiSwipe?.setOnClickListener {
@@ -138,7 +138,7 @@ class RevisePiActivity : LocaleBaseActivity(),
 //                    mBinding?.txtPiSwipe?.setText("Pi preview being genrated")
                     mBinding?.txtPiSwipe?.isEnabled=false
                     viewLoader()
-                    mEnqVM.revisePi(enquiryId,  pi)
+                    mEnqVM?.revisePi(enquiryId,  pi)
                 } else {
                     PiPredicates.insertPiForOfflineForRevise(enquiryId,pi)
                     OrdersPredicates.updatIsPiSend(enquiryId,1L)
@@ -156,7 +156,7 @@ class RevisePiActivity : LocaleBaseActivity(),
             startActivity(intent)
         }
         mBinding?.btnChat?.setOnClickListener {
-            enquiryId.let {  startActivity(Intent(this.chatLogDetailsIntent(it)))}
+            enquiryId?.let {  startActivity(Intent(this?.chatLogDetailsIntent(it)))}
         }
     }
 
@@ -219,10 +219,10 @@ class RevisePiActivity : LocaleBaseActivity(),
             mBinding?.productName?.text = enquiryDetails?.productName
         }else{
             //TODO : set text as prod cat / werft / warn / extraweft
-            var weaveList = Utility.getWeaveType()
-            var catList = Utility.getProductCategory()
+            var weaveList = Utility?.getWeaveType()
+            var catList = Utility?.getProductCategory()
 
-            weaveList.forEach {
+            weaveList?.forEach {
                 if(it.first == enquiryDetails?.weftYarnID){
                     weft = it.second
                 }
@@ -233,7 +233,7 @@ class RevisePiActivity : LocaleBaseActivity(),
                     extraweft = it.second
                 }
             }
-            catList.forEach {
+            catList?.forEach {
                 if(it.first == enquiryDetails?.productCategoryID){
                     prodCategory = it.second
                 }
@@ -260,10 +260,10 @@ class RevisePiActivity : LocaleBaseActivity(),
 
         val piObj=PiPredicates.getSinglePi(enquiryId)
            piObj?.let{
-               mBinding?.etQty?.setText(it.quantity.toString(), TextView.BufferType.EDITABLE)
-               mBinding?.etDeliveryDate?.setText(it.date, TextView.BufferType.EDITABLE)
-               mBinding?.etPpu?.setText(it.ppu.toString(), TextView.BufferType.EDITABLE)
-               mBinding?.etHsnCode?.setText(it.hsn.toString(), TextView.BufferType.EDITABLE)
+               mBinding?.etQty?.setText(it?.quantity.toString(), TextView.BufferType.EDITABLE)
+               mBinding?.etDeliveryDate?.setText(it?.date, TextView.BufferType.EDITABLE)
+               mBinding?.etPpu?.setText(it?.ppu.toString(), TextView.BufferType.EDITABLE)
+               mBinding?.etHsnCode?.setText(it?.hsn.toString(), TextView.BufferType.EDITABLE)
                mBinding?.etSgst?.setText(it.sgst.toString(), TextView.BufferType.EDITABLE)
                mBinding?.etCgst?.setText(it.cgst.toString(), TextView.BufferType.EDITABLE)
            }

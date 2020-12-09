@@ -80,6 +80,7 @@ class BrandDetailsEditFragment : Fragment() {
         productArray.add("Fabric")
         productArray.add("Home Accessories")
         productArray.add("Fashion Accessories")
+        productArray.add("Mekhla Chadar")
         mBinding?.prodCategory?.setItems(productArray)
 
         mBinding?.cluster?.text = craftUser?.clusterdesc ?: "-"

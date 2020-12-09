@@ -325,6 +325,8 @@ ViewProductsViewModel.ViewProductsInterface{
     }
 
     fun setDimensions(details: EnquiryProductDetails?){
+        try {
+
         var l = SpannableString("L")
         l.setSpan(ForegroundColorSpan(ContextCompat.getColor(requireActivity(),R.color.length_unit_color)), 0, l.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         var w = SpannableString("W")
@@ -342,6 +344,7 @@ ViewProductsViewModel.ViewProductsInterface{
         mBinding?.prodDimensValue?.append(length)
         mBinding?.prodDimensValue?.append("\tX\t")
         mBinding?.prodDimensValue?.append(width)
+        }catch (e:Exception){}
     }
 
 

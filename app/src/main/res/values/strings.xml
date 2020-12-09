@@ -117,9 +117,9 @@
     <string name="enter_email_mobile">Enter your email/mobile numner</string>
     <string name="logout_text">Are your sure you want to logout?</string>
     <string name="profile_update_success">Profile updated successfully!</string>
-    <string name="artisan_self_design">Artisan self\ndesign</string>
+    <string name="artisan_self_design">Artisan self design</string>
     <string name="explore">Explore</string>
-    <string name="antaran_design_collec">Antaran co-design\n</string>
+    <string name="antaran_design_collec">Antaran co-design</string>
     <string name="user">User</string>
     <string name="edit_profile">Edit profile</string>
     <string name="artisan_rating_text">Avg. rating by artisans</string>

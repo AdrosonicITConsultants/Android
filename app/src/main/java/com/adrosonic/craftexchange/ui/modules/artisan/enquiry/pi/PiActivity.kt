@@ -70,10 +70,10 @@ class PiActivity : LocaleBaseActivity(),
         val view = mBinding?.root
         setContentView(view)
 
-        mEnqVM.piLisener =this
+        mEnqVM?.piLisener=this
         if (intent.extras != null) {
             enquiryId = intent.getLongExtra("enquiryId",0)
-            enquiryDetails = mEnqVM.loadSingleEnqDetails(enquiryId)
+            enquiryDetails = mEnqVM?.loadSingleEnqDetails(enquiryId)
             moqs = MoqsPredicates.getSingleMoq(enquiryId)
             Utility.getDeliveryTimeList()?.let {moqDeliveryTimeList.addAll(it)  }
             setDetails()
@@ -91,7 +91,7 @@ class PiActivity : LocaleBaseActivity(),
                 OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                     mBinding?.etDeliveryDate?.setText( year.toString() + "-" + (monthOfYear + 1) + "-" +dayOfMonth.toString() , TextView.BufferType.EDITABLE )
                 }, mYear, mMonth, mDay)
-            datePickerDialog.datePicker.minDate = System.currentTimeMillis() - 1000
+            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000)
             datePickerDialog.show()
 //            view?.onTouchEvent(motionEvent) ?: true
         }
@@ -105,7 +105,7 @@ class PiActivity : LocaleBaseActivity(),
                 OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                     mBinding?.etDeliveryDate?.setText( year.toString() + "-" + (monthOfYear + 1) + "-" +dayOfMonth.toString() , TextView.BufferType.EDITABLE )
                 }, mYear, mMonth, mDay)
-            datePickerDialog.datePicker.minDate = System.currentTimeMillis() - 1000
+            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000)
             datePickerDialog.show()
         }
         mBinding?.chbTnc?.setOnClickListener {
@@ -140,10 +140,10 @@ class PiActivity : LocaleBaseActivity(),
                 pi.quantity=qty.toLong()
                 pi.sgst=sgst.toLong()
                 if (Utility.checkIfInternetConnected(applicationContext)) {
-                    mBinding?.txtPiSwipe?.text = "Pi preview being genrated"
+                    mBinding?.txtPiSwipe?.setText("Pi preview being genrated")
                     mBinding?.txtPiSwipe?.isEnabled=false
                     viewLoader()
-                    mEnqVM.savePi(enquiryId, 0, pi)
+                    mEnqVM?.savePi(enquiryId, 0, pi)
                 } else {
 //                    todo add dat to pi table
                     PiPredicates.insertPiForOffline(enquiryId,0,1,pi)
@@ -158,7 +158,7 @@ class PiActivity : LocaleBaseActivity(),
             startActivity(intent)
         }
         mBinding?.btnChat?.setOnClickListener {
-            enquiryId.let {  startActivity(Intent(this.chatLogDetailsIntent(it)))}
+            enquiryId?.let {  startActivity(Intent(this?.chatLogDetailsIntent(it)))}
         }
     }
 
@@ -221,10 +221,10 @@ class PiActivity : LocaleBaseActivity(),
             mBinding?.productName?.text = enquiryDetails?.productName
         }else{
             //TODO : set text as prod cat / werft / warn / extraweft
-            var weaveList = Utility.getWeaveType()
-            var catList = Utility.getProductCategory()
+            var weaveList = Utility?.getWeaveType()
+            var catList = Utility?.getProductCategory()
 
-            weaveList.forEach {
+            weaveList?.forEach {
                 if(it.first == enquiryDetails?.weftYarnID){
                     weft = it.second
                 }
@@ -235,7 +235,7 @@ class PiActivity : LocaleBaseActivity(),
                     extraweft = it.second
                 }
             }
-            catList.forEach {
+            catList?.forEach {
                 if(it.first == enquiryDetails?.productCategoryID){
                     prodCategory = it.second
                 }
@@ -254,8 +254,8 @@ class PiActivity : LocaleBaseActivity(),
         if(moqs!=null){
             mBinding?.orderQuantity?.text="${moqs?.moq?:0}"
             mBinding?.orderAmount?.text="${moqs?.ppu?:0}"
-            moqDeliveryTimeList.forEach {
-                if (it.id.equals(moqs?.deliveryTimeId))mBinding?.orderTime?.text = if (it.days.equals(0L)) {"Immediate"} else "${it.days} Days"// "${it?.days} Days"
+            moqDeliveryTimeList?.forEach {
+                if (it.id.equals(moqs?.deliveryTimeId))mBinding?.orderTime?.text = if (it?.days.equals(0L)) {"Immediate"} else "${it?.days} Days"// "${it?.days} Days"
             }
         }
         currencyList.clear()
@@ -280,7 +280,7 @@ class PiActivity : LocaleBaseActivity(),
             Handler(Looper.getMainLooper()).post(Runnable {
                 hideLoader()
                 Utility.displayMessage(getString(R.string.unable_raise_pi),applicationContext)
-                mBinding?.txtPiSwipe?.text = "Swipe to generate PI preview"
+                mBinding?.txtPiSwipe?.setText("Swipe to generate PI preview")
                 mBinding?.txtPiSwipe?.isEnabled = true
             })
         } catch (e: Exception) {

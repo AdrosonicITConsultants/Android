@@ -112,7 +112,7 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cms_back_img_1"
-                        android:layout_width="120dp"
+                        android:layout_width="220dp"
                         android:layout_height="0dp"
                         android:elevation="4dp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -177,7 +177,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_regular"
-                        android:layout_marginEnd="@dimen/margin_regular"
+                        android:layout_marginEnd="8dp"
                         android:layout_marginBottom="@dimen/margin_regular"
                         android:layout_weight="1">
 
@@ -209,7 +209,7 @@
                                 android:id="@+id/explore1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/margin_regular"
+                                android:layout_marginTop="4dp"
                                 android:layout_marginEnd="@dimen/margin_small"
                                 android:layout_marginBottom="@dimen/margin_small"
                                 android:drawableEnd="@drawable/ic_explore"
@@ -230,7 +230,6 @@
                         android:id="@+id/antaran_catalogue"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_regular"
                         android:layout_marginTop="@dimen/margin_regular"
                         android:layout_marginBottom="@dimen/margin_regular"
                         android:layout_weight="1">
@@ -263,7 +262,7 @@
                                 android:id="@+id/explore2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/margin_regular"
+                                android:layout_marginTop="4dp"
                                 android:layout_marginEnd="@dimen/margin_small"
                                 android:layout_marginBottom="@dimen/margin_small"
                                 android:drawableEnd="@drawable/ic_explore"
@@ -285,7 +284,6 @@
                     android:id="@+id/divider2"
                     style="@style/HorizontalDivider2"
                     android:layout_marginTop="@dimen/margin_regular"
-                    android:layout_marginBottom="@dimen/margin_regular"
                     android:background="@android:color/darker_gray"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
