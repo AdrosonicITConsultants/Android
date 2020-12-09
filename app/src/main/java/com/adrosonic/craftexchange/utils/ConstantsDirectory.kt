@@ -21,7 +21,7 @@ object ConstantsDirectory {
 
     const val ADMIN_DASHBOARD_URL = "https://datastudio.google.com/embed/reporting/00758bf8-9835-4bc1-aa7d-c2fb328332ab/page/wVxhB?params="
     const val VIEW_PI_URL = "http://101.53.153.96:8090/enquiry/getPreviewPiHTML?enquiryId="
-    const val VERSION = "18-11-20 V-1.2"
+    const val VERSION = "09-12-20 V-1.2"
     //////////////////////////////////////////////////////////////////////
     const val PI_PDF_PATH: String = "PiPdfs/"
     const val TI_PDF_PATH: String = "TiPdfs/"
