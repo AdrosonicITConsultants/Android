@@ -159,9 +159,7 @@ class ArtisanLandingActivity : LocaleBaseActivity(),
                     R.id.action_home -> {
                         if (savedInstanceState == null) {
                             supportFragmentManager.beginTransaction()
-                                .replace(R.id.artisan_home_container,
-                                    ArtisanHomeFragment.newInstance()
-                                )
+                                .add(R.id.artisan_home_container,  ArtisanHomeFragment.newInstance() )
                                 .detach(ArtisanHomeFragment())
                                 .attach(ArtisanHomeFragment())
                                 .commitNow()

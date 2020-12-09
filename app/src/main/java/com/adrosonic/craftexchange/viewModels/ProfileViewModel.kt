@@ -103,6 +103,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
                 ) {
                     if(response.body()?.valid == true){
                         UserPredicates.refreshArtisanDetails(response.body())
+                        ProductPredicates.deleteArtisanProdCat(0)
                         ProductPredicates.insertArtisanProductCategory(response.body())
                         UserPredicates.insertPaymentDetails(response.body())
                         AddressPredicates.refreshUserAddress(response.body())

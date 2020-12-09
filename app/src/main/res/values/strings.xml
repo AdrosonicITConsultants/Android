@@ -607,4 +607,5 @@
     <string name="no_ongoing_enquiries_present">No ongoing enquiries present</string>
     <string name="no_completed_enquiries_present">No completed enquiries present</string>
     <string name="you_have_accepted">You have accepted the MOQ. For further discussion and negotiation use Chat box option in the app.</string>
+    <string name="step_110_enter_description">Step 10 : Enter description</string>
 </resources>

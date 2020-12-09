@@ -94,8 +94,6 @@ class BrandDetailsFragment : Fragment(),
         mBinding?.cluster?.text = craftUser?.value?.clusterdesc ?: " - "
         mBinding?.name?.text = craftUser?.value?.companyName ?: " - "
         mBinding?.description?.text = craftUser?.value?.companyDesc ?: " - "
-
-
         mBinding?.prodCategory?.text = getProductCategories()
     }
     fun getProductCategories():String{
@@ -126,6 +124,10 @@ class BrandDetailsFragment : Fragment(),
         Log.e("ArtProBrand","Success")
         mBinding?.branddetailsSwipe?.isRefreshing = false
         setImage()
+        mBinding?.cluster?.text = craftUser?.value?.clusterdesc ?: " - "
+        mBinding?.prodCategory?.text = getProductCategories()
+        mBinding?.name?.text = craftUser?.value?.companyName ?: " - "
+        mBinding?.description?.text = craftUser?.value?.companyDesc ?: " - "
     }
 
     override fun onFailure() {

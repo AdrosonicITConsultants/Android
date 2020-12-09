@@ -4,10 +4,12 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
+import android.text.Html
 import android.text.TextWatcher
 import android.util.Log
 import android.view.KeyEvent
@@ -194,6 +196,42 @@ class ArtisanAddProductTemplateActivity : LocaleBaseActivity(),
     }
 
     fun loadData() {
+        var s1="<font color=#000000>"+getString(R.string.step_1_add_photo)+"</font> <font color=#FF0000> *</font>"
+        var s2="<font color=#000000>"+getString(R.string.step_2_add_general_details)+"</font> <font color=#FF0000> *</font>"
+        var s3="<font color=#000000>"+getString(R.string.step_3_select_weave_type)+"</font> <font color=#FF0000> *</font>"
+        var s4="<font color=#000000>"+getString(R.string.step_4_select_warp_weft_and_yarn)+"</font> <font color=#FF0000> *</font>"
+        var s5="<font color=#000000>"+getString(R.string.step_5_enter_the_reed_count)+"</font> <font color=#FF0000> *</font>"
+        var s6="<font color=#000000>"+getString(R.string.step_6_enter_the_dimensions)+"</font> <font color=#FF0000> *</font>"
+        var s7="<font color=#000000>"+getString(R.string.step_7_enter_the_wash_care_instructions)+"</font> <font color=#FF0000> *</font>"
+        var s8="<font color=#000000>"+getString(R.string.step_8_select_the_availability)+"</font> <font color=#FF0000> *</font>"
+        var s9="<font color=#000000>"+getString(R.string.step_9_enter_the_weight)+"</font> <font color=#FF0000> *</font>"
+        var s10="<font color=#000000>"+getString(R.string.step_10_enter_gsm_value_of_fabric)+"</font> <font color=#FF0000> *</font>"
+        var s11="<font color=#000000>"+getString(R.string.step_11_enter_description)+"</font> <font color=#FF0000> *</font>"
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            mBinding?.txtStep1?.text = Html.fromHtml(s1, Html.FROM_HTML_MODE_COMPACT)
+            mBinding?.txtStep2?.text = Html.fromHtml(s2, Html.FROM_HTML_MODE_COMPACT)
+            mBinding?.txtStep3?.text = Html.fromHtml(s3, Html.FROM_HTML_MODE_COMPACT)
+            mBinding?.txtStep4?.text = Html.fromHtml(s4, Html.FROM_HTML_MODE_COMPACT)
+            mBinding?.txtStep5?.text = Html.fromHtml(s5, Html.FROM_HTML_MODE_COMPACT)
+            mBinding?.txtStep6?.text = Html.fromHtml(s6, Html.FROM_HTML_MODE_COMPACT)
+            mBinding?.txtStep7?.text = Html.fromHtml(s7, Html.FROM_HTML_MODE_COMPACT)
+            mBinding?.txtStep8?.text = Html.fromHtml(s8, Html.FROM_HTML_MODE_COMPACT)
+            mBinding?.txtStep9?.text = Html.fromHtml(s9, Html.FROM_HTML_MODE_COMPACT)
+            mBinding?.txtStep10?.text = Html.fromHtml(s10, Html.FROM_HTML_MODE_COMPACT)
+            mBinding?.txtStep11?.text = Html.fromHtml(s11, Html.FROM_HTML_MODE_COMPACT)
+        } else {
+            mBinding?.txtStep1?.text = Html.fromHtml(s1)
+            mBinding?.txtStep2?.text = Html.fromHtml(s2)
+            mBinding?.txtStep3?.text = Html.fromHtml(s3)
+            mBinding?.txtStep4?.text = Html.fromHtml(s4)
+            mBinding?.txtStep5?.text = Html.fromHtml(s5)
+            mBinding?.txtStep6?.text = Html.fromHtml(s6)
+            mBinding?.txtStep7?.text = Html.fromHtml(s7)
+            mBinding?.txtStep8?.text = Html.fromHtml(s8)
+            mBinding?.txtStep9?.text = Html.fromHtml(s9)
+            mBinding?.txtStep10?.text = Html.fromHtml(s10)
+            mBinding?.txtStep11?.text = Html.fromHtml(s11)
+        }
             ///////////////////////Add Photo////////////////////////
             add_photo_recycler.layoutManager =LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
             prodImgListAdapter = ProdImageListAdapter(this, true,pairList)
@@ -673,7 +711,6 @@ class ArtisanAddProductTemplateActivity : LocaleBaseActivity(),
                 t.productWidths.forEach { arrProdWidthStr?.add(it.width) }
             }
         }
-
         if (arrProdWidthStr.size <= 0) {
             sp_prod_width.visibility = View.GONE
             et_prod_width.visibility = View.VISIBLE
@@ -698,29 +735,35 @@ class ArtisanAddProductTemplateActivity : LocaleBaseActivity(),
             sp_prod_length.setAdapter(spLenghtAdapter)
             if(productId>0)sp_prod_length.setSelection(arrProdLengthStr.indexOf(productEntry?.productLength?:""))
         }
-
         if (type.equals("Fabric")) {
             parent_step10.visibility = View.VISIBLE
             child_step10.visibility = View.VISIBLE
-            txt_step_11.text = "Step 11 : Enter description"
+            var s11="<font color=#000000>"+getString(R.string.step_11_enter_description)+"</font> <font color=#FF0000> *</font>"
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                mBinding?.txtStep11?.text = Html.fromHtml(s11, Html.FROM_HTML_MODE_COMPACT)
+            } else {
+                mBinding?.txtStep11?.text = Html.fromHtml(s11)
+            }
         } else {
             parent_step10.visibility = View.GONE
             child_step10.visibility = View.GONE
-            txt_step_11.text = "Step 10 : Enter description"
+            var s11="<font color=#000000>"+getString(R.string.step_110_enter_description)+"</font> <font color=#FF0000> *</font>"
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                mBinding?.txtStep11?.text = Html.fromHtml(s11, Html.FROM_HTML_MODE_COMPACT)
+            } else {
+                mBinding?.txtStep11?.text = Html.fromHtml(s11)
+            }
         }
-
         if(arrRelatedProdType!=null) {
             if (arrRelatedProdType!!.size > 0) {
                 //todo inflater to be called post API itegratipn
                 txt_related_prod_type.visibility = View.VISIBLE
                 ll_sub_prod.visibility = View.VISIBLE
                 txt_related_prod_type.text = arrRelatedProdType.get(0).productDesc
-
                 arrRelatedProdType.get(0).productLengths.forEach { arrSubProdLengthStr.add(it.length) }
                 val splengthAdapter = ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, arrSubProdLengthStr)
                 splengthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 sp_sub_prod_length.setAdapter(splengthAdapter)
-
                 arrRelatedProdType.get(0).productWidths.forEach { arrSubProdWidthStr.add(it.width) }
                 val spwidthAdapter =ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, arrSubProdWidthStr)
                 spwidthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -729,7 +772,6 @@ class ArtisanAddProductTemplateActivity : LocaleBaseActivity(),
                     sp_sub_prod_length.setSelection(arrSubProdLengthStr.indexOf(relatedProdStored?.productLength))
                     sp_sub_prod_width.setSelection(arrSubProdWidthStr.indexOf(relatedProdStored?.productWidth))
                 }
-
             } else {
                 txt_related_prod_type.visibility = View.GONE
                 ll_sub_prod.visibility = View.GONE

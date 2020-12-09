@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityPdfViewerBinding
+import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
 
 fun Context.pdfViewerIntent(): Intent {
@@ -33,31 +34,31 @@ class PdfViewerActivity: LocaleBaseActivity() {
            if(!TextUtils.isEmpty(viewType) || viewType!=null){
                if(viewType.equals("Terms_conditions")){
                    mBinding?.webView?.settings?.javaScriptEnabled = true
-                   pdf = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/documents/TERMS_and_CONDITIONS.pdf"
+                   pdf =ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV+"documents/TERMS_and_CONDITIONS.pdf"
                    mBinding?.webView?.loadUrl("https://drive.google.com/viewerng/viewer?embedded=true&url=$pdf")
                }
 
                if(viewType.equals("PRIVACY_POLICY_PDF")){
                    mBinding?.webView?.settings?.javaScriptEnabled = true
-                   pdf =
-                       "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/documents/PRIVACY%20POLICY.pdf"
+                   pdf = ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV+"documents/PRIVACY%20POLICY.pdf"
                    mBinding?.webView?.loadUrl("https://drive.google.com/viewerng/viewer?embedded=true&url=$pdf")
 
                }
 
                if(viewType.equals("LEGAL_DISCLAIMER")){
                    mBinding?.webView?.settings?.javaScriptEnabled = true
-                   pdf = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/documents/LEGAL%20DISCLAIMER.pdf"
+                   pdf = ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV+"documents/LEGAL%20DISCLAIMER.pdf"
                    mBinding?.webView?.loadUrl("https://drive.google.com/viewerng/viewer?embedded=true&url=$pdf")
                }
                if(viewType.equals("HELP")){
                    mBinding?.webView?.settings?.javaScriptEnabled = true
-                   pdf = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/documents/Help.pdf"
+                   pdf = ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV+"documents/Help.pdf"
                    mBinding?.webView?.loadUrl("https://drive.google.com/viewerng/viewer?embedded=true&url=$pdf")
                }
                if(viewType.equals("FAQ_PDF")){
                    mBinding?.webView?.settings?.javaScriptEnabled = true
-                   pdf = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/documents/LEGAL%20DISCLAIMER.pdf"
+//                   pdf = ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV+"documents/LEGAL%20DISCLAIMER.pdf"
+                   pdf = ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV+"documents/FAQ.pdf"
                    mBinding?.webView?.loadUrl("https://drive.google.com/viewerng/viewer?embedded=true&url=$pdf")
                }
                 Utility.displayMessage(getString(R.string.plz_Wait),this)

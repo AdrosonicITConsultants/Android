@@ -21,6 +21,18 @@ class ProductPredicates {
 
         //TODO : INSERT
 
+        fun deleteArtisanProdCat(userId: Long?){
+            val realm = CXRealmManager.getRealmInstance()
+            try {
+                realm?.executeTransaction {
+                    val prodcat = realm.where(ArtisanProductCategory::class.java)
+                        .findAll()
+                    prodcat?.forEach { it?.deleteFromRealm() }
+                }
+            }catch (e:Exception){
+
+            }
+        }
         fun insertArtisanProductCategory(user: ProfileResponse?) : Long? {
             nextID = 0L
             val realm = CXRealmManager.getRealmInstance()

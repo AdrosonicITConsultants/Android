@@ -570,7 +570,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
                         mBinding?.txtCrLayerStatus?.text = Utility.getCountStatement(enqID?:0)//Utility.returnDisplayDate(orderDetails?.changeRequestModifiedOn ?: "")
                     }
                     null->{
-
+                        mBinding?.txtCrLayerStatus?.text = "Change request not available"
                     }
                     else -> {
                          mBinding?.txtCrLayerStatus?.text = "Change request not available"
