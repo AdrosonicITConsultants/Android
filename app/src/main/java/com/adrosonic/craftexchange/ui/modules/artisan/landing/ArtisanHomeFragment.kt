@@ -136,7 +136,8 @@ class ArtisanHomeFragment : Fragment(),
             mProVM.getArtisanProfileDetails(requireContext())
             craftUser = mProVM.getUserMutableData()
             setBrandImage()
-            mCMSVM.getCategoriesData()
+//            mCMSVM.getCategoriesData()
+            mCMSVM.categoriesselfdesign()
             setVisibilities()
         }
     }

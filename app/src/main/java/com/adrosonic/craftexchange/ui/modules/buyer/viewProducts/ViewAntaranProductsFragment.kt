@@ -44,9 +44,7 @@ class ViewAntaranProductsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         childFragmentManager.let{
             mBinding?.viewPagerViewProducts?.adapter =
-                ViewAntaranProductsPagerAdapter(
-                    it
-                )
+                ViewAntaranProductsPagerAdapter(  it )
             mBinding?.tabLayoutViewProducts?.setupWithViewPager(mBinding?.viewPagerViewProducts)
         }
     }

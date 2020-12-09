@@ -96,4 +96,38 @@ class CMSViewModel(application: Application) : AndroidViewModel(application) {
                 }
             })
     }
+
+    fun categoriesselfdesign(){
+        CMSRepository
+            .getCMSservice()
+            .categoriesselfdesign().enqueue(object : Callback, retrofit2.Callback<CMSDataResponse> {
+                override fun onFailure(call: Call<CMSDataResponse>, t: Throwable) {
+                    t.printStackTrace()
+                    cmsListener?.onCMSFailure()
+                }
+                override fun onResponse(call: Call<CMSDataResponse>, response: Response<CMSDataResponse>) {
+                    if (response?.isSuccessful) {
+                        UserConfig.shared.categoryCMS = Gson().toJson(response?.body())
+                        cmsListener?.onCMSSuccess()
+                    }
+                }
+            })
+    }
+
+    fun categoriescodesign(){
+        CMSRepository
+            .getCMSservice()
+            .categoriescodesign().enqueue(object : Callback, retrofit2.Callback<CMSDataResponse> {
+                override fun onFailure(call: Call<CMSDataResponse>, t: Throwable) {
+                    t.printStackTrace()
+                    cmsListener?.onCMSFailure()
+                }
+                override fun onResponse(call: Call<CMSDataResponse>, response: Response<CMSDataResponse>) {
+                    if (response?.isSuccessful) {
+                        UserConfig.shared.categoryCMS = Gson().toJson(response?.body())
+                        cmsListener?.onCMSSuccess()
+                    }
+                }
+            })
+    }
 }

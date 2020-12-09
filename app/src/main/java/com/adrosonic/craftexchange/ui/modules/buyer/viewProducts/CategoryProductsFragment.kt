@@ -26,6 +26,7 @@ import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.A
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.Product
 import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.adapter.CategoryAdapter
 import com.adrosonic.craftexchange.ui.modules.buyer.viewProducts.adapter.RegionAdapter
+import com.adrosonic.craftexchange.utils.UserConfig
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.CMSViewModel
 import com.adrosonic.craftexchange.viewModels.CategoryViewModel
@@ -71,7 +72,9 @@ class CategoryProductsFragment : Fragment(),
         if (!Utility.checkIfInternetConnected(requireContext())) {
             Utility.displayMessage(getString(R.string.no_internet_connection), requireContext())
         } else {
-            mCMSViewModel.getCategoriesData()
+            if(UserConfig.shared.isAntranCoDesign)   mCMSViewModel.categoriescodesign()
+            else mCMSViewModel.categoriesselfdesign()
+        //  mCMSViewModel.getCategoriesData()
             mViewModel.getAllCategories()
         }
 

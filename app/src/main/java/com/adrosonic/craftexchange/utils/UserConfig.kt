@@ -103,6 +103,8 @@ const val QC_QUESTION_DATA ="qc_question_data"
 
 const val ESCALATION_DATA ="escalation_data"
 
+const val IS_ANTRAN_CODESIGN ="is_antran_codesign"
+
 class UserConfig {
 
     private object Holder { val INSTANCE = UserConfig() }
@@ -654,6 +656,13 @@ class UserConfig {
         get() = Prefs.getString(BUYER_FAULT_REVIEW,"")
         set(value) {
             Prefs.putString(BUYER_FAULT_REVIEW, value)
+            field = value
+        }
+
+    var isAntranCoDesign : Boolean = false
+        get() = Prefs.getBoolean(IS_ANTRAN_CODESIGN,false)
+        set(value) {
+            Prefs.putBoolean(IS_ANTRAN_CODESIGN, value)
             field = value
         }
 

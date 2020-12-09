@@ -22,4 +22,12 @@ interface CMSDao {
     @Headers("Accept: application/json")
     @GET("pages")
     fun getPagesData() : Call<CMSDataResponse>
+
+    @Headers("Accept: application/json")
+    @GET("categoriesselfdesign")
+    fun categoriesselfdesign() : Call<CMSDataResponse>
+
+    @Headers("Accept: application/json")
+    @GET("categoriescodesign")
+    fun categoriescodesign() : Call<CMSDataResponse>
 }
