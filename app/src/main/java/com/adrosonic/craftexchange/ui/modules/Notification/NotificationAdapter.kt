@@ -117,10 +117,10 @@ class NotificationAdapter(
             "Enquiry Generated", "Enquiry Closed" -> {
                 R.drawable.ic_status_recipt
             }
-            "Moq Received","Moq accepted"  -> {
+            "Moq Received", "Moq accepted" -> {
                 R.drawable.ic_moq_received
             }
-            "Pi finalized", "Tax Invoice Raised","Delivery Challan Uploaded","Order Received","Order Dispached","Faulty Order" -> {
+            "Pi finalized", "Tax Invoice Raised", "Delivery Challan Uploaded", "Order Received", "Order Dispached", "Faulty Order", "Order Closed", "Issue resolved" -> {
                 R.drawable.ic_status_invoice
             }
             "Advance Payment Received","Advanced Payment Accepted","Advanced Payment Rejected","Final Payment Received","Final Payment Accepted" -> {

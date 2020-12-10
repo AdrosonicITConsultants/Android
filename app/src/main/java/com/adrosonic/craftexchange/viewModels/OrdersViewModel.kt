@@ -589,11 +589,14 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
                 override fun onFailure(call: Call<TaxInvoiceResponse>, t: Throwable) {
                     t.printStackTrace()
                     taxInvGenListener?.onGenTaxInvFailure()
+                    Log.e("TaxInvoice","onFailure ${t.message}")
                 }
                 override fun onResponse(
                     call: Call<TaxInvoiceResponse>,
                     response: Response<TaxInvoiceResponse>
                 ) {
+                    Log.e("TaxInvoice","111 ${response?.body()?.valid}")
+                    Log.e("TaxInvoice","222 ${response?.body()?.data?.id}")
                     if(response?.body()?.valid!!) {
                         taxInvGenListener?.onGenTaxInvSuccess()
                         TaxInvPredicates.insertTi(response.body()!!)

@@ -7,7 +7,7 @@ open class SendTiRequest : Serializable{
     var cgst: String?= ""
     var deliveryCharges: String?= ""
     var enquiryId: String?= ""
-    var finalTotalAmt: Long?=0L
+    var finalTotalAmt: Double?=0.0
     var ppu: Long?=0L
     var quantity: Long?=0L
     var sgst: String?=""

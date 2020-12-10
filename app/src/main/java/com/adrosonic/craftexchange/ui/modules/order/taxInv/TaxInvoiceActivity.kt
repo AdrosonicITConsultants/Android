@@ -147,15 +147,15 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
                 else if (!mBinding?.chbTnc?.isChecked!!) Utility.displayMessage(getString(R.string.plz_accept_tnc), applicationContext)
                 else {
                     //Tax Invoice Preview
-                    taxInvPrev?.cgst=cgst?.toLong()
+                    taxInvPrev?.cgst=cgst?.toDouble()
                     taxInvPrev?.ppu=ppu.toLong()
                     taxInvPrev?.quantity=qty.toLong()
-                    taxInvPrev?.sgst=sgst?.toLong()
+                    taxInvPrev?.sgst=sgst?.toDouble()
                     taxInvPrev?.hsn = rrHSN
                     taxInvPrev?.enquiryId = enquiryId
                     taxInvPrev?.advancePaidAmt = advPay.toLong()
                     taxInvPrev?.deliveryCharges = delCharge.toLong()
-                    taxInvPrev?.finalTotalAmt = finAmt.toLong()
+                    taxInvPrev?.finalTotalAmt = finAmt.toDouble()
 
                     //Generate Tax Invoice
                     taxInv?.cgst=cgst
@@ -165,7 +165,7 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
                     taxInv?.enquiryId = enquiryId?.toString()
                     taxInv?.advancePaidAmt = advPay
                     taxInv?.deliveryCharges = delCharge
-                    taxInv?.finalTotalAmt = finAmt.toLong()
+                    taxInv?.finalTotalAmt = finAmt.toDouble()
 
                     if (Utility.checkIfInternetConnected(applicationContext)) {
                         mBinding?.btnSwipeTi?.text = getString(R.string.tax_invoic_gen)
@@ -184,22 +184,22 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
                 else if (sgst.isEmpty()) Utility.displayMessage( getString(R.string.plz_add_sgst), applicationContext)
                 else if (cgst.isEmpty()) Utility.displayMessage( getString(R.string.plz_add_cgst), applicationContext)
                 else if (prevTotAmt.isEmpty()) Utility.displayMessage( getString(R.string.plz_add_prev_total), applicationContext)
-                else if (finAmt.isEmpty()) Utility.displayMessage( getString(R.string.plz_add_final_amt), applicationContext)
-                else if (delCharge.isEmpty()) Utility.displayMessage( getString(R.string.plz_add_del_charges), applicationContext)
+//                else if (finAmt.isEmpty()) Utility.displayMessage( getString(R.string.plz_add_final_amt), applicationContext)
+//                else if (delCharge.isEmpty()) Utility.displayMessage( getString(R.string.plz_add_del_charges), applicationContext)
                 else if (currency!!.isEmpty()) Utility.displayMessage( getString(R.string.plz_add_currency), applicationContext)
                 else if (!mBinding?.chbTnc?.isChecked!!) Utility.displayMessage( getString(R.string.plz_accept_tnc), applicationContext)
                 else {
 
                     //tax invoice preview
-                    taxInvPrev?.cgst=cgst.toLong()
+                    taxInvPrev?.cgst=cgst.toDouble()
                     taxInvPrev?.ppu=ppu.toLong()
                     taxInvPrev?.quantity=qty.toLong()
-                    taxInvPrev?.sgst=sgst.toLong()
+                    taxInvPrev?.sgst=sgst.toDouble()
                     taxInvPrev?.hsn = rrHSN
                     taxInvPrev?.advancePaidAmt = 0
                     taxInvPrev?.enquiryId = enquiryId
                     taxInvPrev?.deliveryCharges = delCharge.toLong()
-                    taxInvPrev?.finalTotalAmt = finAmt.toLong()
+                    taxInvPrev?.finalTotalAmt = finAmt.toDouble()
 
                     //Generate Tax Invoice
                     taxInv?.cgst=cgst
@@ -209,7 +209,7 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
                     taxInv?.advancePaidAmt = "0"
                     taxInv?.enquiryId = enquiryId?.toString()
                     taxInv?.deliveryCharges = delCharge
-                    taxInv?.finalTotalAmt = finAmt.toLong()
+                    taxInv?.finalTotalAmt = finAmt.toDouble()
 
                     if (Utility.checkIfInternetConnected(applicationContext)) {
                         mBinding?.btnSwipeTi?.text = getString(R.string.tax_invoic_gen)

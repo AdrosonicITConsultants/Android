@@ -9,7 +9,7 @@ import com.adrosonic.craftexchange.database.predicates.BuyerCustomProductPredica
 import com.adrosonic.craftexchange.database.entities.realmEntities.RelatedProducts
 import com.adrosonic.craftexchange.database.predicates.*
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
-import com.adrosonic.craftexchange.repository.data.request.buyer.RelProduct
+//import com.adrosonic.craftexchange.repository.data.request.buyer.RelProduct
 import com.adrosonic.craftexchange.repository.data.request.buyer.ProductWeaf
 import com.adrosonic.craftexchange.repository.data.request.buyer.UpdateOwnDesignRequest
 import com.adrosonic.craftexchange.repository.data.response.buyer.ownDesign.AddOwnDesignResponse
@@ -56,28 +56,28 @@ class UpdateOwnProductService : JobIntentService() {
     }
 
     fun createOwnProductString(productEntry: BuyerCustomProduct? ,realatedEntry: RelatedProducts?,weaveList:List<Long>?): String {
-        var relList=ArrayList<RelProduct>()
-        var weafList=ArrayList<ProductWeaf>()
-        if(realatedEntry!=null)  {
-            var relatedProductObj=RelProduct(
-                    realatedEntry.productTypeId ?: 0,
-                    realatedEntry.productWidth ?: "",
-                    realatedEntry.productLength ?: ""
-                )
-            relList.add(relatedProductObj)
-        }
-        weaveList?.forEach {
-            var productWeaf= ProductWeaf(it,productEntry?.id?:0,it)
-            weafList.add(productWeaf)
-        }
-        Log.e("Offline", "createOwnProductString ${productEntry?.extraWeftDyeId}")
-        var template = UpdateOwnDesignRequest(productEntry?.extraWeftDyeId?:0,productEntry?.extraWeftYarnCount?:"",productEntry?.extraWeftYarnId?:0,
-            productEntry?.gsm?:"",productEntry?.id?:0,productEntry?.length?:"",productEntry?.productCategoryId?:0,productEntry?.productTypeId?:0,
-            weafList ,productEntry?.productSpe?:"",productEntry?.reedCountId?:0,relList,productEntry?.warpDyeId?:0,productEntry?.warpYarnCount?:"",
-            productEntry?.warpYarnId?:0,productEntry?.weftDyeId?:0,productEntry?.weftYarnCount?:"",productEntry?.weftYarnId?:0,productEntry?.weight?:"",productEntry?.width?:"")
-
-        Log.e("Offline","template :"+ Gson().toJson(template))
-        return Gson().toJson(template)
+//        var relList=ArrayList<RelProduct>()
+//        var weafList=ArrayList<ProductWeaf>()
+//        if(realatedEntry!=null)  {
+//            var relatedProductObj=RelProduct(
+//                    realatedEntry.productTypeId ?: 0,
+//                    realatedEntry.productWidth ?: "",
+//                    realatedEntry.productLength ?: ""
+//                )
+//            relList.add(relatedProductObj)
+//        }
+//        weaveList?.forEach {
+//            var productWeaf= ProductWeaf(it,productEntry?.id?:0,it)
+//            weafList.add(productWeaf)
+//        }
+//        Log.e("Offline", "createOwnProductString ${productEntry?.extraWeftDyeId}")
+//        var template = UpdateOwnDesignRequest(productEntry?.extraWeftDyeId?:0,productEntry?.extraWeftYarnCount?:"",productEntry?.extraWeftYarnId?:0,
+//            productEntry?.gsm?:"",productEntry?.id,productEntry?.length?:"",productEntry?.productCategoryId?:0,productEntry?.productTypeId?:0,
+//            weafList ,productEntry?.productSpe?:"",productEntry?.reedCountId?:0,null,productEntry?.warpDyeId?:0,productEntry?.warpYarnCount?:"",
+//            productEntry?.warpYarnId?:0,productEntry?.weftDyeId?:0,productEntry?.weftYarnCount?:"",productEntry?.weftYarnId?:0,productEntry?.weight?:"",productEntry?.width?:"")
+//
+//        Log.e("Offline","template :"+ Gson().toJson(template))
+        return ""//Gson().toJson(template)
     }
 
     fun uploadProduct(productData: String, imageList: ArrayList<String>?, prodId: Long) {

@@ -50,7 +50,7 @@ class TaxInvService: JobIntentService() {
                 ti.enquiryId=tiObj?.enquiryID.toString()
                 ti.ppu=  tiObj?.ppu?:0
                 ti.quantity=tiObj?.quantity?:0
-                ti.finalTotalAmt=tiObj?.finalTotalAmt ?:0
+                ti.finalTotalAmt=tiObj?.finalTotalAmt?:0.0
                 ti.advancePaidAmt=tiObj?.advancePaidAmt?.toString()
                 ti.deliveryCharges=tiObj?.sgst?.toString()
 

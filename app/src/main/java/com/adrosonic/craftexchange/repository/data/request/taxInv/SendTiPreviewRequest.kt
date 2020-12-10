@@ -4,11 +4,11 @@ import java.io.Serializable
 
 open class SendTiPreviewRequest : Serializable{
     var advancePaidAmt: Long ?= 0
-    var cgst: Long?= 0
-    var sgst: Long?= 0
+    var cgst: Double?= 0.0
+    var sgst: Double?= 0.0
     var deliveryCharges: Long?= 0
     var enquiryId: Long?= 0
-    var finalTotalAmt: Long?= 0
+    var finalTotalAmt: Double?= 0.0
     var ppu: Long?= 0
     var quantity: Long?= 0
 

@@ -5,8 +5,9 @@ import com.adrosonic.craftexchange.database.CXRealmManager
 import com.adrosonic.craftexchange.database.entities.realmEntities.BuyerCustomProduct
 import com.adrosonic.craftexchange.repository.data.request.artisan.productTemplate.RelatedProduct
 import com.adrosonic.craftexchange.repository.data.request.artisan.productTemplate.ProductWeaf
+import com.adrosonic.craftexchange.repository.data.request.artisan.productTemplate.RelProduct
 import com.adrosonic.craftexchange.repository.data.request.buyer.OwnDesignRequest
-import com.adrosonic.craftexchange.repository.data.request.buyer.RelProduct
+//import com.adrosonic.craftexchange.repository.data.request.buyer.RelProduct
 import com.adrosonic.craftexchange.repository.data.request.buyer.UpdateOwnDesignRequest
 import com.adrosonic.craftexchange.repository.data.response.buyer.ownDesign.OwnDesigns
 import com.adrosonic.craftexchange.repository.data.response.buyer.ownDesign.ProductImage
@@ -327,7 +328,7 @@ class BuyerCustomProductPredicates {
             try {
                 realm.executeTransaction {
                     Log.e("OwnPorduct","Update : ${Gson().toJson(product)}")
-                    var prodEntry=realm.where(BuyerCustomProduct::class.java).equalTo(BuyerCustomProduct.COLUMN_ID,product.id).limit(1).findFirst()
+                    var prodEntry=realm.where(BuyerCustomProduct::class.java).equalTo(BuyerCustomProduct.COLUMN_ID,product.id?.toLong()).limit(1).findFirst()
                     nextID =prodEntry?._id
                     prodEntry?.actionEdited = 1
 
@@ -354,18 +355,18 @@ class BuyerCustomProductPredicates {
                     prodEntry?.extraWeftYarnId = product.extraWeftYarnId
                     realm.copyToRealmOrUpdate(prodEntry)
                 }
-                Log.e("OwnPorduct","${product.productWeaves.size}")
+//                Log.e("OwnPorduct","${product.productWeaves.size}")
                 Log.e("OwnPorduct","${imageList?.joinToString()}")
-                if(relatedProdList.size>0)RelateProductPredicates.insertRelatedProduct(product?.id,relatedProdList.get(0).productTypeId,relatedProdList.get(0).width,relatedProdList.get(0).length)
+                if(relatedProdList.size>0)RelateProductPredicates.insertRelatedProduct(product?.id?.toLong(),relatedProdList.get(0).productTypeId,relatedProdList.get(0).width,relatedProdList.get(0).length)
                 if(imageList.size>0) {
-                    ProductImagePredicates.deleteProdImages(product?.id)
-                    ProductImagePredicates.insertProductImages(product?.id, imageList)
+                    ProductImagePredicates.deleteProdImages(product?.id?.toLong()?:0)
+                    ProductImagePredicates.insertProductImages(product?.id?.toLong(), imageList)
                 }
                 if(product.productWeaves!=null){
-                    WeaveTypesPredicates.deleteWeaveIds(product?.id)
+                    WeaveTypesPredicates.deleteWeaveIds(product?.id?.toLong())
                     var weaveIds=ArrayList<Long>()
-                    product.productWeaves?.forEach {  weaveIds.add(it.weaveId)}
-                    WeaveTypesPredicates.insertWeaveIds(product?.id,weaveIds)
+//                    product.productWeaves?.forEach {  weaveIds.add(it.)}
+                    WeaveTypesPredicates.insertWeaveIds(product?.id?.toLong(),weaveIds)
                 }
             }catch (e:Exception){
                 Log.e("OwnPorduct","${e.message}")

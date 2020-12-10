@@ -20,7 +20,7 @@ open class TaxInvDetails : RealmObject() {
     var deliveryCharges: Long?=0
     var cgst: Long?=0
     var sgst: Long?=0
-    var finalTotalAmt: Long?=0
+    var finalTotalAmt: Double?=0.0
     var isactive: Long?=null
     var createdon: String?=""
     var modifiedon: String?=""

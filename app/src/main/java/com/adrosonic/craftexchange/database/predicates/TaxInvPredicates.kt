@@ -108,7 +108,7 @@ class TaxInvPredicates {
                         tiDetails?.deliveryCharges = tiOb?.deliveryCharges
                         tiDetails?.cgst = tiOb?.cgst
                         tiDetails?.sgst = tiOb?.sgst
-                        tiDetails?.finalTotalAmt = tiOb?.finalTotalAmt
+                        tiDetails?.finalTotalAmt = tiOb?.finalTotalAmt.toDouble()
                         tiDetails?.isactive = tiOb?.isactive
                         tiDetails?.createdon = tiOb?.createdon
                         tiDetails?.modifiedon = tiOb?.modifiedon
@@ -129,7 +129,7 @@ class TaxInvPredicates {
                         tiObj?.deliveryCharges = tiOb?.deliveryCharges
                         tiObj?.cgst = tiOb?.cgst
                         tiObj?.sgst = tiOb?.sgst
-                        tiObj?.finalTotalAmt = tiOb?.finalTotalAmt
+                        tiObj?.finalTotalAmt = tiOb?.finalTotalAmt.toDouble()
                         tiObj?.isactive = tiOb?.isactive
                         tiObj?.createdon = tiOb?.createdon
                         tiObj?.modifiedon = tiOb?.modifiedon

@@ -42,6 +42,7 @@ import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.WeaveSelec
 import com.adrosonic.craftexchange.ui.modules.artisan.productTemplate.yarnFrgamnets.YarnFrgamentAdapter
 import com.adrosonic.craftexchange.utils.*
 import com.adrosonic.craftexchange.viewModels.DownLoadProdImagesViewModel
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_buyer_add_own_product_design.*
 import kotlinx.android.synthetic.main.activity_buyer_add_own_product_design.yarn_pager
@@ -96,7 +97,7 @@ class BuyerAddOwnProductDesignActivity : LocaleBaseActivity(),
     var weaveIdList=ArrayList<Long>()
     var relatedProduct =ArrayList<RelatedProduct>()
     var status=1L
-    var reedCountId=1L
+    var reedCountId=0L
     private var dots = ArrayList<TextView>()
 
     var arrProdCategoryStr = ArrayList<String>()
@@ -333,31 +334,33 @@ class BuyerAddOwnProductDesignActivity : LocaleBaseActivity(),
             Log.e("Offline", "activity imageList :" +imageList.size)
             if(imageList.size>0){
                 mViewModel.listener=this
-                mBinding?.pbLoader?.visibility=View.VISIBLE
-                mViewModel.downLoadImages(productId,imageList)
+                    mBinding?.pbLoader?.visibility = View.VISIBLE
+                    mViewModel.downLoadImages(productId, imageList)
             }
-//            imageList.forEach {  pairList.add(Triple(true,productId,it))}
 
             for (category in arrProductCategory!!) {
                 if (category.productDesc.equals(productEntry?.productCategoryDscrp?:"", true)) {
                     arrProductType = category.productTypes
                 }
             }
-
+            arrProdTypeStr.clear()
+            arrProdTypeStr.add("Select product type")
             arrProductType?.forEach {
                 Log.e("Offline", "activity forEach :" +it.productDesc)
                 if(it.id.equals(productEntry?.productTypeId))productTypeDescForUpdate=it.productDesc
                 if (it.productDesc.equals(productTypeDescForUpdate)) {
                     arrRelatedProdType = it.relatedProductType
                 }
-                arrProdTypeStr.add(it.productDesc)
+               if(!arrProdTypeStr.contains(it.productDesc)) arrProdTypeStr.add(it.productDesc)
             }
-            Log.e("Offline", "activity arrRelatedProdType :" +arrRelatedProdType?.size)
+            prodTypeId=productEntry?.productTypeId
+            Log.e("Offline", "activity arrProdTypeStr :" +arrProdTypeStr?.joinToString())
+            Log.e("Offline", "activity productTypeDescForUpdate :" +productTypeDescForUpdate)
             relatedProdStored= RelateProductPredicates.getRelatedProductOfProduct(productId)
 
             Log.e("Offline", "activity productTypeDesc :" +productEntry?.productCategoryDscrp)
             mBinding?.spProdCategory?.setSelection(arrProdCategoryStr.indexOf(productEntry?.productCategoryDscrp?:""))
-            mBinding?.spProdType?.setSelection(arrProdTypeStr.indexOf(productTypeDescForUpdate))//todo
+            mBinding?.spProdType?.setSelection(arrProdTypeStr.indexOf(productTypeDescForUpdate))//todo/
 
             setVisiblitiesAndTextsOnType(productTypeDescForUpdate, arrRelatedProdType)
             weaveIdStored= WeaveTypesPredicates.getWeaveList(productId)
@@ -663,7 +666,8 @@ class BuyerAddOwnProductDesignActivity : LocaleBaseActivity(),
                 relatedProductObj.productTypeID=arrRelatedProdType?.get(0)?.id?:0
                 relatedProduct.add(relatedProductObj)
             }
-            Log.e("saveUploadProduct","relatedProduct :${mBinding?.spSubProdWidth?.selectedItem.toString() } ")
+            Log.e("saveUploadProduct","spProdCategory :${mBinding?.spProdCategory?.selectedItem.toString() } ")
+            Log.e("saveUploadProduct","spProdType :${mBinding?.spProdType?.selectedItem.toString() } ")
 
             if(pairList.isEmpty()) Utility.displayMessage("Please add atleast 1 product image",applicationContext)
             else if(mBinding?.spProdCategory?.selectedItemPosition==0) Utility.displayMessage("Please select product category at step 2",applicationContext)
@@ -749,19 +753,57 @@ class BuyerAddOwnProductDesignActivity : LocaleBaseActivity(),
 
     fun callUpdate(width:String,length:String){
 
-        var weavelist=ArrayList<com.adrosonic.craftexchange.repository.data.request.buyer.ProductWeaf>()
-        weaveIdList.forEach { weavelist.add(com.adrosonic.craftexchange.repository.data.request.buyer.ProductWeaf(System.currentTimeMillis(),productId,it)) }
-
-        var relProdList=ArrayList<com.adrosonic.craftexchange.repository.data.request.buyer.RelProduct>()
-        if (arrRelatedProdType!!.size > 0) {
-            var relprod= com.adrosonic.craftexchange.repository.data.request.buyer.RelProduct(arrRelatedProdType?.get(0)?.id ?: 0,mBinding?.spSubProdWidth?.selectedItem.toString(),mBinding?.spSubProdLength?.selectedItem.toString())
-            relProdList.add(relprod)
+//        var weavelist=ArrayList<com.adrosonic.craftexchange.repository.data.request.buyer.ProductWeaf>()
+        var weavelist=ArrayList<String>()
+        weaveIdList.forEach {
+            var weafObj=com.adrosonic.craftexchange.repository.data.request.buyer.ProductWeaf()
+            weafObj.id=System.currentTimeMillis()
+            weafObj.productId=productId
+            weafObj.weaveId=it
+            weavelist.add(weafObj.toString())
         }
+        arrReedCount?.forEach { if(it.count.equals(mBinding?.spReedCount?.selectedItem.toString()) ){reedCountId=it.id}}
 
-        var template = UpdateOwnDesignRequest(extraWeftDyeId,extraWeftYarnCount,extraWeftYarnId,mBinding?.etGsm?.text.toString(),productId,
-            length,prodCatId?:0,prodTypeId?:0,weavelist,
-            mBinding?.etDscrp?.text.toString(),reedCountId,relProdList,
-           warpDyeId,warpYarnCount,warpYarnId,weftDyeId,weftYarnCount,weftYarnId,"",width)
+        arrProductCategory?.forEach { if(it.productDesc.equals(mBinding?.spProdCategory?.selectedItem.toString())){
+            prodCatId=it.id
+            it.productTypes.forEach {
+                if(it.productDesc.equals(mBinding?.spProdType?.selectedItem.toString())){
+                    prodTypeId=it.id
+                }
+            }
+        }
+        }
+//        var relProdList=ArrayList<com.adrosonic.craftexchange.repository.data.request.buyer.RelProduct>()
+//        if (arrRelatedProdType!!.size > 0) {
+//         if(mBinding?.spSubProdWidth?.selectedItem!=null&& mBinding?.spSubProdLength?.selectedItem!=null){
+//            var relprod= com.adrosonic.craftexchange.repository.data.request.buyer.RelProduct(arrRelatedProdType?.get(0)?.id ?: 0,mBinding?.spSubProdWidth?.selectedItem.toString(),mBinding?.spSubProdLength?.selectedItem.toString())
+//            relProdList.add(relprod)
+//        }
+//        }
+//        var template1 =  UpdateOwnDesignRequest(extraWeftDyeId,extraWeftYarnCount,extraWeftYarnId,mBinding?.etGsm?.text.toString(),productId,
+//            length,prodCatId?:0,prodTypeId?:0,"",
+//            mBinding?.etDscrp?.text.toString(),reedCountId,null,
+//            warpDyeId,warpYarnCount,warpYarnId,weftDyeId,weftYarnCount,weftYarnId,"",width)
+        Log.e("Offline","weavelist ${weavelist.toString()}")
+        var template= UpdateOwnDesignRequest()
+        template.id=productId
+        template.productCategoryId=prodCatId?:0
+        template.productTypeId=prodTypeId?:0
+        template.productWeaves=weavelist.toString()
+        template.gsm=mBinding?.etGsm?.text.toString()
+        template.warpDyeId=warpDyeId
+        template.warpYarnCount=warpYarnCount
+        template.warpYarnId=warpYarnId
+        template.weftDyeId=weftDyeId
+        template.weftYarnCount=weftYarnCount
+        template.weftYarnId=weftYarnId
+        template.extraWeftYarnId=extraWeftYarnId
+        template.extraWeftYarnCount=extraWeftYarnCount
+        template.extraWeftDyeId=extraWeftDyeId
+        template.width=width
+        template.length=length
+        template.productSpec=mBinding?.etDscrp?.text.toString()
+        template.reedCountId=reedCountId
 
         val dialogCompresion = CompressionProgressDialog()
         dialogCompresion.show(
@@ -779,16 +821,18 @@ class BuyerAddOwnProductDesignActivity : LocaleBaseActivity(),
                 val pair = Utility.validTotalFileSize(result)
                 val status = pair.first
                 if (status) {
-                    BuyerCustomProductPredicates.updateOwnProductOffline(
-                        template,
-                        list,
-                        deletedPaths,
-                        relProdList
-                    )
+//                    BuyerCustomProductPredicates.updateOwnProductOffline(
+//                        template,
+//                        list,
+//                        deletedPaths,
+//                        relProdList
+//                    )
                     if (Utility.checkIfInternetConnected(applicationContext)) {
-                        val coordinator = SyncCoordinator(applicationContext)
-                        coordinator.performLocallyAvailableActions()
-                    }
+//                        val coordinator = SyncCoordinator(applicationContext)
+//                        coordinator.performLocallyAvailableActions()
+                        Log.e("Offline","template ${template.toString()}")
+                        mViewModel?.uploadProduct( template.toString(),list,productId)
+                    }else Utility.displayMessage(getString(R.string.no_internet_connection),applicationContext)
 
                     finish()
                 } else
