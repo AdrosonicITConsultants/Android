@@ -786,8 +786,12 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
                     response: retrofit2.Response<OrderProgressResponse>) {
                     if(response.body()?.valid == true){
                         Log.e("Order Progress","Success: "+response.body()?.errorMessage)
-                        getOrderProgressListener?.onOPSuccess()
                         OrdersPredicates?.insertOrderProgressDetails(response?.body())
+                        Timer().schedule(object : TimerTask() {
+                            override fun run() {
+                                getOrderProgressListener?.onOPSuccess()
+                            }
+                        }, 500)
                     }else{
                         Log.e("Order Progress","Failure: "+response.body()?.errorMessage)
                         getOrderProgressListener?.onOPFailure()

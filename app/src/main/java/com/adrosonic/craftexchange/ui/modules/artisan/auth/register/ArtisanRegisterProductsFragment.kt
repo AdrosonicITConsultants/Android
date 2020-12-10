@@ -95,7 +95,7 @@ class ArtisanRegisterProductsFragment : Fragment() {
         val clickSpan = SpannableString("terms & Condition")
         val clickableSpan: ClickableSpan = object : ClickableSpan() {
             override fun onClick(textView: View) {
-                Toast.makeText(activity,"Terms n Conditions", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(activity,"Terms n Conditions", Toast.LENGTH_SHORT).show()
             }
 
             override fun updateDrawState(ds: TextPaint) {

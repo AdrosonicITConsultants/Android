@@ -6,7 +6,7 @@ enum class Instances{
 object ConstantsDirectory {
     //////////////////////////////////////////////////////////////////////
 //    const val BASE_URL_DEV = "http://101.53.153.96:8090/api/" //qa
-    const val BASE_URL_DEV = "http://164.52.192.15:8090/api/"
+    const val BASE_URL_DEV = "http://164.52.192.15:8090/api/"//uat
 
 //    const val IMAGE_LOAD_BASE_URL_DEV = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/" //qa
     const val IMAGE_LOAD_BASE_URL_DEV = "https://tatacrftexchangeuat.objectstore.e2enetworks.net/"//uat

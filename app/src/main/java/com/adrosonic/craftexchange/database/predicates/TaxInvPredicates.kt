@@ -43,8 +43,8 @@ class TaxInvPredicates {
                         tiDetails?.ppu = sendTiRequest?.ppu
                         tiDetails?.advancePaidAmt = sendTiRequest?.advancePaidAmt?.toLong()
                         tiDetails?.deliveryCharges = sendTiRequest?.deliveryCharges?.toLong()
-                        tiDetails?.cgst = sendTiRequest?.cgst?.toLong()
-                        tiDetails?.sgst = sendTiRequest?.sgst?.toLong()
+                        tiDetails?.cgst = sendTiRequest?.cgst?.toDouble()
+                        tiDetails?.sgst = sendTiRequest?.sgst?.toDouble()
                         tiDetails?.finalTotalAmt = sendTiRequest?.finalTotalAmt
 
                         tiDetails?.actionMarkTiForSend = send
@@ -58,8 +58,8 @@ class TaxInvPredicates {
                         tiObj?.ppu = sendTiRequest?.ppu
                         tiObj?.advancePaidAmt = sendTiRequest?.advancePaidAmt?.toLong()
                         tiObj?.deliveryCharges = sendTiRequest?.deliveryCharges?.toLong()
-                        tiObj?.cgst = sendTiRequest?.cgst?.toLong()
-                        tiObj?.sgst = sendTiRequest?.sgst?.toLong()
+                        tiObj?.cgst = sendTiRequest?.cgst?.toDouble()
+                        tiObj?.sgst = sendTiRequest?.sgst?.toDouble()
                         tiObj?.finalTotalAmt = sendTiRequest?.finalTotalAmt
 
                         tiObj?.actionMarkTiForSend = send
