@@ -120,7 +120,8 @@ class NotificationAdapter(
             "Moq Received", "Moq accepted" -> {
                 R.drawable.ic_moq_received
             }
-            "Pi finalized", "Tax Invoice Raised", "Delivery Challan Uploaded", "Order Received", "Order Dispached", "Faulty Order", "Order Closed", "Issue resolved" -> {
+            "Pi finalized", "Tax Invoice Raised", "Delivery Challan Uploaded", "Order Received","Rating Received",
+            "Order Dispached", "Faulty Order", "Order Closed", "Issue resolved","Partial Payment Received" -> {
                 R.drawable.ic_status_invoice
             }
             "Advance Payment Received","Advanced Payment Accepted","Advanced Payment Rejected","Final Payment Received","Final Payment Accepted" -> {

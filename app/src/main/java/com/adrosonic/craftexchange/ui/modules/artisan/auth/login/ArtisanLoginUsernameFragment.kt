@@ -306,12 +306,12 @@ class ArtisanLoginUsernameFragment : Fragment() {
                     firebaseAuthWithGoogle(account.idToken!!)
                 } catch (e: ApiException) {
                     // Google Sign In failed, update UI appropriately
-                    Log.w("SignInActivity", "Google sign in failed", e)
+                    Log.e("SignInActivity", "Google sign in failed", e)
                     // ...
                 }
 
             }else{
-                Log.w("SignInActivity", exception.toString())
+                Log.e("SignInActivity", exception.toString())
             }
 
         }else{
@@ -393,7 +393,7 @@ class ArtisanLoginUsernameFragment : Fragment() {
 
                     } else {
                         // If sign in fails, display a message to the user.
-                        Log.w("SignInActivity", "signInWithCredential:failure", task.exception)
+                        Log.e("SignInActivity", "signInWithCredential:failure", task.exception)
                     }
                 }
         }

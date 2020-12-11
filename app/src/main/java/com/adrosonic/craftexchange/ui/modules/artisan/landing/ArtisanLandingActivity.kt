@@ -100,8 +100,6 @@ class ArtisanLandingActivity : LocaleBaseActivity(),
         setContentView(view)
         mViewModel?.noficationlistener=this
 
-
-
         if(Utility.checkIfInternetConnected(applicationContext)){
             mViewModel?.getAllNotifications()
             mViewModel?.getMoqDeliveryTimes()
