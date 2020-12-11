@@ -203,9 +203,6 @@ class BuyerLoginUsernameFragment : Fragment() {
             LoginManager.getInstance().logOut();
         }
 
-//        var accessToken = AccessToken.getCurrentAccessToken()
-//        var isLoggedIn = accessToken != null && !accessToken.isExpired
-
         mBinding?.facebookLoginBtn?.setOnClickListener {
             // Login
             callbackManager = CallbackManager.Factory.create()
@@ -286,40 +283,43 @@ class BuyerLoginUsernameFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         // Result
         // returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        Log.e("SignInActivity", "onActivityResult $requestCode")
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             val exception = task.exception
             if(task.isSuccessful){
+                Log.e("SignInActivity", "onActivityResult isSuccessful: true")
                 try {
                     // Google Sign In was successful, authenticate with Firebase
                     val account = task.getResult(ApiException::class.java)!!
                     firebaseAuthWithGoogle(account.idToken!!)
                 } catch (e: ApiException) {
                     // Google Sign In failed, update UI appropriately
+                    Log.e("SignInActivity", "ApiException: ${e.message}")
                 }
 
             }else{
+                Log.e("SignInActivity", "onActivityResult isSuccessful: false")
             }
 
         }else{
+            Log.e("SignInActivity", "onActivityResult callbackManager block")
             callbackManager?.onActivityResult(requestCode, resultCode, data)
         }
     }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
-        activity?.let {
+        Log.e("SignInActivity", "firebaseAuthWithGoogle start")
+//        activity?.let {
             mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(it) { task ->
+                .addOnCompleteListener(requireActivity()) { task ->
+                    Log.e("SignInActivity", "addOnCompleteListener ${task.isSuccessful}")
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
-                        Log.e("SignInActivity", "success")
-
                         if(Utility.checkIfInternetConnected(requireContext())) {
-
                             CraftExchangeRepository
                                 .getLoginService()
                                 .authSocialBuyer("google", idToken, "android")
@@ -386,9 +386,11 @@ class BuyerLoginUsernameFragment : Fragment() {
                         }
 
                     } else {
+                        Log.e("SignInActivity", "else ${task.isSuccessful}")
+                        Log.e("SignInActivity", "else ${task.exception}")
                         // If sign in fails, display a message to the user.
                     }
-                }
+//                }
         }
     }
 
