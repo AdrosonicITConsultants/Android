@@ -31,11 +31,16 @@ class DownLoadProdImagesViewModel (application: Application) : AndroidViewModel(
         fun onSuccess(imageList:ArrayList<String>)
         fun onFailure()
     }
-var downloadcnt=0
-var listener: DownloadImagesCallback? = null
-companion object{
-    const val TAG="DownLoadProdImages"
-}
+    interface UpdateProductCallback {
+        fun onUpdateSuccess()
+        fun onUpdateFailure()
+    }
+    var downloadcnt=0
+    var listener: DownloadImagesCallback? = null
+    var updateListener: UpdateProductCallback? = null
+    companion object{
+        const val TAG="DownLoadProdImages"
+    }
     fun downLoadImages(productId:Long,imageList:ArrayList<String>){
         downloadcnt=imageList.size
         for(imageName in imageList) {
@@ -175,6 +180,7 @@ companion object{
                 ) {
                     t.printStackTrace()
                     Log.e("Offline", "getProductUploadData onFailure: " + t.localizedMessage)
+                    updateListener?.onUpdateFailure()
                 }
                 override fun onResponse(
                     call: Call<AddOwnDesignResponse>,
@@ -184,6 +190,9 @@ companion object{
                     Log.e("Offline", "onResponse :" + response.body()?.valid)
                     if (response.body()?.valid == true) {
                         deleteOfflineEntries(prodId)
+                        updateListener?.onUpdateSuccess()
+                    }else{
+                        updateListener?.onUpdateFailure()
                     }
                 }
             })

@@ -61,6 +61,7 @@ fun Context.ownDesignIntent(id: Long): Intent {
 class BuyerAddOwnProductDesignActivity : LocaleBaseActivity(),
     View.OnClickListener,
     DownLoadProdImagesViewModel.DownloadImagesCallback,
+    DownLoadProdImagesViewModel.UpdateProductCallback,
     ProdImageListAdapter.ProdUpdateListener,
     WeaveSelectionAdapter.selectionListener{
     val mViewModel: DownLoadProdImagesViewModel by viewModels()
@@ -137,7 +138,7 @@ class BuyerAddOwnProductDesignActivity : LocaleBaseActivity(),
         arrYarn = productUploadData?.data?.yarns
         arrReedCount = productUploadData?.data?.reedCounts
         arrDyes = productUploadData?.data?.dyes
-
+        mViewModel?.updateListener=this
         if (intent.extras != null) {
             productId = intent.getLongExtra("productId", 0)
             Log.e("Offline", "own design activity prodId :" + productId)
@@ -333,7 +334,7 @@ class BuyerAddOwnProductDesignActivity : LocaleBaseActivity(),
             var imageList= ProductImagePredicates.getImagesList(productId)
             Log.e("Offline", "activity imageList :" +imageList.size)
             if(imageList.size>0){
-                mViewModel.listener=this
+                mViewModel?.listener=this
                     mBinding?.pbLoader?.visibility = View.VISIBLE
                     mViewModel.downLoadImages(productId, imageList)
             }
@@ -830,11 +831,11 @@ class BuyerAddOwnProductDesignActivity : LocaleBaseActivity(),
                     if (Utility.checkIfInternetConnected(applicationContext)) {
 //                        val coordinator = SyncCoordinator(applicationContext)
 //                        coordinator.performLocallyAvailableActions()
+                        mBinding?.pbLoader?.visibility = View.VISIBLE
                         Log.e("Offline","template ${template.toString()}")
                         mViewModel?.uploadProduct( template.toString(),list,productId)
                     }else Utility.displayMessage(getString(R.string.no_internet_connection),applicationContext)
-
-                    finish()
+//                    finish()
                 } else
                     Utility.displayMessage(
                         "One of image size exceeds 1MB limit, kindly remove the it to continue",
@@ -921,5 +922,14 @@ class BuyerAddOwnProductDesignActivity : LocaleBaseActivity(),
     override fun onFailure() {
       mBinding?.pbLoader?.visibility=View.GONE
       Utility.displayMessage("Unable to download product images",this)
+    }
+
+    override fun onUpdateSuccess() {
+        finish()
+    }
+
+    override fun onUpdateFailure() {
+        mBinding?.pbLoader?.visibility=View.GONE
+        Utility.displayMessage("Unable to update product",this)
     }
 }
