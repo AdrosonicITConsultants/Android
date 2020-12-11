@@ -135,6 +135,7 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
 
             if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
                 if (qty.isEmpty()) Utility.displayMessage(getString(R.string.plz_add_qty), applicationContext)
+                else if(qty.toLong() < 10 )  Utility.displayMessage(getString(R.string.min_moq),applicationContext)
                 else if (ppu.isEmpty()) Utility.displayMessage(getString(R.string.add_ppu), applicationContext)
                 else if (sgst.isEmpty()) Utility.displayMessage(getString(R.string.plz_add_sgst), applicationContext)
                 else if (cgst.isEmpty()) Utility.displayMessage(getString(R.string.plz_add_cgst), applicationContext)

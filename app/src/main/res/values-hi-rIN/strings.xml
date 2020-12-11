@@ -581,4 +581,5 @@
     <string name="no_completed_enquiries_present">कोई पूर्ण पूछताछ मौजूद नहीं है</string>
     <string name="you_have_accepted">You have accepted the MOQ. For further discussion and negotiation use Chat box option in the app.</string>
     <string name="step_110_enter_description">चरण 10 : विवरण दर्ज करें</string>
+    <string name="min_moq">MOQ 9 से अधिक होना चाहिए </string>
 </resources>

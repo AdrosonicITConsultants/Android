@@ -126,6 +126,7 @@ class PiActivity : LocaleBaseActivity(),
             val cgst = mBinding?.etCgst?.text.toString()
             currency = mBinding?.spCurrency?.selectedItem.toString()
             if (qty.isEmpty()) Utility.displayMessage("Please add Quantity", applicationContext)
+            else if(qty.toLong() < 10 )  Utility.displayMessage(getString(R.string.min_moq),applicationContext)
             else if (date.isEmpty()) Utility.displayMessage("Please select delivery date", applicationContext )
             else if (ppu.isEmpty()) Utility.displayMessage("Please add price per unit", applicationContext)
             else if (hsn.isEmpty()) Utility.displayMessage("Please add HSN code",applicationContext)

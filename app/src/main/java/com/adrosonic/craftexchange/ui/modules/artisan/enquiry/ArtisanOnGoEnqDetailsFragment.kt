@@ -205,6 +205,7 @@ class ArtisanOnGoEnqDetailsFragment : Fragment(),
                 val moq=mBinding?.etMoq?.text.toString()
                 val ppu=mBinding?.etPrice?.text.toString()
                 if(moq.isEmpty()) Utility.displayMessage(getString(R.string.add_moq),requireContext())
+                else if(moq.toLong() < 10) Utility.displayMessage(getString(R.string.min_moq),requireContext())
                 else if(ppu.isEmpty()) Utility.displayMessage(getString(R.string.add_ppu),requireContext())
                 else if(estId<=0) Utility.displayMessage(getString(R.string.select_est_days),requireContext())
                 else {
