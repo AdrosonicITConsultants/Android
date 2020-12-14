@@ -199,6 +199,7 @@ class EnquiryPredicates {
                                 exEnq?.pocContact = enquiry?.openEnquiriesResponse?.pocContact
                                 exEnq?.pocEmail = enquiry?.openEnquiriesResponse?.pocEmail
                                 exEnq?.gst = enquiry?.openEnquiriesResponse?.gst
+                                exEnq?.revisedAdvancePaymentId = enquiry?.openEnquiriesResponse?.revisedAdvancePaymentId
                                 exEnq?.userId=enquiry?.userId
                                 realm.copyToRealmOrUpdate(exEnq)
                             }else{
@@ -274,6 +275,7 @@ class EnquiryPredicates {
                                 enqObj?.pocEmail = enquiry?.openEnquiriesResponse?.pocEmail
                                 enqObj?.gst = enquiry?.openEnquiriesResponse?.gst
                                 enqObj?.userId=enquiry?.userId
+                                enqObj?.revisedAdvancePaymentId = enquiry?.openEnquiriesResponse?.revisedAdvancePaymentId
                                 realm.copyToRealmOrUpdate(enqObj)
                             }
                         }
@@ -380,7 +382,7 @@ class EnquiryPredicates {
                                 exEnq?.pocContact = enquiry?.openEnquiriesResponse?.pocContact
                                 exEnq?.pocEmail = enquiry?.openEnquiriesResponse?.pocEmail
                                 exEnq?.gst = enquiry?.openEnquiriesResponse?.gst
-
+                                exEnq?.revisedAdvancePaymentId = enquiry?.openEnquiriesResponse?.revisedAdvancePaymentId
                                 realm.copyToRealmOrUpdate(exEnq)
                             }else{
                                 nextID = enqObj?._id ?: 0
@@ -454,7 +456,7 @@ class EnquiryPredicates {
                                 enqObj?.pocContact = enquiry?.openEnquiriesResponse?.pocContact
                                 enqObj?.pocEmail = enquiry?.openEnquiriesResponse?.pocEmail
                                 enqObj?.gst = enquiry?.openEnquiriesResponse?.gst
-
+                                enqObj?.revisedAdvancePaymentId = enquiry?.openEnquiriesResponse?.revisedAdvancePaymentId
                                 realm.copyToRealmOrUpdate(enqObj)
                             }
                         }
@@ -946,7 +948,6 @@ class EnquiryPredicates {
             }
             return payment
         }
-
 
         fun getAllOngoingEnquiries(): RealmResults<OngoingEnquiries>? {
             val realm = CXRealmManager.getRealmInstance()

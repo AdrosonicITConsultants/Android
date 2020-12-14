@@ -78,7 +78,8 @@ data class EnquiriesResponse (
     val productHistoryImages: String ?="",
     val enquiryStatusId: Long?=0,
     val state: String?="",
-    val country: String?=""
+    val country: String?="",
+    val revisedAdvancePaymentId: Long?=0
 )
 
 data class PaymentAccountDetail (

@@ -424,13 +424,8 @@
     <string name="legal_disclaimer">Legal Disclaimer</string>
 
     //facebook sdk
-    <string name="facebook_app_id">717798432467327</string>
-    <string name="fb_login_protocol_scheme">fb717798432467327</string>
-
-//temp fb sdk
-<!--    <string name="facebook_app_id">2492150817748015</string>-->
-<!--    <string name="fb_login_protocol_scheme">fb2492150817748015</string>-->
-
+    <string name="facebook_app_id">2960179490877793</string>
+    <string name="fb_login_protocol_scheme">fb2960179490877793</string>
 
     <string name="mark_order_dispatched">Mark Order Dispatched</string>
     <string name="check_delivery_receipt">Check Delivery Receipt</string>

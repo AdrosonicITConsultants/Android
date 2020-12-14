@@ -88,7 +88,7 @@ open class Orders:RealmObject() {
     var actionMarkCr:Long?=0
     var actionMarkCrStatusUpdate:Long?=0
     var crStatusUpdateInput:String?=""
-
+    var revisedAdvancePaymentId:  Long ?=0
     companion object{
         const val COLUMN__ID = "_id"
         const val COLUMN_ENQUIRY_ID = "enquiryId"

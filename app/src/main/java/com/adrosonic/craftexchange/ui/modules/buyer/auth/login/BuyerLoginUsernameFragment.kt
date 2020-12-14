@@ -322,6 +322,7 @@ class BuyerLoginUsernameFragment : Fragment() {
                         if(Utility.checkIfInternetConnected(requireContext())) {
                             CraftExchangeRepository
                                 .getLoginService()
+
                                 .authSocialBuyer("google", idToken, "android")
                                 .enqueue(object : Callback, retrofit2.Callback<BuyerResponse> {
                                     override fun onFailure(call: Call<BuyerResponse>, t: Throwable) {
@@ -340,7 +341,7 @@ class BuyerLoginUsernameFragment : Fragment() {
                                     override fun onResponse(
                                         call: Call<BuyerResponse>, response: Response<BuyerResponse>
                                     ) {
-
+                                        Log.e("SignInActivity", "before ${response.body()?.valid}")
                                         if (response.body()?.valid == true)  {
 
                                             Prefs.putBoolean(ConstantsDirectory.IS_LOGGED_IN, true)
@@ -385,7 +386,8 @@ class BuyerLoginUsernameFragment : Fragment() {
                             Utility.displayMessage(requireActivity().getString(R.string.no_internet_connection),requireContext())
                         }
 
-                    } else {
+                    }
+                    else {
                         Log.e("SignInActivity", "else ${task.isSuccessful}")
                         Log.e("SignInActivity", "else ${task.exception}")
                         // If sign in fails, display a message to the user.

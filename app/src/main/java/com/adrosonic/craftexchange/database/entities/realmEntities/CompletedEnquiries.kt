@@ -74,7 +74,7 @@ open class CompletedEnquiries : RealmObject() {
     var pocEmail: String? = ""
     var pocContact: String? = ""
     var gst: String? = ""
-
+    var revisedAdvancePaymentId:  Long ?=0
     companion object{
         const val COLUMN_ENQUIRY_ID = "enquiryID"
         const val COLUMN_PRODUCT_ID = "productID"

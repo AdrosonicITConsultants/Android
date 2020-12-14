@@ -119,6 +119,7 @@ class OrdersPredicates {
                                 exEnq?.isPartialRefundReceived=order?.openEnquiriesResponse?.isPartialRefundReceived
                                 exEnq?.isRefundReceived=order?.openEnquiriesResponse?.isRefundReceived
                                 exEnq?.isProductReturned=order?.openEnquiriesResponse?.isProductReturned
+                                exEnq?.revisedAdvancePaymentId=order?.openEnquiriesResponse?.revisedAdvancePaymentId
 
                                 realm.copyToRealmOrUpdate(exEnq)
                             }else{
@@ -198,6 +199,7 @@ class OrdersPredicates {
                                 orderObj?.artisanReviewId = order?.openEnquiriesResponse?.artisanReviewId ?: 0
                                 orderObj?.isReprocess = order?.openEnquiriesResponse?.isReprocess ?: 0
                                 orderObj?.isNewGenerated = order?.openEnquiriesResponse?.isNewGenerated ?: 0
+                                orderObj?.revisedAdvancePaymentId=order?.openEnquiriesResponse?.revisedAdvancePaymentId
                                 realm.copyToRealmOrUpdate(orderObj)
                             }
                         }

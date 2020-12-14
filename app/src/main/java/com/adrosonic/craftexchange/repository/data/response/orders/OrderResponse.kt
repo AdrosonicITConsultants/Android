@@ -89,7 +89,8 @@ data class OpenEnquiriesResponse (
     val country: String? = null,
     val artisanReviewId: Long?=0,
     val isReprocess: Long?=0,
-    val isNewGenerated: Long?=0
+    val isNewGenerated: Long?=0,
+    val revisedAdvancePaymentId: Long?=0
 )
 
 enum class ProductType {
