@@ -1,4 +1,4 @@
-package com.adrosonic.craftexchange.ui.modules.buyer.enquiry.advPay
+package com.adrosonic.craftexchange.ui.modules.order.revisedAdvPayment
 
 import android.Manifest
 import android.app.Dialog
@@ -19,52 +19,49 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
 import com.adrosonic.craftexchange.R
-import com.adrosonic.craftexchange.database.entities.realmEntities.EnquiryPaymentDetails
-import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
+import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
 import com.adrosonic.craftexchange.database.predicates.EnquiryPredicates
-import com.adrosonic.craftexchange.database.predicates.PiPredicates
-import com.adrosonic.craftexchange.databinding.FragmentAdvPay1Binding
-import com.adrosonic.craftexchange.databinding.FragmentAdvPay2Binding
+import com.adrosonic.craftexchange.databinding.FragmentUploadRevPayReciptBinding
 import com.adrosonic.craftexchange.enums.PaymentStatus
 import com.adrosonic.craftexchange.enums.getId
 import com.adrosonic.craftexchange.repository.data.request.enquiry.BuyerPayment
-import com.adrosonic.craftexchange.ui.modules.authentication.reset.ResetPasswordFragment
+import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.advPay.AdvPay3Fragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
-import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
+import com.adrosonic.craftexchange.viewModels.OrdersViewModel
 import com.adrosonic.craftexchange.viewModels.TransactionViewModel
-import com.bumptech.glide.Glide
-import com.pixplicity.easyprefs.library.Prefs
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 private const val ARG_PARAM3 = "param3"
 private const val ARG_PARAM4 = "param4"
+private const val ARG_PARAM5 = "param5"
 
 
-class AdvPay2Fragment : Fragment(),
-TransactionViewModel.UploadPaymentInterface{
+class UploadRevPayReciptFragment : Fragment(),
+    TransactionViewModel.UploadPaymentInterface{
 
     private var param1: String? = null
     private var param2: Float?= 0F
     private var param3: String?= null
     private var param4: String?= null
+    private var param5: String?= null
 
     var piID : Long ?= 0
     var enqID : Long?= 0
     var calculatedAmount : Long?= 0
     var percentSelected : Long?= 0
+    var amount : Long?= 0
 
-    private var mBinding: FragmentAdvPay2Binding?= null
+    private var mBinding: FragmentUploadRevPayReciptBinding?= null
 
-    val mEnqVM : EnquiryViewModel by viewModels()
+    val mOrderVm : OrdersViewModel by viewModels()
     val mTransVM : TransactionViewModel by viewModels()
 
-    private var enquiryDetails : OngoingEnquiries?= null
+    private var orderDetails : Orders?= null
     private var url : String?=""
     private lateinit var slideDown: Animation
     private lateinit var slideUp: Animation
@@ -86,6 +83,7 @@ TransactionViewModel.UploadPaymentInterface{
             param2 = it.getFloat(ARG_PARAM2)
             param3 = it.getString(ARG_PARAM3)
             param4 = it.getString(ARG_PARAM4)
+            param5 = it.getString(ARG_PARAM5)
         }
     }
 
@@ -94,7 +92,7 @@ TransactionViewModel.UploadPaymentInterface{
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_adv_pay2, container, false)
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_upload_rev_pay_recipt, container, false)
         if(param1!=null){
             enqID = if(param1!!.isNotEmpty()) param1!!.toLong() else 0
         }
@@ -107,6 +105,12 @@ TransactionViewModel.UploadPaymentInterface{
         if(param4!=null){
             piID = if(param4!!.isNotEmpty())param4!!.toLong() else 0
         }
+        if(param4!=null){
+            piID = if(param4!!.isNotEmpty())param4!!.toLong() else 0
+        }
+        if(param5!=null){
+            amount = if(param5!!.isNotEmpty())param5!!.toLong() else 0
+        }
         dialog = Utility.loadingDialog(requireActivity())
 
         return mBinding?.root
@@ -116,13 +120,12 @@ TransactionViewModel.UploadPaymentInterface{
         super.onViewCreated(view, savedInstanceState)
         mTransVM?.uploadPaymentListener = this
 
-        enquiryDetails = enqID?.toLong()?.let { mEnqVM?.getSingleOnEnqData(it) }?.value
-//        var piDetails = PiPredicates?.getSinglePi(enqID?.toLong())
+        orderDetails = enqID?.let { mOrderVm?.getSingleOnOrderData(it,0) }?.value
 
         slideDown = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_down)
         slideUp = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_up)
 
-        if(enquiryDetails != null){
+        if(orderDetails != null){
             setDetails()
         }
 
@@ -134,7 +137,6 @@ TransactionViewModel.UploadPaymentInterface{
             if (mBinding?.paymentDetailsLayout?.visibility == View.GONE) {
                 mBinding?.paymentDetailsLayout?.animation = slideDown
                 mBinding?.paymentDetailsLayout?.visibility = View.VISIBLE
-
             } else {
                 mBinding?.paymentDetailsLayout?.animation = slideUp
                 mBinding?.paymentDetailsLayout?.visibility = View.GONE
@@ -154,9 +156,6 @@ TransactionViewModel.UploadPaymentInterface{
         }
 
         mBinding?.btnUploadSend?.setOnClickListener {
-
-            var amount = enquiryDetails?.totalAmount?.toFloat()?.toLong()
-
             if(Utility.checkIfInternetConnected(requireActivity())){
                 if(absolutePath != ""){
                     var paymentObj = enqID?.let { it1 ->
@@ -169,9 +168,9 @@ TransactionViewModel.UploadPaymentInterface{
                                             null,
                                             it2,
                                             it3,
-                                            it4,
+                                            it4,//fetch from API
                                             it5,
-                                            PaymentStatus.ADVANCE.getId())
+                                            PaymentStatus.REVISED.getId())
                                     }
                                 }
                             }
@@ -188,25 +187,24 @@ TransactionViewModel.UploadPaymentInterface{
             }
 
         }
-
-
     }
 
     fun setDetails(){
-        mBinding?.enquiryCode?.text = enquiryDetails?.enquiryCode ?: "N.A"
+        mBinding?.selectAdvancePayment?.text="Select recipt for revised advance payment"
+        mBinding?.enquiryCode?.text = orderDetails?.enquiryCode ?: "N.A"
         mBinding?.calculatedAmount?.text = "₹ $calculatedAmount"
         setProductImage()
         setAccountDetails()
     }
 
     fun setProductImage(){
-        val image = enquiryDetails?.productImages?.split((",").toRegex())
+        val image = orderDetails?.productImages?.split((",").toRegex())
             ?.dropLastWhile { it.isEmpty() }?.toTypedArray()?.get(0)
 
-        if (enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT) {
-            url = Utility.getCustomProductImagesUrl(enquiryDetails?.productID, image)
+        if (orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT) {
+            url = Utility.getCustomProductImagesUrl(orderDetails?.productId, image)
         } else {
-            url = Utility.getProductsImagesUrl(enquiryDetails?.productID, image)
+            url = Utility.getProductsImagesUrl(orderDetails?.productId, image)
         }
         mBinding?.productImage?.let {
             ImageSetter.setImage(
@@ -222,10 +220,10 @@ TransactionViewModel.UploadPaymentInterface{
 
     fun setAccountDetails(){
 
-        mBinding?.artisanBrand?.text = enquiryDetails?.ProductBrandName ?: " - "
-        mBinding?.artisanName?.text = "${enquiryDetails?.firstName} ${enquiryDetails?.lastName ?: ""}"
+        mBinding?.artisanBrand?.text = orderDetails?.companyName ?: " - "
+        mBinding?.artisanName?.text = "${orderDetails?.firstName} ${orderDetails?.lastName ?: ""}"
 
-        userID = enquiryDetails?.userId
+        userID = orderDetails?.userId
         var bank =  EnquiryPredicates.getEnqPaymentDetails(userID.toString(),1)
 
         mBinding?.branchDetails?.text = "${bank?.bankName}, ${bank?.branch}"
@@ -324,9 +322,10 @@ TransactionViewModel.UploadPaymentInterface{
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("AdvancePAyUpload", "OnSuccess")
                 dialog?.cancel()
+                Utility.displayMessage("Pending advance payment recipt uploaded successfully",requireContext())
                 activity?.supportFragmentManager?.beginTransaction()
-                    ?.replace(R.id.enquiry_payment_container,
-                        AdvPay3Fragment.newInstance(enqID.toString(),calculatedAmount.toString(),false))
+                    ?.replace(R.id.order_payment_container,
+                        AdvPay3Fragment.newInstance(enqID.toString(),calculatedAmount.toString(),true))
                     ?.commit()
             }
             )
@@ -350,14 +349,14 @@ TransactionViewModel.UploadPaymentInterface{
 
     companion object {
 
-        fun newInstance(param1: String,param2: Float,param3:String,param4:String) =
-            AdvPay2Fragment().apply {
+        fun newInstance(param1: String,param2: Float,param3:String,param4:String,param5:String) =
+            UploadRevPayReciptFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putFloat(ARG_PARAM2, param2)
                     putString(ARG_PARAM3, param3)
                     putString(ARG_PARAM4, param4)
-
+                    putString(ARG_PARAM5, param5)
                 }
             }
     }

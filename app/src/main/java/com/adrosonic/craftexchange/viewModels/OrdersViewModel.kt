@@ -18,6 +18,8 @@ import com.adrosonic.craftexchange.repository.data.response.buyer.ownDesign.Dele
 import com.adrosonic.craftexchange.repository.data.response.changeReequest.CrDetailsResponse
 import com.adrosonic.craftexchange.repository.data.response.orders.OrderProgressResponse
 import com.adrosonic.craftexchange.repository.data.response.orders.OrderResponse
+import com.adrosonic.craftexchange.repository.data.response.orders.advPayment.RevisedStatusResponse
+import com.adrosonic.craftexchange.repository.data.response.orders.advPayment.RviseAdvPaymentStatusResponse
 import com.adrosonic.craftexchange.repository.data.response.taxInv.TaxInvPreviewResponse
 import com.adrosonic.craftexchange.repository.data.response.taxInv.TaxInvoiceResponse
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
@@ -81,19 +83,21 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
         fun onRatingFailure()
     }
 
-
     interface OrderCloseInterface{
         fun onOrderCloseSuccess()
         fun onOrderCloseFailure()
     }
 
     interface tiInterface{
-        //        fun onTiFailure()
-//        fun onTiSuccess()
         fun onTiDownloadSuccess()
         fun onTiDownloadFailure()
         fun onTiHTMLSuccess(data:String)
         fun onTiHTMLFailure()
+    }
+
+    interface FetchReviseStatusInterface{
+        fun onReviseStatusSuccess(data: RevisedStatusResponse)
+        fun onReviseStatusFailure()
     }
     val ongoingOrderList : MutableLiveData<RealmResults<Orders>> by lazy { MutableLiveData<RealmResults<Orders>>() }
     val onGoingOrderDetails : MutableLiveData<Orders> by lazy { MutableLiveData<Orders>() }
@@ -112,6 +116,7 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
     var taxInvGenListener : GenTaxInvInterface?=null
     var tiListener : tiInterface?=null
     var orderCloseListener : OrderCloseInterface?=null
+    var reviseStatusListener : FetchReviseStatusInterface?=null
 
     fun getOnOrderListMutableData(): MutableLiveData<RealmResults<Orders>> {
         ongoingOrderList.value=loadOnOrderList()
@@ -434,7 +439,7 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
                     response: Response<NotificationReadResponse>
                 ) {
                     Log.e("RaiseCr","onResponse : ${response?.body()?.data}")
-                    if(response?.body()?.valid!!){
+                    if(response?.body()?.valid==true){
                         Log.e("RaiseCr","isSuccessful ")
                         CrPredicates.updatePostCrStatus(changeRequestParameters,changeRequestStatus)
                         OrdersPredicates.updateChangeRequestStatus(changeRequestParameters.enquiryId,changeRequestStatus)
@@ -798,6 +803,26 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
                     }
                 }
 
+            })
+    }
+
+    fun getRevisedAdvancedPaymentStatus(enquiryId : Long){
+        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
+        CraftExchangeRepository
+            .getOrderService()
+            .getRevisedAdvancedPaymentStatus(token,enquiryId)
+            .enqueue(object: Callback, retrofit2.Callback<RviseAdvPaymentStatusResponse> {
+                override fun onFailure(call: Call<RviseAdvPaymentStatusResponse>, t: Throwable) {
+                    t.printStackTrace()
+                    reviseStatusListener?.onReviseStatusFailure()
+                }
+                override fun onResponse(
+                    call: Call<RviseAdvPaymentStatusResponse>,
+                    response: retrofit2.Response<RviseAdvPaymentStatusResponse>) {
+                    if(response?.isSuccessful){
+                        response?.body()?.let {  reviseStatusListener?.onReviseStatusSuccess(response?.body()?.data!!) }
+                    }else reviseStatusListener?.onReviseStatusFailure()
+                }
             })
     }
 }

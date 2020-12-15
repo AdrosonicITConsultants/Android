@@ -2,6 +2,7 @@ package com.adrosonic.craftexchange.repository.remote
 
 import com.adrosonic.craftexchange.repository.data.response.enquiry.payment.PaymentReceiptResponse
 import com.adrosonic.craftexchange.repository.data.response.taxInv.FinalPayDetailsResponse
+import com.adrosonic.craftexchange.repository.data.response.transaction.AdvancePaymentStatusResponse
 import com.adrosonic.craftexchange.repository.data.response.transaction.SingleTransactionResponse
 import com.adrosonic.craftexchange.repository.data.response.transaction.TransactionResponse
 import com.adrosonic.craftexchange.repository.data.response.transaction.TransactionStatusData
@@ -80,5 +81,15 @@ interface TransactionDao {
     @GET("transaction/getTransactions/{enquiryId}")
     fun getSingleTransaction(@Header("Authorization") token:String,
                                @Path("enquiryId") enquiryId : Int) : Call<SingleTransactionResponse>
+
+    @Headers("Accept: application/json")
+    @GET("enquiry/getRevisedAdvancedPaymentReceipt/{enquiryId}")
+    fun getRevisedAdvancedPaymentReceipt(@Header("Authorization") token:String,
+                                 @Query("enquiryId") enquiryId : Long) : Call<PaymentReceiptResponse>
+
+    @Headers("Accept: application/json")
+    @GET("enquiry/getAdvancedPaymentStatus")
+    fun getAdvancedPaymentStatus(@Header("Authorization") token:String,
+                                 @Query("enquiryId") enquiryId : Long) : Call<AdvancePaymentStatusResponse>
 
 }

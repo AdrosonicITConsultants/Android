@@ -15,8 +15,11 @@ import androidx.fragment.app.viewModels
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
 import com.adrosonic.craftexchange.databinding.FragmentFinPay2Binding
+import com.adrosonic.craftexchange.enums.DocumentType
+import com.adrosonic.craftexchange.enums.getId
 import com.adrosonic.craftexchange.ui.modules.chat.chatLogDetailsIntent
 import com.adrosonic.craftexchange.ui.modules.transaction.transactionIntent
+import com.adrosonic.craftexchange.ui.modules.transaction.viewDocument
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
@@ -85,7 +88,9 @@ class FinPay2Fragment : Fragment() {
         }
 
         mBinding?.btnViewTransac?.setOnClickListener {
-            requireActivity()?.startActivity(requireActivity()?.transactionIntent())
+//            requireActivity()?.startActivity(requireActivity()?.transactionIntent())
+            val intent = Intent(enqID.let { it1 -> requireContext().viewDocument(it1!!.toLong(),DocumentType.FINALPAY.getId()) })
+            startActivity(intent)
         }
         mBinding?.btnChat?.setOnClickListener {
             enqID?.let {  startActivity(Intent(requireContext()?.chatLogDetailsIntent(it.toLong())))}

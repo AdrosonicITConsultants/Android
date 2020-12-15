@@ -8,6 +8,7 @@ import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryStage
 import com.adrosonic.craftexchange.repository.data.response.enquiry.EnquiryResponse
 import com.adrosonic.craftexchange.repository.data.response.orders.OrderProgressResponse
 import com.adrosonic.craftexchange.repository.data.response.orders.OrderResponse
+import com.adrosonic.craftexchange.repository.data.response.orders.advPayment.RviseAdvPaymentStatusResponse
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
@@ -77,4 +78,10 @@ interface OrderDao {
     fun initializePartialRefund(@Header("Authorization") token:String,
                              @Query("orderId") orderId : Long
     ) : Call<NotificationReadResponse>
+
+    @Headers("Accept: application/json")
+    @POST("enquiry/getRevisedAdvancedPaymentStatus/{enquiryId}")
+    fun getRevisedAdvancedPaymentStatus(@Header("Authorization") token:String,
+                                @Path("enquiryId") enquiryId : Long
+    ) : Call<RviseAdvPaymentStatusResponse>
 }

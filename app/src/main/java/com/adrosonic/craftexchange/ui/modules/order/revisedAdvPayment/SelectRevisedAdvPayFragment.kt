@@ -1,6 +1,5 @@
-package com.adrosonic.craftexchange.ui.modules.buyer.enquiry.advPay
+package com.adrosonic.craftexchange.ui.modules.order.revisedAdvPayment
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -9,47 +8,42 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
-import com.adrosonic.craftexchange.databinding.FragmentAdvPay2Binding
-import com.adrosonic.craftexchange.databinding.FragmentAdvPay3Binding
+import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
+import com.adrosonic.craftexchange.databinding.FragmentAdvPay1Binding
+import com.adrosonic.craftexchange.databinding.FragmentSelectRevisedAdvPayBinding
 import com.adrosonic.craftexchange.enums.AvailableStatus
-import com.adrosonic.craftexchange.enums.DocumentType
 import com.adrosonic.craftexchange.enums.getId
-import com.adrosonic.craftexchange.ui.modules.chat.chatLogDetailsIntent
-import com.adrosonic.craftexchange.ui.modules.enquiry.enquiryDetails
-import com.adrosonic.craftexchange.ui.modules.transaction.transactionIntent
-import com.adrosonic.craftexchange.ui.modules.transaction.viewDocument
+import com.adrosonic.craftexchange.repository.data.response.orders.advPayment.RevisedStatusResponse
+import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.advPay.AdvPay1Fragment
+import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.advPay.AdvPay2Fragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
 import com.adrosonic.craftexchange.viewModels.EnquiryViewModel
-import com.pixplicity.easyprefs.library.Prefs
+import com.adrosonic.craftexchange.viewModels.OrdersViewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
-private const val ARG_PARAM3 = "param3"
 
+class SelectRevisedAdvPayFragment : Fragment()
+,OrdersViewModel.FetchReviseStatusInterface{
+    private var param1: Long? = null
+    private var param2: Long? = null
 
-class AdvPay3Fragment : Fragment() {
+    var enqID : Long? = 0
+    var piID : Long? = 0
 
-    private var param1: String? = null
-    private var param2: String? = null
-    private var param3: Boolean? = null
+    private var mBinding: FragmentSelectRevisedAdvPayBinding?= null
 
-    var enqID : String?= ""
+    val mOrderVM : OrdersViewModel by viewModels()
 
-    private var mBinding: FragmentAdvPay3Binding?= null
-
-    val mEnqVM : EnquiryViewModel by viewModels()
-
-    private var enquiryDetails : OngoingEnquiries?= null
+    private var orderDetails : Orders?= null
     private var url : String?=""
 
     var weft : String ?= ""
@@ -57,19 +51,16 @@ class AdvPay3Fragment : Fragment() {
     var extraweft : String ?= ""
     var prodCategory : String ?= ""
     var status : String ?= ""
-
-    var amountPaid : String?=""
-    var isRevised : Boolean=false
-
+    var calculatedAmount : Float?= 0F
+    var percentSelected : Long?= 30L
+    var totalAmount : Long?= 30L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-            param3 = it.getBoolean(ARG_PARAM3)
+            param1 = it.getLong(ARG_PARAM1)
+            param2 = it.getLong(ARG_PARAM2)
         }
-
     }
 
     override fun onCreateView(
@@ -77,26 +68,25 @@ class AdvPay3Fragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_adv_pay3, container, false)
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_select_revised_adv_pay, container, false)
         if(param1!=null){
-            enqID = if(param1!!.isNotEmpty())param1 else "0"
+            enqID = if(param1!=null)param1 else 0
         }
-
         if(param2!=null){
-            amountPaid = if(param2!!.isNotEmpty())param2 else "0"
-        }
-        if(param3!=null){
-            isRevised = if(param3!=null)param3?:false else false
+            piID = if(param2!=null)param2 else 0
         }
         return mBinding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        enquiryDetails = enqID?.toLong()?.let { mEnqVM?.getSingleOnEnqData(it) }?.value
-
-        if(enquiryDetails != null){
+        if(Utility.checkIfInternetConnected(requireContext())){
+            mBinding?.pbLoader?.visibility=View.VISIBLE
+            mOrderVM?.reviseStatusListener=this
+            enqID?.let {mOrderVM?.getRevisedAdvancedPaymentStatus(it?.toLong())  }
+        }else Utility.displayMessage(getString(R.string.no_internet_connection),requireContext())
+        orderDetails = enqID?.toLong()?.let { mOrderVM?.getSingleOnOrderData(it,0) }?.value
+        if(orderDetails != null){
             setDetails()
         }
 
@@ -104,44 +94,35 @@ class AdvPay3Fragment : Fragment() {
             activity?.onBackPressed()
         }
 
-        mBinding?.btnViewTransac?.setOnClickListener {
-//            requireActivity()?.startActivity(requireActivity()?.transactionIntent())
-            if(isRevised){
-                val intent = Intent(enqID?.let { it1 -> requireContext()?.viewDocument(it1.toLong(),DocumentType.REVADVANCEPAY.getId()) })
-                startActivity(intent)
-            }
-            else {
-                val intent = Intent(enqID?.let { it1 -> requireContext()?.viewDocument(it1.toLong(), DocumentType.ADVANCEPAY.getId()) })
-                startActivity(intent)
+        mBinding?.btnProceedAdvPay?.setOnClickListener {
+
+            if (savedInstanceState == null) {
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.order_payment_container,
+                        UploadRevPayReciptFragment.newInstance(enqID.toString(),
+                            calculatedAmount!!,percentSelected.toString(),piID.toString(),totalAmount.toString()))
+                    ?.commit()
             }
         }
-        mBinding?.btnChat?.setOnClickListener {
-            enqID?.let {  startActivity(Intent(requireContext()?.chatLogDetailsIntent(it.toLong())))}
-        }
+
     }
 
-
     fun setDetails(){
-        mBinding?.enquiryCode?.text = enquiryDetails?.enquiryCode ?: "N.A"
-        mBinding?.amountPaid?.text = "₹ $amountPaid"
-
+        mBinding?.enquiryCode?.text = orderDetails?.enquiryCode ?: "N.A"
         setProductImage()
         setProductName()
         setProductAvailability()
-        if(isRevised){
-            mBinding?.psText?.text="The final tax invoice will be updated."
-            mBinding?.enqToOrderText?.text="Your Order will be dispatched as soon as Artisan approves your final payment receipt."
-        }
+        mBinding?.productAmount?.text = "₹ ${orderDetails?.totalAmount ?: 0}"
     }
 
     fun setProductImage(){
-        val image = enquiryDetails?.productImages?.split((",").toRegex())
+        val image = orderDetails?.productImages?.split((",").toRegex())
             ?.dropLastWhile { it.isEmpty() }?.toTypedArray()?.get(0)
 
-        if (enquiryDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT) {
-            url = Utility.getCustomProductImagesUrl(enquiryDetails?.productID, image)
+        if (orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT) {
+            url = Utility.getCustomProductImagesUrl(orderDetails?.productId, image)
         } else {
-            url = Utility.getProductsImagesUrl(enquiryDetails?.productID, image)
+            url = Utility.getProductsImagesUrl(orderDetails?.productId, image)
         }
         mBinding?.productImage?.let {
             ImageSetter.setImage(
@@ -157,26 +138,26 @@ class AdvPay3Fragment : Fragment() {
 
     fun setProductName(){
         //Product name or Product cloth details
-        if (enquiryDetails?.productName != "") {
-            mBinding?.productName?.text = enquiryDetails?.productName
+        if (orderDetails?.productName != "") {
+            mBinding?.productName?.text = orderDetails?.productName
         } else {
             //TODO : set text as prod cat / werft / warn / extraweft
             var weaveList = Utility?.getWeaveType()
             var catList = Utility?.getProductCategory()
 
             weaveList?.forEach {
-                if (it.first == enquiryDetails?.weftYarnID) {
+                if (it.first == orderDetails?.weftYarnId) {
                     weft = it.second
                 }
-                if (it.first == enquiryDetails?.warpYarnID) {
+                if (it.first == orderDetails?.warpYarnId) {
                     warp = it.second
                 }
-                if (it.first == enquiryDetails?.extraWeftYarnID) {
+                if (it.first == orderDetails?.extraWeftYarnId) {
                     extraweft = it.second
                 }
             }
             catList?.forEach {
-                if (it.first == enquiryDetails?.productCategoryID) {
+                if (it.first == orderDetails?.productCategoryId) {
                     prodCategory = it.second
                 }
             }
@@ -195,7 +176,7 @@ class AdvPay3Fragment : Fragment() {
 
     fun setProductAvailability(){
         //ProductAvailability
-        when (enquiryDetails?.productStatusID) {
+        when (orderDetails?.productStatusId) {
             AvailableStatus.IN_STOCK.getId() -> {
                 status = context?.getString(R.string.in_stock)
                 mBinding?.productAvailability?.text = status
@@ -225,16 +206,27 @@ class AdvPay3Fragment : Fragment() {
             }
         }
     }
+    override fun onReviseStatusSuccess(data: RevisedStatusResponse) {
+        mBinding?.pbLoader?.visibility=View.GONE
+        piID=data?.piId
+        calculatedAmount=data?.pendingAmount.toFloat()
+        percentSelected=data?.percentage
+        totalAmount=data?.totalAmount
+        mBinding?.selectAmountText?.text="Advance amount paid as "+data?.percentage+"% of order amount: ₹ "+data?.totalAmount
+        mBinding?.calculatedAmount?.text="₹ "+data?.pendingAmount
+    }
 
-
-
+    override fun onReviseStatusFailure() {
+        mBinding?.pbLoader?.visibility=View.GONE
+        Utility.displayMessage("Unable to fetch details",requireContext())
+    }
     companion object {
-        fun newInstance(param1: String, param2:String,param3:Boolean) =
-            AdvPay3Fragment().apply {
+
+        fun newInstance(param1: Long,param2: Long) =
+            SelectRevisedAdvPayFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                    putBoolean(ARG_PARAM3, param3)
+                    putLong(ARG_PARAM1, param1)
+                    putLong(ARG_PARAM2, param2)
                 }
             }
     }

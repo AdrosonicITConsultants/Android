@@ -2,7 +2,7 @@ package com.adrosonic.craftexchange.enums
 
 
 enum class DocumentType {
-    ADVANCEPAY,FINALPAY,DELIVERY_CHALLAN
+    ADVANCEPAY,FINALPAY,DELIVERY_CHALLAN,REVADVANCEPAY
 }
 
 fun DocumentType.getId() : Long {
@@ -10,5 +10,6 @@ fun DocumentType.getId() : Long {
         DocumentType.ADVANCEPAY -> 1L
         DocumentType.FINALPAY -> 2L
         DocumentType.DELIVERY_CHALLAN -> 3L
+        DocumentType.REVADVANCEPAY -> 4L
     }
 }

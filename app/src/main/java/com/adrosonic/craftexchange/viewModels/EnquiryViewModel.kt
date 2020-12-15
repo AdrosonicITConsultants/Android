@@ -414,8 +414,9 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
                     response: Response<SendMoqResponse>
                 ) {
                     val valid=response.body()?.valid?:false
-                    Log.e(TAG,"sendMoq :${response.body()?.errorMessage}")
+                    Log.e(TAG,"sendMoq :${response.body()?.valid}")
                     if(valid){
+                        Log.e(TAG,"sendMoq ifff :${response.body()?.valid}")
                         moqListener?.onAddMoqSuccess()
                         MoqsPredicates.insertMoq(response.body()?.data?.moq!!,response.body()?.data?.accepted?:false,enquiryId)
                     }else moqListener?.onAddMoqFailure()

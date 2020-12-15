@@ -532,11 +532,13 @@ EnquiryViewModel.FetchEnquiryInterface,
                     }
                 }
                 if(enquiryDetails?.productType == "Custom Product" || enquiryDetails?.productStatusID == AvailableStatus.MADE_TO_ORDER.getId()){
+                    enquiryDetails?.enquiryStageID?.let{
                     if(enquiryDetails?.enquiryStageID!!>=4L) mBinding?.viewEnqLayer?.visibility=View.VISIBLE
-                    else mBinding?.viewEnqLayer?.visibility=View.GONE
+                    else mBinding?.viewEnqLayer?.visibility=View.GONE}
                 }else{
+                    enquiryDetails?.enquiryStageID?.let{
                     if(enquiryDetails?.enquiryStageID!!>=3L) mBinding?.viewEnqLayer?.visibility=View.VISIBLE
-                    else mBinding?.viewEnqLayer?.visibility=View.GONE
+                    else mBinding?.viewEnqLayer?.visibility=View.GONE}
                 }
             })
         }catch (e:Exception){

@@ -122,9 +122,8 @@ class OnGoingTransactionRecyclerAdapter(var context: Context?, private var trans
                     buy -> { holder?.statusIcon?.setImageResource(R.drawable.ic_pfi_received) }
                 }
             }
-
             //PI & Advance Payment
-            6L -> {
+            6L,24L,26L,28L -> {
                 when(profile){
                     art -> { holder?.statusIcon?.setImageResource(R.drawable.ic_adv_pfi_rec) }
 
@@ -277,7 +276,7 @@ class OnGoingTransactionRecyclerAdapter(var context: Context?, private var trans
                 context?.let { ContextCompat.getColor(it, R.color.view_invoice) }?.let { holder.btnDoc.setTextColor(it) }
                 holder?.btnDoc?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_view_invoice, 0, 0, 0)
             }
-            6L,7L,8L,9L,10L,11L,14L,15L,16L,17L,18L,19L,20L,21L,22L,23L -> {
+            6L,7L,8L,9L,10L,11L,14L,15L,16L,17L,18L,19L,20L,21L,22L,23L,24L,26L,28L -> {
                 holder.btnDoc?.text = context?.getString(R.string.view_receipt)
                 context?.let { ContextCompat.getColor(it, R.color.view_receipt) }?.let { holder.btnDoc.setTextColor(it) }
                 holder?.btnDoc?.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_view_receipt, 0, 0, 0)
@@ -310,6 +309,10 @@ class OnGoingTransactionRecyclerAdapter(var context: Context?, private var trans
                 //Delivery Challan
                 20L,22L -> {
                     val intent = Intent(transaction?.enquiryID?.let { it1 -> context?.viewDocument(it1,DocumentType.FINALPAY.getId()) })
+                    context?.startActivity(intent)
+                }
+                24L,25L,26L,27L,28L,29L->{
+                    val intent = Intent(transaction?.enquiryID?.let { it1 -> context?.viewDocument(it1,DocumentType.REVADVANCEPAY.getId()) })
                     context?.startActivity(intent)
                 }
             }

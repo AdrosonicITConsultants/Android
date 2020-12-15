@@ -12,6 +12,8 @@ import com.adrosonic.craftexchange.repository.data.request.enquiry.BuyerPayment
 import com.adrosonic.craftexchange.repository.data.response.enquiry.payment.PaymentReceiptResponse
 import com.adrosonic.craftexchange.repository.data.response.taxInv.FinPayData
 import com.adrosonic.craftexchange.repository.data.response.taxInv.FinalPayDetailsResponse
+import com.adrosonic.craftexchange.repository.data.response.transaction.AdvancePaymentStatus
+import com.adrosonic.craftexchange.repository.data.response.transaction.AdvancePaymentStatusResponse
 import com.adrosonic.craftexchange.repository.data.response.transaction.SingleTransactionResponse
 import com.adrosonic.craftexchange.repository.data.response.transaction.TransactionResponse
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
@@ -57,6 +59,11 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
         fun onGetTransactionsFailure()
     }
 
+    interface AdvPayStatusInterface{
+        fun onAdvPayFetchSuccess(data: AdvancePaymentStatus)
+        fun onAdvPayFetchFailure()
+    }
+
     var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
 
     var uploadPaymentListener : UploadPaymentInterface ?= null
@@ -64,6 +71,7 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
     var paymentReceiptListener : PaymentReceiptInterface ?= null
     var transactionListener : TransactionInterface ?= null
     var finalPayDetailsListener : FinalPayDetailsInterface?=null
+    var advPayListener : AdvPayStatusInterface?=null
 
 
     val ongoingTranList : MutableLiveData<RealmResults<Transactions>> by lazy { MutableLiveData<RealmResults<Transactions>>() }
@@ -94,7 +102,7 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
 
         var gson = Gson()
         var payObjString = gson.toJson(payObj)
-
+        Log.e("uploadPaymentReceipt","$payObjString")
         var file = File(filePath)
         var fileReqBody = file!!.toRequestBody(MediaType.parse("image/*"))
         var fileBody = MultipartBody.Builder()
@@ -250,19 +258,37 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
 
 
     fun getAdvancePaymentStatus(enquiryId:Long){
-//        CraftExchangeRepository
-//            .getTransactionService()
-//            .getAdvancePaymentReceipt(token,enquiryId).enqueue(object : Callback, retrofit2.Callback<ResponseBody> {
-//                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-////                    paymentReceiptListener?.onFailure()
-//                }
-//                override fun onResponse(
-//                    call: Call<ResponseBody>,
-//                    response: Response<ResponseBody>
-//                ) {
-////                    paymentReceiptListener?.onSuccess()
-//                }
-//            })
+        Log.e("PaymentReceipt", "0000000: $enquiryId")
+        CraftExchangeRepository
+            .getTransactionService()
+            .getAdvancedPaymentStatus(token,enquiryId).enqueue(object : Callback, retrofit2.Callback<AdvancePaymentStatusResponse> {
+                override fun onFailure(call: Call<AdvancePaymentStatusResponse>, t: Throwable) {
+//                    paymentReceiptListener?.onFailure()
+                    advPayListener?.onAdvPayFetchFailure()
+                }
+                override fun onResponse(
+                    call: Call<AdvancePaymentStatusResponse>,
+                    response: Response<AdvancePaymentStatusResponse>
+                ) {
+                    Log.e("PaymentReceipt", "11111 ${response?.body()?.data}")
+                    if(response?.body()?.valid!=null){
+                        if(response?.body()?.valid!!){
+                            advPayListener?.onAdvPayFetchSuccess(response?.body()?.data!!)
+                            Log.e("PaymentReceipt", "11111 true ${response?.body()?.data}")
+                        }
+                        else{
+                            advPayListener?.onAdvPayFetchFailure()
+                            Log.e("PaymentReceipt", "222222")
+                        }
+                    }else{
+                        advPayListener?.onAdvPayFetchFailure()
+                        Log.e("PaymentReceipt", "3333333333 ${response?.code()}")
+                        Log.e("PaymentReceipt", "3333333333 ${response?.isSuccessful}")
+                        Log.e("PaymentReceipt", "3333333333 ${response?.errorBody()}")
+                    }
+//                    paymentReceiptListener?.onSuccess()
+                }
+            })
     }
 
 
@@ -362,4 +388,24 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
     }
 
 
+    fun getRevisedAdvancedPaymentReceipt(enquiryId:Long){
+        CraftExchangeRepository
+            .getTransactionService()
+            .getRevisedAdvancedPaymentReceipt(token,enquiryId).enqueue(object : Callback, retrofit2.Callback<PaymentReceiptResponse> {
+                override fun onFailure(call: Call<PaymentReceiptResponse>, t: Throwable) {
+                    paymentReceiptListener?.onFailure()
+                }
+                override fun onResponse(
+                    call: Call<PaymentReceiptResponse>,
+                    response: Response<PaymentReceiptResponse>
+                ) {
+                    if(response.body()?.valid == true){
+                        response?.body()?.data?.label?.let { response.body()?.data?.paymentId?.let { it1 ->
+                            paymentReceiptListener?.onSuccess(it, it1) } }
+                    }else{
+                        paymentReceiptListener?.onFailure()
+                    }
+                }
+            })
+    }
 }

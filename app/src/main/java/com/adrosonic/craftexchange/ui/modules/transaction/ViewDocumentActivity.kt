@@ -64,6 +64,9 @@ class ViewDocumentActivity : LocaleBaseActivity(), TransactionViewModel.PaymentR
                 DocumentType.FINALPAY.getId() -> {
                     enqID?.let { mTranVM?.getFinalPaymentReceipt(it) }
                 }
+                DocumentType.REVADVANCEPAY.getId() -> {
+                    enqID?.let { mTranVM?.getRevisedAdvancedPaymentReceipt(it) }
+                }
                 DocumentType.DELIVERY_CHALLAN.getId() -> {
                     orderDetails = enqID?.let { mOrdVM.loadSingleOrderDetails(it,0) }
                     url = Utility.getDeliveryChallanReceiptUrl(enqID,orderDetails?.deliveryChallanLabel)
@@ -104,6 +107,9 @@ class ViewDocumentActivity : LocaleBaseActivity(), TransactionViewModel.PaymentR
                 Log.e("PaymentReceipt", "OnSuccess")
                 when(docType){
                     DocumentType.ADVANCEPAY.getId() -> {
+                        url = Utility.getAdvancePaymentImageUrl(receiptId,imgName)
+                    }
+                    DocumentType.REVADVANCEPAY.getId() -> {
                         url = Utility.getAdvancePaymentImageUrl(receiptId,imgName)
                     }
                     DocumentType.FINALPAY.getId() -> {

@@ -47,6 +47,7 @@ import com.adrosonic.craftexchange.ui.modules.enquiry.viewEnqDetails
 import com.adrosonic.craftexchange.ui.modules.order.cr.crContext
 import com.adrosonic.craftexchange.ui.modules.order.finalPay.orderPaymentIntent
 import com.adrosonic.craftexchange.ui.modules.order.revisePi.viewPiContextPostCr
+import com.adrosonic.craftexchange.ui.modules.order.revisedAdvPayment.orderPayment
 import com.adrosonic.craftexchange.ui.modules.order.taxInv.raiseTaxInvIntent
 import com.adrosonic.craftexchange.ui.modules.order.taxInv.taxInvoiceIntent
 import com.adrosonic.craftexchange.ui.modules.products.ViewProductDetailsFragment
@@ -368,6 +369,12 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
                 startActivity(Intent(requireContext()?.viewEnqDetails( requireContext(),it.toString(),"2")))
             }
         }
+        mBinding?.btnViewApproveRevAdvPayment?.setOnClickListener {
+            startActivity(context?.orderPayment()
+                ?.putExtra(ConstantsDirectory.ENQUIRY_ID,enqID)
+                ?.putExtra(ConstantsDirectory.ORDER_STATUS_FLAG, 0L)
+                ?.putExtra(ConstantsDirectory.PI_ID,0))
+        }
     }
 
     fun showConfirmDialog() {
@@ -582,18 +589,17 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         else {
             mBinding?.txtCrLayerStatus?.text=getString(R.string.cr_not_applicable)
         }
-
         if(orderDetails?.enquiryStageId!!>5L) {
-            Log.e("ToggleCr","5555555555555")
             mBinding?.toogleCr?.isClickable=false
             mBinding?.toogleCr?.isEnabled=false
             mBinding?.toogleCr?.isChecked=false
             mBinding?.toogleCr?.text="Change request"
          }
         else{
-            Log.e("ToggleCr","6666666666666666")
             mBinding?.toogleCr?.isEnabled=true
         }
+        if(orderDetails?.revisedAdvancePaymentId!!.equals(3L))mBinding?.btnViewApproveRevAdvPayment?.visibility = View.VISIBLE
+        else mBinding?.btnViewApproveRevAdvPayment?.visibility = View.GONE
         } catch (e: Exception) {
             Log.e("setDetails", "Exception " + e.message)
         }
@@ -852,16 +858,28 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
 
     fun setActionButtonVisibilites(){
         //upload tax invoice
+        Log.e("Revpay","Stage: ${orderDetails?.enquiryStageId}")
+        Log.e("Revpay","revId: ${orderDetails?.revisedAdvancePaymentId}")
         when(orderDetails?.enquiryStageId){
             EnquiryStages.PI_FINALIZED.getId(),
             EnquiryStages.ADVANCE_PAYMENT_RECEIVED.getId(),
             EnquiryStages.PRODUCTION_COMPLETED.getId(),
             EnquiryStages.QUALITY_CHECK_BEFORE_DELIVERY.getId(),
             EnquiryStages.COMPLETION_OF_ORDER.getId() -> {
-                mBinding?.uploadTaxInvLayout?.visibility = View.VISIBLE
+                if( orderDetails?.revisedAdvancePaymentId!!.equals(0L)||
+                   orderDetails?.revisedAdvancePaymentId!!.equals(1L)||
+                   orderDetails?.revisedAdvancePaymentId!!.equals(4L)){
+                    mBinding?.uploadTaxInvLayout?.visibility = View.VISIBLE
+                    Log.e("Revpay","tax inv visible")
+                }
+                else  {
+                    mBinding?.uploadTaxInvLayout?.visibility = View.GONE
+                    Log.e("Revpay","tax inv gone")
+                }
             }
             else -> {
                 mBinding?.uploadTaxInvLayout?.visibility = View.GONE
+                Log.e("Revpay","tax inv gone")
             }
         }
 

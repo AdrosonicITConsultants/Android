@@ -25,6 +25,7 @@ import com.adrosonic.craftexchange.databinding.FragmentPaymentReceiptBinding
 import com.adrosonic.craftexchange.enums.AvailableStatus
 import com.adrosonic.craftexchange.enums.PaymentActionStatus
 import com.adrosonic.craftexchange.enums.getId
+import com.adrosonic.craftexchange.repository.data.response.transaction.AdvancePaymentStatus
 import com.adrosonic.craftexchange.syncManager.SyncCoordinator
 import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.advPay.AdvPay3Fragment
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
@@ -39,7 +40,8 @@ private const val ARG_PARAM2 = "param2"
 
 class PaymentReceiptFragment : Fragment(),
 TransactionViewModel.ValidatePaymentInterface,
-TransactionViewModel.PaymentReceiptInterface{
+TransactionViewModel.PaymentReceiptInterface,
+TransactionViewModel.AdvPayStatusInterface{
 
     private var param1: String? = null
 
@@ -87,6 +89,7 @@ TransactionViewModel.PaymentReceiptInterface{
         super.onViewCreated(view, savedInstanceState)
         mTransVM.validatePaymentListener = this
         mTransVM.paymentReceiptListener = this
+        mTransVM.advPayListener = this
         mBinding?.swipeReceipt?.isEnabled = false
 
 
@@ -98,7 +101,10 @@ TransactionViewModel.PaymentReceiptInterface{
 
         if(Utility.checkIfInternetConnected(requireActivity())){
             viewLoader()
-            enquiryDetails?.enquiryID?.let { mTransVM.getAdvancePaymentReceipt(it) }
+            enquiryDetails?.enquiryID?.let {
+                mTransVM.getAdvancePaymentReceipt(it)
+                mTransVM.getAdvancePaymentStatus(it)
+            }
         }else{
             Utility.displayMessage(getString(R.string.no_internet_connection),requireActivity())
         }
@@ -131,7 +137,6 @@ TransactionViewModel.PaymentReceiptInterface{
         mBinding?.productAmount?.text = "₹ ${enquiryDetails?.totalAmount ?: 0}"
         mBinding?.buyerCompany?.text = enquiryDetails?.ProductBrandName
         mBinding?.enquiryUpdateDate?.text = "Last updated : ${enquiryDetails?.lastUpdated?.split("T")?.get(0)}"
-
         setProductImage()
         setProductName()
         setProductAvailability()
@@ -395,5 +400,28 @@ TransactionViewModel.PaymentReceiptInterface{
                     putString(ARG_PARAM1, param1)
                 }
             }
+    }
+
+    override fun onAdvPayFetchSuccess(data: AdvancePaymentStatus) {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                hideLoader()
+                mBinding?.amtPaidText?.text="Amount paid by buyer : ₹ "+data?.paidAmount
+                Log.e("PaymentReceipt", "onAdvPayFetchSuccess ${data?.paidAmount}")
+            }
+            )
+        } catch (e: Exception) {
+        }
+    }
+
+    override fun onAdvPayFetchFailure() {
+        try {
+            Handler(Looper.getMainLooper()).post(Runnable {
+                hideLoader()
+                Log.e("PaymentReceipt", "onAdvPayFetchFailure")
+            }
+            )
+        } catch (e: Exception) {
+        }
     }
 }

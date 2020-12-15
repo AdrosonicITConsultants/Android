@@ -307,7 +307,7 @@
     <string name="upload_and_send_transac">Upload and send for confirmation</string>
     <string name="account_details">Account Details : </string>
     <string name="amount_paid">Amount paid</string>
-    <string name="thankyou_upload_transac_receipt_text">Thankyou! Your receipt has been uploaded\nsuccessfully and Artisan is notified.\nThe acceptance will be notified within 3 days\nmaximum from now.</string>
+    <string name="thankyou_upload_transac_receipt_text">Thank you! Your receipt has been uploaded\nsuccessfully and Artisan is notified.\nThe acceptance will be notified within 3 days\nmaximum from now.</string>
     <string name="ps_updated_pi">Please Note: The Pro forma invoice will be updated</string>
     <string name="enq_to_order_text">The enquiry will be converted to order\nonce payment is approved. Check Orders tab.</string>
     <string name="view_transaction">View transaction</string>
@@ -383,7 +383,6 @@
     <string name="quality_check">Quality Check</string>
 
 
-
     <string name="new_pi_post_cr">Generate new PI post CR</string>
     <string name="create_and_send_ti"><![CDATA[Create & Send Tax Invoice]]></string>
     <string name="tax_invoice">Tax invoice</string>
@@ -423,9 +422,12 @@
     <string name="qc_disclaimer_text"><![CDATA["Declaration by AE- I, hereby certify from my end that all the processes have been Monitored & Supervised under my guidence and any issue in Quality Certified by me in person or my staff in charge is liable to be discussed with me directly on mail. Once the goods received at your doorsteps, we will not be liable for quality issue if informed after 72 hrs of receipts. "]]></string>
     <string name="legal_disclaimer">Legal Disclaimer</string>
 
-    //facebook sdk
-    <string name="facebook_app_id">2960179490877793</string>
-    <string name="fb_login_protocol_scheme">fb2960179490877793</string>
+    //prod
+    <!--    <string name="facebook_app_id">2960179490877793</string>-->
+    <!--    <string name="fb_login_protocol_scheme">fb2960179490877793</string>-->
+    //uat, qa
+    <string name="facebook_app_id">717798432467327</string>
+    <string name="fb_login_protocol_scheme">fb717798432467327</string>
 
     <string name="mark_order_dispatched">Mark Order Dispatched</string>
     <string name="check_delivery_receipt">Check Delivery Receipt</string>
@@ -604,4 +606,7 @@
     <string name="you_have_accepted">You have accepted the MOQ. For further discussion and negotiation use Chat box option in the app.</string>
     <string name="step_110_enter_description">Step 10 : Enter description</string>
     <string name="min_moq">MOQ should be greater than 9</string>
+    <string name="select_revised_advance_payment">Select revised advance payment</string>
+    <string name="proceed_with_revised_payment">Proceed with revised payment</string>
+    <string name="approve_pending_advance">Approve pending advance</string>
 </resources>
