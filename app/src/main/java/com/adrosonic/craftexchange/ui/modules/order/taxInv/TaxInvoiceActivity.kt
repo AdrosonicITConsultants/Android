@@ -230,6 +230,7 @@ class TaxInvoiceActivity : LocaleBaseActivity(),
         mBinding?.etAdvPay?.addTextChangedListener(generalTextWatcher)
         mBinding?.etSgst?.addTextChangedListener(generalTextWatcher)
         mBinding?.etCgst?.addTextChangedListener(generalTextWatcher)
+        mBinding?.etDeliveryCharge?.addTextChangedListener(generalTextWatcher)
         mBinding?.txtTnc?.setOnClickListener {
             val intent = Intent(this, PdfViewerActivity::class.java)
             intent.putExtra("ViewType", "Terms_conditions")

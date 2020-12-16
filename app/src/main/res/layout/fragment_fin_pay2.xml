@@ -200,37 +200,38 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tick" />
 
-<!--            <TextView-->
-<!--                android:id="@+id/ps_text"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="@dimen/margin_semimedium"-->
-<!--                android:fontFamily="@font/lato_regular"-->
-<!--                android:gravity="center"-->
-<!--                android:text="@string/ps_updated_pi"-->
-<!--                android:textColor="@color/black_text"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/thankyou_text" />-->
+            <TextView
+                android:id="@+id/ps_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_semimedium"
+                android:fontFamily="@font/lato_regular"
+                android:gravity="center"
+                android:text="@string/the_final_tax_invoice_will_be_updated"
+                android:textColor="@color/black_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/thankyou_text" />
 
-<!--            <TextView-->
-<!--                android:id="@+id/enq_to_order_text"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="@dimen/margin_semimedium"-->
-<!--                android:fontFamily="@font/lato_regular"-->
-<!--                android:gravity="center"-->
-<!--                android:text="@string/enq_to_order_text"-->
-<!--                android:textColor="#A3B3F8"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/ps_text" />-->
+            <TextView
+                android:id="@+id/enq_to_order_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_semimedium"
+                android:fontFamily="@font/lato_regular"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="@string/your_order_will_be_dispatched"
+                android:textColor="#A3B3F8"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ps_text" />
 
             <Button
                 android:id="@+id/btn_view_transac"
                 android:layout_width="180dp"
                 android:layout_height="45dp"
-                android:layout_marginTop="@dimen/margin_semimedium"
+                android:layout_marginTop="32dp"
                 android:background="@color/black_text"
                 android:drawableStart="@drawable/ic_transaction_white"
                 android:elevation="8dp"
@@ -242,8 +243,9 @@
                 android:textColor="@color/white_text"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.455"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/thankyou_text" />
+                app:layout_constraintTop_toBottomOf="@+id/enq_to_order_text" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

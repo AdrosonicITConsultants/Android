@@ -133,6 +133,7 @@ class PiActivity : LocaleBaseActivity(),
             else if (sgst.isEmpty()) Utility.displayMessage("Please add SGST", applicationContext)
             else if (cgst.isEmpty()) Utility.displayMessage("Please add CGST", applicationContext)
             else if (currency!!.isEmpty()) Utility.displayMessage("Please select Currency", applicationContext)
+            else if(!mBinding?.chbTnc!!.isChecked)Utility.displayMessage(getString(R.string.plz_accept_tnc), applicationContext)
             else {
                 pi.cgst=cgst.toLong()
                 pi.expectedDateOfDelivery=date

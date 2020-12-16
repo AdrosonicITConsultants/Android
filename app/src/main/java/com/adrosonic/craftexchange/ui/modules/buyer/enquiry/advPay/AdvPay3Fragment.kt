@@ -129,8 +129,8 @@ class AdvPay3Fragment : Fragment() {
         setProductName()
         setProductAvailability()
         if(isRevised){
-            mBinding?.psText?.text="The final tax invoice will be updated."
-            mBinding?.enqToOrderText?.text="Your Order will be dispatched as soon as Artisan approves your final payment receipt."
+            mBinding?.psText?.text="The proforma invoice will be updated."
+            mBinding?.enqToOrderText?.visibility=View.GONE
         }
     }
 

@@ -271,11 +271,11 @@ class RevisePiActivity : LocaleBaseActivity(),
     }
 
     fun viewLoader(){
-        mBinding?.swipeEnquiryDetails?.visibility= View.VISIBLE
+        mBinding?.progressBar?.visibility= View.VISIBLE
     }
 
     fun hideLoader(){
-        mBinding?.swipeEnquiryDetails?.visibility= View.VISIBLE
+        mBinding?.progressBar?.visibility= View.GONE
     }
 
     override fun onPiFailure() {

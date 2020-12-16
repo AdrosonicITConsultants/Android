@@ -605,8 +605,10 @@
     <string name="no_completed_enquiries_present">No completed enquiries present</string>
     <string name="you_have_accepted">You have accepted the MOQ. For further discussion and negotiation use Chat box option in the app.</string>
     <string name="step_110_enter_description">Step 10 : Enter description</string>
-    <string name="min_moq">MOQ should be greater than 9</string>
+    <string name="min_moq">Min Order Qty should be atleast 10</string>
     <string name="select_revised_advance_payment">Select revised advance payment</string>
     <string name="proceed_with_revised_payment">Proceed with revised payment</string>
     <string name="approve_pending_advance">Approve pending advance</string>
+    <string name="the_final_tax_invoice_will_be_updated">The final tax invoice will be updated.</string>
+    <string name="your_order_will_be_dispatched">Your Order will be dispatched as soon as Artisan approves your final payment receipt.</string>
 </resources>

@@ -84,7 +84,8 @@ class CrAcceptRejectService: JobIntentService() {
                     response: Response<NotificationReadResponse>
                 ) {
                     Log.e("RaiseCr","onResponse : ${response?.body()?.data}")
-                    if(response?.body()?.valid!!){
+                    val valid=response.body()?.valid?:false
+                    if (valid) {
                         Log.e("RaiseCr","isSuccessful ")
 //                        CrPredicates.updatePostCrStatus(changeRequestParameters,changeRequestStatus)/
                         OrdersPredicates.updateChangeRequestStatusOffline(changeRequestParameters.enquiryId,"",0,changeRequestStatus)

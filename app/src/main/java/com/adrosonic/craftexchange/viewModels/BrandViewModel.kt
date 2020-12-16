@@ -69,7 +69,8 @@ class BrandViewModel(application: Application) : AndroidViewModel(application) {
                     call: Call<BrandListResponse>,
                     response: Response<BrandListResponse>
                 ) {
-                    if (response.body()?.valid == true) {
+                    val valid=response.body()?.valid?:false
+                    if (valid) {
                         ProductPredicates.insertBrands(response.body())
                         brandListener?.onSuccess()
                     } else {
@@ -91,7 +92,8 @@ class BrandViewModel(application: Application) : AndroidViewModel(application) {
                 override fun onResponse(
                     call: Call<CatalogueProductsResponse>, response: Response<CatalogueProductsResponse>
                 ) {
-                    if (response.body()?.valid == true) {
+                    val valid=response.body()?.valid?:false
+                    if (valid)  {
                         ProductPredicates.insertProductsInCatalogue(response.body()?.data?.products,0)
                         brandListener?.onSuccess()
                     } else {

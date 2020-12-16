@@ -379,7 +379,8 @@ class OrdersViewModel(application: Application) : AndroidViewModel(application){
                     response: Response<CrDetailsResponse>
                 ) {
                     Log.e("CrDetails","onResponse : ${response?.body()?.data}")
-                    if(response?.body()?.valid!!){
+                    var isValid=response?.body()?.valid?:false
+                    if(isValid){
                         Log.e("CrDetails","isSuccessful ")
                         if(response?.body()!!.data!!.changeRequestItemList!!.size>0){
                             CrPredicates.insertChangeReq(response?.body())
