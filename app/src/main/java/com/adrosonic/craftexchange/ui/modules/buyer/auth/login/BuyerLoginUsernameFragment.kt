@@ -301,7 +301,7 @@ class BuyerLoginUsernameFragment : Fragment() {
                 }
 
             }else{
-                Log.e("SignInActivity", "onActivityResult isSuccessful: false")
+                Log.e("SignInActivity", "onActivityResult : false "+exception)
             }
 
         }else{

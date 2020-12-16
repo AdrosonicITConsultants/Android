@@ -817,42 +817,44 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
 
     private fun setTabVisibilities(){
         //advance payment
-        if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
-            if(orderDetails?.enquiryStageId!! >= 4L){
-                mBinding?.viewPaymentLayer?.visibility = View.VISIBLE
-            }else{
+        orderDetails?.enquiryStageId?.let {
+            if (orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT) {
+                if (orderDetails?.enquiryStageId!! >= 4L) {
+                    mBinding?.viewPaymentLayer?.visibility = View.VISIBLE
+                } else {
+                    mBinding?.viewPaymentLayer?.visibility = View.GONE
+                }
+            } else {
                 mBinding?.viewPaymentLayer?.visibility = View.GONE
             }
-        }else{
-            mBinding?.viewPaymentLayer?.visibility = View.GONE
-        }
 
-        //QcForm
-        if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
-            if(orderDetails?.enquiryStageId!! >= EnquiryStages.ADVANCE_PAYMENT_RECEIVED.getId()){
-                mBinding?.qualityCheckLayer?.visibility = View.VISIBLE
-            }else{
-                mBinding?.qualityCheckLayer?.visibility = View.GONE
+            //QcForm
+            if (orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT) {
+                if (orderDetails?.enquiryStageId!! >= EnquiryStages.ADVANCE_PAYMENT_RECEIVED.getId()) {
+                    mBinding?.qualityCheckLayer?.visibility = View.VISIBLE
+                } else {
+                    mBinding?.qualityCheckLayer?.visibility = View.GONE
+                }
+            } else {
+                if (orderDetails?.enquiryStageId!! >= EnquiryStages.PI_FINALIZED.getId()) {
+                    mBinding?.qualityCheckLayer?.visibility = View.VISIBLE
+                } else {
+                    mBinding?.qualityCheckLayer?.visibility = View.GONE
+                }
             }
-        }else{
-            if(orderDetails?.enquiryStageId!! >= EnquiryStages.PI_FINALIZED.getId()){
-                mBinding?.qualityCheckLayer?.visibility = View.VISIBLE
-            }else{
-                mBinding?.qualityCheckLayer?.visibility = View.GONE
+            //TaxInvoice
+            if (orderDetails?.enquiryStageId!! >= EnquiryStages.FINAL_INVOICE_RAISED.getId()) {
+                mBinding?.taxInvoiceLayer?.visibility = View.VISIBLE
+            } else {
+                mBinding?.taxInvoiceLayer?.visibility = View.GONE
             }
-        }
-        //TaxInvoice
-        if(orderDetails?.enquiryStageId!! >= EnquiryStages.FINAL_INVOICE_RAISED.getId()){
-            mBinding?.taxInvoiceLayer?.visibility = View.VISIBLE
-        }else{
-            mBinding?.taxInvoiceLayer?.visibility = View.GONE
-        }
 
-        //DeliveryReceipt
-        if(orderDetails?.enquiryStageId!! >= EnquiryStages.FINAL_PAYMENT_RECEIVED.getId() && orderDetails?.deliveryChallanUploaded == 1L){
-            mBinding?.deliveryReceiptLayer?.visibility = View.VISIBLE
-        }else{
-            mBinding?.deliveryReceiptLayer?.visibility = View.GONE
+            //DeliveryReceipt
+            if (orderDetails?.enquiryStageId!! >= EnquiryStages.FINAL_PAYMENT_RECEIVED.getId() && orderDetails?.deliveryChallanUploaded == 1L) {
+                mBinding?.deliveryReceiptLayer?.visibility = View.VISIBLE
+            } else {
+                mBinding?.deliveryReceiptLayer?.visibility = View.GONE
+            }
         }
     }
 

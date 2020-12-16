@@ -204,7 +204,7 @@ class CompEnqDetailsFragment : Fragment(),
 //                bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG, "1")
 //                intent.putExtras(bundle)
 //                context?.startActivity(intent)
-                startActivity(Intent(requireContext()?.viewOrderDetails( requireContext(),it.toString(),"2")))
+                startActivity(Intent(requireContext()?.viewOrderDetails( requireContext(),it.toString(), EnquiryStatus.COMPLETED.getId().toString())))
             }
         }
     }

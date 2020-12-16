@@ -502,10 +502,13 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
                  mBinding?.txtCr?.visibility = View.GONE
                  mBinding?.txtCrDate?.text=getString(R.string.cr_not_applicable)
              }
-
-             if (orderDetails?.enquiryStageId!! < 9L) {
+             orderDetails?.enquiryStageId?.let {
+                 if (orderDetails?.enquiryStageId!! < 9L) {
                      if (orderDetails?.isPartialRefundReceived == 0L) {
-                         if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType.equals(ConstantsDirectory.CUSTOM_PRODUCT))  mBinding?.btnIsPartialRefundRcvd?.visibility = View.VISIBLE
+                         if (orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType.equals(
+                                 ConstantsDirectory.CUSTOM_PRODUCT
+                             )
+                         ) mBinding?.btnIsPartialRefundRcvd?.visibility = View.VISIBLE
                          mBinding?.btnCloseOrder?.visibility = View.GONE
                      } else {
                          mBinding?.btnIsPartialRefundRcvd?.visibility = View.GONE
@@ -515,6 +518,7 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
                      mBinding?.btnIsPartialRefundRcvd?.visibility = View.GONE
                      mBinding?.btnCloseOrder?.visibility = View.GONE
                  }
+             }
 //            if(orderDetails?.enquiryStageId!!<8) {
                  if (orderDetails?.revisedAdvancePaymentId!!.equals(2L)) mBinding?.btnReviseAdvPay?.visibility = View.VISIBLE
                  else mBinding?.btnReviseAdvPay?.visibility = View.GONE
@@ -706,60 +710,64 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
 
     private fun setTabVisibilities(){
         //AdvancePayment
-        if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
-            if(orderDetails?.enquiryStageId!! >= 4L){
-                mBinding?.viewPaymentLayer?.visibility = View.VISIBLE
-            }else{
+        orderDetails?.enquiryStageId?.let {
+            if (orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT) {
+                if (orderDetails?.enquiryStageId!! >= 4L) {
+                    mBinding?.viewPaymentLayer?.visibility = View.VISIBLE
+                } else {
+                    mBinding?.viewPaymentLayer?.visibility = View.GONE
+                }
+            } else {
                 mBinding?.viewPaymentLayer?.visibility = View.GONE
             }
-        }else{
-            mBinding?.viewPaymentLayer?.visibility = View.GONE
-        }
 
-        //QcForm
-        if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
-            if(orderDetails?.enquiryStageId!! >= EnquiryStages.ADVANCE_PAYMENT_RECEIVED.getId()){
-                mBinding?.qualityCheckLayer?.visibility = View.VISIBLE
-            }else{
-                mBinding?.qualityCheckLayer?.visibility = View.GONE
+            //QcForm
+            if (orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT) {
+                if (orderDetails?.enquiryStageId!! >= EnquiryStages.ADVANCE_PAYMENT_RECEIVED.getId()) {
+                    mBinding?.qualityCheckLayer?.visibility = View.VISIBLE
+                } else {
+                    mBinding?.qualityCheckLayer?.visibility = View.GONE
+                }
+            } else {
+                if (orderDetails?.enquiryStageId!! >= EnquiryStages.PI_FINALIZED.getId()) {
+                    mBinding?.qualityCheckLayer?.visibility = View.VISIBLE
+                } else {
+                    mBinding?.qualityCheckLayer?.visibility = View.GONE
+                }
             }
-        }else{
-            if(orderDetails?.enquiryStageId!! >= EnquiryStages.PI_FINALIZED.getId()){
-                mBinding?.qualityCheckLayer?.visibility = View.VISIBLE
-            }else{
-                mBinding?.qualityCheckLayer?.visibility = View.GONE
+            //TaxInvoice
+            if (orderDetails?.enquiryStageId!! >= EnquiryStages.FINAL_INVOICE_RAISED.getId()) {
+                if (orderDetails?.revisedAdvancePaymentId!!.equals(0L) || orderDetails?.revisedAdvancePaymentId!!.equals(
+                        1L
+                    ) || orderDetails?.revisedAdvancePaymentId!!.equals(4L)
+                )
+                    mBinding?.taxInvoiceLayer?.visibility = View.VISIBLE
+                else mBinding?.taxInvoiceLayer?.visibility = View.GONE
+            } else {
+                mBinding?.taxInvoiceLayer?.visibility = View.GONE
+            }
+
+            //DeliveryReceipt
+            if (orderDetails?.enquiryStageId!! >= EnquiryStages.ORDER_DISPATCHED.getId() && orderDetails?.deliveryChallanUploaded == 1L) {
+                mBinding?.deliveryReceiptLayer?.visibility = View.VISIBLE
+            } else {
+                mBinding?.deliveryReceiptLayer?.visibility = View.GONE
+            }
+
+            //Raise Concern
+            if (orderDetails?.enquiryStageId!! >= EnquiryStages.ORDER_DISPATCHED.getId() && orderDetails?.isReprocess == 0L) {
+                mBinding?.raiseConcernLayer?.visibility = View.VISIBLE
+            } else {
+                mBinding?.raiseConcernLayer?.visibility = View.GONE
+            }
+
+            //order recreation text
+            if (orderDetails?.isReprocess == 1L) {
+                mBinding?.txtOrderRecreation?.visibility = View.VISIBLE
+            } else {
+                mBinding?.txtOrderRecreation?.visibility = View.GONE
             }
         }
-        //TaxInvoice
-        if(orderDetails?.enquiryStageId!! >= EnquiryStages.FINAL_INVOICE_RAISED.getId()){
-            if(orderDetails?.revisedAdvancePaymentId!!.equals(0L)||orderDetails?.revisedAdvancePaymentId!!.equals(1L)||orderDetails?.revisedAdvancePaymentId!!.equals(4L))
-            mBinding?.taxInvoiceLayer?.visibility = View.VISIBLE
-            else mBinding?.taxInvoiceLayer?.visibility = View.GONE
-        }else{
-            mBinding?.taxInvoiceLayer?.visibility = View.GONE
-        }
-
-        //DeliveryReceipt
-        if(orderDetails?.enquiryStageId!! >= EnquiryStages.ORDER_DISPATCHED.getId() && orderDetails?.deliveryChallanUploaded == 1L){
-            mBinding?.deliveryReceiptLayer?.visibility = View.VISIBLE
-        }else{
-            mBinding?.deliveryReceiptLayer?.visibility = View.GONE
-        }
-
-        //Raise Concern
-        if(orderDetails?.enquiryStageId!! >= EnquiryStages.ORDER_DISPATCHED.getId() && orderDetails?.isReprocess == 0L){
-            mBinding?.raiseConcernLayer?.visibility = View.VISIBLE
-        }else{
-            mBinding?.raiseConcernLayer?.visibility = View.GONE
-        }
-
-        //order recreation text
-        if(orderDetails?.isReprocess == 1L){
-            mBinding?.txtOrderRecreation?.visibility = View.VISIBLE
-        }else{
-            mBinding?.txtOrderRecreation?.visibility = View.GONE
-        }
-
     }
 
     override fun onResume() {
