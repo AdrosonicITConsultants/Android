@@ -121,9 +121,16 @@ class NotificationAdapter(
                 R.drawable.ic_moq_received
             }
             "Pi finalized", "Tax Invoice Raised", "Delivery Challan Uploaded", "Order Received","Rating Received",
-            "Order Dispached", "Faulty Order", "Order Closed", "Issue resolved","Partial Payment Received" -> {
+            "Order Dispached", "Order Closed", "Issue resolved","Partial Payment Received",
+            "Revised Pi",
+            "Qc Received for Final Qc","Qc Received for Yarn Procure","Qc Received for Off loom Process & Quality Check before delivery completed",
+            "Qc Received for Design Specification Check","Qc Received for Design Specification Check","Qc Received for Preloom Process",
+            "Qc Received for Yarn Dyeing","Qc Received for Yarn Procure","Qc Received for Preloom Process","Qc Received for Yarn Dyeing",
+            "Qc Received for Preloom Process","Qc Received for Final Qc",
+            "Order Dispatched After Recreation","Order Regenerated","\"Faulty Order\""-> {
                 R.drawable.ic_status_invoice
             }
+            "Revised Advance Payment Received","Revised Advanced Payment Accepted",
             "Advance Payment Received","Advanced Payment Accepted","Advanced Payment Rejected","Final Payment Received","Final Payment Accepted" -> {
                 R.drawable.ic_advance_payent_received
             }
@@ -135,14 +142,14 @@ class NotificationAdapter(
             "Post loom process initiated","Post loom process","Completion of Order" -> {
                 R.drawable.ic_noti_yarn
             }
-            "Escalation Raised","Escalation Resolved" -> {
+            "Escalation Raised","Escalation Resolved","Escalation Received" -> {
                 R.drawable.ic_escalation
             }
             "Chat Message Received" -> {
                 R.drawable.ic_chat_outline
             }
             else -> {
-                R.drawable.ic_receipt
+                R.drawable.ic_status_recipt
             }
         }
     }

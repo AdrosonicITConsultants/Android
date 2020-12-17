@@ -479,7 +479,8 @@ class TransactionPredicates {
             var tranObj : RealmResults<Transactions> ?= null
             realm?.executeTransaction {
                 try {
-               tranObj = realm?.where(Transactions::class.java).equalTo(Transactions.COLUMN_ENQUIRY_ID,searchString).findAll()
+               tranObj = realm?.where(Transactions::class.java).equalTo(Transactions.COLUMN_ENQUIRY_ID,searchString)
+                   .sort(Transactions.COLUMN_MODIFIED_ON, Sort.DESCENDING).findAll()
                 }catch (e:Exception){
                     Log.e("Transactions",e.printStackTrace().toString())
                 }

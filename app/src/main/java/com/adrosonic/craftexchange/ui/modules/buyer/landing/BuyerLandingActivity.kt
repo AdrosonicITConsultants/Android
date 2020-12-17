@@ -18,6 +18,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.R
@@ -73,7 +74,9 @@ class BuyerLandingActivity : LocaleBaseActivity(),
     LandingViewModel.notificationInterface,
     NotifcationFragment.Companion.notifcationsInterface{
 
-
+    fun AppCompatActivity.replaceContainerFragment(fragment: Fragment, name:String) {
+        supportFragmentManager.beginTransaction().replace(R.id.buyer_home_container, fragment, name).addToBackStack(name).commit()
+    }
     companion object{
         const val TAG = "buyerLanding"
     }

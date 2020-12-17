@@ -22,6 +22,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -83,6 +84,9 @@ class ArtisanLandingActivity : LocaleBaseActivity(),
 
     companion object{
         const val TAG = "ArtisanLanding"
+    }
+    fun AppCompatActivity.replaceContainerFragment(fragment: Fragment, name:String) {
+        supportFragmentManager.beginTransaction().replace(R.id.artisan_home_container, fragment, name).addToBackStack(name).commit()
     }
     private var mBinding : ActivityArtisanLandingBinding ?= null
     val mViewModel:LandingViewModel by viewModels()
@@ -156,37 +160,41 @@ class ArtisanLandingActivity : LocaleBaseActivity(),
                 when (item.itemId) {
                     R.id.action_home -> {
                         if (savedInstanceState == null) {
-                            supportFragmentManager.beginTransaction()
-                                .add(R.id.artisan_home_container,  ArtisanHomeFragment.newInstance() )
-                                .detach(ArtisanHomeFragment())
-                                .attach(ArtisanHomeFragment())
-                                .commitNow()
+//                            supportFragmentManager.beginTransaction()
+//                                .add(R.id.artisan_home_container,  ArtisanHomeFragment.newInstance() )
+//                                .detach(ArtisanHomeFragment())
+//                                .attach(ArtisanHomeFragment())
+//                                .commitNow()
+                            replaceContainerFragment(ArtisanHomeFragment.newInstance(),"ArtisanHomeFragment")
                         }
                         return true
                     }
 
                     R.id.action_enquiries -> {
                         if (savedInstanceState == null) {
-                            supportFragmentManager.beginTransaction() .add(R.id.artisan_home_container, CommonEnquiryFragment.newInstance())
-                                .addToBackStack(null)
-                                .commit()
+//                            supportFragmentManager.beginTransaction() .add(R.id.artisan_home_container, CommonEnquiryFragment.newInstance())
+//                                .addToBackStack(null)
+//                                .commit()
+                            replaceContainerFragment(CommonEnquiryFragment.newInstance(),"CommonEnquiryFragment")
                         }
                         return true
                     }
 
                     R.id.action_orders -> {
                         if (savedInstanceState == null) {
-                            supportFragmentManager.beginTransaction() .add(R.id.artisan_home_container, CommonOrderFragment.newInstance())
-                                .addToBackStack(null)
-                                .commit()
+//                            supportFragmentManager.beginTransaction() .add(R.id.artisan_home_container, CommonOrderFragment.newInstance())
+//                                .addToBackStack(null)
+//                                .commit()
+                            replaceContainerFragment(CommonOrderFragment.newInstance(),"CommonOrderFragment")
                         }
                         return true
                     }
                     R.id.action_chat -> {
                         if (savedInstanceState == null) {
-                            supportFragmentManager.beginTransaction() .add(R.id.artisan_home_container, ChatListFragment.newInstance())
-                                .addToBackStack(null)
-                                .commit()
+//                            supportFragmentManager.beginTransaction() .add(R.id.artisan_home_container, ChatListFragment.newInstance())
+//                                .addToBackStack(null)
+//                                .commit()
+                            replaceContainerFragment(ChatListFragment.newInstance(),"ChatListFragment")
                         }
                         return true
                     }
@@ -197,6 +205,7 @@ class ArtisanLandingActivity : LocaleBaseActivity(),
         }
         NotifcationFragment.badgeCountListener=this
     }
+
     override fun onOptionsItemSelected(item:MenuItem):Boolean {
         // The action bar home/up action should open or close the drawer.
 
@@ -209,9 +218,10 @@ class ArtisanLandingActivity : LocaleBaseActivity(),
                 startActivity(searchSuggestionIntent())
             }
             R.id.action_notification->{
-                    supportFragmentManager.beginTransaction() .add(R.id.artisan_home_container, NotifcationFragment.newInstance())
-                        .addToBackStack(null)
-                        .commit()
+//                    supportFragmentManager.beginTransaction() .add(R.id.artisan_home_container, NotifcationFragment.newInstance())
+//                        .addToBackStack(null)
+//                        .commit()
+                replaceContainerFragment(NotifcationFragment.newInstance(),"NotifcationFragment")
             }
         }
         setupBadge()

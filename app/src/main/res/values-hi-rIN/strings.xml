@@ -451,7 +451,7 @@
     <string name="enter_receiving_date">प्राप्त करने की तिथि दर्ज करें</string>
     <string name="confirm_delivery_check_text_note">यदि आप अपने आदेश को दोषपूर्ण पाते हैं,\nतो आप हमेशा प्राप्त तिथि से 10\nदिनों के भीतर चिंता व्यक्त कर सकते हैं।</string>
     <string name="confirm_delivery">डिलिवरी की पुष्टि</string>
-    <string name="chats">tबातचीत</string>
+    <string name="chats">बातचीत</string>
     <string name="search_by_enquiry_id_order_id_buyer_s_name">पूछताछ आईडी / ऑर्डर आईडी / खरीदार के नाम से खोजें</string>
     <string name="type_your_msg">अपना संदेश यहां टंकित करें</string>
     <string name="err_fetch_list">सूची लाते समय त्रुटि</string>
@@ -588,7 +588,7 @@
     <string name="min_moq">न्यूनतम आदेश मात्रा कम से कम 10 होनी चाहिए </string>
     <string name="select_revised_advance_payment">Select revised advance payment</string>
     <string name="proceed_with_revised_payment">Proceed with revised payment</string>
-    <string name="approve_pending_advance">Approve pending advance</string>
+    <string name="approve_pending_advance">लंबित अग्रिम स्वीकृत करें</string>
     <string name="the_final_tax_invoice_will_be_updated">अंतिम कर चालान अपडेट किया जाएगा।</string>
     <string name="your_order_will_be_dispatched">जैसे ही कारीगर आपकी अंतिम भुगतान रसीद को मंजूरी देगा, आपका ऑर्डर भेज दिया जाएगा।</string>
 </resources>

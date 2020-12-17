@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.database.entities.realmEntities.OngoingEnquiries
 import com.adrosonic.craftexchange.database.entities.realmEntities.Orders
+import com.adrosonic.craftexchange.enums.AvailableStatus
+import com.adrosonic.craftexchange.enums.getId
 import com.adrosonic.craftexchange.ui.modules.enquiry.enquiryDetails
 import com.adrosonic.craftexchange.ui.modules.order.orderDetails
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
@@ -211,6 +213,63 @@ class ArtisanOngoingOrderListAdapter(var context: Context?, private var orders: 
                 enquiryStage = it.second
             }
         }
+
+        //////////////////////////////////////////////
+        if(enquiry?.productType == "Custom Product" || enquiry?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId()){
+            stageList = Utility.getEnquiryStagesData() // custom product or made to order
+            Log.e("enqdata", "List All : $stageList")
+
+            var innerStageList = Utility.getInnerEnquiryStagesData()
+            Log.e("enqdata", "List Inner : $innerStageList")
+
+
+            if(enquiry?.innerEnquiryStageId != null && enquiry?.enquiryStageId == 5L){
+                when(enquiry?.innerEnquiryStageId){
+                    1L -> {
+                        innerStageList?.forEach {
+                            if(it.first == enquiry?.innerEnquiryStageId){
+                                enquiryStage = it.second
+                            }
+                        }
+                    }
+                    5L -> {
+                        innerStageList?.forEach {
+                            if(it.first == enquiry?.innerEnquiryStageId){
+                                enquiryStage = it.second
+                                Log.e("CurrentEnqStage","current : $enquiryStage")
+                            }
+                        }
+                    }
+                    else -> {
+                        innerStageList?.forEach {
+                            if(it.first == enquiry?.innerEnquiryStageId){
+                                enquiryStage = it.second
+                                Log.e("CurrentEnqStage","current : $enquiryStage")
+                            }
+                        }
+                    }
+                }
+            }else{
+                stageList?.forEach {
+                    if(it.first == enquiry?.enquiryStageId){
+                        enquiryStage = it.second
+                        Log.e("CurrentEnqStage","current : $enquiryStage")
+                    }
+                }
+            }
+        }else{
+            var stageAPList = Utility.getAvaiProdEnquiryStagesData() // available product
+            Log.e("enqdata", "List AP : $stageAPList")
+            stageAPList?.forEach {
+                if(it.second == enquiry?.enquiryStageId){
+                    enquiryStage = it.third
+                    Log.e("CurrentEnqStage","current : $enquiryStage")
+                }
+            }
+
+        }
+        //////////////////////////////////////////////
+
         holder?.enquiryStageStatus.text = enquiryStage
 
         if(enquiry?.isMoqSend == null && enquiry?.enquiryStageId == 1L){
