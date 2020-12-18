@@ -134,21 +134,21 @@ class BuyerLandingActivity : LocaleBaseActivity(),
 
         mBinding?.txtVerTag?.text=ConstantsDirectory.VERSION
         if (savedInstanceState == null) {
-//            supportFragmentManager.beginTransaction()
-//                .add(R.id.buyer_home_container,
-//                    BuyerHomeFragment.newInstance()
-//                )
-//                .detach(BuyerHomeFragment())
-//                .attach(BuyerHomeFragment())
-//                .commitNow()
-            replaceContainerFragment(BuyerHomeFragment.newInstance(),"BuyerHomeFragment")
+            supportFragmentManager.beginTransaction()
+                .add(R.id.buyer_home_container,
+                    BuyerHomeFragment.newInstance()
+                )
+                .detach(BuyerHomeFragment())
+                .attach(BuyerHomeFragment())
+                .commitNow()
+//            replaceContainerFragment(BuyerHomeFragment.newInstance(),"BuyerHomeFragment")
         }
         if (intent.extras != null) {
             if (intent.getBooleanExtra("isNotification", false)) {
-//                supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container, NotifcationFragment.newInstance())
-//                    .addToBackStack(null)
-//                    .commit()
-                replaceContainerFragment(NotifcationFragment.newInstance(),"NotifcationFragment")
+                supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container, NotifcationFragment.newInstance())
+                    .addToBackStack(null)
+                    .commit()
+//                replaceContainerFragment(NotifcationFragment.newInstance(),"NotifcationFragment")
             }
         }
         tab_bar.onNavigationItemSelectedListener = object: BottomNavigationView.OnNavigationItemSelectedListener{
@@ -214,10 +214,11 @@ class BuyerLandingActivity : LocaleBaseActivity(),
                 startActivity(searchSuggestionIntent())
             }
             R.id.action_notification->{
-                supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container, NotifcationFragment.newInstance())
-                    .addToBackStack(null)
-                    .commit()
-                return true
+//                supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container, NotifcationFragment.newInstance())
+//                    .addToBackStack(null)
+//                    .commit()
+//                return true
+                replaceContainerFragment(NotifcationFragment.newInstance(),"NotifcationFragment")
             }
         }
         setupBadge()

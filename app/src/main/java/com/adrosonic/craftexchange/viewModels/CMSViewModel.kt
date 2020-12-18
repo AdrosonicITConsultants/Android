@@ -33,7 +33,6 @@ class CMSViewModel(application: Application) : AndroidViewModel(application) {
                 }
                 override fun onResponse(call: Call<CMSDataResponse>, response: Response<CMSDataResponse>) {
                     if (response?.isSuccessful) {
-                        cmsListener?.onCMSSuccess()
                         var itr = response?.body()?.iterator()
                         if(itr != null){
                             while (itr.hasNext()){
@@ -42,6 +41,7 @@ class CMSViewModel(application: Application) : AndroidViewModel(application) {
                                 UserConfig.shared.videoArtisan = data?.acf?.artisan_demo_video
                             }
                         }
+                        cmsListener?.onCMSSuccess()
                     }
                 }
             })

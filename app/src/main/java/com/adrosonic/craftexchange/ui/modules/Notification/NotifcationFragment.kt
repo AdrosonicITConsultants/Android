@@ -85,14 +85,14 @@ class NotifcationFragment : Fragment(),
     fun setVisiblities() {
         if (mViewModel.getNotificationsMutableData().value?.size!! > 0) {
             notificationList?.visibility = View.VISIBLE
-            empty_view.visibility = View.GONE
-            readAll.visibility=View.VISIBLE
+            empty_view?.visibility = View.GONE
+            readAll?.visibility=View.VISIBLE
             notification_elements.text =  "${mViewModel.getNotificationsMutableData().value?.size} "+getString(R.string.new_notifications)
         } else {
             notificationList?.visibility = View.GONE
-            empty_view.visibility = View.VISIBLE
-            readAll.visibility=View.GONE
-            notification_elements.text = getString(R.string.no_new_notifications)
+            empty_view?.visibility = View.VISIBLE
+            readAll?.visibility=View.GONE
+            notification_elements?.text = getString(R.string.no_new_notifications)
 
         }
         badgeCountListener?.onBadgeCOuntUpdated()
