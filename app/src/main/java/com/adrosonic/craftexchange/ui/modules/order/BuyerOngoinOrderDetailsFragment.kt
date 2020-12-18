@@ -458,7 +458,7 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
              setProgressTimeline()
 
 
-             var tranList = TransactionPredicates.getTransactionByEnquiryId(enqID ?: 0)
+             var tranList = TransactionPredicates.getTransactionByEnquiryId(enqID ?: 0,false)
              if (tranList!!.size > 0) {
                  mBinding?.viewTransaction?.text = "View"
                  mBinding?.transactionList?.layoutManager =

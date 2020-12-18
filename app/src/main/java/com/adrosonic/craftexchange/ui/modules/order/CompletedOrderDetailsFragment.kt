@@ -513,7 +513,7 @@ class CompletedOrderDetailsFragment : Fragment(),
                 }"
                 mBinding?.brand?.text = orderDetails?.companyName
 
-                var tranList = TransactionPredicates.getTransactionByEnquiryId(enqID ?: 0)
+                var tranList = TransactionPredicates.getTransactionByEnquiryId(enqID ?: 0,true)
                 if (tranList!!.size > 0) {
                     mBinding?.viewPaymentLayer?.visibility = View.VISIBLE
                     mBinding?.viewTransaction?.text = "View"

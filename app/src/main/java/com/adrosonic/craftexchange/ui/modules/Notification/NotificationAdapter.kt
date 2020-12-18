@@ -120,14 +120,9 @@ class NotificationAdapter(
             "Moq Received", "Moq accepted" -> {
                 R.drawable.ic_moq_received
             }
-            "Pi finalized", "Tax Invoice Raised", "Delivery Challan Uploaded", "Order Received","Rating Received",
+            "Pi finalized", "Tax Invoice Raised", "Delivery Challan Uploaded", "Order Received",
             "Order Dispached", "Order Closed", "Issue resolved","Partial Payment Received",
-            "Revised Pi",
-            "Qc Received for Final Qc","Qc Received for Yarn Procure","Qc Received for Off loom Process & Quality Check before delivery completed",
-            "Qc Received for Design Specification Check","Qc Received for Design Specification Check","Qc Received for Preloom Process",
-            "Qc Received for Yarn Dyeing","Qc Received for Yarn Procure","Qc Received for Preloom Process","Qc Received for Yarn Dyeing",
-            "Qc Received for Preloom Process","Qc Received for Final Qc",
-            "Order Dispatched After Recreation","Order Regenerated","\"Faulty Order\""-> {
+            "Revised Pi"-> {
                 R.drawable.ic_status_invoice
             }
             "Revised Advance Payment Received","Revised Advanced Payment Accepted",
@@ -144,6 +139,21 @@ class NotificationAdapter(
             }
             "Escalation Raised","Escalation Resolved","Escalation Received" -> {
                 R.drawable.ic_escalation
+            }
+            "Qc Received for Final Qc","Qc Received for Yarn Procure","Qc Received for Off loom Process & Quality Check before delivery completed",
+            "Qc Received for Design Specification Check","Qc Received for Design Specification Check","Qc Received for Preloom Process",
+            "Qc Received for Yarn Dyeing","Qc Received for Yarn Procure","Qc Received for Preloom Process","Qc Received for Yarn Dyeing",
+            "Qc Received for Preloom Process","Qc Received for Final Qc" -> {
+                R.drawable.ic_noti_qc
+            }
+            "Faulty Order" -> {
+                R.drawable.ic_noit_faulty
+            }
+            "Rating Received" -> {
+                R.drawable.ic_noti_rating
+            }
+            "Order Dispatched After Recreation","Order Regenerated" -> {
+                R.drawable.ic_noti_order_recreated
             }
             "Chat Message Received" -> {
                 R.drawable.ic_chat_outline

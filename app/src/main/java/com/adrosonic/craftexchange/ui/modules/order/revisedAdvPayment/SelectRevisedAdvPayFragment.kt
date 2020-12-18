@@ -212,8 +212,9 @@ class SelectRevisedAdvPayFragment : Fragment()
         calculatedAmount=data?.pendingAmount.toFloat()
         percentSelected=data?.percentage
         totalAmount=data?.totalAmount
-        mBinding?.selectAmountText?.text="Advance amount paid as "+data?.percentage+"% of order amount: ₹ "+data?.totalAmount
+        mBinding?.selectAmountText?.text="Advance amount paid as "+data?.percentage+"% of order amount: ₹ "+data?.paidAmount
         mBinding?.calculatedAmount?.text="₹ "+data?.pendingAmount
+        mBinding?.productAmount?.text = "₹ ${data?.totalAmount ?: 0}"
     }
 
     override fun onReviseStatusFailure() {

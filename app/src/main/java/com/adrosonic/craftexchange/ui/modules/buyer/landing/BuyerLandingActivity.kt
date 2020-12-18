@@ -29,6 +29,7 @@ import com.adrosonic.craftexchange.databinding.ActivityBuyerLandingBinding
 import com.adrosonic.craftexchange.repository.CraftExchangeRepository
 import com.adrosonic.craftexchange.repository.data.response.Notification.SaveUserTokenResponse
 import com.adrosonic.craftexchange.ui.modules.Notification.NotifcationFragment
+import com.adrosonic.craftexchange.ui.modules.artisan.landing.ArtisanHomeFragment
 import com.adrosonic.craftexchange.ui.modules.pdfViewer.PdfViewerActivity
 import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.CommonEnquiryFragment
 import com.adrosonic.craftexchange.ui.modules.buyer.ownDesign.OwnProductListFragment
@@ -133,19 +134,21 @@ class BuyerLandingActivity : LocaleBaseActivity(),
 
         mBinding?.txtVerTag?.text=ConstantsDirectory.VERSION
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .add(R.id.buyer_home_container,
-                    BuyerHomeFragment.newInstance()
-                )
-                .detach(BuyerHomeFragment())
-                .attach(BuyerHomeFragment())
-                .commitNow()
+//            supportFragmentManager.beginTransaction()
+//                .add(R.id.buyer_home_container,
+//                    BuyerHomeFragment.newInstance()
+//                )
+//                .detach(BuyerHomeFragment())
+//                .attach(BuyerHomeFragment())
+//                .commitNow()
+            replaceContainerFragment(BuyerHomeFragment.newInstance(),"BuyerHomeFragment")
         }
         if (intent.extras != null) {
             if (intent.getBooleanExtra("isNotification", false)) {
-                supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container, NotifcationFragment.newInstance())
-                    .addToBackStack(null)
-                    .commit()
+//                supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container, NotifcationFragment.newInstance())
+//                    .addToBackStack(null)
+//                    .commit()
+                replaceContainerFragment(NotifcationFragment.newInstance(),"NotifcationFragment")
             }
         }
         tab_bar.onNavigationItemSelectedListener = object: BottomNavigationView.OnNavigationItemSelectedListener{
@@ -153,36 +156,40 @@ class BuyerLandingActivity : LocaleBaseActivity(),
                 when (item.itemId) {
                     R.id.action_home -> {
                         if (savedInstanceState == null) {
-                            supportFragmentManager.beginTransaction()
-                                .add(R.id.buyer_home_container, BuyerHomeFragment.newInstance())
-                                .detach(BuyerHomeFragment())
-                                .attach(BuyerHomeFragment())
-                                .commitNow()
+//                            supportFragmentManager.beginTransaction()
+//                                .add(R.id.buyer_home_container, BuyerHomeFragment.newInstance())
+//                                .detach(BuyerHomeFragment())
+//                                .attach(BuyerHomeFragment())
+//                                .commitNow()
+                            replaceContainerFragment(BuyerHomeFragment.newInstance(),"BuyerHomeFragment")
                         }
                         return true
                     }
 
                     R.id.action_enquiries -> {
                         if (savedInstanceState == null) {
-                            supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container, CommonEnquiryFragment.newInstance())
-                                .addToBackStack(null)
-                                .commit()
+//                            supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container, CommonEnquiryFragment.newInstance())
+//                                .addToBackStack(null)
+//                                .commit()
+                            replaceContainerFragment(CommonEnquiryFragment.newInstance(),"CommonEnquiryFragment")
                         }
                         return true
                     }
                     R.id.action_wishlist -> {
                         if (savedInstanceState == null) {
-                            supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container, wishlistFragment.newInstance())
-                                .addToBackStack(null)
-                                .commit()
+//                            supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container, wishlistFragment.newInstance())
+//                                .addToBackStack(null)
+//                                .commit()
+                            replaceContainerFragment(wishlistFragment.newInstance(),"wishlistFragment")
                         }
                         return true
                     }
                     R.id.action_chat -> {
                         if (savedInstanceState == null) {
-                            supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container, ChatListFragment.newInstance())
-                                .addToBackStack(null)
-                                .commit()
+//                            supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container, ChatListFragment.newInstance())
+//                                .addToBackStack(null)
+//                                .commit()
+                            replaceContainerFragment(ChatListFragment.newInstance(),"ChatListFragment")
                         }
                         return true
                     }

@@ -289,6 +289,7 @@ EnquiryViewModel.FetchEnquiryInterface,
                         R.drawable.artisan_logo_placeholder,
                         R.drawable.artisan_logo_placeholder
                     )
+
                 }
 
                 //ProductAvailability

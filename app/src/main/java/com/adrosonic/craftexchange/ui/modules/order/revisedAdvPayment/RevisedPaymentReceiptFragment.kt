@@ -411,7 +411,7 @@ OrdersViewModel.FetchReviseStatusInterface{
     }
 
     override fun onReviseStatusSuccess(data: RevisedStatusResponse) {
-    mBinding?.amtPaidText?.text="Pending advance amount paid by buyer: ₹ "+data.paidAmount
+    mBinding?.amtPaidText?.text="Pending advance amount paid by buyer: ₹ "+data.pendingAmount
     }
 
     override fun onReviseStatusFailure() {

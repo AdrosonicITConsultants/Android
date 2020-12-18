@@ -123,14 +123,25 @@ class OnGoingTransactionRecyclerAdapter(var context: Context?, private var trans
                 }
             }
             //PI & Advance Payment
-            6L,24L,26L,28L -> {
+            6L -> {
                 when(profile){
                     art -> { holder?.statusIcon?.setImageResource(R.drawable.ic_adv_pfi_rec) }
 
                     buy -> { holder?.statusIcon?.setImageResource(R.drawable.ic_adv_pfi_rec_buyer) }
                 }
             }
+            //revised adv payment
+           24L -> {
+               holder?.statusIcon?.setImageResource(R.drawable.ic_revised_advance_payment_in_verification)
+            }
+            26L,28L -> {
+                if (transaction?.upcomingStatus == 11L) {
+                    holder?.statusIcon?.setImageResource(R.drawable.ic_revised_advance_payment_rejected)
+                } else {
+                    holder?.statusIcon?.setImageResource(R.drawable.ic_revised_advance_payment___accepted)
+                }
 
+            }
             //Advance Payment
             8L,10L -> {
                 when(profile){

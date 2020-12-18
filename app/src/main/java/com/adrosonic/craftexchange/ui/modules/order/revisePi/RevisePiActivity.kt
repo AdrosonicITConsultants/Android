@@ -175,6 +175,7 @@ class RevisePiActivity : LocaleBaseActivity(),
             mBinding?.txtEta?.text = Html.fromHtml(strEta)
             mBinding?.txtHsn?.text = Html.fromHtml("<font color=#A9A9A9>HSN code</font> <font color=#FF0000> *</font>")
         }
+        mBinding?.txtPiSwipe?.text=" Click to generate PI "
         mBinding?.enquiryCode?.text=getString(R.string.proforma_invoice)+": ${enquiryDetails?.enquiryCode}"
         mBinding?.enquiryStartDate?.text = getString(R.string.date_accepted)+": ${enquiryDetails?.startedOn?.split("T")?.get(0)}"
         val image = enquiryDetails?.productImages?.split((",").toRegex())?.dropLastWhile { it.isEmpty() }?.toTypedArray()?.get(0)

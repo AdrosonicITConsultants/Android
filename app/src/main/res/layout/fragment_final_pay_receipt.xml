@@ -267,7 +267,7 @@
                         android:elevation="8dp"
                         android:fontFamily="@font/lato_regular"
                         android:padding="4dp"
-                        android:text="@string/approve_advance_payment_by_buyer"
+                        android:text="@string/approve_final_payment_by_buyer"
                         android:textAlignment="center"
                         android:textAllCaps="false"
                         android:textColor="@color/white_text"

@@ -488,6 +488,22 @@ class TransactionPredicates {
             return tranObj
         }
 
+        fun getTransactionByEnquiryId(searchString : Long, isCompleted:Boolean): RealmResults<Transactions>? {
+            val realm = CXRealmManager.getRealmInstance()
+            var tranObj : RealmResults<Transactions> ?= null
+            realm?.executeTransaction {
+                try {
+                    tranObj = realm?.where(Transactions::class.java)
+                        .equalTo(Transactions.COLUMN_ENQUIRY_ID,searchString)
+                        .equalTo(Transactions.COLUMN_IS_COMPLETED,isCompleted)
+                        .sort(Transactions.COLUMN_MODIFIED_ON, Sort.DESCENDING)
+                        .findAll()
+                }catch (e:Exception){
+                    Log.e("Transactions",e.printStackTrace().toString())
+                }
+            }
+            return tranObj
+        }
 
     }
 }

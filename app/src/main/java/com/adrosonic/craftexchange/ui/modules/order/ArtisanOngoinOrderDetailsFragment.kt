@@ -188,12 +188,6 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
             })
         }
 
-        mBinding?.btnViewApprovePayment?.setOnClickListener {
-            startActivity(requireContext().orderPaymentIntent()
-                ?.putExtra(ConstantsDirectory.ENQUIRY_ID,enqID)
-                ?.putExtra(ConstantsDirectory.ENQUIRY_STATUS_FLAG,OrderStatus.ONGOING.getId()))
-        }
-
         mBinding?.btnUploadTaxInv?.setOnClickListener {
             enqID?.let {startActivityForResult(requireContext().taxInvoiceIntent(it),ConstantsDirectory.RESULT_TI)}
         }
@@ -359,21 +353,21 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         }
         mBinding?.viewEnqLayer?.setOnClickListener {
             enqID?.let {
-//                val intent = Intent(context?.enquiryDetails())
-//                var bundle = Bundle()
-//                Prefs.putString(ConstantsDirectory.ENQUIRY_ID, it.toString()) //TODO change later
-//                bundle.putString(ConstantsDirectory.ENQUIRY_ID, it.toString())
-//                bundle.putString(ConstantsDirectory.ENQUIRY_STATUS_FLAG, "2")
-//                intent.flags =Intent.FLAG_ACTIVITY_SINGLE_TOP
-//                intent.putExtras(bundle)
                 startActivity(Intent(requireContext()?.viewEnqDetails( requireContext(),it.toString(),"2")))
             }
         }
         mBinding?.btnViewApproveRevAdvPayment?.setOnClickListener {
-            startActivity(context?.orderPayment()
+            enqID?.let {
+                startActivity(context?.orderPayment()
+                        ?.putExtra(ConstantsDirectory.ENQUIRY_ID, it)
+                        ?.putExtra(ConstantsDirectory.ORDER_STATUS_FLAG, 0L)
+                        ?.putExtra(ConstantsDirectory.PI_ID, 0))
+            }
+        }
+        mBinding?.btnViewApprovePayment?.setOnClickListener {
+            startActivity(requireContext().orderPaymentIntent()
                 ?.putExtra(ConstantsDirectory.ENQUIRY_ID,enqID)
-                ?.putExtra(ConstantsDirectory.ORDER_STATUS_FLAG, 0L)
-                ?.putExtra(ConstantsDirectory.PI_ID,0))
+                ?.putExtra(ConstantsDirectory.ENQUIRY_STATUS_FLAG,OrderStatus.ONGOING.getId()))
         }
     }
 
@@ -552,7 +546,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         mBinding?.buyerBrand?.text = orderDetails?.companyName
 
         setProgressTimeline()
-        var tranList = TransactionPredicates.getTransactionByEnquiryId(enqID?:0)
+        var tranList = TransactionPredicates.getTransactionByEnquiryId(enqID?:0,false)
                 if(tranList!!.size>0){
                     mBinding?.viewTransaction?.text=getString(R.string.view)
                     mBinding?.transactionList?.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false )
@@ -598,6 +592,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         else{
             mBinding?.toogleCr?.isEnabled=true
         }
+
         if(orderDetails?.revisedAdvancePaymentId!!.equals(3L))mBinding?.btnViewApproveRevAdvPayment?.visibility = View.VISIBLE
         else mBinding?.btnViewApproveRevAdvPayment?.visibility = View.GONE
         } catch (e: Exception) {
@@ -893,7 +888,7 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
         }
 
         //Upload Delivery Receipt
-        if(orderDetails?.enquiryStageId == EnquiryStages.FINAL_PAYMENT_RECEIVED.getId() && orderDetails?.deliveryChallanUploaded == 0L){
+        if(orderDetails?.enquiryStageId!! >= EnquiryStages.FINAL_PAYMENT_RECEIVED.getId() && orderDetails?.deliveryChallanUploaded == 0L){
             mBinding?.uploadDeliveryReceiptLayout?.visibility = View.VISIBLE
         }else{
             mBinding?.uploadDeliveryReceiptLayout?.visibility = View.GONE
