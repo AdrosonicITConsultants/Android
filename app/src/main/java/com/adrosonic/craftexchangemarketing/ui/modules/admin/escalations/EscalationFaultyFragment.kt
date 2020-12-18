@@ -25,9 +25,6 @@ import com.adrosonic.craftexchangemarketing.repository.data.response.escalation.
 import com.adrosonic.craftexchangemarketing.repository.data.response.escalation.GenerateEnqResponse
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.enqOrd.chat.chatLogDetailsIntent
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.escalations.adapter.FaultyRecyclerAdapter
-import com.adrosonic.craftexchangemarketing.ui.modules.admin.escalations.adapter.PaymentRecyclerAdapter
-import com.adrosonic.craftexchangemarketing.ui.modules.admin.escalations.adapter.UpdatesRecyclerAdapter
-import com.adrosonic.craftexchangemarketing.ui.modules.admin.redirectEnquiries.selectLessThan8ArtisanActivityIntent
 import com.adrosonic.craftexchangemarketing.utils.ConstantsDirectory
 import com.adrosonic.craftexchangemarketing.utils.Utility
 import com.adrosonic.craftexchangemarketing.viewModels.EscalationViewModel

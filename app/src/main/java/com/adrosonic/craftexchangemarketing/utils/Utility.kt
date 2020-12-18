@@ -294,15 +294,15 @@ class Utility {
             }
         }
         fun getDeliveryChallanReceiptUrl(enquiryId : Long?,imagename : String?) : String{
-            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_UAT}deliveryChallanReceipt/${enquiryId}/${imagename}"
+            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV}deliveryChallanReceipt/${enquiryId}/${imagename}"
         }
 
         fun getAdvancePaymentImageUrl(receiptId : Long?,imagename : String?) : String{
-            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_UAT}AdvancedPayment/${receiptId}/${imagename}"
+            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV}AdvancedPayment/${receiptId}/${imagename}"
         }
 
         fun getFinalPaymentImageUrl(receiptId : Long?,imagename : String?) : String{
-            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_UAT}FinalPayment/${receiptId}/${imagename}"
+            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV}FinalPayment/${receiptId}/${imagename}"
         }
 
 
@@ -482,18 +482,18 @@ class Utility {
         }
 
         fun getBrandLogoUrl(userId : Long?, imagename : String?) : String{
-            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_UAT}User/${userId}/CompanyDetails/Logo/${imagename}"
+            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV}User/${userId}/CompanyDetails/Logo/${imagename}"
         }
 
         fun getProfilePhotoUrl(artisanId : Long?, imagename : String?) : String{
-            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_UAT}User/${artisanId}/ProfilePics/${imagename}"
+            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV}User/${artisanId}/ProfilePics/${imagename}"
         }
 
         fun getProductsImagesUrl(productId : Long?,imagename : String?) : String{
-            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_UAT}Product/${productId}/${imagename}"
+            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV}Product/${productId}/${imagename}"
         }
         fun getCustomProductImagesUrl(productId : Long?,imagename : String?) : String{
-            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_UAT}CustomProduct/${productId}/${imagename}"
+            return "${ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV}CustomProduct/${productId}/${imagename}"
         }
         fun setImageResource(context: Context?,imageView:ImageView?,imageId:Int){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -747,20 +747,24 @@ class Utility {
                 return false
             }
         }
-        fun getDateDiffInDays(orderCreatedOn:String):Long{
-            val currentDateTime=System.currentTimeMillis()
+        fun getDateDiffInDays(orderCreatedOn:String?):Long?{
+            try {
+                val currentDateTime=System.currentTimeMillis()
 //            val orderCreatedOn=Utility.returnDisplayDate(orderDetails?.orderCreatedOn?:"")
-            val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
-            val dateString =dateFormat.parse(orderCreatedOn)
-            Log.e("RaiseCr","orderDateMillis $dateString")
+                val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+                val dateString =dateFormat.parse(orderCreatedOn)
+                Log.e("RaiseCr","orderDateMillis $dateString")
 
-            val diff: Long = currentDateTime - dateString.getTime()
-            val seconds = diff / 1000
-            val minutes = seconds / 60
-            val hours = minutes / 60
-            val days = hours / 24
+                val diff: Long = currentDateTime - dateString.getTime()
+                val seconds = diff / 1000
+                val minutes = seconds / 60
+                val hours = minutes / 60
+                val days = hours / 24
 
-            return days
+                return days
+            } catch (e: Exception) {
+                return 0
+            }
         }
 
         fun openFile(context: Activity,enquiryId:Long,old:String){

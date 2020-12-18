@@ -97,7 +97,7 @@ class AdminHomeFragment : Fragment(),
 
         mBinding?.FaultPane?.setOnClickListener {
             val myIntent = Intent(context, EscalationActivity::class.java)
-            myIntent.putExtra("total", enquiryOrderCountResponse?.data!![0]?.escaltions)
+            myIntent.putExtra("total", enquiryOrderCountResponse?.data!![0]?.escaltions?:1)
             context?.startActivity(myIntent)
         }
             mBinding?.microEnterpriseSummary?.setOnClickListener {

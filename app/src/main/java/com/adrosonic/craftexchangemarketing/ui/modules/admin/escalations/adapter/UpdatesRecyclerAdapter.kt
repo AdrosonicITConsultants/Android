@@ -15,6 +15,7 @@ import com.adrosonic.craftexchangemarketing.repository.data.response.enquiryOrde
 import com.adrosonic.craftexchangemarketing.repository.data.response.escalation.EscalationData
 import com.adrosonic.craftexchangemarketing.utils.Utility
 import com.adrosonic.craftexchangemarketing.viewModels.EscalationViewModel
+import java.lang.Exception
 
 class UpdatesRecyclerAdapter(var context: Context? ,var escalationList: ArrayList<EscalationData>, val listener :(EscalationData) -> Unit) : RecyclerView.Adapter<UpdatesRecyclerAdapter.MyViewHolder>(){
 
@@ -47,9 +48,9 @@ class UpdatesRecyclerAdapter(var context: Context? ,var escalationList: ArrayLis
         var escalation = escalationList[position]
         holder?.enquiryCode?.text = escalation?.enquiryCode.toString()
         holder?.eStatus?.text = escalation?.stage
-        holder?.date?.text = escalation?.lastUpdated?.split("T")?.get(0)
-        var daysleft = Utility.getDateDiffInDays(escalation?.lastUpdated)
-        holder?.daysago?.text = daysleft.toString() + "days ago"
+        holder?.date?.text =  try{if(escalation?.lastUpdated==null){"Invalid date"}else escalation?.lastUpdated?.split("T")?.get(0)}catch (e:Exception){"Invalid date"}
+        var daysleft = Utility.getDateDiffInDays(escalation?.lastUpdated?:"")
+        holder?.daysago?.text = if(daysleft!!.equals(0L)){"Invalid date"}else daysleft?.toString() + "days ago"
         holder?.layout?.setOnClickListener {
             listener(escalation)
             Log.d("updatesClick", "onBindViewHolder: clicked" )
@@ -66,7 +67,6 @@ class UpdatesRecyclerAdapter(var context: Context? ,var escalationList: ArrayLis
 
     override fun getItemCount(): Int {
         Log.e("EscalationVM","fn called " + escalationList?.size)
-
         return escalationList?.size
     }
 
