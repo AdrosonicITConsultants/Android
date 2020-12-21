@@ -275,6 +275,11 @@ class BuyerLandingActivity : LocaleBaseActivity(),
                 intent.putExtra("ViewType", "FAQ_PDF")
                 startActivity(intent)
             }
+            R.id.nav_user_manual -> {
+                val intent = Intent(this@BuyerLandingActivity, PdfViewerActivity::class.java)
+                intent.putExtra("ViewType", "USER_MAN_BUY")
+                startActivity(intent)
+            }
             R.id.nav_logout -> {
                 if (Utility.checkIfInternetConnected(this)) {
                     val builder = AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar)

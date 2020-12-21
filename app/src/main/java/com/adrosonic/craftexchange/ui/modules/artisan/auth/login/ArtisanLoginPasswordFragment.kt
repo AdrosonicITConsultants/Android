@@ -110,11 +110,7 @@ class ArtisanLoginPasswordFragment : Fragment() {
                         .enqueue(object : Callback, retrofit2.Callback<ArtisanResponse> {
                             override fun onFailure(call: Call<ArtisanResponse>, t: Throwable) {
                                 t.printStackTrace()
-                                Toast.makeText(
-                                    activity,
-                                    "${t.printStackTrace()}",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                Toast.makeText(activity,"${t.printStackTrace()}", Toast.LENGTH_SHORT).show()
                             }
 
                             override fun onResponse(
@@ -128,7 +124,6 @@ class ArtisanLoginPasswordFragment : Fragment() {
                                     Prefs.putBoolean(ConstantsDirectory.IS_LOGGED_IN, true)
                                     UserPredicates.insertArtisan(response.body()!!)
                                     AddressPredicates.insertArtisanAddress(response.body()!!)
-
                                     mUserConfig.deviceName = "Android"
 
                                     Prefs.putString(

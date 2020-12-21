@@ -26,6 +26,10 @@
             android:icon="@drawable/ic_icon_help"
             android:title="@string/support" />
         <item
+            android:id="@+id/nav_user_manual"
+            android:icon="@drawable/ic_user_manual"
+            android:title="@string/user_manual" />
+        <item
             android:id="@+id/nav_change_lang"
             android:icon="@drawable/ic_change_language_black"
             android:title="@string/change_language" />

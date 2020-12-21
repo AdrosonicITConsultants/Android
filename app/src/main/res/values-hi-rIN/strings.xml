@@ -573,11 +573,11 @@
     <string name="you">आप</string>
 
     //prod
-<!--    <string name="facebook_app_id">2960179490877793</string>-->
-<!--    <string name="fb_login_protocol_scheme">fb2960179490877793</string>-->
+    <string name="facebook_app_id">2960179490877793</string>
+    <string name="fb_login_protocol_scheme">fb2960179490877793</string>
     //uat, qa
-    <string name="facebook_app_id">717798432467327</string>
-    <string name="fb_login_protocol_scheme">fb717798432467327</string>
+<!--    <string name="facebook_app_id">717798432467327</string>-->
+<!--    <string name="fb_login_protocol_scheme">fb717798432467327</string>-->
 
     <string name="previouse_total_amount">पिछला कुल राशि</string>
     <string name="no_ongoing_orders_present">कोई चल रहे आदेश मौजूद नहीं हैं</string>
@@ -591,4 +591,5 @@
     <string name="approve_final_payment_by_buyer">अग्रिम स्वीकृत करें</string>
     <string name="the_final_tax_invoice_will_be_updated">अंतिम कर चालान अपडेट किया जाएगा।</string>
     <string name="your_order_will_be_dispatched">जैसे ही कारीगर आपकी अंतिम भुगतान रसीद को मंजूरी देगा, आपका ऑर्डर भेज दिया जाएगा।</string>
+    <string name="user_manual">User Manual</string>
 </resources>

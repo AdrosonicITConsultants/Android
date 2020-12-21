@@ -269,6 +269,11 @@ class ArtisanLandingActivity : LocaleBaseActivity(),
                 intent.putExtra("ViewType", "FAQ_PDF")
                 startActivity(intent)
             }
+            R.id.nav_user_manual -> {
+                val intent = Intent(this@ArtisanLandingActivity, PdfViewerActivity::class.java)
+                intent.putExtra("ViewType", "USER_MAN_ART")
+                startActivity(intent)
+            }
             R.id.nav_change_lang->{
                 showLanguageSelectionDialog()
             }

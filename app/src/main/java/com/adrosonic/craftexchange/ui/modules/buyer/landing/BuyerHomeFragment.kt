@@ -127,7 +127,7 @@ CMSViewModel.CMSDataInterface{
                         val dataObj = dataJson.getJSONObject(i)
                         Log.i("CMS", "DataObj : $dataObj")
                         var pageId = dataObj?.getString("id")?.toLong()
-                        if (pageId == 27L) {
+                        if (pageId == 64L) {
                             var acfObj = dataObj?.getJSONObject("acf")
                             mBinding?.browseText?.text = acfObj?.getString("card_header")
 

@@ -8,8 +8,11 @@ import androidx.appcompat.app.AppCompatActivity
 import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.ActivityPdfViewerBinding
+import com.adrosonic.craftexchange.ui.modules.artisan.landing.ArtisanLandingActivity
+import com.adrosonic.craftexchange.ui.modules.buyer.landing.BuyerLandingActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
+import com.pixplicity.easyprefs.library.Prefs
 
 fun Context.pdfViewerIntent(): Intent {
     return Intent(this, PdfViewerActivity::class.java).apply {
@@ -42,7 +45,6 @@ class PdfViewerActivity: LocaleBaseActivity() {
                    mBinding?.webView?.settings?.javaScriptEnabled = true
                    pdf = ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV+"documents/PRIVACY%20POLICY.pdf"
                    mBinding?.webView?.loadUrl("https://drive.google.com/viewerng/viewer?embedded=true&url=$pdf")
-
                }
 
                if(viewType.equals("LEGAL_DISCLAIMER")){
@@ -59,6 +61,16 @@ class PdfViewerActivity: LocaleBaseActivity() {
                    mBinding?.webView?.settings?.javaScriptEnabled = true
 //                   pdf = ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV+"documents/LEGAL%20DISCLAIMER.pdf"
                    pdf = ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV+"documents/FAQ.pdf"
+                   mBinding?.webView?.loadUrl("https://drive.google.com/viewerng/viewer?embedded=true&url=$pdf")
+               }
+               if(viewType.equals("USER_MAN_ART")){
+                   mBinding?.webView?.settings?.javaScriptEnabled = true
+                   pdf = ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV+"usermanual/ArtisanMobile.pdf"
+                   mBinding?.webView?.loadUrl("https://drive.google.com/viewerng/viewer?embedded=true&url=$pdf")
+               }
+               if(viewType.equals("USER_MAN_BUY")){
+                   mBinding?.webView?.settings?.javaScriptEnabled = true
+                   pdf = ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV+"usermanual/BuyerMobile.pdf"
                    mBinding?.webView?.loadUrl("https://drive.google.com/viewerng/viewer?embedded=true&url=$pdf")
                }
                 Utility.displayMessage(getString(R.string.plz_Wait),this)

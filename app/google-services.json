@@ -1,42 +1,33 @@
 {
   "project_info": {
-    "project_number": "654275993029",
-    "firebase_url": "https://craft-xchange-android.firebaseio.com",
-    "project_id": "craft-xchange-android",
-    "storage_bucket": "craft-xchange-android.appspot.com"
+    "project_number": "951846626811",
+    "project_id": "craftxchange-5fab4",
+    "storage_bucket": "craftxchange-5fab4.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:654275993029:android:1662e781e8102e7d15bfac",
+        "mobilesdk_app_id": "1:951846626811:android:62a98c993a1762b4d4575e",
         "android_client_info": {
           "package_name": "com.adrosonic.craftexchange"
         }
       },
       "oauth_client": [
         {
-          "client_id": "654275993029-p6r38drn1bi52bv2nk6lvistdgdt2rqv.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.adrosonic.craftexchange",
-            "certificate_hash": "35f6e857ecf96c43c4193da5014672e6624d0dcd"
-          }
-        },
-        {
-          "client_id": "654275993029-bm4gp0vua28849g2a757ojpl7ia1qgql.apps.googleusercontent.com",
+          "client_id": "951846626811-ib2lq187v30q9tjt8g7k7vmrtu01t1tb.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAikChrCvMJyDd3tgEtzSWDO_D2co4F9Ks"
+          "current_key": "AIzaSyBqpKGzMyOkVeJ3rB7kMr-esl7EYWxE-6I"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "654275993029-bm4gp0vua28849g2a757ojpl7ia1qgql.apps.googleusercontent.com",
+              "client_id": "951846626811-ib2lq187v30q9tjt8g7k7vmrtu01t1tb.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
