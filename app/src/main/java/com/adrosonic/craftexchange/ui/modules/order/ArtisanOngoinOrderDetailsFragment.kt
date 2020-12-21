@@ -813,15 +813,15 @@ class ArtisanOngoinOrderDetailsFragment : Fragment(),
     private fun setTabVisibilities(){
         //advance payment
         orderDetails?.enquiryStageId?.let {
-            if (orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT) {
-                if (orderDetails?.enquiryStageId!! >= 4L) {
-                    mBinding?.viewPaymentLayer?.visibility = View.VISIBLE
-                } else {
-                    mBinding?.viewPaymentLayer?.visibility = View.GONE
-                }
-            } else {
-                mBinding?.viewPaymentLayer?.visibility = View.GONE
-            }
+//            if (orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT) {
+//                if (orderDetails?.enquiryStageId!! >= 3L) {
+//                    mBinding?.viewPaymentLayer?.visibility = View.VISIBLE
+//                } else {
+//                    mBinding?.viewPaymentLayer?.visibility = View.GONE
+//                }
+//            } else {
+//                mBinding?.viewPaymentLayer?.visibility = View.GONE
+//            }
 
             //QcForm
             if (orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT) {

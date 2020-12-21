@@ -600,15 +600,15 @@ class CompletedOrderDetailsFragment : Fragment(),
     private fun setTabVisibilities(){
 //        when(profile){
 //            ConstantsDirectory.ARTISAN -> {
-                if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
-                    if(orderDetails?.enquiryStageId!! >= 4L){
-                        mBinding?.viewPaymentLayer?.visibility = View.VISIBLE
-                    }else{
-                        mBinding?.viewPaymentLayer?.visibility = View.GONE
-                    }
-                }else{
-                    mBinding?.viewPaymentLayer?.visibility = View.GONE
-                }
+//                if(orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT){
+//                    if(orderDetails?.enquiryStageId!! >= 4L){
+//                        mBinding?.viewPaymentLayer?.visibility = View.VISIBLE
+//                    }else{
+//                        mBinding?.viewPaymentLayer?.visibility = View.GONE
+//                    }
+//                }else{
+//                    mBinding?.viewPaymentLayer?.visibility = View.GONE
+//                }
         //quality check
         if(orderDetails?.enquiryStageId!! >= 5L){
             mBinding?.qualityCheckLayer?.visibility = View.VISIBLE

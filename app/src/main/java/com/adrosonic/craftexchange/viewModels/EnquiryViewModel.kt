@@ -471,6 +471,8 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
                 ) {
                     val valid=response.body()?.valid?:false
                     Log.e(TAG,"getSingleMoq :$valid")
+                    Log.e(TAG,"getSingleMoq :${response.body()?.errorMessage}")
+                    Log.e(TAG,"getSingleMoq :${response.body()?.errorCode}")
                     if(valid){
                         Log.e(TAG,"getSingleMoq :${response.body()?.data}")
                         response.body()?.data?.let {

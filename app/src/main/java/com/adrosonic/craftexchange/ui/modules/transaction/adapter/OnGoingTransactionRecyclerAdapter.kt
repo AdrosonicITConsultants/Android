@@ -266,6 +266,9 @@ class OnGoingTransactionRecyclerAdapter(var context: Context?, private var trans
             holder?.amount?.text = "N.A"
         }
 
+//        if(transaction?.totalAmount==0L) holder?.amount?.text = "₹ ${transaction?.paidAmount}"
+//        else  holder?.amount?.text = "₹ ${transaction?.totalAmount}"
+
         val slideDown = AnimationUtils.loadAnimation(context, R.anim.slide_down)
         val slideUp = AnimationUtils.loadAnimation(context, R.anim.slide_up)
 

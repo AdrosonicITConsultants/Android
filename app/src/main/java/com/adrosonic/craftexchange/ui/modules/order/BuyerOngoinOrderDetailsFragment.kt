@@ -461,8 +461,7 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
              var tranList = TransactionPredicates.getTransactionByEnquiryId(enqID ?: 0,false)
              if (tranList!!.size > 0) {
                  mBinding?.viewTransaction?.text = "View"
-                 mBinding?.transactionList?.layoutManager =
-                     LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                 mBinding?.transactionList?.layoutManager =  LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
                  val transactionAdapter =
                      OnGoingTransactionRecyclerAdapter(requireContext(), tranList)
                  mBinding?.transactionList?.adapter = transactionAdapter
@@ -711,15 +710,15 @@ class BuyerOngoinOrderDetailsFragment : Fragment(),
     private fun setTabVisibilities(){
         //AdvancePayment
         orderDetails?.enquiryStageId?.let {
-            if (orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT) {
-                if (orderDetails?.enquiryStageId!! >= 4L) {
-                    mBinding?.viewPaymentLayer?.visibility = View.VISIBLE
-                } else {
-                    mBinding?.viewPaymentLayer?.visibility = View.GONE
-                }
-            } else {
-                mBinding?.viewPaymentLayer?.visibility = View.GONE
-            }
+//            if (orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT) {
+//                if (orderDetails?.enquiryStageId!! >= 4L) {
+//                    mBinding?.viewPaymentLayer?.visibility = View.VISIBLE
+//                } else {
+//                    mBinding?.viewPaymentLayer?.visibility = View.GONE
+//                }
+//            } else {
+//                mBinding?.viewPaymentLayer?.visibility = View.GONE
+//            }
 
             //QcForm
             if (orderDetails?.productStatusId == AvailableStatus.MADE_TO_ORDER.getId() || orderDetails?.productType == ConstantsDirectory.CUSTOM_PRODUCT) {
