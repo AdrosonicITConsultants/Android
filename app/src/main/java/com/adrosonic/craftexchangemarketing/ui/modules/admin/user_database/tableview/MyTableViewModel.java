@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.Gravity;
 
 
+import com.adrosonic.craftexchangemarketing.database.entities.realmEntities.UserDatabase;
 import com.adrosonic.craftexchangemarketing.repository.data.response.admin.userDatabase.User;
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.tableview.model.CellModel;
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.tableview.model.ColumnHeaderModel;
@@ -134,14 +135,14 @@ public class MyTableViewModel {
         return list;
     }
 
-    private List<List<CellModel>> createCellModelList(List<User> userList) {
+    private List<List<CellModel>> createCellModelList(List<UserDatabase> userList) {
         List<List<CellModel>> lists = new ArrayList<>();
 
         // Creating cell model list from User list for Cell Items
         // In this example, User list is populated from web service
 
         for (int i = 0; i < userList.size(); i++) {
-            User user = userList.get(i);
+            UserDatabase user = userList.get(i);
             List<CellModel> list = new ArrayList<>();
 
             // The order should be same with column header list;
@@ -160,11 +161,11 @@ public class MyTableViewModel {
         return lists;
     }
 
-    private List<RowHeaderModel> createRowHeaderList(List<User> userList) {
+    private List<RowHeaderModel> createRowHeaderList(List<UserDatabase> userList) {
         List<RowHeaderModel> list = new ArrayList<>();
         for (int i = 0; i < userList.size(); i++) {
             // In this example, Row headers just shows the index of the TableView List.
-            User user=userList.get(i);
+            UserDatabase user=userList.get(i);
             Log.e("RowHeaderModel",""+user.getBrandName());
             if(user.getBrandName()==null)list.add(new RowHeaderModel("NA",user.getStatus()));
             else list.add(new RowHeaderModel(""+user.getBrandName(),user.getStatus()));
@@ -186,7 +187,7 @@ public class MyTableViewModel {
     }
 
 
-    public void generateListForTableView(List<User> users) {
+    public void generateListForTableView(List<UserDatabase> users) {
         mColumnHeaderModelList = createColumnHeaderModelList();
         mCellModelList = createCellModelList(users);
         mRowHeaderModelList = createRowHeaderList(users);

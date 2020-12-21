@@ -3,6 +3,7 @@ package com.adrosonic.craftexchangemarketing.viewModels
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import com.adrosonic.craftexchangemarketing.database.predicates.UserDatabasePredicates
 import com.adrosonic.craftexchangemarketing.repository.craftexchangemarketingRepository
 import com.adrosonic.craftexchangemarketing.repository.data.request.admin.database.UserDataRequest
 import com.adrosonic.craftexchangemarketing.repository.data.response.admin.userDatabase.DatabaseCountResponse
@@ -45,14 +46,15 @@ class DatabaseViewModel(application: Application) : AndroidViewModel(application
                 ) {
                     if(response.body()?.data != null) {
                         Log.e("DatabaseResults", "Success : $isFilter")
-                        if(isFilter) {
-                            Log.e("DatabaseResults", "Success : " + response?.body()?.data?.size+": $page")
-                            listener?.onSuccess(response?.body()?.data!!)
-                        }
-                        else{
+                        UserDatabasePredicates.insertUserDatabase(response.body()?.data,if(roleId==1)true else false)
+//                        if(isFilter) {
+//                            Log.e("DatabaseResults", "Success : " + response?.body()?.data?.size+": $page")
+//                            listener?.onSuccess(response?.body()?.data!!)
+//                        }
+//                        else{
                             Log.e("DatabaseResults", "page : $page :: ${UserConfig.shared.artisanDbPageCount}")
                             page++
-                            if(page>UserConfig.shared.artisanDbPageCount){
+                            if(page>=UserConfig.shared.artisanDbPageCount){
                                 listener?.onSuccess(userList)
                             }
                             else {
@@ -60,7 +62,7 @@ class DatabaseViewModel(application: Application) : AndroidViewModel(application
                                 userList.addAll(response?.body()?.data!!)
                                 getDatabaseForAdmin(isFilter,clusterId, page, rating, roleId,searchStr, sortBy,sortType)
                             }
-                        }
+//                        }
                     }else{
                         Log.e("DatabaseResults","Failure")
                         listener?.onFailure()

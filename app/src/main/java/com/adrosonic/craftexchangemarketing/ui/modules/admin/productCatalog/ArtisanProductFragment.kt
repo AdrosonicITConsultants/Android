@@ -123,6 +123,7 @@ class ArtisanProductFragment() :Fragment(),
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("ArtisanDatabaseFragment", "onFailure")
                 mBinding?.swipeRefreshLayout?.isRefreshing=false
+                setCount()
             }
             )
         } catch (e: Exception) {

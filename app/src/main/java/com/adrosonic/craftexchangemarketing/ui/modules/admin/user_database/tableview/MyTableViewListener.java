@@ -7,6 +7,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.adrosonic.craftexchangemarketing.database.entities.realmEntities.UserDatabase;
 import com.adrosonic.craftexchangemarketing.repository.data.response.admin.userDatabase.User;
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.individualProfile.ArtisanProfileActivity;
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.individualProfile.BuyerProfileActivity;
@@ -31,12 +32,13 @@ public class MyTableViewListener implements ITableViewListener {
     private static final String LOG_TAG = MyTableViewListener.class.getSimpleName();
     public interface TableListenrs{
         void onColumnClick(int columnIndes);
+
     }
     private ITableView mTableView;
-    private List<User> mUserList;
+    private List<UserDatabase> mUserList;
     public  TableListenrs tableListenrs;
     private int roleId;
-    public MyTableViewListener(ITableView pTableView, List<User> userList, int roleId) {
+    public MyTableViewListener(ITableView pTableView, List<UserDatabase> userList, int roleId) {
         this.mTableView = pTableView;
         this.mUserList=userList;
         this.roleId=roleId;
@@ -83,7 +85,7 @@ public class MyTableViewListener implements ITableViewListener {
     @Override
     public void onRowHeaderClicked(@NonNull RecyclerView.ViewHolder rowHeaderView, int row) {
         Log.e(LOG_TAG, "onRowHeaderClicked has been clicked for " + row);
-        User user=mUserList.get(row);
+        UserDatabase user=mUserList.get(row);
         if(roleId==1){
             Intent myIntent = new Intent(mTableView.getContext(), ArtisanProfileActivity.class);
             myIntent.putExtra("artisanId", user.getId());

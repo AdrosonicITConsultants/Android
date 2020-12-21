@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import com.adrosonic.craftexchangemarketing.R;
+import com.adrosonic.craftexchangemarketing.database.entities.realmEntities.UserDatabase;
 import com.adrosonic.craftexchangemarketing.repository.data.response.admin.userDatabase.User;
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.tableview.holder.CellViewHolder;
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.tableview.holder.ColumnHeaderViewHolder;
@@ -139,7 +140,7 @@ public class MyTableAdapter extends AbstractTableAdapter<ColumnHeaderModel, RowH
      * This method is not a generic Adapter method. It helps to generate lists from single user
      * list for this adapter.
      */
-    public void setUserList(List<User> userList) {
+    public void setUserList(List<UserDatabase> userList) {
         // Generate the lists that are used to TableViewAdapter
         myTableViewModel.generateListForTableView(userList);
 

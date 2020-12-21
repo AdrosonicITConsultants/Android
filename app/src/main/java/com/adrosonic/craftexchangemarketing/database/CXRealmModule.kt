@@ -42,7 +42,8 @@ import io.realm.annotations.RealmModule
         OrderProgressDetails::class,
         ChatUser::class,
         ChatLogUserData::class,
-        Escalations::class
+        Escalations::class,
+        UserDatabase::class
     ]
 )
 class CXRealmModule

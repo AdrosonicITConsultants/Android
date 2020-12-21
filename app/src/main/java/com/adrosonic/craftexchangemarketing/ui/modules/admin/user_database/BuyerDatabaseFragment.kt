@@ -13,34 +13,40 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.adrosonic.craftexchangemarketing.R
 import com.adrosonic.craftexchangemarketing.database.entities.realmEntities.ClusterList
+import com.adrosonic.craftexchangemarketing.database.entities.realmEntities.UserDatabase
 import com.adrosonic.craftexchangemarketing.database.predicates.ClusterPredicates
+import com.adrosonic.craftexchangemarketing.database.predicates.UserDatabasePredicates
+import com.adrosonic.craftexchangemarketing.database.predicates.UserPredicates
 import com.adrosonic.craftexchangemarketing.databinding.FragmentUserdbArtisanBinding
 import com.adrosonic.craftexchangemarketing.repository.data.response.admin.userDatabase.User
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.tableview.MyTableAdapter
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.tableview.MyTableViewListener
+import com.adrosonic.craftexchangemarketing.ui.modules.admin.user_database.tableview.MyTableViewListener.TableListenrs
+import com.adrosonic.craftexchangemarketing.ui.modules.artisan.productTemplate.yarnFrgamnets.WarpFragment
 import com.adrosonic.craftexchangemarketing.utils.Utility
 import com.adrosonic.craftexchangemarketing.viewModels.DatabaseViewModel
 import io.realm.RealmResults
+import io.realm.Sort
 
 
 private const val ARG_PARAM1 = "roleId"
 
 class BuyerDatabaseFragment :Fragment(),
     DatabaseViewModel.DbInterface,
-    MyTableViewListener.TableListenrs {
-        private var roleId: Int = 2
-        var mBinding : FragmentUserdbArtisanBinding?= null
-        val mViewModel: DatabaseViewModel by viewModels()
-        var userList= ArrayList<User>()
-        private var mTableAdapter: MyTableAdapter? = null
-        var clusterList=ArrayList<String>()
-        var clusterDetailsList: RealmResults<ClusterList>? = null
-        var ratingList=ArrayList<String>()
-        var nameOrder="asc"
-        var clusterOrder="asc"
-        var ratingOrder="asc"
-        var dategOrder="asc"
-        var brandOrder="asc"
+    TableListenrs{
+
+    private var roleId: Int = 2
+    var mBinding : FragmentUserdbArtisanBinding?= null
+    val mViewModel: DatabaseViewModel by viewModels()
+    var userList= ArrayList<UserDatabase>()
+    private var mTableAdapter: MyTableAdapter? = null
+    var clusterList=ArrayList<String>()
+    var clusterDetailsList:RealmResults<ClusterList>? = null
+    var ratingList=ArrayList<String>()
+    var nameOrder=Sort.DESCENDING
+    var ratingOrder=Sort.DESCENDING
+    var dategOrder=Sort.DESCENDING
+    var clusterOrder=Sort.DESCENDING
     var isSearch=false
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
@@ -79,52 +85,42 @@ class BuyerDatabaseFragment :Fragment(),
             val spRatingAdapter = ArrayAdapter<String>(requireContext(), R.layout.spinner_item,ratingList)
             spRatingAdapter.setDropDownViewResource(R.layout.spinner_item)
             mBinding?.spRating?.adapter = spRatingAdapter
-            initializeTableView()
+            initializeTableView(UserDatabasePredicates.getBuyerUsers("",0.0f,"",Sort.DESCENDING))
             mBinding?.btnApply?.setOnClickListener {
-                val searchStr= if(mBinding?.searchArtisan?.text.toString().isNullOrEmpty()) null else  mBinding?.searchArtisan?.text.toString()
-                var clusterId=-1
-                clusterDetailsList?.
-                forEach {
-                    if(it?.cluster.equals(mBinding?.spCluster?.selectedItem.toString())){
-                        clusterId=it.clusterid!!.toInt()
-                    }
-                }
+                val searchStr= if(mBinding?.searchArtisan?.text.toString().isNullOrEmpty()) "" else  mBinding?.searchArtisan?.text.toString()
                 val rating= when(mBinding?.spRating?.selectedItemPosition){
-                    1->  3
-                    2->  6
-                    3->  8
-                    else->  -1
+                    1->  3.0f
+                    2->  6.0f
+                    3->  8.0f
+                    else->  0.0f
                 }
-                isSearch=true
-                if(clusterId.equals(-1) && rating.equals(-1) && searchStr.isNullOrEmpty()) apiCall(false,-1,1,-1,roleId,null,"desc","date")
-                else apiCall(true,clusterId,1,rating,roleId,searchStr,"asc","date")
+                apiCall(false,-1,1,-1,roleId,null,"desc","date",false)
+                initializeTableView(UserDatabasePredicates.getBuyerUsers(searchStr,rating,"",Sort.DESCENDING))
             }
         }
-        private fun initializeTableView() {
-            // Create TableView Adapter
-            mTableAdapter = MyTableAdapter(roleId)
-            mBinding?.tableview?.setAdapter(mTableAdapter)
-//            if (userList != null && userList.size > 0) {
-                mTableAdapter?.setUserList(userList)
-//            }
-//            MyTableViewListener.tableListenrs=this
-            // Create listener
-            val tableLister=MyTableViewListener(mBinding?.tableview,userList,roleId)
-            tableLister.tableListenrs=this
-            mBinding?.tableview?.tableViewListener = tableLister
-        }
+    private fun initializeTableView(userList:List<UserDatabase>?) {
+        // Create TableView Adapter
+
+        mTableAdapter = MyTableAdapter(roleId)
+        mBinding?.tableview?.setAdapter(mTableAdapter)
+        mTableAdapter?.setUserList(userList)
+        val tableLister=MyTableViewListener(mBinding?.tableview,userList,roleId)
+        tableLister.tableListenrs=this
+        mBinding?.tableview?.tableViewListener = tableLister
+    }
         override fun onSuccess(userList: List<User>) {
             try {
                 Handler(Looper.getMainLooper()).post(Runnable {
-                    Log.e(CommonUserFragment.TAG, "onSuccess")
-                    this.userList.clear()
-                    this.userList.addAll(userList)
+                    Log.e("BuyerDatabaseFragment", "onSuccess")
                     mBinding?.pbLoader?.visibility=View.GONE
-                    if(isSearch){if(this.userList.size==0){
-                        isSearch=false
-                        Utility.displayMessage("No results found",requireContext())
-                    }}
-                    initializeTableView()
+                    val searchStr= if(mBinding?.searchArtisan?.text.toString().isNullOrEmpty()) "" else  mBinding?.searchArtisan?.text.toString()
+                    val rating= when(mBinding?.spRating?.selectedItemPosition){
+                        1->  3.0f
+                        2->  6.0f
+                        3->  8.0f
+                        else->  0.0f
+                    }
+                    initializeTableView(UserDatabasePredicates.getBuyerUsers(searchStr,rating,"",Sort.ASCENDING))
 
                 }
                 )
@@ -148,7 +144,7 @@ class BuyerDatabaseFragment :Fragment(),
                 Handler(Looper.getMainLooper()).post(Runnable {
                     Log.e("BuyerDatabaseFragment", "onCountSuccess")
                     setCount(count.toString())
-                    apiCall(false,-1,1,-1,roleId,null,"desc","date")
+                    apiCall(false,-1,1,-1,roleId,null,"desc","date",true)
                 }
                 )
             } catch (e: Exception) {
@@ -157,9 +153,9 @@ class BuyerDatabaseFragment :Fragment(),
 
         }
         override fun onCountFailure() { }
-        private fun apiCall(isFilter:Boolean,clusterId : Int, pageNo:Int, rating:Int, roleId:Int,searchStr:String?, sortBy : String,sortType : String){
+        private fun apiCall(isFilter:Boolean,clusterId : Int, pageNo:Int, rating:Int, roleId:Int,searchStr:String?, sortBy : String,sortType : String,showPbLoader:Boolean){
             if(Utility.checkIfInternetConnected(requireContext())){
-                mBinding?.pbLoader?.visibility=View.VISIBLE
+                if(showPbLoader)mBinding?.pbLoader?.visibility=View.VISIBLE
                 mViewModel.getDatabaseForAdmin(isFilter,clusterId,pageNo,rating,roleId,searchStr,sortBy,sortType)
             } else Utility.displayMessage(requireContext().getString(R.string.no_internet_connection),requireContext())
         }
@@ -173,56 +169,62 @@ class BuyerDatabaseFragment :Fragment(),
 
         }
         override fun onColumnClick(columnIndex: Int) {
-            Log.e("BuyerDatabaseFragment","onColumnClick : $columnIndex RoleId: $roleId")
-                when (columnIndex) {
-                    1 -> {
-                        apiCall(true, -1, 1, -1, roleId, null, "name", nameOrder)
-                        if (nameOrder.equals("asc")) nameOrder = "desc"
-                        else nameOrder = "asc"
-                    }
-                    3 -> {
-                        apiCall(true, -1, 1, -1, roleId, null, "mobile", clusterOrder)
-                        if (clusterOrder.equals("asc")) clusterOrder = "desc"
-                        else clusterOrder = "asc"
-                    }
-                    4 -> {
-                        apiCall(true, -1, 1, -1, roleId, null, "rating", ratingOrder)
-                        if (ratingOrder.equals("asc")) ratingOrder = "desc"
-                        else ratingOrder = "asc"
-                    }
-                    5 -> {
-                        apiCall(true, -1, 1, -1, roleId, null, "date", dategOrder)
-                        if (dategOrder.equals("asc")) dategOrder = "desc"
-                        else dategOrder = "asc"
-                    }
-//            0->{
-//                apiCall(false,-1,1,-1,1,null,"brand","date")}
-                }
+        Log.e("BuyerDatabaseFragment","onColumnClick : $columnIndex RoleId: $roleId")
+        val searchStr= if(mBinding?.searchArtisan?.text.toString().isNullOrEmpty()) "" else  mBinding?.searchArtisan?.text.toString()
+        val rating= when(mBinding?.spRating?.selectedItemPosition){
+            1->  3.0f
+            2->  6.0f
+            3->  8.0f
+            else->  0.0f
         }
+            when (columnIndex) {
+                1 -> {
+                    initializeTableView(UserDatabasePredicates.getBuyerUsers(searchStr,rating,"firstName",nameOrder))
+                    if (nameOrder.equals(Sort.ASCENDING)) nameOrder = Sort.DESCENDING
+                    else nameOrder = Sort.ASCENDING
+                }
+//                3 -> {
+//                    initializeTableView(UserDatabasePredicates.getBuyerUsers(searchStr,rating,"cluster",clusterOrder))
+//                    if (clusterOrder.equals(Sort.ASCENDING)) clusterOrder = Sort.DESCENDING
+//                    else clusterOrder = Sort.ASCENDING
+//                }
+                4 -> {
+                    initializeTableView(UserDatabasePredicates.getBuyerUsers(searchStr,rating,"rating",ratingOrder))
+                    if (ratingOrder.equals(Sort.ASCENDING)) ratingOrder = Sort.DESCENDING
+                    else ratingOrder =Sort.ASCENDING
+                }
+                5 -> {
+                    initializeTableView(UserDatabasePredicates.getBuyerUsers(searchStr,rating,"dateAdded",dategOrder))
+                    if (dategOrder.equals(Sort.ASCENDING)) dategOrder = Sort.DESCENDING
+                    else dategOrder = Sort.ASCENDING
+                }
+            }
+
+    }
         fun setCount(count:String){
                     mBinding?.totalUserCount?.text="Total buyers: $count"
 
         }
     override fun onResume() {
         super.onResume()
-        val searchStr= if(mBinding?.searchArtisan?.text.toString().isNullOrEmpty()) null else  mBinding?.searchArtisan?.text.toString()
-        var clusterId=-1
-        clusterDetailsList?.
-        forEach {
-            if(it?.cluster.equals(mBinding?.spCluster?.selectedItem.toString())){
-                clusterId=it.clusterid!!.toInt()
-            }
-        }
-        val rating= when(mBinding?.spRating?.selectedItemPosition){
-            1->  3
-            2->  6
-            3->  8
-            else->  -1
-        }
-        isSearch=true
-        if(clusterId.equals(-1) && rating.equals(-1) && searchStr.isNullOrEmpty()) apiCall(false,-1,1,-1,roleId,null,"desc","date")
-        else apiCall(true,clusterId,1,rating,roleId,searchStr,"asc","date")
-
+//        val searchStr= if(mBinding?.searchArtisan?.text.toString().isNullOrEmpty()) null else  mBinding?.searchArtisan?.text.toString()
+//        var clusterId=-1
+//        clusterDetailsList?.
+//        forEach {
+//            if(it?.cluster.equals(mBinding?.spCluster?.selectedItem.toString())){
+//                clusterId=it.clusterid!!.toInt()
+//            }
+//        }
+//        val rating= when(mBinding?.spRating?.selectedItemPosition){
+//            1->  3
+//            2->  6
+//            3->  8
+//            else->  -1
+//        }
+//        isSearch=true
+//        if(clusterId.equals(-1) && rating.equals(-1) && searchStr.isNullOrEmpty()) apiCall(false,-1,1,-1,roleId,null,"desc","date")
+//        else
+        apiCall(false,-1,1,-1,roleId,null,"desc","date",true)
     }
         companion object {
 
