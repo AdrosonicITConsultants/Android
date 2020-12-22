@@ -349,7 +349,7 @@ class BuyerLandingActivity : LocaleBaseActivity(),
         try {
             var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
             val deviceRegistration = CraftExchangeRepository.getRegisterService().saveDeviceToken(token,authtoken,authtoken)
-
+            Log.e(TAG, "token ${token}")
             deviceRegistration.enqueue(object : Callback<SaveUserTokenResponse> {
                 override fun onResponse(call: Call<SaveUserTokenResponse>, response: retrofit2.Response<SaveUserTokenResponse>?) {
                     response?.takeUnless { response.isSuccessful }?.apply {

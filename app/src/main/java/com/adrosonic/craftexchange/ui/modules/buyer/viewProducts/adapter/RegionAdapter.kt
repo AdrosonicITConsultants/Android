@@ -56,29 +56,34 @@ class RegionAdapter(var context: Context?, private var regionProducts: RealmResu
         holder.binding.clusterProdName.text= product?.cluster
 
         if(Utility.checkIfInternetConnected(context!!)) {
-            if (UserConfig.shared.regionCMS != null) {
-                val dataJson = JSONArray(UserConfig.shared.regionCMS)
-                Log.i("CMS", "DataJson : $dataJson")
-                for (i in 0 until dataJson.length()) {
-                    val dataObj = dataJson.getJSONObject(i)
-                    Log.i("CMS", "DataObj : $dataObj")
-                    var acfObj = dataObj?.getJSONObject("acf")
-                    var clusterId = acfObj?.getString("cluster_id")?.toLong()
+            try {
+                if (UserConfig.shared.regionCMS != null) {
+                    val dataJson = JSONArray(UserConfig.shared.regionCMS)
+                    if(dataJson.length()>0) {
+                        Log.i("CMS", "DataJson : $dataJson")
+                        for (i in 0 until dataJson.length()) {
+                            val dataObj = dataJson.getJSONObject(i)
+                            Log.i("CMS", "DataObj : $dataObj")
+                            var acfObj = dataObj?.getJSONObject("acf")
+                            var clusterId = acfObj?.getString("cluster_id")?.toLong()
 
-                    if (product?.clusterid == clusterId) {
-                        holder.binding.clusterProdAdjective.text = acfObj?.getString("header")
-                        var imgUrl = acfObj?.getString("image")
-                        context?.let {
-                            imgUrl?.let { it1 ->
-                                ImageSetter.setCMSImage(
-                                    it,
-                                    it1, holder.binding.clusterProdImg
-                                )
+                            if (product?.clusterid == clusterId) {
+                                holder.binding.clusterProdAdjective.text = acfObj?.getString("header")
+                                var imgUrl = acfObj?.getString("image")
+                                context?.let {
+                                    imgUrl?.let { it1 ->
+                                        ImageSetter.setCMSImage(
+                                            it,
+                                            it1, holder.binding.clusterProdImg
+                                        )
+                                    }
+                                }
                             }
+
                         }
                     }
-
                 }
+            } catch (e: Exception) {
             }
         }else{
             holder.binding.clusterProdImg.setImageResource(R.drawable.demo2_img)

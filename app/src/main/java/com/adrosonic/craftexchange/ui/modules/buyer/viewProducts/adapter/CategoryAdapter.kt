@@ -57,27 +57,30 @@ class CategoryAdapter(var context: Context?, private var categoryDetails: RealmR
 
         //product image from cms
         if(Utility.checkIfInternetConnected(context!!)) {
-            if (UserConfig.shared.categoryCMS != null) {
-                val dataJson = JSONArray(UserConfig.shared.categoryCMS)
-                Log.i("CMS", "DataJson : $dataJson")
-                for (i in 0 until dataJson.length()) {
-                    val dataObj = dataJson.getJSONObject(i)
-                    Log.i("CMS", "DataObj : $dataObj")
-                    var acfObj = dataObj?.getJSONObject("acf")
-                    var prodCatId = acfObj?.getString("category_id")?.toLong()
+            try {
+                if (UserConfig.shared.categoryCMS != null) {
+                    val dataJson = JSONArray(UserConfig.shared.categoryCMS)
+                    Log.i("CMS", "DataJson : $dataJson")
+                    for (i in 0 until dataJson.length()) {
+                        val dataObj = dataJson.getJSONObject(i)
+                        Log.i("CMS", "DataObj : $dataObj")
+                        var acfObj = dataObj?.getJSONObject("acf")
+                        var prodCatId = acfObj?.getString("category_id")?.toLong()
 
-                    if (product?.productCategoryid == prodCatId) {
-                        var imgUrl = acfObj?.getString("image")
-                        context?.let {
-                            imgUrl?.let { it1 ->
-                                ImageSetter.setCMSImage(
-                                    it,
-                                    it1, holder.binding.prodImg
-                                )
+                        if (product?.productCategoryid == prodCatId) {
+                            var imgUrl = acfObj?.getString("image")
+                            context?.let {
+                                imgUrl?.let { it1 ->
+                                    ImageSetter.setCMSImage(
+                                        it,
+                                        it1, holder.binding.prodImg
+                                    )
+                                }
                             }
                         }
                     }
                 }
+            } catch (e: Exception) {
             }
         }else{
             holder.binding.prodImg.setImageResource(R.drawable.demo_img)

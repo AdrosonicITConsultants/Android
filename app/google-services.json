@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "951846626811",
-    "project_id": "craftxchange-5fab4",
-    "storage_bucket": "craftxchange-5fab4.appspot.com"
+    "project_number": "512409514108",
+    "project_id": "craft-xchange-user",
+    "storage_bucket": "craft-xchange-user.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:951846626811:android:62a98c993a1762b4d4575e",
+        "mobilesdk_app_id": "1:512409514108:android:cb744099a1c2540e7ad9f9",
         "android_client_info": {
           "package_name": "com.adrosonic.craftexchange"
         }
       },
       "oauth_client": [
         {
-          "client_id": "951846626811-ib2lq187v30q9tjt8g7k7vmrtu01t1tb.apps.googleusercontent.com",
+          "client_id": "512409514108-2kl2bmd3c58ou4rt2pjnmc84itcreil6.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBqpKGzMyOkVeJ3rB7kMr-esl7EYWxE-6I"
+          "current_key": "AIzaSyCyo_Quo5cQkYCnNq9mAYkncJCzx9f5MkI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "951846626811-ib2lq187v30q9tjt8g7k7vmrtu01t1tb.apps.googleusercontent.com",
+              "client_id": "512409514108-2kl2bmd3c58ou4rt2pjnmc84itcreil6.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
