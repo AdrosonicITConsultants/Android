@@ -32,6 +32,7 @@ import com.bumptech.glide.request.transition.Transition
 import com.bumptech.glide.signature.ObjectKey
 import com.pixplicity.easyprefs.library.Prefs
 import org.json.JSONArray
+import org.json.JSONObject
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -121,15 +122,16 @@ CMSViewModel.CMSDataInterface{
             Handler(Looper.getMainLooper()).post(Runnable {
                 Log.e("CMS", "onSuccess")
                 if(UserConfig.shared.pageCMS != null){
-                    val dataJson = JSONArray(UserConfig.shared.pageCMS)
-                    Log.i("CMS", "DataJson : $dataJson")
-                    for (i in 0 until dataJson.length()) {
-                        val dataObj = dataJson.getJSONObject(i)
+//                    val json=JSONObject(UserConfig.shared.pageCMS)
+//                    val dataJson = JSONArray(UserConfig.shared.pageCMS)
+//                    Log.i("CMS", "DataJson : $dataJson")
+//                    for (i in 0 until dataJson.length()) {
+                        val dataObj = JSONObject(UserConfig.shared.pageCMS)
                         Log.i("CMS", "DataObj : $dataObj")
                         var pageId = dataObj?.getString("id")?.toLong()
                         if (pageId == 64L) {
                             var acfObj = dataObj?.getJSONObject("acf")
-                            mBinding?.browseText?.text = acfObj?.getString("card_header")
+                            mBinding?.browseText?.text = ""//acfObj?.getString("card_para2")
 
                             var url1 = acfObj?.getString("card_background_1")
                             var url2 = acfObj?.getString("card_background_2")
@@ -152,7 +154,7 @@ CMSViewModel.CMSDataInterface{
                                 }
                             })
 
-                            mBinding?.titleText?.text = acfObj?.getString("card_title")
+                            mBinding?.titleText?.text =""// acfObj?.getString("card_para")
 
                             var desc = acfObj?.getString("card_para2")
                             @RequiresApi(Build.VERSION_CODES.N)
@@ -183,7 +185,7 @@ CMSViewModel.CMSDataInterface{
 
                         }
                     }
-                }
+//                }
             }
             )
         } catch (e: Exception) {

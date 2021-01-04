@@ -83,12 +83,12 @@ class CMSViewModel(application: Application) : AndroidViewModel(application) {
     fun getPagesData(pageId : Long){
         CMSRepository
             .getCMSservice()
-            .getPagesData().enqueue(object : Callback, retrofit2.Callback<CMSDataResponse> {
-                override fun onFailure(call: Call<CMSDataResponse>, t: Throwable) {
+            .getPagesData().enqueue(object : Callback, retrofit2.Callback<CMSDataResponseElement> {
+                override fun onFailure(call: Call<CMSDataResponseElement>, t: Throwable) {
                     t.printStackTrace()
                     cmsListener?.onCMSFailure()
                 }
-                override fun onResponse(call: Call<CMSDataResponse>, response: Response<CMSDataResponse>) {
+                override fun onResponse(call: Call<CMSDataResponseElement>, response: Response<CMSDataResponseElement>) {
                     if (response?.isSuccessful) {
                         UserConfig.shared.pageCMS = Gson().toJson(response?.body())
                         cmsListener?.onCMSSuccess()

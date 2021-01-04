@@ -14,7 +14,7 @@ object ConstantsDirectory {
        const val IMAGE_LOAD_BASE_URL_DEV = "https://tatatrustcraftxchangelive.objectstore.e2enetworks.net/"//prod
 
 //    const val CMS_URL_DEV = "http://101.53.158.227/wordpress/index.php/wp-json/wp/v2/"//qa uat
-    const val CMS_URL_DEV = "https://craftxchange.antaran.in/index.php/wp-json/wp/v2/"//prod
+    const val CMS_URL_DEV = "https://craftxchangecms.antaran.in/index.php/wp-json/wp/v2/"//prod
 
 //    const val BUYER_DASHBOARD_URL = "https://datastudio.google.com/embed/reporting/1ff96a35-a386-4d11-9e64-0d0883bdd7ee/page/iTZoB?params=" //qa
     const val BUYER_DASHBOARD_URL ="https://datastudio.google.com/embed/reporting/22dd8e4d-ca54-4a5a-8084-571f9b776457/page/iJ7cB?params="//uat

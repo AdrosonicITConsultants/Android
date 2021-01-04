@@ -1,6 +1,7 @@
 package com.adrosonic.craftexchange.repository.remote
 
 import com.adrosonic.craftexchange.repository.data.response.cms.CMSDataResponse
+import com.adrosonic.craftexchange.repository.data.response.cms.CMSDataResponseElement
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Headers
@@ -20,8 +21,8 @@ interface CMSDao {
     fun getCategoriesData() : Call<CMSDataResponse>
 
     @Headers("Accept: application/json")
-    @GET("pages")
-    fun getPagesData() : Call<CMSDataResponse>
+    @GET("pages/64")
+    fun getPagesData() : Call<CMSDataResponseElement>
 
     @Headers("Accept: application/json")
     @GET("categoriesselfdesign")
