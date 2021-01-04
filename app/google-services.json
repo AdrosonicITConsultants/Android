@@ -1,34 +1,33 @@
 {
   "project_info": {
-    "project_number": "530815645937",
-    "firebase_url": "https://craft-xchange-admin.firebaseio.com",
-    "project_id": "craft-xchange-admin",
-    "storage_bucket": "craft-xchange-admin.appspot.com"
+    "project_number": "667962321153",
+    "project_id": "craft-xchange-admin-5296e",
+    "storage_bucket": "craft-xchange-admin-5296e.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:530815645937:android:1d077a94fd3e7ef3bfd150",
+        "mobilesdk_app_id": "1:667962321153:android:02ba6d285f280e28fb5300",
         "android_client_info": {
           "package_name": "com.adrosonic.craftexchangemarketing"
         }
       },
       "oauth_client": [
         {
-          "client_id": "530815645937-lcik04hp5mc7ssj0nibekkc4f3sg1qgr.apps.googleusercontent.com",
+          "client_id": "667962321153-n049ai506lq5gvpvivck598qf2026k0g.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBm9klB2B8upPruwi8xKxS1zMIrSE0NTqY"
+          "current_key": "AIzaSyABIiESczMIrKYYPG6xQP3TCC2foF1ONUo"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "530815645937-lcik04hp5mc7ssj0nibekkc4f3sg1qgr.apps.googleusercontent.com",
+              "client_id": "667962321153-n049ai506lq5gvpvivck598qf2026k0g.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

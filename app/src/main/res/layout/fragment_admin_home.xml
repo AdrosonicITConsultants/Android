@@ -177,6 +177,15 @@
                         <!--                            android:textAllCaps="false"-->
                         <!--                            android:textColor="@color/colorBackground"-->
                         <!--                            android:textSize="@dimen/edit_text" />-->
+                        <TextView
+                            android:id="@+id/txtUserManual"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="8dp"
+                            android:text="User Manual"
+                            android:textColor="@color/white_text"
+                            android:textSize="@dimen/edit_text" />
                         <Button
                             android:id="@+id/logoutbtn"
                             android:layout_width="wrap_content"
@@ -200,7 +209,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginBottom="@dimen/margin_regular"
-                            android:text="27-11-2020 V1.0"
+                            android:text="22-12-2020 V1.0"
                             android:textColor="@color/white_text"
                             android:textSize="@dimen/edit_text" />
                     </LinearLayout>

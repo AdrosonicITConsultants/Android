@@ -19,6 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".ui.modules.pdfViewer.PdfViewerActivity"/>
         <activity android:name=".ui.modules.admin.escalations.SelectArtisanForEnqActivity" />
         <activity android:name=".ui.modules.admin.redirectEnquiries.SelectLessThan8ArtisanActivity" />
         <activity android:name=".ui.modules.admin.selectArtisan.SelectArtisanActivity" />

@@ -8,7 +8,8 @@ open class UserDatabase : RealmObject() {
     @PrimaryKey
     var _id: Long? = 0
     var id :Long? = 0
-    var weaverId : String?=""
+    var idStr :String? = "0"
+    var weaverId : String=""
     var rating : Float?=0.0f
     var status : Int?=0
     var email : String?=""
@@ -25,6 +26,7 @@ open class UserDatabase : RealmObject() {
         const val COLUMN_TABLE = "UserDatabase"
         const val COLUMN__ID = "_id"
         const val COLUMN_ID = "id"
+        const val COLUMN_ID_STR = "idStr"
         const val COLUMN_IS_ARTISAN = "isArtisan"
         const val COLUMN_DATE_ADDED = "dateAdded"
         const val COLUMN_FIRST_NAME = "firstName"

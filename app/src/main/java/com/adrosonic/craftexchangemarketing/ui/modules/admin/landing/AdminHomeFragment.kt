@@ -26,6 +26,7 @@ import com.adrosonic.craftexchangemarketing.ui.modules.admin.productCatalog.addP
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.redirectEnquiries.RedirectEnquiriesFragment
 import com.adrosonic.craftexchangemarketing.ui.modules.dashboard.OpenEnquirySummaryActivity
 import com.adrosonic.craftexchangemarketing.ui.modules.main.MainActivity
+import com.adrosonic.craftexchangemarketing.ui.modules.pdfViewer.PdfViewerActivity
 import com.adrosonic.craftexchangemarketing.utils.ConstantsDirectory
 import com.adrosonic.craftexchangemarketing.utils.UserConfig
 import com.adrosonic.craftexchangemarketing.utils.Utility
@@ -123,6 +124,7 @@ class AdminHomeFragment : Fragment(),
                             dialog.cancel()
                             mViewModel?.logoutUser()
                             AdminPredicates.deleteData()
+
                             Utility.deleteCache(requireContext())
                             Utility.deleteImageCache(requireContext())
                             startActivity(Intent(activity, MainActivity::class.java))
@@ -132,6 +134,11 @@ class AdminHomeFragment : Fragment(),
                 }else{
                     Utility.displayMessage(getString(R.string.message_operation_not_supported_offline),requireContext().getApplicationContext())
                 }
+            }
+            mBinding?.txtUserManual?.setOnClickListener {
+                val intent = Intent(requireContext(), PdfViewerActivity::class.java)
+                intent.putExtra("ViewType", "USER_MAN")
+                startActivity(intent)
             }
             mBinding?.addProductPane?.setOnClickListener {
                 context?.startActivity(context?.addAdminProductIntent())

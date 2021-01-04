@@ -85,12 +85,12 @@ class NotifcationFragment : Fragment(),
     fun setVisiblities() {
         if (mViewModel.getNotificationsMutableData().value?.size!! > 0) {
             notificationList?.visibility = View.VISIBLE
-            empty_view.visibility = View.GONE
+            empty_view?.visibility = View.GONE
             readAll.visibility=View.INVISIBLE
             notification_elements.text =  "${mViewModel.getNotificationsMutableData().value?.size} new notifications"
         } else {
             notificationList?.visibility = View.GONE
-            empty_view.visibility = View.VISIBLE
+            empty_view?.visibility = View.VISIBLE
             readAll.visibility=View.INVISIBLE
             notification_elements.text = "No notification"
 

@@ -45,7 +45,8 @@ class UserDatabasePredicates {
                                 }
                                 var newUser = it.createObject(UserDatabase::class.java, nextID)
                                 newUser.id = user.id
-                                newUser.weaverId = user.weaverId
+                                newUser.idStr = user.id.toString()?:"0"
+                                newUser.weaverId = user.weaverId?:""
                                 newUser.rating = user.rating
                                 newUser.status = user.status
                                 newUser.email = user.email
@@ -61,7 +62,8 @@ class UserDatabasePredicates {
                             } else {
                                 nextID = userObj._id ?: 0
                                 userObj.id = user.id
-                                userObj.weaverId = user.weaverId
+                                userObj.idStr = user.id.toString()?:"0"
+                                userObj.weaverId = user.weaverId?:""
                                 userObj.rating = user.rating
                                 userObj.status = user.status
                                 userObj.email = user.email
@@ -78,6 +80,7 @@ class UserDatabasePredicates {
                     }
                 }
             } catch (e: Exception) {
+                Log.e("DatabaseResults","Exception :"+e)
             } finally {
 //                realm.close()
             }
@@ -85,7 +88,6 @@ class UserDatabasePredicates {
         }
 
         fun getUsers(isArtisan: Boolean?,search:String,clusterstr: String,rating:Float,filterBy1:String,sort:Sort?): List<UserDatabase>? {
-
             var realm = CXRealmManager.getRealmInstance()
             var users: List<UserDatabase>? =null
             val cluster= if(clusterstr.equals("Select Cluster"))"" else clusterstr
@@ -96,31 +98,30 @@ class UserDatabasePredicates {
                         Log.e("Filter","11111111111 $filterBy: sort $sort")
                         realm.where(UserDatabase::class.java)
                             .equalTo(UserDatabase.COLUMN_IS_ARTISAN, true)
-                            .and().greaterThan(UserDatabase.COLUMN_RATING,rating)
+                            .and().greaterThanOrEqualTo(UserDatabase.COLUMN_RATING,rating)
                             .and().sort(filterBy, sort)
                             .findAll().toList()
-
                     }
                     else {
                     if(cluster.isEmpty()){
                             Log.e("Filter","222222222 $filterBy: rating $rating")
                             realm.where(UserDatabase::class.java)
                                 .equalTo(UserDatabase.COLUMN_IS_ARTISAN, true)
-                                .and().greaterThan(UserDatabase.COLUMN_RATING,rating)
+                                .and().greaterThanOrEqualTo(UserDatabase.COLUMN_RATING,rating)
                                 .findAll().where()
                                 .contains(UserDatabase.COLUMN_BRAND_NAME,search, Case.INSENSITIVE).or()
                                 .contains(UserDatabase.COLUMN_FIRST_NAME,search, Case.INSENSITIVE).or()
                                 .contains(UserDatabase.COLUMN_LAST_NAME,search, Case.INSENSITIVE).or()
                                 .contains(UserDatabase.COLUMN_EMAIL,search, Case.INSENSITIVE).or()
                                 .contains(UserDatabase.COLUMN_MOBILE,search, Case.INSENSITIVE)
-//                              .contains(UserDatabase.COLUMN_ID,search, Case.INSENSITIVE).or()
+                                .or().equalTo(UserDatabase.COLUMN_ID_STR,search)
                                 .and().sort(filterBy, sort)
                                 .findAll().toList()
                     }
                     else {
                             Log.e("Filter","333333333 $filterBy: rating $rating")
                             realm.where(UserDatabase::class.java).equalTo( UserDatabase.COLUMN_IS_ARTISAN, true)
-                                .and().greaterThan(UserDatabase.COLUMN_RATING,rating)
+                                .and().greaterThanOrEqualTo(UserDatabase.COLUMN_RATING,rating)
                                 .and().equalTo(UserDatabase.COLUMN_CLUSTER,cluster, Case.INSENSITIVE)
                                 .findAll().where()
                                 .contains(UserDatabase.COLUMN_BRAND_NAME,search, Case.INSENSITIVE).or()
@@ -128,7 +129,7 @@ class UserDatabasePredicates {
                                 .contains(UserDatabase.COLUMN_LAST_NAME,search, Case.INSENSITIVE).or()
                                 .contains(UserDatabase.COLUMN_EMAIL,search, Case.INSENSITIVE).or()
                                 .contains(UserDatabase.COLUMN_MOBILE,search, Case.INSENSITIVE)
-//                              .contains(UserDatabase.COLUMN_ID,search, Case.INSENSITIVE).or()
+                                .or().equalTo(UserDatabase.COLUMN_ID_STR,search)
                                 .and().sort(filterBy, sort)
                                 .findAll().toList()
                     }
@@ -148,7 +149,7 @@ class UserDatabasePredicates {
                         Log.e("Filter","11111111111 $filterBy: sort $sort")
                         realm.where(UserDatabase::class.java)
                             .equalTo(UserDatabase.COLUMN_IS_ARTISAN, false)
-                            .and().greaterThan(UserDatabase.COLUMN_RATING,rating)
+                            .and().greaterThanOrEqualTo(UserDatabase.COLUMN_RATING,rating)
                             .and().sort(filterBy, sort)
                             .findAll().toList()
                     }
@@ -156,7 +157,7 @@ class UserDatabasePredicates {
                         Log.e("Filter","222222222222 $filterBy: rating $rating")
                         realm.where(UserDatabase::class.java)
                             .equalTo(UserDatabase.COLUMN_IS_ARTISAN, false)
-                            .and().greaterThan(UserDatabase.COLUMN_RATING,rating)
+                            .and().greaterThanOrEqualTo(UserDatabase.COLUMN_RATING,rating)
                             .and().sort(UserDatabase.COLUMN_DATE_ADDED, Sort.DESCENDING)
                             .findAll().toList()
                     }
@@ -166,7 +167,7 @@ class UserDatabasePredicates {
                             Log.e("Filter","333333333333 $filterBy: rating $rating")
                             realm.where(UserDatabase::class.java)
                                 .equalTo(UserDatabase.COLUMN_IS_ARTISAN, false)
-                                .and().greaterThan(UserDatabase.COLUMN_RATING,rating)
+                                .and().greaterThanOrEqualTo(UserDatabase.COLUMN_RATING,rating)
                                 .and().sort(filterBy, sort)
                                 .findAll().where()
                                 .contains(UserDatabase.COLUMN_BRAND_NAME,search, Case.INSENSITIVE).or()
@@ -181,7 +182,7 @@ class UserDatabasePredicates {
                             Log.e("Filter","4444444444 $filterBy: rating $rating")
                             realm.where(UserDatabase::class.java)
                                 .equalTo(UserDatabase.COLUMN_IS_ARTISAN, false)
-                                .and().greaterThan(UserDatabase.COLUMN_RATING,rating)
+                                .and().greaterThanOrEqualTo(UserDatabase.COLUMN_RATING,rating)
                                 .findAll().where()
                                 .contains(UserDatabase.COLUMN_BRAND_NAME,search, Case.INSENSITIVE).or()
                                 .contains(UserDatabase.COLUMN_FIRST_NAME,search, Case.INSENSITIVE).or()

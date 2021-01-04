@@ -101,13 +101,15 @@ class ArtisanDatabaseFragment() :Fragment(),
     }
     private fun initializeTableView(userList:List<UserDatabase>?) {
         // Create TableView Adapter
-
+        Log.e("ArtisanDatabaseFragment", "initializeTableView ${userList?.size}")
         mTableAdapter = MyTableAdapter(roleId)
         mBinding?.tableview?.setAdapter(mTableAdapter)
         mTableAdapter?.setUserList(userList)
+        Log.e("ArtisanDatabaseFragment", "initializeTableView 1111111111111")
         val tableLister=MyTableViewListener(mBinding?.tableview,userList,roleId)
         tableLister.tableListenrs=this
         mBinding?.tableview?.tableViewListener = tableLister
+        Log.e("ArtisanDatabaseFragment", "initializeTableView 222222222")
     }
 
     override fun onSuccess(userList: List<User>) {
