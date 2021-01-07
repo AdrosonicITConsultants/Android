@@ -35,7 +35,9 @@ interface WishlistDao {
 
     @Headers("Accept: application/json")
     @GET("product/getProduct/{productId}")
-    fun getSingleProductDetails(@Header("Authorization") token: String,@Path("productId")productId:Int): Call<SingleProductDetails>
+    fun getSingleProductDetails(
+//        @Header("Authorization") token: String,
+        @Path("productId")productId:Int): Call<SingleProductDetails>
 
     @Headers("Accept: application/json")
     @GET("product/getProduct/{productId}")

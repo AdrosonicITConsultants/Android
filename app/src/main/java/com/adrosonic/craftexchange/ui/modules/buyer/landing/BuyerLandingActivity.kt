@@ -18,6 +18,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.adrosonic.craftexchange.LocalizationManager.LocaleBaseActivity
@@ -33,6 +34,7 @@ import com.adrosonic.craftexchange.ui.modules.artisan.landing.ArtisanHomeFragmen
 import com.adrosonic.craftexchange.ui.modules.pdfViewer.PdfViewerActivity
 import com.adrosonic.craftexchange.ui.modules.buyer.enquiry.CommonEnquiryFragment
 import com.adrosonic.craftexchange.ui.modules.buyer.ownDesign.OwnProductListFragment
+import com.adrosonic.craftexchange.ui.modules.buyer.productDetails.catalogueProductDetailsIntent
 import com.adrosonic.craftexchange.ui.modules.buyer.profile.buyerProfileIntent
 import com.adrosonic.craftexchange.ui.modules.buyer.wishList.wishlistFragment
 import com.adrosonic.craftexchange.ui.modules.chat.ChatListFragment
@@ -65,9 +67,12 @@ fun Context.buyerLandingIntent(isNotification:Boolean): Intent {
     intent.putExtra("isNotification", isNotification)
     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
     return intent
-//    return Intent(this, BuyerLandingActivity::class.java).apply {
-//        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-//    }
+}
+fun Context.buyerLandingIntentForGenEnq(isGenEnq:Boolean): Intent {
+    val intent = Intent(this, BuyerLandingActivity::class.java)
+    intent.putExtra("isGenEnq", isGenEnq)
+    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+    return intent
 }
 class BuyerLandingActivity : LocaleBaseActivity(),
     NavigationView.OnNavigationItemSelectedListener,
@@ -92,6 +97,7 @@ class BuyerLandingActivity : LocaleBaseActivity(),
     var noti_badge:TextView? = null
     val mEnqVm: EnquiryViewModel by viewModels()
     val mOrderVm: OrdersViewModel by viewModels()
+    val mUserConfig=UserConfig()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -105,15 +111,15 @@ class BuyerLandingActivity : LocaleBaseActivity(),
             }
         }).execute()
 
-
-
         refreshProfile()
         mProVM.listener = this
         mViewModel?.noficationlistener=this
-        mProVM.getUserMutableData()
-            .observe(this, Observer<CraftUser> {
+
+        if(Prefs.getBoolean(ConstantsDirectory.IS_LOGGED_IN, false)){
+            mProVM.getUserMutableData() .observe(this, Observer<CraftUser> {
                 craftUser = it
             })
+        }else mBinding?.navView?.menu?.get(7)?.setTitle(R.string.switch_to_artisan)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.title = ""
@@ -129,26 +135,33 @@ class BuyerLandingActivity : LocaleBaseActivity(),
         var firstname = Prefs.getString(ConstantsDirectory.FIRST_NAME,"Craft")
 
         mBinding?.navView?.setNavigationItemSelectedListener(this)
-        nav_view.getHeaderView(0).text_user.text = firstname
-
+        nav_view.getHeaderView(0).text_user.text = if(firstname.isNullOrEmpty())"Guest" else firstname
 
         mBinding?.txtVerTag?.text=ConstantsDirectory.VERSION
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .add(R.id.buyer_home_container,
-                    BuyerHomeFragment.newInstance()
-                )
+                .add(R.id.buyer_home_container, BuyerHomeFragment.newInstance())
                 .detach(BuyerHomeFragment())
                 .attach(BuyerHomeFragment())
                 .commitNow()
-//            replaceContainerFragment(BuyerHomeFragment.newInstance(),"BuyerHomeFragment")
         }
         if (intent.extras != null) {
             if (intent.getBooleanExtra("isNotification", false)) {
                 supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container, NotifcationFragment.newInstance())
                     .addToBackStack(null)
                     .commit()
-//                replaceContainerFragment(NotifcationFragment.newInstance(),"NotifcationFragment")
+            }
+            if (intent.getBooleanExtra("isGenEnq", false)){
+                val intent = Intent(catalogueProductDetailsIntent())
+                val bundle = Bundle()
+                Log.e("CatalogueProductDetails", "44444 productId: ${mUserConfig.productId?.toString()}")
+                bundle.putString(ConstantsDirectory.PRODUCT_ID, mUserConfig.productId?.toString())
+                bundle.putBoolean("isGenEnq", true)
+                intent.putExtras(bundle)
+                startActivity(intent)
+                mUserConfig.productId=0
+                mUserConfig.isEnquiryAction=false
+
             }
         }
         tab_bar.onNavigationItemSelectedListener = object: BottomNavigationView.OnNavigationItemSelectedListener{
@@ -156,11 +169,6 @@ class BuyerLandingActivity : LocaleBaseActivity(),
                 when (item.itemId) {
                     R.id.action_home -> {
                         if (savedInstanceState == null) {
-//                            supportFragmentManager.beginTransaction()
-//                                .add(R.id.buyer_home_container, BuyerHomeFragment.newInstance())
-//                                .detach(BuyerHomeFragment())
-//                                .attach(BuyerHomeFragment())
-//                                .commitNow()
                             replaceContainerFragment(BuyerHomeFragment.newInstance(),"BuyerHomeFragment")
                         }
                         return true
@@ -168,28 +176,22 @@ class BuyerLandingActivity : LocaleBaseActivity(),
 
                     R.id.action_enquiries -> {
                         if (savedInstanceState == null) {
-//                            supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container, CommonEnquiryFragment.newInstance())
-//                                .addToBackStack(null)
-//                                .commit()
-                            replaceContainerFragment(CommonEnquiryFragment.newInstance(),"CommonEnquiryFragment")
+                        if(Prefs.getBoolean(ConstantsDirectory.IS_LOGGED_IN, false)) replaceContainerFragment(CommonEnquiryFragment.newInstance(),"CommonEnquiryFragment")
+                        else Utility.buyerLoginDialog(this@BuyerLandingActivity,false,0)
                         }
                         return true
                     }
                     R.id.action_wishlist -> {
                         if (savedInstanceState == null) {
-//                            supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container, wishlistFragment.newInstance())
-//                                .addToBackStack(null)
-//                                .commit()
-                            replaceContainerFragment(wishlistFragment.newInstance(),"wishlistFragment")
+                            if(Prefs.getBoolean(ConstantsDirectory.IS_LOGGED_IN, false))  replaceContainerFragment(wishlistFragment.newInstance(),"wishlistFragment")
+                            else Utility.buyerLoginDialog(this@BuyerLandingActivity,false,0)
                         }
                         return true
                     }
                     R.id.action_chat -> {
                         if (savedInstanceState == null) {
-//                            supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container, ChatListFragment.newInstance())
-//                                .addToBackStack(null)
-//                                .commit()
-                            replaceContainerFragment(ChatListFragment.newInstance(),"ChatListFragment")
+                            if(Prefs.getBoolean(ConstantsDirectory.IS_LOGGED_IN, false))  replaceContainerFragment(ChatListFragment.newInstance(),"ChatListFragment")
+                            else Utility.buyerLoginDialog(this@BuyerLandingActivity,false,0)
                         }
                         return true
                     }
@@ -214,11 +216,9 @@ class BuyerLandingActivity : LocaleBaseActivity(),
                 startActivity(searchSuggestionIntent())
             }
             R.id.action_notification->{
-//                supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container, NotifcationFragment.newInstance())
-//                    .addToBackStack(null)
-//                    .commit()
-//                return true
-                replaceContainerFragment(NotifcationFragment.newInstance(),"NotifcationFragment")
+                if(Prefs.getBoolean(ConstantsDirectory.IS_LOGGED_IN, false))  replaceContainerFragment(NotifcationFragment.newInstance(),"NotifcationFragment")
+                else Utility.buyerLoginDialog(this@BuyerLandingActivity,false,0)
+
             }
         }
         setupBadge()
@@ -252,23 +252,33 @@ class BuyerLandingActivity : LocaleBaseActivity(),
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_my_profile -> {
-                startActivity(buyerProfileIntent())
+                if(Prefs.getBoolean(ConstantsDirectory.IS_LOGGED_IN, false)) startActivity(buyerProfileIntent())
+                else Utility.buyerLoginDialog(this@BuyerLandingActivity,false,0)
             }
             R.id.nav_my_transactions -> {
-                startActivity(transactionIntent())
+                if(Prefs.getBoolean(ConstantsDirectory.IS_LOGGED_IN, false))  startActivity(transactionIntent())
+                else Utility.buyerLoginDialog(this@BuyerLandingActivity,false,0)
             }
             R.id.nav_my_orders -> {
-                supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container, CommonOrderFragment.newInstance())
-                    .addToBackStack(null)
-                    .commit()
-            }
-            R.id.nav_custom_design -> {
-            supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container,OwnProductListFragment.newInstance())
+                if(Prefs.getBoolean(ConstantsDirectory.IS_LOGGED_IN, false))  {
+                    supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container, CommonOrderFragment.newInstance())
                         .addToBackStack(null)
                         .commit()
+                }
+                else Utility.buyerLoginDialog(this@BuyerLandingActivity,false,0)
+            }
+            R.id.nav_custom_design -> {
+                if(Prefs.getBoolean(ConstantsDirectory.IS_LOGGED_IN, false)){
+                    supportFragmentManager.beginTransaction() .add(R.id.buyer_home_container,OwnProductListFragment.newInstance())
+                        .addToBackStack(null)
+                        .commit()
+                }
+                else Utility.buyerLoginDialog(this@BuyerLandingActivity,false,0)
             }
             R.id.nav_my_dashboard -> {
-                startActivity(dashboardIntent())
+                if(Prefs.getBoolean(ConstantsDirectory.IS_LOGGED_IN, false))  startActivity(dashboardIntent())
+                else Utility.buyerLoginDialog(this@BuyerLandingActivity,false,0)
+
             }
             R.id.nav_support -> {
                 val intent = Intent(this@BuyerLandingActivity, PdfViewerActivity::class.java)
@@ -281,6 +291,7 @@ class BuyerLandingActivity : LocaleBaseActivity(),
                 startActivity(intent)
             }
             R.id.nav_logout -> {
+                if(Prefs.getBoolean(ConstantsDirectory.IS_LOGGED_IN, false)){
                 if (Utility.checkIfInternetConnected(this)) {
                     val builder = AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar)
                     builder.setMessage(R.string.logout_text)
@@ -299,6 +310,9 @@ class BuyerLandingActivity : LocaleBaseActivity(),
 
                 }else{
                     Utility.displayMessage(getString(R.string.message_operation_not_supported_offline),applicationContext)
+                }
+                }else{
+                    startActivity(roleselectIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK))
                 }
             }
             else -> {
@@ -398,32 +412,33 @@ class BuyerLandingActivity : LocaleBaseActivity(),
             Utility.displayMessage(getString(R.string.no_internet_connection), this)
         } else {
 
-            mViewModel.getwishlisteProductIds()
-            mViewModel.getProductsInWishlist()
-            mViewModel?.getMoqDeliveryTimes()
+            if(Prefs.getBoolean(ConstantsDirectory.IS_LOGGED_IN, false)){
+                mProVM.getBuyerProfileDetails(this)
+                mProVM.getUserMutableData()
+                mViewModel.getwishlisteProductIds()
+                mViewModel.getProductsInWishlist()
+                mViewModel?.getMoqDeliveryTimes()
+                mViewModel.getAllNotifications()
+                mEnqVm?.getAllOngoingEnquiries()
+                mEnqVm?.getAllCompletedEnquiries()
+                mOrderVm?.getAllOngoingOrders()
+                mOrderVm?.getAllCompletedOrders()
+                mViewModel?.getTransactionStatus()
+                mViewModel?.getChangeRequestStatuses()
+                mViewModel?.getQCQuestionData()
+                mViewModel?.getQCStageData()
+                mViewModel?.getEscalationData()
+                mViewModel?.getArtisanFaultReviewData()
+                mViewModel?.getBuyerFaultReviewData()
+            }
             mViewModel.getProductsOfArtisan(this)
             mViewModel.getProductUploadData()
             mViewModel.getEnquiryStageData()
             mViewModel?.getInnerEnquiryStageData()
             mViewModel.getEnquiryStageAvailableProdsData()
             mViewModel.getArtisanBrandDetails()
-            mViewModel.getAllNotifications()
-            mProVM.getBuyerProfileDetails(this)
-            mProVM.getUserMutableData()
-            mViewModel?.getTransactionStatus()
-            mViewModel?.getChangeRequestStatuses()
-            mViewModel?.getQCQuestionData()
-            mViewModel?.getQCStageData()
-            mViewModel?.getEscalationData()
-            mViewModel?.getArtisanFaultReviewData()
-            mViewModel?.getBuyerFaultReviewData()
             mCMSViewModel?.getRegionData()
-//            mCMSViewModel?.getCategoriesData()
             mCMSViewModel?.categoriescodesign()
-            mEnqVm?.getAllOngoingEnquiries()
-            mEnqVm?.getAllCompletedEnquiries() 
-            mOrderVm?.getAllOngoingOrders()
-            mOrderVm?.getAllCompletedOrders()
         }
     }
 

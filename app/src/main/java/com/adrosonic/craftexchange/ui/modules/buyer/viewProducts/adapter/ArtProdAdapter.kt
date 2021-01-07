@@ -20,6 +20,7 @@ import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
 import com.like.LikeButton
 import com.like.OnLikeListener
+import com.pixplicity.easyprefs.library.Prefs
 import io.realm.RealmResults
 
 class ArtProdAdapter(var context: Context?, private var regionProduct: RealmResults<ProductCatalogue>?) : RecyclerView.Adapter<ArtProdAdapter.ViewHolder>() {
@@ -122,7 +123,9 @@ class ArtProdAdapter(var context: Context?, private var regionProduct: RealmResu
         })
 
         holder.binding.btnGenerateEnquiry.setOnClickListener {
-            generateEnquiry(product?.productId ?:0,false)
+            if(Prefs.getBoolean(ConstantsDirectory.IS_LOGGED_IN, false))
+                generateEnquiry(product?.productId ?:0,false)
+            else context?.let { Utility.buyerLoginDialog(it,true,product?.productId ?:0) }
         }
     }
 

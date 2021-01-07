@@ -104,6 +104,8 @@ const val QC_QUESTION_DATA ="qc_question_data"
 const val ESCALATION_DATA ="escalation_data"
 
 const val IS_ANTRAN_CODESIGN ="is_antran_codesign"
+const val IS_ENQUIRY_ACTION ="is_enquiry_action"
+const val PRODUCT_ID ="product_id"
 
 class UserConfig {
 
@@ -666,5 +668,17 @@ class UserConfig {
             field = value
         }
 
+    var isEnquiryAction : Boolean = false
+        get() = Prefs.getBoolean(IS_ENQUIRY_ACTION,false)
+        set(value) {
+            Prefs.putBoolean(IS_ENQUIRY_ACTION, value)
+            field = value
+        }
+    var productId : Long = 0L
+        get() = Prefs.getLong(PRODUCT_ID,0L)
+        set(value) {
+            Prefs.putLong(PRODUCT_ID, value)
+            field = value
+        }
 }
 

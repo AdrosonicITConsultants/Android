@@ -23,6 +23,8 @@ import com.adrosonic.craftexchange.repository.data.response.buyer.login.BuyerRes
 import com.adrosonic.craftexchange.repository.data.model.UserAuthModel
 import com.adrosonic.craftexchange.ui.modules.authentication.register.RegisterActivity
 import com.adrosonic.craftexchange.ui.modules.authentication.reset.ResetPasswordActivity
+import com.adrosonic.craftexchange.ui.modules.buyer.landing.buyerLandingIntent
+import com.adrosonic.craftexchange.ui.modules.buyer.landing.buyerLandingIntentForGenEnq
 import com.adrosonic.craftexchange.ui.modules.cx_demovideo.CXVideoActivity
 import com.adrosonic.craftexchange.ui.modules.pdfViewer.PdfViewerActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
@@ -99,14 +101,12 @@ class BuyerLoginPasswordFragment : Fragment() {
 
                     CraftExchangeRepository
                         .getLoginService()
-                        .authenticateBuyer(
-                            "application/json",
+                        .authenticateBuyer("application/json",
                             UserAuthModel(
                                 Prefs.getString(ConstantsDirectory.USER_EMAIL, null),
                                 mBinding?.textBoxPassword?.text.toString(),
                                 Prefs.getLong(ConstantsDirectory.REF_ROLE_ID, 0)
-                            )
-                        )
+                            ))
                         .enqueue(object : Callback, retrofit2.Callback<BuyerResponse> {
                             override fun onFailure(call: Call<BuyerResponse>, t: Throwable) {
                                 t.printStackTrace()
@@ -152,10 +152,10 @@ class BuyerLoginPasswordFragment : Fragment() {
                                         ConstantsDirectory.COMP_NAME,
                                         response.body()?.data?.user?.companyDetails?.companyName
                                     )
-
-//                                Toast.makeText(activity,"Login Successful! - landing screen Buyer",Toast.LENGTH_SHORT).show()
-                                    startActivity(Intent(activity, CXVideoActivity::class.java))
-
+                                    if(mUserConfig.isEnquiryAction){
+                                        startActivity(context?.buyerLandingIntentForGenEnq(true))
+                                    }
+                                    else startActivity(Intent(activity, CXVideoActivity::class.java))
                                 } else {
                                     Toast.makeText(
                                         activity,

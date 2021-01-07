@@ -22,33 +22,33 @@ interface ProductDao {
     @Headers("Accept: application/json")
     @GET("product/getProduct/{productId}")
     fun getSingleProduct(
-        @Header("Authorization") token: String,
+//        @Header("Authorization") token: String,
         @Path("productId") productId : Long
     ): Call<EnquiryProductResponse>
 
     @Headers("Accept: application/json")
     @GET("filter/getFilteredArtisans")
-    fun getFilteredArtisans(@Header("Authorization") token: String): Call<BrandListResponse>
+    fun getFilteredArtisans(): Call<BrandListResponse>
 
     ////////////////////////////////Catalogue APIs//////////////////////////////////////
     @Headers("Accept: application/json")
     @GET("product/getProductByArtisan/{artisanId}")
     fun getProductsByArtisan(
-        @Header("Authorization") token: String,
+//        @Header("Authorization") token: String,
         @Path("artisanId") artisanId: Long
     ): Call<CatalogueProductsResponse>
 
     @Headers("Accept: application/json")
     @GET("product/getClusterProducts/{clusterId}")
     fun getProductByCluster(
-        @Header("Authorization") token: String,
+//        @Header("Authorization") token: String,
         @Path("clusterId") clusterId: Long
     ): Call<CatalogueProductsResponse>
 
     @Headers("Accept: application/json")
     @GET("product/getProductCategoryProducts/{productCategoryId}")
     fun getProductByCategory(
-        @Header("Authorization") token: String,
+//        @Header("Authorization") token: String,
         @Path("productCategoryId") productCategoryId: Long
     ): Call<CatalogueProductsResponse>
 

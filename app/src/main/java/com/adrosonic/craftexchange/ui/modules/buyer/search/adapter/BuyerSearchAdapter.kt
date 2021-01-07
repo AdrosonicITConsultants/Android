@@ -125,25 +125,26 @@ class BuyerSearchAdapter(private val mContext : Context,
         }else{
             holder?.wishlistButton?.isLiked = false
         }
-
+        if(!Prefs.getBoolean(ConstantsDirectory.IS_LOGGED_IN, false)){
+        holder?.wishlistButton?.setOnClickListener {
+            if(!Prefs.getBoolean(ConstantsDirectory.IS_LOGGED_IN, false)) Utility.buyerLoginDialog(mContext,false,0)
+        }}
         holder?.wishlistButton?.setOnLikeListener(object: OnLikeListener {
             override fun liked(likeButton: LikeButton) {
-                product?.id?.let { wishlistener?.onSelected(it,1L) }
-
+                if(Prefs.getBoolean(ConstantsDirectory.IS_LOGGED_IN, false)) product?.id?.let { wishlistener?.onSelected(it,1L) }
             }
             override fun unLiked(likeButton: LikeButton) {
-                product?.id?.let { wishlistener?.onSelected(it,0L) }
+                if(Prefs.getBoolean(ConstantsDirectory.IS_LOGGED_IN, false)) product?.id?.let { wishlistener?.onSelected(it,0L) }
             }
         })
 
         holder.btnViewMore.setOnClickListener {
         //TODO : change this implementation later
-
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         product?.id?.let { it1 ->
                 CraftExchangeRepository
                     .getWishlistService()
-                    .getSingleProductDetails(token, it1.toInt())
+                    .getSingleProductDetails(it1.toInt())
                     .enqueue(object : Callback, retrofit2.Callback<SingleProductDetails> {
                         override fun onFailure(call: Call<SingleProductDetails>, t: Throwable) {
                             t.printStackTrace()
@@ -187,7 +188,7 @@ class BuyerSearchAdapter(private val mContext : Context,
             product?.id?.let { it1 ->
                 CraftExchangeRepository
                     .getWishlistService()
-                    .getSingleProductDetails(token, it1.toInt())
+                    .getSingleProductDetails(it1.toInt())
                     .enqueue(object : Callback, retrofit2.Callback<SingleProductDetails> {
                         override fun onFailure(call: Call<SingleProductDetails>, t: Throwable) {
                             t.printStackTrace()
@@ -220,7 +221,30 @@ class BuyerSearchAdapter(private val mContext : Context,
         }
 
         holder.btnGenerateEnquiry.setOnClickListener {
-            generateEnquiry(product?.id?:0,false)
+//            generateEnquiry(product?.id?:0,false)
+            if(Prefs.getBoolean(ConstantsDirectory.IS_LOGGED_IN, false))
+                generateEnquiry(product?.id ?:0,false)
+            else mContext?.let {
+                CraftExchangeRepository
+                    .getWishlistService()
+                    .getSingleProductDetails((product?.id ?:0).toInt())
+                    .enqueue(object : Callback, retrofit2.Callback<SingleProductDetails> {
+                        override fun onFailure(call: Call<SingleProductDetails>, t: Throwable) {
+                            t.printStackTrace()
+                            Log.e("prodDetails","Failure : "+t.printStackTrace())
+
+                        }
+                        override fun onResponse(call: Call<SingleProductDetails>, response: Response<SingleProductDetails>
+                        ) {
+                            if (response.body()?.valid == true) {
+                                val response=response.body()?.data
+                                if(response != null){
+                                    WishlistPredicates.insertSingleProduct(response)
+                                }
+                            }
+                        }
+                    })
+                Utility.buyerLoginDialog(it,true,product?.id ?:0) }
         }
     }
 

@@ -37,6 +37,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.like.LikeButton
 import com.like.OnLikeListener
+import com.pixplicity.easyprefs.library.Prefs
 import com.synnapps.carouselview.ImageListener
 import kotlinx.android.synthetic.main.dialog_gen_enquiry_update_or_new.*
 import kotlin.collections.ArrayList
@@ -47,6 +48,7 @@ fun Context.catalogueProductDetailsIntent(): Intent {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
         }
 }
+
 private var mBinding : ActivityCatalogueProductDetailsBinding ?= null
 var imageUrlList: MutableList<String> = ArrayList()
 var productId : Long ?= 0
@@ -64,17 +66,14 @@ var productTypeName : String?=""
 private var dialog : Dialog ?= null
 private var exDialog : Dialog ?= null
 
-
-
 class CatalogueProductDetailsActivity : LocaleBaseActivity(),
     EnquiryViewModel.GenerateEnquiryInterface{
     val mEnqVM: EnquiryViewModel by viewModels()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mEnqVM.listener = this
-        dialog = Utility.enquiryGenProgressDialog(this)
 
+        dialog = Utility.enquiryGenProgressDialog(this)
         mBinding = ActivityCatalogueProductDetailsBinding.inflate(layoutInflater)
         val view = mBinding?.root
         setContentView(view)
@@ -84,14 +83,23 @@ class CatalogueProductDetailsActivity : LocaleBaseActivity(),
         productUploadData = gson.fromJson(jsonProductData, ProductUploadData::class.java)
 
         productId = intent.getStringExtra(ConstantsDirectory.PRODUCT_ID).toLong()
+        if (intent.extras != null) {
+            if (intent.getBooleanExtra("isGenEnq", false)) {
+                if (!Utility.checkIfInternetConnected(applicationContext)) {
+                    Utility.displayMessage(getString(R.string.no_internet_connection), applicationContext)
+                } else {
+                    dialog?.show()
+                    mEnqVM.ifEnquiryExists(productId!!,false)
+//                mEnqVM?.generateEnquiry(productId!!,false, mUserConfig?.deviceName.toString())
+                }
+            }
+        }
+        Log.e("CatalogueProductDetails", "55555 productId: $productId")
         getProductDetails(productId)
-
         getProductImages(productId)
-
         mBinding?.productTitle?.text = productDetails?.productTag ?: "-"
         mBinding?.productDescription?.text = productDetails?.product_spe ?: "-"
 //        mBinding?.productNote?.text = TODO implment later
-
         var status : String ?= ""
         when(productDetails?.productStatusId){
             2.toLong() -> {
@@ -118,26 +126,17 @@ class CatalogueProductDetailsActivity : LocaleBaseActivity(),
                 }.let { mBinding?.productAvailabilityText?.setTextColor(it) }
             }
         }
-
         //Product Code
         mBinding?.productCode?.text = "Product Code : ${productDetails?.productCode ?: ""}"
-
-
         mBinding?.regionName?.text = productDetails?.clusterName ?: "-"
         mBinding?.categoryName?.text = productDetails?.productCategoryName ?: "-"
-
         setBrandDetails(productDetails?.artisanId)
-
         getWeavesusedDetails(productDetails)
-
         getWeaveTypes(productId)
-
         prodCareAdapter = ProductCareRecyclerAdapter(applicationContext,mCare)
         getProductCares(productId)
-
         mBinding?.reedCountValue?.text = productDetails?.reedCount ?: "-"
         //TODO weight and dimensions in list view
-
         if(productDetails?.productCategoryName == "Fabric") {
             mBinding?.gsmDetails?.visibility = View.VISIBLE
             mBinding?.gsmValue?.text = productDetails?.gsm ?: "-"
@@ -167,13 +166,17 @@ class CatalogueProductDetailsActivity : LocaleBaseActivity(),
         }
 
         mBinding?.btnGenerateEnquiry?.setOnClickListener {
-            if (!Utility.checkIfInternetConnected(applicationContext)) {
-                Utility.displayMessage(getString(R.string.no_internet_connection), applicationContext)
-            } else {
-                dialog?.show()
-                mEnqVM.ifEnquiryExists(productId!!,false)
+            if(Prefs.getBoolean(ConstantsDirectory.IS_LOGGED_IN, false))
+            {
+                    if (!Utility.checkIfInternetConnected(applicationContext)) {
+                        Utility.displayMessage(getString(R.string.no_internet_connection), applicationContext)
+                    } else {
+                        dialog?.show()
+                        mEnqVM.ifEnquiryExists(productId!!,false)
 //                mEnqVM?.generateEnquiry(productId!!,false, mUserConfig?.deviceName.toString())
+                    }
             }
+            else productId?.let { Utility.buyerLoginDialog(this,true, it) }
         }
     }
 
@@ -335,20 +338,29 @@ class CatalogueProductDetailsActivity : LocaleBaseActivity(),
 
     fun setWishlisting(details: ProductCatalogue?){
         mBinding?.btnWishlist?.isLiked = details?.isWishlisted == 1L
+        if(!Prefs.getBoolean(ConstantsDirectory.IS_LOGGED_IN, false)){
+        mBinding?.btnWishlist?.setOnClickListener {
+            if(!Prefs.getBoolean(ConstantsDirectory.IS_LOGGED_IN, false)) Utility.buyerLoginDialog(this@CatalogueProductDetailsActivity,false,0)
+        }
+        }
         mBinding?.btnWishlist?.setOnLikeListener(object: OnLikeListener {
             override fun liked(likeButton: LikeButton) {
-                WishlistPredicates.updateProductWishlisting(productId,1L,1L)
-                if(Utility.checkIfInternetConnected(applicationContext)){
-                    val coordinator = SyncCoordinator(applicationContext)
-                    coordinator.performLocallyAvailableActions()
-                }
+                if(Prefs.getBoolean(ConstantsDirectory.IS_LOGGED_IN, false)) {
+                    WishlistPredicates.updateProductWishlisting(productId, 1L, 1L)
+                    if (Utility.checkIfInternetConnected(applicationContext)) {
+                        val coordinator = SyncCoordinator(applicationContext)
+                        coordinator.performLocallyAvailableActions()
+                    }
+                } else Utility.buyerLoginDialog(this@CatalogueProductDetailsActivity,false,0)
             }
             override fun unLiked(likeButton: LikeButton) {
+                if(Prefs.getBoolean(ConstantsDirectory.IS_LOGGED_IN, false)) {
                 WishlistPredicates.updateProductWishlisting(productId,0L,1L)
                 if(Utility.checkIfInternetConnected(applicationContext)){
                     val coordinator = SyncCoordinator(applicationContext)
                     coordinator.performLocallyAvailableActions()
                 }
+                }else Utility.buyerLoginDialog(this@CatalogueProductDetailsActivity,false,0)
             }
         })
     }

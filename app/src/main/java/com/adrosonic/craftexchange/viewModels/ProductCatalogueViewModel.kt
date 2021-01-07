@@ -52,7 +52,7 @@ class ProductCatalogueViewModel(application: Application) : AndroidViewModel(app
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         CraftExchangeRepository
             .getWishlistService()
-            .getSingleProductDetails(token, productId.toInt())
+            .getSingleProductDetails( productId.toInt())
             .enqueue(object : Callback, retrofit2.Callback<SingleProductDetails> {
                 override fun onFailure(call: Call<SingleProductDetails>, t: Throwable) {
                     t.printStackTrace()

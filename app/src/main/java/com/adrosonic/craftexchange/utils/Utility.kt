@@ -45,7 +45,9 @@ import com.adrosonic.craftexchange.repository.data.response.qc.QCData
 import com.adrosonic.craftexchange.repository.data.response.qc.QCQuestionData
 import com.adrosonic.craftexchange.repository.data.response.transaction.TranStatData
 import com.adrosonic.craftexchange.repository.data.response.transaction.TransactionStatusData
+import com.adrosonic.craftexchange.ui.modules.authentication.login.LoginActivity
 import com.adrosonic.craftexchange.ui.modules.enquiry.enquiryDetails
+import com.adrosonic.craftexchange.ui.modules.role.roleselectIntent
 import com.bumptech.glide.Glide
 import com.google.gson.GsonBuilder
 import com.pixplicity.easyprefs.library.Prefs
@@ -76,8 +78,8 @@ class Utility {
         var craftUser = UserPredicates.findUser(Prefs.getString(ConstantsDirectory.USER_ID,"0").toLong())
         var mCraftUser = CraftUser()
         const val BROWSING_IMGS: String = "BrowsedImages/"
-
-
+//        val isLogedIn=Prefs.getBoolean(ConstantsDirectory.IS_LOGGED_IN, false)
+        var mUserConfig=UserConfig()
 
         fun displayMessage(message: String, context: Context) {
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
@@ -748,6 +750,7 @@ class Utility {
                 displayMessage(" Application not installed $e", context)
             }
         }
+
         fun getDateDiffInDays(orderCreatedOn:String):Long{
             val currentDateTime=System.currentTimeMillis()
 //            val orderCreatedOn=Utility.returnDisplayDate(orderDetails?.orderCreatedOn?:"")
@@ -763,6 +766,7 @@ class Utility {
 
             return days
         }
+
         fun getCountStatement(enqID:Long):String{
             try {
                 var profile = Prefs.getString(ConstantsDirectory.PROFILE,"")
@@ -847,6 +851,26 @@ class Utility {
             dialog.create()
             dialog.show()
             return dialog
+        }
+
+        fun buyerLoginDialog(context: Context,isEnquiryAction:Boolean,productId: Long){
+            val builder = AlertDialog.Builder(context, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar)
+            builder.setMessage("Please login to proceed")
+                .setPositiveButton("Login"){ dialog, id ->
+                    dialog.cancel()
+                    Prefs.putString(ConstantsDirectory.PROFILE, "Buyer")
+                    Prefs.putLong(ConstantsDirectory.REF_ROLE_ID, 2)
+                    mUserConfig.isEnquiryAction=isEnquiryAction
+                    mUserConfig.productId=productId
+                    Log.e("CatalogueProductDetails", "2222 productId: ${mUserConfig.productId}")
+                    context.startActivity(Intent(context, LoginActivity::class.java))
+                }
+                .setNegativeButton("Cancel"){ dialog, id ->
+                    dialog.cancel()
+                }
+            builder.create()
+            builder.show()
+//            return builder
         }
     }
 

@@ -21,7 +21,8 @@ interface CMSDao {
     fun getCategoriesData() : Call<CMSDataResponse>
 
     @Headers("Accept: application/json")
-    @GET("pages/64")
+    @GET("pages/64")//prod
+    // @GET("pages/27")//qa uat
     fun getPagesData() : Call<CMSDataResponseElement>
 
     @Headers("Accept: application/json")

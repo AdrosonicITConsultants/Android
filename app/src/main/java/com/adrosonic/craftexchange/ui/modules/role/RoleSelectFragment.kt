@@ -7,11 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-
 import com.adrosonic.craftexchange.R
 import com.adrosonic.craftexchange.databinding.FragmentRoleSelectBinding
 import com.adrosonic.craftexchange.ui.modules.pdfViewer.PdfViewerActivity
 import com.adrosonic.craftexchange.ui.modules.authentication.login.LoginActivity
+import com.adrosonic.craftexchange.ui.modules.cx_demovideo.CXVideoActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.Utility
 import com.pixplicity.easyprefs.library.Prefs
@@ -47,7 +47,6 @@ class RoleSelectFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_role_select, container, false)
-
         //clear all prefs
         Utility.clearPrefs()
         return mBinding?.root
@@ -65,10 +64,18 @@ class RoleSelectFragment : Fragment() {
 
         mBinding?.roleBuyer?.setOnClickListener {
             //TODO:Uncommnt lter
+//            Utility.clearPrefs()
+//            startActivity(Intent(activity, LoginActivity::class.java))
+//            Prefs.putString(ConstantsDirectory.PROFILE, "Buyer")
+//            Prefs.putLong(ConstantsDirectory.REF_ROLE_ID, 2)
             Utility.clearPrefs()
-            startActivity(Intent(activity, LoginActivity::class.java))
+            Prefs.putBoolean(ConstantsDirectory.IS_LOGGED_IN, false)
+            Prefs.putString(  ConstantsDirectory.USER_ID, "0")
+            Prefs.putString( ConstantsDirectory.FIRST_NAME,"")
+            Prefs.putString( ConstantsDirectory.LAST_NAME, "")
             Prefs.putString(ConstantsDirectory.PROFILE, "Buyer")
             Prefs.putLong(ConstantsDirectory.REF_ROLE_ID, 2)
+            startActivity(Intent(activity, CXVideoActivity::class.java))
         }
 
         mBinding?.privacyPolicy?.setOnClickListener {

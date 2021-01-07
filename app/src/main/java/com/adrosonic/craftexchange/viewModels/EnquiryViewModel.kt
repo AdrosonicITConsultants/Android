@@ -154,7 +154,6 @@ class EnquiryViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun ifEnquiryExists(productId : Long,isCustom : Boolean){
-
         var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
         CraftExchangeRepository
             .getEnquiryService()

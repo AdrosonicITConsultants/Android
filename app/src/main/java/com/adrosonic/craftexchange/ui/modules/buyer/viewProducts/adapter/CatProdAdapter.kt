@@ -20,6 +20,7 @@ import com.adrosonic.craftexchange.utils.ImageSetter
 import com.adrosonic.craftexchange.utils.Utility
 import com.like.LikeButton
 import com.like.OnLikeListener
+import com.pixplicity.easyprefs.library.Prefs
 import io.realm.RealmResults
 
 class CatProdAdapter(var context: Context?, private var regionProduct: RealmResults<ProductCatalogue>?) : RecyclerView.Adapter<CatProdAdapter.ViewHolder>() {
@@ -103,26 +104,35 @@ class CatProdAdapter(var context: Context?, private var regionProduct: RealmResu
         }
 
         holder.binding.wishlistButton.isLiked = product?.isWishlisted == 1L
+        if(!Prefs.getBoolean(ConstantsDirectory.IS_LOGGED_IN, false)){
+        holder?.binding.wishlistButton?.setOnClickListener {
+            if(!Prefs.getBoolean(ConstantsDirectory.IS_LOGGED_IN, false)) context?.let { Utility.buyerLoginDialog(it,false,0) }
+        }}
         holder.binding.wishlistButton.setOnLikeListener(object: OnLikeListener {
             override fun liked(likeButton: LikeButton) {
-                WishlistPredicates.updateProductWishlisting(product?.productId,1L,1L)
-                if(Utility.checkIfInternetConnected(context!!)){
-                    val coordinator = SyncCoordinator(context!!)
-                    coordinator.performLocallyAvailableActions()
+                if(Prefs.getBoolean(ConstantsDirectory.IS_LOGGED_IN, false)) {
+                    WishlistPredicates.updateProductWishlisting(product?.productId, 1L, 1L)
+                    if (Utility.checkIfInternetConnected(context!!)) {
+                        val coordinator = SyncCoordinator(context!!)
+                        coordinator.performLocallyAvailableActions()
+                    }
                 }
             }
-
             override fun unLiked(likeButton: LikeButton) {
-                WishlistPredicates.updateProductWishlisting(product?.productId,0L,1L)
-                if(Utility.checkIfInternetConnected(context!!)){
-                    val coordinator = SyncCoordinator(context!!)
-                    coordinator.performLocallyAvailableActions()
+                if(Prefs.getBoolean(ConstantsDirectory.IS_LOGGED_IN, false)) {
+                    WishlistPredicates.updateProductWishlisting(product?.productId, 0L, 1L)
+                    if (Utility.checkIfInternetConnected(context!!)) {
+                        val coordinator = SyncCoordinator(context!!)
+                        coordinator.performLocallyAvailableActions()
+                    }
                 }
             }
         })
 
         holder.binding.btnGenerateEnquiry.setOnClickListener {
-            generateEnquiry(product?.productId ?:0,false)
+            if(Prefs.getBoolean(ConstantsDirectory.IS_LOGGED_IN, false))
+                generateEnquiry(product?.productId ?:0,false)
+            else context?.let { Utility.buyerLoginDialog(it,true,product?.productId ?:0) }
         }
     }
 

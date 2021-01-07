@@ -31,7 +31,6 @@ class RegionAdapter(var context: Context?, private var regionProducts: RealmResu
         }
     }
 
-
     fun updateClusterList(newList: RealmResults<ClusterList>?){
         if (newList != null) {
             this.regionProducts=newList

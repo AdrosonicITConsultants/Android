@@ -75,7 +75,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
 
         CraftExchangeRepository
             .getSearchService()
-            .getArtisanSuggestions(token,str).enqueue(object : Callback, retrofit2.Callback<SuggestionResponse> {
+            .getArtisanSuggestions(str).enqueue(object : Callback, retrofit2.Callback<SuggestionResponse> {
                 override fun onFailure(call: Call<SuggestionResponse>, t: Throwable) {
                     t.printStackTrace()
                     artSugListener?.onFailureSugg()
@@ -99,7 +99,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
 
         CraftExchangeRepository
             .getSearchService()
-            .getBuyerSuggestions(token,str).enqueue(object : Callback, retrofit2.Callback<SuggestionResponse> {
+            .getBuyerSuggestions(str).enqueue(object : Callback, retrofit2.Callback<SuggestionResponse> {
                 override fun onFailure(call: Call<SuggestionResponse>, t: Throwable) {
                     t.printStackTrace()
                     buySugListener?.onFailureSugg()
@@ -122,7 +122,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
 
         CraftExchangeRepository
             .getSearchService()
-            .searchProducts(token, SearchProduct(pageNo,str,id,madeWithAntharan))
+            .searchProducts(SearchProduct(pageNo,str,id,madeWithAntharan))
             .enqueue(object : Callback, retrofit2.Callback<SearchProductResponse> {
                 override fun onFailure(call: Call<SearchProductResponse>, t: Throwable) {
                     t.printStackTrace()

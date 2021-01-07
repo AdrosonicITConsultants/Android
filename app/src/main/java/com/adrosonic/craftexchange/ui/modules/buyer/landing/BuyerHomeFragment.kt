@@ -55,7 +55,7 @@ CMSViewModel.CMSDataInterface{
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_buyer_home, container, false)
         var firstname = Prefs.getString(ConstantsDirectory.FIRST_NAME, "User")
-        mBinding?.textUser?.text = firstname
+        mBinding?.textUser?.text = if(firstname.isNullOrEmpty())"Guest" else firstname
         return mBinding?.root
     }
 
@@ -79,10 +79,7 @@ CMSViewModel.CMSDataInterface{
             if (savedInstanceState == null) {
                 Prefs.putLong(ConstantsDirectory.IS_MADE_WITH_ANTHARAN,0)
                 activity?.supportFragmentManager?.beginTransaction()
-                    ?.replace(
-                        R.id.buyer_home_container,
-                        ViewArtisanProductsFragment.newInstance()
-                    )
+                    ?.replace( R.id.buyer_home_container, ViewArtisanProductsFragment.newInstance() )
                     ?.addToBackStack(null)
                     ?.commit()
             }
@@ -92,16 +89,15 @@ CMSViewModel.CMSDataInterface{
             if (savedInstanceState == null) {
                 Prefs.putLong(ConstantsDirectory.IS_MADE_WITH_ANTHARAN,1)
                 activity?.supportFragmentManager?.beginTransaction()
-                    ?.replace(
-                        R.id.buyer_home_container,
-                        ViewAntaranProductsFragment.newInstance()
-                    )
+                    ?.replace( R.id.buyer_home_container,ViewAntaranProductsFragment.newInstance() )
                     ?.addToBackStack(null)
                     ?.commit()
             }
         }
         mBinding?.buttonCustomDesign?.setOnClickListener {
-            startActivity(context?.ownDesignIntent())
+            if(Prefs.getBoolean(ConstantsDirectory.IS_LOGGED_IN, false)) startActivity(context?.ownDesignIntent())
+            else Utility.buyerLoginDialog(requireContext(),false,0)
+
         }
 
     }

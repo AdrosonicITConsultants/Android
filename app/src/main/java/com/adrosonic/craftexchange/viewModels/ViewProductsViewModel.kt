@@ -69,7 +69,7 @@ class ViewProductsViewModel(application: Application) : AndroidViewModel(applica
     fun getArtisanProduct(productId: Long){
         CraftExchangeRepository
             .getProductService()
-            .getSingleProduct(token,productId)
+            .getSingleProduct(productId)
             .enqueue(object: Callback, retrofit2.Callback<EnquiryProductResponse> {
                 override fun onFailure(call: Call<EnquiryProductResponse>, t: Throwable) {
                     t.printStackTrace()
