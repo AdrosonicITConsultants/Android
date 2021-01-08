@@ -28,6 +28,7 @@ import com.adrosonic.craftexchange.repository.data.response.buyer.login.BuyerRes
 import com.adrosonic.craftexchange.services.notification.MessagingService.Companion.TAG
 import com.adrosonic.craftexchange.ui.modules.pdfViewer.PdfViewerActivity
 import com.adrosonic.craftexchange.ui.modules.authentication.register.RegisterActivity
+import com.adrosonic.craftexchange.ui.modules.buyer.landing.buyerLandingIntentForGenEnq
 import com.adrosonic.craftexchange.ui.modules.cx_demovideo.CXVideoActivity
 import com.adrosonic.craftexchange.utils.ConstantsDirectory
 import com.adrosonic.craftexchange.utils.UserConfig
@@ -250,8 +251,10 @@ class BuyerLoginUsernameFragment : Fragment() {
                                                 ConstantsDirectory.LAST_NAME,
                                                 response.body()?.data?.user?.lastName
                                             )
-
-                                            startActivity(Intent(activity, CXVideoActivity::class.java))
+                                            if(mUserConfig.isEnquiryAction){
+                                                startActivity(context?.buyerLandingIntentForGenEnq(true))
+                                            }
+                                            else startActivity(Intent(activity, CXVideoActivity::class.java))
                                         }else {
                                             Toast.makeText(activity, getString(R.string.reg_as_buyer_fb), Toast.LENGTH_LONG).show()
                                         }
@@ -368,8 +371,10 @@ class BuyerLoginUsernameFragment : Fragment() {
                                                 ConstantsDirectory.LAST_NAME,
                                                 response.body()?.data?.user?.lastName
                                             )
-
-                                            startActivity(Intent(activity, CXVideoActivity::class.java))
+                                            if(mUserConfig.isEnquiryAction){
+                                                startActivity(context?.buyerLandingIntentForGenEnq(true))
+                                            }
+                                            else startActivity(Intent(activity, CXVideoActivity::class.java))
                                         }else {
                                             Log.e("SignInActivity", "333333 Register your Google Id & Try Again")
                                             Toast.makeText(

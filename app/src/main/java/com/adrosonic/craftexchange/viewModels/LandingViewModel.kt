@@ -90,7 +90,7 @@ class LandingViewModel(application: Application) : AndroidViewModel(application)
                     if(response.body()?.valid == true){
                         ProductPredicates.insertProductsOfArtisan(response.body())
                     }else{
-                        Utility.displayMessage(response.body()?.errorMessage.toString(),context)
+//                        if(response.body()?.errorMessage!=null)Utility.displayMessage(response.body()?.errorMessage.toString(),context)
                     }
                 }
 

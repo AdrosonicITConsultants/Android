@@ -134,7 +134,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
                         UserPredicates.refreshBuyerDetails(response.body()!!)
                         AddressPredicates.refreshUserAddress(response.body()!!)
                     }else{
-                        Toast.makeText(context,response.body()?.errorMessage, Toast.LENGTH_SHORT).show()
+                        if(response.body()?.errorMessage!=null)Toast.makeText(context,response.body()?.errorMessage, Toast.LENGTH_SHORT).show()
                     }
                 }
             })
