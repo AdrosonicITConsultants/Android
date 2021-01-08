@@ -65,12 +65,14 @@ class PdfViewerActivity: LocaleBaseActivity() {
                }
                if(viewType.equals("USER_MAN_ART")){
                    mBinding?.webView?.settings?.javaScriptEnabled = true
-                   pdf = ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV+"usermanual/ArtisanMobile.pdf"
+//                   pdf = ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV+"usermanual/ArtisanMobile.pdf"
+                   pdf = "https://tatatrustcraftxchangelive.objectstore.e2enetworks.net/usermanual/ArtisanMobile.pdf"
                    mBinding?.webView?.loadUrl("https://drive.google.com/viewerng/viewer?embedded=true&url=$pdf")
                }
                if(viewType.equals("USER_MAN_BUY")){
                    mBinding?.webView?.settings?.javaScriptEnabled = true
-                   pdf = ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV+"usermanual/BuyerMobile.pdf"
+//                   pdf = ConstantsDirectory.IMAGE_LOAD_BASE_URL_DEV+"usermanual/BuyerMobile.pdf"
+                   pdf = "https://tatatrustcraftxchangelive.objectstore.e2enetworks.net/usermanual/BuyerMobile.pdf"
                    mBinding?.webView?.loadUrl("https://drive.google.com/viewerng/viewer?embedded=true&url=$pdf")
                }
                 Utility.displayMessage(getString(R.string.plz_Wait),this)

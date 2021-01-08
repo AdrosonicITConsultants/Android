@@ -17,8 +17,8 @@ android {
         applicationId "com.adrosonic.craftexchange"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 67
-        versionName "1.3"
+        versionCode 68
+        versionName "1.4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

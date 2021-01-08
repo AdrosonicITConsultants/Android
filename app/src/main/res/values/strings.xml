@@ -425,7 +425,7 @@
     //prod
         <string name="facebook_app_id">2960179490877793</string>
         <string name="fb_login_protocol_scheme">fb2960179490877793</string>
-    //uat, qa
+<!--    //uat, qa-->
 <!--    <string name="facebook_app_id">717798432467327</string>-->
 <!--    <string name="fb_login_protocol_scheme">fb717798432467327</string>-->
 

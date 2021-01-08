@@ -13,12 +13,13 @@ import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.A
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.BrandListResponse
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.productCatalogue.Product
 import com.adrosonic.craftexchange.repository.data.response.buyer.viewProducts.singleProduct.Data
+import com.adrosonic.craftexchange.utils.UserConfig
 import io.realm.RealmResults
 
 class ProductPredicates {
     companion object {
         private var nextID: Long? = 0
-
+        var mUserConfig= UserConfig()
         //TODO : INSERT
 
         fun deleteArtisanProdCat(userId: Long?){
@@ -351,7 +352,7 @@ class ProductPredicates {
                                 exprod.madeWithAntaran = catalogueProduct?.madeWithAnthran
                                 exprod.isDeleted = catalogueProduct?.isDeleted
                                 exprod.isWishlisted = isWishlisted
-
+                                if(mUserConfig.wishlistedIds!!.contains(catalogueProduct.id.toString()))exprod.isWishlisted =1
                                 realm.copyToRealmOrUpdate(exprod)
                             }else{
                                 nextID = productObj._id ?: 0
@@ -415,6 +416,7 @@ class ProductPredicates {
                                 productObj.madeWithAntaran = catalogueProduct?.madeWithAnthran
                                 productObj.isDeleted = catalogueProduct?.isDeleted
                                 productObj.isWishlisted = isWishlisted
+                                if(mUserConfig.wishlistedIds!!.contains(catalogueProduct.id.toString()))productObj.isWishlisted =1
                                 realm.copyToRealmOrUpdate(productObj)
                             }
 

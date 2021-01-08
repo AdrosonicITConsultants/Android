@@ -106,7 +106,7 @@ const val ESCALATION_DATA ="escalation_data"
 const val IS_ANTRAN_CODESIGN ="is_antran_codesign"
 const val IS_ENQUIRY_ACTION ="is_enquiry_action"
 const val PRODUCT_ID ="product_id"
-
+const val WISHLISTED_IDS ="wishlisted_ids"
 class UserConfig {
 
     private object Holder { val INSTANCE = UserConfig() }
@@ -678,6 +678,13 @@ class UserConfig {
         get() = Prefs.getLong(PRODUCT_ID,0L)
         set(value) {
             Prefs.putLong(PRODUCT_ID, value)
+            field = value
+        }
+
+    var wishlistedIds : String? = ""
+        get() = Prefs.getString(WISHLISTED_IDS,"")
+        set(value) {
+            Prefs.putString(WISHLISTED_IDS, value)
             field = value
         }
 }

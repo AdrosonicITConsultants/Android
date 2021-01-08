@@ -96,7 +96,6 @@ class ClusterViewModel(application: Application) : AndroidViewModel(application)
                 ) {
                     if (response.body()?.valid == true) {
                         ProductPredicates.insertProductsInCatalogue(response.body()?.data?.products,0)
-                        if(Prefs.getBoolean(ConstantsDirectory.IS_LOGGED_IN, false))getProductsInWishlist()
                         clusterListener?.onSuccess()
                     } else {
                         clusterListener?.onFailure()
@@ -104,29 +103,6 @@ class ClusterViewModel(application: Application) : AndroidViewModel(application)
                 }
             })
 
-    }
-
-    fun getProductsInWishlist(){
-        var token = "Bearer ${Prefs.getString(ConstantsDirectory.ACC_TOKEN,"")}"
-        CraftExchangeRepository
-            .getWishlistService()
-            .getProductsInWishlist(token)
-            .enqueue(object: Callback, retrofit2.Callback<CatalogueProductsResponse> {
-                override fun onFailure(call: Call<CatalogueProductsResponse>, t: Throwable) {
-                    t.printStackTrace()
-                    Log.e("LandingViewModel","wishlist onFailure: "+t.message)
-                }
-                override fun onResponse(
-                    call: Call<CatalogueProductsResponse>,
-                    response: Response<CatalogueProductsResponse>) {
-
-                    if(response.body()?.valid == true){
-                        val response=response.body()?.data
-                        ProductPredicates.insertProductsInCatalogue(response?.products,1)
-                        clusterListener?.onSuccess()
-                    }
-                }
-            })
     }
 
 }

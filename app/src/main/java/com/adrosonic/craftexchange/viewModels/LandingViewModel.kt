@@ -55,7 +55,7 @@ class LandingViewModel(application: Application) : AndroidViewModel(application)
     var listener: wishlistFetchedInterface? = null
     var noficationlistener: notificationInterface? = null
     val wishListData : MutableLiveData<RealmResults<ProductCatalogue>> by lazy { MutableLiveData<RealmResults<ProductCatalogue>>() }
-
+    var mUserConfig=UserConfig()
     fun getwishListMutableData(): MutableLiveData<RealmResults<ProductCatalogue>> {
         wishListData.value=loadwishListData()
         return wishListData
@@ -343,6 +343,7 @@ class LandingViewModel(application: Application) : AndroidViewModel(application)
 
                     if(response.body()?.valid == true){
                         val response=response.body()?.data
+                        mUserConfig.wishlistedIds=response?.joinToString()
                         Log.e("LandingViewModel","wishlist :"+response?.joinToString())
                         response?.forEach {
                             if(!WishlistPredicates.isProductPresent(it))   getBuyerProductDetails(it)
