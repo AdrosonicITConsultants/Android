@@ -614,4 +614,5 @@
     <string name="view_approve_payment"><![CDATA[View & Approve Payment]]></string>
     <string name="user_manual">User Manual</string>
     <string name="switch_to_artisan">Switch to Artisan</string>
+    <string name="please_enter_valid_email">Please enter valid email Id</string>
 </resources>

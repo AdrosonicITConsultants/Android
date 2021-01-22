@@ -82,7 +82,8 @@ class ArtisanRegisterArtisanidFragment : Fragment() {
                                         ?.commit()
                                 }
                             } else{
-                                Toast.makeText(requireActivity(),"${response.body()?.errorMessage}", Toast.LENGTH_SHORT).show()
+                                if(response.body()!=null)Toast.makeText(requireActivity(),"${response.body()?.errorMessage}", Toast.LENGTH_SHORT).show()
+                                else Toast.makeText(requireActivity(),"No message available", Toast.LENGTH_SHORT).show()
                             }
                         }
 

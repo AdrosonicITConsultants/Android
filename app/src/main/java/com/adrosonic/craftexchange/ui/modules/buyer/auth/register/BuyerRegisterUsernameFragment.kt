@@ -76,7 +76,8 @@ class BuyerRegisterUsernameFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         mBinding?.buttonSendOtp?.setOnClickListener{
-            if(mBinding?.textBoxUsername?.nonEmpty{ mBinding?.textBoxUsername?.error = it } == true) {
+            val isValidEmail=android.util.Patterns.EMAIL_ADDRESS.matcher(mBinding?.textBoxUsername?.text).matches()
+            if(mBinding?.textBoxUsername?.nonEmpty{ mBinding?.textBoxUsername?.error = it } == true && isValidEmail) {
                 showProgress()
                 CraftExchangeRepository
                     .getRegisterService()
@@ -104,6 +105,7 @@ class BuyerRegisterUsernameFragment : Fragment() {
                         }
                     })
             }
+            else Utility.displayMessage("Please enter valid email Id",requireContext())
         }
 
         mBinding?.buttonVerify?.setOnClickListener{
@@ -153,6 +155,8 @@ class BuyerRegisterUsernameFragment : Fragment() {
         }
         }
     }
+
+
         mBinding?.privacyPolicy?.setOnClickListener {
             val intent = Intent(context, PdfViewerActivity::class.java)
             intent.putExtra("ViewType", "PRIVACY_POLICY_PDF")

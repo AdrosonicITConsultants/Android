@@ -6,12 +6,12 @@ enum class Instances{
 object ConstantsDirectory {
     //////////////////////////////////////////////////////////////////////
 //    const val BASE_URL_DEV = "http://101.53.153.96:8090/api/" //qa
-    const val BASE_URL_DEV = "http://164.52.192.15:8090/api/"//uat
-//    const val BASE_URL_DEV = "http://164.52.206.168:8090/api/"//prod
+//    const val BASE_URL_DEV = "http://164.52.192.15:8090/api/"//uat
+    const val BASE_URL_DEV = "http://164.52.206.168:8090/api/"//prod
 
 //    const val IMAGE_LOAD_BASE_URL_DEV = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/" //qa
-    const val IMAGE_LOAD_BASE_URL_DEV = "https://tatacrftexchangeuat.objectstore.e2enetworks.net/"//uat
-//       const val IMAGE_LOAD_BASE_URL_DEV = "https://tatatrustcraftxchangelive.objectstore.e2enetworks.net/"//prod
+//    const val IMAGE_LOAD_BASE_URL_DEV = "https://tatacrftexchangeuat.objectstore.e2enetworks.net/"//uat
+       const val IMAGE_LOAD_BASE_URL_DEV = "https://tatatrustcraftxchangelive.objectstore.e2enetworks.net/"//prod
 
 //    const val CMS_URL_DEV = "http://101.53.158.227/wordpress/index.php/wp-json/wp/v2/"//qa uat
     const val CMS_URL_DEV = "https://craftxchangecms.antaran.in/index.php/wp-json/wp/v2/"//prod
@@ -23,7 +23,7 @@ object ConstantsDirectory {
 
     const val ADMIN_DASHBOARD_URL = "https://datastudio.google.com/embed/reporting/00758bf8-9835-4bc1-aa7d-c2fb328332ab/page/wVxhB?params="
     const val VIEW_PI_URL = "http://101.53.153.96:8090/enquiry/getPreviewPiHTML?enquiryId="
-    const val VERSION = "08-01-21 V-1.4"
+    const val VERSION = "21-01-21 V-1.4"
     //////////////////////////////////////////////////////////////////////
     const val PI_PDF_PATH: String = "PiPdfs/"
     const val TI_PDF_PATH: String = "TiPdfs/"

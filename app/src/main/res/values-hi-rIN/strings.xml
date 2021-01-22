@@ -586,4 +586,5 @@
     <string name="the_final_tax_invoice_will_be_updated">अंतिम कर चालान अपडेट किया जाएगा।</string>
     <string name="your_order_will_be_dispatched">जैसे ही कारीगर आपकी अंतिम भुगतान रसीद को मंजूरी देगा, आपका ऑर्डर भेज दिया जाएगा।</string>
     <string name="user_manual">User Manual</string>
+    <string name="please_enter_valid_email">कृपया मान्य ईमेल आईडी दर्ज करें</string>
 </resources>

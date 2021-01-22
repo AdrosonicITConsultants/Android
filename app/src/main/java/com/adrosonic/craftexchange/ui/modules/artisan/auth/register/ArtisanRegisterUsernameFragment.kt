@@ -85,7 +85,8 @@ class ArtisanRegisterUsernameFragment : Fragment() {
             showLanguageSelectionDialog()
         }
         mBinding?.buttonSendOtp?.setOnClickListener{
-            if(mBinding?.textBoxUsername?.nonEmpty{ mBinding?.textBoxUsername?.error = it } == true) {
+            val isValidEmail=android.util.Patterns.EMAIL_ADDRESS.matcher(mBinding?.textBoxUsername?.text).matches()
+            if(mBinding?.textBoxUsername?.nonEmpty{ mBinding?.textBoxUsername?.error = it } == true && isValidEmail) {
                 showProgress()
                 CraftExchangeRepository
                     .getRegisterService()
@@ -112,6 +113,7 @@ class ArtisanRegisterUsernameFragment : Fragment() {
                         }
                     })
             }
+            else Utility.displayMessage(getString(R.string.please_enter_valid_email),requireContext())
         }
 
         mBinding?.buttonVerify?.setOnClickListener{
