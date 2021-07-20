@@ -42,6 +42,6 @@ interface LoginDao {
     @POST("api/login/authenticateMarketing")
     fun authenticateLoginAdmin(@Header("Content-Type") headerValue:String,
                                @Body userAuthenticate : AdminAuthModel
-    ) : Call<JsonElement>
+    ) : Call<AdminLoginResponse>
 
 }

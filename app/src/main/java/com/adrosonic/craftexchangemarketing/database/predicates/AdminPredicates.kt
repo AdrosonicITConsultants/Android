@@ -15,7 +15,7 @@ class AdminPredicates {
     companion object {
         var nextID: Long? = 0
 
-        fun insertAdmin(data : Data) : Long? {
+        fun insertAdmin(data : LoginData) : Long? {
             nextID = 0L
             val realm = CXRealmManager.getRealmInstance()
             var user = data.user

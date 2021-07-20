@@ -14,7 +14,9 @@ import com.adrosonic.craftexchangemarketing.database.predicates.AdminPredicates
 import com.adrosonic.craftexchangemarketing.databinding.FragmentAdminLoginBinding
 import com.adrosonic.craftexchangemarketing.repository.craftexchangemarketingRepository
 import com.adrosonic.craftexchangemarketing.repository.data.request.authModel.AdminAuthModel
+import com.adrosonic.craftexchangemarketing.repository.data.response.admin.login.AdminLoginResponse
 import com.adrosonic.craftexchangemarketing.repository.data.response.admin.login.AdminResponse
+import com.adrosonic.craftexchangemarketing.repository.data.response.admin.login.LoginData
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.landing.adminLandingIntent
 import com.adrosonic.craftexchangemarketing.ui.modules.authentication.reset.ResetPasswordActivity
 import com.adrosonic.craftexchangemarketing.ui.modules.authentication.reset.resetFirstTimeIntent
@@ -75,8 +77,8 @@ class AdminLoginFragment :Fragment(){
                                 mBinding?.textBoxPassword?.text.toString()
                             )
                         )
-                        .enqueue(object : Callback, retrofit2.Callback<JsonElement> {
-                            override fun onFailure(call: Call<JsonElement>, t: Throwable) {
+                        .enqueue(object : Callback, retrofit2.Callback<AdminLoginResponse> {
+                            override fun onFailure(call: Call<AdminLoginResponse>, t: Throwable) {
                                 t.printStackTrace()
                                 Toast.makeText(
                                     activity,
@@ -88,23 +90,22 @@ class AdminLoginFragment :Fragment(){
                             }
 
                             override fun onResponse(
-                                call: Call<JsonElement>,
-                                response: Response<JsonElement>
+                                call: Call<AdminLoginResponse>,
+                                response: Response<AdminLoginResponse>
                             ) {
 
-                                val valid = response.body()?.asJsonObject?.get("valid")?.asBoolean
-                                val errorMessage = response.body()?.asJsonObject?.get("errorMessage")
-                                val errorCode = response.body()?.asJsonObject?.get("errorCode")?.asInt
+                                val valid = response.body()?.valid
+                                val errorMessage = response.body()?.errorMessage
+                                val errorCode = response.body()?.errorCode
 
                                 Log.e("Login", "onResponse :${call.request().url}")
                                 Log.e("Login", "onResponse :${response.message()}")
                                 Log.e("Login", "onResponse :${errorMessage}")
                                 Log.e("Login", "onResponse :${errorCode}")
                                 if (valid!!) {
-                                    Toast.makeText(context, "valid", Toast.LENGTH_SHORT).show()
                                     when (errorCode) {
                                         701 -> {
-                                            val resetToken = response.body()?.asJsonObject?.get("body")?.asString
+                                            val resetToken = response.body()?.data?.asString
                                             Toast.makeText(context, errorMessage.toString(), Toast.LENGTH_SHORT).show()
                                             startActivity(
                                                 context?.resetFirstTimeIntent(
@@ -114,7 +115,7 @@ class AdminLoginFragment :Fragment(){
                                             )
                                         }
                                         702 -> {
-                                            val resetToken = response.body()?.asJsonObject?.get("body")?.asString
+                                            val resetToken = response.body()?.data?.asString
                                             Toast.makeText(
                                                 context,
                                                 "Your password has expired and must be changed.",
@@ -131,27 +132,27 @@ class AdminLoginFragment :Fragment(){
                                             Toast.makeText(context, "Account is locked as maximum number of login attempts has exceeded. Please try after 5 minutes or unlock by clicking forgot password.", Toast.LENGTH_SHORT).show()
                                         }
                                         0 -> {
-                                            val body = Gson().fromJson(
-                                                response.body(),
-                                                AdminResponse::class.java
+                                            val data = Gson().fromJson(
+                                                response.body()?.data,
+                                                LoginData::class.java
                                             )
                                             Prefs.putString(
                                                 ConstantsDirectory.USER_PWD,
                                                 mBinding?.textBoxPassword?.text.toString()
                                             )
                                             Prefs.putBoolean(ConstantsDirectory.IS_LOGGED_IN, true)
-                                            AdminPredicates.insertAdmin(body.data)
+                                            AdminPredicates.insertAdmin(data)
                                             mUserConfig.deviceName = "Android"
                                             Prefs.putString(
                                                 ConstantsDirectory.USER_ID,
-                                                body.data.user?.id.toString()
+                                                data.user?.id.toString()
                                             )
                                             Prefs.putString(
                                                 ConstantsDirectory.ACC_TOKEN,
-                                                body.data.acctoken
+                                                data.acctoken
                                             )
                                             mUserConfig.adminUserRoles =
-                                                body.data.user?.refMarketingRoleId ?: 0
+                                                data.user?.refMarketingRoleId ?: 0
                                             startActivity(context?.adminLandingIntent())
                                         }
                                     }
