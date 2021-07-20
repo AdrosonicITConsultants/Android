@@ -5,6 +5,9 @@ import com.adrosonic.craftexchangemarketing.database.CXRealmManager
 import com.adrosonic.craftexchangemarketing.database.entities.realmEntities.CategoryProducts
 import com.adrosonic.craftexchangemarketing.database.entities.realmEntities.CraftAdmin
 import com.adrosonic.craftexchangemarketing.repository.data.response.admin.login.AdminResponse
+import com.adrosonic.craftexchangemarketing.repository.data.response.admin.login.Data
+import com.adrosonic.craftexchangemarketing.repository.data.response.admin.login.LoginData
+import com.adrosonic.craftexchangemarketing.repository.data.response.escalation.userData
 import java.lang.Exception
 
 class AdminPredicates {
@@ -12,16 +15,16 @@ class AdminPredicates {
     companion object {
         var nextID: Long? = 0
 
-        fun insertAdmin(userData : AdminResponse?) : Long? {
+        fun insertAdmin(data : Data) : Long? {
             nextID = 0L
             val realm = CXRealmManager.getRealmInstance()
-            var user = userData?.data?.user
+            var user = data.user
 
 
             realm.executeTransaction {
 
                 var userObj =realm.where(CraftAdmin::class.java)
-                    .equalTo("id", userData?.data?.user?.id)
+                    .equalTo("id", data.user?.id)
                     .limit(1)
                     .findFirst()
 
@@ -36,7 +39,7 @@ class AdminPredicates {
                     }
                     var exUser = it.createObject(CraftAdmin::class.java, nextID)
                     exUser.id = user?.id
-                    exUser.acctoken = userData?.data?.acctoken
+                    exUser.acctoken = data.acctoken
                     exUser.email = user?.email
                     exUser.username = user?.username
                     exUser.refMarketingRoleId = user?.refMarketingRoleId
@@ -55,7 +58,7 @@ class AdminPredicates {
                     nextID = userObj._id ?:0
 
                     userObj.id = user?.id
-                    userObj.acctoken = userData?.data?.acctoken
+                    userObj.acctoken = data.acctoken
                     userObj.email = user?.email
                     userObj.username = user?.username
                     userObj.refMarketingRoleId = user?.refMarketingRoleId

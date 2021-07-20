@@ -15,10 +15,17 @@ import com.adrosonic.craftexchangemarketing.ui.modules.authentication.login.Logi
 import com.adrosonic.craftexchangemarketing.utils.ConstantsDirectory
 import com.pixplicity.easyprefs.library.Prefs
 
+private const val ARG_PARAM1 = "param1"
+
 class ResetSuccessFragment : Fragment() {
 
     companion object {
-        fun newInstance() = ResetSuccessFragment()
+        fun newInstance(param1 : Boolean) = ResetSuccessFragment().apply {
+            arguments = Bundle().apply {
+                putBoolean(ARG_PARAM1, param1)
+            }
+        }
+        const val TAG = "ResetSuccess"
     }
 
     private var mBinding: FragmentResetSuccessBinding?= null
@@ -37,6 +44,9 @@ class ResetSuccessFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         var profile = Prefs.getString(ConstantsDirectory.PROFILE,null)
+        val firstTime = arguments?.get(ARG_PARAM1) as Boolean
+
+        mBinding?.confirmationText?.visibility = if(firstTime) View.INVISIBLE else View.VISIBLE
 
         mBinding?.buttonLoginNow?.setOnClickListener {
             when(profile){

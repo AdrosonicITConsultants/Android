@@ -13,14 +13,16 @@ import com.adrosonic.craftexchangemarketing.R
 import com.adrosonic.craftexchangemarketing.database.predicates.AdminPredicates
 import com.adrosonic.craftexchangemarketing.databinding.FragmentAdminLoginBinding
 import com.adrosonic.craftexchangemarketing.repository.craftexchangemarketingRepository
-//import com.adrosonic.craftexchangemarketing.repository.craftexchangemarketingRepository
 import com.adrosonic.craftexchangemarketing.repository.data.request.authModel.AdminAuthModel
 import com.adrosonic.craftexchangemarketing.repository.data.response.admin.login.AdminResponse
 import com.adrosonic.craftexchangemarketing.ui.modules.admin.landing.adminLandingIntent
 import com.adrosonic.craftexchangemarketing.ui.modules.authentication.reset.ResetPasswordActivity
+import com.adrosonic.craftexchangemarketing.ui.modules.authentication.reset.resetFirstTimeIntent
 import com.adrosonic.craftexchangemarketing.utils.ConstantsDirectory
 import com.adrosonic.craftexchangemarketing.utils.UserConfig
 import com.adrosonic.craftexchangemarketing.utils.Utility
+import com.google.gson.Gson
+import com.google.gson.JsonElement
 import com.pixplicity.easyprefs.library.Prefs
 import retrofit2.Call
 import retrofit2.Response
@@ -35,7 +37,7 @@ class AdminLoginFragment :Fragment(){
         fun newInstance(param1: String) =
             AdminLoginFragment().apply {
                 arguments = Bundle().apply {
-                    putString(com.adrosonic.craftexchangemarketing.ui.modules.admin.auth.login.ARG_PARAM1, param1)
+                    putString(ARG_PARAM1, param1)
                 }
             }
         const val TAG = "AdminLogin"
@@ -66,59 +68,100 @@ class AdminLoginFragment :Fragment(){
                 if (mBinding?.textBoxPassword?.text.toString() != "" && mBinding?.textBoxUsername?.text.toString() != "") {
                     craftexchangemarketingRepository
                         .getLoginService()
-                        .authenticateAdmin(
+                        .authenticateLoginAdmin(
                             "application/json",
                             AdminAuthModel(
                                 mBinding?.textBoxUsername?.text.toString(),
                                 mBinding?.textBoxPassword?.text.toString()
                             )
                         )
-                        .enqueue(object : Callback, retrofit2.Callback<AdminResponse> {
-                            override fun onFailure(call: Call<AdminResponse>, t: Throwable) {
+                        .enqueue(object : Callback, retrofit2.Callback<JsonElement> {
+                            override fun onFailure(call: Call<JsonElement>, t: Throwable) {
                                 t.printStackTrace()
                                 Toast.makeText(
                                     activity,
                                     "Login failure ${t.printStackTrace()}",
                                     Toast.LENGTH_SHORT
                                 ).show()
-                                Log.e("Login","onFailure :${t.message}")
-                                Log.e("Login","onFailure :${t.localizedMessage}")
+                                Log.e("Login", "onFailure :${t.message}")
+                                Log.e("Login", "onFailure :${t.localizedMessage}")
                             }
+
                             override fun onResponse(
-                                call: Call<AdminResponse>, response: Response<AdminResponse>
+                                call: Call<JsonElement>,
+                                response: Response<JsonElement>
                             ) {
-                                Log.e("Login","onResponse :${call.request().url}")
-                                Log.e("Login","onResponse :${response.message()}")
-                                Log.e("Login","onResponse :${response.body()?.errorMessage}")
-                                Log.e("Login","onResponse :${response.body()?.errorCode}")
-                                if (response.body()?.valid == true) {
-                                    Prefs.putString(
-                                        ConstantsDirectory.USER_PWD,
-                                        mBinding?.textBoxPassword?.text.toString()
-                                    )
-                                    Prefs.putBoolean(ConstantsDirectory.IS_LOGGED_IN, true)
-                                    AdminPredicates.insertAdmin(response.body()!!)
-                                    mUserConfig.deviceName = "Android"
-//                                    Prefs.putString(
-//                                        ConstantsDirectory.USER_PWD,
-//                                        mBinding?.textBoxPassword?.text.toString()
-//                                    )
-                                    Prefs.putString(
-                                        ConstantsDirectory.USER_ID,
-                                        response.body()?.data?.user?.id.toString()
-                                    )
-                                    Prefs.putString(
-                                        ConstantsDirectory.ACC_TOKEN,
-                                        response.body()?.data?.acctoken
-                                    )
-                                    mUserConfig.adminUserRoles=response.body()?.data?.user?.refMarketingRoleId?:0
-                                      startActivity(context?.adminLandingIntent())
-//                                      startActivity(Intent(activity, AdminLandingActivity::class.java))
+
+                                val valid = response.body()?.asJsonObject?.get("valid")?.asBoolean
+                                val errorMessage = response.body()?.asJsonObject?.get("errorMessage")
+                                val errorCode = response.body()?.asJsonObject?.get("errorCode")?.asInt
+
+                                Log.e("Login", "onResponse :${call.request().url}")
+                                Log.e("Login", "onResponse :${response.message()}")
+                                Log.e("Login", "onResponse :${errorMessage}")
+                                Log.e("Login", "onResponse :${errorCode}")
+                                if (valid!!) {
+                                    Toast.makeText(context, "valid", Toast.LENGTH_SHORT).show()
+                                    when (errorCode) {
+                                        701 -> {
+                                            val resetToken = response.body()?.asJsonObject?.get("body")?.asString
+                                            Toast.makeText(context, errorMessage.toString(), Toast.LENGTH_SHORT).show()
+                                            startActivity(
+                                                context?.resetFirstTimeIntent(
+                                                    mBinding?.textBoxUsername?.text.toString(),
+                                                    resetToken.toString()
+                                                )
+                                            )
+                                        }
+                                        702 -> {
+                                            val resetToken = response.body()?.asJsonObject?.get("body")?.asString
+                                            Toast.makeText(
+                                                context,
+                                                "Your password has expired and must be changed.",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                            startActivity(
+                                                context?.resetFirstTimeIntent(
+                                                    mBinding?.textBoxUsername?.text.toString(),
+                                                    resetToken.toString()
+                                                )
+                                            )
+                                        }
+                                        703 -> {
+                                            Toast.makeText(context, "Account is locked as maximum number of login attempts has exceeded. Please try after 5 minutes or unlock by clicking forgot password.", Toast.LENGTH_SHORT).show()
+                                        }
+                                        0 -> {
+                                            val body = Gson().fromJson(
+                                                response.body(),
+                                                AdminResponse::class.java
+                                            )
+                                            Prefs.putString(
+                                                ConstantsDirectory.USER_PWD,
+                                                mBinding?.textBoxPassword?.text.toString()
+                                            )
+                                            Prefs.putBoolean(ConstantsDirectory.IS_LOGGED_IN, true)
+                                            AdminPredicates.insertAdmin(body.data)
+                                            mUserConfig.deviceName = "Android"
+                                            Prefs.putString(
+                                                ConstantsDirectory.USER_ID,
+                                                body.data.user?.id.toString()
+                                            )
+                                            Prefs.putString(
+                                                ConstantsDirectory.ACC_TOKEN,
+                                                body.data.acctoken
+                                            )
+                                            mUserConfig.adminUserRoles =
+                                                body.data.user?.refMarketingRoleId ?: 0
+                                            startActivity(context?.adminLandingIntent())
+                                        }
+                                    }
+
                                 } else {
                                     Toast.makeText(
                                         activity,
                                         "Invalid user name or password",
-                                        Toast.LENGTH_SHORT ).show()
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
                             }
 

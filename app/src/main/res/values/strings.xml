@@ -31,8 +31,11 @@
     <string name="verify_proceed"><![CDATA[Verify & Proceed]]></string>
     <string name="reach_out_text">In case of any help</string>
     <string name="reach_out_button">Reach out to us</string>
+    <string name="current_password">Current Password</string>
     <string name="enter_new_password">Enter your new password</string>
+    <string name="new_password">New password</string>
     <string name="retype_pwd">Retype Password</string>
+    <string name="reenter_pwd">Re-enter your new password</string>
     <string name="about_yourself">Tell us about yourself</string>
     <string name="firstname">First Name</string>
     <string name="lastname">Last Name</string>

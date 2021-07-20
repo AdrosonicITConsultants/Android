@@ -9,12 +9,12 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 
 import com.adrosonic.craftexchangemarketing.R
-import com.adrosonic.craftexchangemarketing.databinding.FragmentResetPasswordBinding
+import com.adrosonic.craftexchangemarketing.databinding.FragmentResetPasswordFirstTimeBinding
 
 import com.adrosonic.craftexchangemarketing.repository.craftexchangemarketingRepository
 import com.adrosonic.craftexchangemarketing.repository.data.resetResponse.ResetResponse
-import com.adrosonic.craftexchangemarketing.repository.data.model.UserAuthModel
 import com.adrosonic.craftexchangemarketing.repository.data.request.authModel.AdminAuthModel
+import com.adrosonic.craftexchangemarketing.repository.data.request.authModel.ResetPasswordModel
 import com.adrosonic.craftexchangemarketing.utils.ConstantsDirectory
 import com.adrosonic.craftexchangemarketing.utils.Utility
 import com.pixplicity.easyprefs.library.Prefs
@@ -24,30 +24,32 @@ import retrofit2.Response
 import javax.security.auth.callback.Callback
 
 private const val ARG_PARAM1 = "param1"
+private const val ARG_PARAM2 = "param2"
 
-class ResetPasswordFragment : Fragment() {
+class ResetPasswordFirstTimeFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(param1: String) =
-            ResetPasswordFragment()
+        fun newInstance(param1: String, param2: String) =
+            ResetPasswordFirstTimeFragment()
                 .apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
                 }
             }
-        const val TAG = "ResetPwd"
+        const val TAG = "ResetPwdFirstTime"
 
     }
 
-    private var mBinding: FragmentResetPasswordBinding ?= null
+    private var mBinding: FragmentResetPasswordFirstTimeBinding ?= null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_reset_password, container, false)
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_reset_password_first_time, container, false)
 //        mBinding?.profileTag?.text = Prefs.getString(ConstantsDirectory.PROFILE,"")
         return mBinding?.root
     }
@@ -55,7 +57,9 @@ class ResetPasswordFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        var email = arguments?.get(ARG_PARAM1).toString()
+        val username = arguments?.get(ARG_PARAM1).toString()
+        val resetToken = arguments?.get(ARG_PARAM2).toString()
+
         mBinding?.buttonNext?.setOnClickListener{
 
             if(mBinding?.textBoxPassword?.text.toString() == mBinding?.textBoxRetypePwd?.text.toString()){
@@ -65,14 +69,17 @@ class ResetPasswordFragment : Fragment() {
                             mBinding?.textBoxPassword?.atleastOneSpecialCharacters() == true &&
                             mBinding?.textBoxPassword?.atleastOneUpperCase() == true &&
                             mBinding?.textBoxPassword?.minLength(8) == true &&
-                            mBinding?.textBoxRetypePwd?.nonEmpty() == true
+                            mBinding?.textBoxRetypePwd?.nonEmpty() == true &&
+                            mBinding?.textBoxCurrentPassword?.nonEmpty() == true
                 ){
                     craftexchangemarketingRepository
                         .getResetPwdService()
-                        .resetPassword("application/json",
-                            AdminAuthModel(
-                                email,
-                                mBinding?.textBoxRetypePwd?.text.toString()
+                        .resetUserPassword("application/json",
+                            ResetPasswordModel(
+                                mBinding?.textBoxCurrentPassword?.text.toString(),
+                                mBinding?.textBoxPassword?.text.toString(),
+                                resetToken,
+                                username
                             )
                         )
                         .enqueue(object : Callback,retrofit2.Callback<ResetResponse>{
@@ -87,12 +94,16 @@ class ResetPasswordFragment : Fragment() {
                                     if (savedInstanceState == null) {
                                         activity?.supportFragmentManager?.beginTransaction()
                                             ?.replace(R.id.reset_container,
-                                                ResetSuccessFragment.newInstance(false),"Reset Buyer Success")
+                                                ResetSuccessFragment.newInstance(true),"Reset Buyer Success")
                                             ?.addToBackStack(null)
                                             ?.commit()
-                                    }else{
+                                    }
+                                    else{
                                         Toast.makeText(activity,"${response.body()?.errorMessage}",Toast.LENGTH_SHORT).show()
                                     }
+                                }
+                                else{
+                                    Toast.makeText(activity,response.body()?.errorMessage,Toast.LENGTH_SHORT).show()
                                 }
                             }
 

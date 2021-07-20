@@ -6,6 +6,9 @@ import com.adrosonic.craftexchangemarketing.repository.data.response.admin.login
 import com.adrosonic.craftexchangemarketing.repository.data.response.buyer.login.BuyerResponse
 import com.adrosonic.craftexchangemarketing.repository.data.model.UserAuthModel
 import com.adrosonic.craftexchangemarketing.repository.data.request.authModel.AdminAuthModel
+import com.adrosonic.craftexchangemarketing.repository.data.response.admin.login.AdminLoginResponse
+import com.google.gson.JsonElement
+import org.json.JSONObject
 
 import retrofit2.Call
 import retrofit2.http.*
@@ -34,5 +37,11 @@ interface LoginDao {
     fun authenticateAdmin(@Header("Content-Type") headerValue:String,
                           @Body userAuthenticate : AdminAuthModel
     ) : Call<AdminResponse>
+
+    @Headers("Accept: application/json")
+    @POST("api/login/authenticateMarketing")
+    fun authenticateLoginAdmin(@Header("Content-Type") headerValue:String,
+                               @Body userAuthenticate : AdminAuthModel
+    ) : Call<JsonElement>
 
 }

@@ -9,11 +9,12 @@ object ConstantsDirectory {
 
     //////////////////////////////////////////////////////////////////////
 //    const val BASE_URL_DEV = "http://101.53.153.96:8090/"//qa
-////    const val BASE_URL_DEV = "http://164.52.192.15:8090/"//uat
-    const val BASE_URL_DEV = "http://164.52.206.168:8090/"//prod
+//    const val BASE_URL_DEV = "http://164.52.192.15:8090/"//uat
+//    const val BASE_URL_DEV = "http://164.52.206.168:8090/"//prod
+    const val BASE_URL_DEV = "http://164.52.214.208:8090"//dev
 
 //    const val IMAGE_LOAD_BASE_URL_DEV = "https://f3adac-craft-exchange-resource.objectstore.e2enetworks.net/"//qa
-////    const val IMAGE_LOAD_BASE_URL_DEV = "https://tatacrftexchangeuat.objectstore.e2enetworks.net/"//uat
+//    const val IMAGE_LOAD_BASE_URL_DEV = "https://tatacrftexchangeuat.objectstore.e2enetworks.net/"//uat
     const val IMAGE_LOAD_BASE_URL_DEV = "https://tatatrustcraftxchangelive.objectstore.e2enetworks.net/"//prod
 
 
