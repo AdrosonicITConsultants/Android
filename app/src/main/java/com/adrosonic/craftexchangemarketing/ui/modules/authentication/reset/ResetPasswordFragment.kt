@@ -90,7 +90,8 @@ class ResetPasswordFragment : Fragment() {
                                                 ResetSuccessFragment.newInstance(false),"Reset Buyer Success")
                                             ?.addToBackStack(null)
                                             ?.commit()
-                                    }else{
+                                    }
+                                    else{
                                         Toast.makeText(activity,"${response.body()?.errorMessage}",Toast.LENGTH_SHORT).show()
                                     }
                                 }
